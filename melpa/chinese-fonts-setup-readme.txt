@@ -30,9 +30,12 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 2. M-x package-install RET chinese-fonts-setup RET
 3. 在emacs配置文件中（比如: ~/.emacs）添加如下代码：
 
-#+BEGIN_EXAMPLE
-(require 'chinese-fonts-setup)
-#+END_EXAMPLE
+   #+BEGIN_EXAMPLE
+   (require 'chinese-fonts-setup)
+   ;; 让 chinese-fonts-setup 随着 emacs 自动生效。
+   ;; (chinese-fonts-setup-enable)
+   #+END_EXAMPLE
+
 
 ** 配置使用
 *** 编辑使用 profile
@@ -129,6 +132,16 @@ Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
 注意：在调整字体大小的同时，字号信息也会保存 ~/.emacs 中。
 
 [[./snapshots/cfs-increase-and-decrease-fontsize.gif]]
+
+*** 让 chinese-fonts-setup 随着 emacs 自动启动
+`chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着 emacs 自动启动，
+这个命令将 `cfs-set-font-with-saved-step' 添加到下面两个 hook:
+
+1. `after-make-frame-functions'
+2. `window-setup-hook'
+
+用户也可以手动运行 `cfs-set-font-with-saved-step' 来让 chinese-fonts-setup 生效。
+
 
 ** Tips
 
