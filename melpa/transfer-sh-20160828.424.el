@@ -4,7 +4,7 @@
 
 ;; Author: S. Roskamp <steffen.roskamp@gmail.com>
 ;; Keywords: cloud, upload, share
-;; Package-Version: 20160827.1025
+;; Package-Version: 20160828.424
 ;; Package-Requires: ((async "1.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -95,12 +95,13 @@ If no REMOTE-FILENAME is given, the LOCAL-FILENAME is used."
 
 ;;;###autoload
 (defun transfer-sh-upload (async)
-  "Uploads either active region of complete buffer to transfer.sh.
+  "Uploads either active region or complete buffer to transfer.sh.
 
 If a region is active, that region is exported to a file and then
 uploaded, otherwise the complete buffer is uploaded.  The remote
-file name is determined by customize-variables and the buffer
-name."
+file name is determined by the custom variables
+`transfer-sh-remote-prefix' and `transfer-sh-remote-suffix', and
+the buffer name."
   (interactive "P")
   (let* ((remote-filename (concat transfer-sh-remote-prefix (buffer-name) transfer-sh-remote-suffix))
          (local-filename (if (use-region-p)
