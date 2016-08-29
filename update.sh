@@ -57,4 +57,5 @@ function update {
   log "Done updating elpa mirrors"
 }
 
-update >> "$LOGFILE"
+trap '[ "$?" -eq 0 ] || log Error! Could not update elpa mirrors!' EXIT
+update >> "$LOGFILE" 2>&1
