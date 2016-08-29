@@ -20,39 +20,41 @@ fi
 
 ELPA_CLONE_URL="git@github.com:dochang/elpa-clone.git"
 
-echo "Starting..."
-echo "Output to: $MIRROR_PATH"
-echo "elpa-clone in: $ELPA_CLONE_PATH"
-
 set -e
 
-cd "$MIRROR_PATH"
-
 function log {
-  echo "[$(date '+%d/%m/%y %H:%M:%S')]" "$@" >> "$LOGFILE"
+  echo "[$(date '+%d/%m/%y %H:%M:%S')]" "$@"
 }
-
-log "Start updating elpa mirrors"
-
-if [[ ! -d $ELPA_CLONE_PATH ]]; then
-  git clone "$ELPA_CLONE_URL" "$ELPA_CLONE_PATH"
-fi
 
 function clone {
   log "Updating mirror for $2 ($1)"
-  emacs -l "$ELPA_CLONE_PATH/elpa-clone.el" -nw --batch --eval="(elpa-clone \"$1\" \"$MIRROR_PATH/$2\")" 2>> "$LOGFILE"
+  emacs -l "$ELPA_CLONE_PATH/elpa-clone.el" -nw --batch --eval="(elpa-clone \"$1\" \"$MIRROR_PATH/$2\")"
 }
 
-git fetch origin
-git rebase origin/master
+function update {
+  log "Start updating elpa mirrors"
+  log "Output to: $MIRROR_PATH"
+  log "elpa-clone in: $ELPA_CLONE_PATH"
 
-clone "http://orgmode.org/elpa/" "org"
-clone "https://elpa.gnu.org/packages/" "gnu"
-clone "https://melpa.org/packages/" "melpa"
-clone "https://stable.melpa.org/packages/" "stable-melpa"
+  cd "$MIRROR_PATH"
 
-git add --all
-git commit -m "snapshot $(date '+%d/%m/%y %H:%M:%S')"
-git push origin master
+  if [[ ! -d $ELPA_CLONE_PATH ]]; then
+    git clone "$ELPA_CLONE_URL" "$ELPA_CLONE_PATH"
+  fi
 
-log "Done updating elpa mirrors"
+  git fetch origin
+  git rebase origin/master
+
+  clone "http://orgmode.org/elpa/" "org"
+  clone "https://elpa.gnu.org/packages/" "gnu"
+  clone "https://melpa.org/packages/" "melpa"
+  clone "https://stable.melpa.org/packages/" "stable-melpa"
+
+  git add --all
+  git commit -m "snapshot $(date '+%d/%m/%y %H:%M:%S')"
+  git push origin master
+
+  log "Done updating elpa mirrors"
+}
+
+update >> "$LOGFILE"
