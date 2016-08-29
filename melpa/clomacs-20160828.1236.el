@@ -4,7 +4,7 @@
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/clojure-emacs/clomacs
-;; Package-Version: 20160720.845
+;; Package-Version: 20160828.1236
 ;; Keywords: clojure, interaction
 ;; Version: 0.0.2
 ;; Package-Requires: ((emacs "24.3") (cider "0.11"))
@@ -264,6 +264,7 @@ Handle errors. Handle difference between CIDER versions."
                                 cl-entity-name-str)))
     (list doc namespace-str cl-entity-full-name)))
 
+;;;###autoload
 (cl-defmacro clomacs-def (el-entity-name
                           cl-entity-name
                           &optional &key
@@ -297,6 +298,7 @@ or it may be a custom function (:string by default)."
            (clomacs-get-result result :value ',type ',namespace)))
        ,doc)))
 
+;;;###autoload
 (cl-defmacro clomacs-defun (el-func-name
                             cl-func-name
                             &optional &key

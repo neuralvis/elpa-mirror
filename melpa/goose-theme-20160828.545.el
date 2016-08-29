@@ -4,7 +4,7 @@
 
 ;; Author: Stephen Whipple <shw@wicdmedia.org>
 ;; URL: https://github.com/thwg/goose-theme
-;; Package-Version: 20160822.1753
+;; Package-Version: 20160828.545
 ;; Version: 2.0.0
 ;; Package-Requires: ((emacs "24.1"))
 
@@ -184,6 +184,19 @@
  '(outline-6 ((t (:weight bold))))
  '(outline-7 ((t (:weight bold))))
  '(outline-8 ((t (:weight bold))))
+ ;; rcirc
+ '(rcirc-bright-nick ((t (:inherit font-lock-keyword-face))))
+ '(rcirc-dim-nick ((t (:inherit font-lock-comment-face))))
+ '(rcirc-keyword ((t (:inherit font-lock-keyword-face))))
+ '(rcirc-my-nick ((t (:inherit rcirc-other-nick))))
+ '(rcirc-nick-in-message ((t (:inherit rcirc-keyword))))
+ '(rcirc-nick-in-message-full-line ((t nil)))
+ '(rcirc-other-nick ((t nil)))
+ '(rcirc-prompt ((t (:inherit font-lock-keyword-face))))
+ '(rcirc-server ((t (:foreground "#006600"))))
+ '(rcirc-track-keyword ((t (:inherit rcirc-keyword))))
+ '(rcirc-track-nick ((t (:inherit rcirc-track-keyword))))
+ '(rcirc-url ((t (:inherit link))))
  ;; rst
  '(rst-level-1 ((t (:inherit outline-1))))
  '(rst-level-2 ((t (:inherit outline-2))))
@@ -217,7 +230,11 @@
  '(whitespace-space ((t (:foreground "#999999"))))
  '(whitespace-space-after-tab ((t (:foreground "#AAAAAA"))))
  '(whitespace-tab ((t (:foreground "#AAAAAA"))))
- '(whitespace-trailing ((t (:inherit whitespace-space)))))
+ '(whitespace-trailing ((t (:inherit whitespace-space))))
+ ;; window-divider
+ '(window-divider ((t (:foreground "#A0A0A0"))))
+ '(window-divider-first-pixel ((t (:inherit window-divider))))
+ '(window-divider-last-pixel ((t (:inherit window-divider)))))
 
 ;; Add theme directory to `custom-theme-load-path'
 ;;;###autoload

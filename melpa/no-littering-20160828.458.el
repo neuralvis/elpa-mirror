@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: http://github.com/tarsius/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20160803.1353
+;; Package-Version: 20160828.458
 
 ;; This file is not part of GNU Emacs.
 
@@ -239,6 +239,9 @@ This variable has to be set before `no-littering' is loaded.")
     (setq sx-cache-directory               (var "sx-cache/"))
     (setq undo-tree-history-directory-alist (list (cons "." (var "undo-tree-hist/"))))
     (setq user-emacs-ensime-directory      (var "ensime/"))
+    (eval-after-load 'yasnippet
+      `(make-directory ,(etc "yas-snippets/") t))
+    (setq yas-snippet-dirs                 (list (etc "yas-snippets/") 'yas-installed-snippets-dir))
     ))
 
 (provide 'no-littering)

@@ -4,7 +4,7 @@
 
 ;; Author: David Shepherd <davidshepherd7@gmail.com>
 ;; Version: 0.3
-;; Package-Version: 20160815.1228
+;; Package-Version: 20160828.544
 ;; Package-Requires: ((dash "2.10.0") (names "20150618.0") (emacs "24.4"))
 ;; Keywords: electric
 ;; URL: https://github.com/davidshepherd7/electric-operator
@@ -847,7 +847,9 @@ Using `cc-mode''s syntactic analysis."
 (apply #'add-rules-for-mode 'sql-mode prog-mode-rules)
 (add-rules-for-mode 'sql-mode
                     (cons "-" nil)
-                    (cons "=" nil))
+                    (cons "=" nil)
+                    (cons "%" nil)
+                    (cons "*" nil))
 
 ;; Don't use either prog or text mode defaults, css is too different
 (add-rules-for-mode 'css-mode
