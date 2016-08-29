@@ -43,6 +43,9 @@ function clone {
   emacs -l "$ELPA_CLONE_PATH/elpa-clone.el" -nw --batch --eval="(elpa-clone \"$1\" \"$MIRROR_PATH/$2\")" 2>> "$LOGFILE"
 }
 
+git fetch origin
+git rebase origin/master
+
 clone "http://orgmode.org/elpa/" "org"
 clone "https://elpa.gnu.org/packages/" "gnu"
 clone "https://melpa.org/packages/" "melpa"
