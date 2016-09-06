@@ -4,7 +4,7 @@
 
 ;; Author: Aborn Jiang <aborn.jiang@gmail.com>
 ;; Version: 0.4.0
-;; Package-Version: 20160904.836
+;; Package-Version: 20160905.1849
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (request "0.2") (let-alist "1.0.3") (pcache "0.4.0") (s "1.10.0") (async "1.9"))
 ;; Keywords: leanote, note, markdown
 ;; Homepage: https://github.com/aborn/leanote-emacs
@@ -840,7 +840,7 @@
               (unless result-data
                 (error "Error in push(update note) to server. reason: server error!"))
               (leanote-log (format "file %s update to remote success." note-title))
-              (message (format "file %s update to remote success." note-title))
+              (message (format "file %s.md update to remote success." note-title))
               (leanote-notebook-replace notebook-notes result-data note-id)
               (puthash note-id result-data leanote--cache-noteid-info))
             ))
@@ -859,7 +859,7 @@
               (unless result-data
                 (error "Add new note to server error. reason: server error!"))
               (leanote-log (format "add new file %s to remote success." note-title))
-              (message (format "add new file %s to remote success." note-title))
+              (message (format "add new file %s.md to remote success." note-title))
               (let* ((notebook-notes-new (vconcat notebook-notes (vector result-data))))
                 (setq note-id (assoc-default 'NoteId result-data))
                 (unless note-id
