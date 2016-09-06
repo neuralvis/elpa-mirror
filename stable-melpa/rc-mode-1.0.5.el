@@ -4,8 +4,8 @@
 
 ;; Author: Jordan Brown
 ;; URL: https://github.com/mrhmouse/rc-mode.el
-;; Package-Version: 20160904.707
-;; Version: 1.0.1
+;; Package-Version: 1.0.5
+;; Version: 1.0.5
 ;; Keywords: rc, plan9, shell
 
 ;;; License:
@@ -42,10 +42,7 @@
 (defvar rc-highlights
   `(("'[^']*'"
      . font-lock-string-face)
-        
-    ("#.*$"
-     . font-lock-comment-face)
-        
+                
     (,(rc-join-string '("fn" "break"
                         "builtin" "cd"
                         "echo" "eval"
@@ -62,9 +59,15 @@
                         "\\$version")
                       "\\|")
      . font-lock-builtin-face)
-        
+
+    ("\\(?1:\\$#?\\$*[a-zA-Z0-9_]+\\)\\|\\(?1:[a-zA-Z0-9_]+\\)[[:space:]]*="
+     1 font-lock-variable-name-face)
+
+    ("#.*$"
+     . font-lock-comment-face)
+
     (,(rc-join-string '("if" "while" "for" "else" "if not"
-                        "switch"
+                        "switch" "case"
                         "@" "=" "&" "&&" "\\^"
                         "|" ";"
                         "<<?" ">>?"
@@ -73,9 +76,6 @@
                       "\\|")
      . font-lock-keyword-face)
         
-    ("\\(?1:\\$#?\\$*\\w+\\)\\|\\(?1:\\w+\\)[[:space:]]*="
-     1 font-lock-variable-name-face)
-
     ("!"
      . font-lock-negation-char-face)))
 
@@ -142,8 +142,8 @@
 
 ;;;###autoload
 (define-derived-mode rc-mode fundamental-mode "plan9-rc"
-  (setq font-lock-defaults '(rc-highlights))
-  (setq indent-line-function 'rc-indent-line))
+  (setq-local font-lock-defaults '(rc-highlights))
+  (setq-local indent-line-function 'rc-indent-line))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist
