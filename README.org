@@ -1,7 +1,7 @@
 * =elpa-mirror=
 
 Mirrors for some Emacs package archives. These mirrors should be used only when
-official repository is temporarily down.
+official repository is temporarily down. Maintained using [[https://github.com/d12frosted/environment/tree/master/utils/mirror_elpa][mirror-elpa]].
 
 ** Usage
 
