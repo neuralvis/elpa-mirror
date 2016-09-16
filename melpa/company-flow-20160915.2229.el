@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Jensen <aaronjensen@gmail.com>
 ;; URL: https://github.com/aaronjensen/company-flow
-;; Package-Version: 20160909.735
+;; Package-Version: 20160915.2229
 ;; Version: 0.1.0
 ;; Package-Requires: ((company "0.8.0") (dash "2.13.0"))
 
@@ -136,6 +136,9 @@ PROCESS, and terminates standard input with EOF."
 (defun company-flow--annotation (candidate)
   (format " %s" (get-text-property 0 'meta candidate)))
 
+(defun company-flow--meta (candidate)
+  (format "%s: %s" candidate (get-text-property 0 'meta candidate)))
+
 (defvar-local company-flow--debounce-state nil)
 
 (defun company-flow--debounce-callback (prefix callback)
@@ -173,6 +176,7 @@ Use like:
     (`interactive (company-begin-backend 'company-flow))
     (`prefix (company-flow--prefix))
     (`annotation (company-flow--annotation arg))
+    (`meta (company-flow--meta arg))
     (`sorted t)
     (`candidates (cons :async (company-flow--debounce-async arg 'company-flow--candidates-query)))))
 

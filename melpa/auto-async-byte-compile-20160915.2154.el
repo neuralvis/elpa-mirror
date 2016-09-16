@@ -1,11 +1,11 @@
-;;;; auto-async-byte-compile.el --- Automatically byte-compile when saved
+;;; auto-async-byte-compile.el --- Automatically byte-compile when saved
 ;; Time-stamp: <2012-03-23 06:40:14 rubikitch>
 
 ;; Copyright (C) 2010  rubikitch
 
 ;; Author: rubikitch <rubikitch@ruby-lang.org>
 ;; Keywords: lisp, convenience
-;; Package-Version: 20120322.1441
+;; Package-Version: 20160915.2154
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/download/auto-async-byte-compile.el
 
 ;; This file is free software; you can redistribute it and/or modify

@@ -6,7 +6,7 @@
 ;; Author: Vladimir Polushin <vovapolu@gmail.com>
 ;; Author of base darcula theme: Sam Halliday <Sam.Halliday@gmail.com>
 ;; Keywords: faces
-;; Package-Version: 20160914.1650
+;; Package-Version: 20160915.1707
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@
  '(link ((t (:weight normal :slant normal :underline (:color foreground-color :style line) :inverse-video nil :foreground "#5859b7"))))
  '(link-visited ((t (:weight normal :slant normal :underline (:color foreground-color :style line) :inverse-video nil :foreground "#c61b6e" :inherit (link)))))
  '(fringe ((t (:background nil :foreground nil))))
- '(header-line ((t (:weight normal :slant normal :underline nil :box nil :inverse-video t :foreground "#708183g" :background "#0a2832" :inherit (mode-line)))))
+ '(header-line ((t (:weight normal :slant normal :underline nil :box nil :inverse-video t :foreground "#708183" :background "#0a2832" :inherit (mode-line)))))
  '(tooltip ((((class color)) (:foreground "black" :background "lightyellow"))))
  '(mode-line ((t (:weight normal :slant normal :underline nil :box nil :inverse-video t :foreground "#000000" :background "#ffffff"))))
  '(mode-line-inactive ((t (:weight normal :slant normal :underline nil :box nil :inverse-video t :foreground "#888888" :background "#ffffff" :inherit (mode-line)))))
