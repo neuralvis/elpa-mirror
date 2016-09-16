@@ -7,7 +7,7 @@
 
 ;; Author: Taiki SUGAWARA <buzz.taiki@gmail.com>
 ;; URL: https://github.com/emacs-helm/helm-descbinds
-;; Package-Version: 20160916.247
+;; Package-Version: 20160916.713
 ;; Keywords: helm, help
 ;; Version: 1.12
 ;; Package-Requires: ((helm "1.5"))
@@ -240,7 +240,7 @@ Provide a useful behavior for prefix commands."
 
 (defun helm-descbinds-source (name candidates)
   (when (and name candidates)
-    (helm-make-source name helm-descbinds-source-class
+    (helm-make-source name 'helm-descbinds-source-class
       :candidates candidates
       :candidate-transformer #'helm-descbinds-transform-candidates
       :filtered-candidate-transformer #'helm-fuzzy-highlight-matches

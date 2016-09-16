@@ -4,7 +4,7 @@
 
 ;; Author: Chunyang Xu <xuchunyang.me@gmail.com>
 ;; URL: https://github.com/xuchunyang/gitter.el
-;; Package-Version: 20160915.1011
+;; Package-Version: 20160916.1128
 ;; Package-Requires: ((emacs "24.1") (let-alist "1.0.4"))
 ;; Keywords: Gitter, chat, client, Internet
 ;; Version: 0.0
@@ -299,11 +299,14 @@ URL `https://developer.gitter.im/docs/streaming-api'.")
   "JSON object of requesing user rooms API.")
 
 (defvar gitter--markup-text-functions '(string-trim
-                                        gitter--markup-emoji)
+                                        gitter--markup-emoji
+                                        gitter--markup-fenced-code)
   "A list of functions to markup text. They will be called in order.
 
-The function takes a string as argument and returns a string.
-The function should not modify the current buffer.")
+The functions should take a string as argument and return a string.
+The functions are called in the Gitter buffer, you can examine some buffer
+local variables etc easily, but you should not modify the buffer or change the
+current buffer.")
 
 
 ;;; Utility
@@ -470,6 +473,47 @@ PARAMS is an alist."
 ;;       (with-no-warnings
 ;;         (font-lock-fontify-buffer)))
 ;;     (buffer-substring 3 (point-max))))
+
+(defun gitter--fontify-code (code mode)
+  "Fontify CODE in major-mode MODE."
+  (with-temp-buffer
+    (insert code)
+    (delay-mode-hooks (funcall mode))
+    (if (fboundp 'font-lock-ensure)
+        (font-lock-ensure)
+      (with-no-warnings
+        (font-lock-fontify-buffer)))
+    (buffer-string)))
+
+(defun gitter--markup-fenced-code (text)
+  "Markup Github-flavored fenced code block.
+
+For reference, see URL
+`https://help.github.com/articles/creating-and-highlighting-code-blocks/'."
+  (with-temp-buffer
+    (insert text)
+    (goto-char (point-min))
+    ;; Assuming there is only one code block
+    (let* ((beg-inner (and (re-search-forward "^\\s-*```\\(.*\\)$" nil t)
+                           (line-end-position)))
+           (lang (and beg-inner
+                      (string-trim (match-string 1))))
+           (beg-outter (and lang
+                            (line-beginning-position)))
+           (end-outter (and beg-outter
+                            (re-search-forward "^\\s-*```\\s-*$" nil t)
+                            (line-end-position)))
+           (end-inner (and end-outter
+                           (line-beginning-position)))
+           (mode (and end-inner
+                      (not (string-empty-p lang))
+                      (intern (format "%s-mode" lang)))))
+      (when (and mode (fboundp mode))
+        (let ((code (buffer-substring beg-inner end-inner)))
+          (gitter--debug "Markup code in %s mode" mode)
+          (delete-region beg-outter end-outter)
+          (insert (gitter--fontify-code code mode)))))
+    (buffer-string)))
 
 (defun gitter--markup-emoji (text)
   (cond ((require 'emojify nil t)

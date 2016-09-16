@@ -8,15 +8,15 @@
 ;; Original author:  wandad guscheh <wandad.guscheh@fh-hagenberg.at>
 ;; Author:           Cayetano Santos
 ;; Keywords: vhdl
-;; Package-Version: 20160810.525
+;; Package-Version: 20160916.1421
 
 ;; Filename: vhdl-tools.el
 ;; Description: Utilities for navigating vhdl sources.
 ;; URL: https://github.com/csantosb/vhdl-tools
 ;; Keywords: convenience
 ;; Compatibility: GNU Emacs >= 24.5
-;; Version: 5.2
-;; Package-Requires: ((ggtags "0.8.11") (emacs "24.5") (outshine "2.0") (helm "1.9.9"))
+;; Version: 5.3
+;; Package-Requires: ((ggtags "0.8.11") (emacs "24.5") (outshine "2.0") (helm "2.1.0"))
 
 ;;; License:
 ;;
@@ -665,16 +665,7 @@ When no symbol at point, move point to indentation."
   "Tangle a `vorg' `MYFILE' file to its corresponding `vhdl' file."
   (interactive (list (format "%s.org" (file-name-base))))
   (when (region-active-p) (keyboard-quit))
-  (let (;; When tangling the org file, this code helps to auto set proper
-	;; indentation, whitespace fixup, alignment, and case fixing to entire
-	;; exported buffer
-	(org-babel-post-tangle-hook
-	 (add-hook 'org-babel-post-tangle-hook
-		   (lambda ()
-		     (when (string= major-mode "vhdl-mode")
-		       (vhdl-beautify-buffer)
-		       (save-buffer))) nil t))
-	(org-babel-tangle-uncomment-comments nil)
+  (let ((org-babel-tangle-uncomment-comments nil)
 	;; sets the "comments:link" header arg
 	;; possible as this is constant header arg, not dynamic with code block
 	(org-babel-default-header-args
@@ -687,12 +678,23 @@ When no symbol at point, move point to indentation."
 		 org-babel-tangle-comment-format-beg))
 	(org-babel-tangle-comment-format-end
 	 (format "%s %s" vhdl-tools-vorg-tangle-comment-format-end
-		 org-babel-tangle-comment-format-end)))
-    ;; tangle and jump to tangled file only when there are tangled blocks
-    (when (org-babel-tangle-file myfile (format "%s.vhd" (file-name-base
-							  myfile)) "vhdl")
-      (when (called-interactively-p 'interactive)
-	(call-interactively 'vhdl-tools-vorg-jump-from-vorg)))))
+		 org-babel-tangle-comment-format-end))
+	(myfilename (format "%s.vhd" (file-name-base myfile))))
+    (if (or (not (file-exists-p myfilename))
+	    (file-newer-than-file-p myfile myfilename))
+	;; tangle, beautify and jump to tangled file only when there are tangled blocks
+	(when (org-babel-tangle-file myfile myfilename "vhdl")
+	  ;; When tangling the org file, this code helps to auto set proper
+	  ;; indentation, whitespace fixup, alignment, and case fixing to entire
+	  ;; exported buffer
+	  (message (format "File %s tangled to %s." myfile myfilename))
+	  (org-babel-with-temp-filebuffer myfilename
+	    (vhdl-beautify-buffer)
+	    (save-buffer)))
+      (message (format "File %s NOT tangled to %s." myfile myfilename)))
+    (when (and (called-interactively-p 'interactive)
+	       (file-exists-p myfilename))
+      (call-interactively 'vhdl-tools-vorg-jump-from-vorg))))
 
 ;;;###autoload
 (defun vhdl-tools-vorg-tangle-all ()
@@ -722,10 +724,11 @@ Beautifies source code blocks before editing."
 (defun vhdl-tools-vorg-src-block-beautify ()
   "Beautify of source code block at point."
   (interactive)
-  (org-edit-src-code)
-  (vhdl-beautify-buffer)
-  (org-edit-src-save)
-  (org-edit-src-exit))
+  (when (org-in-src-block-p t)
+    (org-edit-src-code)
+    (vhdl-beautify-buffer)
+    (org-edit-src-save)
+    (org-edit-src-exit)))
 
 
 ;;; Links

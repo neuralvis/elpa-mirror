@@ -7,7 +7,7 @@
 ;; Based on: simplenote.el
 ;;     by Konstantinos Efstathiou <konstantinos@efstathiou.gr>
 ;; Package-Requires: ((request-deferred "0.2.0"))
-;; Package-Version: 20160318.603
+;; Package-Version: 20160916.622
 ;; Keywords: simplenote
 ;; Version: 2.2.2
 
@@ -576,6 +576,8 @@ setting."
     (when create-flag
       (run-hooks 'simplenote2-create-note-hook))
     (simplenote2-note-mode)
+    ;; Rename buffer so the title isn't just the filename hash
+    (rename-buffer (simplenote2--note-headline (buffer-string)))
     ;; Refresh notes display after save
     (add-hook 'after-save-hook
               (lambda () (simplenote2-browser-refresh))
