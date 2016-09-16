@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20160914.435
+;; Package-Version: 20160915.914
 ;; Version: 0.8.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.8.0"))
 ;; Keywords: matching
@@ -787,8 +787,10 @@ Run `swiper' for those buffers."
           (list "")
         (setq ivy--old-cands (nreverse cands))))))
 
+(defvar swiper-window-width 80)
+
 (defun swiper--all-format-function (cands)
-  (let* ((ww (window-width))
+  (let* ((ww swiper-window-width)
          (col2 1)
          (cands-with-buffer
           (mapcar (lambda (s)
@@ -826,7 +828,8 @@ Run `swiper' for those buffers."
 (defun swiper-all ()
   "Run `swiper' for all opened buffers."
   (interactive)
-  (let ((ivy-format-function #'swiper--all-format-function))
+  (let* ((swiper-window-width (- (frame-width) (if (display-graphic-p) 0 1)))
+         (ivy-format-function #'swiper--all-format-function))
     (ivy-read "swiper-all: " 'swiper-all-function
               :action 'swiper-all-action
               :unwind #'swiper--cleanup

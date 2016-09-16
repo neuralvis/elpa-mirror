@@ -11,11 +11,11 @@
 ;; Author: Henrik Lissner
 ;; Maintainer: Henrik Lissner <henrik@lissner.net>
 ;; Created: February 18, 2016
-;; Modified: May 30, 2016
-;; Version: 1.0.3
-;; Package-Version: 1.0.3
-;; Homepage: https://github.com/hlissner/pug-mode
-;; Keywords: markup, language, jade pug
+;; Modified: September 15, 2016
+;; Version: 1.0.4
+;; Package-Version: 1.0.4
+;; Homepage: https://github.com/hlissner/emacs-pug-mode
+;; Keywords: markup, language, jade, pug
 ;; Package-Requires: ((cl-lib "0.5"))
 ;;
 ;; This file is not part of GNU Emacs.
@@ -231,6 +231,7 @@ declaration"
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?\" "\"" table)
     (modify-syntax-entry ?\' "." table)
+    (modify-syntax-entry ?= " " table)
     (modify-syntax-entry ?# "." table)
     (modify-syntax-entry ?. "." table)
     (modify-syntax-entry ?: "." table)
@@ -515,6 +516,13 @@ line."
 (defun pug-indent-string ()
   "Return the indentation string for `tab-width'."
   (mapconcat 'identity (make-list tab-width " ") ""))
+
+;;;###autoload
+(defun pug-compile ()
+  (interactive)
+  (if (memq major-mode '(pug-mode jade-mode))
+      (compile (format "pug %s" buffer-file-name))
+    (user-error "Not in a pug-mode buffer")))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.\\(jade\\|pug\\)\\'" . pug-mode))

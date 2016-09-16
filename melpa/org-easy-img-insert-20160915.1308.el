@@ -1,11 +1,10 @@
 ;;; org-easy-img-insert.el --- An easier way to add images from the web in org mode  -*- lexical-binding: t; -*-
-;;;###autoload
 
 ;; Copyright (C) 2016  Tashrif Sanil
 
 ;; Author: Tashrif Sanil <tashrifsanil@kloke-source.com>
 ;; URL: https://github.com/tashrifsanil/org-easy-img-insert
-;; Package-Version: 20160914.1623
+;; Package-Version: 20160915.1308
 ;; Version: 2.0
 ;; Keywords: convenience, hypermedia, files
 ;; Package-Requires: ((emacs "24.4"))
