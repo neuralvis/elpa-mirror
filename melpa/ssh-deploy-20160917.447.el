@@ -3,9 +3,9 @@
 ;; Author: Christian Johansson <github.com/cjohansson>
 ;; Maintainer: Christian Johansson <github.com/cjohansson>
 ;; Created: 5 Jul 2016
-;; Modified: 1 Sep 2016
-;; Version: 1.36
-;; Package-Version: 20160831.2219
+;; Modified: 17 Sep 2016
+;; Version: 1.37
+;; Package-Version: 20160917.447
 ;; Keywords: tools, convenience
 ;; URL: https://github.com/cjohansson/emacs-ssh-deploy
 
@@ -80,7 +80,7 @@
   :type 'boolean
   :group 'ssh-deploy)
 
-(defcustom ssh-deploy-protocol 'ssh'
+(defcustom ssh-deploy-protocol "ssh"
   "String variable defining current protocol, 'ssh' by default."
   :type 'string
   :group 'ssh-deploy)
@@ -98,14 +98,17 @@
 	   (fboundp 'tramp-term--initialize)
 	   (fboundp 'tramp-term--do-ssh-login))
       (progn
-        (let ((hostname (replace-regexp-in-string ":.*$" "" remote-host)))
-          (let ((host (split-string hostname "@")))
-            (message "Opening tramp-terminal for remote host '%s@%s' or '%s' translated from '%s'.." (car host) (car (last host)) hostname remote-host)
-            (unless (eql (catch 'tramp-term--abort (tramp-term--do-ssh-login host)) 'tramp-term--abort)
-              (tramp-term--initialize hostname)
-              (run-hook-with-args 'tramp-term-after-initialized-hook hostname)
-              (message "tramp-term initialized")))))
-    (message "tramp-term is not installed.")))
+	(if (string= ssh-deploy-protocol "ssh")
+	    (progn
+	      (let ((hostname (replace-regexp-in-string ":.*$" "" remote-host)))
+		(let ((host (split-string hostname "@")))
+		  (message "Opening tramp-terminal for remote host '%s@%s' or '%s' translated from '%s'.." (car host) (car (last host)) hostname remote-host)
+		  (unless (eql (catch 'tramp-term--abort (tramp-term--do-ssh-login host)) 'tramp-term--abort)
+		    (tramp-term--initialize hostname)
+		    (run-hook-with-args 'tramp-term-after-initialized-hook hostname)
+		    (message "tramp-term initialized")))))
+	  (message "Terminal is only available for ssh protocol.")))
+	  (message "tramp-term is not installed.")))
 
 (defun ssh-deploy-file-is-in-path (file path)
   "Return true if FILE is in the path PATH."
@@ -167,13 +170,15 @@
 			  (ssh-deploy-run-shell-command command)))
                     (progn
 		      (message "Uploading directory '%s' to '%s'.." path remote-path)
-		      (if (string= path local-root)
-			  (progn
-			    (let ((command (concat "scp -r " (concat (shell-quote-argument path) "*") " " (shell-quote-argument (concat remote-path)))))
-			      (ssh-deploy-run-shell-command command)))
-			(progn
-			  (let ((command (concat "scp -r " (shell-quote-argument path) " " (shell-quote-argument (file-name-directory (directory-file-name remote-path))))))
-			    (ssh-deploy-run-shell-command command)))))))
+		      (if (string= ssh-deploy-protocol "ssh")
+			  (if (string= path local-root)
+			      (progn
+				(let ((command (concat "scp -r " (concat (shell-quote-argument path) "*") " " (shell-quote-argument (concat remote-path)))))
+				  (ssh-deploy-run-shell-command command)))
+			    (progn
+			      (let ((command (concat "scp -r " (shell-quote-argument path) " " (shell-quote-argument (file-name-directory (directory-file-name remote-path))))))
+				(ssh-deploy-run-shell-command command))))
+			(message "Only ssh protocol is supported for directory operations")))))
               (progn
                 (message "Downloading path '%s' to '%s'.." remote-path path)
                 (if file-or-directory
@@ -183,13 +188,15 @@
 			(ssh-deploy-run-shell-command command)))
                   (progn
 		    (message "Downloading directory '%s' to '%s'.." remote-path path)
-		    (if (string= path local-root)
-			(progn
-			  (let ((command (concat "scp -r " (concat (shell-quote-argument remote-path) "*") " " (shell-quote-argument path))))
-			    (ssh-deploy-run-shell-command command)))
-		      (progn
-			  (let ((command (concat "scp -r " (shell-quote-argument remote-path) " " (shell-quote-argument (file-name-directory (directory-file-name path))))))
-			    (ssh-deploy-run-shell-command command)))))))))
+		      (if (string= ssh-deploy-protocol "ssh")
+			  (if (string= path local-root)
+			      (progn
+				(let ((command (concat "scp -r " (concat (shell-quote-argument remote-path) "*") " " (shell-quote-argument path))))
+				  (ssh-deploy-run-shell-command command)))
+			    (progn
+			      (let ((command (concat "scp -r " (shell-quote-argument remote-path) " " (shell-quote-argument (file-name-directory (directory-file-name path))))))
+				(ssh-deploy-run-shell-command command))))
+			(message "Only ssh protocol is supported for directory operations")))))))
         (if ssh-deploy-debug
             (message "Path '%s' is not in the root '%s'" path local-root))))))
 
