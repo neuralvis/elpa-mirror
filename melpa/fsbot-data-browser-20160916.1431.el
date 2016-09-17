@@ -6,8 +6,8 @@
 ;; Maintainer: Benaiah Mischenko
 ;; Created: Thu September 15 2016
 ;; Version: 0.1
-;; Package-Version: 20160915.2149
-;; Package-Requires: ((dash "2.12.1"))
+;; Package-Version: 20160916.1431
+;; Package-Requires: ()
 ;; Last-Updated: Thu September 15 2016
 ;;           By: Benaiah Mischenko
 ;;     Update #: 1
@@ -41,8 +41,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
-
-(require 'dash)
 
 ;;;###autoload
 (defun fsbot-download-data ()
@@ -81,12 +79,12 @@
   (let ((fsbot-parsed-data
          (with-temp-buffer (fsbot-slurp-file-into-buffer "~/.emacs.d/.fsbot-data-raw")
                            (fsbot-parse-data))))
-    (-map (lambda (entry)
-            (let ((key (aref (car entry) 0))
-                  (notes (fsbot-process-notes
-                          (cdr (car (cdr (aref (car entry) 7)))))))
-              `(,key [,key ,notes])))
-          fsbot-parsed-data)))
+    (mapcar (lambda (entry)
+              (let ((key (aref (car entry) 0))
+                    (notes (fsbot-process-notes
+                            (cdr (car (cdr (aref (car entry) 7)))))))
+                `(,key [,key ,notes])))
+            fsbot-parsed-data)))
 
 (define-derived-mode fsbot-data-browser-mode tabulated-list-mode
   "Fsbot Data Browser" "Tabulated-list-mode browser for fsbot data."
