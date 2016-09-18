@@ -6,6 +6,7 @@ basic GitHub repository management.  Supported actions include:
  - pushing brand-new local repositories up to GitHub
  - creating forks of existing repositories
  - submitting pull requests upstream
+ - creating issues
 
 Press `@' in the status buffer to get started -- happy hacking!
 

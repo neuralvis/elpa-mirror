@@ -4,7 +4,7 @@
 
 ;; Author: Elis "etu" Axelsson
 ;; URL: https://github.com/etu/0blayout
-;; Package-Version: 20160826.1522
+;; Package-Version: 20160918.133
 ;; Package-X-Original-Version: 20151021.0
 ;; Version: 1.0.0
 ;; Keywords: convenience, window-management
@@ -51,6 +51,8 @@
 
 (defvar 0blayout-alist ()
   "List of the currently defined layouts.")
+
+;;;###autoload
 (defvar 0blayout-default "default"
   "Name of default layout used")
 
@@ -61,6 +63,7 @@
 
 (defvar 0blayout-mode-map (make-sparse-keymap)
   "Keymap for 0blayout.")
+
 
 ;; Function to create a new layout
 (defun 0blayout-new (layout-name)
@@ -78,7 +81,6 @@ Argument LAYOUT-NAME Name of the layout."
 
   ;; Save the name of the new current layout
   (0blayout-set-current layout-name))
-
 
 
 ;; Function to kill current layout
@@ -106,7 +108,6 @@ Argument LAYOUT-NAME Name of the layout."
         (0blayout-set-current (symbol-name new-layout))))))
 
 
-
 ;; Function to switch layout
 (defun 0blayout-switch (layout-name)
   "0blayout switching function.
@@ -131,7 +132,6 @@ Argument LAYOUT-NAME Name of the layout."
         (message "Switch to layout: '%s'" layout-name)))))
 
 
-
 ;; Function to save layout
 (defun 0blayout-save ()
   "This is a helper function to save the current layout."
@@ -149,7 +149,6 @@ Argument LAYOUT-NAME Name of the layout."
   (message "Saved the currently active layout: %s" (0blayout-get-current)))
 
 
-
 ;; Save current layout
 (defun 0blayout-set-current (layout-name)
   "Helper function to store layout name"
@@ -157,14 +156,11 @@ Argument LAYOUT-NAME Name of the layout."
   (set-frame-parameter nil '0blayout-current layout-name))
 
 
-
 ;; Get current layout
 (defun 0blayout-get-current ()
   "Helper function to get layout name"
 
   (frame-parameter nil '0blayout-current))
-
-
 
 
 ;;;###autoload
@@ -179,11 +175,12 @@ Argument LAYOUT-NAME Name of the layout."
 (0blayout-add-keybindings-with-prefix "C-c C-l")
 
 
-
 ;;;###autoload
 (add-to-list 'default-frame-alist (cons '0blayout-current 0blayout-default))
-(set-frame-parameter nil '0blayout-current 0blayout-default)
 
+
+;;;###autoload
+(set-frame-parameter nil '0blayout-current 0blayout-default)
 
 
 ;;;###autoload
@@ -193,6 +190,7 @@ Argument LAYOUT-NAME Name of the layout."
   :global t
   :group '0blayout
   :keymap 0blayout-mode-map)
+
 
 (provide '0blayout)
 

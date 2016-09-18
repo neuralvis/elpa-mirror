@@ -6,7 +6,7 @@
 ;; Maintainer: Benaiah Mischenko
 ;; Created: Thu September 15 2016
 ;; Version: 0.1
-;; Package-Version: 20160916.1431
+;; Package-Version: 20160918.213
 ;; Package-Requires: ()
 ;; Last-Updated: Thu September 15 2016
 ;;           By: Benaiah Mischenko
@@ -41,6 +41,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
+
+(require 'cl-lib)
+(require 'subr-x)
+
+(defvar fsbot-data)
 
 ;;;###autoload
 (defun fsbot-download-data ()
@@ -79,12 +84,42 @@
   (let ((fsbot-parsed-data
          (with-temp-buffer (fsbot-slurp-file-into-buffer "~/.emacs.d/.fsbot-data-raw")
                            (fsbot-parse-data))))
-    (mapcar (lambda (entry)
-              (let ((key (aref (car entry) 0))
-                    (notes (fsbot-process-notes
-                            (cdr (car (cdr (aref (car entry) 7)))))))
-                `(,key [,key ,notes])))
-            fsbot-parsed-data)))
+    (let ((loaded-fsbot-data
+           (mapcar (lambda (entry)
+                     (let ((key (aref (car entry) 0))
+                           (notes (fsbot-process-notes
+                                   (cdr (car (cdr (aref (car entry) 7)))))))
+                       `(,key [,key ,notes])))
+                   fsbot-parsed-data)))
+      (setq fsbot-data loaded-fsbot-data)
+      loaded-fsbot-data)))
+
+(defun fsbot-get-entry (entry-title)
+  (car (cdr (cl-find-if
+             (lambda (entry) (string-equal (car entry) entry-title))
+             fsbot-data))))
+
+(defun fsbot-get-title-of-entry (entry)
+  (elt entry 0))
+
+(defun fsbot-get-text-of-entry (entry)
+  (elt entry 1))
+
+(defun fsbot-display-entry (title)
+  (interactive (list (completing-read "Fsbot entry: " fsbot-data)))
+  (pop-to-buffer "*fsbot entry*")
+  (erase-buffer)
+  (let ((text (fsbot-get-text-of-entry (fsbot-get-entry title))))
+    (insert (format "%s is \n%s" title
+                    (let ((text-as-list (car (read-from-string (string-trim text))))
+                          (current-entry -1))
+                      (if (and (listp text-as-list)
+                               (< 0 (length text-as-list)))
+                          (string-join (mapcar (lambda (el)
+                                                 (cl-incf current-entry)
+                                                 (format "[%s]: %s\n" current-entry el))
+                                               text-as-list))
+                        text))))))
 
 (define-derived-mode fsbot-data-browser-mode tabulated-list-mode
   "Fsbot Data Browser" "Tabulated-list-mode browser for fsbot data."
@@ -95,7 +130,7 @@
   (tabulated-list-init-header))
 
 (defun fsbot-list-data (data)
-  (pop-to-buffer "*fsbot data*" nil)
+  (pop-to-buffer "*fsbot data*")
   (fsbot-data-browser-mode)
   (setq truncate-lines t)
   (setq tabulated-list-entries data)

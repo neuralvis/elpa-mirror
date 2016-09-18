@@ -5,7 +5,7 @@
 ;; Authors: Austin Bingham <austin.bingham@gmail.com>
 ;;          Peter Vasil <mail@petervasil.net>
 ;; version: 0.1
-;; Package-Version: 20160910.901
+;; Package-Version: 20160918.204
 ;; URL: https://github.com/abingham/emacs-ycmd
 ;; Package-Requires: ((ycmd "0.1") (company "0.9.0") (deferred "0.2.0") (s "1.9.0") (dash "2.12.1") (let-alist "1.0.4"))
 ;;
@@ -291,6 +291,20 @@ with spaces."
       (propertize .insertion_text 'meta meta 'doc .detailed_info 'kind kind
                   'params params 'filepath filepath 'line_num line-num))))
 
+;; The next two function are taken from racer.el
+;; https://github.com/racer-rust/emacs-racer
+(defun company-ycmd--file-and-parent (path)
+  "Convert PATH /foo/bar/baz/q.txt to baz/q.txt."
+  (let ((file (f-filename path))
+        (parent (f-filename (f-parent path))))
+    (f-join parent file)))
+
+(defun company-ycmd--trim-up-to (needle s)
+  "Return content after the occurrence of NEEDLE in S."
+  (-if-let (idx (s-index-of needle s))
+      (substring s (+ idx (length needle)))
+    s))
+
 (defun company-ycmd--construct-candidate-rust (candidate)
   "Construct completion string from CANDIDATE for rust file-types."
   (company-ycmd--with-destructured-candidate candidate
@@ -299,14 +313,13 @@ with spaces."
                       ("Module"
                        (if (string= .insertion_text .extra_menu_info)
                            ""
-                         (concat " " .extra_menu_info)))
+                         (concat " " (company-ycmd--file-and-parent
+                                      .extra_menu_info))))
+                      ("StructField"
+                       (concat " " .extra_menu_info))
                       (_
                        (->> .extra_menu_info
-                            (funcall (lambda (needle s)
-                                       (-if-let (idx (s-index-of needle s))
-                                           (substring s (+ idx (length needle)))
-                                         s))
-                                     .insertion_text)
+                            (company-ycmd--trim-up-to .insertion_text)
                             (s-chop-suffixes '(" {" "," ";"))))))
            (annotation (concat context
                                (when (s-present? .kind)

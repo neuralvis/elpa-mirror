@@ -4,9 +4,9 @@
 
 ;; Author: Sean Allred <code@seanallred.com>
 ;; Keywords: git, tools, vc
-;; Package-Version: 20160917.1609
+;; Package-Version: 20160918.117
 ;; Homepage: https://github.com/vermiculus/magithub
-;; Package-Requires: ((magit "2.8.0") (emacs "24.3"))
+;; Package-Requires: ((emacs "24.3") (magit "2.8.0") (git-commit "20160821.1338") (with-editor "20160828.1025"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 ;;  - pushing brand-new local repositories up to GitHub
 ;;  - creating forks of existing repositories
 ;;  - submitting pull requests upstream
+;;  - creating issues
 ;;
 ;; Press `@' in the status buffer to get started -- happy hacking!
 ;;
@@ -43,6 +44,8 @@
 (require 'magit)
 (require 'magit-process)
 (require 'magit-popup)
+(require 'git-commit)
+(require 'with-editor)
 
 (defcustom magithub-hub-executable "hub"
   "The hub executable used by Magithub."
@@ -91,6 +94,7 @@ and returns its output as a list of lines."
   :actions '((?@ "Browse on GitHub" magithub-browse)
              (?c "Create" magithub-create-popup)
              (?f "Fork" magithub-fork-popup)
+             (?i "Issues" magithub-issues-popup)
              (?p "Submit a pull request" magithub-pull-request-popup)))
 
 (magit-define-popup magithub-create-popup
@@ -120,6 +124,13 @@ and returns its output as a list of lines."
   :actions '((?P "Submit a pull request" magithub-pull-request))
   :default-arguments '("-o"))
 
+(magit-define-popup magithub-issues-popup
+  "Popup console for creating GitHub issues."
+  'magithub-commands
+  :man-page "hub"
+  :options '((?l "Add labels" "--label=" magithub-issue-read-labels))
+  :actions '((?c "Create new issue" magithub-issue-new)))
+
 (defun magithub-github-repository-p ()
   "Non-nil if \"origin\" points to GitHub."
   (let ((url (magit-get "remote" "origin" "url")))
@@ -127,7 +138,75 @@ and returns its output as a list of lines."
         (string-prefix-p "https://github.com/" url)
         (string-prefix-p "git://github.com/" url))))
 
+(defun magithub-issue-new ()
+  "Create a new issue on GitHub."
+  (interactive)
+  (unless (magithub-github-repository-p)
+    (user-error "Not a GitHub repository"))
+  (magithub--command-with-editor
+   "issue" (cons "create" (magithub-issues-arguments))))
+
+(defun magithub-issue-label-list ()
+  "Return a list of issue labels.
+This is a hard-coded list right now."
+  (list "bug" "duplicate" "enhancement"
+        "help wanted" "invalid" "question" "wontfix"))
+
+(defun magithub-issue-read-labels (prompt &optional default)
+  "Read some issue labels."
+  (string-join
+   (magithub--completing-read-multiple
+    (format "%s... %s" prompt "Issue labels (or \"\" to quit): ")
+    (cl-set-difference
+     (magithub-issue-label-list)
+     (when default
+       (split-string default ","))))
+   ","))
+
+(defun magithub--completing-read-multiple (prompt collection)
+  "Using PROMPT, get a list of elements in COLLECTION.
+This function continues until all candidates have been entered or
+until the user enters a value of \"\".  Duplicate entries are not
+allowed."
+  (let (label-list this-label done)
+    (while (not done)
+      (setq collection (remove this-label collection)
+            this-label "")
+      (when collection
+        ;; @todo it would be nice to detect whether or not we are
+        ;; allowed to create labels -- if not, we can require-match
+        (setq this-label (completing-read prompt collection)))
+      (unless (setq done (string-empty-p this-label))
+        (add-to-list 'label-list this-label t)))
+    label-list))
+
+(defface magithub-issue-warning-face
+  '((((class color)) :foreground "red"))
+  "Face used to call out warnings in the issue-create buffer."
+  :group 'magithub)
+
+(defun magithub-check-buffer ()
+  (when (and buffer-file-name
+             (member (file-name-base buffer-file-name)
+                     '("ISSUE_EDITMSG")))
+    (with-editor-mode 1)
+    (git-commit-setup-font-lock)
+    (font-lock-add-keywords
+     nil
+     `(("^# \\(Creating issue for .*\\)"
+        (1 'magithub-issue-warning-face t))
+       (,(rx (= 40 (| digit (any (?A . ?F) (?a . ?f)))))
+        (0 'magit-hash t)))
+     t)
+    (set (make-local-variable 'with-editor-pre-finish-hook)
+         with-editor-pre-finish-hook)
+    (add-hook
+     'with-editor-pre-finish-hook
+     (lambda () (unfill-region (point-min) (point-max))))))
+(add-hook 'find-file-hook #'magithub-check-buffer)
+
 (defun magithub-browse ()
+  "Open the repository in your browser."
   (interactive)
   (unless (magithub-github-repository-p)
     (user-error "Not a GitHub repository"))
