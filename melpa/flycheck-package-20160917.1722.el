@@ -5,7 +5,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;;         Fanael Linithien <fanael4@gmail.com>
 ;; Keywords: lisp
-;; Package-Version: 20160908.621
+;; Package-Version: 20160917.1722
 ;; Version: 0
 ;; Package-Requires: ((cl-lib "0.5") (flycheck "0.22") (emacs "24"))
 
@@ -83,7 +83,8 @@ This is bound dynamically while the checks run.")
             (let ((desc (flycheck-package--check-package-el-can-parse)))
               (when desc
                 (flycheck-package--check-package-summary desc)))
-            (flycheck-package--check-dependency-list)))))
+            (let ((deps (flycheck-package--check-dependency-list)))
+              (flycheck-package--check-lexical-binding-requires-emacs-24 deps))))))
     flycheck-package--errors))
 
 (defun flycheck-package--error (line col type message)
@@ -94,7 +95,9 @@ This is bound dynamically while the checks run.")
 ;;; Checks
 
 (defun flycheck-package--check-dependency-list ()
-  "Return position and contents of the \"Package-Requires\" header, if any."
+  "Check the contents of the \"Package-Requires\" header.
+Return a list of well-formed dependencies, same as
+`flycheck-package--check-well-formed-dependencies'."
   (when (flycheck-package--goto-header "Package-Requires")
     (let ((position (match-beginning 3))
           (line-no (line-number-at-pos))
@@ -106,16 +109,16 @@ This is bound dynamically while the checks run.")
                line-no 1 'error
                "More than one expression provided."))
             (let ((deps (flycheck-package--check-well-formed-dependencies position line-no parsed-deps)))
-              (when deps
-                (flycheck-package--check-packages-installable deps)
-                (flycheck-package--check-deps-use-non-snapshot-version deps)
-                (flycheck-package--check-deps-do-not-use-zero-versions deps)
-                (flycheck-package--check-lexical-binding-requires-emacs-24 deps)
-                (flycheck-package--check-do-not-depend-on-cl-lib-1.0 deps))))
+              (flycheck-package--check-packages-installable deps)
+              (flycheck-package--check-deps-use-non-snapshot-version deps)
+              (flycheck-package--check-deps-do-not-use-zero-versions deps)
+              (flycheck-package--check-do-not-depend-on-cl-lib-1.0 deps)
+              deps))
         (error
          (flycheck-package--error
           line-no 1 'error
-          (format "Couldn't parse \"Package-Requires\" header: %s" (error-message-string err))))))))
+          (format "Couldn't parse \"Package-Requires\" header: %s" (error-message-string err)))
+         nil)))))
 
 (defun flycheck-package--check-well-formed-dependencies (position line-no parsed-deps)
   "Check that dependencies listed at POSITION on LINE-NO are well-formed.

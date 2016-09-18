@@ -4,7 +4,7 @@
 
 ;; Author: Anler Hernandez Peral <inbox@anler.me>
 ;; Keywords: color, theme, minimal, basic, simple, white
-;; Package-Version: 20160916.1158
+;; Package-Version: 20160917.1043
 ;; URL: http://github.com/anler/white-theme.el
 ;; Package-Requires: ((emacs "24"))
 
@@ -163,12 +163,12 @@
    `(font-lock-builtin-face ((t :foreground nil :background nil :weight bold)))
    `(font-lock-comment-delimiter-face ((t :foreground ,gray4 :background ,gray7 :slant italic)))
    `(font-lock-comment-face ((t :foreground ,gray4 :background ,gray7 :slant italic)))
+   `(font-lock-preprocessor-face ((t :foreground nil :background nil :slant italic)))
    `(font-lock-constant-face ((t :foreground nil :background nil :weight bold :slant italic)))
    `(font-lock-doc-face ((t :foreground nil :background ,gray7 :slant italic)))
    `(font-lock-function-name-face ((t :foreground nil :background nil :weight bold)))
-   `(font-lock-keyword-face ((t :foreground nil :background nil :weight bold)))
+   `(font-lock-keyword-face ((t :foreground ,gray3 :background nil)))
    `(font-lock-negation-char-face ((t :foreground nil :background nil)))
-   `(font-lock-preprocessor-face ((t :foreground nil :background nil :slant italic)))
    `(font-lock-regexp-grouping-backslash ((t :foreground nil :background nil)))
    `(font-lock-regexp-grouping-construct ((t :foreground nil :background nil)))
    `(font-lock-string-face ((t :foreground nil :background ,gray7 :slant italic)))

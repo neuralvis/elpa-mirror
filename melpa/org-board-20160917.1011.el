@@ -1,13 +1,18 @@
-;;; org-board.el --- org-board is a bookmarking and web archival system for Org mode.
+;;; org-board.el --- a bookmarking and web archival system for Org mode.
 
 ;; Author: Charles A. Roelli <charles@aurox.ch>
 ;; Created: Wed Aug 10 2016
 ;; Keywords: org, bookmarks, archives
-;; Package-Version: 20160915.1404
+;; Package-Version: 20160917.1011
 
 ;;; Commentary:
 ;;
-;; For documentation see README.org.
+;; org-board uses `org-attach' and `wget' to provide a bookmarking and
+;; web archival system directly from an Org file.  Any `wget' switch
+;; can be used in `org-board', and presets (like user agents) can be
+;; used for easier control.  Every snapshot is logged, and snapshots
+;; for the same link can be compared using the `ztree' package
+;; (optional dependency).
 
 ;;; Code:
 
@@ -242,6 +247,13 @@ attachments to the entry are deleted."
   (if (require 'ztree nil t)
       (ztree-diff archive1 archive2)
     (message "Ztree required!")))
+
+;;;###autoload
+(defun org-board-cancel ()
+  "Cancel the current org-board archival process.  Leave the
+output buffer intact."
+  (interactive)
+  (kill-process "org-board-wget-process"))
 
 (provide 'org-board)
 

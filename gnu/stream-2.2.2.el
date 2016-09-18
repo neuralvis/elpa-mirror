@@ -4,7 +4,7 @@
 
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: stream, laziness, sequences
-;; Version: 2.2.1
+;; Version: 2.2.2
 ;; Package-Requires: ((emacs "25"))
 ;; Package: stream
 
@@ -49,6 +49,17 @@
 ;; (defun fib (a b)
 ;;  (stream-cons a (fib b (+ a b))))
 ;; (fib 0 1)
+;;
+;; A note for developers: Please make sure to implement functions that
+;; process streams (build new streams out of given streams) in a way
+;; that no new elements in any argument stream are generated.  This is
+;; most likely an error since it changes the argument stream.  For
+;; example, a common error is to call `stream-empty-p' on an input
+;; stream and build the stream to return depending on the result.
+;; Instead, delay such tests until elements are requested from the
+;; resulting stream.  A way to achieve this is to wrap such tests into
+;; `stream-make' or `stream-delay'.  See the implementations of
+;; `stream-append' or `seq-drop-while' for example.
 
 ;;; Code:
 
@@ -148,8 +159,7 @@ range is infinite."
 
 (defun streamp (stream)
   "Return non-nil if STREAM is a stream, nil otherwise."
-  (and (consp stream)
-       (eq (car stream) stream--identifier)))
+  (eq (car-safe stream) stream--identifier))
 
 (defun stream-empty ()
   "Return a new empty stream."
@@ -197,10 +207,10 @@ elements in the STREAMS in order."
 
 (cl-generic-define-generalizer stream--generalizer
   11
-  (lambda (name)
+  (lambda (name &rest _)
     `(when (streamp ,name)
        'stream))
-  (lambda (tag)
+  (lambda (tag &rest _)
     (when (eq tag 'stream)
       '(stream))))
 
@@ -230,8 +240,19 @@ This function will eagerly consume the entire stream."
       (setq stream (stream-rest stream)))
     len))
 
-(cl-defmethod seq-subseq ((stream stream) start end)
-  (seq-take (seq-drop stream start) (- end start)))
+(cl-defmethod seq-subseq ((stream stream) start &optional end)
+  "Return a stream of elements of STREAM from START to END.
+
+END is exclusive.  If END is omitted, include all elements from
+START on.  Both START and END must be non-negative.  Since
+streams are a delayed type of sequences, don't signal an error if
+START or END are larger than the number of elements (the returned
+stream will simply be accordingly shorter, or even empty)."
+  (when (or (< start 0) (and end (< end 0)))
+    (error "seq-subseq: only non-negative indexes allowed for streams"))
+  (let ((stream-from-start (seq-drop stream start)))
+    (if end (seq-take stream-from-start (- end start))
+      stream-from-start)))
 
 (cl-defmethod seq-into-sequence ((stream stream))
   "Convert STREAM into a sequence."
@@ -438,6 +459,28 @@ resulting stream to the files fulfilling this predicate."
 
 ;;;; ChangeLog:
 
+;; 2016-09-16  Michael Heerdegen  <michael_heerdegen@web.de>
+;; 
+;; 	Add systematic tests against bogus element generation
+;; 
+;; 	Also add a note about this problem in the header and how to avoid it.
+;; 
+;; 2016-09-13  Michael Heerdegen  <michael_heerdegen@web.de>
+;; 
+;; 	Pinpoint semantics of `seq-subseq's implementation for streams
+;; 
+;; 	- Make argument END optional.
+;; 
+;; 	- Forbid negative index arguments.
+;; 
+;; 	- Add tests.
+;; 
+;; 2016-08-04  Stefan Monnier  <monnier@iro.umontreal.ca>
+;; 
+;; 	* stream/stream.el (stream--generalizer): Accept more arguments
+;; 
+;; 	(streamp): Use car-safe.
+;; 
 ;; 2016-08-02  Michael Heerdegen  <michael_heerdegen@web.de>
 ;; 
 ;; 	Avoid recursive stream-append in stream-concatenate

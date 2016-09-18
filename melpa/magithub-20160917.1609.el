@@ -4,7 +4,8 @@
 
 ;; Author: Sean Allred <code@seanallred.com>
 ;; Keywords: git, tools, vc
-;; Package-Version: 20160916.1427
+;; Package-Version: 20160917.1609
+;; Homepage: https://github.com/vermiculus/magithub
 ;; Package-Requires: ((magit "2.8.0") (emacs "24.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -22,10 +23,18 @@
 
 ;;; Commentary:
 
-;; Magithub is an interface to GitHub.
-
-;; It uses the command-line utility `hub' to interface with GitHub.
-;; See <hub.github.com> for more details.
+;; Magithub is an interface to GitHub using the `hub' utility [1].
+;;
+;; Integrated into Magit workflows, Magithub allows very easy, very
+;; basic GitHub repository management.  Supported actions include:
+;;
+;;  - pushing brand-new local repositories up to GitHub
+;;  - creating forks of existing repositories
+;;  - submitting pull requests upstream
+;;
+;; Press `@' in the status buffer to get started -- happy hacking!
+;;
+;; [1]: https://hub.github.com
 
 ;; Requires hub 2.2.8
 
@@ -40,11 +49,18 @@
   :group 'magithub
   :type 'string)
 
+(defmacro magithub-with-hub (&rest body)
+  `(let  ((magit-git-executable magithub-hub-executable)
+          (magit-pre-call-git-hook nil)
+          (magit-git-global-arguments nil))
+     ,@body))
+
 (defun magithub--hub-command (magit-function command args)
-  (if (executable-find magithub-hub-executable)
-      (let ((magit-git-executable magithub-hub-executable))
-        (funcall magit-function command args))
-    (user-error "Please install hub from hub.github.com")))
+  (unless (executable-find magithub-hub-executable)
+    (user-error "Hub (hub.github.com) not installed; aborting"))
+  (unless (file-exists-p "~/.config/hub")
+    (user-error "Hub hasn't been initialized yet; aborting"))
+  (magithub-with-hub (funcall magit-function command args)))
 
 (defun magithub--command (command &optional args)
   "Run COMMAND synchronously using `magithub-hub-executable'."
@@ -55,11 +71,25 @@
 Ensure GIT_EDITOR is set up appropriately."
   (magithub--hub-command #'magit-run-git-with-editor command args))
 
+(defun magithub--command-output (command &optional args)
+  "Run COMMAND synchronously using `magithub-hub-executable'
+and returns its output as a list of lines."
+  (magithub-with-hub (magit-git-lines command args)))
+
+(defun magithub--command-quick (command &optional args)
+  "Quickly execute COMMAND with ARGS."
+  (ignore (magithub--command-output command args)))
+
+(defvar magithub-after-create-messages
+  '("Don't be shy!"
+    "Don't let your dreams be dreams!"))
+
 (magit-define-popup magithub-dispatch-popup
   "Popup console for dispatching other Magithub popups."
   'magithub-commands
   :man-page "hub"
-  :actions '((?c "Create" magithub-create-popup)
+  :actions '((?@ "Browse on GitHub" magithub-browse)
+             (?c "Create" magithub-create-popup)
              (?f "Fork" magithub-fork-popup)
              (?p "Submit a pull request" magithub-pull-request-popup)))
 
@@ -87,28 +117,60 @@ Ensure GIT_EDITOR is set up appropriately."
               (?o "Open in my browser" "-o"))
   :options '((?b "Base branch" "--base=" magit-read-branch)
              (?h "Head branch" "--head=" magit-read-branch))
-  :actions '((?P "Submit a pull request" magithub-pull-request)))
+  :actions '((?P "Submit a pull request" magithub-pull-request))
+  :default-arguments '("-o"))
+
+(defun magithub-github-repository-p ()
+  "Non-nil if \"origin\" points to GitHub."
+  (let ((url (magit-get "remote" "origin" "url")))
+    (or (string-prefix-p "git@github.com:" url)
+        (string-prefix-p "https://github.com/" url)
+        (string-prefix-p "git://github.com/" url))))
+
+(defun magithub-browse ()
+  (interactive)
+  (unless (magithub-github-repository-p)
+    (user-error "Not a GitHub repository"))
+  (magithub--command-quick "browse"))
 
 (defun magithub-create ()
   "Create the current repository on GitHub."
   (interactive)
+  (message "Creating repository on GitHub...")
   (magithub--command "create" (magithub-create-arguments))
+  (message "Creating repository on GitHub...done!  %s"
+           (nth (random (length magithub-after-create-messages))
+                magithub-after-create-messages))
   (magit-push-popup))
 
 (defun magithub-fork ()
   "Fork 'origin' on GitHub."
   (interactive)
+  (unless (magithub-github-repository-p)
+    (user-error "Not a GitHub repository"))
   (when (and (string-equal "master" (magit-get-current-branch))
              (y-or-n-p "Looks like master is checked out.  Create a new branch? "))
     (call-interactively #'magit-branch-spinoff))
-  (magithub--command "fork" (magithub-fork-arguments)))
+  (message "Forking repository on GitHub...")
+  (magithub--command "fork" (magithub-fork-arguments))
+  (message "Forking repository on GitHub...done"))
 
 (defun magithub-pull-request ()
   "Open a pull request to 'origin' on GitHub."
   (interactive)
-  (when (y-or-n-p "Do you want to push any more commits? ")
-    (magit-push-popup))
-  (magithub--command-with-editor "pull-request" (magithub-pull-request-arguments)))
+  (unless (magithub-github-repository-p)
+    (user-error "Not a GitHub repository"))
+  (let (just-pushed)
+    (unless (magit-get-push-remote)
+      (when (y-or-n-p "No push remote defined; push now? ")
+        (call-interactively #'magit-push-current-to-pushremote)
+        (setq just-pushed t)))
+    (unless (magit-get-push-remote)
+      (user-error "No push remote defined; aborting pull request"))
+    (unless just-pushed
+      (when (y-or-n-p "Do you want to push any more commits? ")
+        (magit-push-popup)))
+    (magithub--command-with-editor "pull-request" (magithub-pull-request-arguments))))
 
 ;; Integrate into the Magit dispatcher and status buffer
 (magit-define-popup-action 'magit-dispatch-popup

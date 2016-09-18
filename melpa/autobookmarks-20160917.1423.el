@@ -5,7 +5,7 @@
 ;; Author: Matúš Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20160430.1221
+;; Package-Version: 20160917.1423
 ;; Created: 28th February 2015
 ;; Package-requires: ((dash "2.10.0") (cl-lib "0.5"))
 ;; Keywords: files
@@ -135,6 +135,9 @@ List of ignored buffers is customizable via `abm-ignore-buffers'."
   (when (abm--process-bookmark-p bookmark)
     (let ((bookmark (or (--first (equal (car bookmark) (car it)) abm-visited-buffers) bookmark)))
       (unless (assoc (car bookmark) abm-recent-buffers)
+        ;; remove all bookmarks which point to a parent of new bookmark
+        (setq abm-recent-buffers
+              (--remove (string-prefix-p (car it) (car bookmark)) abm-recent-buffers))
         (push bookmark abm-recent-buffers))
       (setq abm-visited-buffers (abm--remove-bookmark bookmark abm-visited-buffers)))))
 
@@ -145,13 +148,6 @@ List of ignored buffers is customizable via `abm-ignore-buffers'."
     (user-error "The regexp to match against is empty"))
   (setq abm-recent-buffers (--remove (string-match-p regexp (car it)) abm-recent-buffers)))
 
-;; TODO: add intelligent collapsing of dired bookmarks into a file (=
-;; top level) bookmark.  Instead of saving
-;; - /foo
-;; - /foo/bar
-;; - /foo/bar/baz
-;; - /foo/bar/baz/file.txt
-;; save just /foo/bar/baz/file.txt
 (defun abm-save-to-file ()
   "Save visited and recent buffers to file.
 
@@ -159,12 +155,14 @@ Additionally, before saving the data, it filters the
 `abm-recent-buffers' list and removes bookmarks older than
 `abm-old-bookmark-threshold'."
   (interactive)
-  (setq abm-recent-buffers (--remove (time-less-p
-                                      ;; old threshold in days
-                                      (days-to-time abm-old-bookmark-threshold)
-                                      ;; minus "current - bookmark last used timestamp" (= number of days since last use)
-                                      (time-subtract (current-time) (or (cdr (assoc 'time it)) (current-time))))
-                                     abm-recent-buffers))
+  ;; remove too old bookmarks
+  (setq abm-recent-buffers (--remove
+                            (time-less-p
+                             ;; old threshold in days
+                             (days-to-time abm-old-bookmark-threshold)
+                             ;; minus "current - bookmark last used timestamp" (= number of days since last use)
+                             (time-subtract (current-time) (or (cdr (assoc 'time it)) (current-time))))
+                            abm-recent-buffers))
   (let ((print-level nil)
         (print-length nil))
     (with-temp-file abm-file

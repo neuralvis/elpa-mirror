@@ -4,8 +4,8 @@
 
 ;; Authors: Jason Milkins <jasonm23@gmail.com>
 ;; URL: http://github.com/emacsfodder/emacs-theme-darktooth
-;; Package-Version: 0.1.44
-;; Version: 0.1.44
+;; Package-Version: 0.1.45
+;; Version: 0.1.45
 
 ;;; Commentary:
 ;;  Color theme for Emacs, when soothe and gruvbox collide.
@@ -347,6 +347,13 @@
    `(show-paren-match                          ((t (:foreground ,darktooth-light0 :background ,darktooth-faded_blue))))
    `(show-paren-mismatch                       ((t (:foreground ,darktooth-light0_hard :background ,darktooth-faded_red))))
    `(anzu-mode-line                            ((t (:foreground ,darktooth-light0 :height 100 :background ,darktooth-faded_blue))))
+
+   ;; Anzu
+   `(anzu-match-1                              ((t (:foreground ,darktooth-dark0 :background ,darktooth-bright_green))))
+   `(anzu-match-2                              ((t (:foreground ,darktooth-dark0 :background ,darktooth-bright_yellow))))
+   `(anzu-match-3                              ((t (:foreground ,darktooth-dark0 :background ,darktooth-bright_cyan))))
+   `(anzu-replace-highlight                    ((t (:background ,darktooth-dark_aqua))))
+   `(anzu-replace-to                           ((t (:background ,darktooth-dark_cyan))))
 
    ;; Avy
    `(avy-lead-face-0                           ((t (:foreground ,darktooth-bright_blue ))))

@@ -792,7 +792,7 @@
 	   ((:url . "https://github.com/Malabarba/spinner.el")
 	    (:keywords "processes" "mode-line"))])
  (stream .
-	 [(2 2 1)
+	 [(2 2 2)
 	  ((emacs
 	    (25)))
 	  "Implementation of streams" single
