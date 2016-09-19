@@ -4,7 +4,7 @@
 
 ;; Author: Sean Allred <code@seanallred.com>
 ;; Keywords: git, tools, vc
-;; Package-Version: 20160918.2003
+;; Package-Version: 20160919.312
 ;; Homepage: https://github.com/vermiculus/magithub
 ;; Package-Requires: ((emacs "24.3") (magit "2.8.0") (git-commit "20160821.1338") (with-editor "20160828.1025") (cl-lib "1.0") (s "20160711.525"))
 
@@ -104,7 +104,7 @@ and returns its output as a list of lines."
              (?& "Request a feature or report a bug" magithub--meta-new-issue)
              (?h "Ask for help on Gitter" magithub--meta-help)))
 
-(magit-define-popup-action 'magit-dispatch-popup ?H "Magithub" ?!)
+(magit-define-popup-action 'magit-dispatch-popup ?H "Magithub" #'magithub-dispatch-popup ?!)
 (define-key magit-status-mode-map "H" #'magithub-dispatch-popup)
 
 (magit-define-popup magithub-create-popup

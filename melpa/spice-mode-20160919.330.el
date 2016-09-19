@@ -5,7 +5,7 @@
 ;;         Emmanuel Rouat <emmanuel.rouat@wanadoo.fr> 1997-
 ;;         Carlin J. Vieri, MIT AI Lab <cvieri@ai.mit.edu> 1994
 ;; Keywords: spice, spice2g6, spice3, eldo, hspice, layla, mondriaan, fasthenry, CDL, spectre compatibility, netlist editing
-;; Package-Version: 20160818.1749
+;; Package-Version: 20160919.330
 ;; Package-Requires: ((emacs "24.3"))
 ;; Filename: spice-mode.el
 ;; Version: 1.2.25
@@ -14,7 +14,6 @@
 ;; Description: spice file editing
 ;; URL: http://spice-mode.4t.com/
 ;; old-URL: http://www.esat.kuleuven.ac.be/~vdplas/emacs/
-;; Compatibility: Emacs2[01], (partly tested)XEmacs21
 
 ;; Please send suggestions and bug reports to
 ;; mailto:Geert_VanderPlas@email.com
@@ -98,7 +97,6 @@
 ;; 	      (list
 ;; 	       (list "My Header"    "MY HEADER"    nil)
 ;; 	       )))
-;;  '(spice-use-func-menu t)                          ;; use func-menu (XEmacs)
 ;;  '(spice-show-describe-mode nil)         ;; don't describe mode at startup
 ;;  )
 
@@ -153,9 +151,6 @@
 (defconst spice-developer
   "Geert Van der Plas & Emmanuel Rouat (<geert_vanderplas@email.com>, <emmanuel.rouat@wanadoo.fr>)"
   "Current developers/maintainers of spice-mode.")
-
-(defvar spice-running-xemacs (string-match "XEmacs" emacs-version)
-  "A variable that tells us whether we're in Xemacs or not")
 
 (defvar spice-tempo-tags nil
   "List of templates used in spice mode.")
@@ -235,15 +230,6 @@ Additional standards:
          (spice-custom-set variable value
 			   'spice-update-existing-buffers))
   :type 'boolean)
-
-;;;###autoload
-(defcustom spice-use-func-menu nil
-  "*Spice func menu setting (untested), comparable to imenu"
-  :group 'spice
-  :set (lambda (variable value)
-         (spice-custom-set variable value
-			   'spice-update-existing-buffers))
-  :type  'boolean)
 
 ;;;###autoload
 (defcustom spice-show-describe-mode nil ; was t
@@ -584,7 +570,7 @@ The following faces are used:
   `font-lock-constant-face'	: simulator's options
   `font-lock-variable-name-face': names of .param's & variables
 NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
-      entry \"Fontify Buffer\").  XEmacs: turn off and on font locking."
+      entry \"Fontify Buffer\")."
   :type 'boolean
   :group 'spice-faces)
 
@@ -1269,63 +1255,26 @@ NOTE: Activate the new setting in a spice buffer by re-fontifying it (menu
   "Spice mode face used to highlight analysis commands."
   :group 'spice-faces)
 
-(defvar spice-doc-face	(if spice-running-xemacs
-			    'font-lock-doc-string-face
-			  'font-lock-string-face)
+(defvar spice-doc-face 'font-lock-string-face
   "Face name to use for doc strings.")
 
-(custom-add-to-group
- 'spice-faces (if spice-running-xemacs
-		  'font-lock-doc-string-face
-		'font-lock-string-face)
- 'custom-face)
+(custom-add-to-group 'spice-faces 'font-lock-string-face 'custom-face)
 
 
-(defvar spice-constant-face	(if spice-running-xemacs
-				    'font-lock-reference-face
-				  (if (facep 'font-lock-constant-face)
-				      'font-lock-constant-face
-				    'font-lock-reference-face)) ; old emacs20.1
+(defvar spice-constant-face 'font-lock-constant-face
   "Face name to use for constants.")
 
-(custom-add-to-group
- 'spice-faces (if spice-running-xemacs
-		  'font-lock-reference-face
-		(if (facep 'font-lock-constant-face)
-		    'font-lock-constant-face
-		  'font-lock-reference-face))
- 'custom-face)
+(custom-add-to-group 'spice-faces 'font-lock-constant-face 'custom-face)
 
-(defvar spice-include-file-face	(if spice-running-xemacs
-				    'font-lock-preprocessor-face
-				  'font-lock-string-face)
+(defvar spice-include-file-face 'font-lock-string-face
   "Face name to use for include files and libraries.")
 
-(custom-add-to-group
- 'spice-faces (if spice-running-xemacs
-		  'font-lock-preprocessor-face
-		'font-lock-string-face)
- 'custom-face)
+(custom-add-to-group 'spice-faces 'font-lock-string-face 'custom-face)
 
-(if (not spice-running-xemacs)
-    (custom-add-to-group
-     'spice-faces 'font-lock-builtin-face 'custom-face)
+(custom-add-to-group 'spice-faces 'font-lock-builtin-face 'custom-face)
 
-  (defface spice-builtin-face
-    '((((class grayscale) (background light)) (:foreground "LightGray"))
-      (((class grayscale) (background dark)) (:foreground "DimGray"))
-      (((class color) (background light)) (:foreground "Orchid" :bold t))
-      (((class color) (background dark)) (:foreground "LightBlue" :bold t))
-      (t (:bold t)))
-    "Spice mode face used for builtin types."
-    :group 'spice-faces))
-
-(defvar spice-builtin-face	 (if spice-running-xemacs
-				     'spice-builtin-face
-				   'font-lock-builtin-face)
+(defvar spice-builtin-face 'font-lock-builtin-face
   "Face name for builtin types.")
-
-
 
 (defun spice-keywords-init ()
   "Initialize reserved words."
@@ -2113,10 +2062,6 @@ Doc comments (starting with '!') are unaffected."
     ;; changelog addition
     (define-key map "\C-c\C-ac"   'spice-add-changelog-entry)
 
-    ;; fontification
-    (when spice-running-xemacs
-      (define-key map "\C-c\C-f" 'font-lock-fontify-buffer))
-
     (setq spice-mode-map map)))
 
 
@@ -2135,10 +2080,6 @@ Doc comments (starting with '!') are unaffected."
 ;;; libraries & include files (taken & adapted from eldo-mode.el, E. Rouat)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (if spice-running-xemacs
-    ;; (require 'overlay)
-  ;; (require 'lucid)) ;; what else can we do ??
-
 ;;------------------------------------------------------------
 ;; Mouse bindings (only used by 'spice-load-file-at-mouse')
 ;; I separate this from spice-mode-map so that this particular
@@ -2154,12 +2095,8 @@ Doc comments (starting with '!') are unaffected."
     ;; mouse button bindings
     ;;(define-key map "\r" 'ffap)
     (define-key map "\r" 'spice-load-file-at-point)
-    (if spice-running-xemacs
-	(define-key map 'button2 'spice-load-file-at-mouse) ;; ffap-at-mouse ?
-      (define-key map [mouse-2] 'spice-load-file-at-mouse))
-    (if spice-running-xemacs
-	(define-key map 'Sh-button2 'mouse-yank)
-      (define-key map [S-mouse-2] 'mouse-yank-at-click))
+    (define-key map [mouse-2] 'spice-load-file-at-mouse)
+    (define-key map [S-mouse-2] 'mouse-yank-at-click)
     (setq spice-mode-mouse-map map)))
 
 
@@ -2367,7 +2304,7 @@ argument is provided, bar will be added from current column."
       (goto-char (point-min))
       (while (re-search-forward spice-section-headings-regexp nil t)
 	(setq spice-cache-section-alist
-	      (cons (cons (downcase (spice-match-string-no-properties 2)) t)
+	      (cons (cons (downcase (match-string-no-properties 2)) t)
 		    spice-cache-section-alist)))
       (spice-section-p section)))
 
@@ -6811,15 +6748,8 @@ uses cache generated with the `spice-cache-section-p' function."
 						; been updated
   (interactive)
   (if (spice-output-p)
-      (progn
-	(easy-menu-remove spice-output-menu-list)     ; for XEmacs
-	;; (setq spice-output-menu-list (spice-create-output-mode-menu))
-	(easy-menu-add spice-output-menu-list)	 ; for XEmacs
-	(easy-menu-define spice-output-menu spice-output-mode-map
-	  "Menu keymap for Spice-output Mode." spice-output-menu-list))
-    (easy-menu-remove spice-menu-list)     ; for XEmacs
-    ;; (setq spice-menu-list (spice-create-mode-menu))
-    (easy-menu-add spice-menu-list)	 ; for XEmacs
+      (easy-menu-define spice-output-menu spice-output-mode-map
+	"Menu keymap for Spice-output Mode." spice-output-menu-list)
     (easy-menu-define spice-menu spice-mode-map
       "Menu keymap for Spice Mode." spice-menu-list)))
 
@@ -6894,7 +6824,7 @@ uses cache generated with the `spice-cache-section-p' function."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Imenu: S-mouse3 in emacs to find spice objects quickly (xemacs ?)
+;;; Imenu: S-mouse3 in emacs to find spice objects quickly
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'imenu)
@@ -7056,12 +6986,9 @@ uses cache generated with the `spice-cache-section-p' function."
 		    (cons (append
 			   (list (nth 0 sublist)
 				 (if (= 0 (nth 1 sublist))
-				     (if spice-running-xemacs 9 nil)
+				     nil
 				   (nth 1 sublist))
-				 (if (numberp (nth 2 sublist))
-				     (nth 2 sublist)
-				   (if spice-running-xemacs 0
-				     (nth 2 sublist))))
+				 (nth 2 sublist))
 			   (list (nth 3 sublist))
 			   (if (nth 4 sublist)
 			       (if (stringp (nth 4 sublist))
@@ -7459,73 +7386,6 @@ that has been selected."
   (spice-add-changelog-entry "File created") ; in any case
   )
 
-
-
-;;------------------------------------------------------------
-;; Hacks to implement the find function menu bar for spice-mode
-;; subckts/models Fortunately spice-mode only provides one means of
-;; abstraction so the parsing is very easy.  (only available in
-;; XEmacs, remove this and spice-mode entry when compiling for emacs
-;; to avoid warnings) This code has been taken from eldo-mode.el
-;; (E. Rouat)
-;;------------------------------------------------------------
-
-(eval-and-compile
-  (when (fboundp 'function-menu)
-    (require 'func-menu)
-
-    (defconst fume-function-name-regexp-spice
-      "^\\.\\(subckt\\|model\\|macro\\)\\s-+\\([a-z]\\w*\\)"
-      "Expression to parse Spice subcircuit and model names.")
-
-    (defun fume-find-next-spice-function-name (buffer)
-      "Searches for the next spice subcircuit name in BUFFER."
-      (set-buffer buffer)
-      (setq case-fold-search 't)		;;otherwise func-menu bombs....
-      (if (re-search-forward fume-function-name-regexp nil t)
-	  (let ((beg (match-beginning 2))
-		(end (match-end 2)))
-	    (cons (buffer-substring beg end) beg))))
-    ) ; when
-  )
-
-
-(defun spice-func-menu-init ()
-  "Initialize function menu." ; buffer local stuff
-  ;; hook in the spice-mode mode regular expression above into the
-  ;; association list of regexps used by the function menu generator
-  (setq fume-function-name-regexp-alist
-	(purecopy
-	 (append
-	  fume-function-name-regexp-alist
-	  (list
-	   '(spice-mode . fume-function-name-regexp-spice)))))
-
-  ;; hook in the search method above into the association list used by the
-  ;; function menu generating code
-  (setq fume-find-function-name-method-alist
-	(purecopy
-	 (append
-	  fume-find-function-name-method-alist
-	  (list '(spice-mode . fume-find-next-spice-function-name)))))
-
-  ;; Now activate func-menu - I hope that these settings don't
-  ;; interfere with users settings
-  (make-local-variable 'fume-menubar-menu-name)
-  (make-local-variable 'fume-buffer-name)
-  (make-local-variable 'fume-index-method)
-  (setq fume-menubar-menu-name "Subckts"
-	fume-buffer-name "*Subcircuits List*"
-	fume-index-method 2)
-
-  (when (and (featurep 'xemacs) (not (emacs-version>= 21 5)))
-    (make-local-hook 'find-file-hooks))
-
-  (add-hook 'find-file-hooks 'fume-add-menubar-entry)
-  (define-key global-map '(shift button2) 'fume-mouse-function-goto)
-  (fume-add-menubar-entry))
-
-
 ;; ======================================================================
 ;; Support for .subckt search !?
 ;; ======================================================================
@@ -7603,12 +7463,10 @@ subcircuit searches.")
 
 (defun spice-visit-subckt-def (mrk)
   "Helper function visiting buffer and mark specified."
-  (if (eq (marker-buffer (cdr mrk))
-	  (current-buffer))
-      (if (or
-	   spice-running-xemacs ; then push mark always
-	   (not (and transient-mark-mode mark-active))) ; emacs, check if active region
-	  (push-mark)))
+  (when (and (eq (marker-buffer (cdr mrk))
+		 (current-buffer))
+	     (not (and transient-mark-mode mark-active)))
+    (push-mark))
   (pop-to-buffer (marker-buffer (cdr mrk)) t)
   (widen)
   (goto-char (cdr mrk)))
@@ -7907,7 +7765,6 @@ is nil then the text is shown, while if FLAG is t the text is hidden."
   (use-local-map spice-output-mode-map)
 
   ;; set menu for local buffer
-  (easy-menu-add spice-menu-list)	; for XEmacs
   (easy-menu-define spice-output-menu spice-output-mode-map
     "Menu keymap for Spice Output Mode." spice-output-menu-list)
 
@@ -7997,9 +7854,9 @@ eldo..."
 	  (setq spice-guess-nodeset-statements
 		(append spice-guess-nodeset-statements
 			(list (concat " V("
-				      (spice-match-string-no-properties 1)
+				      (match-string-no-properties 1)
 				      ") = "
-				      (spice-match-string-no-properties 2)))
+				      (match-string-no-properties 2)))
 
 		      ))
 	  )))))
@@ -8111,7 +7968,7 @@ in eldo mode, otherwise uses \"+ \" prefix."
 	   (and
 	    (spice-standard-p 'eldo)
 	    (re-search-forward "\\s-\\([!]\\)" end t))))
-	(setq fill-prefix (concat (spice-match-string-no-properties 1) " "))
+	(setq fill-prefix (concat (match-string-no-properties 1) " "))
       (setq fill-prefix (concat spice-continuation-prefix " ")))
     ;(comment-indent-new-line) ;;call standard comment-indent-new-line function
     (when spice-save-comment-line-break-function
@@ -8129,7 +7986,7 @@ returns it. Non-comment paragraphs can also be filled correctly."
 				   spice-continuation-prefix)
 				 "]+\\)"))
 		 (looking-at "\\([$!]+\\)"))
-	     (concat (spice-match-string-no-properties 1) " ")
+	     (concat (match-string-no-properties 1) " ")
 	   (concat spice-continuation-prefix " "))))
 ;;    (message (format "result is '%s'" result))
     result))
@@ -8141,7 +7998,7 @@ returns it. Non-comment paragraphs can also be filled correctly."
     (beginning-of-line)
     (if arg (forward-line 1))
     (if (looking-at "\\([+$!*]+\\)") ;; don't check submodes here ?
-	(setq fill-prefix (spice-match-string-no-properties 1)))
+	(setq fill-prefix (match-string-no-properties 1)))
     (delete-indentation)
     (setq fill-prefix fillpfx)))
 
@@ -8239,14 +8096,6 @@ returns it. Non-comment paragraphs can also be filled correctly."
       (error "Error: turn on Eldo when you want to use Eldo Verilog-A")))
   )
 
-;; xemacs - emacs compatibility wrapper
-(defun spice-match-string-no-properties (num)
-  "wrapper for no properties string matcher"
-  (if spice-running-xemacs
-      (match-string num)
-    (match-string-no-properties num)))
-
-
 (defun spice-update-existing-buffers ()
   "updates all spice-mode buffers with new customization"
   (save-excursion
@@ -8271,9 +8120,6 @@ returns it. Non-comment paragraphs can also be filled correctly."
   (set-spice-name)
   (spice-update-mode-menu)
   (set-syntax-table spice-mode-syntax-table)
-  (if spice-use-func-menu
-      (if (fboundp 'function-menu)
-	  (funcall 'spice-func-menu-init)))
   (if (not (spice-output-p))
       (setq imenu-generic-expression spice-imenu-generic-expression))
   (when spice-imenu-add-to-menubar
@@ -8286,10 +8132,7 @@ returns it. Non-comment paragraphs can also be filled correctly."
   (if (fboundp 'font-lock-unset-defaults)
       (font-lock-unset-defaults))
   (font-lock-set-defaults)
-  (if (not (and spice-running-xemacs font-lock-mode))
-      (font-lock-fontify-buffer)
-    (font-lock-mode)
-    (font-lock-mode))
+  (font-lock-fontify-buffer)
   )
 
 
@@ -8310,9 +8153,6 @@ variables of the customization buffer."
   (set-syntax-table spice-mode-syntax-table)
   (spice-keywords-init)
   (spice-font-lock-init)
-  (if spice-use-func-menu
-      (if (fboundp 'function-menu)
-	  (funcall 'spice-func-menu-init)))
   (spice-imenu-init)
   (if (not (spice-output-p))
       (setq imenu-generic-expression spice-imenu-generic-expression))
@@ -8496,8 +8336,7 @@ Usage & Features:
    - Paragraph support: [a-z] starts dev lines, '+' continues dev lines,
      [*!$] start paragraphs.
 
-   - Works under GNU Emacs20.6/21.[123], also tested under XEmacs21.1/21.4.5,
-     requires fsf-compat package for XEmacs 21.4.5.
+   - Works under GNU Emacs20.6/21.[123].
 
 
 Do not use a -*- Mode -*- line in a spice deck as the first card in
@@ -8589,7 +8428,6 @@ Key bindings for other parts in the file:
     (use-local-map spice-mode-map)
 
     ;; set menu for local buffer
-    (easy-menu-add spice-menu-list)	; for XEmacs
     (easy-menu-define spice-menu spice-mode-map
       "Menu keymap for Spice Mode." spice-menu-list)
 
@@ -8639,22 +8477,11 @@ Key bindings for other parts in the file:
     ;; add speedbar (global, can be moved ?)
     (spice-speedbar-init)
 
-    ;; func-menu stuff, all buffer local
-    (if spice-use-func-menu
-	(if (fboundp 'function-menu)
-	    (funcall 'spice-func-menu-init)))
-
     ;;------------------------------------------------------------
     ;; now hook in 'spice-colorize-libraries (eldo-mode.el)
     ;; all buffer local:
-    ;;(make-local-hook 'font-lock-mode-hook)
-    (when (and (featurep 'xemacs) (not (emacs-version>= 21 5)))
-      (make-local-hook 'font-lock-after-fontify-buffer-hook)); doesn't exist in emacs 20
-    ;;(add-hook 'font-lock-mode-hook 'spice-colorize-libraries-buffer t t)
-    (add-hook 'font-lock-after-fontify-buffer-hook 'spice-colorize-libraries-buffer t t) ; not in emacs 20
-
-    (when (and (featurep 'xemacs) (not (emacs-version>= 21 5)))
-      (make-local-hook 'after-change-functions))
+    (add-hook 'font-lock-after-fontify-buffer-hook
+	      'spice-colorize-libraries-buffer t t) ; not in emacs 20
     (add-hook 'after-change-functions 'spice-colorize-libraries t t)
     (spice-colorize-libraries-buffer)
 

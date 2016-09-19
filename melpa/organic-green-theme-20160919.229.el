@@ -1,5 +1,5 @@
 ﻿;;; organic-green-theme.el --- Low-contrast green color theme.
-;; Package-Version: 20160811.1539
+;; Package-Version: 20160919.229
 
 ;;; Copyright © 2009-2016 - Kostafey <kostafey@gmail.com>
 
@@ -60,7 +60,7 @@ Basic, Font Lock, Isearch, Jabber, rst, magit, Web faces are included.")
        (organic-constant-fg "#3465BD")
        (organic-builtin-fg "#009292")
        (minor-green-highlight-background "#D5F0D5")
-       (tiny-green-highlight-background "#E3F2E1")
+       (tiny-green-highlight-background "#E3FFE1")
        (minor-grey-highlight-background "#DAEADA")
        (minor-yellow-highlight-background "#F2FFC0") ;#E3F2A1
        (minor-blue-highlight-background "#C0E0FF")
@@ -216,7 +216,7 @@ Basic, Font Lock, Isearch, Jabber, rst, magit, Web faces are included.")
    `(magit-diff-added ((t (:foreground "#22aa22" :background "#ddffdd"))) t)
    `(magit-diff-removed ((t (:foreground "#aa2222" :background "#ffdddd"))) t)
    `(magit-diff-added-highlight ((t (:foreground "#22aa22" :background "#cceecc"))) t)
-   `(magit-diff-removed-highlight ((t (:foreground "#aa2222" :background "#eecccc"))) t)
+  `(magit-diff-removed-highlight ((t (:foreground "#aa2222" :background "#eecccc"))) t)
    `(magit-diff-context-highlight ((t (:background ,organic-bg :foreground "grey50"))) t)
    `(magit-diff-file-heading-highlight ((t (:background ,minor-green-highlight-background))) t)
    '(magit-item-highlight ((t (:background "#E3F2E1"))) t)
@@ -275,7 +275,13 @@ Basic, Font Lock, Isearch, Jabber, rst, magit, Web faces are included.")
    `(eldoc-highlight-function-argument
      ((t (:foreground ,organic-string-fg :weight bold))) t)
 
-   `(table-cell ((t (:foreground ,organic-fg :background "#E3FFE1"))) t)
+   `(table-cell ((t (:foreground ,organic-fg :background ,tiny-green-highlight-background))) t)
+
+   ;; dired
+   `(diredp-dir-heading ((t (:background ,tiny-green-highlight-background))))
+   `(diredp-dir-name ((t (:foreground ,alum-6))))
+   `(diredp-file-name ((t (:foreground ,organic-fg))))
+   `(diredp-file-suffix ((t (:foreground ,organic-builtin-fg))))
 
    ;;Highlight pair parentheses
    `(show-paren-match ((t (:background "#F0F0A1"))))

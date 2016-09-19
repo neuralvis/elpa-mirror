@@ -7,11 +7,11 @@
 ;; Copyright (C) 2008-2016, Drew Adams, all rights reserved.
 ;; Created: Fri May 23 09:58:41 2008 ()
 ;; Version: 0
-;; Package-Version: 20151231.1553
+;; Package-Version: 20160918.1024
 ;; Package-Requires: ()
-;; Last-Updated: Thu Dec 31 15:58:41 2015 (-0800)
+;; Last-Updated: Sun Sep 18 10:25:31 2016 (-0700)
 ;;           By: dradams
-;;     Update #: 564
+;;     Update #: 578
 ;; URL: http://www.emacswiki.org/second-sel.el
 ;; Doc URL: http://emacswiki.org/SecondarySelection
 ;; Keywords: region, selection, yank, paste, edit
@@ -31,10 +31,11 @@
 ;;  Commands defined here:
 ;;
 ;;    `isearch-yank-secondary', `primary-to-secondary',
-;;    `rotate-secondary-selection-yank-pointer', `secondary-dwim',
-;;    `secondary-save-then-kill', `secondary-swap-region',
-;;    `secondary-to-primary', `set-secondary-start',
-;;    `yank-pop-commands', `yank-pop-secondary', `yank-secondary'.
+;;    `rotate-secondary-selection-yank-pointer',
+;;    `secondary-yank|select|move|swap', `secondary-save-then-kill',
+;;    `secondary-swap-region', `secondary-to-primary',
+;;    `set-secondary-start', `yank-pop-commands',
+;;    `yank-pop-secondary', `yank-secondary'.
 ;;
 ;;  User options defined here:
 ;;
@@ -63,7 +64,7 @@
 ;;
 ;;  Suggested key bindings:
 ;;
-;;   (global-set-key (kbd "C-M-y")               'secondary-dwim)
+;;   (global-set-key (kbd "C-M-y")               'secondary-yank|select|move|swap)
 ;;   (define-key esc-map "y"                     'yank-pop-commands)
 ;;   (define-key isearch-mode-map (kbd "C-M-y")  'isearch-yank-secondary)
 ;;   (global-set-key (kbd "C-x C-M-SPC")         'set-secondary-start)
@@ -101,6 +102,8 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2016/09/18 dadams
+;;     Renamed secondary-dwim to secondary-yank|select|move|swap.  Aliased old name as obsolete.
 ;; 2013/10/16 dadams
 ;;     secondary-save-then-kill-1: No-op if mouse-secondary-overlay is nil.
 ;; 2013/03/09 dadams
@@ -212,7 +215,7 @@ oldest element."
 
 ;;;###autoload
 (defcustom secondary-selection-yank-secondary-commands '(mouse-yank-secondary
-                                                         secondary-dwim
+                                                         secondary-yank|select|move|swap
                                                          yank-secondary)
   "*Commands that yank the secondary selection."
   :type '(repeat (restricted-sexp :match-alternatives (symbolp commandp) :value ignore))
@@ -232,9 +235,11 @@ Function is called with two parameters, START and END corresponding to
 the value of the mark and point; it is guaranteed that START <= END.
 Normally set from the UNDO element of a yank-handler; see `insert-for-yank'."))
 
+(defalias 'secondary-dwim 'secondary-yank|select|move|swap)
+(make-obsolete 'secondary-dwim 'secondary-yank|select|move|swap)
 ;;;###autoload
-(defun secondary-dwim (arg)             ; Suggested binding: `C-M-y'
-  "Do-What-I-Mean with the secondary selection.
+(defun secondary-yank|select|move|swap (arg)   ; Suggested binding: `C-M-y'
+  "Yank the secondary selection.  With a prefix arg, interact with region.
 Prefix arg:
 
  None: Yank secondary.

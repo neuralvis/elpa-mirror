@@ -4,7 +4,7 @@
 
 ;; Author: Elis "etu" Axelsson
 ;; URL: https://github.com/etu/0blayout
-;; Package-Version: 1.0.1
+;; Package-Version: 20160918.2330
 ;; Package-X-Original-Version: 20160918.0
 ;; Version: 1.0.1
 ;; Keywords: convenience, window-management
@@ -52,8 +52,9 @@
 (defvar 0blayout-alist ()
   "List of the currently defined layouts.")
 
-(defvar 0blayout-default "default"
-  "Name of default layout used.")
+(defcustom 0blayout-default "default"
+  "Name of default layout used."
+  :group '0blayout)
 
 (defvar 0blayout-keys-map '(("C-c" . 0blayout-new)
                             ("C-k" . 0blayout-kill)
