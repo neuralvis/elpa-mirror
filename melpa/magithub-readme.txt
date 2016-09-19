@@ -8,7 +8,7 @@ basic GitHub repository management.  Supported actions include:
  - submitting pull requests upstream
  - creating issues
 
-Press `@' in the status buffer to get started -- happy hacking!
+Press `H' in the status buffer to get started -- happy hacking!
 
 [1]: https://hub.github.com
 
