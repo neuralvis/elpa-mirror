@@ -4,7 +4,7 @@
 ;;
 ;; Author: Raghav Kumar Gautam <raghav@apache.org>
 ;; Keywords: Apple, AppleScript, OSX, Finder, Emacs, Elisp, VPN, Speech
-;; Package-Version: 20160912.956
+;; Package-Version: 20160919.1700
 ;; Package-Requires: ((emacs "24.4"))
 ;;; Commentary:
 ;; Provides functions for:
@@ -128,8 +128,11 @@
 
 ;;clipboard functions
 ;;;###autoload
-(defun osx-lib-copy-to-clipboard (text)
+(defun osx-lib-copy-to-clipboard (&optional text)
   "Copy the given TEXT to clipboard."
+  (interactive)
+  (unless text
+    (setq text (buffer-substring (mark) (point))))
   (shell-command-to-string (concat "pbcopy < <(echo -n " (shell-quote-argument text) ")")))
 
 
@@ -149,11 +152,11 @@
   "Reveal the supplied file FILE in Finder.
 This function runs the actual AppleScript."
   (let ((script (concat
-		 "set thePath to POSIX file \"" (shell-quote-argument file) "\"\n"
-		 "tell application \"Finder\"\n"
-		 " set frontmost to true\n"
-		 " reveal thePath \n"
-		 "end tell\n")))
+                 "set thePath to POSIX file \"" (shell-quote-argument file) "\"\n"
+                 "tell application \"Finder\"\n"
+                 " set frontmost to true\n"
+                 " reveal thePath \n"
+                 "end tell\n")))
     (osx-lib-run-osascript script)))
 
 ;;;###autoload

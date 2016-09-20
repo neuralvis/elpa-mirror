@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20160919.146
+;; Package-Version: 20160919.1106
 ;; Keywords: project, convenience
 ;; Version: 0.14.0
 ;; Package-Requires: ((pkg-info "0.4"))
@@ -999,7 +999,8 @@ Files are returned as relative paths to the project root."
   (let ((vcs (projectile-project-vcs)))
     (cond
      ((eq vcs 'git) projectile-git-ignored-command)
-     (t (error "VCS command for ignored files not implemented yet")))))
+     ;; TODO: Add support for other VCS
+     (t nil))))
 
 (defun projectile-flatten (lst)
   "Take a nested list LST and return its contents as a single, flat list."
@@ -1072,7 +1073,8 @@ they are excluded from the results of this function."
 (defun projectile-get-repo-ignored-files ()
   "Get a list of the files ignored in the project."
   (let ((cmd (projectile-get-ext-ignored-command)))
-    (projectile-files-via-ext-command cmd)))
+    (when cmd
+      (projectile-files-via-ext-command cmd))))
 
 (defun projectile-files-via-ext-command (command)
   "Get a list of relative file names in the project root by executing COMMAND."

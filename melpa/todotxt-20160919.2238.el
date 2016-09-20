@@ -9,7 +9,7 @@
 
 ;; Created: 14 March 2011
 ;; Version: 0.2.4
-;; Package-Version: 20160918.1535
+;; Package-Version: 20160919.2238
 ;; URL: https://github.com/rpdillon/todotxt.el
 ;; Keywords: todo.txt, todotxt, todotxt.el
 ;; Compatibility: GNU Emacs 22 ~ 25
@@ -90,9 +90,9 @@ performed.  Defaults to 't."
   :require 'todotxt
   :group 'todotxt)
 
-(setq todotxt-tags-regexp "[+|@][^[:space:]]*") ; Used to find keywords for completion
-(setq todotxt-projects-regexp "+[^[:space:]]*")
-(setq todotxt-contexts-regexp "@[^[:space:]]*")
+(setq todotxt-tags-regexp "[+|@][[:graph:]]+") ; Used to find keywords for completion
+(setq todotxt-projects-regexp "+[[:graph:]]+")
+(setq todotxt-contexts-regexp "@[[:graph:]]+")
 (setq todotxt-complete-regexp "^x .*?$")
 (setq todotxt-priority-regexp "^(\\([A-Z]\\)) .*?$")
 (setq todotxt-priority-a-regexp "^\\((A)\\) .*?$")
@@ -283,7 +283,7 @@ or '+') and return a list of them."
   (save-excursion
     (let ((completion-list '())
           (start-index 0))
-      (while (string-match todotxt-tags-regexp string start-index)
+      (while (string-match todotxt-tags-regexp str start-index)
         (let ((tag (match-string-no-properties 0 str)))
           (if (not (member tag completion-list))
               (progn

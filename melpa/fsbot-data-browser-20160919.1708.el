@@ -6,7 +6,7 @@
 ;; Maintainer: Benaiah Mischenko
 ;; Created: Thu September 15 2016
 ;; Version: 0.1
-;; Package-Version: 20160918.213
+;; Package-Version: 20160919.1708
 ;; Package-Requires: ()
 ;; Last-Updated: Thu September 15 2016
 ;;           By: Benaiah Mischenko
@@ -81,18 +81,18 @@
     "nil"))
 
 (defun fsbot-load-data ()
-  (let ((fsbot-parsed-data
-         (with-temp-buffer (fsbot-slurp-file-into-buffer "~/.emacs.d/.fsbot-data-raw")
-                           (fsbot-parse-data))))
-    (let ((loaded-fsbot-data
-           (mapcar (lambda (entry)
-                     (let ((key (aref (car entry) 0))
-                           (notes (fsbot-process-notes
-                                   (cdr (car (cdr (aref (car entry) 7)))))))
-                       `(,key [,key ,notes])))
-                   fsbot-parsed-data)))
-      (setq fsbot-data loaded-fsbot-data)
-      loaded-fsbot-data)))
+  (let* ((fsbot-parsed-data
+          (with-temp-buffer (fsbot-slurp-file-into-buffer "~/.emacs.d/.fsbot-data-raw")
+                            (fsbot-parse-data)))
+         (loaded-fsbot-data
+          (mapcar (lambda (entry)
+                    (let ((key (aref (car entry) 0))
+                          (notes (fsbot-process-notes
+                                  (cdr (car (cdr (aref (car entry) 7)))))))
+                      `(,key [,key ,notes])))
+                  fsbot-parsed-data)))
+    (setq fsbot-data (cl-copy-tree loaded-fsbot-data))
+    loaded-fsbot-data))
 
 (defun fsbot-get-entry (entry-title)
   (car (cdr (cl-find-if
@@ -135,6 +135,12 @@
   (setq truncate-lines t)
   (setq tabulated-list-entries data)
   (tabulated-list-print t))
+
+(defun fsbot-display-entry-at-point ()
+  (interactive)
+  (fsbot-display-entry (tabulated-list-get-id)))
+
+(define-key fsbot-data-browser-mode-map (kbd "RET") 'fsbot-display-entry-at-point)
 
 ;;;###autoload
 (defun fsbot-view-data ()

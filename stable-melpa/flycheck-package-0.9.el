@@ -1,11 +1,11 @@
 ;;; flycheck-package.el --- A Flycheck checker for elisp package authors
 
-;; Copyright (C) 2014-2015  Steve Purcell, Fanael Linithien
+;; Copyright (C) 2014-2016  Steve Purcell, Fanael Linithien
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;;         Fanael Linithien <fanael4@gmail.com>
 ;; Keywords: lisp
-;; Package-Version: 0.8
+;; Package-Version: 0.9
 ;; Version: 0
 ;; Package-Requires: ((cl-lib "0.5") (flycheck "0.22") (emacs "24"))
 
@@ -70,6 +70,61 @@
   "List of errors and warnings for the current buffer.
 This is bound dynamically while the checks run.")
 
+(defconst flycheck-package--functions-and-macros-added-alist
+  (eval-when-compile
+    (list
+     (cons '(24 1)
+           (regexp-opt
+            '("bidi-string-mark-left-to-right" "condition-case-unless-debug"
+              "current-bidi-paragraph-direction" "file-selinux-context" "letrec"
+              "make-composed-keymap" "read-char-choice" "run-hook-wrapped"
+              "set-file-selinux-context" "server-eval-at" "special-variable-p"
+              "string-prefix-p" "url-queue-retrieve" "window-body-height"
+              "window-stage-get" "window-stage-put" "window-total-width"
+              "window-valid-p" "with-wrapper-hook")))
+     (cons '(24 3)
+           (regexp-opt
+            '("autoloadp" "autoload-do-load" "buffer-narrowed-p" "defvar-local"
+              "file-name-base" "function-get" "posnp" "setq-local"
+              "system-groups" "system-users" "url-encode-url"
+              "with-temp-buffer-window")))
+     (cons '(24 4)
+           (regexp-opt
+            '("add-face-text-property" "cl-tagbody"
+              "completion-table-with-cache" "completion-table-merge"
+              "define-alternative" "define-error"
+              "display-monitor-attributes-list" "file-acl"
+              "file-extended-attributes" "fill-single-char-nobreak-p"
+              "frame-monitor-attributes" "group-gid" "group-real-gid"
+              "get-pos-property" "macrop" "set-file-acl" "special-form-p"
+              "string-suffix-p" "window-bottom-divider-width"
+              "window-header-line-height" "window-mode-line-height"
+              "window-right-divider-width" "window-scroll-bar-width"
+              "window-text-pixel-size" "with-eval-after-load"
+              "zlib-decompress-region")))
+     (cons '(25 1)
+           (regexp-opt
+            '("alist-get" "backward-word-strictly"
+              "bidi-find-overridden-directionality"
+              "buffer-substring-with-bidi-context" "bufferpos-to-filepos"
+              "checkdoc-file" "char-fold-to-regexp" "cl-digit-char-p"
+              "cl-fresh-line" "cl-parse-integer" "default-font-width"
+              "define-advice" "define-inline" "directory-name-p"
+              "directory-files-recursively" "file-notify-valid-p"
+              "filepos-to-bufferpos" "forward-word-strictly" "format-message"
+              "frame-edges" "frame-geometry" "frame-scroll-bar-height"
+              "funcall-interactively" "function-put"
+              "horizontal-scroll-bars-available-p" "if-let" "macroexpand-1"
+              "make-process" "mouse-absolute-pixel-position" "set-binary-mode"
+              "set-mouse-absolute-pixel-position" "string-collate-equalp"
+              "string-collate-lessp" "string-greaterp" "thread-first"
+              "thread-last" "toggle-horizontal-scroll-bar" "when-let"
+              "window-absolute-pixel-position" "window-font-height"
+              "window-font-width" "window-max-chars-per-line"
+              "window-preserve-size" "window-scroll-bar-height"
+              "with-file-modes")))))
+  "An alist of function/macro names and when they were added to Emacs.")
+
 (defun flycheck-package--check-all ()
   "Return a list of errors/warnings for the current buffer."
   (let ((flycheck-package--errors '()))
@@ -83,7 +138,9 @@ This is bound dynamically while the checks run.")
             (let ((desc (flycheck-package--check-package-el-can-parse)))
               (when desc
                 (flycheck-package--check-package-summary desc)))
-            (flycheck-package--check-dependency-list)))))
+            (let ((deps (flycheck-package--check-dependency-list)))
+              (flycheck-package--check-lexical-binding-requires-emacs-24 deps)
+              (flycheck-package--check-macros-functions-available-in-emacs deps))))))
     flycheck-package--errors))
 
 (defun flycheck-package--error (line col type message)
@@ -94,7 +151,9 @@ This is bound dynamically while the checks run.")
 ;;; Checks
 
 (defun flycheck-package--check-dependency-list ()
-  "Return position and contents of the \"Package-Requires\" header, if any."
+  "Check the contents of the \"Package-Requires\" header.
+Return a list of well-formed dependencies, same as
+`flycheck-package--check-well-formed-dependencies'."
   (when (flycheck-package--goto-header "Package-Requires")
     (let ((position (match-beginning 3))
           (line-no (line-number-at-pos))
@@ -106,16 +165,16 @@ This is bound dynamically while the checks run.")
                line-no 1 'error
                "More than one expression provided."))
             (let ((deps (flycheck-package--check-well-formed-dependencies position line-no parsed-deps)))
-              (when deps
-                (flycheck-package--check-packages-installable deps)
-                (flycheck-package--check-deps-use-non-snapshot-version deps)
-                (flycheck-package--check-deps-do-not-use-zero-versions deps)
-                (flycheck-package--check-lexical-binding-requires-emacs-24 deps)
-                (flycheck-package--check-do-not-depend-on-cl-lib-1.0 deps))))
+              (flycheck-package--check-packages-installable deps)
+              (flycheck-package--check-deps-use-non-snapshot-version deps)
+              (flycheck-package--check-deps-do-not-use-zero-versions deps)
+              (flycheck-package--check-do-not-depend-on-cl-lib-1.0 deps)
+              deps))
         (error
          (flycheck-package--error
           line-no 1 'error
-          (format "Couldn't parse \"Package-Requires\" header: %s" (error-message-string err))))))))
+          (format "Couldn't parse \"Package-Requires\" header: %s" (error-message-string err)))
+         nil)))))
 
 (defun flycheck-package--check-well-formed-dependencies (position line-no parsed-deps)
   "Check that dependencies listed at POSITION on LINE-NO are well-formed.
@@ -206,6 +265,23 @@ the form (PACKAGE-NAME PACKAGE-VERSION LINE-NO LINE-BEGINNING-OFFSET)."
          lexbind-line lexbind-col 'warning
          "You should depend on (emacs \"24\") if you need lexical-binding.")))))
 
+(defun flycheck-package--check-macros-functions-available-in-emacs (valid-deps)
+  "Warn about use of functions/macros that are not available in the Emacs version in VALID-DEPS."
+  (let ((emacs-version-dep (or (cadr (assq 'emacs valid-deps)) '(0))))
+    (pcase-dolist (`(,added-in-version . ,regexp) flycheck-package--functions-and-macros-added-alist)
+      (when (version-list-< emacs-version-dep added-in-version)
+        (goto-char (point-min))
+        (while (re-search-forward (concat "(\\s-*?\\(" regexp "\\)\\_>") nil t)
+          (unless (let ((ppss (syntax-ppss)))
+                    (or (nth 3 ppss) (nth 4 ppss)))
+            (flycheck-package--error
+             (line-number-at-pos)
+             (current-column)
+             'warning
+             (format "You should depend on (emacs \"%s\") if you need `%s'."
+                     (mapconcat #'number-to-string added-in-version ".")
+                     (buffer-substring-no-properties (match-beginning 1) (match-end 1))))))))))
+
 (defun flycheck-package--check-lexical-binding-is-on-first-line ()
   "Check that any `lexical-binding' declaration is on the first line of the file."
   (cl-block return
@@ -256,7 +332,7 @@ the form (PACKAGE-NAME PACKAGE-VERSION LINE-NO LINE-BEGINNING-OFFSET)."
           (flycheck-package--error
            (nth 2 cl-lib-dep) (nth 3 cl-lib-dep) 'error
            (format "Depend on the latest 0.x version of cl-lib rather than on version \"%S\".
-Alternatively, depend on Emacs 24.3, which introduced cl-lib 1.0."
+Alternatively, depend on (emacs \"24.3\") or greater, in which cl-lib is bundled."
                    cl-lib-version)))))))
 
 (defun flycheck-package--check-package-version-present ()
@@ -322,7 +398,7 @@ DESC is a struct as returned by `package-buffer-info'."
   (save-excursion
     (goto-char (point-min))
     (re-search-forward
-     (concat lm-header-prefix (regexp-opt '("Package-Version" "Package-Requires")))
+     (concat lm-header-prefix (rx (or "Package-Version" "Package-Requires")))
      nil t)))
 
 (defun flycheck-package--lowest-installable-version-of (package)

@@ -8,7 +8,7 @@
 ;; Created:  8 Feb 2000
 ;; Updated:  18 Mar 2015
 ;; Version: 1.8
-;; Package-Version: 20160113.653
+;; Package-Version: 20160919.1118
 ;; Keywords: lisp
 ;; X-URL: http://www.gci-net.com/users/j/johnw/emacs.html
 
@@ -213,9 +213,8 @@ might contain customizations we haven't seen yet."
 (defvar initsplit-load-function 'initsplit-load-if-exists
   "The function that's actually used by initsplit to load
 customization files before their customizations are operated on.")
-(eval-when-compile
-  (defvar initsplit-stanza-position nil)
-  (defvar initsplit-buffer-checksum nil))
+(defvar initsplit-stanza-position nil)
+(defvar initsplit-buffer-checksum nil)
 
 (defun initsplit-load (filespec)
   "If the file specified by (initsplit-custom-alist)' element
