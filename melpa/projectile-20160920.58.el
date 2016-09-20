@@ -4,9 +4,9 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20160919.1106
+;; Package-Version: 20160920.58
 ;; Keywords: project, convenience
-;; Version: 0.14.0
+;; Version: 0.15.0-cvs
 ;; Package-Requires: ((pkg-info "0.4"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -584,7 +584,7 @@ just return nil."
   (if (require 'pkg-info nil t)
       (let ((version (pkg-info-version-info 'projectile)))
         (when show-version
-          (message "Projectile version: %s" version))
+          (message "Projectile %s" version))
         version)
     (error "Cannot determine version without package pkg-info")))
 

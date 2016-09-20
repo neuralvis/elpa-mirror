@@ -1,9 +1,10 @@
 ;;; org-board.el --- a bookmarking and web archival system for Org mode.
 
 ;; Author: Charles A. Roelli <charles@aurox.ch>
+;; Url: https://github.com/scallywag/org-board
+;; Package-Version: 20160920.355
 ;; Created: Wed Aug 10 2016
 ;; Keywords: org, bookmarks, archives
-;; Package-Version: 20160918.1054
 
 ;;; Commentary:
 ;;

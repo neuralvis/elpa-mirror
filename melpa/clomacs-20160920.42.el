@@ -4,7 +4,7 @@
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/clojure-emacs/clomacs
-;; Package-Version: 20160919.932
+;; Package-Version: 20160920.42
 ;; Keywords: clojure, interaction
 ;; Version: 0.0.2
 ;; Package-Requires: ((emacs "24.3") (cider "0.11"))
@@ -341,9 +341,11 @@ RETURN-VALUE may be :value or :stdout (:value by default)."
                 request
                 (lambda (result)
                   (if ,callback
-                      (,callback (clomacs-get-result
-                              result
-                              ,return-value ',return-type ',namespace))))
+                      (let ((el-result (clomacs-get-result
+                                        result
+                                        ,return-value ',return-type ',namespace)))
+                        (if el-result
+                            (,callback el-result)))))
                 connection
                 session)
              (clomacs-get-result

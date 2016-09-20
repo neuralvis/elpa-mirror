@@ -4,7 +4,7 @@
 
 ;; Author: Yuki Inoue <inouetakahiroki _at_ gmail.com>
 ;; URL: AWS, Amazon Web Service
-;; Package-Version: 20160710.2110
+;; Package-Version: 20160920.646
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.1") (dash-functional "1.2.0") (magit-popup "2.6.0") (tablist "0.70"))
 
@@ -46,13 +46,12 @@
       (list "aws" "--profile" aws-current-profile)
     (list "aws")))
 
-(defun aws-raw-instances ()
+(defun aws-ec2-all-raw-instances ()
   (interactive)
   (json-read-from-string
    (aws--shell-command-to-string "ec2" "describe-instances")))
 
-(defun aws-convert-raw-instances (raw-instances)
-
+(defun aws-ec2-normalize-raw-instances (raw-instances)
   (->>
    raw-instances
    (assoc-default 'Reservations)
@@ -60,17 +59,7 @@
    (mapcar (apply-partially 'assoc-default 'Instances))
    (mapcar (lambda (v) (append v nil)))
    (-mapcat 'identity)
-   (mapcar 'aws-instance-fix-tag)
-   (mapcar (lambda (instance)
-     (list (cdr (assoc 'InstanceId instance))
-           (vector (assoc-default 'InstanceId instance)
-                   (assoc-default 'InstanceType instance)
-                   (or (assoc-default "Name" (assoc-default 'Tags instance)) "")
-                   (assoc-default 'Name (assoc-default 'State instance))
-                   (prin1-to-string (assoc-default 'PrivateIpAddress instance) t)
-                   (or  "..." (prin1-to-string instance))
-                   ))))
-   ))
+   (mapcar 'aws-instance-fix-tag)))
 
 (defun aws-instance-fix-tag (instance)
   (mapcar
@@ -119,9 +108,21 @@
 (defun aws-instances-refresh ()
   "Refresh elasticsearch snapshots."
 
-  (setq tabulated-list-entries
-        (aws-convert-raw-instances
-         (aws-raw-instances))))
+  (setq
+   tabulated-list-entries
+   (->>
+    (aws-ec2-normalize-raw-instances
+     (aws-ec2-all-raw-instances))
+    (mapcar (lambda (instance)
+              (list (cdr (assoc 'InstanceId instance))
+                    (vector (assoc-default 'InstanceId instance)
+                            (assoc-default 'InstanceType instance)
+                            (or (assoc-default "Name" (assoc-default 'Tags instance)) "")
+                            (assoc-default 'Name (assoc-default 'State instance))
+                            (prin1-to-string (assoc-default 'PrivateIpAddress instance) t)
+                            (or  "..." (prin1-to-string instance))
+                            ))))
+    )))
 
 (defun aws-select-if-empty (&optional arg)
   "Select current row is selection is empty."
