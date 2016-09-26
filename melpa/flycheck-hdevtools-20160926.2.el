@@ -4,7 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; URL: https://github.com/flycheck/flycheck-hdevtools
-;; Package-Version: 20160109.1814
+;; Package-Version: 20160926.2
 ;; Keywords: convenience languages tools
 ;; Package-Requires: ((flycheck "0.21-cvs1") (dash "2.0"))
 ;; Version: DEV
@@ -40,7 +40,7 @@
 (flycheck-define-checker haskell-hdevtools
   "A Haskell syntax and type checker using hdevtools.
 
-See URL `https://github.com/bitc/hdevtools'."
+See URL `https://github.com/hdevtools/hdevtools'."
   :command
   ("hdevtools" "check" "-g" "-Wall"
    (eval (when flycheck-ghc-no-user-package-database
@@ -56,22 +56,22 @@ See URL `https://github.com/bitc/hdevtools'."
    source-inplace)
   :error-patterns
   ((warning line-start (file-name) ":" line ":" column ":"
-            (or " " "\n ") "Warning:" (optional "\n")
+            (or " " "\n ") "warning:" (optional "\n")
             (message
              (one-or-more " ") (one-or-more not-newline)
              (zero-or-more "\n"
                            (one-or-more " ")
                            (one-or-more not-newline)))
             line-end)
-   (error line-start (file-name) ":" line ":" column ":"
-          (or (message (one-or-more not-newline))
-              (and "\n"
-                   (message
-                    (one-or-more " ") (one-or-more not-newline)
-                    (zero-or-more "\n"
-                                  (one-or-more " ")
-                                  (one-or-more not-newline)))))
-          line-end))
+    (error line-start (file-name) ":" line ":" column ":"
+             (or " " "\n ") "error:" (optional "\n")
+             (message
+              (one-or-more " ") (one-or-more not-newline)
+              (zero-or-more "\n"
+                            (one-or-more " ")
+                            (one-or-more not-newline)))
+             line-end)
+    )
   :error-filter
   (lambda (errors)
     (-> errors
