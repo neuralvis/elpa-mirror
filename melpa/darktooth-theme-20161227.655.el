@@ -4,8 +4,8 @@
 
 ;; Authors: Jason Milkins <jasonm23@gmail.com>
 ;; URL: http://github.com/emacsfodder/emacs-theme-darktooth
-;; Package-Version: 20161225.1936
-;; Version: 0.3.2
+;; Package-Version: 20161227.655
+;; Version: 0.3.3
 ;; Package-Requires: ((autothemer "0.2"))
 
 ;;; Commentary:
@@ -21,10 +21,8 @@
 (unless (>= emacs-major-version 24)
   (error "Requires Emacs 24 or later"))
 
-(deftheme darktooth "From the darkness... it watches")
-
 (autothemer-deftheme
- darktooth "A color theme for Emacs, from the darkness... it watches"
+ darktooth "From the darkness... it watches"
 
  ((((class color) (min-colors #xFFFFFF)) ;; color column 1 GUI/24bit
    ((class color) (min-colors #xFF)))    ;; color column 2 Xterm/256

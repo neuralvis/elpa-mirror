@@ -4,9 +4,8 @@
 ;;; Author: Vladimir Lagunov <lagunov.vladimir@gmail.com>
 ;;; Maintainer: Vladimir Lagunov <lagunov.vladimir@gmail.com>
 ;;; URL: https://github.com/werehuman/python-switch-quotes
-;; Package-Version: 20161219.622
-;;; Created: 2016-12-18
-;;; Version: 0.1
+;; Package-Version: 20161227.829
+;;; Version: 1.0.1
 ;;; Keywords: python tools convenience
 ;;; Package-Requires: ((emacs "24.3"))
 
@@ -65,6 +64,10 @@ OLD-QUOTE and NEW-QUOTE may be ?' or ?\"."
   "Private: Convert simple strings like r\"hello world\" => r'hello world'.
 Expected that string is between STRING-START and STRING-END.
 NEW-QUOTE may be ?' or ?\"."
+  (when (string-match (concat "\\(?:^\\|[^\\\\]\\)" (regexp-quote (string new-quote)))
+                      (buffer-substring (1+ string-start) (1- string-end)))
+    ;;; r'"'
+    (error "Impossible to switch quotes in these raw string"))
   (goto-char (1- string-end))
   (delete-char 1)
   (insert new-quote)

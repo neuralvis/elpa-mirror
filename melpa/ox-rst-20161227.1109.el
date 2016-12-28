@@ -18,7 +18,7 @@
 
 ;; Author: IGARASHI Masanao <syoux2@gmail.com>
 ;; Keywords: org, rst, reST, reStructuredText
-;; Package-Version: 20161219.1016
+;; Package-Version: 20161227.1109
 ;; Version: 0.2
 ;; URL: https://github.com/masayuko/ox-rst
 ;; Package-Requires: ((emacs "24.4") (org "8.2.4"))
@@ -415,8 +415,7 @@ See `org-rst-text-markup-alist' for details."
      ;; Handle the `verb' special case: Protect some
      ;; special chars and use "\\" escape.
      ((eq 'verb fmt)
-      (let ((start 0)
-	    (rtn "")
+      (let ((rtn "")
 	    char)
 		(while (string-match "\\`*" text)
 		  (setq char (match-string 0 text))
@@ -765,10 +764,7 @@ holding export options."
 	;; 1. Document's body.
 	contents
 	;; 2. Footnote definitions.
-	(let ((definitions (org-export-collect-footnote-definitions info))
-		  ;; Insert full links right inside the footnote definition
-		  ;; as they have no chance to be inserted later.
-		  (org-rst-links-to-notes nil))
+	(let ((definitions (org-export-collect-footnote-definitions info)))
 	  (when definitions
 		(concat
 		 "\n\n"
@@ -965,9 +961,9 @@ INFO is a plist holding contextual information."
 		 (desc (and (not (string= desc "")) desc))
 		 (path (cond
 				((member type '("http" "https" "ftp" "mailto"))
-				 (org-link-escape
+				 (url-encode-url
 				  (org-link-unescape
-				   (concat type ":" raw-path)) org-link-escape-chars-browser))
+				   (concat type ":" raw-path))))
 				((string= type "file")
 				 ;; Treat links to ".org" files as ".html", if needed.
 				 (setq raw-path

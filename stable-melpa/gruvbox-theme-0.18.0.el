@@ -7,8 +7,8 @@
 ;;          Greduan <me@greduan.com>
 ;; Maintainer: jasonm23 <jasonm23@gmail.com>
 ;; URL: http://github.com/Greduan/emacs-theme-gruvbox
-;; Package-Version: 20161227.326
-;; Version: 0.17
+;; Package-Version: 0.18.0
+;; Version: 0.18
 
 ;;; Commentary:
 
@@ -16,9 +16,9 @@
 ;; theme support in Emacs 24.
 ;;
 ;; This theme contains my own modifications and it's a bit opinionated
-;; sometimes, deviating from the original because of it. I try to stay true to
-;; the original as much as possible, however. I only make changes where I would
-;; have made the changes on the original.
+;; sometimes, deviating from the original because of it. I try to stay
+;; true to the original as much as possible, however. I only make
+;; changes where I would have made the changes on the original.
 ;;
 ;; Since there is no direct equivalent in syntax highlighting from Vim to Emacs
 ;; some stuff may look different, especially in stuff like JS2-mode, where it
@@ -105,10 +105,10 @@
       (gruvbox-turquoise4       (if (display-graphic-p) "#61ACBB" "turquoise4"))
 
       (gruvbox-bg (cl-case gruvbox-contrast
-		    (hard gruvbox-dark0_hard)
-		    (soft gruvbox-dark0_soft)
-		    ;; Medium by default.
-		    (t    gruvbox-dark0))))
+        (hard gruvbox-dark0_hard)
+        (soft gruvbox-dark0_soft)
+        ;; Medium by default.
+        (t    gruvbox-dark0))))
 
   (custom-theme-set-faces
     'gruvbox
@@ -370,6 +370,14 @@
     `(isearch                       ((t (:foreground ,gruvbox-black :background ,gruvbox-neutral_orange))))
     `(lazy-highlight           ((t (:foreground ,gruvbox-black :background ,gruvbox-neutral_yellow))))
     `(isearch-fail                  ((t (:foreground ,gruvbox-light0 :background ,gruvbox-bright_red))))
+
+    ;; markdown-mode
+    `(markdown-header-face-1                       ((t (:foreground ,gruvbox-neutral_blue))))
+    `(markdown-header-face-2                       ((t (:foreground ,gruvbox-neutral_yellow))))
+    `(markdown-header-face-3                       ((t (:foreground ,gruvbox-neutral_purple))))
+    `(markdown-header-face-4                       ((t (:foreground ,gruvbox-neutral_red))))
+    `(markdown-header-face-5                       ((t (:foreground ,gruvbox-neutral_green))))
+    `(markdown-header-face-6                       ((t (:foreground ,gruvbox-neutral_aqua))))
 
     ;; anzu-mode
     `(anzu-mode-line        ((t (:foreground ,gruvbox-bright_yellow :weight bold))))
