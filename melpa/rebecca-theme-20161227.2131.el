@@ -7,7 +7,7 @@
 
 ;; Author: vic <vborja@apache.org>
 ;; Version: 1.2.1
-;; Package-Version: 20161227.1206
+;; Package-Version: 20161227.2131
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/vic/rebecca-theme
 ;; Keywords: theme, dark
@@ -27,6 +27,7 @@
 
 (let* ((class '((class color) (min-colors 89)))
        (rebecca "#663399")
+       (ninja   "#333353")
 
        (base00 "#292a44") ;; default background
        (base01 "#663399") ;; lighter background (status bar)
@@ -109,6 +110,8 @@
    `(trailing-whitespace ((,class :foreground nil :background ,warning)))
    `(vertical-border ((,class (:foreground ,bg2))))
    `(warning ((,class (:foreground ,warning))))
+   `(whitespace-space ((,class (:foreground ,ninja))))
+   `(whitespace-newline ((,class (:foreground ,ninja))))
    `(whitespace-trailing ((,class :inherit trailing-whitespace)))
    ;; syntax
    `(font-lock-builtin-face ((,class (:foreground ,builtin))))

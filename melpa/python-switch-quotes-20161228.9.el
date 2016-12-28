@@ -4,7 +4,7 @@
 ;;; Author: Vladimir Lagunov <lagunov.vladimir@gmail.com>
 ;;; Maintainer: Vladimir Lagunov <lagunov.vladimir@gmail.com>
 ;;; URL: https://github.com/werehuman/python-switch-quotes
-;; Package-Version: 20161227.829
+;; Package-Version: 20161228.9
 ;;; Version: 1.0.1
 ;;; Keywords: python tools convenience
 ;;; Package-Requires: ((emacs "24.3"))
@@ -28,8 +28,6 @@
 ;;; Commentary:
 ;;;   Converts strings like 'this' to strings like "this".
 ;;;   Supports raw strings, docstrings and strings with escaped quotes.
-;;;
-;;;   Assigns key ``C-c '`` to convert string at point.
 
 
 ;;; Code:

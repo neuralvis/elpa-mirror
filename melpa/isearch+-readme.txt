@@ -50,6 +50,7 @@
 
    `isearchp-act-on-demand' (Emacs 22+),
    `isearchp-add-filter-predicate' (Emacs 24.4+),
+   `isearchp-add-inline-regexp-filter-predicate' (Emacs 24.4+),
    `isearchp-add-regexp-filter-predicate' (Emacs 24.4+),
    `isearchp-append-register', `isearch-char-by-name' (Emacs
    23-24.3), `isearchp-columns' (Emacs 24.4+),
@@ -60,8 +61,10 @@
    `isearchp-fontify-buffer-now', `isearchp-init-edit',
    `isearchp-near' (Emacs 24.4+), `isearchp-near-after' (Emacs
    24.4+), `isearchp-near-before' (Emacs 24.4+),
+   `isearchp-negate-last-filter' (Emacs 24.4+),
    `isearchp-open-recursive-edit' (Emacs 22+),
    `isearchp-or-filter-predicate' (Emacs 24.4+),
+   `isearchp-or-last-filter' (Emacs 24.4+),
    `isearchp-remove-failed-part' (Emacs 22+),
    `isearchp-remove-failed-part-or-last-char' (Emacs 22+),
    `isearchp-remove-filter-predicate' (Emacs 24.4+),
@@ -159,7 +162,9 @@
    `isearchp-near-after-predicate' (Emacs 24.4+),
    `isearchp-near-before-predicate' (Emacs 24.4+),
    `isearchp-near-predicate' (Emacs 24.4+), `isearchp-not-pred'
-   (Emacs 24.4+), `isearchp-oddp', `isearchp-read-face-names',
+   (Emacs 24.4+), `isearchp-not-predicate' (Emacs 24.4+),
+   `isearchp-oddp', `isearchp-or-predicates' (Emacs 24.4+),
+   `isearchp-or-preds' (Emacs 24.4+), `isearchp-read-face-names',
    `isearchp-read-face-names--read', `isearchp-read-filter-name'
    (Emacs 24.4+), `isearchp-read-measure' (Emacs 24.4+),
    `isearchp-read-near-args' (Emacs 24.4+),
@@ -288,6 +293,8 @@
    `C-z !'      `isearchp-set-filter-predicate' (Emacs 24.4+)
    `C-z %'      `isearchp-add-regexp-filter-predicate'
                 (Emacs 24.4+)
+   `C-z .'      `isearchp-add-inline-regexp-filter-predicate'
+                (Emacs 24.4+)
    `C-z &'      `isearchp-add-filter-predicate' (Emacs 24.4+)
    `C-z -'      `isearchp-remove-filter-predicate' (Emacs 24.4+)
    `C-z 0'      `isearchp-reset-filter-predicate' (Emacs 24.4+)
@@ -302,8 +309,10 @@
    `C-z S'      `isearchp-toggle-auto-save-filter-predicate'
                 (Emacs 24.4+)
    `C-z s'      `isearchp-save-filter-predicate' (Emacs 24.4+)
-   `C-z |'      `isearchp-or-filter-predicate' (Emacs 24.4+)
-   `C-z ~'      `isearchp-complement-filter' (Emacs 24.4+)
+   `C-z ||'     `isearchp-or-filter-predicate' (Emacs 24.4+)
+   `C-z |1'     `isearchp-or-last-filter' (Emacs 24.4+)
+   `C-z ~~'     `isearchp-complement-filter' (Emacs 24.4+)
+   `C-z ~1'     `isearchp-negate-last-filter' (Emacs 24.4+)
    `C-M-;'      `isearchp-toggle-ignoring-comments' (Emacs 23+)
                 (`isearch-prop.el')
    `C-M-`'      `isearchp-toggle-literal-replacement' (Emacs 22+)
@@ -467,12 +476,25 @@ Overview of Features ---------------------------------------------
    - `C-z %' (`isearchp-add-regexp-filter-predicate') adds a filter
      predicate that requires search hits to match a given regexp.
 
-   - `C-z |' (`isearchp-or-filter-predicate') adds a filter
+   - `C-z .' (`isearchp-add-inline-regexp-filter-predicate') is
+     really just `C-z %', but `.*' is added to each side of the
+     regexp you enter.  You can use this multiple times when regexp
+     searching for full lines with `.+', to find the lines that
+     contain multiple regexp matches in any order.
+
+   - `C-z ||' (`isearchp-or-filter-predicate') adds a filter
      predicate, OR-ing it as an additional `:before-until' filter.
 
-   - `C-z ~' (`isearchp-complement-filter') complements the current
+   - `C-z |1' (`isearchp-or-last-filter') replaces the last-added
+     filter by its disjunction with another predicate, which you
+     specify.
+
+   - `C-z ~~' (`isearchp-complement-filter') complements the current
      filter.  It either adds an `:around' filter that complements
      or it removes an existing top-level complementing filter.
+
+   - `C-z ~1' (`isearchp-negate-last-filter') replaces the
+     last-added filter by its complement.
 
    - `C-z -' (`isearchp-remove-filter-predicate') removes the last
      added filter predicate.
@@ -489,9 +511,18 @@ Overview of Features ---------------------------------------------
 
    - `C-z n' (`isearchp-defun-filter-predicate') names the current
      suite of filter predicates, creating a named predicate that
-     does the same thing.  (You can use that name with `C-z -' to
-     remove that predicate.)  With a prefix arg it can also set or
+     does the same thing.  With a prefix arg it can also set or
      save (i.e., do what `C-z !' or `C-z s' does).
+
+     You can use that name with `C-z -' to remove that predicate.
+     You can also use it to create a custom Isearch command that
+     uses it for filtering.  For example:
+
+       (defun foo ()
+         "Isearch with filter predicate `my-filter-pred'."
+         (interactive)
+         (let ((isearch-filter-predicate  'my-filter-pred))
+           (isearch-forward)))
 
    - `C-z p' (`isearchp-toggle-showing-filter-prompt-prefixes')
      toggles option `isearchp-show-filter-prompt-prefixes-flag',
@@ -530,6 +561,25 @@ Overview of Features ---------------------------------------------
      predicates, which incorporate particular patterns and
      distances. You can then simply add such a predicate using `C-z
      &' (no prompting for pattern or distance).
+
+   Typically you add (`C-z &', `C-z %', etc.) a filter predicate to
+   those already active, or you remove one (`C-z -').  Adding is
+   implicitly an AND operation: the list of current predicates must
+   all be satisfied.  You can also OR a predicate against either
+   the entire ANDed list of predicates (`C-z ||') or against only
+   the last-added one (`C-z |1').  And you can complement either
+   the entire ANDed list (`C-z ~~') or just the last-added
+   predicate (`C-z ~1').
+
+   This ORing and NOTing, together with adding and removing
+   predicates in a given order (implicitly ANDing them), gives you
+   complete Boolean combination flexibility.
+
+   The list of filter predicates is always a conjunction.  But you
+   can use, as any of the conjuncts, a predicate that implements a
+   disjunction or a negation.  Or you can replace the entire list
+   by a single predicate that implements a disjunction or a
+   negation.
 
    When you use one of the commands that adds a filter predicate as
    advice to `isearch-filter-predicate' you can be prompted for two
@@ -589,12 +639,18 @@ Overview of Features ---------------------------------------------
    associate with the newly defined predicate, so that you can
    easily choose it again (no prompting).
 
+   Similarly, candidate `not...' prompts you for a predicate to
+   negate, and candidate `or...' prompts you for two predicates to
+   combine using `or'.
+
    For the completion candidates that are predefined, this
    naming convention is used:
 
    * Bracketed names (`[...]') stand for predicates that check that
      the search hit is within something.  For example, name `[;]'
-     tests whether it is inside a comment.
+     tests whether it is inside a comment (`;' is the Emacs-Lisp
+     comment-start character), and name `[defun]' tests whether it
+     is inside a defun.
 
    * Names that end in `...' indicate candidates that prompt you
      for more information.  These names represent, not filter

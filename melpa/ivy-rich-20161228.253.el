@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20161221.559
+;; Package-Version: 20161228.253
 ;; Version: 0.0.1
 ;; Keywords: ivy
 
@@ -71,6 +71,11 @@ to hold the project name."
   ""
   "Delimiter between columns."
   :type 'string)
+
+(defcustom ivy-rich-switch-buffer-align-virtual-buffer
+  nil
+  "Whether to align virtual buffers just as true buffers or not."
+  :type 'boolean)
 
 (defvar ivy-rich-switch-buffer-buffer-size-length 7)
 
@@ -185,7 +190,27 @@ Currently the transformed format is
                                   project ivy-rich-switch-buffer-delimiter
                                   path)))
             display))
-      str)))
+      (if ivy-rich-switch-buffer-align-virtual-buffer
+          (let* (;; File name
+                 (filename (file-name-nondirectory (expand-file-name str)))
+                 (filename (ivy-rich-switch-buffer-pad filename
+                                                       (+ ivy-rich-switch-buffer-name-max-length
+                                                          3  ; width of indicators
+                                                          ivy-rich-switch-buffer-buffer-size-length
+                                                          ivy-rich-switch-buffer-mode-max-length
+                                                          ivy-rich-switch-buffer-project-max-length)))
+                 (filename (propertize filename 'face 'ivy-virtual))
+                 ;; Path
+                 (path (file-name-directory str))
+                 (path (if (> (length path) (- (window-width (minibuffer-window)) (length filename)))
+                           (ivy-rich-switch-buffer-shorten-path path)
+                         path))
+                 (path (propertize path 'face 'ivy-virtual)))
+            (format "%s%s%s"
+                    filename
+                    ivy-rich-switch-buffer-delimiter
+                    (ivy-rich-switch-buffer-pad path (- (window-width) (length filename)))))
+        str))))
 
 (provide 'ivy-rich)
 
