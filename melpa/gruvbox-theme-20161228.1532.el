@@ -2,13 +2,17 @@
 
 ;; Copyright (c) 2013 Lee Machin
 ;; Copyright (c) 2013-2016 Greduan
+;; Copyright (c) 2016-2017 Jason Milkins
 
-;; Authors: Lee Machin <ljmachin@gmail.com>
-;;          Greduan <me@greduan.com>
-;; Maintainer: jasonm23 <jasonm23@gmail.com>
+;; Author: Jason Milkins <jasonm23@gmail.com>
+;; (current maintainer)
+;;
+;; Author-list: Lee Machin <ljmachin@gmail.com>,
+;;              Greduan <me@greduan.com>
+;;
 ;; URL: http://github.com/Greduan/emacs-theme-gruvbox
-;; Package-Version: 20161228.257
-;; Version: 1.04
+;; Package-Version: 20161228.1532
+;; Version: 1.11.0
 
 ;; Package-Requires: ((autothemer "0.2"))
 
@@ -33,8 +37,12 @@
 ;; Pavel Pertsev created the original theme for Vim, on which this port
 ;; is based.
 
-;; Lee Machin created the first port of the original theme, which I'm working on
-;; to make better and more feature complete.
+;; Lee Machin created the first port of the original theme, which
+;; Greduan developed further adding support for several major modes.
+;;
+;; Jason Milkins (ocodo) has maintained the theme since 2015 and is
+;; working with the community to add further mode support and align
+;; the project more closely with Vim Gruvbox.
 
 ;;; Code:
 (eval-when-compile
@@ -53,70 +61,67 @@
  gruvbox
  "A retro-groove colour theme"
 
- ((((class color) (min-colors #xFFFFFF) (background dark))   ;; color column 1 GUI/24bit
-   ((class color) (min-colors #xFF)     (background dark))   ;; color column 2 Xterm/256
+ ((((class color) (min-colors #xFFFFFF))        ; col 1 GUI/24bit
+   ((class color) (min-colors #xFF)))           ; col 2 Xterm/256
 
-   ((class color) (min-colors #xFFFFFF) (background light))  ;; color column 1 GUI/24bit
-   ((class color) (min-colors #xFF)     (background light))) ;; color column 2 Xterm/256
+  (gruvbox-dark0_hard      "#1d2021" "#1c1c1c")
+  (gruvbox-dark0           "#282828" "#262626")
+  (gruvbox-dark0_soft      "#32302f" "#303030")
+  (gruvbox-dark1           "#3c3836" "#3a3a3a")
+  (gruvbox-dark2           "#504945" "#4e4e4e")
+  (gruvbox-dark3           "#665c54" "#626262")
+  (gruvbox-dark4           "#7c6f64" "#767676")
 
-  (gruvbox-dark0_hard     "#1d2021" "#1c1c1c" "#f9f5d7" "#ffffdf")
-  (gruvbox-dark0          "#282828" "#262626" "#fbf1c7" "#ffffaf")
-  (gruvbox-dark0_soft     "#32302f" "#303030" "#f2e5bc" "#ffff87")
-  (gruvbox-dark1          "#3c3836" "#3a3a3a" "#ebdbb2" "#ffdfaf")
-  (gruvbox-dark2          "#504945" "#4e4e4e" "#d5c4a1" "#bcbcbc")
-  (gruvbox-dark3          "#665c54" "#626262" "#bdae93" "#a8a8a8")
-  (gruvbox-dark4          "#7c6f64" "#767676" "#a89984" "#949494")
+  (gruvbox-gray            "#928374" "#8a8a8a")
 
-  (gruvbox-medium         "#928374" "#8a8a8a" "#928374" "#8a8a8a")
+  (gruvbox-light0_hard     "#ffffc8" "#ffffdf")
+  (gruvbox-light0          "#fdf4c1" "#ffffaf")
+  (gruvbox-light0_soft     "#f4e8ba" "#ffff87")
+  (gruvbox-light1          "#ebdbb2" "#ffdfaf")
+  (gruvbox-light2          "#d5c4a1" "#bcbcbc")
+  (gruvbox-light3          "#bdae93" "#a8a8a8")
+  (gruvbox-light4          "#a89984" "#949494")
 
-  (gruvbox-light0_hard    "#f9f5d7" "#ffffdf" "#1d2021" "#1c1c1c")
-  (gruvbox-light0         "#fbf1c7" "#ffffaf" "#282828" "#262626")
-  (gruvbox-light0_soft    "#f2e5bc" "#ffff87" "#32302f" "#303030")
-  (gruvbox-light1         "#ebdbb2" "#ffdfaf" "#3c3836" "#3a3a3a")
-  (gruvbox-light2         "#d5c4a1" "#bcbcbc" "#504945" "#4e4e4e")
-  (gruvbox-light3         "#bdae93" "#a8a8a8" "#665c54" "#626262")
-  (gruvbox-light4         "#a89984" "#949494" "#7c6f64" "#767676")
+  (gruvbox-bright_red      "#fb4933" "#d75f5f")
+  (gruvbox-bright_green    "#b8bb26" "#afaf00")
+  (gruvbox-bright_yellow   "#fabd2f" "#ffaf00")
+  (gruvbox-bright_blue     "#83a598" "#87afaf")
+  (gruvbox-bright_purple   "#d3869b" "#d787af")
+  (gruvbox-bright_aqua     "#8ec07c" "#87af87")
+  (gruvbox-bright_orange   "#fe8019" "#ff8700")
 
-  (gruvbox-bright_red     "#fb4934" "#d75f5f" "#9d0006" "#870000")
-  (gruvbox-bright_green   "#b8bb26" "#afaf00" "#79740e" "#878700")
-  (gruvbox-bright_yellow  "#fabd2f" "#ffaf00" "#b57614" "#af8700")
-  (gruvbox-bright_blue    "#83a598" "#87afaf" "#076678" "#005f87")
-  (gruvbox-bright_purple  "#d3869b" "#d787af" "#8f3f71" "#875f87")
-  (gruvbox-bright_aqua    "#8ec07c" "#87af87" "#427b58" "#5f8787")
-  (gruvbox-bright_orange  "#fe8019" "#ff8700" "#af3a03" "#af5f00")
+  (gruvbox-neutral_red     "#fb4934" "#d75f5f")
+  (gruvbox-neutral_green   "#b8bb26" "#afaf00")
+  (gruvbox-neutral_yellow  "#fabd2f" "#ffaf00")
+  (gruvbox-neutral_blue    "#83a598" "#87afaf")
+  (gruvbox-neutral_purple  "#d3869b" "#d787af")
+  (gruvbox-neutral_aqua    "#8ec07c" "#87af87")
+  (gruvbox-neutral_orange  "#fe8019" "#ff8700")
 
-  (gruvbox-neutral_red    "#cc241d" "#d75f5f" "#cc241d" "#d75f5f")
-  (gruvbox-neutral_green  "#98971a" "#afaf00" "#98971a" "#afaf00")
-  (gruvbox-neutral_yellow "#d79921" "#ffaf00" "#d79921" "#ffaf00")
-  (gruvbox-neutral_blue   "#458588" "#87afaf" "#458588" "#87afaf")
-  (gruvbox-neutral_purple "#b16286" "#d787af" "#b16286" "#d787af")
-  (gruvbox-neutral_aqua   "#689d6a" "#87af87" "#689d6a" "#87af87")
-  (gruvbox-neutral_orange "#d65d0e" "#ff8700" "#d65d0e" "#ff8700")
+  (gruvbox-faded_red       "#9d0006" "#870000")
+  (gruvbox-faded_green     "#79740e" "#878700")
+  (gruvbox-faded_yellow    "#b57614" "#af8700")
+  (gruvbox-faded_blue      "#076678" "#005f87")
+  (gruvbox-faded_purple    "#8f3f71" "#875f87")
+  (gruvbox-faded_aqua      "#427b58" "#5f8787")
+  (gruvbox-faded_orange    "#af3a03" "#af5f00")
 
-  (gruvbox-faded_red      "#9d0006" "#870000" "#fb4934" "#d75f5f")
-  (gruvbox-faded_green    "#79740e" "#878700" "#b8bb26" "#afaf00")
-  (gruvbox-faded_yellow   "#b57614" "#af8700" "#fabd2f" "#ffaf00")
-  (gruvbox-faded_blue     "#076678" "#005f87" "#83a598" "#87afaf")
-  (gruvbox-faded_purple   "#8f3f71" "#875f87" "#d3869b" "#d787af")
-  (gruvbox-faded_aqua     "#427b58" "#5f8787" "#8ec07c" "#87af87")
-  (gruvbox-faded_orange   "#af3a03" "#af5f00" "#fe8019" "#ff8700")
+  (gruvbox-dark_red        "#421E1E" "#5f0000")
+  (gruvbox-dark_blue       "#2B3C44" "#000080")
+  (gruvbox-dark_aqua       "#36473A" "#005f5f")
 
-  (gruvbox-dark_red        "#421E1E" "#5f0000" "#421E1E" "#5f0000")
-  (gruvbox-dark_blue       "#2B3C44" "#000080" "#2B3C44" "#000080")
-  (gruvbox-dark_aqua       "#36473A" "#005f5f" "#36473A" "#005f5f")
-
-  (gruvbox-delimiter-one    "#458588" "#008787"        "#458588" "#008787"       )
-  (gruvbox-delimiter-two    "#b16286" "#d75f87"        "#b16286" "#d75f87"       )
-  (gruvbox-delimiter-three  "#8ec07c" "#87af87"        "#8ec07c" "#87af87"       )
-  (gruvbox-delimiter-four   "#d65d0e" "#d75f00"        "#d65d0e" "#d75f00"       )
-  (gruvbox-white            "#FFFFFF" "white"          "#FFFFFF" "white"         )
-  (gruvbox-black            "#000000" "black"          "#000000" "black"         )
-  (gruvbox-sienna           "#DD6F48" "sienna"         "#DD6F48" "sienna"        )
-  (gruvbox-darkslategray4   "#528B8B" "DarkSlateGray4" "#528B8B" "DarkSlateGray4")
-  (gruvbox-lightblue4       "#66999D" "LightBlue4"     "#66999D" "LightBlue4"    )
-  (gruvbox-burlywood4       "#BBAA97" "burlywood4"     "#BBAA97" "burlywood4"    )
-  (gruvbox-aquamarine4      "#83A598" "aquamarine4"    "#83A598" "aquamarine4"   )
-  (gruvbox-turquoise4       "#61ACBB" "turquoise4"     "#61ACBB" "turquoise4"    )
+  (gruvbox-delimiter-one   "#458588" "#008787")
+  (gruvbox-delimiter-two   "#b16286" "#d75f87")
+  (gruvbox-delimiter-three "#8ec07c" "#87af87")
+  (gruvbox-delimiter-four  "#d65d0e" "#d75f00")
+  (gruvbox-white           "#FFFFFF" "white")
+  (gruvbox-black           "#000000" "black")
+  (gruvbox-sienna          "#DD6F48" "sienna")
+  (gruvbox-darkslategray4  "#528B8B" "DarkSlateGray4")
+  (gruvbox-lightblue4      "#66999D" "LightBlue4")
+  (gruvbox-burlywood4      "#BBAA97" "burlywood4")
+  (gruvbox-aquamarine4     "#83A598" "aquamarine4")
+  (gruvbox-turquoise4      "#61ACBB" "turquoise4")
 
   (gruvbox-bg (cl-case gruvbox-contrast
                 (hard gruvbox-dark0_hard)
@@ -127,8 +132,8 @@
  ;; UI
  ((default                                   (:background gruvbox-bg :foreground gruvbox-light0))
   (cursor                                    (:background gruvbox-light0))
-  (mode-line                                 (:box nil :background gruvbox-dark2 :foreground gruvbox-light2))
-  (mode-line-inactive                        (:box nil :background gruvbox-dark1 :foreground gruvbox-light4))
+  (mode-line                                 (:background gruvbox-dark2 :foreground gruvbox-light2 :box nil))
+  (mode-line-inactive                        (:background gruvbox-dark1 :foreground gruvbox-light4 :box nil))
   (fringe                                    (:background gruvbox-bg))
   (linum                                     (:background gruvbox-bg :foreground gruvbox-dark4))
   (hl-line                                   (:background gruvbox-dark1))
@@ -188,14 +193,14 @@
   (sp-pair-overlay-face                      (:background gruvbox-dark2))
   (sp-show-pair-match-face                   (:background gruvbox-dark2)) ;; Pair tags highlight
   (sp-show-pair-mismatch-face                (:background gruvbox-neutral_red)) ;; Highlight for bracket without pair
-  ;(sp-wrap-overlay-face                     (:inherit 'sp-wrap-overlay-face))
-  ;(sp-wrap-tag-overlay-face                 (:inherit 'sp-wrap-overlay-face))
+  ;;(sp-wrap-overlay-face                     (:inherit 'sp-wrap-overlay-face))
+  ;;(sp-wrap-tag-overlay-face                 (:inherit 'sp-wrap-overlay-face))
 
   ;; elscreen
-  (elscreen-tab-background-face              (:box nil :background gruvbox-bg)) ;; Tab bar, not the tabs
-  (elscreen-tab-control-face                 (:box nil :background gruvbox-dark2 :foreground gruvbox-neutral_red :underline nil)) ;; The controls
-  (elscreen-tab-current-screen-face          (:box nil :background gruvbox-dark4 :foreground gruvbox-dark0)) ;; Current tab
-  (elscreen-tab-other-screen-face            (:box nil :background gruvbox-dark2 :foreground gruvbox-light4 :underline nil)) ;; Inactive tab
+  (elscreen-tab-background-face              (:background gruvbox-bg :box nil)) ;; Tab bar, not the tabs
+  (elscreen-tab-control-face                 (:background gruvbox-dark2 :foreground gruvbox-neutral_red :underline nil :box nil)) ;; The controls
+  (elscreen-tab-current-screen-face          (:background gruvbox-dark4 :foreground gruvbox-dark0 :box nil)) ;; Current tab
+  (elscreen-tab-other-screen-face            (:background gruvbox-dark2 :foreground gruvbox-light4 :underline nil :box nil)) ;; Inactive tab
 
   ;; ag (The Silver Searcher)
   (ag-hit-face                               (:foreground gruvbox-neutral_blue))
@@ -212,7 +217,7 @@
   (js2-warning                               (:underline (:color gruvbox-bright_yellow :style 'wave)))
   (js2-error                                 (:underline (:color gruvbox-bright_red :style 'wave)))
   (js2-external-variable                     (:underline (:color gruvbox-bright_aqua :style 'wave)))
-  (js2-jsdoc-tag                             (:background nil :foreground gruvbox-medium))
+  (js2-jsdoc-tag                             (:background nil :foreground gruvbox-gray  ))
   (js2-jsdoc-type                            (:background nil :foreground gruvbox-light4))
   (js2-jsdoc-value                           (:background nil :foreground gruvbox-light3))
   (js2-function-param                        (:background nil :foreground gruvbox-bright_aqua))
@@ -321,7 +326,7 @@
   (org-drawer                                (:inherit 'font-lock-function-face))
   (org-column                                (:background gruvbox-dark0))
   (org-column-title                          (:background gruvbox-dark0 :underline t :weight 'bold))
-  (org-warning                               (:bold t :foreground gruvbox-neutral_red :weight 'bold :underline nil))
+  (org-warning                               (:foreground gruvbox-neutral_red :weight 'bold :underline nil :bold t))
   (org-archived                              (:foreground gruvbox-light0 :weight 'bold))
   (org-link                                  (:foreground gruvbox-faded_aqua :underline t))
   (org-footnote                              (:foreground gruvbox-neutral_aqua :underline t))
@@ -330,8 +335,8 @@
   (org-sexp-date                             (:foreground gruvbox-faded_blue :underline t))
   (org-tag                                   (:bold t :weight 'bold))
   (org-list-dt                               (:bold t :weight 'bold))
-  (org-todo                                  (:bold t :foreground gruvbox-neutral_red :weight 'bold))
-  (org-done                                  (:bold t :foreground gruvbox-neutral_aqua :weight 'bold))
+  (org-todo                                  (:foreground gruvbox-neutral_red :weight 'bold :bold t))
+  (org-done                                  (:foreground gruvbox-neutral_aqua :weight 'bold :bold t))
   (org-agenda-done                           (:foreground gruvbox-neutral_aqua))
   (org-headline-done                         (:foreground gruvbox-neutral_aqua))
   (org-table                                 (:foreground gruvbox-neutral_blue))
@@ -358,7 +363,7 @@
   (org-habit-overdue-future-face             (:background gruvbox-neutral_red))
 
   ;; elfeed
-  (elfeed-search-title-face                  (:foreground gruvbox-medium))
+  (elfeed-search-title-face                  (:foreground gruvbox-gray  ))
   (elfeed-search-unread-title-face           (:foreground gruvbox-light0))
   (elfeed-search-date-face                   (:inherit 'font-lock-builtin-face :underline t))
   (elfeed-search-feed-face                   (:inherit 'font-lock-variable-name-face))

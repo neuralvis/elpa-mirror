@@ -1,12 +1,14 @@
 ;;; erc-crypt.el --- Symmetric Encryption for ERC
-
-;; Copyright (C) 2011 xristos@sdf.lonestar.org
+;;
+;; Copyright (C) 2011-2016 xristos@sdf.lonestar.org
 ;; All rights reserved
-
-;; Version: 1.0 - 2012-07-05
-;; Package-Version: 1.0
+;;
+;; Version: 1.6 - 2016-12-28
+;; Package-Version: 1.6
 ;; Author: xristos@sdf.lonestar.org
-;; Keywords: application
+;; URL: https://github.com/atomontage/erc-crypt
+;; Package-Requires: ((cl-lib "0.5"))
+;; Keywords: comm
 ;;
 ;; Redistribution and use in source and binary forms, with or without
 ;; modification, are permitted provided that the following conditions
@@ -60,25 +62,29 @@
 ;;
 ;;
 ;;; TODO:
-
+;;
 ;; + Move to GnuPG for symmetric encryption (also customizable key
 ;;                                           derivation from passphrase)
 ;;
 ;; + Use OpenSSL for DH key generation
 ;;
-;; + Fully automated authenticated DH key exchange 
+;; + Fully automated authenticated DH key exchange
 ;;
 ;;
 ;;; Notes:
 ;;
-;; I am not a cryptographer && crypto bugs may lurk -> Use at your own risk!
+;; erc-crypt should be seen as a proof-of-concept and serve as HOWTO-code
+;; in terms of developing minor modes for ERC.
+;;
+;; There is no strong cryptography here, DO NOT use this for anything serious!
 ;;
 ;;; Code:
 
-(require 'cl)
+
 (require 'erc)
 (require 'erc-fill)
 (require 'sha1)
+(require 'cl-lib)
 
 ;; erc-fill doesn't play well with us
 (defvar erc-crypt-fill-function nil)
@@ -98,13 +104,13 @@
         (add-hook 'erc-send-completed-hook 'erc-crypt-post-send nil t)
         (add-hook 'erc-insert-pre-hook 'erc-crypt-pre-insert nil t)
         (add-hook 'erc-insert-modify-hook 'erc-crypt-maybe-insert nil t)
-        
+
         ;; Reset buffer locals
         (setq erc-crypt-left-over nil
               erc-crypt-insert-queue nil
               erc-crypt-fill-function erc-fill-function
               erc-fill-function nil))
-    
+
     ;; disabled
     (progn
       (remove-hook 'erc-send-pre-hook 'erc-crypt-maybe-send t)
@@ -118,8 +124,8 @@
 (defvar erc-crypt-openssl-path "openssl"
   "Path to openssl binary.")
 
-(defvar erc-crypt-cipher "bf-cbc"
-  "Cipher to use.  Default is Blowfish CBC.")
+(defvar erc-crypt-cipher "aes-256-cbc"
+  "Cipher to use.  Default is AES CBC.")
 
 (defvar erc-crypt-indicator "☿"
   "String that is used to visually indicate encrypted messages.")
@@ -168,7 +174,7 @@ by `erc-crypt-maybe-insert'.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro* erc-crypt-with-message ((message) &rest body)
+(cl-defmacro erc-crypt-with-message ((message) &rest body)
   "Deal with narrowed regions as implemented by
 `erc-send-modify-hook' and `erc-insert-modify-hook'.
 
@@ -176,7 +182,7 @@ Search for and extract an encrypted message (if present),
 then bind MESSAGE to it, delete the encrypted string from the
 buffer and executes BODY.  Finally, restore ERC text properties."
   (declare (indent defun))
-  (let ((start (gensym)))
+  (let ((start (cl-gensym)))
     `(when erc-crypt-mode
        (goto-char (point-min))
        (let ((,start nil))
@@ -191,7 +197,7 @@ buffer and executes BODY.  Finally, restore ERC text properties."
 
 (defun erc-crypt-time-millis ()
   "Return current time (time since Unix epoch) in milliseconds."
-  (destructuring-bind (sec-h sec-l micro &optional _) (current-time)
+  (cl-destructuring-bind (sec-h sec-l micro &optional _) (current-time)
     (+ (* (+ (* sec-h (expt 2 16))
              sec-l)
           1000)
@@ -208,7 +214,7 @@ Return IV as a 128bit hex string."
                     ""))
              0 32))
 
-(defun* erc-crypt-encrypt (string)
+(cl-defun erc-crypt-encrypt (string)
   "Encrypt STRING with `erc-crypt-key'.
 An IV generated dynamically by `erc-crypt-generate-iv' is used for encryption.
 Return the BASE64 encoded concatenation of IV and CIPHERTEXT which should be
@@ -222,24 +228,25 @@ Return NIL on error."
   (condition-case ex
       (let ((iv (erc-crypt-generate-iv))
             (key erc-crypt-key))
-        (multiple-value-bind (status result)
+        (cl-multiple-value-bind (status result)
             (with-temp-buffer
-              (insert-string (base64-encode-string string))
-              (values (call-process-region
-                       (point-min) (point-max)
-                       erc-crypt-openssl-path t t nil
-                       "enc" "-a" (concat "-" erc-crypt-cipher)
-                       "-iv" iv "-K" key "-nosalt")
-                      (buffer-string)))
+              (insert (base64-encode-string string))
+              (list (call-process-region
+                     (point-min) (point-max)
+                     erc-crypt-openssl-path t t nil
+                     "enc" "-a" (concat "-" erc-crypt-cipher)
+                     "-iv" iv "-K" key "-nosalt")
+                    (buffer-string)))
           (unless (= status 0)
             (message "Non-zero return code from openssl (encrypt)")
-            (return-from erc-crypt-encrypt nil))
+            (message "Output was: %s" result)
+            (cl-return-from erc-crypt-encrypt nil))
           (base64-encode-string (concat iv result) t)))
     ('error
      (message "Process error during encryption: %s" ex)
      nil)))
 
-(defun* erc-crypt-decrypt (string)
+(cl-defun erc-crypt-decrypt (string)
   "Decrypt STRING with `erc-crypt-key'.
 STRING should be BASE64 encoded and contain in order, the IV as a 16 byte hex string
 and the CIPHERTEXT, which should be BASE64 encoded as well.
@@ -248,28 +255,28 @@ If `erc-crypt-key' is NIL, return NIL. See `erc-crypt-set-key'.
 Return NIL on all errors."
   (unless erc-crypt-key
     (message "No key set, could not decrypt")
-    (return-from erc-crypt-decrypt nil))
+    (cl-return-from erc-crypt-decrypt nil))
   (condition-case ex
       (let* ((str (base64-decode-string string))
              (iv (substring str 0 32))
              (key erc-crypt-key)
              (ciphertext (substring str 32)))
-        (multiple-value-bind (status result)
+        (cl-multiple-value-bind (status result)
             (with-temp-buffer
-              (insert-string ciphertext)
-              (values (call-process-region
-                       (point-min) (point-max)
-                       erc-crypt-openssl-path t t nil
-                       "enc" "-d" "-a" (concat "-" erc-crypt-cipher)
-                       "-iv" iv "-K" key "-nosalt")
-                      (buffer-string)))
+              (insert ciphertext)
+              (list (call-process-region
+                     (point-min) (point-max)
+                     erc-crypt-openssl-path t t nil
+                     "enc" "-d" "-a" (concat "-" erc-crypt-cipher)
+                     "-iv" iv "-K" key "-nosalt")
+                    (buffer-string)))
           (unless (= status 0)
             (message "Non-zero return code from openssl (decrypt)")
-            (return-from erc-crypt-decrypt nil))
+            (cl-return-from erc-crypt-decrypt nil))
           (base64-decode-string result)))
-      ('error
-       (message "Process error during decryption: %s" ex)
-       nil)))
+    ('error
+     (message "Process error during decryption: %s" ex)
+     nil)))
 
 
 
@@ -289,13 +296,15 @@ On errors, do not send STRING to the server."
     (let* ((encoded (encode-coding-string string 'utf-8 t))
            (split (erc-crypt-split-message encoded))
            (encrypted (mapcar 'erc-crypt-encrypt split)))
-      (cond ((some 'null encrypted)
+      (cond ((cl-some 'null encrypted)
              (message "Message will not be sent")
              (setq erc-send-this nil))
             (t
+             ;; str is dynamically bound
+             (defvar str)
              (setq erc-crypt-message str
-                   str (concat erc-crypt-prefix (first encrypted) erc-crypt-postfix)
-                   erc-crypt-left-over (rest encrypted)))))))
+                   str (concat erc-crypt-prefix (cl-first encrypted) erc-crypt-postfix)
+                   erc-crypt-left-over (cl-rest encrypted)))))))
 
 
 (defun erc-crypt-maybe-send-fixup ()
@@ -329,23 +338,23 @@ This will avoid displaying the message and will not trigger
 (defun erc-crypt-maybe-insert ()
   "Display decrypted messages and do fragment reconstruction.
 This happens inside `erc-insert-modify-hook'."
-  (labels ((insert-msg (msg)
-                       (insert (decode-coding-string msg 'utf-8 t))
-                       (goto-char (point-min))
-                       (insert (concat (propertize erc-crypt-indicator
-                                                   'face `(:foreground ,erc-crypt-success-color))
-                                       " "))
-                       (setq erc-crypt-insert-queue nil)))
+  (cl-labels ((insert-msg (msg)
+                          (insert (decode-coding-string msg 'utf-8 t))
+                          (goto-char (point-min))
+                          (insert (concat (propertize erc-crypt-indicator
+                                                      'face `(:foreground ,erc-crypt-success-color))
+                                          " "))
+                          (setq erc-crypt-insert-queue nil)))
     (erc-crypt-with-message (msg)
       (let* ((len (length erc-crypt-insert-queue))
-             (cons (first erc-crypt-insert-queue))
+             (cons (cl-first erc-crypt-insert-queue))
              (msg (car cons))
              (tag (cdr cons)))
         (cond ((eql msg :error)
                ;; Insert queued fragments
                (insert (concat "(decrypt error) "
                                (decode-coding-string
-                                (mapconcat 'identity (mapcar 'car (nreverse (rest erc-crypt-insert-queue))) "")
+                                (mapconcat 'identity (mapcar 'car (nreverse (cl-rest erc-crypt-insert-queue))) "")
                                 'utf-8 t)))
                (goto-char (point-min))
                (insert (concat (propertize erc-crypt-indicator
@@ -365,7 +374,7 @@ This happens inside `erc-insert-modify-hook'."
 (defun erc-crypt-post-send (string)
   "Send message fragments placed in `erc-crypt-left-over' to remote end."
   (unwind-protect
-      (loop for m in erc-crypt-left-over do
+      (cl-loop for m in erc-crypt-left-over do
             (erc-message "PRIVMSG"
                          (concat (erc-default-target) " "
                                  (concat erc-crypt-prefix m erc-crypt-postfix))))
@@ -381,33 +390,33 @@ XXX are bytes used for padding.
 P is a single byte that is equal to the number of X (padding bytes)
 S is a single byte that is equal to 1 when the message is a fragment, 0
 if not or if final fragment."
-  (labels ((do-pad (string split-tag)
-                   (let* ((len (length string))
-                          (diff (- erc-crypt-max-len len))
-                          (pad (loop repeat diff
-                                     collect (string (random 255)) into ret
-                                     finally (return (reduce 'concat ret)))))
-                     (concat string pad (string diff) (string split-tag)))))
-    (cond ((listp (rest list))
-             ;; Message is split in parts
-             (loop for msg in list
-                   for count from 0
-                   with len = (length list)
-                   if (= count (1- len))
-                       collect (do-pad msg 0)
-                       else
-                       collect (do-pad msg 1)))
-            (t (list (do-pad list 0))))))
+  (cl-labels ((do-pad (string split-tag)
+                      (let* ((len (length string))
+                             (diff (- erc-crypt-max-len len))
+                             (pad (cl-loop repeat diff
+                                        collect (string (random 255)) into ret
+                                        finally return (cl-reduce 'concat ret))))
+                        (concat string pad (string diff) (string split-tag)))))
+    (cond ((listp (cl-rest list))
+           ;; Message is split in parts
+           (cl-loop for msg in list
+                 for count from 0
+                 with len = (length list)
+                 if (= count (1- len))
+                 collect (do-pad msg 0)
+                 else
+                 collect (do-pad msg 1)))
+          (t (list (do-pad list 0))))))
 
 
 (defun erc-crypt-split-hard (string)
   "Split STRING into substrings that are at most `erc-crypt-max-len' bytes long.
 Splitting does not take into account word boundaries or whitespace.
 Return list of substrings."
-  (loop with len = (length string)
-        for start = 0 then (+ start erc-crypt-max-len)
-        while (< start len)
-        collect (substring string start (min len (+ start erc-crypt-max-len)))))
+  (cl-loop with len = (length string)
+           for start = 0 then (+ start erc-crypt-max-len)
+           while (< start len)
+           collect (substring string start (min len (+ start erc-crypt-max-len)))))
 
 (defun erc-crypt-split-message (string)
   (let* ((len (length string)))
@@ -417,20 +426,18 @@ Return list of substrings."
           (t
            (erc-crypt-pad (erc-crypt-split-hard string))))))
 
-;;
-;; Interactive
-;; 
+;;; Interactive
 
 (defun erc-crypt-enable ()
   "Enable erc-crypt-mode for the current buffer."
   (interactive)
-  (assert (eq major-mode 'erc-mode))
+  (cl-assert (eq major-mode 'erc-mode))
   (erc-crypt-mode t))
 
 (defun erc-crypt-disable ()
   "Disable erc-crypt-mode for the current buffer."
   (interactive)
-  (assert (eq major-mode 'erc-mode))
+  (cl-assert (eq major-mode 'erc-mode))
   (erc-crypt-mode -1))
 
 (defun erc-crypt-set-key (key)
@@ -444,5 +451,4 @@ The value used is the SHA1 hash of KEY."
   (setq erc-crypt-key (sha1 key)))
 
 (provide 'erc-crypt)
-
 ;;; erc-crypt.el ends here

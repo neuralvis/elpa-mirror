@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20161228.253
+;; Package-Version: 20161228.2022
 ;; Version: 0.0.1
 ;; Keywords: ivy
 
@@ -190,7 +190,8 @@ Currently the transformed format is
                                   project ivy-rich-switch-buffer-delimiter
                                   path)))
             display))
-      (if ivy-rich-switch-buffer-align-virtual-buffer
+      (if (and (eq ivy-virtual-abbreviate 'full)
+               ivy-rich-switch-buffer-align-virtual-buffer)
           (let* (;; File name
                  (filename (file-name-nondirectory (expand-file-name str)))
                  (filename (ivy-rich-switch-buffer-pad filename

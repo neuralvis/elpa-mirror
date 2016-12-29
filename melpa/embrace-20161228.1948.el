@@ -4,7 +4,7 @@
 
 ;; Author: Junpeng Qiu <qjpchmail@gmail.com>
 ;; Package-Requires: ((cl-lib "0.5") (expand-region "0.10.0"))
-;; Package-Version: 20161227.1933
+;; Package-Version: 20161228.1948
 ;; Keywords: extensions
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -919,7 +919,7 @@
 (defun embrace-ruby-mode-hook ()
   (dolist (lst '((?# "#{" "}")
                  (?d "do" "end")))
-    (embrace-add-pair (car lst) (cadr lst) (caddr lst))))
+    (embrace-add-pair (car lst) (cadr lst) (cl-caddr lst))))
 
 (provide 'embrace)
 ;;; embrace.el ends here

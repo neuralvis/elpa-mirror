@@ -1,10 +1,10 @@
 ;;; erc-crypt.el --- Symmetric Encryption for ERC
 ;;
-;; Copyright (C) 2011 xristos@sdf.lonestar.org
+;; Copyright (C) 2011-2016 xristos@sdf.lonestar.org
 ;; All rights reserved
 ;;
-;; Version: 1.0 - 2012-07-05
-;; Package-Version: 20161105.623
+;; Version: 1.6 - 2016-12-28
+;; Package-Version: 20161228.739
 ;; Author: xristos@sdf.lonestar.org
 ;; URL: https://github.com/atomontage/erc-crypt
 ;; Package-Requires: ((cl-lib "0.5"))
