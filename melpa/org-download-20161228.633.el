@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
-;; Package-Version: 20161119.315
+;; Package-Version: 20161228.633
 ;; Version: 0.1.0
 ;; Package-Requires: ((async "1.2"))
 ;; Keywords: images, screenshots, download
@@ -137,8 +137,13 @@ will be used."
           (const :tag "screencapture" "screencapture -i %s"))
   :group 'org-download)
 
-(defcustom org-download-image-width 0
+(defcustom org-download-image-html-width 0
   "When non-zero add #+attr_html: :width tag to the image."
+  :type 'integer
+  :group 'org-download)
+
+(defcustom org-download-image-latex-width 0
+  "When non-zero add #+attr_latex: :width tag to the image."
   :type 'integer
   :group 'org-download)
 
@@ -318,12 +323,14 @@ It's inserted before the image link and is used to annotate it.")
   (insert
    (concat
     (funcall org-download-annotate-function link)
-    (format "\n%s[[file:%s]]"
-            (if (= org-download-image-width 0)
-                ""
-              (format
-               "#+attr_html: :width %dpx\n" org-download-image-width))
-            (file-relative-name filename (file-name-directory (buffer-name))))))
+    "\n"
+    (if (= org-download-image-html-width 0)
+        ""
+      (format "#+attr_html: :width %dpx\n" org-download-image-html-width))
+    (if (= org-download-image-latex-width 0)
+        ""
+      (format "#+attr_latex: :width %dcm\n" org-download-image-latex-width))
+    (format "[[file:%s]]" (file-relative-name filename (file-name-directory (buffer-name))))))
   (org-display-inline-images))
 
 (defun org-download--at-comment-p ()

@@ -1,10 +1,10 @@
-;;; helm-hunks.el --- A helm interface for git hunks - browsing, staging, unstaging and killing -*- lexical-binding: t -*-
+;;; helm-hunks.el --- A helm interface for git hunks -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2012-2016 Free Software Foundation, Inc.
 
 ;; Author: @torgeir
 ;; Version: 1.5.0
-;; Package-Version: 20161228.1611
+;; Package-Version: 20161229.657
 ;; Keywords: helm git hunks vc
 ;; Package-Requires: ((emacs "24.4") (helm "1.9.8"))
 
@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; A helm interface for git hunks - browsing, staging, unstaging and killing.
+;; A helm interface for git hunks.
 ;;
 ;; Enable `helm-follow-mode' and trigger `helm-hunks' and jump around
 ;; unstaged hunks like never before with `C-n' and `C-p'. Stage with `C-s'.

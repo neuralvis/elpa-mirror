@@ -1,11 +1,11 @@
-;;; slime-company.el --- slime completion backend for company mode
+;;; slime-company.el --- slime completion backend for company mode -*-lexical-binding:t-*-
 ;;
 ;; Copyright (C) 2009-2015  Ole Arndt
 ;;
 ;; Author: Ole Arndt <anwyn@sugarshark.com>
 ;; Keywords: convenience, lisp, abbrev
-;; Package-Version: 20151210.614
-;; Version: 1.0
+;; Package-Version: 20161229.743
+;; Version: 1.1
 ;; Package-Requires: ((slime "2.13") (company "0.9.0"))
 ;;
 ;; This file is free software; you can redistribute it and/or modify
@@ -126,7 +126,7 @@ be active in derived modes as well."
   :group 'slime-company
   :type '(repeat symbol))
 
-(defun slime-company-just-one-space (arg)
+(defun slime-company-just-one-space (_)
   (just-one-space))
 
 (defsubst slime-company-active-p ()
@@ -180,7 +180,7 @@ be active in derived modes as well."
                     (funcall callback
                              (mapcar
                               (lambda (completion)
-                                (cl-destructuring-bind (sym score chunks flags)
+                                (cl-destructuring-bind (sym score _ flags)
                                     completion
                                   (propertize sym 'score score 'flags flags)))
                               (car result))))
@@ -205,7 +205,7 @@ be active in derived modes as well."
     (erase-buffer)
     (insert (funcall slime-company-transform-arglist string))
     (let ((font-lock-verbose nil))
-      (font-lock-fontify-buffer))
+      (font-lock-fontify-region (point-min) (point-max)))
     (goto-char (point-min))
     (buffer-substring (point-min) (point-max))))
 

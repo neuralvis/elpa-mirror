@@ -4,7 +4,7 @@
 
 ;; Author:  Atila Neves <atila.neves@gmail.com>
 ;; Version: 0.5
-;; Package-Version: 20161221.455
+;; Package-Version: 20161229.138
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5") (seq "1.11") (levenshtein "0"))
 ;; Keywords: languages
 ;; URL: http://github.com/atilaneves/cmake-ide
@@ -432,12 +432,21 @@ the object file's name just above."
            ret-obj
            ret-file-name)
 
-      (setq idb (cmake-ide--idb-sorted-by-file-distance idb file-name))
-      (setq ret-obj (cmake-ide--filter-first
-                     (lambda (x) (cmake-ide--idb-obj-depends-on-file x file-name))
-                     idb))
+      (setq ret-file-name
+            (with-temp-buffer
+              (rtags-call-rc "--dependencies" file-name "included-by" :noerror t)
+              (cmake-ide--filter-first
+               (lambda (a)
+                 (gethash a idb))
+               (split-string (buffer-string) "\n" t split-string-default-separators))))
 
-      (when ret-obj (setq ret-file-name (cmake-ide--idb-obj-get ret-obj 'file)))
+      (unless ret-file-name
+        (setq idb (cmake-ide--idb-sorted-by-file-distance idb file-name))
+        (setq ret-obj (cmake-ide--filter-first
+                       (lambda (x) (cmake-ide--idb-obj-depends-on-file x file-name))
+                       idb))
+        (when ret-obj (setq ret-file-name (cmake-ide--idb-obj-get ret-obj 'file))))
+
       (when ret-file-name (cmake-ide--message "Found a source file including %s" file-name))
 
       ret-file-name)))
