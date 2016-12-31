@@ -4,7 +4,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: kiwix wikipedia
-;; Package-Version: 20161219.1811
+;; Package-Version: 20161230.2008
 ;; URL: https://github.com/stardiviner/kiwix.el
 ;; Created: 23th July 2016
 ;; Version: 0.1.0
@@ -36,10 +36,11 @@
 (require 'cl-lib)
 ;; load for `org-link-set-parameters'
 (require 'org)
-(autoload 'org-link-set-parameters "org")
+(declare-function 'org-link-set-parameters "org")
 
 (defgroup kiwix nil
-  "Kiwix customization options.")
+  "Kiwix customization options."
+  :group 'kiwix)
 
 (defcustom kiwix-server-url "http://127.0.0.1:8000/"
   "Specify Kiwix server URL."

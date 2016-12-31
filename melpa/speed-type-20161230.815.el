@@ -5,7 +5,7 @@
 ;; Author: Gunther Hagleitner
 ;; Maintainer: Julien Pagès <j.parkouss@gmail.com>
 ;; Version: 1.0
-;; Package-Version: 20161230.351
+;; Package-Version: 20161230.815
 ;; Keywords: games
 ;; URL: https://github.com/parkouss/speed-type
 ;; Package-Requires: ((cl-lib "0.3"))
@@ -52,12 +52,17 @@
 (defcustom speed-type-gb-book-list
   '(1342 11 1952 1661 74 1232 23 135 5200 2591 844 84 98 2701 1400 16328 174
          46 4300 345 1080 2500 829 1260 6130 1184 768 32032 521 1399 55)
-  "List of book numbers to use from the gutemberg web site.
+  "List of book numbers to use from the gutenberg web site.
 
 Book numbers can be picked from https://www.gutenberg.org, when looking at
 a book url.  E.G, https://www.gutenberg.org/ebooks/14577."
   :group 'speed-type
   :type '(repeat integer))
+
+(defcustom speed-type-gb-dir (locate-user-emacs-file "speed-type")
+  "Directory in which the gutenberg books will be saved."
+  :group 'speed-type
+  :type 'directory)
 
 (defface speed-type-correct
   '((t :foreground "green"))
@@ -214,8 +219,9 @@ Accuracy is computed as (CORRECT-ENTRIES - CORRECTIONS) / TOTAL-ENTRIES."
 
 (defun speed-type--gb-retrieve (book-num)
   "Return buffer with book number BOOK-NUM in it."
-  (let ((dr (locate-user-emacs-file (format "speed-type")))
-        (fn (locate-user-emacs-file (format "speed-type/%d.txt" book-num)))
+  (let ((dr speed-type-gb-dir)
+        (fn (concat (file-name-as-directory speed-type-gb-dir)
+                    (format "%d.txt" book-num)))
         (url-request-method "GET"))
     (if (file-readable-p fn)
         (find-file-noselect fn t)
@@ -362,7 +368,7 @@ are color coded and stats are gathered about the typing performance."
   "Set up a new buffer for the typing exercise on TEXT.
 
 AUTHOR and TITLE can be given, this happen when the text to type comes
-from a gutemberg book."
+from a gutenberg book."
   (with-temp-buffer
     (insert text)
     (delete-trailing-whitespace)

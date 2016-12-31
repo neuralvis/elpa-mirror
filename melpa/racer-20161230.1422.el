@@ -4,7 +4,7 @@
 
 ;; Author: Phil Dawes
 ;; URL: https://github.com/racer-rust/emacs-racer
-;; Package-Version: 20161226.1715
+;; Package-Version: 20161230.1422
 ;; Version: 1.3
 ;; Package-Requires: ((emacs "24.3") (rust-mode "0.2.0") (dash "2.13.0") (s "1.10.0") (f "0.18.2"))
 ;; Keywords: abbrev, convenience, matching, rust, tools
@@ -113,7 +113,8 @@ If nil, we will query $CARGO_HOME at runtime."
 
 (defun racer--cargo-project-root ()
   "Find the root of the current Cargo project."
-  (let ((root (locate-dominating-file (or buffer-file-name default-directory) "Cargo.toml")))
+  (let ((root (locate-dominating-file (or (buffer-file-name (buffer-base-buffer)) default-directory)
+                                      "Cargo.toml")))
     (and root (file-truename root))))
 
 (defun racer--header (text)
@@ -252,7 +253,7 @@ Return a list of all the lines returned by the command."
       (racer--call command
                    (number-to-string (line-number-at-pos))
                    (number-to-string (racer--current-column))
-                   (buffer-file-name)
+                   (buffer-file-name (buffer-base-buffer))
                    tmp-file)))))
 
 (defun racer--read-rust-string (string)
