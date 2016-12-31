@@ -7,11 +7,11 @@
 ;; Copyright (C) 1996-2016, Drew Adams, all rights reserved.
 ;; Created: Fri Dec 15 10:44:14 1995
 ;; Version: 0
-;; Package-Version: 20161229.1545
+;; Package-Version: 20161230.1640
 ;; Package-Requires: ()
-;; Last-Updated: Thu Dec 29 15:47:26 2016 (-0800)
+;; Last-Updated: Fri Dec 30 16:43:22 2016 (-0800)
 ;;           By: dradams
-;;     Update #: 5647
+;;     Update #: 5708
 ;; URL: http://www.emacswiki.org/isearch+.el
 ;; Doc URL: http://www.emacswiki.org/IsearchPlus
 ;; Doc URL: http://www.emacswiki.org/DynamicIsearchFiltering
@@ -91,8 +91,9 @@
 ;;    `isearchp-defun-filter-predicate' (Emacs 24.4+),
 ;;    `isearchp-eval-sexp-and-insert' (Emacs 22+),
 ;;    `isearchp-fontify-buffer-now', `isearchp-init-edit',
-;;    `isearchp-near' (Emacs 24.4+), `isearchp-near-after' (Emacs
-;;    24.4+), `isearchp-near-before' (Emacs 24.4+),
+;;    `isearchp-keep-filter-predicate' (Emacs 24.4+), `isearchp-near'
+;;    (Emacs 24.4+), `isearchp-near-after' (Emacs 24.4+),
+;;    `isearchp-near-before' (Emacs 24.4+),
 ;;    `isearchp-negate-last-filter' (Emacs 24.4+),
 ;;    `isearchp-open-recursive-edit' (Emacs 22+),
 ;;    `isearchp-or-filter-predicate' (Emacs 24.4+),
@@ -102,11 +103,10 @@
 ;;    `isearchp-remove-filter-predicate' (Emacs 24.4+),
 ;;    `isearchp-reset-filter-predicate' (Emacs 24.4+),
 ;;    `isearchp-retrieve-last-quit-search',
-;;    `isearchp-save-filter-predicate' (Emacs 24.4+),
 ;;    `isearchp-set-filter-predicate' (Emacs 24.4+),
 ;;    `isearchp-set-region-around-search-target',
 ;;    `isearchp-show-filters' (Emacs 24.4+),
-;;    `isearchp-toggle-auto-save-filter-predicate' (Emacs 24.4+),
+;;    `isearchp-toggle-auto-keep-filter-predicate' (Emacs 24.4+),
 ;;    `isearchp-toggle-dimming-filter-failures' (Emacs 24.4+),
 ;;    `isearchp-toggle-highlighting-regexp-groups',
 ;;    `isearchp-toggle-lazy-highlight-cleanup' (Emacs 22+),
@@ -127,7 +127,7 @@
 ;;
 ;;  User options defined here:
 ;;
-;;    `isearchp-auto-save-filter-predicate-flag' (Emacs 22+),
+;;    `isearchp-auto-keep-filter-predicate-flag' (Emacs 22+),
 ;;    `isearchp-case-fold', `isearchp-deactivate-region-flag' (Emacs
 ;;    24.3+), `isearchp-drop-mismatch',
 ;;    `isearchp-drop-mismatch-regexp-flag',
@@ -174,6 +174,7 @@
 ;;    `isearchp-fail-pos', `isearchp-ffap-guesser' (Emacs 24.4+),
 ;;    `isearchp-filter-bookmark-alist-only' (Emacs 24.4+),
 ;;    `isearchp-filter-bookmark-p' (Emacs 24.4+),
+;;    `isearchp-filters-description' (Emacs 24.4+),
 ;;    `isearchp-first-isearch-advice' (Emacs 24.4+),
 ;;    `isearchp-highlight-lighter', `isearchp-in-color-p' (Emacs
 ;;    24.4+), `isearchp-in-comment-p' (Emacs 24.4+),
@@ -226,6 +227,7 @@
 ;;    `isearchp-ffap-max-region-size' (Emacs 24.4+),
 ;;    `isearchp-filter-map' (Emacs 24.4+),
 ;;    `isearchp-in-lazy-highlight-update-p' (Emacs 24.3+),
+;;    `isearchp-kept-filter-predicate' (Emacs 24.4+),
 ;;    `isearchp-last-non-nil-invisible',
 ;;    `isearchp-last-quit-regexp-search', `isearchp-last-quit-search',
 ;;    `isearchp-lazy-highlight-face' (Emacs 22+),
@@ -237,7 +239,6 @@
 ;;    `isearchp-regexp-level-overlays' (Emacs 24.4+),
 ;;    `isearchp-replace-literally' (Emacs 22+), `isearchp-replacement'
 ;;    (Emacs 22+), `isearchp--replacing-on-demand' (Emacs 22+),
-;;    `isearchp-saved-filter-predicate' (Emacs 24.4+),
 ;;    `isearch-update-post-hook' (Emacs 20-21),
 ;;    `isearchp-user-entered-new-filter-p' (Emacs 24.4+),
 ;;    `isearchp-win-pt-line'.
@@ -345,9 +346,9 @@
 ;;    `C-z n'      `isearchp-defun-filter-predicate' (Emacs 24.4+)
 ;;    `C-z p'      `isearchp-toggle-showing-filter-prompt-prefixes'
 ;;                 (Emacs 24.4+)
-;;    `C-z S'      `isearchp-toggle-auto-save-filter-predicate'
+;;    `C-z S'      `isearchp-toggle-auto-keep-filter-predicate'
 ;;                 (Emacs 24.4+)
-;;    `C-z s'      `isearchp-save-filter-predicate' (Emacs 24.4+)
+;;    `C-z s'      `isearchp-keep-filter-predicate' (Emacs 24.4+)
 ;;    `C-z ||'     `isearchp-or-filter-predicate' (Emacs 24.4+)
 ;;    `C-z |1'     `isearchp-or-last-filter' (Emacs 24.4+)
 ;;    `C-z ~~'     `isearchp-complement-filter' (Emacs 24.4+)
@@ -557,7 +558,8 @@
 ;;    - `C-z n' (`isearchp-defun-filter-predicate') names the current
 ;;      suite of filter predicates, creating a named predicate that
 ;;      does the same thing.  With a prefix arg it can also set or
-;;      save (i.e., do what `C-z !' or `C-z s' does).
+;;      keep it (for this Emacs session) - that is, do what `C-z !' or
+;;      `C-z s' does.
 ;;
 ;;      You can use that name with `C-z -' to remove that predicate.
 ;;      You can also use it to create a custom Isearch command that
@@ -574,15 +576,19 @@
 ;;      which controls whether to show filter prefixes in the Isearch
 ;;      prompt.
 ;;
-;;    - `C-z s' (`isearchp-save-filter-predicate') saves the current
-;;      filter-predicate suite for subsequent searches.  Unless you
-;;      save it, the next Isearch starts out from scratch, using the
-;;      default value of `isearch-filter-predicate'.
+;;    - `C-z s' (`isearchp-keep-filter-predicate') keeps the current
+;;      filter-predicate suite for subsequent searches (in this Emacs
+;;      session only).  Unless you do this (and unless auto-keeping is
+;;      turned on), the next Isearch starts out from scratch, using
+;;      the default value of `isearch-filter-predicate'.  (To remove
+;;      the kept predicate suite, use `C-z 0'.)
 ;;
 ;;    - `C-z S' (uppercase `s')
-;;      (`isearchp-toggle-auto-save-filter-predicate') toggles option
-;;      `isearchp-auto-save-filter-predicate-flag', which provides
-;;      automatic filter-predicate saving (so no need to use `C-z s').
+;;      (`isearchp-toggle-auto-keep-filter-predicate') toggles option
+;;      `isearchp-auto-keep-filter-predicate-flag', which
+;;      automatically keeps the current filter-predicate suite, so
+;;      that it is used for subsequent searches (so no need to use
+;;      `C-z s').  (To remove a kept predicate suite, use `C-z 0'.)
 ;;
 ;;    - `C-z ?' (`isearchp-show-filters') echoes the current suite of
 ;;      filter predicates (advice and original, unadvised predicate).
@@ -707,8 +713,8 @@
 ;;    completion candidates for the current Emacs session.  If option
 ;;    `isearchp-update-filter-predicates-alist-flag' is non-`nil' then
 ;;    they are also added to `isearchp-filter-predicates-alist'.  That
-;;    updated option value is NOT saved, however.  If you want to save
-;;    your additions to it for future Emacs sessions sessions then use
+;;    updated option value is NOT SAVED, however.  If you want to save
+;;    your additions to it for future Emacs sessions then use
 ;;    `M-x customize-option isearchp-filter-predicates-alist'.
 ;;
 ;;    If option `isearchp-lazy-dim-filter-failures-flag' is non-`nil'
@@ -1126,6 +1132,18 @@
 ;;
 ;;(@* "Change log")
 ;;
+;; 2016/12/30 dadams
+;;     Added: isearchp-filters-description.
+;;     Renamed: isearchp-save-filter-predicate to isearchp-keep-filter-predicate,
+;;              isearchp-auto-save-filter-predicate-flag to isearchp-auto-keep-filter-predicate-flag,
+;;              isearchp-toggle-auto-save-filter-predicate to isearchp-toggle-auto-keep-filter-predicate,
+;;              isearchp-prompt-filter-prefix-auto-save to isearchp-prompt-filter-prefix-auto-keep,
+;;              isearchp-saved-filter-predicate to isearchp-kept-filter-predicate.
+;;     Added redefinition of isearch-pre-command-hook and isearch-scroll property (fix for Emacs bug #25302).
+;;     isearchp-defun-filter-predicate:
+;;       Now C-u persists; C-u C-u persists and keeps current.  Combined args SET-P and KEEP-P as arg ACTION.
+;;     isearchp-read-predicate: Fix bug introduced yesterday, for (NAME FUNCTION) case.
+;;     isearchp-show-filters: Use isearchp-filters-description.
 ;; 2016/12/29 dadams
 ;;     Added: isearchp-current-filter-predicates, isearchp-first-isearch-advice, isearchp-last-isearch-advice.
 ;;       Use them in isearchp-or-last-filter, isearchp-remove-filter-predicate, isearchp-complement-filter,
@@ -1790,7 +1808,7 @@
 (defvar isearch-start-hscroll)           ; In `isearch.el'.
 (defvar isearch-within-brackets)         ; In `isearch.el'.
 (defvar isearch-wrap-function)           ; In `isearch.el'.
-(defvar isearchp-auto-save-filter-predicate-flag) ; Here (Emacs 24.4+).
+(defvar isearchp-auto-keep-filter-predicate-flag) ; Here (Emacs 24.4+).
 (defvar isearchp-current-filter-preds-alist) ; Here (Emacs 24.4+).
 (defvar isearchp-deactivate-region-flag) ; Here (Emacs 24.3+).
 (defvar isearchp-filter-map)             ; Here (Emacs 24.4+).
@@ -2027,12 +2045,12 @@ This highlighting is done during regexp searching whenever
     "*Face for Isearch prompt filter prefix when not autosaving."
     :group 'isearch-plus)
 
-  (defface isearchp-prompt-filter-prefix-auto-save
+  (defface isearchp-prompt-filter-prefix-auto-keep
       '((((class color) (min-colors 88)) (:inherit font-lock-constant-face))
         (t :foreground "gray"))
     "*Face for Isearch prompt filter prefix when autosaving.
 Like `isearchp-prompt-filter-prefix', but used only when
-`isearchp-auto-save-filter-predicate-flag' is non-nil."
+`isearchp-auto-keep-filter-predicate-flag' is non-nil."
     :group 'isearch-plus)
 
   )
@@ -2072,8 +2090,8 @@ t     means search is never  case sensitive
     (define-key isearchp-filter-map (kbd "b")  'isearchp-bookmark-current-filter-predicate))  ; `C-z b'
   (define-key isearchp-filter-map (kbd "c")  'isearchp-columns)                               ; `C-z c'
   (define-key isearchp-filter-map (kbd "p")  'isearchp-toggle-showing-filter-prompt-prefixes) ; `C-z p'
-  (define-key isearchp-filter-map (kbd "s")  'isearchp-save-filter-predicate)                 ; `C-z s'
-  (define-key isearchp-filter-map (kbd "S")  'isearchp-toggle-auto-save-filter-predicate)     ; `C-z S'
+  (define-key isearchp-filter-map (kbd "s")  'isearchp-keep-filter-predicate)                 ; `C-z s'
+  (define-key isearchp-filter-map (kbd "S")  'isearchp-toggle-auto-keep-filter-predicate)     ; `C-z S'
   (define-key isearchp-filter-map (kbd "n")  'isearchp-defun-filter-predicate)                ; `C-z n'
   (define-key isearchp-filter-map (kbd "0")  'isearchp-reset-filter-predicate)                ; `C-z 0'
   (define-key isearchp-filter-map (kbd "<")  'isearchp-near-before)                           ; `C-z <'
@@ -2241,10 +2259,10 @@ See also option `isearchp-deactivate-region-flag'."
 (when (or (> emacs-major-version 24)    ; Emacs 24.4+
           (and (= emacs-major-version 24)  (> emacs-minor-version 3)))
 
-  (defcustom isearchp-auto-save-filter-predicate-flag nil
-    "Non-nil means automatically apply `\\[isearchp-save-filter-predicate]'.
-Changes to `isearch-filter-predicate' are automatically saved when you
-exit Isearch'."
+  (defcustom isearchp-auto-keep-filter-predicate-flag nil
+    "Non-nil means automatically apply `\\[isearchp-keep-filter-predicate]'.
+Changes to `isearch-filter-predicate' are automatically kept for
+subsequent searches in this Emacs session when you exit Isearch'."
     :type 'boolean :group 'isearch-plus)
 
   (defcustom isearchp-filter-predicates-alist
@@ -2590,7 +2608,7 @@ This means we need to update `isearchp-current-filter-preds-alist'.")
   (defvar isearchp-current-filter-preds-alist isearchp-filter-predicates-alist
     "`isearchp-filter-predicates-alist', plus predicates added by input.")
 
-  (defvar isearchp-saved-filter-predicate isearch-filter-predicate
+  (defvar isearchp-kept-filter-predicate isearch-filter-predicate
     "Value to which `isearch-filter-predicate' is set in `isearch-done'.")
 
   )
@@ -3071,16 +3089,16 @@ Toggles between nil and the last non-nil value."
 (when (or (> emacs-major-version 24)    ; Emacs 24.4+
           (and (= emacs-major-version 24)  (> emacs-minor-version 3)))
 
-  (defun isearchp-toggle-auto-save-filter-predicate () ; Bound to `C-z S' in `isearch-mode-map'.
-    "Toggle `isearchp-auto-save-filter-predicate-flag'.
-If turning it on, save now.  Note that turning it off does not reset
-`isearch-filter-predicate'.  Use \\<isearch-mode-map>`\\[isearchp-reset-filter-predicate]' to do that."
+  (defun isearchp-toggle-auto-keep-filter-predicate () ; Bound to `C-z S' in `isearch-mode-map'.
+    "Toggle `isearchp-auto-keep-filter-predicate-flag'.
+If turning it on, save it now (for this Emacs session).
+Note that turning it off does not reset `isearch-filter-predicate'.
+Use \\<isearch-mode-map>`\\[isearchp-reset-filter-predicate]' to do that."
     (interactive)
-    (setq isearchp-auto-save-filter-predicate-flag  (not isearchp-auto-save-filter-predicate-flag))
-    (when isearchp-auto-save-filter-predicate-flag
-      (setq isearchp-saved-filter-predicate  isearch-filter-predicate))
-    (message "Automatic saving of filter-predicate changes is now %s"
-             (if isearchp-auto-save-filter-predicate-flag 'ON 'OFF))
+    (setq isearchp-auto-keep-filter-predicate-flag  (not isearchp-auto-keep-filter-predicate-flag))
+    (when isearchp-auto-keep-filter-predicate-flag (setq isearchp-kept-filter-predicate  isearch-filter-predicate))
+    (message "Automatic saving of filter-predicate changes (for this Emacs session) is now %s"
+             (if isearchp-auto-keep-filter-predicate-flag 'ON 'OFF))
     (sit-for 1)
     (isearch-update))
 
@@ -3500,7 +3518,7 @@ not necessarily fontify the whole buffer."
   ;; REPLACE ORIGINAL in `isearch.el'.
   ;;
   ;; Keep any advice of `isearch-filter-predicate'.  But keep it only for the duration of query-replacing,
-  ;; unless `isearchp-auto-save-filter-predicate-flag' is non-nil.
+  ;; unless `isearchp-auto-keep-filter-predicate-flag' is non-nil.
   ;;
   (defun isearch-query-replace (&optional arg regexp-flag)
     "Start `query-replace' with string to replace from last search string.
@@ -3514,11 +3532,11 @@ replacements from Isearch is `M-s w ... M-%'."
     (interactive "P")
     (barf-if-buffer-read-only)
     (when regexp-flag (setq isearch-regexp  t))
-    (let ((orig-auto-save-filter  isearchp-auto-save-filter-predicate-flag))
+    (let ((orig-auto-keep-filter  isearchp-auto-keep-filter-predicate-flag))
       (unwind-protect
-           (let ((isearch-filter-predicate         isearch-filter-predicate)
-                 (isearchp-saved-filter-predicate  isearch-filter-predicate))
-             (unless orig-auto-save-filter (isearchp-toggle-auto-save-filter-predicate))
+           (let ((isearch-filter-predicate        isearch-filter-predicate)
+                 (isearchp-kept-filter-predicate  isearch-filter-predicate))
+             (unless orig-auto-keep-filter (isearchp-toggle-auto-keep-filter-predicate))
              (let ((case-fold-search                isearch-case-fold-search)
                    ;; Bind `search-upper-case' to nil, to prevent calling `isearch-no-upper-case-p'
                    ;; in `perform-replace'.
@@ -3564,8 +3582,8 @@ replacements from Isearch is `M-s w ... M-%'."
                 (and transient-mark-mode  mark-active  (region-end))
                 backward))
              (and isearch-recursive-edit  (exit-recursive-edit)))
-        (when (and isearchp-auto-save-filter-predicate-flag  (not orig-auto-save-filter))
-          (setq isearchp-auto-save-filter-predicate-flag  nil)
+        (when (and isearchp-auto-keep-filter-predicate-flag  (not orig-auto-keep-filter))
+          (setq isearchp-auto-keep-filter-predicate-flag  nil)
           (isearch-done)
           (isearch-clean-overlays)))))
 
@@ -3782,7 +3800,7 @@ The following non-printing keys are bound in `isearch-mode-map'.
 
 Options
 -------
-`isearchp-auto-save-filter-predicate-flag'\t- autosave predicates?
+`isearchp-auto-keep-filter-predicate-flag'\t- auto-keep predicates?
 `isearchp-case-fold'\t\t\t- search is case sensitive?
 `isearchp-deactivate-region-flag'\t- search deactivates region?
 `isearchp-dim-outside-search-area-flag' [*] - dim non-search zones?
@@ -4129,13 +4147,13 @@ Non-nil argument REGEXP-FUNCTION:
           (and (= emacs-major-version 24)  (> emacs-minor-version 3)))
 
   (defadvice isearch-done (after isearchp-restore/update-filter-pred activate)
-    "Reset `isearch-filter-predicate' or `isearchp-saved-filter-predicate'.
-If `isearchp-auto-save-filter-predicate-flag' is non-nil then set
-`isearchp-saved-filter-predicate' to the current value of
+    "Reset `isearch-filter-predicate' or `isearchp-kept-filter-predicate'.
+If `isearchp-auto-keep-filter-predicate-flag' is non-nil then set
+`isearchp-kept-filter-predicate' to the current value of
 `isearch-filter-predicate'.  Otherwise, do the opposite."
-    (if isearchp-auto-save-filter-predicate-flag
-        (setq isearchp-saved-filter-predicate  isearch-filter-predicate)
-      (setq isearch-filter-predicate  isearchp-saved-filter-predicate)))
+    (if isearchp-auto-keep-filter-predicate-flag
+        (setq isearchp-kept-filter-predicate  isearch-filter-predicate)
+      (setq isearch-filter-predicate  isearchp-kept-filter-predicate)))
 
   )
 
@@ -4307,6 +4325,62 @@ With a numeric prefix arg, append that many copies of CHAR."
         (isearch-process-search-char char)))))
 
 
+(when (or (and (= emacs-major-version 24) (> emacs-minor-version 3))
+          (and (= emacs-major-version 25) (< emacs-minor-version 3)))
+
+
+  (put 'universal-argument-more 'isearch-scroll t)
+
+
+  ;; REPLACE ORIGINAL in `isearch.el'.
+  ;;
+  ;; Fixes Emacs bug #25302, to allow `C-u C-u' etc. in prefix arg.
+  ;;
+  (defun isearch-pre-command-hook ()
+    "Decide whether to exit Isearch mode before executing the command.
+Don't exit Isearch if the key sequence that invoked this command
+is bound in `isearch-mode-map', or if the invoked command is
+a prefix argument command (when `isearch-allow-prefix' is non-nil),
+or it is a scrolling command (when `isearch-allow-scroll' is non-nil).
+Otherwise, exit Isearch (when `search-exit-option' is non-nil)
+before the command is executed globally with terminated Isearch."
+    (let* ((key         (this-single-command-keys))
+           (main-event  (aref key 0)))
+      (cond
+        ;; Don't exit Isearch if we're in the middle of some
+        ;; `set-transient-map' thingy like `universal-argument--mode'.
+        ((not (eq overriding-terminal-local-map isearch--saved-overriding-local-map)))
+        ;; Don't exit Isearch for isearch key bindings.
+        ((commandp (lookup-key isearch-mode-map key nil)))
+        ;; Optionally edit the search string instead of exiting.
+        ((eq search-exit-option 'edit)
+         (setq this-command 'isearch-edit-string))
+        ;; Handle a scrolling function or prefix argument.
+        ((or (and isearch-allow-prefix
+                  (memq this-command '(universal-argument
+                                       universal-argument-more ; Fixes bug #25302.
+                                       digit-argument negative-argument)))
+             (and isearch-allow-scroll
+                  (symbolp this-command)
+                  (or (eq (get this-command 'isearch-scroll) t)
+                      (eq (get this-command 'scroll-command) t))))
+         (when isearch-allow-scroll
+           (setq isearch-pre-scroll-point  (point))))
+        ;; A mouse click on the isearch message starts editing the search string.
+        ((and (eq (car-safe main-event) 'down-mouse-1)
+              (window-minibuffer-p (posn-window (event-start main-event))))
+         ;; Swallow the up-event.
+         (read-event)
+         (setq this-command  'isearch-edit-string))
+        ;; Other characters terminate the search and are then executed normally.
+        (search-exit-option
+         (isearch-done)
+         (isearch-clean-overlays))
+        ;; If search-exit-option is nil, run the command without exiting Isearch.
+        (t
+         (isearch-process-search-string key key)))))
+
+  )
 
 ;; $$$$$$
 ;; (when (> emacs-major-version 21)        ; Emacs 22+
@@ -4475,8 +4549,8 @@ If SPACE-BEFORE is non-nil,  put a space before, instead of after it."
                                                        (let ((np  (cdr (assq 'isearch-message-prefix props))))
                                                          (when np (setq prefix  (concat prefix np)))))
                                                      isearch-filter-predicate)
-                               (propertize prefix 'face (if isearchp-auto-save-filter-predicate-flag
-                                                            'isearchp-prompt-filter-prefix-auto-save
+                               (propertize prefix 'face (if isearchp-auto-keep-filter-predicate-flag
+                                                            'isearchp-prompt-filter-prefix-auto-keep
                                                           'isearchp-prompt-filter-prefix))))
                         (if (> emacs-major-version 24)
                             (isearch--describe-regexp-mode isearch-regexp-function)
@@ -5406,9 +5480,11 @@ If you do not choose a completion candidate then the value returned by
                 choice  (or choice  (assoc (intern input) filter-alist)))
           (setq result  (or choice  (read input)) ; For example, input was a lambda form.
                 pred    (if choice
-                            (if (stringp (nth 0 choice)) ; (NAME FUNCTION [PREFIX]) or BOOKMARK
-                                (or (setq result  (cdr (assq 'isearchp-filter choice))) ; A bookmark.
-                                    (nth 1 choice))
+                            (if (stringp (nth 0 choice))
+                                (let ((bmk-filt  (cdr (assq 'isearchp-filter choice))))
+                                  (if bmk-filt
+                                      (setq result  bmk-filt) ; BOOKMARK
+                                    (nth 1 choice))) ; (NAME FUNCTION [PREFIX])
                               (nth 0 choice)) ; (FUNCTION [PREFIX])
                           result))
           (unless (or (functionp pred)  (advice-function-member-p pred isearch-filter-predicate))
@@ -5477,7 +5553,7 @@ associated `name'."
              (isearchp-remove-filter-predicate "not") ; Just turn off complementing current.
              (isearchp-redo-lazy-highlighting)
              (when msgp (message (substitute-command-keys "No longer complementing: %s  \
-\[use \\<isearch-mode-map>`\\[isearchp-save-filter-predicate]' to save, \
+\[use \\<isearch-mode-map>`\\[isearchp-keep-filter-predicate]' to keep, \
 `\\[isearchp-defun-filter-predicate]' to name]")
                                  (mapconcat 'identity (cdr preds) ", "))))
             (t
@@ -5485,7 +5561,7 @@ associated `name'."
                            '((name . "not") (isearch-message-prefix . "NOT ")))
              (isearchp-redo-lazy-highlighting)
              (when msgp (message (substitute-command-keys "NOT: %s  [use \\<isearch-mode-map>`\
-\\[isearchp-save-filter-predicate]' to save, `\\[isearchp-defun-filter-predicate]' to name]")
+\\[isearchp-keep-filter-predicate]' to keep, `\\[isearchp-defun-filter-predicate]' to name]")
                                  (mapconcat 'identity preds ", ")))))))
 
   (defun isearchp-negate-last-filter (&optional msgp) ;  `C-z ~1'
@@ -5510,21 +5586,25 @@ associated `name'."
     (unless predicate (setq predicate  (isearchp-read-predicate "Filter predicate to negate: ")))
     `(lambda (beg end) (isearchp-not-pred ',predicate beg end)))
 
-  (defun isearchp-show-filters ()       ; `C-z ?'
-    "Print a message listing the current filter predicates."
-    (interactive)
+  (defun isearchp-filters-description ()
+    "Description that lists the current filter predicates."
     (let ((preds  (isearchp-current-filter-predicates)))
       (let ((opred  (isearchp-first-isearch-advice)))
         (setq opred  (if (symbolp opred) (symbol-name opred) (format "%s" opred)))
         (push opred preds))
-      (message (if preds
-                   (format "Filters: %s" (mapconcat (lambda (pred)
-                                                      (if (string-match-p "[ \t]" pred)
-                                                          (format "`%s'" pred)
-                                                        pred))
-                                                    (nreverse preds)
-                                                    ", "))
-                 "NO filters"))))
+      (if preds
+          (format "Filters: %s" (mapconcat (lambda (pred)
+                                             (if (string-match-p "[ \t]" pred)
+                                                 (format "`%s'" pred)
+                                               pred))
+                                           (nreverse preds)
+                                           ", "))
+        "NO filters")))
+
+  (defun isearchp-show-filters ()       ; `C-z ?'
+    "Print a message listing the current filter predicates."
+    (interactive)
+    (message (isearchp-filters-description)))
 
   (defun isearchp-set-filter-predicate (predicate &optional msgp) ; `C-z !'
     "Set `isearch-filter-predicate' to PREDICATE.
@@ -5536,47 +5616,69 @@ Isearch) to reset it to the default value."
     (isearchp-redo-lazy-highlighting)
     (when msgp (isearchp-show-filters)))
 
-  (defun isearchp-defun-filter-predicate (function-symbol &optional set-p save-p msgp) ; `C-z n'
+  (defun isearchp-defun-filter-predicate (function-symbol &optional action msgp) ; `C-z n'
     "Name the current filter predicate: Define a named function for it.
+With a plain prefix arg (`C-u'), set the current filter predicate to
+the function, and save the function definition persistently.  With a
+double plain prefix arg (`C-u C-u'), do the same but also keep the
+filter current for subsequent searches.  In both cases you are
+prompted for the file to save it in.  The definition is appended to
+any existing file contents.
+
 With a non-positive prefix arg, set the current filter predicate to
-the named function (as if you had also used \\<isearch-mode-map>`\\[isearchp-set-filter-predicate]').  (This \
-can make
-it easier to remove, if you have not otherwise assigned a name to it.)
+the named function (as if you had also used `\\[isearchp-set-filter-predicate]'), so you can refer
+to it by name.
 
-With a non-negative prefix arg, save the current filter predicate for
-subsequent searches (as if you had also used `\\[isearchp-save-filter-predicate]')."
-    (interactive (let ((isearchp-resume-with-last-when-empty-flag  nil)
-                       fsymb)
-                   (with-isearch-suspended (setq fsymb  (read-string "Name current filter predicate: ")))
-                   (while (and (fboundp (intern-soft fsymb))
-                               (not (y-or-n-p (format "Function `%s' exists.  Redefine? " fsymb))))
-                     (with-isearch-suspended (setq fsymb  (read-string "Name current filter predicate: "))))
-                   (setq fsymb  (intern fsymb))
-                   (list fsymb
-                         (and current-prefix-arg  (<= (prefix-numeric-value current-prefix-arg) 0))
-                         (and current-prefix-arg  (>= (prefix-numeric-value current-prefix-arg) 0))
-                         t)))
-    (fset function-symbol isearch-filter-predicate)
-    (when set-p  (isearchp-set-filter-predicate function-symbol))
-    (when save-p (isearchp-save-filter-predicate))
-    (add-to-list 'isearchp-current-filter-preds-alist (list function-symbol) :APPEND)
-    (when isearchp-update-filter-predicates-alist-flag
-      (customize-set-value 'isearchp-filter-predicates-alist isearchp-current-filter-preds-alist)
-      (setq isearchp-current-filter-preds-alist  ()))
-    (when msgp (message "Filter predicate `%S' defined%s" function-symbol (if save-p " and saved" ""))))
+With a non-negative prefix arg, keep the current filter predicate for
+subsequent searches (as if you had also used `\\[isearchp-keep-filter-predicate]')."
+    (interactive
+     (let ((isearchp-resume-with-last-when-empty-flag  nil)
+           fsymb)
+       (with-isearch-suspended (setq fsymb  (read-string "Function name for current filter predicate: ")))
+       (while (and (fboundp (intern-soft fsymb))
+                   (not (y-or-n-p (format "Function `%s' exists.  Redefine? " fsymb))))
+         (with-isearch-suspended (setq fsymb  (read-string "Name current filter predicate: "))))
+       (setq fsymb  (intern fsymb))
+       (list fsymb current-prefix-arg t)))
+    (defalias function-symbol isearch-filter-predicate)
+    (let* ((write-p  (consp action))
+           (set-p    (or write-p  (and action  (<= (prefix-numeric-value action) 0))))
+           (keep-p   (if write-p
+                         (> (car action) 4)
+                       (and action  (>= (prefix-numeric-value action) 0))))
+           file)
+      (when write-p
+        (with-isearch-suspended (setq file  (read-file-name "Append filter to file: ")))
+        (write-region (format "(defalias '%S %S %S)\n"
+                              function-symbol isearch-filter-predicate (isearchp-filters-description))
+                      nil file 'APPEND nil nil 'CONFIRM-IF-EXISTS))
+      (when set-p (isearchp-set-filter-predicate function-symbol))
+      (when keep-p (isearchp-keep-filter-predicate))
+      (add-to-list 'isearchp-current-filter-preds-alist (list function-symbol) :APPEND)
+      (when isearchp-update-filter-predicates-alist-flag
+        (customize-set-value 'isearchp-filter-predicates-alist isearchp-current-filter-preds-alist)
+        (setq isearchp-current-filter-preds-alist  ()))
+      (when msgp (message "Filter predicate `%S' defined%s" function-symbol
+                          (cond ((and write-p  keep-p) (format ", set, kept current, and saved to file `%s'" file))
+                                (write-p               (format ", set and saved to file `%s'" file))
+                                ((and set-p  keep-p)           ", set, and kept")
+                                (set-p                         " and set")
+                                (keep-p                        " and kept")
+                                (t ""))))))
 
-  (defun isearchp-save-filter-predicate (&optional msgp) ; `C-z s'
-    "Save the current filter predicate for subsequent searches."
+  (defun isearchp-keep-filter-predicate (&optional msgp) ; `C-z s'
+    "Keep current filter predicate for subsequent searches in this session.
+This does not save the predicate persistently."
     (interactive "p")
-    (setq isearchp-saved-filter-predicate  isearch-filter-predicate)
-    (when msgp (message "Current filter predicate SAVED for next Isearch")))
+    (setq isearchp-kept-filter-predicate  isearch-filter-predicate)
+    (when msgp (message "Current filter predicate KEPT for next Isearch")))
 
   (defun isearchp-reset-filter-predicate (&optional msgp) ; `C-z 0'
     "Reset `isearch-filter-predicate' to its default value.
 By default, this is `isearch-filter-visible'."
     (interactive "p")
-    (setq isearch-filter-predicate         #'isearch-filter-visible
-          isearchp-saved-filter-predicate  isearch-filter-predicate)
+    (setq isearch-filter-predicate        #'isearch-filter-visible
+          isearchp-kept-filter-predicate  isearch-filter-predicate)
     (isearchp-redo-lazy-highlighting)
     (when msgp (message "`isearch-filter-predicate' is RESET to default: %s" isearch-filter-predicate)))
 

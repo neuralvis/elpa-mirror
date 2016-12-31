@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/bbatsov/zenburn-emacs
-;; Package-Version: 20161230.2322
+;; Package-Version: 20161231.945
 ;; Version: 2.4
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -253,6 +253,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(ac-candidate-face ((t (:background ,zenburn-bg+3 :foreground ,zenburn-bg-2))))
    `(ac-selection-face ((t (:background ,zenburn-blue-4 :foreground ,zenburn-fg))))
    `(popup-tip-face ((t (:background ,zenburn-yellow-2 :foreground ,zenburn-bg-2))))
+   `(popup-menu-mouse-face ((t (:background ,zenburn-yellow-2 :foreground ,zenburn-bg-2))))
+   `(popup-summary-face ((t (:background ,zenburn-bg+3 :foreground ,zenburn-bg-2))))
    `(popup-scroll-bar-foreground-face ((t (:background ,zenburn-blue-5))))
    `(popup-scroll-bar-background-face ((t (:background ,zenburn-bg-1))))
    `(popup-isearch-match ((t (:background ,zenburn-bg :foreground ,zenburn-fg))))

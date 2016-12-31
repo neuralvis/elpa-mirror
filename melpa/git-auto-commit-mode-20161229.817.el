@@ -5,7 +5,7 @@
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Created: Jan 9, 2012
 ;; Version: 4.4.0
-;; Package-Version: 20150404.751
+;; Package-Version: 20161229.817
 ;; Keywords: vc
 ;; URL: http://projects.ryuslash.org/git-auto-commit-mode/
 
@@ -51,6 +51,13 @@ If non-nil a git push will be executed after each commit."
   :tag "Ask for a summary on each commit"
   :group 'git-auto-commit-mode
   :type 'boolean)
+
+(defcustom gac-shell-and " && "
+  "How to join commands together in the shell. For fish shell,
+  you want to customise this to: \" ; and \" instead of the default."
+  :tag "Join shell commands"
+  :group 'git-auto-commit-mode
+  :type 'string)
 
 (defun gac-relative-file-name (filename)
   "Find the path to FILENAME relative to the git directory."
@@ -112,7 +119,8 @@ Default to FILENAME."
          (default-directory (file-name-directory buffer-file)))
     (shell-command
      (concat "git add " (shell-quote-argument filename)
-             " && git commit -m " (shell-quote-argument commit-msg)))))
+             gac-shell-and
+             "git commit -m " (shell-quote-argument commit-msg)))))
 
 (defun gac-push ()
   "Push commits to the current upstream.

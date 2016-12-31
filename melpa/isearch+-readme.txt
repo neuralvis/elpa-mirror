@@ -60,8 +60,9 @@
    `isearchp-defun-filter-predicate' (Emacs 24.4+),
    `isearchp-eval-sexp-and-insert' (Emacs 22+),
    `isearchp-fontify-buffer-now', `isearchp-init-edit',
-   `isearchp-near' (Emacs 24.4+), `isearchp-near-after' (Emacs
-   24.4+), `isearchp-near-before' (Emacs 24.4+),
+   `isearchp-keep-filter-predicate' (Emacs 24.4+), `isearchp-near'
+   (Emacs 24.4+), `isearchp-near-after' (Emacs 24.4+),
+   `isearchp-near-before' (Emacs 24.4+),
    `isearchp-negate-last-filter' (Emacs 24.4+),
    `isearchp-open-recursive-edit' (Emacs 22+),
    `isearchp-or-filter-predicate' (Emacs 24.4+),
@@ -71,11 +72,10 @@
    `isearchp-remove-filter-predicate' (Emacs 24.4+),
    `isearchp-reset-filter-predicate' (Emacs 24.4+),
    `isearchp-retrieve-last-quit-search',
-   `isearchp-save-filter-predicate' (Emacs 24.4+),
    `isearchp-set-filter-predicate' (Emacs 24.4+),
    `isearchp-set-region-around-search-target',
    `isearchp-show-filters' (Emacs 24.4+),
-   `isearchp-toggle-auto-save-filter-predicate' (Emacs 24.4+),
+   `isearchp-toggle-auto-keep-filter-predicate' (Emacs 24.4+),
    `isearchp-toggle-dimming-filter-failures' (Emacs 24.4+),
    `isearchp-toggle-highlighting-regexp-groups',
    `isearchp-toggle-lazy-highlight-cleanup' (Emacs 22+),
@@ -96,7 +96,7 @@
 
  User options defined here:
 
-   `isearchp-auto-save-filter-predicate-flag' (Emacs 22+),
+   `isearchp-auto-keep-filter-predicate-flag' (Emacs 22+),
    `isearchp-case-fold', `isearchp-deactivate-region-flag' (Emacs
    24.3+), `isearchp-drop-mismatch',
    `isearchp-drop-mismatch-regexp-flag',
@@ -143,6 +143,7 @@
    `isearchp-fail-pos', `isearchp-ffap-guesser' (Emacs 24.4+),
    `isearchp-filter-bookmark-alist-only' (Emacs 24.4+),
    `isearchp-filter-bookmark-p' (Emacs 24.4+),
+   `isearchp-filters-description' (Emacs 24.4+),
    `isearchp-first-isearch-advice' (Emacs 24.4+),
    `isearchp-highlight-lighter', `isearchp-in-color-p' (Emacs
    24.4+), `isearchp-in-comment-p' (Emacs 24.4+),
@@ -195,6 +196,7 @@
    `isearchp-ffap-max-region-size' (Emacs 24.4+),
    `isearchp-filter-map' (Emacs 24.4+),
    `isearchp-in-lazy-highlight-update-p' (Emacs 24.3+),
+   `isearchp-kept-filter-predicate' (Emacs 24.4+),
    `isearchp-last-non-nil-invisible',
    `isearchp-last-quit-regexp-search', `isearchp-last-quit-search',
    `isearchp-lazy-highlight-face' (Emacs 22+),
@@ -206,7 +208,6 @@
    `isearchp-regexp-level-overlays' (Emacs 24.4+),
    `isearchp-replace-literally' (Emacs 22+), `isearchp-replacement'
    (Emacs 22+), `isearchp--replacing-on-demand' (Emacs 22+),
-   `isearchp-saved-filter-predicate' (Emacs 24.4+),
    `isearch-update-post-hook' (Emacs 20-21),
    `isearchp-user-entered-new-filter-p' (Emacs 24.4+),
    `isearchp-win-pt-line'.
@@ -314,9 +315,9 @@
    `C-z n'      `isearchp-defun-filter-predicate' (Emacs 24.4+)
    `C-z p'      `isearchp-toggle-showing-filter-prompt-prefixes'
                 (Emacs 24.4+)
-   `C-z S'      `isearchp-toggle-auto-save-filter-predicate'
+   `C-z S'      `isearchp-toggle-auto-keep-filter-predicate'
                 (Emacs 24.4+)
-   `C-z s'      `isearchp-save-filter-predicate' (Emacs 24.4+)
+   `C-z s'      `isearchp-keep-filter-predicate' (Emacs 24.4+)
    `C-z ||'     `isearchp-or-filter-predicate' (Emacs 24.4+)
    `C-z |1'     `isearchp-or-last-filter' (Emacs 24.4+)
    `C-z ~~'     `isearchp-complement-filter' (Emacs 24.4+)
@@ -526,7 +527,8 @@ Overview of Features ---------------------------------------------
    - `C-z n' (`isearchp-defun-filter-predicate') names the current
      suite of filter predicates, creating a named predicate that
      does the same thing.  With a prefix arg it can also set or
-     save (i.e., do what `C-z !' or `C-z s' does).
+     keep it (for this Emacs session) - that is, do what `C-z !' or
+     `C-z s' does.
 
      You can use that name with `C-z -' to remove that predicate.
      You can also use it to create a custom Isearch command that
@@ -543,15 +545,19 @@ Overview of Features ---------------------------------------------
      which controls whether to show filter prefixes in the Isearch
      prompt.
 
-   - `C-z s' (`isearchp-save-filter-predicate') saves the current
-     filter-predicate suite for subsequent searches.  Unless you
-     save it, the next Isearch starts out from scratch, using the
-     default value of `isearch-filter-predicate'.
+   - `C-z s' (`isearchp-keep-filter-predicate') keeps the current
+     filter-predicate suite for subsequent searches (in this Emacs
+     session only).  Unless you do this (and unless auto-keeping is
+     turned on), the next Isearch starts out from scratch, using
+     the default value of `isearch-filter-predicate'.  (To remove
+     the kept predicate suite, use `C-z 0'.)
 
    - `C-z S' (uppercase `s')
-     (`isearchp-toggle-auto-save-filter-predicate') toggles option
-     `isearchp-auto-save-filter-predicate-flag', which provides
-     automatic filter-predicate saving (so no need to use `C-z s').
+     (`isearchp-toggle-auto-keep-filter-predicate') toggles option
+     `isearchp-auto-keep-filter-predicate-flag', which
+     automatically keeps the current filter-predicate suite, so
+     that it is used for subsequent searches (so no need to use
+     `C-z s').  (To remove a kept predicate suite, use `C-z 0'.)
 
    - `C-z ?' (`isearchp-show-filters') echoes the current suite of
      filter predicates (advice and original, unadvised predicate).
@@ -676,8 +682,8 @@ Overview of Features ---------------------------------------------
    completion candidates for the current Emacs session.  If option
    `isearchp-update-filter-predicates-alist-flag' is non-`nil' then
    they are also added to `isearchp-filter-predicates-alist'.  That
-   updated option value is NOT saved, however.  If you want to save
-   your additions to it for future Emacs sessions sessions then use
+   updated option value is NOT SAVED, however.  If you want to save
+   your additions to it for future Emacs sessions then use
    `M-x customize-option isearchp-filter-predicates-alist'.
 
    If option `isearchp-lazy-dim-filter-failures-flag' is non-`nil'

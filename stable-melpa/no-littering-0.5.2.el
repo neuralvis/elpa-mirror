@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 0.5.0
+;; Package-Version: 0.5.2
 
 ;; This file is not part of GNU Emacs.
 
@@ -71,7 +71,7 @@
 ;;
 ;; 1. File names are based on the name of the respective Emacs lisp
 ;;    variables and the name of the respective Emacs package.
-;;   
+;;
 ;; 2. The name of the respective Emacs package should serve as the
 ;;    prefix of the file name, unless the file is in a subdirectory in
 ;;    which case the name of the subdirectory serves as the prefix.
@@ -99,7 +99,7 @@
 ;; 2. If a package has multiple data (or config files), then those files
 ;;    are placed in a subdirectory of `no-littering-var-directory` (or
 ;;    `no-littering-var-directory`).
-;;  
+;;
 ;; 3. If a subdirectory is used for a package's data (or config) file
 ;;    variables, then the name of the directory should match the name of
 ;;    the package in most cases. The subdirectory name may serve as the
@@ -177,7 +177,8 @@ This variable has to be set before `no-littering' is loaded.")
 ;;; Built-in packages
 
     (setq abbrev-file-name                 (var "abbrev.el"))
-    (setq auto-save-list-file-prefix       (var "auto-save-"))
+    (setq auto-insert-directory            (etc "auto-insert/"))
+    (setq auto-save-list-file-prefix       (var "auto-save/"))
     (setq backup-directory-alist           (list (cons "." (var "backup/"))))
     (setq bookmark-default-file            (var "bookmark-default.el"))
     (eval-after-load 'desktop
@@ -211,13 +212,18 @@ This variable has to be set before `no-littering' is loaded.")
     (setq shared-game-score-directory      (var "shared-game-score/"))
     (setq tramp-persistency-file-name      (var "tramp-persistency.el"))
     (setq trash-directory                  (var "trash/"))
-    (setq url-cache-directory              (var "url/"))
-    (setq url-configuration-directory      (etc "url/"))
+    (setq url-cache-directory              (var "url/cache/"))
+    (setq url-configuration-directory      (var "url/configuration/"))
 
 ;;; Third-party packages
 
     (setq ac-comphist-file                 (var "ac-comphist.el"))
     (setq anaconda-mode-installation-directory (etc "anaconda-mode/"))
+    (eval-after-load 'bbdb
+      `(make-directory ,(var "bbdb/") t))
+    (setq bbdb-file                        (var "bbdb/bbdb.el"))
+    (setq bbdb-vcard-directory             (var "bbdb/vcard/"))
+    (setq bm-repository-file               (var "bm-repository.el"))
     (eval-after-load 'bookmark+-1
       `(make-directory ,(var "bmkp/") t))
     (setq bmkp-current-bookmark-file       (var "bmkp/current-bookmark.el"))
@@ -225,6 +231,10 @@ This variable has to be set before `no-littering' is loaded.")
     (eval-after-load 'company-statistics
       `(make-directory ,(var "company/") t))
     (setq company-statistics-file          (var "company/statistics.el"))
+    (eval-after-load 'elfeed
+       `(make-directory ,(var "elfeed/") t))
+    (setq elfeed-db-directory              (var "elfeed/db/"))
+    (setq elfeed-enclosure-default-dir     (var "elfeed/enclosures/"))
     (setq emms-directory                   (var "emms/"))
     (eval-after-load 'emojify
       `(make-directory ,(var "emojify/") t))
@@ -243,6 +253,7 @@ This variable has to be set before `no-littering' is loaded.")
     (setq projectile-cache-file            (var "projectile/cache.el"))
     (setq projectile-known-projects-file   (var "projectile/known-projects.el"))
     (setq request-storage-directory        (var "request/storage/"))
+    (setq rmh-elfeed-org-files             (list (var "elfeed/rmh-elfeed.org")))
     (setq save-kill-file-name              (var "save-kill.el"))
     (setq smex-save-file                   (var "smex-save.el"))
     (eval-after-load 'sx
