@@ -1,10 +1,10 @@
 ;;; ebal.el --- Emacs interface to Cabal and Stack -*- lexical-binding: t; -*-
 ;;
-;; Copyright © 2015–2016 Mark Karpov <markkarpov@openmailbox.org>
+;; Copyright © 2015–2017 Mark Karpov <markkarpov@openmailbox.org>
 ;;
 ;; Author: Mark Karpov <markkarpov@openmailbox.org>
 ;; URL: https://github.com/mrkkrp/ebal
-;; Package-Version: 20160531.906
+;; Package-Version: 20161231.1559
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.4") (f "0.18.0") (ido-completing-read+ "3.6"))
 ;; Keywords: convenience, cabal, haskell

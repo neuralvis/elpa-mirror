@@ -1,10 +1,10 @@
 ;;; modalka.el --- Easily introduce native modal editing of your own design -*- lexical-binding: t; -*-
 ;;
-;; Copyright © 2015–2016 Mark Karpov <markkarpov@openmailbox.org>
+;; Copyright © 2015–2017 Mark Karpov <markkarpov@openmailbox.org>
 ;;
 ;; Author: Mark Karpov <markkarpov@openmailbox.org>
 ;; URL: https://github.com/mrkkrp/modalka
-;; Package-Version: 20160531.912
+;; Package-Version: 20161231.1639
 ;; Version: 0.1.4
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: modal editing

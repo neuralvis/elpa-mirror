@@ -1,10 +1,10 @@
 ;;; cyphejor.el --- Shorten major mode names using user-defined rules -*- lexical-binding: t; -*-
 ;;
-;; Copyright © 2015 Mark Karpov <markkarpov@openmailbox.org>
+;; Copyright © 2015–2017 Mark Karpov <markkarpov@openmailbox.org>
 ;;
 ;; Author: Mark Karpov <markkarpov@openmailbox.org>
 ;; URL: https://github.com/mrkkrp/cyphejor
-;; Package-Version: 20160531.905
+;; Package-Version: 20161231.1558
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: mode-line major-mode

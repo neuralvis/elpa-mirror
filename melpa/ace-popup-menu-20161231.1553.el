@@ -1,10 +1,10 @@
 ;;; ace-popup-menu.el --- Replace GUI popup menu with something more efficient -*- lexical-binding: t; -*-
 ;;
-;; Copyright © 2015–2016 Mark Karpov <markkarpov@openmailbox.org>
+;; Copyright © 2015–2017 Mark Karpov <markkarpov@openmailbox.org>
 ;;
 ;; Author: Mark Karpov <markkarpov@openmailbox.org>
 ;; URL: https://github.com/mrkkrp/ace-popup-menu
-;; Package-Version: 20160522.519
+;; Package-Version: 20161231.1553
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.3") (avy-menu "0.1"))
 ;; Keywords: convenience, popup, menu

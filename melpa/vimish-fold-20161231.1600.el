@@ -1,12 +1,12 @@
 ;;; vimish-fold.el --- Fold text like in Vim -*- lexical-binding: t; -*-
 ;;
-;; Copyright © 2015–2016 Mark Karpov <markkarpov@openmailbox.org>
+;; Copyright © 2015–2017 Mark Karpov <markkarpov@openmailbox.org>
 ;; Copyright © 2012–2013 Magnar Sveen <magnars@gmail.com>
 ;;
 ;; Author: Mark Karpov <markkarpov@openmailbox.org>
 ;; Author: Magnar Sveen <magnars@gmail.com>
 ;; URL: https://github.com/mrkkrp/vimish-fold
-;; Package-Version: 20160718.126
+;; Package-Version: 20161231.1600
 ;; Version: 0.2.2
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (f "0.18.0"))
 ;; Keywords: convenience
