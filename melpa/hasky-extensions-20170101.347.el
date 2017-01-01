@@ -1,10 +1,10 @@
 ;;; hasky-extensions.el --- Toggle Haskell language extensions -*- lexical-binding: t; -*-
 ;;
-;; Copyright © 2016 Mark Karpov <markkarpov@openmailbox.org>
+;; Copyright © 2016–2017 Mark Karpov <markkarpov@openmailbox.org>
 ;;
 ;; Author: Mark Karpov <markkarpov@openmailbox.org>
 ;; URL: https://github.com/hasky-mode/hasky-extensions
-;; Package-Version: 20160813.609
+;; Package-Version: 20170101.347
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "24.4") (avy-menu "0.2"))
 ;; Keywords: programming
