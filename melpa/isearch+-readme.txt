@@ -71,6 +71,7 @@
    `isearchp-remove-failed-part-or-last-char' (Emacs 22+),
    `isearchp-remove-filter-predicate' (Emacs 24.4+),
    `isearchp-reset-filter-predicate' (Emacs 24.4+),
+   `isearchp-reset-filter-preds-alist' (Emacs 24.4+),
    `isearchp-retrieve-last-quit-search',
    `isearchp-set-filter-predicate' (Emacs 24.4+),
    `isearchp-set-region-around-search-target',
@@ -685,6 +686,12 @@ Overview of Features ---------------------------------------------
    updated option value is NOT SAVED, however.  If you want to save
    your additions to it for future Emacs sessions then use
    `M-x customize-option isearchp-filter-predicates-alist'.
+
+   You can use command `isearchp-reset-filter-preds-alist' (not
+   bound) to reset the filter predicates available for completion
+   to those in option `isearchp-filter-predicates-alist'.  A prefix
+   arg with `C-z 0' also resets this, along with resetting to the
+   unadvised value of `isearch-filter-predicate'.
 
    If option `isearchp-lazy-dim-filter-failures-flag' is non-`nil'
    then search hits that are skipped because they are removed by
