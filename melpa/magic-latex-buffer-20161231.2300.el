@@ -18,7 +18,7 @@
 
 ;; Author: zk_phi
 ;; URL: http://hins11.yu-yake.com/
-;; Package-Version: 20161214.1726
+;; Package-Version: 20161231.2300
 ;; Version: 0.4.0
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24.3"))
 
@@ -676,6 +676,7 @@ between BEG and END."
     ("\\\\lesssim\\>" . "≲") ("\\\\gtrsim\\>" . "≳")
     ("\\\\ll\\>" . "≪") ("\\\\gg\\>" . "≫")
     ("\\\\to\\>" . "→") ("\\\\mapsto\\>" . "↦")
+    ("\\\\colon\\>" . ":")
     ("\\\\propto\\>" . "∝")
 
     ;; set
