@@ -4,7 +4,7 @@
 
 ;; Author : Rich Alesi <https://github.com/ralesi>
 ;; Version: 0.9.8.3
-;; Package-Version: 0.9.8.4
+;; Package-Version: 0.9.8.5
 ;; Keywords: files, convenience
 ;; Homepage: https://github.com/ralesi/ranger
 ;; Package-Requires: ((emacs "24.4"))
@@ -64,6 +64,7 @@
 ;; version 0.9.8,   2015-10-04 multiple ranger window support, override dired
 ;; version 0.9.8.1, 2015-10-04 ranger is now a major mode
 ;; version 0.9.8.3, 2016-08-23 ranger-override-dired-mode
+;; version 0.9.8.4, 2016-10-02 more mappings to match ranger
 
 ;;; Code:
 
@@ -468,8 +469,8 @@ preview window."
     (define-key map (kbd "C-w") 'ranger-close-tab)
     (define-key map (kbd "TAB") 'ranger-next-tab)
     (define-key map (kbd "S-TAB") 'ranger-prev-tab)
-    (define-key map (kbd "M-Right") 'ranger-next-tab)
-    (define-key map (kbd "M-Left") 'ranger-prev-tab)
+    (define-key map (kbd "M-<Right>") 'ranger-next-tab)
+    (define-key map (kbd "M-<Left>") 'ranger-prev-tab)
     (define-key map "uq" 'ranger-restore-tab)
 
     ;; define M + number bindings to access tabs.
