@@ -10,7 +10,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20170101.1150
+;; Package-Version: 20170103.420
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((flycheck "0.30") (emacs "25.1") (dash "2.13.0"))
@@ -706,8 +706,7 @@ Uses the directory of the current buffer for context."
          (default-directory (if cabal-file
                                 (file-name-directory cabal-file)
                               (or root default-directory))))
-    (with-current-buffer
-        (get-buffer-create buffer-name)
+    (with-current-buffer (get-buffer-create buffer-name)
       (setq dante-package-name package-name)
       (fundamental-mode)
       (cd default-directory)
@@ -797,6 +796,9 @@ a list is returned instead of failing with a nil result."
 (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql dante)))
   nil)
 
+(defun dante-expand-filename (filename)
+  (concat (with-current-buffer (dante-buffer-p) default-directory) filename))
+
 (defun dante--make-xref (string nm)
   "Turn the GHCi reference STRING in to an xref with description NM."
   (when (string-match "\\(.*?\\):(\\([0-9]+\\),\\([0-9]+\\))-(\\([0-9]+\\),\\([0-9]+\\))$"
@@ -805,7 +807,9 @@ a list is returned instead of failing with a nil result."
           (line (string-to-number (match-string 2 string)))
           (col (string-to-number (match-string 3 string))))
       (xref-make nm (xref-make-file-location
-                     (if (string= file (dante-temp-file-name (current-buffer))) (buffer-file-name) file)
+                     (if (string= file (dante-temp-file-name (current-buffer)))
+                         (buffer-file-name)
+                       (dante-expand-filename file))
                      line
                      (1- col))))))
 
