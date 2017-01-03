@@ -58,6 +58,7 @@
    (Emacs 24.4+), `isearchp-complement-filter' (Emacs 24.4+),
    `isearchp-complete', `isearchp-cycle-mismatch-removal',
    `isearchp-defun-filter-predicate' (Emacs 24.4+),
+   `isearchp-describe-prefix-bindings',
    `isearchp-eval-sexp-and-insert' (Emacs 22+),
    `isearchp-fontify-buffer-now', `isearchp-init-edit',
    `isearchp-keep-filter-predicate' (Emacs 24.4+), `isearchp-near'
@@ -476,9 +477,10 @@ Overview of Features ---------------------------------------------
    to predicate `isearchp-show-hit-w-crosshairs'.)
 
    The following filtering commands are available during Isearch.
-   They are all on prefix key `C-z', by default.  (They are on
+   They are all on prefix key `C-z', by default.  They are on
    prefix keymap `isearchp-filter-map', which you can bind to any
-   key in `isearch-mode-map'.)
+   key in `isearch-mode-map'.  If you forget a `C-z' key, you can
+   use `C-z C-h' while searching to show them all.
 
    - `C-z &' (`isearchp-add-filter-predicate') adds a filter
      predicate, AND-ing it as an additional `:after-while' filter.
