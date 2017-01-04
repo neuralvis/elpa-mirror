@@ -5,8 +5,8 @@
 ;;
 ;; Author: Sanel Zukan <sanelz@gmail.com>
 ;; URL: http://www.github.com/sanel/monroe
-;; Package-Version: 20161025.621
-;; Version: 0.3.1
+;; Package-Version: 20170103.1555
+;; Version: 0.4.0
 ;; Keywords: languages, clojure, nrepl, lisp
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -79,7 +79,7 @@ but will NOT work on ClojureScript. This option assumes 'monroe-detail-stacktrac
   :type 'boolean
   :group 'monroe)
 
-(defvar monroe-version "0.3.0"
+(defvar monroe-version "0.4.0"
   "The current monroe version.")
 
 (defvar monroe-session nil
@@ -402,6 +402,44 @@ at the top of the file."
   "Internal function to actually ask for symbol documentation via nrepl protocol."
   (monroe-input-sender (get-buffer-process monroe-repl-buffer) (format "(clojure.repl/doc %s)" symbol)))
 
+(eval-when-compile '(require 'arc-mode))
+
+(defvar monroe-translate-path-function 'identity
+  "This function is called on all paths returned by `monroe-jump'.
+You can use it to translate paths if you are running an nrepl server remotely or
+inside a container.")
+
+(defun monroe-jump-find-file (file)
+  "Internal function to find a file on the disk or inside a jar."
+  (if (not (string-match "^jar:file:\\(.+\\)!\\(.+\\)" file))
+      (find-file (substring file 5))
+    (let* ((jar (match-string 1 file))
+           (clj (match-string 2 file))
+           (already-open (get-buffer (file-name-nondirectory jar))))
+      (find-file jar)
+      (goto-char (point-min))
+      (search-forward-regexp (concat " " (substring clj 1) "$"))
+      (let ((archive-buffer (current-buffer)))
+        (archive-extract)
+        (when (not already-open)
+          (kill-buffer archive-buffer))))))
+
+(defun monroe-eval-jump (var)
+  "Internal function to actually ask for var location via nrepl protocol."
+  (monroe-send-eval-string
+   (format "%s" `((juxt (comp str clojure.java.io/resource :file) :line :column)
+                  (meta (var ,(intern var)))))
+   (lambda (response)
+     (let ((value (cdr (assoc "value" response)))
+           (status (cdr (assoc "status" response))))
+       (when (member "done" status)
+         (remhash id monroe-requests))
+       (when value
+         (destructuring-bind (file line column)
+             (append (car (read-from-string value)) nil)
+           (monroe-jump-find-file (funcall monroe-translate-path-function file))
+           (goto-char (point-min))))))))
+
 (defun monroe-get-stacktrace (root-ex ex)
   "When error is happened, try to get as much details as possible from last stracktrace."
   (monroe-input-sender
@@ -437,6 +475,26 @@ as path can be remote location. For remote paths, use absolute path."
      (get-buffer-process monroe-repl-buffer)
      (format "(clojure.core/load-file \"%s\")" full-path))))
 
+(defun monroe-jump (var)
+  "Jump to definition of var at point."
+  (interactive
+   (list (if (thing-at-point 'symbol)
+             (substring-no-properties (thing-at-point 'symbol))
+           (read-string "Find var: "))))
+  (ring-insert find-tag-marker-ring (point-marker))
+  (monroe-eval-jump var))
+
+(defun monroe-jump-pop ()
+  "Return point to the position and buffer before running `monroe-jump'."
+  (interactive)
+  (let ((marker (ring-remove find-tag-marker-ring 0)))
+    (switch-to-buffer (marker-buffer marker))
+    (goto-char (marker-position marker))))
+
+(defun monroe-switch-to-repl ()
+  (interactive)
+  (switch-to-buffer monroe-repl-buffer))
+
 (defun monroe-extract-keys (htable)
   "Get all keys from hashtable."
   (let (keys)
@@ -459,6 +517,9 @@ as path can be remote location. For remote paths, use absolute path."
     (define-key map "\C-c\C-d" 'monroe-describe)
     (define-key map "\C-c\C-b" 'monroe-interrupt)
     (define-key map "\C-c\C-l" 'monroe-load-file)
+    (define-key map "\M-."     'monroe-jump)
+    (define-key map "\M-,"     'monroe-jump-pop)
+    (define-key map "\C-c\C-z" 'monroe-switch-to-repl)
     map))
 
 ;; keys for interacting inside Monroe REPL buffer
@@ -467,6 +528,8 @@ as path can be remote location. For remote paths, use absolute path."
     (set-keymap-parent map comint-mode-map)
     (define-key map "\C-c\C-d" 'monroe-describe)
     (define-key map "\C-c\C-c" 'monroe-interrupt)
+    (define-key map "\M-."     'monroe-jump)
+    (define-key map "\M-,"     'monroe-jump-pop)
     map))
 
 ;;; rest
