@@ -5,7 +5,7 @@
 ;; Author: Johannes Goslar
 ;; Created: 5 April 2016
 ;; Version: 0.1.0
-;; Package-Version: 20161212.313
+;; Package-Version: 20170104.211
 ;; Keywords: theme, zenburn
 ;; URL: https://github.com/ksjogo/labburn-theme
 
@@ -146,7 +146,7 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(link-visited ((t (:foreground ,labburn-yellow-2 :underline t :weight normal))))
  `(default ((t (:foreground ,labburn-fg :background ,labburn-bg))))
  `(cursor ((t (:foreground ,labburn-fg :background ,labburn-fg+1))))
- `(escape-glyph ((t (:foreground ,labburn-yellow :bold t))))
+ `(escape-glyph ((t (:foreground ,labburn-yellow :weight bold))))
  `(fringe ((t (:foreground ,labburn-bg :background ,labburn-bg))))
  `(header-line ((t (:foreground ,labburn-yellow :background ,labburn-bg))))
  `(highlight ((t (:background ,labburn-bg+1))))
@@ -186,21 +186,10 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(match ((t (:background ,labburn-bg-1 :foreground ,labburn-orange))))
 ;;;;; info
  `(Info-quoted ((t (:inherit font-lock-constant-face))))
-;;;;; irfc
- `(irfc-head-name-face ((t (:foreground ,labburn-red))))
- `(irfc-head-number-face ((t (:foreground ,labburn-red))))
- `(irfc-reference-face ((t (:foreground ,labburn-blue-1))))
- `(irfc-requirement-keyword-face ((t (:inherit font-lock-keyword-face))))
- `(irfc-rfc-link-face ((t (:inherit link))))
- `(irfc-rfc-number-face ((t (:foreground ,labburn-cyan))))
- `(irfc-std-number-face ((t (:foreground ,labburn-green+4))))
- `(irfc-table-item-face ((t (:foreground ,labburn-green+3))))
- `(irfc-title-face ((t (:foreground ,labburn-yellow :underline t))))
 ;;;;; isearch
  `(isearch ((t (:foreground ,labburn-highlight))))
  `(isearch-fail ((t (:foreground ,labburn-fg :background ,labburn-red-4))))
  `(lazy-highlight ((t (:foreground ,labburn-yellow-2 :background ,labburn-bg-05))))
-
  `(menu ((t (:foreground ,labburn-fg :background ,labburn-bg))))
  `(minibuffer-prompt ((t (:foreground ,labburn-yellow))))
  `(mode-line
@@ -241,6 +230,15 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(aw-background-face
    ((t (:foreground ,labburn-fg-1 :background ,labburn-bg :inverse-video nil))))
  `(aw-leading-char-face ((t (:inherit aw-mode-line-face))))
+;;;;; auto-complete
+ `(ac-candidate-face ((t (:background ,labburn-bg+3 :foreground ,labburn-bg-2))))
+ `(ac-selection-face ((t (:background ,labburn-blue-4 :foreground ,labburn-fg))))
+ `(popup-tip-face ((t (:background ,labburn-yellow-2 :foreground ,labburn-bg-2))))
+ `(popup-menu-mouse-face ((t (:background ,labburn-yellow-2 :foreground ,labburn-bg-2))))
+ `(popup-summary-face ((t (:background ,labburn-bg+3 :foreground ,labburn-bg-2))))
+ `(popup-scroll-bar-foreground-face ((t (:background ,labburn-blue-5))))
+ `(popup-scroll-bar-background-face ((t (:background ,labburn-bg-1))))
+ `(popup-isearch-match ((t (:background ,labburn-bg :foreground ,labburn-fg))))
 ;;;;; avy
  `(avy-background-face
    ((t (:foreground ,labburn-fg-3 :background ,labburn-bg :inverse-video nil))))
@@ -282,6 +280,25 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(bm-fringe-face ((t (:background ,labburn-yellow-1 :foreground ,labburn-bg))))
  `(bm-fringe-persistent-face ((t (:background ,labburn-green-1 :foreground ,labburn-bg))))
  `(bm-persistent-face ((t (:background ,labburn-green-1 :foreground ,labburn-bg))))
+;;;;; calfw
+ `(cfw:face-annotation ((t (:foreground ,labburn-red :inherit cfw:face-day-title))))
+ `(cfw:face-day-title ((t nil)))
+ `(cfw:face-default-content ((t (:foreground ,labburn-green))))
+ `(cfw:face-default-day ((t (:weight bold))))
+ `(cfw:face-disable ((t (:foreground ,labburn-fg-1))))
+ `(cfw:face-grid ((t (:inherit shadow))))
+ `(cfw:face-header ((t (:inherit font-lock-keyword-face))))
+ `(cfw:face-holiday ((t (:inherit cfw:face-sunday))))
+ `(cfw:face-periods ((t (:foreground ,labburn-cyan))))
+ `(cfw:face-saturday ((t (:foreground ,labburn-blue :weight bold))))
+ `(cfw:face-select ((t (:background ,labburn-blue-5))))
+ `(cfw:face-sunday ((t (:foreground ,labburn-red :weight bold))))
+ `(cfw:face-title ((t (:height 2.0 :inherit (variable-pitch font-lock-keyword-face)))))
+ `(cfw:face-today ((t (:foreground ,labburn-cyan :weight bold))))
+ `(cfw:face-today-title ((t (:inherit highlight bold))))
+ `(cfw:face-toolbar ((t (:background ,labburn-blue-5))))
+ `(cfw:face-toolbar-button-off ((t (:underline nil :inherit link))))
+ `(cfw:face-toolbar-button-on ((t (:underline nil :inherit link-visited))))
 ;;;;; cider
  `(cider-result-overlay-face ((t (:background unspecified))))
  `(cider-enlightened-face ((t (:box (:color ,labburn-orange :line-width -1)))))
@@ -333,8 +350,8 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(diff-header ((,labburn-class (:background ,labburn-bg+2))
                 (t (:background ,labburn-fg :foreground ,labburn-bg))))
  `(diff-file-header
-   ((,labburn-class (:background ,labburn-bg+2 :foreground ,labburn-fg :bold t))
-    (t (:background ,labburn-fg :foreground ,labburn-bg :bold t))))
+   ((,labburn-class (:background ,labburn-bg+2 :foreground ,labburn-fg :weight bold))
+    (t (:background ,labburn-fg :foreground ,labburn-bg :weight bold))))
 ;;;;; diff-hl
  `(diff-hl-change ((,labburn-class (:foreground ,labburn-blue :background ,labburn-blue-2))))
  `(diff-hl-delete ((,labburn-class (:foreground ,labburn-red+1 :background ,labburn-red-1))))
@@ -425,6 +442,8 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(erc-prompt-face ((t (:foreground ,labburn-orange :background ,labburn-bg))))
  `(erc-timestamp-face ((t (:foreground ,labburn-green+4))))
  `(erc-underline-face ((t (:underline t))))
+;;;;; eros
+ `(eros-result-overlay-face ((t (:background unspecified))))
 ;;;;; eshell
  `(eshell-prompt ((t (:foreground ,labburn-yellow))))
  `(eshell-ls-archive ((t (:foreground ,labburn-red-1))))
@@ -531,6 +550,16 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(hydra-face-teal ((t (:foreground ,labburn-cyan :background ,labburn-bg))))
 ;;;;; iedit-mode
  `(iedit-occurrence ((t (:background ,labburn-bg+2))))
+;;;;; irfc
+ `(irfc-head-name-face ((t (:foreground ,labburn-red))))
+ `(irfc-head-number-face ((t (:foreground ,labburn-red))))
+ `(irfc-reference-face ((t (:foreground ,labburn-blue-1))))
+ `(irfc-requirement-keyword-face ((t (:inherit font-lock-keyword-face))))
+ `(irfc-rfc-link-face ((t (:inherit link))))
+ `(irfc-rfc-number-face ((t (:foreground ,labburn-cyan))))
+ `(irfc-std-number-face ((t (:foreground ,labburn-green+4))))
+ `(irfc-table-item-face ((t (:foreground ,labburn-green+3))))
+ `(irfc-title-face ((t (:foreground ,labburn-yellow :underline t))))
 ;;;;; ivy
  `(ivy-confirm-face ((t (:foreground ,labburn-green :background ,labburn-bg))))
  `(ivy-match-required-face ((t (:foreground ,labburn-red :background ,labburn-bg))))
@@ -561,7 +590,7 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(js2-function-call ((t (:foreground ,labburn-cyan))))
  `(js2-private-member ((t (:foreground ,labburn-blue-1))))
  `(js2-keywords ((t (:foreground ,labburn-magenta))))
- ;;;;; ledger-mode
+;;;;; ledger-mode
  `(ledger-font-payee-uncleared-face ((t (:foreground ,labburn-red-1))))
  `(ledger-font-payee-cleared-face ((t (:foreground ,labburn-fg))))
  `(ledger-font-payee-pending-face ((t (:foreground ,labburn-red))))
@@ -684,6 +713,17 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(message-header-xheader ((t (:foreground ,labburn-green))))
  `(message-mml ((t (:foreground ,labburn-yellow))))
  `(message-separator ((t (:inherit font-lock-comment-face))))
+;;;;; mingus
+ `(mingus-directory-face ((t (:foreground ,labburn-blue))))
+ `(mingus-pausing-face ((t (:foreground ,labburn-magenta))))
+ `(mingus-playing-face ((t (:foreground ,labburn-cyan))))
+ `(mingus-playlist-face ((t (:foreground ,labburn-cyan ))))
+ `(mingus-mark-face ((t (:bold t :foreground ,labburn-magenta))))
+ `(mingus-song-file-face ((t (:foreground ,labburn-yellow))))
+ `(mingus-artist-face ((t (:foreground ,labburn-cyan))))
+ `(mingus-album-face ((t (:underline t :foreground ,labburn-red+1))))
+ `(mingus-album-stale-face ((t (:foreground ,labburn-red+1))))
+ `(mingus-stopped-face ((t (:foreground ,labburn-red))))
 ;;;;; mini-header-line
  `(mini-header-line-active ((t (:background ,labburn-bg-2))))
 ;;;;; mu4e
@@ -715,7 +755,7 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(org-checkbox ((t (:background ,labburn-bg+2 :foreground ,labburn-fg+1 :box (:line-width 1 :style released-button)))))
  `(org-date ((t (:foreground ,labburn-blue :underline t))))
  `(org-deadline-announce ((t (:foreground ,labburn-red-1))))
- `(org-done ((t (:bold t :foreground ,labburn-green+3))))
+ `(org-done ((t (:weight bold :foreground ,labburn-green+3))))
  `(org-formula ((t (:foreground ,labburn-yellow-2))))
  `(org-headline-done ((t (:foreground ,labburn-green+3))))
  `(org-hide ((t (:foreground ,labburn-bg-1))))
@@ -734,11 +774,11 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(org-sexp-date ((t (:foreground ,labburn-blue+1 :underline t))))
  `(org-special-keyword ((t (:inherit font-lock-comment-face))))
  `(org-table ((t (:foreground ,labburn-green+2))))
- `(org-tag ((t (:bold t))))
+ `(org-tag ((t (:weight bold))))
  `(org-time-grid ((t (:foreground ,labburn-orange))))
- `(org-todo ((t (:bold t :foreground ,labburn-red))))
+ `(org-todo ((t (:weight bold :foreground ,labburn-red))))
  `(org-upcoming-deadline ((t (:inherit font-lock-keyword-face))))
- `(org-warning ((t (:bold t :foreground ,labburn-red :underline nil))))
+ `(org-warning ((t (:weight bold :foreground ,labburn-red :underline nil))))
  `(org-column ((t (:background ,labburn-bg-1))))
  `(org-column-title ((t (:background ,labburn-bg-1 :underline t))))
  `(org-mode-line-clock ((t (:foreground ,labburn-fg :background ,labburn-bg-1))))
@@ -780,6 +820,13 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(rainbow-delimiters-depth-11-face ((t (:foreground ,labburn-green))))
  `(rainbow-delimiters-depth-12-face ((t (:foreground ,labburn-blue-5))))
  `(rainbow-delimiters-unmatched-face ((t (:foreground "red"))))
+;;;;; re-builder
+ `(reb-match-0 ((t (:foreground ,labburn-bg :background ,labburn-magenta))))
+ `(reb-match-1 ((t (:foreground ,labburn-bg :background ,labburn-blue))))
+ `(reb-match-2 ((t (:foreground ,labburn-bg :background ,labburn-orange))))
+ `(reb-match-3 ((t (:foreground ,labburn-bg :background ,labburn-red))))
+ ;;;;; regex-tool
+ `(regex-tool-matched-face ((t (:background ,labburn-blue-4))))
 ;;;;; rtags
  `(rtags-errline ((t (:underline (:color "red" :style wave)))))
  `(rtags-fixitline ((t (:underline (:color "#93E0E3" :style wave)))))
@@ -790,7 +837,7 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(erm-syn-errline ((t (:underline (:color "red" :style wave)))))
  `(erm-syn-warnline ((t (:underline (:color "orange" :style wave)))))
 ;;;;; sh-mode
- `(sh-heredoc     ((t (:foreground ,labburn-yellow :bold t))))
+ `(sh-heredoc     ((t (:foreground ,labburn-yellow :weight bold))))
  `(sh-quoted-exec ((t (:foreground ,labburn-red))))
 ;;;;; show-paren
  `(show-paren-mismatch ((t (:foreground ,labburn-red))))
@@ -847,6 +894,13 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(undo-tree-visualizer-default-face ((t (:foreground ,labburn-fg))))
  `(undo-tree-visualizer-register-face ((t (:foreground ,labburn-yellow))))
  `(undo-tree-visualizer-unmodified-face ((t (:foreground ,labburn-cyan))))
+;;;;; visual-regexp
+ `(vr/group-0 ((t (:foreground ,labburn-bg :background ,labburn-green))))
+ `(vr/group-1 ((t (:foreground ,labburn-bg :background ,labburn-orange))))
+ `(vr/group-2 ((t (:foreground ,labburn-bg :background ,labburn-blue))))
+ `(vr/match-0 ((t (:inherit isearch))))
+ `(vr/match-1 ((t (:foreground ,labburn-yellow-2 :background ,labburn-bg-1))))
+ `(vr/match-separator-face ((t (:foreground ,labburn-red))))
 ;;;;; volatile-highlights
  `(vhl/default-face ((t (:inherit highlight))))
 ;;;;; web-mode
