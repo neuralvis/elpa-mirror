@@ -1,6 +1,6 @@
 ;;; git-commit.el --- Edit Git commit messages  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2010-2016  The Magit Project Contributors
+;; Copyright (C) 2010-2017  The Magit Project Contributors
 ;;
 ;; You should have received a copy of the AUTHORS.md file which
 ;; lists all contributors.  If not, see http://magit.vc/authors.
@@ -11,8 +11,8 @@
 ;;	Marius Vollmer <marius.vollmer@gmail.com>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
-;; Package-Requires: ((emacs "24.4") (dash "2.13.0") (with-editor "2.5.8"))
-;; Package-Version: 2.9.0
+;; Package-Requires: ((emacs "24.4") (dash "2.13.0") (with-editor "2.5.9"))
+;; Package-Version: 2.10.0
 ;; Keywords: git tools vc
 ;; Homepage: https://github.com/magit/magit
 
@@ -114,6 +114,7 @@
 
 (require 'dash)
 (require 'log-edit)
+(require 'magit-utils nil t)
 (require 'ring)
 (require 'server)
 (require 'with-editor)
@@ -134,6 +135,7 @@
 (defgroup git-commit nil
   "Edit Git commit messages."
   :prefix "git-commit-"
+  :link '(info-link "(magit)Editing Commit Messages")
   :group 'tools)
 
 ;;;###autoload
@@ -163,12 +165,6 @@ The major mode configured here is turned on by the minor mode
   :type '(choice (function-item text-mode)
                  (const :tag "No major mode")))
 
-(unless (find-lisp-object-file-name 'git-commit-setup-hook 'defvar)
-  (add-hook 'git-commit-setup-hook 'with-editor-usage-message)
-  (add-hook 'git-commit-setup-hook 'git-commit-propertize-diff)
-  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
-  (add-hook 'git-commit-setup-hook 'git-commit-setup-changelog-support)
-  (add-hook 'git-commit-setup-hook 'git-commit-save-message))
 (defcustom git-commit-setup-hook
   '(git-commit-save-message
     git-commit-setup-changelog-support
@@ -178,6 +174,7 @@ The major mode configured here is turned on by the minor mode
   "Hook run at the end of `git-commit-setup'."
   :group 'git-commit
   :type 'hook
+  :get (and (featurep 'magit-utils) 'magit-hook-custom-get)
   :options '(git-commit-save-message
              git-commit-setup-changelog-support
              git-commit-turn-on-auto-fill
@@ -250,7 +247,7 @@ already using it, then you probably shouldn't start doing so."
 ;;;; Faces
 
 (defgroup git-commit-faces nil
-  "Faces for highlighting Git commit messages."
+  "Faces used for highlighting Git commit messages."
   :prefix "git-commit-"
   :group 'git-commit
   :group 'faces)
@@ -314,23 +311,28 @@ already using it, then you probably shouldn't start doing so."
 
 (defvar git-commit-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c C-s") 'git-commit-signoff)
+    (cond ((featurep 'jkl)
+           (define-key map (kbd "M-i") 'git-commit-prev-message)
+           (define-key map (kbd "M-k") 'git-commit-next-message))
+          (t
+           (define-key map (kbd "M-p") 'git-commit-prev-message)
+           (define-key map (kbd "M-n") 'git-commit-next-message)
+           ;; Old bindings to avoid confusion
+           (define-key map (kbd "C-c C-x a") 'git-commit-ack)
+           (define-key map (kbd "C-c C-x i") 'git-commit-suggested)
+           (define-key map (kbd "C-c C-x o") 'git-commit-cc)
+           (define-key map (kbd "C-c C-x p") 'git-commit-reported)
+           (define-key map (kbd "C-c C-x r") 'git-commit-review)
+           (define-key map (kbd "C-c C-x s") 'git-commit-signoff)
+           (define-key map (kbd "C-c C-x t") 'git-commit-test)))
     (define-key map (kbd "C-c C-a") 'git-commit-ack)
-    (define-key map (kbd "C-c C-t") 'git-commit-test)
-    (define-key map (kbd "C-c C-r") 'git-commit-review)
+    (define-key map (kbd "C-c C-i") 'git-commit-suggested)
     (define-key map (kbd "C-c C-o") 'git-commit-cc)
     (define-key map (kbd "C-c C-p") 'git-commit-reported)
-    (define-key map (kbd "C-c C-i") 'git-commit-suggested)
+    (define-key map (kbd "C-c C-r") 'git-commit-review)
+    (define-key map (kbd "C-c C-s") 'git-commit-signoff)
+    (define-key map (kbd "C-c C-t") 'git-commit-test)
     (define-key map (kbd "C-c M-s") 'git-commit-save-message)
-    (define-key map (kbd "M-p")     'git-commit-prev-message)
-    (define-key map (kbd "M-n")     'git-commit-next-message)
-    ;; Old bindings to avoid confusion
-    (define-key map (kbd "C-c C-x s") 'git-commit-signoff)
-    (define-key map (kbd "C-c C-x a") 'git-commit-ack)
-    (define-key map (kbd "C-c C-x t") 'git-commit-test)
-    (define-key map (kbd "C-c C-x r") 'git-commit-review)
-    (define-key map (kbd "C-c C-x o") 'git-commit-cc)
-    (define-key map (kbd "C-c C-x p") 'git-commit-reported)
     map)
   "Key map used by `git-commit-mode'.")
 
@@ -731,9 +733,5 @@ Added to `font-lock-extend-region-functions'."
                                 (get-text-property pos 'face)))
            (buffer-string)))))))
 
-;;; git-commit.el ends soon
 (provide 'git-commit)
-;; Local Variables:
-;; indent-tabs-mode: nil
-;; End:
 ;;; git-commit.el ends here

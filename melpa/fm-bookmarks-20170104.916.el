@@ -2,7 +2,7 @@
 
 ;; Author: Ono Hiroko <azazabc123@gmail.com>
 ;; Keywords: files, convenience
-;; Package-Version: 20151203.603
+;; Package-Version: 20170104.916
 ;; Package-Requires: ((emacs "24.3") (cl-lib "0.5"))
 ;; X-URL: http://github.com/kuanyui/fm-bookmarks.el
 ;; Version: 0.1
@@ -228,7 +228,9 @@ Output is like:
       (mapcar (lambda (x)
 		(cons (file-name-base (cdr x)) (cdr x))
 		)
-	      (fm-bookmarks-get-and-parse-media-list)
+              (remove-if
+               (lambda (y) (null (cdr y)))
+               (fm-bookmarks-get-and-parse-media-list))
 	      )
     ))
 
@@ -355,6 +357,39 @@ gnome3 =====
 	       )
       (message "There's no link"))
     ))
+
+
+;; ======================================================
+;; Helm support
+;; ======================================================
+
+;;(when (require 'helm nil :noerror)
+;;  (defun helm-fm-bookmarks ()
+;;    (interactive)
+;;    (helm :sources (helm-build-sync-source "Open bookmark: "
+;;                     :candidates #'fm-bookmarks--get-helm-candidates
+;;                     :action #'identity)
+;;          :buffer "File Manager Bookmarks"
+;;          :prompt "Bookmarks list:"))
+;;
+;;  (defun fm-bookmarks--get-helm-candidates ()
+;;    (mapcar (lambda (fm-symbol)
+;;              (cond ((eq fm-symbol 'kde4)
+;;                     (fm-bookmarks-kde4-parser))
+;;                    ((eq fm-symbol 'kde5)
+;;                     (fm-bookmarks-kde5-parser))
+;;                    ((eq fm-symbol 'gnome3)
+;;                     (fm-bookmarks-gtk-parser fm-symbol))
+;;                    ((eq fm-symbol 'pcmanfm)
+;;                     (fm-bookmarks-gtk-parser fm-symbol))
+;;                    ((eq fm-symbol 'custom)
+;;                     fm-bookmarks-custom-bookmarks)
+;;                    ((eq fm-symbol 'media)
+;;                     (fm-bookmarks-generate-media-pair-list))))
+;;            fm-bookmarks-enabled-file-managers)
+;;    )
+;;
+;;  )
 
 ;; ======================================================
 ;; Tools for UX
