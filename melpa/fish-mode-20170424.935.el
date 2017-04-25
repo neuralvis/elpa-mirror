@@ -4,7 +4,7 @@
 
 ;; Author: Tony Wang <wwwjfy@gmail.com>
 ;; Keywords: Fish, shell
-;; Package-Version: 20160924.1207
+;; Package-Version: 20170424.935
 ;; Package-Requires: ((emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -317,12 +317,12 @@
 (defvar fish/block-opening-terms
   (mapconcat
    'identity
-   '("\\<if\\>"
-     "\\<function\\>"
-     "\\<while\\>"
-     "\\<for\\>"
-     "\\<begin\\>"
-     "\\<switch\\>")
+   '("\\_<if\\_>"
+     "\\_<function\\_>"
+     "\\_<while\\_>"
+     "\\_<for\\_>"
+     "\\_<begin\\_>"
+     "\\_<switch\\_>")
    "\\|"))
 
 (defun fish/current-line ()

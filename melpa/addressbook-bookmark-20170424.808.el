@@ -6,7 +6,7 @@
 
 ;; Compatibility: GNU Emacs 24.1+
 ;; Package-Requires: ((emacs "24"))
-;; Package-Version: 20170331.1209
+;; Package-Version: 20170424.808
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -202,8 +202,9 @@ Special commands:
 (defun addressbook-message-complete ()
   "Provide addressbook completion for `message-mode'."
   (let* ((alist     (cl-loop for m in (addressbook-alist-only)
-                             collect
-                             (cons (car m) (assoc-default 'email m))))
+                             for mail = (assoc-default 'email m)
+                             unless (string= mail "")
+                             collect (cons (car m) mail)))
          (cand      (completing-read "Name: " alist nil t
                                      (thing-at-point 'symbol)))
          (mail-list (split-string (assoc-default cand alist) " ?, ?")))

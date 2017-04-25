@@ -3,7 +3,7 @@
 ;; Copyright (C) 2015-2017 Clément Pit-Claudel
 ;; Author: Clément Pit-Claudel <clement.pitclaudel@live.com>
 ;; URL: https://github.com/FStarLang/fstar.el
-;; Package-Version: 20170421.2206
+;; Package-Version: 20170424.818
 
 ;; Created: 27 Aug 2015
 ;; Version: 0.4
@@ -1746,7 +1746,7 @@ With prefix argument ARG, kill all F* subprocesses."
       (fstar-subp-kill))))
 
 (defconst fstar--ps-line-regexp
-  "^ *\\([0-9]+\\) +\\([0-9]+\\) +\\([^ ]+\\) +\\(.+\\) *$")
+  "^ *\\([0-9]+\\) +\\([0-9]+\\) \\(.+\\) *$")
 
 (defun fstar--ps-processes ()
   "Collect all running processes using `ps'.
@@ -1755,10 +1755,9 @@ Each return value is a list (PID PARENT-PID CMD)."
             (if (string-match fstar--ps-line-regexp line)
                 (list (string-to-number (match-string 1 line))
                       (string-to-number (match-string 2 line))
-                      (match-string 3 line)
-                      (match-string 4 line))
+                      (match-string 3 line))
               (error "Unexpected line in PS output: %S" line)))
-          (cdr (process-lines "ps" "-ax" "-o" "pid,ppid,comm,args"))))
+          (cdr (process-lines "ps" "-axww" "-o" "pid,ppid,comm"))))
 
 (defun fstar--elisp-process-attributes (pid)
   "Get attributes of process PID, or nil."
@@ -1766,8 +1765,7 @@ Each return value is a list (PID PARENT-PID CMD)."
     (when attrs
       (list pid
             (cdr (assq 'ppid attrs))
-            (cdr (assq 'comm attrs))
-            (cdr (assq 'args attrs))))))
+            (cdr (assq 'comm attrs))))))
 
 (defun fstar--elisp-processes ()
   "Collect all running processes using `system-processes'.
@@ -1793,11 +1791,12 @@ returns without doing anything."
     (unless (or all parent-live)
       (user-error "No F* process in this buffer"))
     (let ((subp-pid (and parent-live (process-id fstar-subp--process))))
-      (pcase-dolist (`(,pid ,ppid ,cmd ,args) (fstar--system-processes))
+      (pcase-dolist (`(,pid ,ppid ,cmd) (fstar--system-processes))
         (when (and (or all (eq ppid subp-pid))
-                   (member cmd '("z3" "z3.exe")))
+                   (or (string-suffix-p "z3" cmd)
+                       (string-suffix-p "z3.exe" cmd)))
           (signal-process pid 'int)
-          (message "Sent SIGINT to %S" args))))))
+          (message "Sent SIGINT to %S (%S)" pid cmd))))))
 
 ;;; ;; Parsing and display issues
 
@@ -2356,12 +2355,13 @@ Ignores separators found in comments."
                           collect (point))))
       (fstar-subp-enqueue-until pos found))))
 
-(defun fstar-subp-reload-to-point (pos)
-  "Retract everything and process again to POS."
-  (interactive (list (point)))
+(defun fstar-subp-reload-to-point (pos lax)
+  "Retract everything and process (possibly in LAX mode) again to POS."
+  (interactive (list (point) (not (null current-prefix-arg))))
   (fstar-subp-start)
   (fstar-subp-retract-until (point-min))
-  (fstar-subp-advance-until pos))
+  (let ((fstar-subp--lax lax))
+    (fstar-subp-advance-until pos)))
 
 (defun fstar-subp-advance-or-retract-to-point (&optional arg)
   "Advance or retract proof state to reach point.
