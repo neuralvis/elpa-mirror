@@ -5,7 +5,7 @@
 ;; Authors: Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Olin Shivers <shivers@cs.cmu.edu>
 ;; URL: http://github.com/clojure-emacs/inf-clojure
-;; Package-Version: 20170426.1526
+;; Package-Version: 20170426.2200
 ;; Keywords: processes, clojure
 ;; Version: 2.0.0-snapshot
 ;; Package-Requires: ((emacs "24.4") (clojure-mode "5.6"))
@@ -649,12 +649,19 @@ If you are using REPL types, it will pickup the most approapriate
   :type 'string
   :package-version '(inf-clojure . "2.0.0"))
 
+(defcustom inf-clojure-var-source-form-lumo
+  "(lumo.repl/source %s)"
+  "Lumo form to query inferior Clojure for a var's source."
+  :type 'string
+  :package-version '(inf-clojure . "2.0.0"))
+
 (defun inf-clojure-var-source-form ()
   "Return the form to query inferior Clojure for a var's source.
 If you are using REPL types, it will pickup the most approapriate
 `inf-clojure-var-source-form` variant."
   (inf-clojure--sanitize-command
    (pcase (inf-clojure--set-repl-type (inf-clojure-proc))
+     (`lumo inf-clojure-var-source-form-lumo)
      (`planck inf-clojure-var-source-form-planck)
      (_ inf-clojure-var-source-form))))
 
@@ -674,7 +681,7 @@ If you are using REPL types, it will pickup the most approapriate
 (define-obsolete-variable-alias 'inf-clojure-arglist-command 'inf-clojure-arglists-form "2.0.0")
 
 (defcustom inf-clojure-arglists-form-lumo
-  "(lumo.repl/get-arglists \"%s\")"
+  "(pr-str (lumo.repl/get-arglists \"%s\"))"
   "Lumo form to query inferior Clojure for a function's arglists."
   :type 'string
   :package-version '(inf-clojure . "2.0.0"))
@@ -760,14 +767,20 @@ If you are using REPL types, it will pickup the most approapriate
   :type 'string
   :package-version '(inf-clojure . "2.0.0"))
 
+(defcustom inf-clojure-set-ns-form-lumo
+  "(in-ns '%s)"
+  "Lumo form to set the namespace of the inferior Clojure process."
+  :type 'string
+  :package-version '(inf-clojure . "2.0.0"))
+
 (defun inf-clojure-set-ns-form ()
   "Return the form to set the ns of the inferior Clojure process.
 If you are using REPL types, it will pickup the most approapriate
 `inf-clojure-set-ns-form` variant."
-  (inf-clojure--sanitize-command
-   (pcase (inf-clojure--set-repl-type (inf-clojure-proc))
-     (`planck inf-clojure-set-ns-form-planck)
-     (_ inf-clojure-set-ns-form))))
+  (pcase (inf-clojure--set-repl-type (inf-clojure-proc))
+    (`planck inf-clojure-set-ns-form-planck)
+    (`lumo inf-clojure-set-ns-form-lumo)
+    (_ inf-clojure-set-ns-form)))
 
 (define-obsolete-variable-alias 'inf-clojure-set-ns-command 'inf-clojure-set-ns-form "2.0.0")
 
@@ -775,6 +788,12 @@ If you are using REPL types, it will pickup the most approapriate
   "(doseq [var (sort (clojure.repl/apropos \"%s\"))]
      (println (str var)))"
   "Form to invoke apropos."
+  :type 'string
+  :package-version '(inf-clojure . "2.0.0"))
+
+(defcustom inf-clojure-apropos-form-lumo
+  "(lumo.repl/apropos \"%s\")"
+  "Planck form to invoke apropos."
   :type 'string
   :package-version '(inf-clojure . "2.0.0"))
 
@@ -791,6 +810,7 @@ If you are using REPL types, it will pickup the most approapriate
 `inf-clojure-ns-vars-form` variant."
   (inf-clojure--sanitize-command
    (pcase (inf-clojure--set-repl-type (inf-clojure-proc))
+     (`lumo inf-clojure-apropos-form-lumo)
      (`planck inf-clojure-apropos-form-planck)
      (_ inf-clojure-apropos-form))))
 
@@ -939,7 +959,8 @@ See variable `inf-clojure-arglists-form'."
          (arglists-data (read arglists-result)))
     (cond
      ((null arglists-data) nil)
-     ((listp arglists-data) (string-trim (inf-clojure--single-linify arglists-result))))))
+     ((stringp arglists-data) arglists-data)
+     ((listp arglists-data) arglists-result))))
 
 (defun inf-clojure-show-arglists (prompt-for-symbol)
   "Show the arglists for function FN in the mini-buffer.

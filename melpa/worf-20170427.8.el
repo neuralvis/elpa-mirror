@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/worf
-;; Package-Version: 20170422.416
+;; Package-Version: 20170427.8
 ;; Version: 0.1.0
 ;; Package-Requires: ((swiper "0.7.0") (ace-link "0.1.0") (hydra "0.13.0") (zoutline "0.1.0"))
 ;; Keywords: lisp
@@ -1227,7 +1227,7 @@ When ARG is true, add a CUSTOM_ID first."
               (when (string= keyword "DONE")
                 (save-excursion
                   (org-back-to-heading)
-                  (when (looking-at ".*\\([0-9]+\\) *:recurring:$")
+                  (when (looking-at ".*?\\([0-9]+\\) *:recurring:$")
                     (let ((idx (string-to-number (match-string 1))))
                       (replace-match (prin1-to-string (1+ idx))
                                      nil t nil 1)))))
