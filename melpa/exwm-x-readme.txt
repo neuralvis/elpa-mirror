@@ -49,6 +49,21 @@ Record the application's instance, this key is used by `exwmx-jump-or-exec'.
 **** :title
 Record the application's title, this key is used by `exwmx-jump-or-exec'.
 
+**** :floating
+If set it to `t', application will floating when launched.
+
+**** :add-prefix-keys
+Add a key to `exwm-input-prefix-keys' of application.
+
+**** :remove-prefix-keys
+Remove a key from `exwm-input-prefix-keys' of application,
+if set it to `t', all keys in `exwm-input-prefix-keys' will be removed.
+
+**** :ignore-simulation-keys
+Ingore simulation keys of application.
+
+**** :eval
+Evaluation a expression when launch an application.
 
 *** Buttons
 Exwm-X add the following *buttons* to mode-line, user can
@@ -56,31 +71,32 @@ click them to operate application's window:
 
 1. [X]: Delete the current application.
 2. [D]: Delete the current emacs window.
-3. [R]: Run `exwm-reset'.
-4. [F]: Toggle floating/tilling window.
-5. [<]: Move window border to left.
-6. [+]: Maximize the current window.
-7. [>]: Move window border to right.
-8. [-]: Split window horizontal.
-9. [|]: Split window vertical.
-10. [_]: minumize floating application
-11. [Z+]: Zoom+ floating application's window
-12. [Z-]: Zoom- floating application's window
-13. [Line 'XXXX']: toggle EXWM char-mode/line-mode
+3. [F]: Toggle floating/tilling window.
+4. [<]: Move window border to left.
+5. [+]: Maximize the current window.
+6. [>]: Move window border to right.
+7. [-]: Split window horizontal.
+8. [|]: Split window vertical.
+9. [_]: minumize floating application
+10. [Line 'XXXX'] or [L]: line-mode
+11. [Char 'XXXX'] or [C]: Char-mode
+12. [←][↑][↓][→]: Resize the floating window of application.
 
-Note: user can use 'header-line as the button-line of floating window:
+Note: user can use mode-line as the button-line of floating window:
 
 #+BEGIN_EXAMPLE
-(setq exwmx-button-floating-button-line 'header-line)
+(setq exwmx-button-floating-button-line 'mode-line)
 #+END_EXAMPLE
 
 *** Easy move/resize
 By default, EXWM use "s-'down-mouse-1'" to move a floating-window
 and "s-'down-mouse-3'" to resize a floating-window.
 
-When Exwm-X is enabled, user can drag *title showed in mode-line*
-to move a floating-window. and click '[Z+]' and '[Z-]' in mode-line
+When Exwm-X is enabled, user can drag *title showed in button-line*
+to move a floating-window. and click [←][↑][↓][→] in button-line
 to resize a floating-window, *without press WIN key*.
+
+Note: button-line is mode-line or header-line of emacs.
 
 *** Jump-or-exec
 If the application's window is found, jump to this window, otherwise,
@@ -207,8 +223,12 @@ Add your exwm config to this file, for example:
 (require 'exwmx-example)
 (exwm-input-set-key (kbd "C-t v") 'exwmx:file-browser)
 (exwm-input-set-key (kbd "C-t f") 'exwmx:web-browser)
+(exwm-input-set-key (kbd "C-t e") 'exwmx:emacs)
 (exwm-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
+(exwm-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
 (exwm-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
+
+(exwm-input-set-key (kbd "C-t C-f") 'exwm-floating-toggle-floating)
 #+END_EXAMPLE
 
 ** Usage
@@ -250,3 +270,8 @@ can be used too :-)
 
 If exwmx-example doesn't suit for your need, just copy and paste
 its useful pieces to your "~/.exwm-x" file.
+
+** Issues
+
+1. When exwmx-xfce is enabled, header-line of floating window will
+   dispear when move it to another workspace.

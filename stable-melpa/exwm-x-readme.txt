@@ -49,6 +49,21 @@ Record the application's instance, this key is used by `exwmx-jump-or-exec'.
 **** :title
 Record the application's title, this key is used by `exwmx-jump-or-exec'.
 
+**** :floating
+If set it to `t', application will floating when launched.
+
+**** :add-prefix-keys
+Add a key to `exwm-input-prefix-keys' of application.
+
+**** :remove-prefix-keys
+Remove a key from `exwm-input-prefix-keys' of application,
+if set it to `t', all keys in `exwm-input-prefix-keys' will be removed.
+
+**** :ignore-simulation-keys
+Ingore simulation keys of application.
+
+**** :eval
+Evaluation a expression when launch an application.
 
 *** Buttons
 Exwm-X add the following *buttons* to mode-line, user can
@@ -56,36 +71,47 @@ click them to operate application's window:
 
 1. [X]: Delete the current application.
 2. [D]: Delete the current emacs window.
-3. [R]: Run `exwm-reset'.
-4. [F]: Toggle floating/tilling window.
-5. [<]: Move window border to left.
-6. [+]: Maximize the current window.
-7. [>]: Move window border to right.
-8. [-]: Split window horizontal.
-9. [|]: Split window vertical.
-10. [_]: minumize floating application
-11. [Z+]: Zoom+ floating application's window
-12. [Z-]: Zoom- floating application's window
-13. [Line 'XXXX']: toggle EXWM char-mode/line-mode
+3. [F]: Toggle floating/tilling window.
+4. [<]: Move window border to left.
+5. [+]: Maximize the current window.
+6. [>]: Move window border to right.
+7. [-]: Split window horizontal.
+8. [|]: Split window vertical.
+9. [_]: minumize floating application
+10. [Line 'XXXX'] or [L]: line-mode
+11. [Char 'XXXX'] or [C]: Char-mode
+12. [←][↑][↓][→]: Resize the floating window of application.
 
-*** Move or resize a floating-window without press WIN key.
+Note: user can use mode-line as the button-line of floating window:
+
+#+BEGIN_EXAMPLE
+(setq exwmx-button-floating-button-line 'mode-line)
+#+END_EXAMPLE
+
+*** Easy move/resize
 By default, EXWM use "s-'down-mouse-1'" to move a floating-window
 and "s-'down-mouse-3'" to resize a floating-window.
 
-When Exwm-X is enabled, user can drag *title showed in mode-line*
-to move a floating-window. and click '[Z+]' and '[Z-]' in mode-line
-to resize a floating-window.
+When Exwm-X is enabled, user can drag *title showed in button-line*
+to move a floating-window. and click [←][↑][↓][→] in button-line
+to resize a floating-window, *without press WIN key*.
+
+Note: button-line is mode-line or header-line of emacs.
 
 *** Jump-or-exec
 If the application's window is found, jump to this window, otherwise,
-launch the application with command, this feature need appconfigs stored
-in `exwmx-appconfig-file'.
+launch the application with command.
 
-**** The simplest usage
+**** Common usage
 
 #+BEGIN_EXAMPLE
 (exwmx-jump-or-exec "firefox")
 #+END_EXAMPLE
+
+Note: `exwmx-jump-or-exec' *need* appconfigs stored in
+`exwmx-appconfig-file', user should store appconfigs of
+frequently used applications by yourself with the help
+of `exwmx-appconfig'.
 
 **** Define an alias
 Search an appconfig which :alias is "web-browser", and run this
@@ -95,29 +121,39 @@ appconfig's :command.
 (exwmx-jump-or-exec "web-browser" nil t)
 #+END_EXAMPLE
 
-*** Dynamic menu
-`exwmx-dmenu' let user input a dmenu command in minibuffer,
-and execute it, ivy is used to complete.
+*** Dmenu
+`exwmx-dmenu' let user input or select (with the help of ivy) a command
+in minibuffer, and execute it.
 
 `exwmx-dmenu' support some command prefixes:
-1. "," -> run a dmenu-command in terminal emulator, for example,
-   dmenu-command ",top" will execute a terminal emulator, then run shell command: "top" .
+1. ",command": run "command" in terminal emulator, for example,
+   ",top" will execute a terminal emulator, then run shell command: "top" .
 
-   Note: user can change terminal emulator with the help of
-   variable `exwmx-terminal-emulator'.
-2. ";" -> run an emacs command which name is exwm:<input>, for example,
-   dmenu-command ";firefox" will run emacs command exwm:firefox.
-3. "-" -> split window top-to-bottom, for example,
-   the result of dmenu-command "-32" is that 3 windows on top and 2 windows in buttom.
-4. "|" -> split window left-to-right, for example,
-   the result of dmenu-command "|32" is that 3 windows at left and 2 window at right
+   Note: user can change terminal emulator by variable `exwmx-terminal-emulator'.
+
+2. ";command": run an emacs command which name is exwmx:"command".
+3. "-Num1Num2": split window top-to-bottom, for example,
+   the result of command "-32" is: 3 windows on top and 2 windows in buttom.
+4. "|Num1Num2": split window left-to-right, for example,
+   the result of command "|32" is: 3 windows at left and 2 window at right.
 
 User can customize the prefixes of `exwmx-dmenu' with the help of
 `exwmx-dmenu-prefix-setting'.
 
-*** Send a string to application
+*** Sendstring
 
-When run `exwmx-sendstring', a buffer will be poped up to let user edit.
+`exwmx-sendstring' let user send a string to application, it is a simple
+tool but very useful, for example:
+
+1. Find a Unicode character then search it to with google.
+2. Input Chinese without install ibus, fcitx or other external input method,
+   just use emacs's buildin input method, for example: chinese-pyim, chinese-py,
+   a good emergency tools :-)
+3. Write three line emacs-lisp example and send it to github.
+4. Draw an ascii table with table.el and send it to BBC.
+5. ......
+
+when run `exwmx-sendstring', a buffer will be poped up to let user edit.
 after run command `exwmx-sendstring-finish', the content of the buffer will
 be sent to the input field of current application.
 
@@ -127,8 +163,14 @@ it use minibuffer to get input.
 `exwmx-sendstring-from-kill-ring' can select a string in kill-ring then send
 this string to application.
 
+`exwmx-sendstring--send' can send a string to application, it is used by elisp.
+
 NOTE: if `exwmx-sendstring' can not work well with an application, user
 should set :paste-key of this application with the help of `exwmx-appconfig'.
+
+*** Others
+1. `exwmx-shell-command': run a shell command.
+2. `exwmx-shell-command-interactively': run a shell command interactively.
 
 ** Install
 1. Config melpa repository, please see：http://melpa.org/#/getting-started
@@ -181,8 +223,12 @@ Add your exwm config to this file, for example:
 (require 'exwmx-example)
 (exwm-input-set-key (kbd "C-t v") 'exwmx:file-browser)
 (exwm-input-set-key (kbd "C-t f") 'exwmx:web-browser)
+(exwm-input-set-key (kbd "C-t e") 'exwmx:emacs)
 (exwm-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
+(exwm-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
 (exwm-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
+
+(exwm-input-set-key (kbd "C-t C-f") 'exwm-floating-toggle-floating)
 #+END_EXAMPLE
 
 ** Usage
