@@ -2,8 +2,8 @@
 ;; Copyright 2017 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 1.6
-;; Package-Version: 20170616.259
+;; Version: 1.7
+;; Package-Version: 20170627.422
 ;; Keywords: docs, help
 ;; URL: https://github.com/davep/cheat-sh.el
 ;; Package-Requires: ((emacs "24"))
@@ -18,6 +18,8 @@
 ;; cheat.sh.
 
 ;;; Code:
+
+(require 'url-vars)
 
 (defgroup cheat-sh nil
   "Interact with cheat.sh."
@@ -54,12 +56,13 @@ text.")
 
 (defun cheat-sh-get (thing)
   "Get THING from cheat.sh."
-  (with-current-buffer
-      (let ((url-request-extra-headers `(("User-Agent" . ,cheat-sh-user-agent))))
-        (url-retrieve-synchronously (format cheat-sh-url (url-hexify-string thing)) t t))
-    (setf (point) (point-min))
-    (when (search-forward-regexp "^$" nil t)
-      (buffer-substring (point) (point-max)))))
+  (let* ((url-request-extra-headers `(("User-Agent" . ,cheat-sh-user-agent)))
+         (buffer (url-retrieve-synchronously (format cheat-sh-url (url-hexify-string thing)) t t)))
+    (when buffer
+      (with-current-buffer buffer
+        (setf (point) (point-min))
+        (when (search-forward-regexp "^$" nil t)
+          (buffer-substring (point) (point-max)))))))
 
 (defvar cheat-sh-sheet-list nil
   "List of all available sheets.")
@@ -76,9 +79,10 @@ refreshed after `cheat-sh-list-timeout' seconds."
              (> (- (time-to-seconds) cheat-sh-sheet-list-acquired) cheat-sh-list-timeout))
     (setq cheat-sh-sheet-list nil))
   (or cheat-sh-sheet-list
-      (progn
-        (setq cheat-sh-sheet-list-acquired (time-to-seconds))
-        (setq cheat-sh-sheet-list (split-string (cheat-sh-get ":list") "\n")))))
+      (let ((list (cheat-sh-get ":list")))
+        (when list
+          (setq cheat-sh-sheet-list-acquired (time-to-seconds))
+          (setq cheat-sh-sheet-list (split-string list "\n"))))))
 
 (defun cheat-sh-read (prompt)
   "Read input from the user, showing PROMPT to prompt them.
@@ -98,8 +102,12 @@ based of the sheets that are available on cheat.sh."
 
 (defun cheat-sh-decorate-results (buffer)
   "Decorate BUFFER with properties to highlight results."
-  (cheat-sh-decorate-all buffer "^\\(\\[.*\\]\\)$" 'cheat-sh-section)
-  (cheat-sh-decorate-all buffer "^\\(#.*\\)$"      'cheat-sh-caption))
+  ;; "[Search section]"
+  (cheat-sh-decorate-all buffer "^\\(\\[.*\\]\\)$"        'cheat-sh-section)
+  ;; "# Result caption"
+  (cheat-sh-decorate-all buffer "^\\(#.*\\)$"             'cheat-sh-caption)
+  ;; "cheat-sh help caption:"
+  (cheat-sh-decorate-all buffer "^\\([^[:space:]].*:\\)$" 'cheat-sh-caption))
 
 ;;;###autoload
 (defun cheat-sh (thing)
