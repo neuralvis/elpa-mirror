@@ -6,7 +6,7 @@
 ;; Maintainer: Pavel Kurnosov <pashky@gmail.com>
 ;; Created: 01 Apr 2012
 ;; Keywords: http
-;; Package-Version: 20170626.755
+;; Package-Version: 20170627.153
 
 ;; This file is not part of GNU Emacs.
 ;; This file is public domain software. Do what you want.
@@ -184,7 +184,7 @@
   "Send ENTITY and HEADERS to URL as a METHOD request."
   (if restclient-log-request
       (message "HTTP %s %s Headers:[%s] Body:[%s]" method url headers entity))
-  (let ((url-request-method method)
+  (let ((url-request-method (encode-coding-string method 'us-ascii))
         (url-request-extra-headers '())
         (url-request-data (encode-coding-string entity 'utf-8)))
 
@@ -200,8 +200,9 @@
 
         (if mapped
             (set (cdr mapped) (cdr header))
-          (setq url-request-extra-headers (cons header url-request-extra-headers)))
-        ))
+          (let* ((hkey (encode-coding-string (car header) 'us-ascii))
+                 (hvalue (encode-coding-string (cdr header) 'us-ascii)))
+            (setq url-request-extra-headers (cons (cons hkey hvalue) url-request-extra-headers))))))
 
     (setq restclient-within-call t)
     (setq restclient-request-time-start (current-time))
