@@ -227,6 +227,7 @@ Add your exwm config to this file, for example:
 (exwm-input-set-key (kbd "C-t c") 'exwmx-xfce-terminal)
 (exwm-input-set-key (kbd "C-t z") 'exwmx-floating-hide-all)
 (exwm-input-set-key (kbd "C-t C-c") 'exwmx-xfce-new-terminal)
+(exwm-input-set-key (kbd "C-t j") 'exwmx-switch-application)
 
 (exwm-input-set-key (kbd "C-t C-f") 'exwm-floating-toggle-floating)
 #+END_EXAMPLE
@@ -270,3 +271,8 @@ can be used too :-)
 
 If exwmx-example doesn't suit for your need, just copy and paste
 its useful pieces to your "~/.exwm-x" file.
+
+** Issues
+
+1. When exwmx-xfce is enabled, header-line of floating window will
+   dispear when move it to another workspace.
