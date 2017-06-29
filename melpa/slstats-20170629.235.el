@@ -2,8 +2,8 @@
 ;; Copyright 2017 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 1.8
-;; Package-Version: 20170612.725
+;; Version: 1.9
+;; Package-Version: 20170629.235
 ;; Keywords: games
 ;; URL: https://github.com/davep/slstats.el
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
@@ -35,6 +35,7 @@
 ;;; Code:
 
 (require 'url)
+(require 'url-vars)
 (require 'cl-lib)
 (require 'calc-ext)
 
@@ -82,16 +83,18 @@
   "Load data about SL from URL.
 
 SEP is an optional separator that is passed to `split-string'."
-  (with-current-buffer (url-retrieve-synchronously url t)
-    (setf (point) (point-min))
-    (when (search-forward-regexp "^$" nil t)
-      (slstats-to-alist
-       (cl-remove-if
-        (lambda (s)
-          (zerop (length s)))
-        (split-string
-         (buffer-substring-no-properties (point) (point-max))
-         sep))))))
+  (let ((buffer (url-retrieve-synchronously url t)))
+    (when buffer
+      (with-current-buffer buffer
+        (setf (point) (point-min))
+        (when (search-forward-regexp "^$" nil t)
+          (slstats-to-alist
+           (cl-remove-if
+            (lambda (s)
+              (zerop (length s)))
+            (split-string
+             (buffer-substring-no-properties (point) (point-max))
+             sep))))))))
 
 (defvar slstats-cache (make-hash-table :size 5)
   "Data cache.")
@@ -106,7 +109,8 @@ SEP is an optional separator that is passed to `split-string'."
 
 (defun slstats-cache (id value)
   "Cache stats with ID and VALUE."
-  (cdr (puthash id (cons (time-to-seconds) value) slstats-cache)))
+  (when value
+    (cdr (puthash id (cons (time-to-seconds) value) slstats-cache))))
 
 (defun slstats-cached (id getter)
   "Get stats with ID from the cache, or use and cache result of GETTER."
@@ -142,13 +146,23 @@ SEP is an optional separator that is passed to `split-string'."
   "Return a Second Life texture URL for UUID."
   (format slstats-texture-url uuid))
 
+(defmacro slstats-with-stats (name data &rest body)
+  "Check that DATA is good, execute BODY if it is.
+
+Throws an error if the data doesn't look good."
+  (declare (indent 2))
+  `(let ((,name ,data))
+     (if ,name
+         ,@body
+       (error "Unable to load second life stats"))))
+
 (defun slstats-message (name data time)
   "Show a Second Life statistic as a message.
 
 NAME is the title to give the statistic. DATA is the keyword for
 finding the statistic. TIME is the keyword for finding the
 last-update time for the statistic."
-  (let ((stats (slstats-load-lab-data)))
+  (slstats-with-stats stats (slstats-load-lab-data)
     (message "%s: %s (as of %s)"
              name
              (slstats-format-number data stats)
@@ -176,7 +190,7 @@ last-update time for the statistic."
 (defun slstats-concurrency ()
   "Display the latest-known concurrency stats for Second Life."
   (interactive)
-  (let ((stats (slstats-load-concurrency-data)))
+  (slstats-with-stats stats (slstats-load-concurrency-data)
     (message "As of %s: Min: %s, Max: %s, Mean: %s, Median: %s"
              (slstats-get :date stats)
              (slstats-format-number :min_online    stats)
@@ -188,7 +202,7 @@ last-update time for the statistic."
 (defun slstats-grid-size ()
   "Display the grid size data for Second Life."
   (interactive)
-  (let ((stats (slstats-load-grid-size-data)))
+  (slstats-with-stats stats (slstats-load-grid-size-data)
     (message "Regions: Total: %s, Private: %s, Linden: %s, Adult: %s, Mature: %s, PG: %s, Linden Homes: %s"
              (slstats-format-number :total        stats)
              (slstats-format-number :private      stats)
@@ -219,44 +233,47 @@ This includes information available about the state of the grid and the SL econo
   (let ((lab-stats (slstats-load-lab-data))
         (grid-size (slstats-load-grid-size-data))
         (grid-conc (slstats-load-concurrency-data)))
-    (with-help-window "*Second Life Stats*"
-      (with-current-buffer standard-output
-        (insert
-         (slstats-caption "Total sign-ups..")
-         (slstats-format-number :signups lab-stats)
-         "\n"
-         (slstats-caption "Last updated....")
-         (slstats-format-time :signups_updated_unix lab-stats)
-         "\n\n"
-         (slstats-caption "Avatars in-world")
-         (slstats-format-number :inworld lab-stats)
-         "\n"
-         (slstats-caption "Last updated....")
-         (slstats-format-time :inworld_updated_unix lab-stats)
-         "\n\n"
-         (slstats-caption "Exchange rate...")
-         (slstats-format-number :exchange_rate lab-stats)
-         "\n"
-         (slstats-caption "Last updated....")
-         (slstats-format-time :exchange_rate_updated_unix lab-stats)
-         "\n\n"
-         (slstats-caption "Grid size")
-         "\n"
-         (slstats-format-grid-size-total "Total......." :total        grid-size)
-         (slstats-format-grid-size-total "Private....." :private      grid-size)
-         (slstats-format-grid-size-total "Linden......" :linden       grid-size)
-         (slstats-format-grid-size-total "Adult......." :adult        grid-size)
-         (slstats-format-grid-size-total "Mature......" :mature       grid-size)
-         (slstats-format-grid-size-total "PG.........." :pg           grid-size)
-         (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size)
-         "\n"
-         (slstats-caption "Grid concurrency")
-         "\n"
-         (slstats-caption "As of..") (slstats-get :date grid-conc) "\n"
-         (slstats-caption "Minimum") (slstats-format-number :min_online    grid-conc) "\n"
-         (slstats-caption "Maximum") (slstats-format-number :max_online    grid-conc) "\n"
-         (slstats-caption "Median.") (slstats-format-number :median_online grid-conc) "\n"
-         (slstats-caption "Mean...") (slstats-format-number :mean_online   grid-conc))))))
+    (message "%s" lab-stats)
+    (if (and lab-stats grid-size grid-conc)
+        (with-help-window "*Second Life Stats*"
+          (with-current-buffer standard-output
+            (insert
+             (slstats-caption "Total sign-ups..")
+             (slstats-format-number :signups lab-stats)
+             "\n"
+             (slstats-caption "Last updated....")
+             (slstats-format-time :signups_updated_unix lab-stats)
+             "\n\n"
+             (slstats-caption "Avatars in-world")
+             (slstats-format-number :inworld lab-stats)
+             "\n"
+             (slstats-caption "Last updated....")
+             (slstats-format-time :inworld_updated_unix lab-stats)
+             "\n\n"
+             (slstats-caption "Exchange rate...")
+             (slstats-format-number :exchange_rate lab-stats)
+             "\n"
+             (slstats-caption "Last updated....")
+             (slstats-format-time :exchange_rate_updated_unix lab-stats)
+             "\n\n"
+             (slstats-caption "Grid size")
+             "\n"
+             (slstats-format-grid-size-total "Total......." :total        grid-size)
+             (slstats-format-grid-size-total "Private....." :private      grid-size)
+             (slstats-format-grid-size-total "Linden......" :linden       grid-size)
+             (slstats-format-grid-size-total "Adult......." :adult        grid-size)
+             (slstats-format-grid-size-total "Mature......" :mature       grid-size)
+             (slstats-format-grid-size-total "PG.........." :pg           grid-size)
+             (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size)
+             "\n"
+             (slstats-caption "Grid concurrency")
+             "\n"
+             (slstats-caption "As of..") (slstats-get :date grid-conc) "\n"
+             (slstats-caption "Minimum") (slstats-format-number :min_online    grid-conc) "\n"
+             (slstats-caption "Maximum") (slstats-format-number :max_online    grid-conc) "\n"
+             (slstats-caption "Median.") (slstats-format-number :median_online grid-conc) "\n"
+             (slstats-caption "Mean...") (slstats-format-number :mean_online   grid-conc))))
+      (error "Unable to load Second Life stats"))))
 
 (defun slstats-insert-map (uuid)
   "Given a UUID, insert a map texture into the current buffer."

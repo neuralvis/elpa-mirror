@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20170625.1444
+;; Package-Version: 20170629.501
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9"))
 ;; Version: 0.4
@@ -93,6 +93,14 @@ Applicable for `org-insert-link' and `org-brain-insert-link'."
 (defcustom org-brain-after-visualize-hook nil
   "Hook run after `org-brain-visualize', but before `org-brain-text'.
 Can be used to prettify the buffer output, e.g. `ascii-art-to-unicode'."
+  :group 'org-brain
+  :type 'hook)
+
+(defcustom org-brain-after-resource-button-functions nil
+  "Hook run during `org-brain-insert-resource-button'.
+Insert a bullet, then run hook functions, then insert the actual button.
+Each function must take a single argument: the org link to the resource.
+Can for instance be used in combination with `all-the-icons'."
   :group 'org-brain
   :type 'hook)
 
@@ -1015,6 +1023,7 @@ Setting NOFOCUS to t implies also having NOHISTORY as t."
 (defun org-brain-insert-resource-button (resource &optional indent)
   "Insert a new line with a RESOURCE button, indented by INDENT spaces."
   (insert (make-string (or indent 0) ?\ ) "\n• ")
+  (run-hook-with-args 'org-brain-after-resource-button-functions (car resource))
   (insert-text-button
    (or (cdr resource) (car resource))
    'action (lambda (_x)
