@@ -6,7 +6,7 @@
 ;; Maintainer: Pavel Kurnosov <pashky@gmail.com>
 ;; Created: 01 Apr 2012
 ;; Keywords: http
-;; Package-Version: 20170627.153
+;; Package-Version: 20170702.118
 
 ;; This file is not part of GNU Emacs.
 ;; This file is public domain software. Do what you want.
@@ -449,11 +449,20 @@ The buffer contains the raw HTTP response sent by the server."
   (interactive)
   (restclient-http-parse-current-and-do
    '(lambda (method url headers entity)
-      (kill-new (format "curl -i %s -X%s '%s' %s"
-                        (mapconcat (lambda (header) (format "-H '%s: %s'" (car header) (cdr header))) headers " ")
-                        method url
-                        (if (> (string-width entity) 0)
-                            (format "-d '%s'" entity) "")))
+      (let ((header-args
+             (apply 'append
+                    (mapcar (lambda (header)
+                              (list "-H" (format "%s: %s" (car header) (cdr header))))
+                            headers))))
+        (kill-new (concat "curl "
+                          (mapconcat 'shell-quote-argument
+                                     (append '("-i")
+                                             header-args
+                                             (list (concat "-X" method))
+                                             (list url)
+                                             (when (> (string-width entity) 0)
+                                               (list "-d" entity)))
+                                     " "))))
       (message "curl command copied to clipboard."))))
 
 ;;;###autoload
