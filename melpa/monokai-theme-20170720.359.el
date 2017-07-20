@@ -4,7 +4,7 @@
 
 ;; Author: Kelvin Smith <oneKelvinSmith@gmail.com>
 ;; URL: http://github.com/oneKelvinSmith/monokai-emacs
-;; Package-Version: 20170719.146
+;; Package-Version: 20170720.359
 ;; Version: 3.3.0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -5895,7 +5895,7 @@ Also affects 'linum-mode' background."
 
    ;; pos-tip
    `(pos-tip-foreground-color ,monokai-background)
-   `(pos-tip-background-color ,monokai-green)
+   `(pos-tip-background-color ,monokai-yellow-hc)
 
    ;; vc
    `(vc-annotate-color-map
