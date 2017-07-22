@@ -2,7 +2,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Url: http://github.com/alphapapa/org-recent-headings
-;; Package-Version: 20170703.1625
+;; Package-Version: 20170722.606
 ;; Version: 0.1-pre
 ;; Package-Requires: ((emacs "24.4") (org "9.0.5") (dash "2.13.0"))
 ;; Keywords: hypermedia, outlines, Org
@@ -339,15 +339,16 @@ With prefix argument ARG, turn on if positive, otherwise off."
   (interactive)
   (let* ((heading-display-strings (mapcar #'car org-recent-headings-list))
          (selected-heading (completing-read "Heading: " heading-display-strings))
+         ;; FIXME: If there are two headings with the same name, this
+         ;; will only pick the first one.  I guess it won't happen if
+         ;; full-paths are used, which most likely will be, but maybe
+         ;; it should still be fixed.
          (real (cdr (assoc selected-heading org-recent-headings-list))))
     (funcall org-recent-headings-show-entry-function real)))
 
 ;;;; Helm
 
-(when (fboundp 'helm)
-  ;; FIXME: is `helm' the best symbol to use here?
-
-  (require 'helm)
+(with-eval-after-load 'helm
 
   (defvar org-recent-headings-helm-map
     (let ((map (copy-keymap helm-map)))
@@ -409,8 +410,7 @@ ENTRIES should be a REAL cons, or a list of REAL conses."
 
 ;;;; Ivy
 
-(when (fboundp 'ivy)
-  ;; FIXME: is `ivy' the best symbol to use here?
+(with-eval-after-load 'ivy
 
   (defun org-recent-headings-ivy ()
     "Choose from recent Org headings with Ivy."
