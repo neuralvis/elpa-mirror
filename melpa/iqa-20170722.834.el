@@ -2,7 +2,7 @@
 
 ;; Homepage: https://github.com/a13/iqa.el
 ;; Version: 0.0.1
-;; Package-Version: 20170719.229
+;; Package-Version: 20170722.834
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -47,9 +47,7 @@
 ;; Installation with `quelpa-use-package':
 ;;
 ;; (use-package iqa
-;;   :ensure nil
-;;   :quelpa
-;;   (iqa :repo "a13/iqa.el" :fetcher github :version original)
+;;   :ensure t
 ;;   ;; for generated files only
 ;;   ;; :init
 ;;   ;; (setq iqa-user-init-file (concat user-emacs-directory "init.org"))
