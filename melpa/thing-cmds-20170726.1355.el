@@ -7,13 +7,13 @@
 ;; Copyright (C) 2006-2017, Drew Adams, all rights reserved.
 ;; Created: Sun Jul 30 16:40:29 2006
 ;; Version: 0
-;; Package-Version: 20170331.1338
+;; Package-Version: 20170726.1355
 ;; Package-Requires: ((hide-comnt "0"))
-;; Last-Updated: Fri Mar 31 13:39:00 2017 (-0700)
+;; Last-Updated: Wed Jul 26 13:54:10 2017 (-0700)
 ;;           By: dradams
-;;     Update #: 785
+;;     Update #: 788
 ;; URL: https://www.emacswiki.org/emacs/download/thing-cmds.el
-;; Doc URL: http://www.emacswiki.org/ThingAtPointCommands
+;; Doc URL: https://www.emacswiki.org/emacs/ThingAtPointCommands
 ;; Keywords: thingatpt, thing, region, selection
 ;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
@@ -164,6 +164,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
+
+
+;; Quiet the byte compiler.
+
+(defvar ignore-comments-flag)
+
+;;----------
 
 (when (< emacs-major-version 22) (eval-when-compile (require 'cl))) ;; for Emacs 20: dolist
 
@@ -404,8 +411,8 @@ instead of the end.
 syntax table determines which characters are such balanced delimiters.
 See (emacs) `Moving by Parens' and (elisp) `List Motion'.
 
-This command might does not work as expected if point is in a string
-or a comment."
+This command might not work as expected if point is in a string or a
+comment."
   (interactive "P\np")
   (cond ((and allow-extend  (or (and (eq last-command this-command)  (mark t))
                                 (and transient-mark-mode  mark-active)))
