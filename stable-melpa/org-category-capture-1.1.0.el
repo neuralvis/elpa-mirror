@@ -4,9 +4,9 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: org-mode todo tools outlines
-;; Package-Version: 20170816.2013
+;; Package-Version: 1.1.0
 ;; URL: https://github.com/IvanMalison/org-projectile
-;; Version: 0.0.0
+;; Version: 0.0.1
 ;; Package-Requires: ((org "9.0.0") (emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -120,7 +120,7 @@
                         (equal (apply 'occ-get-heading-category args) category))
                (setq result (point))))
            nil (when do-tree 'tree)
-           (1+ (org-current-level))
+           (1+ (or (org-current-level) 0))
            (occ-level-filter (if do-tree (1+ (org-current-level)) 1)))
           result)
       (error "Can't get category heading in non org-mode file"))))
