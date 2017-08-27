@@ -5,7 +5,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;;         Fanael Linithien <fanael4@gmail.com>
 ;; URL: https://github.com/purcell/package-lint
-;; Package-Version: 20170823.919
+;; Package-Version: 20170826.2129
 ;; Keywords: lisp
 ;; Version: 0
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
@@ -758,7 +758,7 @@ DESC is a struct as returned by `package-buffer-info'."
                                '(?\e ?\e))))
               (equal (car (last lks)) ?\C-h)
               (and (equal modifiers '(control))
-                   (= ?c basic-type)
+                   (equal ?c basic-type)
                    (cdr lks)
                    (let ((v (event-basic-type (cdr lks)))
                          (m (event-modifiers (cdr lks))))
