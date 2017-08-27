@@ -5,7 +5,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;;         Fanael Linithien <fanael4@gmail.com>
 ;; URL: https://github.com/purcell/package-lint
-;; Package-Version: 20170826.2129
+;; Package-Version: 20170826.2205
 ;; Keywords: lisp
 ;; Version: 0
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
@@ -708,10 +708,6 @@ DESC is a struct as returned by `package-buffer-info'."
 
 (defun package-lint--check-globalized-minor-mode (def)
   "Offer up concerns about the global minor mode definition DEF."
-  (unless (eq 'define-globalized-minor-mode (car def))
-    (package-lint--error-at-point
-     'warning
-     "Use `define-globalized-minor-mode' to define global minor modes."))
   (let ((feature (intern (package-lint--provided-feature))))
     (unless (cl-search `(:require ',feature) def :test #'equal)
       (package-lint--error-at-point
