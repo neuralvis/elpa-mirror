@@ -7,7 +7,7 @@
 ;;         Juliusz Chroboczek <jch@pps.univ-paris-diderot.fr>
 ;; Maintainer: Libor Čapák <capak@inputwish.com>
 ;; Keywords: vc
-;; Package-Version: 20170409.623
+;; Package-Version: 20170904.2020
 ;; Package-X-Original-Version: 20170409.1521
 ;; Package-X-Original-Version: 20141122.1326
 ;; Version: 1.19
@@ -225,8 +225,11 @@ list of arguments to pass."
             (goto-char (point-min))
             (while (looking-at "[^\n]+")
               ;; Darcs always prints relative to the root
-              (let ((file2 (expand-file-name (match-string 0) root)))
-                (when (equal file2 file)
+              (let* ((line (match-string 0))
+                     (file2 (expand-file-name line root)))
+                (when (or
+                       (equal file2 file)
+                       (equal line "darcs: can't mix match and pending flags"))
                   (throw 'found t))
                 (forward-line)))
             nil)))))))
@@ -245,8 +248,8 @@ list of arguments to pass."
   (with-temp-buffer
     (vc-do-command t nil vc-darcs-program-name file
                    "whatsnew" "--summary")
-    (goto-char (point-max))
-    (forward-line -1)
+    (goto-char (point-min))
+    (forward-line 1)
     (cond
      ((looking-at "No changes")
       (if (vc-darcs-registered file) 'up-to-date 'unregistered))
@@ -440,7 +443,7 @@ EDITABLE is ignored."
   (set (make-local-variable 'log-view-per-file-logs) nil)
   (set (make-local-variable 'log-view-file-re) "\\`a\\`")
   (set (make-local-variable 'log-view-message-re)
-       "^  \\* \\(.+\\)")
+       "^patch \\([0-9a-f]\\{40\\}\\)")
   (set (make-local-variable 'log-view-font-lock-keywords)
        '(("^\\([A-Z][a-z][a-z] .*[0-9]\\)  \\([^<>]+\\) \\(<[^<>]+>\\)"
           (1 'change-log-date)
@@ -467,7 +470,7 @@ EDITABLE is ignored."
     (apply #'vc-do-command buffer 'async vc-darcs-program-name files "changes"
            (append
             (and start-hash (list "--to-hash" start-hash))
-            (and limit (list "--last" (format "%d" limit)))))))
+            (and limit (list "--max-count" (format "%d" limit)))))))
 
 (defun vc-darcs-diff (file &optional rev1 rev2 buffer _async)
   "Show the differences in FILE between revisions REV1 and REV2."
@@ -513,6 +516,7 @@ EDITABLE is ignored."
 (defun vc-darcs-annotate-command (file buffer &optional rev)
   "Produce an annotated display of fiLE in BUFFER.
 For Darcs, hashes and times are stored in text properties."
+  (vc-setup-buffer buffer)
   (let* ((rev (vc-darcs-rev-to-hash rev file))
          (data
           (with-temp-buffer
@@ -521,6 +525,8 @@ For Darcs, hashes and times are stored in text properties."
                    (and rev (list "--match" (concat "hash " rev))))
             (let ((output ()))
               (goto-char (point-min))
+              (if (looking-at "^Rebase in progress:")
+                  (forward-line 1))
               (while (looking-at "^\\([-0-9a-f]+\\)\\(?:\\.gz\\)? | \\(.*\\)$")
                 (unless (string= (match-string 1) "0000000000000000000000000000000000000000")
                   (push (cons (match-string 1) (match-string 2)) output))
