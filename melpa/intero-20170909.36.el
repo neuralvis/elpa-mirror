@@ -11,7 +11,7 @@
 ;; Author: Chris Done <chrisdone@fpcomplete.com>
 ;; Maintainer: Chris Done <chrisdone@fpcomplete.com>
 ;; URL: https://github.com/commercialhaskell/intero
-;; Package-Version: 20170908.2259
+;; Package-Version: 20170909.36
 ;; Created: 3rd June 2016
 ;; Version: 0.1.13
 ;; Keywords: haskell, tools
@@ -2085,9 +2085,9 @@ default when nil)."
             (list "--ghci-options" "-ignore-dot-ghci"))
           (let ((dir (intero-localize-path (intero-make-temp-file "intero" t))))
             (list "--ghci-options"
-                  (concat "-odir=" dir)
+                  (concat "-odir=" (shell-quote-argument dir))
                   "--ghci-options"
-                  (concat "-hidir=" dir)))
+                  (concat "-hidir=" (shell-quote-argument dir))))
           targets))
 
 (defun intero-sentinel (process change)
