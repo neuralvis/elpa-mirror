@@ -4,7 +4,7 @@
 
 ;; Author: 0rdy <mail@0rdy.com>
 ;; URL: https://github.com/0rdy/kaolin-theme
-;; Package-Version: 20170915.236
+;; Package-Version: 20170917.905
 ;; Package-Requires: ((emacs "24"))
 ;; Version: 0.9.0
 
@@ -162,7 +162,9 @@
          (bg4  black4)
 
          (dim-buffer alt-black)
+         (hl         light-green)
          (hl-line    bg2)
+         (hl-indent  gray)
          (tooltip-bg bg2)
          (tooltip-fg light-gray)
          (tooltip-hl alt-brown)
@@ -199,15 +201,12 @@
          (win-border dark-gray)
          (linum-fg   gray)
          (linum-hl   light-gray)
-         ;; TODO: make more brighter
-         ;; TODO: or change color
+         ;; TODO: (??) add alt color cursor
          (cursor     alt-white)
 
          (keyword    green)
          (key2       "#5f9298")
          (key3       "#41757b")
-         (hl         cyan)
-         (hl-indent  gray)
          (builtin    teal)
          (comment    gray)
          ;; Light
@@ -274,7 +273,7 @@
      `(tooltip ((,c (:foreground ,tooltip-bg :foreground ,tooltip-fg))))
 
      `(match ((,c (:background nil :foreground ,cyan))))
-     `(isearch ((,c (:background nil :foreground ,light-green :bold ,bold :underline ,underline))))
+     `(isearch ((,c (:background nil :foreground ,hl :bold ,bold :underline ,underline))))
      `(isearch-fail ((,c (:background nil :foreground ,red))))
 
      ;; Interface
@@ -297,7 +296,7 @@
      `(package-name ((,c (:background nil :foreground ,cyan))))
 
      ;; Additional highlighting
-     `(highlight ((,c (:background ,bg2 :foreground ,hl))))
+     `(highlight ((,c (:background ,bg2 :foreground ,cyan))))
      `(lazy-highlight ((,c (:background ,bg3 :foreground ,fg2))))
      `(hl-line ((,c (:background ,bg2))))
      `(highlight-numbers-number ((,c (:foreground ,num))))
@@ -352,6 +351,7 @@
      `(telephone-line-evil-emacs ((t (:background ,line-bg2 :foreground ,evil-emacs :inherit telephone-line-evil))))
 
      ;; Powerline
+     ;; TODO: check it
      `(powerline-active1 ((,c (:inherit mode-line))))
      `(powerline-active2 ((,c (:inherit mode-line))))
      `(powerline-inactive1 ((,c (:inherit mode-line-inactive))))
@@ -441,8 +441,8 @@
 
      ;; Ido
      `(ido-indicator ((,c (:foreground ,num))))
-     `(ido-first-match ((,c (:foreground ,light-green :bold ,bold))))
-     `(ido-only-match ((,c (:foreground ,hl))))
+     `(ido-first-match ((,c (:foreground ,hl :bold ,bold))))
+     `(ido-only-match ((,c (:foreground ,cyan))))
      `(ido-subdir ((,c (:foreground ,lavender))))
 
      ;; Gnus
@@ -637,7 +637,7 @@
 
      ;; Company
      `(company-tooltip ((,c (:background ,tooltip-bg :foreground ,fg3 :bold ,bold))))
-     `(company-tooltip-common ((,c (:foreground ,light-green))))
+     `(company-tooltip-common ((,c (:foreground ,hl))))
      `(company-tooltip-common-selection ((,c (:foreground ,light-orange))))
      `(company-tooltip-selection ((,c (:background ,tooltip-hl :foreground ,light-yellow))))
      `(company-tooltip-annotation ((,c (:foreground ,faded-blue))))
@@ -673,7 +673,7 @@
      `(speedbar-file-face ((,c (:foreground ,green))))
      `(speedbar-tag-face ((,c (:foreground ,faded-blue))))
      `(speedbar-selected-face ((,c (:foreground ,teal-green))))
-     `(speedbar-highlight-face ((,c (:foreground ,hl))))
+     `(speedbar-highlight-face ((,c (:foreground cyan))))
      `(speedbar-button-face ((,c (:foreground ,jade))))
 
      ;; Haskell mode
@@ -690,7 +690,7 @@
      `(sh-quoted-exec ((,c (:foreground ,light-yellow))))
 
      ;; Flx
-     `(flx-highlight-face ((,c (:foreground ,light-green :underline ,underline))))
+     `(flx-highlight-face ((,c (:foreground ,hl :underline ,underline))))
 
      ;; Emmet
      `(emmet-preview-input ((t (:foreground nil :background nil))))
@@ -797,11 +797,11 @@
      `(ivy-subdir ((,c (:foreground ,green :bold ,bold))))
      `(ivy-virtual ((,c (:foreground ,violet))))
      `(ivy-remote ((,c (:foreground ,teal))))
-     `(ivy-current-match ((,c (:background ,hl-line :foreground ,light-green :bold t))))
+     `(ivy-current-match ((,c (:background ,hl-line :foreground ,hl :bold t))))
      `(ivy-match-required-face ((,c (:background nil :foreground ,alt-red :bold nil))))
      `(ivy-confirm-face ((,c (:background nil :foreground ,light-orange))))
      `(ivy-action ((,c (:background nil :foreground ,teal-green :bold ,bold))))
-     ;; `(ivy-current-match ((,c (:inherit hl-line :foreground ,hl))))
+     ;; `(ivy-current-match ((,c (:inherit hl-line :foreground ,cyan)))
      `(ivy-minibuffer-match-face-1 ((,c (:background nil :foreground ,fg1))))
      `(ivy-minibuffer-match-face-2 ((,c (:background nil :foreground ,light-green :bold ,bold))))
      `(ivy-minibuffer-match-face-3 ((,c (:background nil :foreground ,light-orange :bold ,bold))))
