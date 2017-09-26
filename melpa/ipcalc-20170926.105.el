@@ -5,9 +5,9 @@
 ;; Author: "Aleksandar Simic" <asimic@gmail.com>
 ;; License: BSD
 ;; Created: 2012-03-11 17:10
-;; Version: 0.2.4
-;; Package-Version: 20160927.220
-;; URL: http://github.org/dotemacs/ipcalc.el
+;; Version: 0.2.5
+;; Package-Version: 20170926.105
+;; URL: http://github.com/dotemacs/ipcalc.el
 ;; Keywords: networking tools
 ;; Package-Requires: ((cl-lib "0.5"))
 
