@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014 - 2016 Ruben Maher
 
 ;; Version: 1.0
-;; Package-Version: 20160902.42
+;; Package-Version: 20171001.2258
 ;; Author: Ruben Maher <r@rkm.id.au>
 ;; URL: https://github.com/eqyiel/circe-notifications
 ;; Package-Requires: ((emacs "24.4") (circe "2.3") (alert "1.2"))
@@ -178,9 +178,9 @@ the last message from NICK?"
 
 (defun circe-notifications-nicks-on-all-networks ()
   "Get a list of all nicks in use according to `circe-network-options'."
-  (delete-dups (mapcar (lambda (opt)
-                          (plist-get (cdr opt) :nick))
-                        circe-network-options)))
+  (remove nil (delete-dups (mapcar (lambda (opt)
+                                     (plist-get (cdr opt) :nick))
+                                   circe-network-options))))
 
 (defun circe-notifications-focus-in-hook ()
   (setq circe-notifications-emacs-focused t))
