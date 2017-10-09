@@ -4,7 +4,7 @@
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
 ;; Version: 2.13.0
-;; Package-Version: 20171006.328
+;; Package-Version: 20171009.105
 ;; Keywords: lists
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -237,7 +237,9 @@ See also: `-reduce-r-from', `-reduce'"
   `(-reduce-r (lambda (&optional it acc) ,form) ,list))
 
 (defmacro --filter (form list)
-  "Anaphoric form of `-filter'."
+  "Anaphoric form of `-filter'.
+
+See also: `--remove'."
   (declare (debug (form form)))
   (let ((r (make-symbol "result")))
     `(let (,r)
@@ -249,21 +251,25 @@ See also: `-reduce-r-from', `-reduce'"
 
 Alias: `-select'
 
-See also: `-keep'"
+See also: `-keep', `-remove'."
   (--filter (funcall pred it) list))
 
 (defalias '-select '-filter)
 (defalias '--select '--filter)
 
 (defmacro --remove (form list)
-  "Anaphoric form of `-remove'."
+  "Anaphoric form of `-remove'.
+
+See also `--filter'."
   (declare (debug (form form)))
   `(--filter (not ,form) ,list))
 
 (defun -remove (pred list)
   "Return a new list of the items in LIST for which PRED returns nil.
 
-Alias: `-reject'"
+Alias: `-reject'
+
+See also: `-filter'."
   (--remove (funcall pred it) list))
 
 (defalias '-reject '-remove)
