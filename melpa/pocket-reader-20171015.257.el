@@ -5,7 +5,7 @@
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Created: 2017-09-25
 ;; Version: 0.1-pre
-;; Package-Version: 20171013.2035
+;; Package-Version: 20171015.257
 ;; Keywords: pocket
 ;; Package-Requires: ((emacs "25.1") (dash "2.13.0") (kv "0.0.19") (pocket-lib "0.1") (s "1.10") (ov "1.0.6") (rainbow-identifiers "0.2.2") (org-web-tools "0.1"))
 ;; URL: https://github.com/alphapapa/pocket-reader.el
@@ -409,6 +409,7 @@ that keystroke on a random item."
                                   for excerpt = (pocket-reader--get-property :excerpt)
                                   when excerpt
                                   return excerpt
+                                  do (forward-line 1)
                                   finally do (error "No excerpts found"))))
       ;; Search for overlay showing this excerpt
       (if (cl-loop for ov in (ov-forwards)
