@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Version: 0.6
-;; Package-Version: 20171012.1200
+;; Package-Version: 20171016.1420
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "24.4") (loop "1.3") (dash "2.13.0") (s "1.11.0") (f "0.18.2"))
 ;; URL: https://github.com/Wilfred/suggest.el
@@ -112,6 +112,7 @@
    #'-intersection
    #'-distinct
    #'-rotate
+   #'-sort
    #'-repeat
    #'-cons*
    #'-snoc
@@ -183,6 +184,7 @@
    #'capitalize
    #'replace-regexp-in-string
    #'format
+   #'string-join
    ;; Quoting strings
    #'shell-quote-argument
    #'regexp-quote
@@ -297,6 +299,8 @@ See also `suggest-extra-args'.")
    ;; `-iterate' is great for building incrementing/decrementing lists.
    ;; (an alternative to `number-sequence').
    #'-iterate '(1+ 1-)
+   ;; Lists can be sorted in a variety of ways.
+   #'-sort '(< > string< string>)
    ;; For indexing functions, just use non-negative numbers. This
    ;; avoids confusing results like (last nil 5) => nil.
    #'elt '(0 1 2)
