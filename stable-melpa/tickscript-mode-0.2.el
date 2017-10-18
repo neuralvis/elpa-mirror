@@ -3,10 +3,10 @@
 ;; Copyright (C) 2017  Marc Sherry
 ;; Homepage: https://github.com/msherry/tickscript-mode
 ;; Version: 0.1
-;; Package-Version: 20171017.1748
+;; Package-Version: 0.2
 ;; Author: Marc Sherry <msherry@gmail.com>
 ;; Keywords: languages
-;; Package-Requires: ((emacs "24.1") s)
+;; Package-Requires: ((emacs "24.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -72,8 +72,6 @@
 ;;   Look up the node, and possibly property, currently under point online.
 
 ;;; Code:
-
-(require 's)
 
 (defvar tickscript-font-lock-keywords nil)
 (defvar tickscript-properties nil)
@@ -659,7 +657,11 @@ file comments for later re-use."
     (let* ((beg (point))
            (end (point-max))
            (region (buffer-substring-no-properties beg end))
-           (escaped (s-replace "]" "\"]" (s-replace "[" "[\"" (s-replace "\"" "\\\"" region))))
+           (escaped (replace-regexp-in-string
+                     "\\]" "\"\\]"
+                     (replace-regexp-in-string
+                      "\\[" "\\[\""
+                      (replace-regexp-in-string "\"" "\\\"" region))))
            (tmpfile (format "/%s/%s.png" temporary-file-directory (make-temp-name "tickscript-")))
            (cmd (format "echo \"%s\" | dot -T png -o %s" escaped tmpfile)))
       (shell-command cmd)
@@ -741,6 +743,7 @@ file comments for later re-use."
 \\{tickscript-mode-map}"
   :syntax-table tickscript-mode-syntax-table
 
+  (set (make-local-variable 'indent-tabs-mode) nil)
   (set (make-local-variable 'font-lock-defaults) '(tickscript-font-lock-keywords))
 
   (set (make-local-variable 'comment-start) "// ")
