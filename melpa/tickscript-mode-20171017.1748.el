@@ -3,10 +3,10 @@
 ;; Copyright (C) 2017  Marc Sherry
 ;; Homepage: https://github.com/msherry/tickscript-mode
 ;; Version: 0.1
-;; Package-Version: 20171017.1644
+;; Package-Version: 20171017.1748
 ;; Author: Marc Sherry <msherry@gmail.com>
 ;; Keywords: languages
-;; Package-Requires: ((emacs "24.1"))
+;; Package-Requires: ((emacs "24.1") s)
 
 ;; This file is not part of GNU Emacs.
 
@@ -72,6 +72,8 @@
 ;;   Look up the node, and possibly property, currently under point online.
 
 ;;; Code:
+
+(require 's)
 
 (defvar tickscript-font-lock-keywords nil)
 (defvar tickscript-properties nil)
@@ -657,9 +659,9 @@ file comments for later re-use."
     (let* ((beg (point))
            (end (point-max))
            (region (buffer-substring-no-properties beg end))
+           (escaped (s-replace "]" "\"]" (s-replace "[" "[\"" (s-replace "\"" "\\\"" region))))
            (tmpfile (format "/%s/%s.png" temporary-file-directory (make-temp-name "tickscript-")))
-           (cmd (format "echo \"%s\" | dot -T png -o %s" region tmpfile)))
-      (message "%s %s: %s" beg end region)
+           (cmd (format "echo \"%s\" | dot -T png -o %s" escaped tmpfile)))
       (shell-command cmd)
       (goto-char (point-max))
       (insert-char ?\n)
