@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017  Marc Sherry
 ;; Homepage: https://github.com/msherry/tickscript-mode
 ;; Version: 0.1
-;; Package-Version: 20171017.2257
+;; Package-Version: 20171018.1049
 ;; Author: Marc Sherry <msherry@gmail.com>
 ;; Keywords: languages
 ;; Package-Requires: ((emacs "24.1"))
@@ -54,7 +54,9 @@
 ;;
 ;; * `C-c C-v' -- `tickscript-show-task'
 ;;
-;;   View the current task's definition with `kapacitor show <task>'
+;;   View the current task's definition with `kapacitor show <task>'.  This
+;;   will also render the DOT output inline, for easier visualization of the
+;;   nodes involved.
 ;;
 ;; * `C-c C-l p' -- `tickscript-list-replays'
 ;;
@@ -108,6 +110,12 @@ If unset, defaults to \"http://localhost:9092\"."
   :type 'string
   :group 'tickscript
   :safe 'stringp)
+
+(defcustom tickscript-render-dot-output t
+  "Whether to render DOT output with Graphviz when executing tickscript-show-task."
+  :type 'boolean
+  :group 'tickscript
+  :safe 'booleanp)
 
 (defcustom tickscript-indent-trigger-commands
   '(indent-for-tab-command yas-expand yas/expand)
@@ -491,7 +499,7 @@ be part of user-defined functions."
    (when (or (tickscript-property-at-point)
              ;; for now, anything starting with "." is a property, because of
              ;; UDFs. TODO: tighten this up to only work under real UDFs?
-             (looking-at "\."))
+             (looking-at "\\."))
      ;; (message "PROP")
      (* 2 tickscript-indent-offset))))
 
@@ -684,7 +692,8 @@ file comments for later re-use."
       (set (make-local-variable 'font-lock-defaults) '(tickscript-font-lock-keywords))
       (font-lock-mode)
       (insert task)
-      (tickscript-render-task-dot-to-buffer))))
+      (when tickscript-render-dot-output
+        (tickscript-render-task-dot-to-buffer)))))
 
 
 (defun tickscript--list-things (noun)
