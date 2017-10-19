@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017  Marc Sherry
 ;; Homepage: https://github.com/msherry/tickscript-mode
 ;; Version: 0.1
-;; Package-Version: 20171018.1719
+;; Package-Version: 20171019.5
 ;; Author: Marc Sherry <msherry@gmail.com>
 ;; Keywords: languages
 ;; Package-Requires: ((emacs "24.1"))
@@ -174,12 +174,12 @@ If unset, defaults to \"http://localhost:9092\"."
 
 
 (setq tickscript-properties
-      '("align" "alignGroup" "as" "buffer" "byMeasurement" "cluster" "create"
-        "crit" "cron" "database" "delimiter" "every" "field" "fill"
-        "flushInterval" "groupBy" "groupByMeasurement" "keep" "level"
-        "measurement" "offset" "on" "period" "precision" "quiet"
-        "retentionPolicy" "streamName" "tag" "tags" "tolerance" "usePointTimes"
-        "writeConsistency"))
+      '("align" "alignGroup" "as" "buffer" "byMeasurement" "channel" "cluster"
+        "create" "crit" "cron" "database" "delimiter" "every" "field" "fill"
+        "flushInterval" "groupBy" "groupByMeasurement" "id" "info" "keep" "level"
+        "measurement" "message" "noRecoveries" "offset" "on" "period" "post"
+        "precision" "quiet" "retentionPolicy" "slack" "stateChangesOnly" "streamName"
+        "tag" "tags" "tcp" "tolerance" "usePointTimes" "warn" "writeConsistency"))
 
 (setq tickscript-toplevel-nodes
       '("batch" "stream"))
@@ -187,9 +187,9 @@ If unset, defaults to \"http://localhost:9092\"."
 (setq tickscript-nodes
       '("alert" "batch" "combine" "deadman" "default" "delete" "derivative"
         "eval" "exclude" "flatten" "from" "groupBy" "httpOut" "httpPost"
-        "influxDBOut" "join" "kapacitorLoopback" "log" "noOp" "query" "sample"
-        "shift" "stateCount" "stateDuration" "stats" "stream" "union" "where"
-        "window"))
+        "influxDBOut" "influxQL" "join" "k8sAutoscale" "kapacitorLoopback" "log" "noOp"
+        "query" "sample" "shift" "stateCount" "stateDuration" "stats" "stream"
+        "union" "where" "window"))
 
 (setq tickscript-chaining-methods
       '("bottom" "count" "cumulativeSum" "difference" "distinct" "elapsed"
@@ -200,7 +200,12 @@ If unset, defaults to \"http://localhost:9092\"."
 (puthash "httpOut" "http_out" tickscript-webhelp-case-map)
 (puthash "httpPost" "http_post" tickscript-webhelp-case-map)
 (puthash "influxDBOut" "influx_d_b_out" tickscript-webhelp-case-map)
+(puthash "influxQL" "influx_q_l" tickscript-webhelp-case-map)
+(puthash "k8sAutoscale" "k8s_autoscale" tickscript-webhelp-case-map)
+(puthash "kapacitorLoopback" "kapacitor_loopback" tickscript-webhelp-case-map)
 (puthash "noOp" "no_op" tickscript-webhelp-case-map)
+(puthash "stateCount" "state_count" tickscript-webhelp-case-map)
+(puthash "stateDuration" "state_duration" tickscript-webhelp-case-map)
 
 (setq tickscript-font-lock-keywords
       `(,
