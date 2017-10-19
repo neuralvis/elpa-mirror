@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017  Marc Sherry
 ;; Homepage: https://github.com/msherry/tickscript-mode
 ;; Version: 0.1
-;; Package-Version: 20171018.1049
+;; Package-Version: 20171018.1719
 ;; Author: Marc Sherry <msherry@gmail.com>
 ;; Keywords: languages
 ;; Package-Requires: ((emacs "24.1"))
@@ -175,9 +175,11 @@ If unset, defaults to \"http://localhost:9092\"."
 
 (setq tickscript-properties
       '("align" "alignGroup" "as" "buffer" "byMeasurement" "cluster" "create"
-        "crit" "cron" "database" "every" "field" "fill" "flushInterval" "groupBy"
-        "groupByMeasurement" "keep" "level" "measurement" "offset" "period" "precision"
-        "quiet" "retentionPolicy" "tag" "tags" "usePointTimes" "writeConsistency"))
+        "crit" "cron" "database" "delimiter" "every" "field" "fill"
+        "flushInterval" "groupBy" "groupByMeasurement" "keep" "level"
+        "measurement" "offset" "on" "period" "precision" "quiet"
+        "retentionPolicy" "streamName" "tag" "tags" "tolerance" "usePointTimes"
+        "writeConsistency"))
 
 (setq tickscript-toplevel-nodes
       '("batch" "stream"))
@@ -203,7 +205,7 @@ If unset, defaults to \"http://localhost:9092\"."
 (setq tickscript-font-lock-keywords
       `(,
         ;; General keywords
-        (rx symbol-start (or "var") symbol-end)
+        (rx symbol-start (or "var" "lambda") symbol-end)
         ;; Node properties - start with "." to avoid collisions for e.g. "groupBy"
         (,(concat "\\.\\_<" (regexp-opt tickscript-properties t) "\\_>") . 'tickscript-property)
         ;; Chaining methods - like nodes, but not
@@ -449,8 +451,16 @@ meaning always increase indent on TAB and decrease on S-TAB."
 
 (defun tickscript-indent-in-continuation ()
   "Indentation for statements/expressions broken across multiple lines."
-  ;; TODO:
-  nil)
+  (let ((open-paren (nth 1 (syntax-ppss)))
+        (linum (line-number-at-pos)))
+    (save-excursion
+      (when open-paren
+        (goto-char open-paren)
+        ;; If open paren is on the current line, we're not in a continuation
+        (unless (eq linum (line-number-at-pos))
+          ;; (message "CONTINUATION")
+          ;; Found the open paren, indent to right after it
+          (1+ (current-column)))))))
 
 (defun tickscript-indent-comment-line ()
   "Indentation for comment lines."
@@ -675,8 +685,12 @@ file comments for later re-use."
       (shell-command cmd)
       (goto-char (point-max))
       (insert-char ?\n)
-      (let ((inhibit-read-only t))
-        (insert-image (create-image tmpfile))))))
+      (let ((inhibit-read-only t)
+            (image (if (image-type-available-p 'imagemagick)
+                       (create-image tmpfile 'imagemagick nil
+                                     :max-width (truncate (* .9 (window-pixel-width))))
+                     (create-image tmpfile))))
+        (insert-image image)))))
 
 
 (defun tickscript-show-task ()
