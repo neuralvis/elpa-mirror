@@ -6,7 +6,7 @@
 ;; Maintainer: Mark Meyer <mark@ofosos.org>
 
 ;; URL: http://github.com/ofosos/org-epub
-;; Package-Version: 20171020.1618
+;; Package-Version: 0.2.4
 ;; Keywords: hypermedia
 
 ;; Version: 0.1.0
