@@ -6,7 +6,7 @@
 ;; Keywords: tools, maint, convenience
 ;; Homepage: https://github.com/vermiculus/apiwrap.el
 ;; Package-Requires: ((emacs "25"))
-;; Package-Version: 20171019.916
+;; Package-Version: 20171022.2203
 ;; Package-X-Original-Version: 0.3
 
 ;; This file is not part of GNU Emacs.
@@ -231,9 +231,12 @@ appropriately handle all of these symbols as a METHOD.")
   ;; Verify all extension functions are actually functions
   (dolist (f functions)
     (let ((key (car f)) (fn (cdr f)))
-      (unless (or (functionp fn) (and (consp fn)
-                                      (eq 'function (car fn))
-                                      (functionp (cadr fn))))
+      (unless (or (functionp fn)
+                  (macrop fn)
+                  (and (consp fn)
+                       (eq 'function (car fn))
+                       (or (functionp (cadr fn))
+                           (macrop (cadr fn)))))
         (if (memq key apiwrap-primitives)
             (error "Primitive function literal required: %s" key)
           (byte-compile-warn "Unknown function for `%S': %S" key fn)))))
@@ -284,6 +287,7 @@ Otherwise, just return VALUE quoted."
     (when objects (setq args (append objects args)))
 
     (setq internal-resource (or internal-resource resource)
+          around (alist-get 'around functions)
           primitive-func (alist-get 'request functions)
           data-massage-func (alist-get 'pre-process-data functions)
           params-massage-func (alist-get 'pre-process-params functions)
@@ -309,6 +313,11 @@ Otherwise, just return VALUE quoted."
                       (list ,(apiwrap--maybe-apply params-massage-func '(cons data params)) nil)
                     (list ,(apiwrap--maybe-apply params-massage-func 'params)
                           ,(apiwrap--maybe-apply data-massage-func 'data)))))
+
+    (when around
+      (unless (macrop around)
+        (error ":around must be a macro: %S" around))
+      (setq form (macroexpand `(,around ,form))))
 
     (let ((props `((prefix   . ,prefix)
                    (method   . ,method)
@@ -393,7 +402,12 @@ macros.
     :pre-process-data
 
         Function to process request data before the request is
-        passed to the `:request' function."
+        passed to the `:request' function.
+
+    :around
+
+        Macro to wrap around the request form (which is passed as
+        the only argument)."
   (declare (indent 2))
   (let ((sname (cl-gensym)) (sprefix (cl-gensym))
         (sstdp (cl-gensym)) (sfuncs (cl-gensym)))
