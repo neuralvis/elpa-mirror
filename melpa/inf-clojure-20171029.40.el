@@ -5,7 +5,7 @@
 ;; Authors: Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Olin Shivers <shivers@cs.cmu.edu>
 ;; URL: http://github.com/clojure-emacs/inf-clojure
-;; Package-Version: 20171005.1130
+;; Package-Version: 20171029.40
 ;; Keywords: processes, clojure
 ;; Version: 2.1.0-snapshot
 ;; Package-Requires: ((emacs "24.4") (clojure-mode "5.6"))
@@ -775,7 +775,7 @@ If you are using REPL types, it will pickup the most approapriate
   :package-version '(inf-clojure . "2.0.0"))
 
 (defcustom inf-clojure-arglists-form-planck
-  "(planck.repl/get-arglists \"%s\""
+  "(planck.repl/get-arglists \"%s\")"
   "Planck form to query inferior Clojure for a function's arglists."
   :type 'string
   :safe #'stringp
