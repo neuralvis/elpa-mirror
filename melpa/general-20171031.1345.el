@@ -2,7 +2,7 @@
 
 ;; Author: Fox Kiester <noct@openmailbox.org>
 ;; URL: https://github.com/noctuid/general.el
-;; Package-Version: 20171031.1035
+;; Package-Version: 20171031.1345
 ;; Created: February 17, 2016
 ;; Keywords: vim, evil, leader, keybindings, keys
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
@@ -423,13 +423,17 @@ definition, only check in FALLBACK-PLIST."
   (or (cl-getf plist keyword1)
       (cl-getf plist keyword2)))
 
+(declare-function evil-get-minor-mode-keymap "evil-core")
+(declare-function evil-state-property "evil-common")
+(declare-function evil-get-auxiliary-keymap "evil-core")
 (cl-defun general--parse-keymap (state keymap &optional minor-mode-p)
   "Transform STATE and the symbol KEYMAP into the appropriate keymap.
 'local  - Return `general-override-local-map' or the evil local keymap
 'global - Return (current-global-map) or the corresponding evil auxiliary map
 else    - Return (symbol-value keymap) or the corresponding evil auxiliary map
 
-Note that if STATE is specified, evil needs to be available."
+Note that if STATE is specified, evil needs to be installed and will be
+required."
   (setq keymap (cl-case keymap
                  (global (current-global-map))
                  (local 'local)
@@ -466,6 +470,7 @@ arguments. The order of arguments will be preserved."
 (defvar general-extended-def-keywords '(:which-key :wk)
   "Extra keywords that are valid in an extended definition.")
 
+(defvar which-key-replacement-alist)
 (defun general--add-which-key-replacement (mode replacement)
   (let* ((mode-match (assq mode which-key-replacement-alist))
          (mode-alist (cdr mode-match)))
@@ -478,6 +483,7 @@ arguments. The order of arguments will be preserved."
           (t
            (push replacement which-key-replacement-alist)))))
 
+(defvar which-key--prefix-title-alist)
 (defun general--add-which-key-title-prefix (mode keys title-prefix)
   (let* ((mode-match (assq mode which-key--prefix-title-alist))
          (title-mode-alist (cdr mode-match))
@@ -659,7 +665,8 @@ number of paired keys and commands"
         (general--emacs-local-set-key (pop maps) (pop maps))
       (define-key keymap (pop maps) (pop maps)))))
 
-;; TODO is this ugly (un)quoting the only way to do this?
+(declare-function evil-local-set-key "evil-core")
+(declare-function evil-define-key* "evil-core")
 (defun general--evil-define-key (state keymap key def)
   "A wrapper for `evil-define-key' and `evil-local-set-key'.
 In STATE and KEYMAP, bind KEY to DEF. `evil-local-set-key' is used when
@@ -670,11 +677,13 @@ KEYMAP is 'local."
         (evil-local-set-key state key def)
       (evil-define-key* state keymap key def))))
 
+(declare-function evil-define-minor-mode-key "evil-core")
 (defun general-minor-mode-define-key (state mode key def _orig-def _kargs)
   "A wrapper for `evil-define-minor-mode-key'."
   (with-eval-after-load 'evil
     (evil-define-minor-mode-key state mode key def)))
 
+(declare-function lispy-define-key "lispy")
 (defun general-lispy-define-key (_state keymap key def orig-def kargs)
   "A wrapper for `lispy-define-key'."
   (with-eval-after-load 'lispy
@@ -683,6 +692,7 @@ KEYMAP is 'local."
            (plist (general--getf orig-def kargs :lispy-plist)))
       (lispy-define-key keymap key def plist))))
 
+(declare-function worf-define-key "worf")
 (defun general-worf-define-key (_state keymap key def orig-def kargs)
   "A wrapper for `worf-define-key'."
   (with-eval-after-load 'worf
@@ -691,7 +701,7 @@ KEYMAP is 'local."
            (plist (general--getf orig-def kargs :worf-plist)))
       (worf-define-key keymap key def plist))))
 
-
+(declare-function lpy-define-key "lpy")
 (defun general-lpy-define-key (_state keymap key def _orig-def _kargs)
   "A wrapper for `lpy-define-key'."
   (with-eval-after-load 'lpy
@@ -844,11 +854,12 @@ information.
 LISPY-PLIST and WORF-PLIST are the corresponding global versions of extended
 definition keywords that are used for the corresponding custom DEFINER"
   ;; to silence compiler warning; variables that are later extracted from kargs
-  (setq predicate predicate
-        package package
-        major-modes major-modes
-        lispy-plist lispy-plist
-        worf-plist worf-plist)
+  (ignore definer
+          predicate
+          package
+          major-modes
+          lispy-plist
+          worf-plist)
   (let (non-normal-prefix-maps
         global-prefix-maps
         kargs)
@@ -1038,7 +1049,7 @@ If X and Y are conses, the first element will be compared. Ordering is based on
         (yind (cl-position y general-describe-evil-states)))
     (cond ((and (null xind)
                 (null yind))
-           (general--symbol-< x y))
+           (general--< x y))
           ((null xind)
            nil)
           ((null yind)
@@ -1086,6 +1097,10 @@ If X and Y are conses, the first element will be compared. Ordering is based on
     (dolist (state-cons state-conses)
       (general--print-state-heading state-cons))))
 
+(declare-function org-at-heading-p "org")
+(declare-function org-table-align "org-table")
+(declare-function outline-next-heading "outline")
+(defvar org-startup-folded)
 ;;;###autoload
 (defun general-describe-keybindings ()
   "Show all keys that have been bound with general in an org buffer.
@@ -1138,20 +1153,49 @@ This is used for testing (but could potentially be useful for a user). Since
 that was manually recorded, this is needed when executing a keyboard macro that
 ends up running general--simulate-keys for the first time.")
 
-(defun general--evil-p ()
-  "Whether `evil-mode' or `evil-local-mode' are in use."
-  (or (bound-and-true-p evil-mode)
-      (bound-and-true-p evil-local-mode)))
+(declare-function evil-change-state "evil-core")
+(defvar evil-no-display)
+(defvar evil-state)
+(defvar evil-previous-state)
+(defvar evil-previous-state-alist)
+(defvar evil-next-state)
+(defmacro general--save-state (&rest body)
+  "Save the current state; execute BODY; restore the state.
+This is a combination of `evil-without-display' and `evil-save-state'. It is
+necessary to define this directly in general so that it is available when
+general is compiled (as evil is an optional dependency and may not be installed
+when general is compiled)."
+  (declare (indent defun)
+           (debug t))
+  `(let* ((evil-no-display t)
+          (evil-state evil-state)
+          (evil-previous-state evil-previous-state)
+          (evil-previous-state-alist (copy-tree evil-previous-state-alist))
+          (evil-next-state evil-next-state)
+          (old-state evil-state)
+          (inhibit-quit t)
+          (buf (current-buffer)))
+     (unwind-protect
+         (progn ,@body)
+       (when (buffer-live-p buf)
+         (with-current-buffer buf
+           (evil-change-state old-state))))))
 
 (defun general--key-lookup (state keymap &optional keys)
   "In the keymap for STATE and KEYMAP, look up KEYS.
 Return the keymap that corresponds to STATE and KEYMAP. When KEYS is also
 specified, and there is a matched command or keymap, also return the matched
 command or keymap and the leftover keys. STATE should only be specified when
-evil is in use."
-  (let* ((state (cond ((eq state t)
-                       'emacs)
-                      (state state)))
+evil is in use.
+
+Note that if STATE is specified, evil needs to be installed and will be
+required."
+  (when state
+    (or (require 'evil nil t)
+        (error "Evil is required if state is specified")))
+  (let* ((state (if (eq state t)
+                    'emacs
+                  state))
          (keymap (if (and keymap state)
                      (evil-get-auxiliary-keymap keymap state)
                    keymap))
@@ -1163,11 +1207,11 @@ evil is in use."
       (let* ((key (substring keys 0 ind))
              (match (cond (keymap
                            (lookup-key keymap key))
-                          ((general--evil-p)
-                           (evil-without-display
-                             (evil-save-state
-                               (evil-change-state (or state evil-state))
-                               (key-binding key))))
+                          (state
+                           ;; this also works fine when evil-local-mode is off
+                           (general--save-state
+                             (evil-change-state state)
+                             (key-binding key)))
                           (t
                            (key-binding key)))))
         (cond ((commandp match)
@@ -1176,9 +1220,7 @@ evil is in use."
                (setq matched-keymap match))
               (t
                (cl-decf ind)))))
-    (list :keymap (or keymap
-                      (when (general--evil-p)
-                        (evil-state-property state :keymap t)))
+    (list :keymap keymap
           :match (or matched-command matched-keymap)
           :keys (if (= ind len)
                     nil
@@ -1323,6 +1365,12 @@ The advantages of this over a keyboard macro are as follows:
       (and (eq repeat-prop 'motion)
            (not (memq evil-state '(insert replace))))))
 
+(declare-function evil-repeat-record "evil-repeat")
+(declare-function evil-get-command-property "evil-common")
+(declare-function evil-repeat-abort "evil-repeat")
+(declare-function evil-this-command-keys "evil-repeat")
+(declare-function evil-clear-command-keys "evil-repeat")
+(defvar evil-this-register)
 (defun general--simulate-repeat (flag)
   "Modified version of `evil-repeat-keystrokes'.
 It behaves as normal but will check the repeat property of a simulated command
@@ -1633,6 +1681,12 @@ aliases such as `nmap' for `general-nmap'."
 
 ;; * Use-package Integration
 (with-eval-after-load 'use-package
+  (declare-function use-package-concat "use-package")
+  (declare-function use-package-process-keywords "use-package")
+  (declare-function use-package-sort-keywords "use-package")
+  (declare-function use-package-plist-maybe-put "use-package")
+  (declare-function use-package-plist-append "use-package")
+  (defvar use-package-keywords)
   (setq use-package-keywords
         ;; should go in the same location as :bind
         ;; adding to end may not cause problems, but see issue #22
@@ -1659,6 +1713,7 @@ aliases such as `nmap' for `general-nmap'."
                    first)))
         (when (symbolp def)
           def))))
+  (declare-function general--extract-symbol "general")
   (defun use-package-handler/:general (name _keyword arglists rest state)
     "Use-package handler for :general."
     (let* ((sanitized-arglist
