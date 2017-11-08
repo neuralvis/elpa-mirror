@@ -3,10 +3,10 @@
 ;; Authors: Chris Rayner (dchrisrayner @ gmail)
 ;; Created: May 23 2011
 ;; Keywords: processes, tools
-;; Package-Version: 0.0.11
+;; Package-Version: 0.0.12
 ;; URL: https://github.com/riscy/shx-for-emacs
 ;; Package-Requires: ((emacs "24.4"))
-;; Version: 0.0.10
+;; Version: 0.0.11
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -797,7 +797,10 @@ commands like :pwd and :edit will work correctly.
   (if (equal host "")
       (shx-insert 'error "ssh host\n")
     (let* ((host (replace-regexp-in-string ":" "#" host))
-           (default-directory (concat "/" host ":~")))
+           (default-directory
+             (if (eq tramp-syntax 'default)
+                 (concat "/ssh:" host ":~")
+               (concat "/" host ":~"))))
       (shx))))
 
 (defun shx-cmd-sedit (file)
