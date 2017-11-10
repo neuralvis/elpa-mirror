@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016-2017 Rami Chowdhury
 ;; Author: Rami Chowdhury <rami.chowdhury@gmail.com>
 ;; URL: http://github.com/necaris/conda.el
-;; Package-Version: 20171028.617
+;; Package-Version: 20171109.903
 ;; Version: 20160914
 ;; Keywords: python, environment, conda
 ;; Package-Requires: ((emacs "24.4") (pythonic "0.1.0") (dash "2.13.0") (s "1.11.0") (f "0.18.2"))
@@ -339,13 +339,18 @@ It's platform specific in that it uses the platform's native path separator."
 ;;;###autoload
 (defun conda-env-shell-init (process)
   "Activate the current env in a newly opened shell PROCESS."
-  (comint-send-string
-   process
-   (concat "source activate " conda-env-current-name)))
+  (let* ((activate-command (if (eq system-type 'windows-nt)
+			       '("activate")
+			     '("source" "activate")))
+	 (full-command (append activate-command `(,conda-env-current-name "\n")))
+	 (command-string (combine-and-quote-strings full-command)))
+    (comint-send-string process command-string)))
+
 
 (defun conda--shell-strip-env (orig-fun &rest args)
   "Use the environment without env to start a new shell, passing ORIG-FUN ARGS."
-  (let* ((buffer-name (or buffer "*shell*"))
+  (let* ((buffer (car args))
+	 (buffer-name (or buffer "*shell*"))
            (buffer-exists-already (get-buffer buffer-name)))
       (if (or buffer-exists-already (not conda-env-current-name))
           (apply orig-fun args)
@@ -354,7 +359,7 @@ It's platform specific in that it uses the platform's native path separator."
                         path-separator
                         (conda-env-stripped-path (s-split path-separator (getenv "PATH")))))
                (setenv "VIRTUAL_ENV" nil)
-               ad-do-it
+               (apply orig-fun args)
                (conda-env-shell-init buffer-name)
                (setenv "PATH"
                        (concat
