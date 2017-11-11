@@ -6,7 +6,7 @@
 
 ;; Author: Arne Babenhauserheide <arne_bab@web.de>
 ;; Version: 0.2.3
-;; Package-Version: 0.9.7
+;; Package-Version: 0.9.8
 ;; Keywords: languages, lisp
 
 ;; This program is free software; you can redistribute it and/or
