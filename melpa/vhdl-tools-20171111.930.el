@@ -8,14 +8,14 @@
 ;; Original author:  wandad guscheh <wandad.guscheh@fh-hagenberg.at>
 ;; Author:           Cayetano Santos
 ;; Keywords: vhdl
-;; Package-Version: 20171103.1356
+;; Package-Version: 20171111.930
 
 ;; Filename: vhdl-tools.el
 ;; Description: Utilities for navigating vhdl sources.
 ;; URL: https://csantosb.github.io/vhdl-tools/
 ;; Keywords: convenience
 ;; Compatibility: GNU Emacs >= 25.2
-;; Version: 5.7
+;; Version: 5.8
 ;; Package-Requires: ((ggtags "0.8.12") (emacs "25.2") (outshine "2.0") (helm "2.8.5"))
 
 ;;; License:
@@ -550,7 +550,8 @@ When no symbol at point, move point to indentation."
   ;; when no symbol at point, move forward to next symbol
   (when (not (vhdl-tools--get-name))
     (back-to-indentation))
-  (let ((vhdl-tools-thing (vhdl-tools--get-name)))
+  (let ((vhdl-tools-thing (vhdl-tools--get-name))
+	(helm-execute-action-at-once-if-one t))
     (vhdl-tools--push-marker)
     (save-excursion
       ;; first, try to search forward
