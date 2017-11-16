@@ -1,11 +1,11 @@
 ;;; magit-stgit.el --- StGit extension for Magit
 
-;; Copyright (C) 2011-2015  The Magit Project Contributors
+;; Copyright (C) 2011-2017  The Magit Project Contributors
 
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Keywords: vc tools
-;; Package-Version: 20160224.703
+;; Package-Version: 20171115.754
 ;; Package: magit-stgit
 ;; Package-Requires: ((emacs "24.4") (magit "2.1.0"))
 
@@ -100,7 +100,7 @@
   :group 'magit-stgit-faces)
 
 (add-to-list 'magit-ref-namespaces
-             '("^refs/patches/\\(.+\\)" magit-stgit-patch nil))
+             (cons "^refs/patches/\\(.+\\)" 'magit-stgit-patch))
 
 (defface magit-stgit-current
   '((((background dark)) (:weight bold :foreground "yellow"))
