@@ -7,7 +7,7 @@
 ;; Author: Yassin Philip <xaccrocheur@gmail.com>
 ;; Maintainer: Yassin Philip <xaccrocheur@gmail.com>
 ;; Keywords: languages, faust
-;; Package-Version: 0.3
+;; Package-Version: 20171122.414
 ;; Version: 0.2
 ;; URL: https://github.com/rukano/emacs-faust-mode
 ;; License: GPLv3
@@ -58,7 +58,7 @@
 
 ;; ### Faustine
 
-;; Based on faust-mode, [Faustine](https://bitbucket.org/yassinphilip/faustine) goes even further into turning Emacs into a full-fledged Faust IDE.
+;; Based on faust-mode, [Faustine](https://bitbucket.org/yphil/faustine) goes even further into turning Emacs into a full-fledged Faust IDE.
 
 ;;; Code:
 
