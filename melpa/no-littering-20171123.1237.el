@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20171015.2358
+;; Package-Version: 20171123.1237
 
 ;; This file is not part of GNU Emacs.
 
@@ -206,7 +206,8 @@ This variable has to be set before `no-littering' is loaded.")
     (setq bookmark-default-file            (var "bookmark-default.el"))
     (eval-after-load 'desktop
       `(make-directory ,(var "desktop/") t))
-    (setq desktop-path                     (list (var "desktop/")))
+    (setq desktop-dirname                  (var "desktop/"))
+    (setq desktop-path                     (list desktop-dirname))
     (setq epkg-repository                  (var "epkgs/"))
     (setq eshell-directory-name            (var "eshell/"))
     (eval-after-load 'eww
@@ -259,6 +260,7 @@ This variable has to be set before `no-littering' is loaded.")
     (eval-after-load 'company-statistics
       `(make-directory ,(var "company/") t))
     (setq company-statistics-file          (var "company/statistics.el"))
+    (setq elbank-data-file                 (var "elbank-data.json"))
     (eval-after-load 'elfeed
       `(make-directory ,(var "elfeed/") t))
     (setq elfeed-db-directory              (var "elfeed/db/"))
