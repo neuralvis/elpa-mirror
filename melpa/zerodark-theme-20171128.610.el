@@ -4,7 +4,7 @@
 
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: themes
-;; Package-Version: 20171126.1202
+;; Package-Version: 20171128.610
 ;; URL: https://github.com/NicolasPetton/zerodark-theme
 ;; Version: 4.3
 ;; Package: zerodark-theme
@@ -733,6 +733,10 @@ The result is cached for one second to avoid hiccups."
    `(markup-reference-face ((,class (:inherit link))))
    `(markup-complex-replacement-face ((,class (:background ,background-green))))
    `(markup-secondary-text-face ((,class (:foreground ,comment))))
+
+   ;; Elbank
+   `(elbank-progressbar-fill-face ((,class (:background ,diff-added-refined-background :weight bold))))
+   `(elbank-progressbar-overflow-face ((,class (:background ,diff-removed-refined-background :weight bold))))
    )
 
   (custom-theme-set-variables

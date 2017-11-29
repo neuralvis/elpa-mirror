@@ -3,8 +3,8 @@
 ;; Copyright (c) 2012-2017 Austin Bingham
 ;;
 ;; Author: Austin Bingham <austin.bingham@gmail.com>
-;; Version: 0.10
-;; Package-Version: 20171115.853
+;; Version: 1.1.0
+;; Package-Version: 20171128.413
 ;; URL: https://github.com/abingham/traad
 ;; Package-Requires: ((dash "2.13.0") (deferred "0.3.2") (popup "0.5.0") (request "0.2.0") (request-deferred "0.2.0") (virtualenvwrapper "20151123"))
 ;;
@@ -71,13 +71,6 @@
 (require 'request)
 (require 'request-deferred)
 (require 'virtualenvwrapper)
-
-                                        ; TODO: Call
-                                        ; update-history-buffer as
-                                        ; needed.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; user variables
 
 (defcustom traad-save-unsaved-buffers 'ask
   "What to do when there are unsaved buffers before a refactoring.
@@ -159,9 +152,6 @@ want to use."
   (host "" :read-only t)
   (proc nil :read-only t))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; open-close
-
 (defun traad--open (directory)
   "Open a traad server in `directory'.
 
@@ -233,9 +223,6 @@ Returns `traad--server' struct.
 ;;   "Get a list of root directories for cross projects."
 ;;   (interactive)
 ;;   (traad-call 'cross_project_directories))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; history
 
 (defun traad--unredo (location idx)
   "Common implementation for undo and redo."
@@ -366,16 +353,13 @@ necessary. Return the history buffer."
   (traad--history-info-core
    (concat "/history/redo_info/" (number-to-string i))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; renaming support
-
-;; TODO
 ;;;###autoload
 (defun traad-rename-current-file (new-name)
   "Rename the current file/module."
   (interactive
    (list
     (read-string "New file name: ")))
+  ;; TODO: Make this work!
   (lexical-let ((new-name new-name)
                 (data (list (cons "name" new-name)
                             (cons "path" (buffer-file-name))))
@@ -414,9 +398,6 @@ necessary. Return the history buffer."
    :data (list (cons "name" new-name)
                (cons "path" (buffer-file-name))
                (cons "offset" (traad--adjust-point (point))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Change signature support
 
 ;;;###autoload
 (defun traad-normalize-arguments ()
@@ -463,9 +444,7 @@ necessary. Return the history buffer."
                (cons "path" (buffer-file-name))
                (cons "offset" (traad--adjust-point (point))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; inline support
-
+;;;###autoload
 (defun traad-inline ()
   (interactive)
   (traad--fetch-perform-refresh
@@ -475,9 +454,7 @@ necessary. Return the history buffer."
           (cons "path" (buffer-file-name))
           (cons "offset" (traad--adjust-point (point))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; introduce parameter
-
+;;;###autoload
 (defun traad-introduce-parameter (parameter)
   (interactive
    (list
@@ -491,9 +468,7 @@ necessary. Return the history buffer."
           (cons "offset" (traad--adjust-point (point)))
           (cons "parameter" parameter))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; encapsulate field
-
+;;;###autoload
 (defun traad-encapsulate-field ()
   (interactive)
   (traad--fetch-perform-refresh
@@ -503,8 +478,25 @@ necessary. Return the history buffer."
           (cons "path" (buffer-file-name))
           (cons "offset" (traad--adjust-point (point))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; extraction support
+;;;###autoload
+(defun traad-local-to-field ()
+  (interactive)
+  (traad--fetch-perform-refresh
+   (buffer-file-name)
+   "/refactor/local_to_field"
+   :data (list
+          (cons "path" (buffer-file-name))
+          (cons "offset" (traad--adjust-point (point))))))
+
+;;;###autoload
+(defun traad-use-function ()
+  (interactive)
+  (traad--fetch-perform-refresh
+   (buffer-file-name)
+   "/refactor/use_function"
+   :data (list
+          (cons "path" (buffer-file-name))
+          (cons "offset" (traad--adjust-point (point))))))
 
 (defun traad--extract-core (location name begin end)
   ;; TODO: refactor this common pattern of getting changes, applying them, and refreshing buffers.
@@ -527,9 +519,6 @@ necessary. Return the history buffer."
   "Extract the currently selected region to a new variable."
   (interactive "sVariable name: \nr")
   (traad--extract-core "/refactor/extract_variable" name begin end))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; importutils support
 
 ;;;###autoload
 (defun traad-organize-imports (filename)
@@ -598,9 +587,6 @@ necessary. Return the history buffer."
            'traad-froms-to-imports
            'traad-handle-long-imports
            'traad-organize-imports)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; findit
 
 ;; (defun traad-find-occurrences (pos)
 ;;   "Get all occurences the use of the symbol at POS in the
@@ -766,9 +752,6 @@ necessary. Return the history buffer."
 ;;    ((equal type "definition")
 ;;     (traad-goto-definition (point)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; code assist
-
 ;;;###autoload
 (defun traad-code-assist (pos)
   "Get possible completions at POS in current buffer.
@@ -894,12 +877,10 @@ This returns an alist like ((completions . [[name documentation scope type]]) (r
                doc
                :point pos)))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; low-level support
-
 (defvar traad--server-map (make-hash-table :test 'equal)
   "Mapping of project roots to `traad--server' structs.")
 
+;;;###autoload
 (defun traad-kill-all ()
   "Kill all traad servers and associatd buffers."
   (interactive)
