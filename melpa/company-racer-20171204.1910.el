@@ -4,10 +4,10 @@
 
 ;; Author: Mario Rodas <marsam@users.noreply.github.com>
 ;; URL: https://github.com/emacs-pe/company-racer
-;; Package-Version: 20160722.1658
+;; Package-Version: 20171204.1910
 ;; Keywords: convenience
 ;; Version: 0.1
-;; Package-Requires: ((emacs "24") (cl-lib "0.5") (company "0.8.0") (deferred "0.3.1") (dash "2.12.0"))
+;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (company "0.8.0") (deferred "0.3.1"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -62,7 +62,9 @@
 ;; [rust-lang]: http://www.rust-lang.org/
 
 ;;; Code:
-(eval-when-compile (require 'cl-lib))
+(eval-when-compile
+  (require 'cl-lib)
+  (require 'subr-x))
 
 (require 'company)
 (require 'thingatpt)
@@ -115,7 +117,7 @@ If non nil overwrites the value of the environment variable 'RUST_SRC_PATH'."
 
 (defun company-racer-parse-candidate (line)
   "Return a completion candidate from a LINE."
-  (let* ((match (and (string-prefix-p "MATCH" line) (cadr (split-string line " "))))
+  (let* ((match (and (string-prefix-p "MATCH" line) (string-join (cdr (split-string line " ")) " ")))
          (values (and match (split-string match ","))))
     (and values
          (cl-multiple-value-bind (matchstr line column filepath matchtype contextstr) values
