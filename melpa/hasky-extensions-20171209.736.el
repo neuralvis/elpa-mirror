@@ -4,7 +4,7 @@
 ;;
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/hasky-mode/hasky-extensions
-;; Package-Version: 20170830.625
+;; Package-Version: 20171209.736
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.4") (avy-menu "0.2"))
 ;; Keywords: programming
@@ -121,6 +121,7 @@
     ("DeriveGeneric"              "deriving-instances-of-extra-classes-data-etc")
     ("DeriveLift"                 "deriving-instances-of-extra-classes-data-etc")
     ("DeriveTraversable"          "deriving-instances-of-extra-classes-data-etc")
+    ("DerivingStrategies"         "deriving-strategies")
     ("DisambiguateRecordFields"   "record-field-disambiguation")
     ("EmptyCase"                  "empty-case-alternatives")
     ("EmptyDataDecls"             "data-types-with-no-constructors")

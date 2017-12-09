@@ -4,7 +4,7 @@
 ;;
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/hasky-mode/hasky-stack
-;; Package-Version: 20171208.30
+;; Package-Version: 20171209.749
 ;; Version: 0.6.0
 ;; Package-Requires: ((emacs "24.4") (f "0.18.0") (magit-popup "2.10"))
 ;; Keywords: tools, haskell
@@ -816,7 +816,7 @@ This uses `compile' internally."
    (list hasky-stack--package-action-package
          (hasky-stack--select-package-version
           hasky-stack--package-action-package)
-         (hasky-stack-build-arguments)))
+         (hasky-stack-package-action-arguments)))
   (apply
    #'hasky-stack--exec-command
    hasky-stack--package-action-package
