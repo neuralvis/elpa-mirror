@@ -6,7 +6,7 @@
 ;; Maintainer: André Riemann <andre.riemann@web.de>
 ;; Created: 2007-09-16
 ;; Keywords: games i18n
-;; Package-Version: 20131113.1818
+;; Package-Version: 20171124.1256
 
 ;; Version: 0.1
 ;; Last-Updated: 2007-12-09
