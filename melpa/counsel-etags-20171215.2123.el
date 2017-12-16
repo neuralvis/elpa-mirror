@@ -5,7 +5,7 @@
 ;; Author: Chen Bin <chenbin.sh@gmail.com>
 ;; Maintainer: Chen Bin <chenbin.sh@gmail.com>
 ;; URL: http://github.com/redguardtoo/counsel-etags
-;; Package-Version: 20171213.1655
+;; Package-Version: 20171215.2123
 ;; Package-Requires: ((emacs "24.3") (counsel "0.9.1"))
 ;; Keywords: tools, convenience
 ;; Version: 1.3.6
@@ -27,6 +27,8 @@
 ;;; Commentary:
 
 ;; Usage:
+;;   "Exuberant Ctags" and "GNU Find" should exist at first.
+;;
 ;;   "M-x counsel-etags-find-tag-at-point" to navigate.  This command will also
 ;;   run `counsel-etags-scan-code' automatically if tags file is not built yet.
 ;;
