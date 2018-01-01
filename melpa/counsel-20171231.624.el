@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20171230.754
+;; Package-Version: 20171231.624
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.9.0"))
 ;; Keywords: completion, matching
@@ -3563,10 +3563,14 @@ And insert it into the minibuffer.  Useful during `eval-expression'."
               :action (lambda (x) (call-interactively (cdr x))))
     (hydra-keyboard-quit)))
 ;;** `counsel-semantic'
-(declare-function semantic-tag-start "tag")
-(declare-function semantic-tag-of-class-p "tag")
+(declare-function semantic-tag-start "semantic/tag")
+(declare-function semantic-tag-class "semantic/tag")
+(declare-function semantic-tag-name "semantic/tag")
+(declare-function semantic-tag-put-attribute "semantic/tag")
+(declare-function semantic-tag-get-attribute "semantic/tag")
 (declare-function semantic-fetch-tags "semantic")
 (declare-function semantic-format-tag-summarize "semantic/format")
+(declare-function semantic-active-p "semantic/fw")
 
 (defun counsel-semantic-action (x)
   "Got to semantic TAG."
@@ -3575,18 +3579,64 @@ And insert it into the minibuffer.  Useful during `eval-expression'."
 (defvar counsel-semantic-history nil
   "History for `counsel-semantic'.")
 
+(defun counsel-semantic-format-tag (tag)
+  "Return a pretty string representation of TAG."
+  (let ((depth (or (semantic-tag-get-attribute tag :depth) 0))
+        (parent (semantic-tag-get-attribute tag :parent)))
+    (concat (make-string (* depth 2) ?\ )
+            (if parent
+                (concat "(" parent ") ")
+              "")
+            (semantic-format-tag-summarize tag nil t))))
+
+(defun counsel-flatten-forest (func treep forest)
+  "Use FUNC and TREEP to flatten FOREST.
+FUNC is applied to each node.
+TREEP is used to expand internal nodes."
+  (cl-labels ((reducer (forest out depth)
+                (dolist (tree forest)
+                  (let ((this (cons (funcall func tree depth) out))
+                        (leafs (funcall treep tree)))
+                    (setq out
+                          (if leafs
+                              (reducer leafs this (1+ depth))
+                            this))))
+                out))
+    (nreverse (reducer forest nil 0))))
+
+(defun counsel-semantic-tags ()
+  "Fetch semantic tags."
+  (counsel-flatten-forest
+   (lambda (tree depth)
+     (semantic-tag-put-attribute tree :depth depth))
+   (lambda (tag)
+     (when (eq (semantic-tag-class tag) 'type)
+       (let ((name (semantic-tag-name tag)))
+         (mapcar
+          (lambda (x) (semantic-tag-put-attribute x :parent name))
+          (semantic-tag-get-attribute tag :members)))))
+   (semantic-fetch-tags)))
+
 (defun counsel-semantic ()
   "Jump to a semantic tag in the current buffer."
   (interactive)
   (let ((tags (mapcar
                (lambda (x)
-                 (cons (semantic-format-tag-summarize x nil t)
-                       x))
-               (semantic-fetch-tags))))
+                 (cons
+                  (counsel-semantic-format-tag x)
+                  x))
+               (counsel-semantic-tags))))
     (ivy-read "tag: " tags
               :action 'counsel-semantic-action
               :history 'counsel-semantic-history
               :caller 'counsel-semantic)))
+
+(defun counsel-semantic-or-imenu ()
+  (interactive)
+  (require 'semantic/fw)
+  (if (semantic-active-p)
+      (counsel-semantic)
+    (counsel-imenu)))
 
 ;;** `counsel-outline'
 (defun counsel-outline-candidates ()
