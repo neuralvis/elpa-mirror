@@ -4,7 +4,7 @@
 
 ;; Author: Chris Done <chrisdone@gmail.com>
 ;; URL: https://github.com/chrisdone/hindent
-;; Package-Version: 5.2.4
+;; Package-Version: 5.2.5
 ;; Package-Requires: ((cl-lib "0.5"))
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -60,6 +60,12 @@ For hindent versions lower than 5, you must set this to a non-nil string."
   :group 'hindent
   :type 'string
   :safe #'stringp)
+
+(defcustom hindent-extra-args nil
+  "Extra arguments to give to hindent"
+  :group 'hindent
+  :type 'sexp
+  :safe #'listp)
 
 (defcustom hindent-reformat-buffer-on-save nil
   "Set to t to run `hindent-reformat-buffer' when a buffer in `hindent-mode' is saved."
@@ -303,7 +309,9 @@ work."
    (when (boundp 'haskell-language-extensions)
      haskell-language-extensions)
    (when hindent-style
-     (list "--style" hindent-style))))
+     (list "--style" hindent-style))
+   (when hindent-extra-args
+     hindent-extra-args)))
 
 (provide 'hindent)
 
