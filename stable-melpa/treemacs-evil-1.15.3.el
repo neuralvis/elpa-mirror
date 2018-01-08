@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((evil "1.2.12") (treemacs "0"))
-;; Package-Version: 1.14
+;; Package-Version: 1.15.3
 ;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -46,7 +46,9 @@
 (define-key evil-treemacs-state-map (kbd "tw")  #'treemacs-toggle-fixed-width)
 (define-key evil-treemacs-state-map (kbd "tf")  #'treemacs-follow-mode)
 (define-key evil-treemacs-state-map (kbd "ta")  #'treemacs-filewatch-mode)
+(define-key evil-treemacs-state-map (kbd "tg")  #'treemacs-git-mode)
 (define-key evil-treemacs-state-map (kbd "w")   #'treemacs-reset-width)
+(define-key evil-treemacs-state-map (kbd "b")   #'treemacs-add-bookmark)
 (define-key evil-treemacs-state-map (kbd "?")   #'treemacs-helpful-hydra)
 (define-key evil-treemacs-state-map (kbd "RET") #'treemacs-visit-node-default-action)
 (evil-define-key 'treemacs treemacs-mode-map (kbd "yr") #'treemacs-yank-root)
