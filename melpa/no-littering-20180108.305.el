@@ -1,11 +1,11 @@
 ;;; no-littering.el --- help keeping ~/.emacs.d clean
 
-;; Copyright (C) 2016-2017  Jonas Bernoulli
+;; Copyright (C) 2016-2018  Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20171219.458
+;; Package-Version: 20180108.305
 
 ;; This file is not part of GNU Emacs.
 
@@ -308,6 +308,7 @@ directories."
     (setq magithub-dir                     (var "magithub/"))
     (setq magithub-cache-file              (var "magithub/cache.el"))
     (setq mc/list-file                     (var "mc-list.el"))
+    (setq meghanada-server-install-dir     (var "meghanada/"))
     (setq multi-compile-history-file       (var "multi-compile-history.el"))
     ;; The value of this variable MUST NOT end with ".el" but the
     ;; actual file name MUST end with ".el".  Use "git blame" for
