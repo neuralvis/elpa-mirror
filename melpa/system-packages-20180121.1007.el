@@ -5,7 +5,7 @@
 ;; Author: J. Alexander Branham <branham@utexas.edu>
 ;; Maintainer: J. Alexander Branham <branham@utexas.edu>
 ;; URL: https://github.com/jabranham/system-packages
-;; Package-Version: 20180109.1407
+;; Package-Version: 20180121.1007
 ;; Package-Requires: ((cl-lib "0.5"))
 
 ;; This file is not part of GNU Emacs.
@@ -262,6 +262,7 @@ default."
   "If non-nil, system-packages uses sudo for appropriate commands.
 
 Tries to be smart for selecting the default."
+  :type 'boolean
   :group 'system-packages)
 
 (define-obsolete-variable-alias 'system-packages-usesudo
