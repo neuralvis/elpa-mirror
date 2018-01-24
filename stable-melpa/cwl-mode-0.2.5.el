@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017 by Tomoya Tanjo
 
 ;; Version: 0.2.2
-;; Package-Version: 0.2.4
+;; Package-Version: 0.2.5
 ;; Author: Tomoya Tanjo <ttanjo@gmail.com>
 ;; URL: https://github.com/tom-tan/cwl-mode
 ;; Package-Requires: ((yaml-mode "0.0.13") (emacs "24.4"))
@@ -34,7 +34,6 @@
 ;; To use this package, add the following line to your .emacs file:
 ;;     (require 'cwl-mode)
 ;; cwl-mode highlights some keywords for usability.
-;; Also, it enables on-the-fly YAML checker if flycheck is installed.
 
 ;;; Code:
 
@@ -66,6 +65,12 @@
     "ramMax" "tmpdirMin" "tmpdirMax" "outdirMin"
     "outdirMax"))
 
+(defvar cwl-mode-syntax-table
+  (let ((table (copy-syntax-table yaml-mode-syntax-table)))
+    (modify-syntax-entry ?_ "w" table)
+    (modify-syntax-entry ?- "w" table)
+    table))
+
 ;;;###autoload
 (define-derived-mode cwl-mode
     yaml-mode "CWL"
@@ -87,17 +92,6 @@
 (defvar cwl-mode-map
   (let ((map (copy-keymap yaml-mode-map)))
     map))
-
-(defvar cwl-mode-syntax-table
-  (let ((table (copy-syntax-table yaml-mode-syntax-table)))
-    (modify-syntax-entry ?_ "w" table)
-    (modify-syntax-entry ?- "w" table)
-    table))
-
-;;;###autoload
-(with-eval-after-load 'flycheck
-  (flycheck-add-mode 'yaml-jsyaml 'cwl-mode)
-  (flycheck-add-mode 'yaml-ruby 'cwl-mode))
 
 (provide 'cwl-mode)
 ;;; cwl-mode.el ends here
