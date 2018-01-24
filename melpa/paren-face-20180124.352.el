@@ -1,7 +1,7 @@
 ;;; paren-face.el --- a face for parentheses in lisp modes  -*- lexical-binding: t -*-
-;; Package-Version: 20161028.1127
+;; Package-Version: 20180124.352
 
-;; Copyright (C) 2013-2016  Jonas Bernoulli
+;; Copyright (C) 2013-2018  Jonas Bernoulli
 
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/paren-face
@@ -82,8 +82,9 @@ one of the modes listed here."
   :type '(repeat symbol)
   :group 'paren-face)
 
-(defcustom paren-face-regexp "[()]"
-  "Regular expression to match parentheses."
+(defcustom paren-face-regexp "[][()]"
+  "Regular expression to match parentheses.
+To add [ and ] use something like \"[][()]\"."
   :type 'regexp
   :group 'paren-face)
 
