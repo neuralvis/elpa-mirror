@@ -1,12 +1,12 @@
 ;;; webpaste.el --- Paste to pastebin-like services  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2016-2017 Elis Axelsson
+;; Copyright (c) 2016-2018 Elis Hirwing
 
-;; Author: Elis "etu" Axelsson
+;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 2.0.0
-;; Package-X-Original-Version: 2.0.0
-;; Version: 2.0.0
+;; Package-Version: 2.1.0
+;; Package-X-Original-Version: 2.1.0
+;; Version: 2.1.0
 ;; Keywords: convenience, comm, paste
 ;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5"))
 
@@ -160,6 +160,25 @@ the docs for `webpaste--provider'."
 
 
 
+;; modified from https://emacs.stackexchange.com/a/33893/12534
+(defun webpaste--alist-set (key val alist)
+  "Set property KEY to VAL in ALIST. Return new alist.
+This creates the association if it is missing, and otherwise sets
+the cdr of the first matching association in the list. It does
+not create duplicate associations. Key comparison is done with
+`equal'.
+
+This method may mutate the original alist, but you still need to
+use the return value of this method instead of the original
+alist, to ensure correct results."
+  (let ((pair (assoc key alist)))
+    (if pair
+        (setcdr pair val)
+      (push (cons key val) alist)))
+  alist)
+
+
+
 (defvar webpaste--tested-providers ()
   "Variable for storing which providers to try in which order while running.
 This list will be re-populated each run based on ‘webpaste-provider-priority’ or
@@ -201,7 +220,7 @@ precalculated, and also available both for pre and post request access.")
                  (webpaste--paste-text text))))
 
 
-(cl-defun webpaste--providers-error-lambda-no-failover (&key text)
+(cl-defun webpaste--providers-error-lambda-no-failover (&rest)
   "Predefined error callback for providers that shouldn't do failover."
   (cl-function (lambda (&key error-thrown &allow-other-keys)
                  (message "Got error: %S" error-thrown))))
@@ -333,11 +352,16 @@ Optional params:
   ;; If we get a separator sent to the function, append it to the list of
   ;; separators for later use
   (when lang-uri-separator
-    (cl-pushnew (cons uri lang-uri-separator) webpaste--provider-separators))
+    (setq webpaste--provider-separators
+          (webpaste--alist-set
+           uri lang-uri-separator webpaste--provider-separators)))
 
   ;; Add pre-calculated list of webpaste lang alists
-  (cl-pushnew (cons uri (webpaste--get-lang-alist-with-overrides lang-overrides))
-              webpaste--provider-lang-alists)
+  (setq webpaste--provider-lang-alists
+        (webpaste--alist-set
+         uri
+         (webpaste--get-lang-alist-with-overrides lang-overrides)
+         webpaste--provider-lang-alists))
 
   (cl-function
    (lambda (text
