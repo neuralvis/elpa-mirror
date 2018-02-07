@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20180205.1306
+;; Package-Version: 20180206.1436
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.0
 
@@ -95,6 +95,14 @@ is member of `org-noter-notes-window-behavior' (which see)."
   :group 'org-noter
   :type 'boolean)
 
+(defcustom org-noter-hide-other nil
+  "When non-nil, hide all headings not related to the command
+  used, like notes from different pages when scrolling.")
+
+(defcustom org-noter-always-create-frame t
+  "When non-nil, org-noter will always create a new frame for the session.
+When nil, it will use the selected frame if it does not belong to any other session.")
+
 (defface org-noter-no-notes-exist-face
   '((t
      :foreground "chocolate"
@@ -110,9 +118,8 @@ is member of `org-noter-notes-window-behavior' (which see)."
 ;; --------------------------------------------------------------------------------
 ;; NOTE(nox): Private variables or constants
 (cl-defstruct org-noter--session
-  frame doc-buffer notes-buffer ast modified-tick doc-mode display-name notes-file-path
-  doc-file-path property-text level window-behavior window-location auto-save-last-page
-  initialized)
+  frame doc-buffer base-buffer notes-buffer ast modified-tick doc-mode display-name notes-file-path doc-file-path
+  property-text level window-behavior window-location auto-save-last-page hide-other initialized)
 
 (defvar org-noter--sessions nil
   "List of `org-noter' sessions.")
@@ -132,6 +139,9 @@ is member of `org-noter-notes-window-behavior' (which see)."
 (defconst org-noter--property-auto-save-last-page "NOTER_AUTO_SAVE_LAST_PAGE"
   "Property for overriding global `org-noter-auto-save-last-page'.")
 
+(defconst org-noter--property-hide-other "NOTER_HIDE_OTHER"
+  "Property for overriding global `org-noter-hide-other'.")
+
 (defconst org-noter--note-search-no-recurse (delete 'headline (append org-element-all-elements nil))
   "List of elements that shouldn't be recursed into when searching for notes.")
 
@@ -142,6 +152,7 @@ is member of `org-noter-notes-window-behavior' (which see)."
          (display-name (if raw-value-not-empty
                            (org-element-property :raw-value ast)
                          (file-name-nondirectory document-property-value)))
+         (frame-name (format "Emacs Org-noter - %s" display-name))
 
          (document (find-file-noselect document-property-value))
          (document-buffer
@@ -150,26 +161,36 @@ is member of `org-noter-notes-window-behavior' (which see)."
                                                (unless raw-value-not-empty "Org-noter: ")
                                                display-name))))
 
+         (base-buffer (or (buffer-base-buffer) (current-buffer)))
          (notes-buffer
           (make-indirect-buffer
-           (current-buffer)
+           base-buffer
            (generate-new-buffer-name (concat "Notes of " display-name)) t))
 
          (session
           (make-org-noter--session
            :display-name display-name
-           :frame (make-frame `((name . ,(format "Emacs Org-noter - %s" display-name))
-                                (fullscreen . maximized)))
+           :frame
+           (if (or org-noter-always-create-frame
+                   (catch 'has-session
+                     (dolist (test-session org-noter--sessions)
+                       (when (eq (org-noter--session-frame test-session) (selected-frame))
+                         (throw 'has-session t)))))
+               (make-frame `((name . ,frame-name) (fullscreen . maximized)))
+             (set-frame-parameter nil 'name frame-name)
+             (selected-frame))
            :doc-mode (buffer-local-value 'major-mode document)
            :property-text document-property-value
            :notes-file-path notes-file-path
            :doc-file-path doc-file-path
            :doc-buffer document-buffer
+           :base-buffer base-buffer
            :notes-buffer notes-buffer
            :level (org-element-property :level ast)
            :window-behavior (or (org-noter--notes-window-behavior-property ast) org-noter-notes-window-behavior)
            :window-location (or (org-noter--notes-window-location-property ast) org-noter-notes-window-location)
            :auto-save-last-page (or (org-noter--auto-save-page-property ast) org-noter-auto-save-last-page)
+           :hide-other (or (org-noter--hide-other-property ast) org-noter-hide-other)
            :modified-tick -1))
 
          current-page)
@@ -211,16 +232,16 @@ is member of `org-noter-notes-window-behavior' (which see)."
         (org-noter--page-change-handler 1)))))
 
 (defun org-noter--valid-session (session)
-  (if (and session
-           (frame-live-p (org-noter--session-frame session))
-           (buffer-live-p (org-noter--session-doc-buffer session))
-           (buffer-live-p (org-noter--session-notes-buffer session))
-           (or (not (org-noter--session-initialized session))
-               (get-buffer-window (org-noter--session-doc-buffer session)
-                                  (org-noter--session-frame session))))
-      t
-    (org-noter-kill-session session)
-    nil))
+  (when session
+    (if (and (frame-live-p (org-noter--session-frame session))
+             (buffer-live-p (org-noter--session-doc-buffer session))
+             (buffer-live-p (org-noter--session-notes-buffer session))
+             (or (not (org-noter--session-initialized session))
+                 (get-buffer-window (org-noter--session-doc-buffer session)
+                                    (org-noter--session-frame session))))
+        t
+      (org-noter-kill-session session)
+      nil)))
 
 (defmacro org-noter--with-valid-session (&rest body)
   `(let ((session org-noter--session))
@@ -440,6 +461,12 @@ is member of `org-noter-notes-window-behavior' (which see)."
       (when (intern property)
         t))))
 
+(defun org-noter--hide-other-property (ast)
+  (let ((property (org-element-property (intern (concat ":" org-noter--property-hide-other)) ast)))
+    (when (and (stringp property) (> (length property) 0))
+      (when (intern property)
+        t))))
+
 (defun org-noter--current-page ()
   (org-noter--with-valid-session
    (with-current-buffer (org-noter--session-doc-buffer session)
@@ -596,12 +623,17 @@ If it has, it will be the `:end' of the last element without that page property.
   (when notes
     (org-noter--with-selected-notes-window
      nil
+     (when (org-noter--session-hide-other session) (org-overview))
      (save-excursion
        (dolist (note notes)
          (goto-char (org-element-property :begin note))
-         (org-show-context)
-         (org-show-siblings)
-         (org-show-subtree)))
+         (org-show-entry) (org-show-children) (org-show-set-visibility t)
+         (org-element-map (org-element-contents note) 'headline
+           (lambda (headline)
+             (unless (org-noter--page-property headline)
+               (goto-char (org-element-property :begin headline))
+               (org-show-entry) (org-show-children)))
+           nil nil org-element-all-elements)))
 
      (let* ((begin (org-element-property :begin (car notes)))
             (end (org-noter--get-this-note-end (car (last notes))))
@@ -711,6 +743,30 @@ With a prefix ARG, delete the current setting and use the default."
           (org-entry-put nil org-noter--property-auto-save-last-page (format "%s" new-setting)))
         (unless new-setting (org-entry-delete nil org-noter-property-note-page)))))))
 
+(defun org-noter-set-hide-other (arg)
+  "This toggles hiding other headings for the current session.
+- With a prefix \\[universal-argument], set the current setting permanently for this document.
+- With a prefix \\[universal-argument] \\[universal-argument], remove the setting and use the default."
+  (interactive "P")
+  (org-noter--with-valid-session
+   (let* ((inhibit-read-only t)
+          (ast (org-noter--parse-root))
+          (persistent
+           (cond ((equal arg '(4)) 'write)
+                 ((equal arg '(16)) 'remove)))
+          (new-setting
+           (cond ((eq persistent 'write) (org-noter--session-hide-other session))
+                 ((eq persistent 'remove) org-noter-hide-other)
+                 ('other-cases (not (org-noter--session-hide-other session))))))
+     (setf (org-noter--session-hide-other session) new-setting)
+     (when persistent
+       (with-current-buffer (org-noter--session-notes-buffer session)
+         (org-with-wide-buffer
+          (goto-char (org-element-property :begin ast))
+          (if (eq persistent 'write)
+              (org-entry-put nil org-noter--property-hide-other (format "%s" new-setting))
+            (org-entry-delete nil org-noter--property-hide-other))))))))
+
 (defun org-noter-set-notes-window-behavior (arg)
   "Set the notes window behaviour for the current session.
 With a prefix ARG, it becomes persistent for that document.
@@ -809,10 +865,12 @@ want to kill."
                                   collection))))))
 
   (when (and session (memq session org-noter--sessions))
-    (let ((frame (org-noter--session-frame session))
+    (setq org-noter--sessions (delq session org-noter--sessions))
+    (let ((ast (org-noter--parse-root))
+          (frame (org-noter--session-frame session))
+          (base-buffer (org-noter--session-base-buffer session))
           (notes-buffer (org-noter--session-notes-buffer session))
           (doc-buffer (org-noter--session-doc-buffer session)))
-      (setq org-noter--sessions (delq session org-noter--sessions))
 
       (when (eq (length org-noter--sessions) 0)
         (setq delete-frame-functions (delq 'org-noter--handle-delete-frame
@@ -820,27 +878,31 @@ want to kill."
         (when (featurep 'doc-view)
           (advice-remove  'org-noter--doc-view-advice 'doc-view-goto-page)))
 
-      (when (frame-live-p frame)
-        (delete-frame frame))
+      (when (buffer-live-p base-buffer)
+        (let ((modified (buffer-modified-p base-buffer)))
+          (when (buffer-live-p notes-buffer)
+            (dolist (window (get-buffer-window-list notes-buffer nil t))
+              (with-selected-frame (window-frame window)
+                (if (= (count-windows) 1)
+                    (delete-frame)
+                  (delete-window window))))
+
+            (with-current-buffer notes-buffer (set-buffer-modified-p nil))
+            (kill-buffer notes-buffer))
+
+          (with-current-buffer base-buffer
+            (org-noter--unset-read-only ast)
+            (set-buffer-modified-p modified))))
 
       (when (buffer-live-p doc-buffer)
         (kill-buffer doc-buffer))
 
-      (when (buffer-live-p notes-buffer)
-        (dolist (window (get-buffer-window-list notes-buffer nil t))
-          (with-selected-frame (window-frame window)
-            (if (= (count-windows) 1)
-                (delete-frame)
-              (delete-window window))))
-
-        (let ((base-buffer (buffer-base-buffer notes-buffer))
-              (modified (buffer-modified-p notes-buffer)))
-          (with-current-buffer notes-buffer
-            (org-noter--unset-read-only (org-noter--parse-root))
-            (set-buffer-modified-p nil)
-            (kill-buffer notes-buffer))
-          (with-current-buffer base-buffer
-            (set-buffer-modified-p modified)))))))
+      (when (frame-live-p frame)
+        (if (= (length (frames-on-display-list)) 1)
+            (progn
+              (delete-other-windows)
+              (set-frame-parameter nil 'name nil))
+          (delete-frame frame))))))
 
 (defun org-noter-create-skeleton ()
   "Create notes skeleton with PDF outline.
