@@ -5,7 +5,7 @@
 
 ;; Author: Jonathan Sterling <jon@jonmsterling.com>
 ;; Package-Requires: ((emacs "24.3"))
-;; Package-Version: 20180205.1219
+;; Package-Version: 20180207.1002
 ;; Version: 0.0.1
 ;; Keywords: languages
 
@@ -136,7 +136,7 @@
   "RedPRL's expression symbols.")
 
 (defconst redprl-tactic-keywords
-  '("auto" "auto-step" "case" "concl" "cut-lemma" "elim" "else" "exact" "fresh" "goal"
+  '("auto" "auto-step" "case" "concl" "cut-lemma" "elim" "else" "exact" "goal"
     "hyp" "id" "lemma" "let" "claim" "match" "of" "print" "progress"
     "query" "rec" "reduce" "refine" "repeat" "rewrite" "symmetry" "inversion" "assumption"
     "then" "unfold" "use" "with")
