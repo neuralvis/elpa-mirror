@@ -1,10 +1,10 @@
 ;;; treemacs-evil.el --- Evil mode integration for treemacs -*- lexical-binding: t -*-
 
-;; Copyright (C) 2017 Alexander Miller
+;; Copyright (C) 2018 Alexander Miller
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((evil "1.2.12") (treemacs "0"))
-;; Package-Version: 1.16.1
+;; Package-Version: 1.18
 ;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -36,6 +36,17 @@
 
 (evil-set-initial-state 'treemacs-mode 'treemacs)
 
+(defun treemacs--turn-off-visual-state-after-click (&rest _)
+  "Go back to `evil-treemacs-state' after a mouse click."
+  ;; a double click will likely have opened a file so we need to make
+  ;; sure to go back in the right buffer
+  (-when-let- [b (treemacs-buffer-exists?)]
+    (with-current-buffer b
+      (evil-treemacs-state))))
+
+(advice-add 'treemacs-leftclick-action   :after #'treemacs--turn-off-visual-state-after-click)
+(advice-add 'treemacs-doubleclick-action :after #'treemacs--turn-off-visual-state-after-click)
+
 (define-key evil-treemacs-state-map (kbd "j")   #'treemacs-next-line)
 (define-key evil-treemacs-state-map (kbd "k")   #'treemacs-previous-line)
 (define-key evil-treemacs-state-map (kbd "h")   #'treemacs-uproot)
@@ -52,10 +63,12 @@
 (define-key evil-treemacs-state-map (kbd "w")   #'treemacs-reset-width)
 (define-key evil-treemacs-state-map (kbd "b")   #'treemacs-add-bookmark)
 (define-key evil-treemacs-state-map (kbd "?")   #'treemacs-helpful-hydra)
-(define-key evil-treemacs-state-map (kbd "RET") #'treemacs-visit-node-default-action)
-(evil-define-key 'treemacs treemacs-mode-map (kbd "yr") #'treemacs-yank-root)
-(evil-define-key 'treemacs treemacs-mode-map (kbd "yy") #'treemacs-yank-path-at-point)
-(evil-define-key 'treemacs treemacs-mode-map (kbd "gr")  #'treemacs-refresh)
+(define-key evil-treemacs-state-map (kbd "RET") #'treemacs-RET-action)
+
+(evil-define-key 'treemacs treemacs-mode-map (kbd "yr")     #'treemacs-yank-root)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "yy")     #'treemacs-yank-path-at-point)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "gr")     #'treemacs-refresh)
+(evil-define-key 'treemacs treemacs-mode-map [down-mouse-1] #'ignore)
 
 (provide 'treemacs-evil)
 

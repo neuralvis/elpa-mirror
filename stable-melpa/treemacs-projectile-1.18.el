@@ -1,10 +1,10 @@
 ;;; treemacs-projectile.el --- Projectile integration for treemacs -*- lexical-binding: t -*-
 
-;; Copyright (C) 2017 Alexander Miller
+;; Copyright (C) 2018 Alexander Miller
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((projectile "0.14.0") (treemacs "0"))
-;; Package-Version: 1.16.1
+;; Package-Version: 1.18
 ;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -40,7 +40,7 @@ the project from among `projectile-known-projects'."
     (treemacs--init (completing-read "Project: " projectile-known-projects)))
    ((projectile-project-p)
     (treemacs--init (projectile-project-root)))
-   (t (treemacs--log "You're not in a project."))))
+   (t (treemacs-log "You're not in a project."))))
 
 ;;;###autoload
 (defun treemacs-projectile-toggle ()
