@@ -4,8 +4,8 @@
 
 ;; Author: Yasuyuki Oka <yasuyk@gmail.com>
 ;; Maintainer: Daniel Ralston <Sodel-the-Vociferous@users.noreply.github.com>
-;; Version: 0.2.0
-;; Package-Version: 0.2.0
+;; Version: 0.2.1
+;; Package-Version: 0.2.1
 ;; URL: https://github.com/Sodel-the-Vociferous/helm-company
 ;; Package-Requires: ((helm "1.5.9") (company "0.6.13"))
 
@@ -70,6 +70,11 @@ you're trying to complete."
   :group 'helm-company
   :type 'boolean)
 
+(defcustom helm-company-after-completion-hooks nil
+  "Normal hook run when entering Text mode and many related modes."
+  :type 'hook
+  :group 'helm-company)
+
 (defvar helm-company-help-window nil)
 (defvar helm-company-candidates nil)
 (defvar helm-company-backend nil)
@@ -127,6 +132,7 @@ annotations.")
          (company-common (helm-attr 'company-common))
          (company-prefix (helm-attr 'company-prefix)))
     (company-finish candidate))
+  (run-hooks 'helm-company-after-completion-hooks)
   ;; for GC
   (helm-company-cleanup-post-action))
 
