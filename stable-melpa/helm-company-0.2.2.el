@@ -4,8 +4,8 @@
 
 ;; Author: Yasuyuki Oka <yasuyk@gmail.com>
 ;; Maintainer: Daniel Ralston <Sodel-the-Vociferous@users.noreply.github.com>
-;; Version: 0.2.1
-;; Package-Version: 0.2.1
+;; Version: 0.2.2
+;; Package-Version: 0.2.2
 ;; URL: https://github.com/Sodel-the-Vociferous/helm-company
 ;; Package-Requires: ((helm "1.5.9") (company "0.6.13"))
 
@@ -71,7 +71,7 @@ you're trying to complete."
   :type 'boolean)
 
 (defcustom helm-company-after-completion-hooks nil
-  "Normal hook run when entering Text mode and many related modes."
+  "Hook run after helm-company has inserted the selected completion candidate."
   :type 'hook
   :group 'helm-company)
 
