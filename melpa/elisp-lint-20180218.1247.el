@@ -6,7 +6,7 @@
 ;; Author: Nikolaj Schumacher <bugs * nschum de>,
 ;; Author: Neil Okamoto <neil.okamoto+melpa@gmail.com>
 ;; Version: 0.2
-;; Package-Version: 20180217.2023
+;; Package-Version: 20180218.1247
 ;; Keywords: lisp, maint, tools
 ;; Package-Requires: ((emacs "23"))
 ;; URL: http://github.com/gonewest818/elisp-lint/
@@ -41,7 +41,7 @@
 ;; Alternatively, you can disable checks using file variables or the following
 ;; .dir-locals.el file:
 ;;
-;; ((nil . ((elisp-lint-ignored-validators . ("fill-column")))))
+;; ((emacs-lisp-mode . ((elisp-lint-ignored-validators . ("fill-column")))))
 ;;
 ;; For a full list of validators, see `elisp-lint-file-validators' and
 ;; `elisp-lint-buffer-validators'.

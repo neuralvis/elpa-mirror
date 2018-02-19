@@ -4,7 +4,7 @@
 
 ;; Author: Eric Danan
 ;; URL: https://github.com/ericdanan/counsel-projectile
-;; Package-Version: 20180213.134
+;; Package-Version: 20180217.2349
 ;; Keywords: project, convenience
 ;; Version: 0.2.0
 ;; Package-Requires: ((counsel "0.10.0") (projectile "0.14.0"))
@@ -117,7 +117,7 @@ actions (a key, a function, and a name for each action)."
                     ((stringp action-item)
                      (lambda (action)
                        (member action-item
-                               (list (car action) (caddr action))))))
+                               (list (car action) (cl-caddr action))))))
                    (cdr action-list)))
       (when index
         (setq index (1+ index))))
@@ -226,7 +226,7 @@ If anything goes wrong, throw an error and do not modify ACTION-VAR."
            (setq action-list (cl-loop for a in action-list
                                       for count from 0
                                       if (= count index)
-                                      collect (list (car a) fun (caddr a))
+                                      collect (list (car a) fun (cl-caddr a))
                                       else
                                       collect a))))
         (`(setname ,action-item ,name)
