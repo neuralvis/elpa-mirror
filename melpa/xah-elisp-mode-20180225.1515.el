@@ -3,8 +3,8 @@
 ;; Copyright © 2013-2017, by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 3.2.20180221
-;; Package-Version: 20180221.1746
+;; Version: 3.2.20180225
+;; Package-Version: 20180225.1515
 ;; Created: 23 Mar 2013
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: lisp, languages
@@ -2935,16 +2935,18 @@ Version 2017-01-27"
 
 (define-abbrev-table 'xah-elisp-mode-abbrev-table
   '(
- 
+
+    ("c" "concat" xah-elisp--ahf)
     ("d" "defun" xah-elisp--ahf)
     ("f" "format" xah-elisp--ahf)
     ("i" "insert" xah-elisp--ahf)
     ("l" "let" xah-elisp--ahf)
     ("m" "message" xah-elisp--ahf)
+    ("o" "&optional " xah-elisp--ahf)
     ("p" "point" xah-elisp--ahf)
     ("s" "setq" xah-elisp--ahf)
-    ("o" "&optional " xah-elisp--ahf)
     ("w" "when" xah-elisp--ahf)
+
     ("ah" "add-hook" xah-elisp--ahf)
     ("bc" "backward-char" xah-elisp--ahf)
     ("bs" "buffer-substring" xah-elisp--ahf)
@@ -2961,20 +2963,21 @@ Version 2017-01-27"
     ("dk" "define-key" xah-elisp--ahf)
     ("dr" "delete-region" xah-elisp--ahf)
     ("dv" "defvar" xah-elisp--ahf)
+    ("eb" "erase-buffer" xah-elisp--ahf)
     ("fc" "forward-char" xah-elisp--ahf)
-    ("fw" "forward-word" xah-elisp--ahf)
     ("ff" "find-file" xah-elisp--ahf)
     ("fl" "forward-line" xah-elisp--ahf)
+    ("fw" "forward-word" xah-elisp--ahf)
     ("gc" "goto-char" xah-elisp--ahf)
     ("kb" "kill-buffer" xah-elisp--ahf)
     ("kr" "kill-region" xah-elisp--ahf)
     ("la" "looking-at" xah-elisp--ahf)
-    ("lc" "left-char" xah-elisp--ahf)
     ("lb" "looking-back" xah-elisp--ahf)
+    ("lc" "left-char" xah-elisp--ahf)
     ("mb" "match-beginning" xah-elisp--ahf)
+    ("mc" "mapcar" xah-elisp--ahf)
     ("md" "make-directory" xah-elisp--ahf)
     ("me" "match-end" xah-elisp--ahf)
-    ("mc" "mapcar" xah-elisp--ahf)
     ("ms" "match-string" xah-elisp--ahf)
     ("pm" "point-min" xah-elisp--ahf)
     ("pn" "progn" xah-elisp--ahf)
@@ -2995,14 +2998,13 @@ Version 2017-01-27"
     ("ss" "split-string" xah-elisp--ahf)
     ("wg" "widget-get" xah-elisp--ahf)
 
-
-
     ("bfn" "buffer-file-name" xah-elisp--ahf)
     ("bmp" "buffer-modified-p" xah-elisp--ahf)
     ("bol" "beginning-of-line" xah-elisp--ahf)
     ("cdr" "cdr" xah-elisp--ahf)
     ("efn" "expand-file-name" xah-elisp--ahf)
     ("eol" "end-of-line" xah-elisp--ahf)
+    ("fep" "file-exists-p" xah-elisp--ahf)
     ("fnd" "file-name-directory" xah-elisp--ahf)
     ("fne" "file-name-extension" xah-elisp--ahf)
     ("fnn" "file-name-nondirectory" xah-elisp--ahf)
@@ -3027,17 +3029,19 @@ Version 2017-01-27"
     ("sfm" "set-file-modes" xah-elisp--ahf)
     ("sfr" "search-forward-regexp" xah-elisp--ahf)
     ("sqa" "shell-quote-argument" xah-elisp--ahf)
+    ("stb" "switch-to-buffer" xah-elisp--ahf)
     ("ste" "(string-equal str1▮ str2)" xah-elisp--ahf)
     ("tap" "thing-at-point" xah-elisp--ahf)
     ("urp" "use-region-p" xah-elisp--ahf)
     ("wcb" "with-current-buffer" xah-elisp--ahf)
     ("wtb" "with-temp-buffer" xah-elisp--ahf)
 
+    ("botap" "bounds-of-thing-at-point" xah-elisp--ahf)
     ("bsnp" "(buffer-substring-no-properties START▮ END)" xah-elisp--ahf)
+    ("daer" "delete-and-extract-region" xah-elisp--ahf)
     ("fnse" "file-name-sans-extension" xah-elisp--ahf)
     ("rris" "replace-regexp-in-string" xah-elisp--ahf)
     ("yonp" "yes-or-no-p" xah-elisp--ahf)
-    ("botap" "bounds-of-thing-at-point" xah-elisp--ahf)
 
     ("abbreviate-file-name" "(abbreviate-file-name ▮)" xah-elisp--ahf)
     ("add-hook" "(add-hook 'HOOK▮ 'FUNCTION)" xah-elisp--ahf)
@@ -3095,8 +3099,8 @@ Version 2017-01-27"
     ("copy-file" "(copy-file FILE▮ NEWNAME &optional OK-IF-ALREADY-EXISTS KEEP-TIME PRESERVE-UID-GID)" xah-elisp--ahf)
     ("create-image" "(create-image FILE-OR-DATA▮ &optional TYPE DATA-P &rest)" xah-elisp--ahf)
     ("cts" "(char-to-string CHAR▮) " xah-elisp--ahf)
-    ("current-word" "(current-word)" xah-elisp--ahf)
     ("current-buffer" "(current-buffer)" xah-elisp--ahf)
+    ("current-word" "(current-word)" xah-elisp--ahf)
     ("custom-autoload" "(custom-autoload ▮ SYMBOL LOAD &optional NOSET)" xah-elisp--ahf)
     ("defalias" "(defalias 'SYMBOL▮ 'DEFINITION &optional DOCSTRING)" xah-elisp--ahf)
     ("defconst" "(defconst ▮ INITVALUE \"DOCSTRING\")" xah-elisp--ahf)
@@ -3109,6 +3113,7 @@ Version 2017-01-27"
     ("defun" "(defun ▮ ()\n  \"DOCSTRING\"\n  (interactive)\n  (let (VAR)\n\n  ))" xah-elisp--ahf)
     ("defvar" "(defvar ▮ &optional INITVALUE \"DOCSTRING\")" xah-elisp--ahf)
     ("delete" "(delete OBJECT▮ SEQUENCE)" xah-elisp--ahf)
+    ("delete-and-extract-region" "(delete-and-extract-region ▮ pos2)" xah-elisp--ahf)
     ("delete-char" "(delete-char ▮)" xah-elisp--ahf)
     ("delete-directory" "(delete-directory ▮ &optional RECURSIVE)" xah-elisp--ahf)
     ("delete-dups" "(delete-dups LIST▮)" xah-elisp--ahf)
@@ -3125,6 +3130,7 @@ Version 2017-01-27"
     ("end-of-line" "(end-of-line ▮&optional N)" xah-elisp--ahf)
     ("eq" "(eq ▮)" xah-elisp--ahf)
     ("equal" "(equal ▮)" xah-elisp--ahf)
+    ("erase-buffer" "(erase-buffer)" xah-elisp--ahf)
     ("error" "(error \"%s\" ▮)" xah-elisp--ahf)
     ("expand-file-name" "(expand-file-name ▮ &optional relativedir)" xah-elisp--ahf)
     ("fboundp" "(fboundp '▮)" xah-elisp--ahf)
@@ -3234,6 +3240,7 @@ Version 2017-01-27"
     ("point" "(point)" xah-elisp--ahf)
     ("point-max" "(point-max)" xah-elisp--ahf)
     ("point-min" "(point-min)" xah-elisp--ahf)
+    ("pop" "(pop ▮)" xah-elisp--ahf)
     ("previous-char-property-change" "(previous-char-property-change POS &optional LIMIT)" xah-elisp--ahf)
     ("previous-property-change" "(previous-property-change POS &optional OBJECT LIMIT)" xah-elisp--ahf)
     ("previous-single-char-property-change" "(previous-single-char-property-change POS PROP &optional OBJECT LIMIT)" xah-elisp--ahf)
@@ -3242,10 +3249,9 @@ Version 2017-01-27"
     ("prin1-to-string" "(prin1-to-string▮ OBJECT &optional NOESCAPE)" xah-elisp--ahf)
     ("princ" "(princ ▮)" xah-elisp--ahf)
     ("print" "(print ▮)" xah-elisp--ahf)
-    ("progn" "(progn\n▮)" xah-elisp--ahf)
     ("prog1" "(prog1\n▮)" xah-elisp--ahf)
     ("prog2" "(prog2\n▮)" xah-elisp--ahf)
-    ("pop" "(pop ▮)" xah-elisp--ahf)
+    ("progn" "(progn\n▮)" xah-elisp--ahf)
     ("propertize" "(propertize STRING▮ &rest PROPERTIES)" xah-elisp--ahf)
     ("push" "(push NEWELT▮ PLACE)" xah-elisp--ahf)
     ("push-mark" "(push-mark ▮&optional LOCATION NOMSG ACTIVATE)" xah-elisp--ahf)
@@ -3302,7 +3308,6 @@ Version 2017-01-27"
     ("set-visited-file-name" "(set-visited-file-name FILENAME▮ &optional NO-QUERY ALONG-WITH-FILE)" xah-elisp--ahf)
     ("setq" "(setq ▮ VAL)" xah-elisp--ahf)
     ("shell-command" "(shell-command ▮ &optional OUTPUT-BUFFER ERROR-BUFFER)" xah-elisp--ahf)
-
     ("shell-quote-argument" "(shell-quote-argument ▮)" xah-elisp--ahf)
     ("skip-chars-backward" "(skip-chars-backward \"▮\" &optional LIM)" xah-elisp--ahf)
     ("skip-chars-forward" "(skip-chars-forward \"▮\" &optional LIM)" xah-elisp--ahf)
@@ -3315,6 +3320,8 @@ Version 2017-01-27"
     ("string-to-number" "(string-to-number \"▮\")" xah-elisp--ahf)
     ("string=" "(string-equal str1▮ str2)" xah-elisp--ahf)
     ("stringp" "(stringp ▮)" xah-elisp--ahf)
+    ("switch-to-buffer" "(switch-to-buffer ▮ &optional NORECORD FORCE-SAME-WINDOW)" xah-elisp--ahf)
+
     ("substring" "(substring STRING▮ FROM &optional TO)" xah-elisp--ahf)
     ("substring-no-properties" "(substring-no-properties ▮ FROM TO)" xah-elisp--ahf)
     ("terpri" "(terpri ▮)" xah-elisp--ahf)
