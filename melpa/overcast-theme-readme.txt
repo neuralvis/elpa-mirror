@@ -1,4 +1,4 @@
-    A dark but vibrant color theme for Emacs.
+    A dark but vibrant color theme.
 
  Overview of features:
 

@@ -1,36 +1,64 @@
-This is meant to be an extremely minimalist presentation tool for
-Emacs org-mode.
-
-Usage:
-
-Add the following to your emacs config:
-
-  (add-to-list 'load-path "~/path/to/org-present")
-  (autoload 'org-present "org-present" nil t)
-
-  (add-hook 'org-present-mode-hook
-            (lambda ()
-              (org-present-big)
-              (org-display-inline-images)))
-
-  (add-hook 'org-present-mode-quit-hook
-            (lambda ()
-              (org-present-small)
-              (org-remove-inline-images)))
-
-Open an org-mode file with each slide under a top-level heading.
-Start org-present with org-present-mode, left and right keys will move forward
-and backward through slides. C-c C-q will quit org-present.
-
-This works well with hide-mode-line (http://webonastick.com/emacs-lisp/hide-mode-line.el),
-which hides the mode-line when only one frame and buffer are open.
-
-If you're on a Mac you might also want to look at the fullscreen patch here:
-http://cloud.github.com/downloads/typester/emacs/feature-fullscreen.patch
+;;; org-present.el --- Minimalist presentation minor-mode for Emacs org-mode.
+;;
+;; Copyright (C) 2012 by Ric Lister
+;;
+;; Author: Ric Lister
+;; Package-Requires: ((org "7"))
+;; Package-Version: 20180303.1530
+;; URL: https://github.com/rlister/org-present
+;;
+;; This file is not part of GNU Emacs.
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of the
+;; License, or any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; if not, write to the Free Software
+;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+;; 02111-1307, USA.
+;;
+;;; Commentary:
+;;
+;; This is meant to be an extremely minimalist presentation tool for
+;; Emacs org-mode.
+;;
+;; Usage:
+;;
+;; Add the following to your emacs config:
+;;
+;;   (add-to-list 'load-path "~/path/to/org-present")
+;;   (autoload 'org-present "org-present" nil t)
+;;
+;;   (add-hook 'org-present-mode-hook
+;;             (lambda ()
+;;               (org-present-big)
+;;               (org-display-inline-images)))
+;;
+;;   (add-hook 'org-present-mode-quit-hook
+;;             (lambda ()
+;;               (org-present-small)
+;;               (org-remove-inline-images)))
+;;
+;; Open an org-mode file with each slide under a top-level heading.
+;; Start org-present with org-present-mode, left and right keys will move forward
+;; and backward through slides. C-c C-q will quit org-present.
+;;
+;; This works well with hide-mode-line (http://webonastick.com/emacs-lisp/hide-mode-line.el),
+;; which hides the mode-line when only one frame and buffer are open.
+;;
+;; If you're on a Mac you might also want to look at the fullscreen patch here:
+;; http://cloud.github.com/downloads/typester/emacs/feature-fullscreen.patch
 
 (defvar org-present-mode-keymap (make-keymap) "org-present-mode keymap.")
 
-left and right page keys
+;; left and right page keys
 (define-key org-present-mode-keymap [right]         'org-present-next)
 (define-key org-present-mode-keymap [left]          'org-present-prev)
 (define-key org-present-mode-keymap (kbd "C-c C-=") 'org-present-big)
@@ -41,7 +69,7 @@ left and right page keys
 (define-key org-present-mode-keymap (kbd "C-c <")   'org-present-beginning)
 (define-key org-present-mode-keymap (kbd "C-c >")   'org-present-end)
 
-how much to scale up font size
+;; how much to scale up font size
 (defvar org-present-text-scale 5)
 (defvar org-present-cursor-cache (or cursor-type nil)
   "Holds the user set value of cursor for `org-present-read-only'")
@@ -189,7 +217,7 @@ how much to scale up font size
   (interactive)
   (internal-show-cursor (selected-window) t))
 
-###autoload
+;;;###autoload
 (defun org-present ()
   "init."
   (interactive)
@@ -214,7 +242,7 @@ how much to scale up font size
 (defvar org-present-after-navigate-functions nil
   "Abnormal hook run after org-present navigates to a new heading.")
 
-courtesy Xah Lee ( http://ergoemacs.org/emacs/modernization_elisp_lib_problem.html )
+;; courtesy Xah Lee ( http://ergoemacs.org/emacs/modernization_elisp_lib_problem.html )
 (defun org-present-trim-string (string)
   "Remove whitespace (space, tab, emacs newline (LF, ASCII 10)) in beginning and ending of STRING."
   (replace-regexp-in-string
@@ -229,4 +257,4 @@ courtesy Xah Lee ( http://ergoemacs.org/emacs/modernization_elisp_lib_problem.ht
     (run-hook-with-args 'org-present-after-navigate-functions (buffer-name) current-heading)))
 
 (provide 'org-present)
-org-present.el ends here
+;;; org-present.el ends here
