@@ -5,7 +5,7 @@
 ;; Author: Huming Chen <chenhuming@gmail.com>
 ;; Maintainer: Huming Chen <chenhuming@gmail.com>
 ;; URL: https://github.com/beacoder/call-graph
-;; Package-Version: 20180306.1839
+;; Package-Version: 20180307.934
 ;; Version: 0.1.0
 ;; Keywords: programming, convenience
 ;; Created: 2018-01-07
@@ -174,6 +174,14 @@ e.g: class::method => method."
       (expand-file-name "global" call-graph-path-to-global)
     "global"))
 
+(defun call-graph--dwim-at-point ()
+  "If there's an active selection, return that.
+Otherwise, get the symbol at point."
+  (if (use-region-p)
+      (prog1 (intern (buffer-substring-no-properties (region-beginning) (region-end)))
+        (deactivate-mark))
+    (symbol-at-point)))
+
 (defun call-graph--visit-function (func-location)
   "Visit function location FUNC-LOCATION."
   (when-let ((temp-split (split-string func-location ":"))
@@ -304,7 +312,7 @@ CALCULATE-DEPTH is used to calculate actual depth."
     (call-graph--build-hierarchy call-graph func depth)
     (call-graph--display-hierarchy)))
 
-(defun call-graph--init ()
+(defun call-graph--initialize ()
   "Initialize data for `call-graph'."
   (when (or current-prefix-arg (null call-graph--default-instance))
     (setq call-graph--default-instance (call-graph-new))) ; clear cached reference
@@ -319,13 +327,9 @@ CALCULATE-DEPTH is used to calculate actual depth."
 (defun call-graph (&optional func)
   "Generate `call-graph' for FUNC / func-at-point / func-in-active-rigion.
 With prefix argument, discard cached data and re-generate reference data."
-  (interactive)
-  (when-let ((func
-              (or func (if (use-region-p)
-                           (prog1 (intern (buffer-substring-no-properties (region-beginning) (region-end)))
-                             (deactivate-mark))
-                         (symbol-at-point)))))
-    (call-graph--init)
+  (interactive (list (call-graph--dwim-at-point)))
+  (when func
+    (call-graph--initialize)
     (let ((call-graph call-graph--default-instance))
 
       (when-let ((file-name (buffer-file-name))
@@ -339,27 +343,6 @@ With prefix argument, discard cached data and re-generate reference data."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Call-Graph Operations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun call-graph-select-caller-location ()
-  "Select caller location as default location for function at point."
-  (interactive)
-  (save-mark-and-excursion
-   (when (get-char-property (point) 'button)
-     (forward-char 4))
-   (when-let ((call-graph call-graph--default-instance)
-              (callee (get-text-property (point) 'callee-name))
-              (caller (get-text-property (point) 'caller-name))
-              (func-caller-key
-               (intern (concat (symbol-name (call-graph--extract-method-name callee)) " <- " (symbol-name caller))))
-              (locations (call-graph--get-func-caller-location call-graph callee caller))
-              (has-many (> (seq-length locations) 1)))
-     (ivy-read "Caller Locations:" locations
-               :action (lambda (func-location)
-                         (while (not (equal func-location (car locations)))
-                           (setq locations
-                                 (nconc (cdr locations) (cons (car locations) ())))) ; put selected location upfront
-                         (setf (map-elt (call-graph--locations call-graph) func-caller-key) locations)
-                         (call-graph--visit-function func-location))))))
 
 (defun call-graph-visit-file-at-point ()
   "Visit occurrence on the current line."
@@ -395,6 +378,27 @@ With prefix argument, discard cached data and re-generate reference data."
    (when-let ((caller (get-text-property (point) 'caller-name)))
      (call-graph caller))))
 
+(defun call-graph-select-caller-location ()
+  "Select caller location as default location for function at point."
+  (interactive)
+  (save-mark-and-excursion
+   (when (get-char-property (point) 'button)
+     (forward-char 4))
+   (when-let ((call-graph call-graph--default-instance)
+              (callee (get-text-property (point) 'callee-name))
+              (caller (get-text-property (point) 'caller-name))
+              (func-caller-key
+               (intern (concat (symbol-name (call-graph--extract-method-name callee)) " <- " (symbol-name caller))))
+              (locations (call-graph--get-func-caller-location call-graph callee caller))
+              (has-many (> (seq-length locations) 1)))
+     (ivy-read "Caller Locations:" locations
+               :action (lambda (func-location)
+                         (while (not (equal func-location (car locations)))
+                           (setq locations
+                                 (nconc (cdr locations) (cons (car locations) ())))) ; put selected location upfront
+                         (setf (map-elt (call-graph--locations call-graph) func-caller-key) locations)
+                         (call-graph--visit-function func-location))))))
+
 (defun call-graph-remove-caller ()
   "Within buffer <*call-graph*>, remove caller at point."
   (interactive)
@@ -414,10 +418,19 @@ With prefix argument, discard cached data and re-generate reference data."
           (remove caller filters))))
 
 (defun call-graph-reset-caller-filter ()
-  "Within buffer <*call-graph*>, reset caller filter."
+  "Within buffer <*call-graph*>, reset caller filter for symbol at point.
+With prefix argument, discard whole caller filter."
   (interactive)
-  (setf call-graph--caller-filters nil)
-  (message "Reset caller filter done"))
+  (if current-prefix-arg
+      (when (yes-or-no-p "Reset whole caller filter ?")
+        (setf call-graph--caller-filters nil)
+        (message "Reset whole caller filter done"))
+    (save-mark-and-excursion
+     (when (get-char-property (point) 'button)
+       (forward-char 4))
+     (when-let ((caller (get-text-property (point) 'caller-name)))
+       (setf (map-elt call-graph--caller-filters caller) nil)
+       (message (format "Reset caller filter for %s done" caller))))))
 
 (defun call-graph-quit ()
   "Quit `call-graph'."
@@ -478,6 +491,7 @@ With prefix argument, discard cached data and re-generate reference data."
     (define-key map (kbd "g") 'call-graph-at-point)
     (define-key map (kbd "d") 'call-graph-remove-caller)
     (define-key map (kbd "l") 'call-graph-select-caller-location)
+    (define-key map (kbd "r") 'call-graph-reset-caller-filter)
     (define-key map (kbd "<RET>") 'call-graph-goto-file-at-point)
     map)
   "Keymap for `call-graph' major mode.")
