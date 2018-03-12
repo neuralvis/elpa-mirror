@@ -1,11 +1,11 @@
 ;;; helm-tramp.el --- Tramp helm interface for ssh, docker, vagrant -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017 by Masashı Mıyaura
+;; Copyright (C) 2017-2018 by Masashı Mıyaura
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-helm-tramp
-;; Package-Version: 20171224.702
-;; Version: 0.8.5
+;; Package-Version: 20180311.2157
+;; Version: 0.9.5
 ;; Package-Requires: ((emacs "24.3") (helm "2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -86,12 +86,22 @@ Kill all remote buffers."
 	(if (string-match "\\`[ \t\n\r]+" host)
 	    (replace-match "" t t host))
         (unless (string= host "*")
-          (push
-	   (concat "/" tramp-default-method ":" host ":")
-	   hosts)
-	  (push
-	   (concat "/ssh:" host "|sudo:" host ":/")
-	   hosts))))
+	  (if (string-match "[ ]+" host)
+	      (let ((result (split-string host " ")))
+		(while result
+		  (push
+		   (concat "/" tramp-default-method ":" (car result) ":")
+		   hosts)
+		  (push
+		   (concat "/ssh:" (car result) "|sudo:root@" (car result) ":/")
+		   hosts)
+		  (pop result)))
+	    (push
+	     (concat "/" tramp-default-method ":" host ":")
+	     hosts)
+	    (push
+	     (concat "/ssh:" host "|sudo:" host ":/")
+	     hosts)))))
     (when (package-installed-p 'docker-tramp)
       (cl-loop for line in (cdr (ignore-errors (apply #'process-lines "docker" (list "ps"))))
 	       for info = (reverse (split-string line "[[:space:]]+" t))
