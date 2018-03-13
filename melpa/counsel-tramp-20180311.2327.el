@@ -1,12 +1,12 @@
-;;; anything-tramp.el --- Tramp with anything for ssh and docker and vagrant-*- lexical-binding: t; -*-
+;;; counsel-tramp.el --- Tramp ivy interface for ssh, docker, vagrant -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017 by Masashı Mıyaura
+;; Copyright (C) 2017-2018 by Masashı Mıyaura
 
 ;; Author: Masashı Mıyaura
-;; URL: https://github.com/masasam/emacs-anything-tramp
-;; Package-Version: 20171224.601
-;; Version: 0.8.5
-;; Package-Requires: ((emacs "24.3") (anything "1.0"))
+;; URL: https://github.com/masasam/emacs-counsel-tramp
+;; Package-Version: 20180311.2327
+;; Version: 0.4.1
+;; Package-Requires: ((emacs "24.3") (counsel "0.10"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,55 +23,55 @@
 
 ;;; Commentary:
 
-;; anything-tramp provides interfaces of Tramp
-;; You can also use tramp with anything interface as root
-;; If you use it with docker-tramp, you can also use docker with anything interface
-;; If you use it with vagrant-tramp, you can also use vagrant with anything interface
+;; counsel-tramp provides interfaces of Tramp
+;; You can also use tramp with counsel interface as root
+;; If you use it with docker-tramp, you can also use docker with counsel interface
+;; If you use it with vagrant-tramp, you can also use vagrant with counsel interface
 
 ;;; Code:
 
-(require 'anything)
+(require 'counsel)
 (require 'tramp)
 (require 'cl-lib)
 
-(defgroup anything-tramp nil
-  "Tramp with anything for ssh server and docker and vagrant"
-  :group 'anything)
+(defgroup counsel-tramp nil
+  "Tramp with ivy interface for ssh, docker, vagrant"
+  :group 'counsel)
 
-(defcustom anything-tramp-docker-user nil
+(defcustom counsel-tramp-docker-user nil
   "If you want to use login user name when `docker-tramp' used, set variable."
-  :group 'anything-tramp
+  :group 'counsel-tramp
   :type 'string)
 
-(defcustom anything-tramp-localhost-directory "/"
+(defcustom counsel-tramp-localhost-directory "/"
   "Initial directory when connecting with /sudo:root@localhost:."
-  :group 'anything-tramp
+  :group 'counsel-tramp
   :type 'string)
 
-(defcustom anything-tramp-pre-command-hook nil
-  "Hook run before `anything-tramp'.
+(defcustom counsel-tramp-pre-command-hook nil
+  "Hook run before `counsel-tramp'.
 The hook is called with one argument that is non-nil."
   :type 'hook)
 
-(defcustom anything-tramp-post-command-hook nil
-  "Hook run after `anything-tramp'.
+(defcustom counsel-tramp-post-command-hook nil
+  "Hook run after `counsel-tramp'.
 The hook is called with one argument that is non-nil."
   :type 'hook)
 
-(defcustom anything-tramp-quit-hook nil
-  "Hook run when `anything-tramp-quit'.
+(defcustom counsel-tramp-quit-hook nil
+  "Hook run when `counsel-tramp-quit'.
 The hook is called with one argument that is non-nil."
   :type 'hook)
 
-(defun anything-tramp-quit ()
-  "Quit anything-tramp.
+(defun counsel-tramp-quit ()
+  "Quit counsel-tramp.
 Kill all remote buffers."
   (interactive)
-  (run-hooks 'anything-tramp-quit-hook)
+  (run-hooks 'counsel-tramp-quit-hook)
   (tramp-cleanup-all-buffers))
 
-(defun anything-tramp--candidates ()
-  "Collect candidates for anything-tramp."
+(defun counsel-tramp--candidates ()
+  "Collect candidates for counsel-tramp."
   (let ((source (split-string
                  (with-temp-buffer
                    (insert-file-contents "~/.ssh/config")
@@ -86,50 +86,50 @@ Kill all remote buffers."
 	(if (string-match "\\`[ \t\n\r]+" host)
 	    (replace-match "" t t host))
         (unless (string= host "*")
-          (push
-	   (concat "/" tramp-default-method ":" host ":")
-	   hosts)
-	  (push
-	   (concat "/ssh:" host "|sudo:" host ":/")
-	   hosts))))
+	  (if (string-match "[ ]+" host)
+	      (let ((result (split-string host " ")))
+		(while result
+		  (push
+		   (concat "/" tramp-default-method ":" (car result) ":")
+		   hosts)
+		  (push
+		   (concat "/ssh:" (car result) "|sudo:root@" (car result) ":/")
+		   hosts)
+		  (pop result)))
+	    (push
+	     (concat "/" tramp-default-method ":" host ":")
+	     hosts)
+	    (push
+	     (concat "/ssh:" host "|sudo:root@" host ":/")
+	     hosts)))))
     (when (package-installed-p 'docker-tramp)
       (cl-loop for line in (cdr (ignore-errors (apply #'process-lines "docker" (list "ps"))))
 	       for info = (reverse (split-string line "[[:space:]]+" t))
 	       collect (progn (push
 			       (concat "/docker:" (car info) ":/")
 			       hosts)
-			      (when anything-tramp-docker-user
-				(if (listp anything-tramp-docker-user)
-				    (let ((docker-user anything-tramp-docker-user))
+			      (when counsel-tramp-docker-user
+				(if (listp counsel-tramp-docker-user)
+				    (let ((docker-user counsel-tramp-docker-user))
 				      (while docker-user
 					(push
 					 (concat "/docker:" (car docker-user) "@" (car info) ":/")
 					 hosts)
 					(pop docker-user)))
 				  (push
-				   (concat "/docker:" anything-tramp-docker-user "@" (car info) ":/")
+				   (concat "/docker:" counsel-tramp-docker-user "@" (car info) ":/")
 				   hosts))))))
     (when (package-installed-p 'vagrant-tramp)
       (cl-loop for box-name in (map 'list 'cadr (vagrant-tramp--completions))
                do (progn
                     (push (concat "/vagrant:" box-name ":/") hosts)
-                    (push (concat "/vagrant:" box-name "|sudo:" box-name ":/") hosts))))
-    (push (concat "/sudo:root@localhost:" anything-tramp-localhost-directory) hosts)
+                    (push (concat "/vagrant:" box-name "|sudo:root@" box-name ":/") hosts))))
+    (push (concat "/sudo:root@localhost:" counsel-tramp-localhost-directory) hosts)
     (reverse hosts)))
 
-(defun anything-tramp-open (path)
-  "Tramp open with PATH."
-  (find-file path))
-
-(defvar anything-tramp-hosts
-  '((name . "Tramp")
-    (candidates . (lambda () (anything-tramp--candidates)))
-    (type . file)
-    (action . (("Tramp" . anything-tramp-open)))))
-
 ;;;###autoload
-(defun anything-tramp ()
-  "Open your ~/.ssh/config with anything interface.
+(defun counsel-tramp ()
+  "Open your ~/.ssh/config with counsel interface.
 You can connect your server with tramp"
   (interactive)
   (unless (file-exists-p "~/.ssh/config")
@@ -140,12 +140,10 @@ You can connect your server with tramp"
   (when (package-installed-p 'vagrant-tramp)
     (unless (executable-find "vagrant")
       (error "'vagrant' is not installed")))
-  (run-hooks 'anything-tramp-pre-command-hook)
-  (anything-other-buffer
-   '(anything-tramp-hosts)
-   "*anything-tramp*")
-  (run-hooks 'anything-tramp-post-command-hook))
+  (run-hooks 'counsel-tramp-pre-command-hook)
+  (counsel-find-file (ivy-read "Tramp: " (counsel-tramp--candidates)))
+  (run-hooks 'counsel-tramp-post-command-hook))
 
-(provide 'anything-tramp)
+(provide 'counsel-tramp)
 
-;;; anything-tramp.el ends here
+;;; counsel-tramp.el ends here
