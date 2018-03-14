@@ -1,8 +1,8 @@
 ;;; org-send-ebook.el --- Send org link file to ebook reader.
 
 ;; Authors: stardiviner <numbchild@gmail.com>
-;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (seq "2.20"))
-;; Package-Version: 20180313.1205
+;; Package-Requires: ((emacs "25") (cl-lib "0.5") (seq "2.20"))
+;; Package-Version: 20180314.14
 ;; Package-X-Original-Version: 0.1
 ;; Keywords: org link ebook kindle epub mobi
 ;; homepage: https://github.com/stardiviner/org-send-ebook
@@ -81,25 +81,33 @@
            (default-directory (temporary-file-directory))
            (target-file (concat (temporary-file-directory) target-file-name))
            (device-directory (org-send-ebook--detect-directory)))
+      ;; device already has this file.
       (unless (file-exists-p (concat device-directory target-file-name))
-        (if (file-exists-p target-file) ; converted temp file exist, when previous convert failed.
+        ;; converted temp file exist, when previous convert failed.
+        (if (file-exists-p target-file)
             (progn
               (message "org-send-ebook: converted temp target file exist.")
               (copy-file target-file device-directory)
               (message (format "org-send-ebook: %s finished." target-file-name)))
-          ;; convert ebook to device compatible format.
-          (if (not (string= (file-name-extension source-file) (file-name-extension target-file-name)))
-              (make-process
-               :name (format "org-send-ebook: %s" target-file-name)
-               :command (list "ebook-convert" " " (shell-quote-argument source-file) " " (shell-quote-argument target-file))
-               :sentinel (lambda (proc event)
-                           ;; send converted file to device
-                           (when (string= event "finished\n")
-                             (copy-file target-file device-directory)
-                             (message (format "org-send-ebook: %s finished." target-file-name))))
-               :buffer (format "org-send-ebook: %s" target-file-name))
-            (copy-file source-file device-directory)
-            (message (format "org-send-ebook: %s finished." target-file-name)))))
+          ;; if converted temporary file exist, copy directly.
+          (if (string= (file-name-extension source-file) (file-name-extension target-file-name))
+              (progn
+                (copy-file source-file device-directory)
+                (message (format "org-send-ebook: %s finished." target-file-name)))
+            ;; convert ebook to device compatible format.
+            (message (format "org-send-ebook: %s started..." target-file-name))
+            (make-process
+             :name (format "org-send-ebook: %s" target-file-name)
+             :command (list "ebook-convert" " " source-file " " target-file)
+             :sentinel (lambda (proc event)
+                         ;; send converted file to device
+                         (if (string= event "finished\n")
+                             (progn
+                               (copy-file target-file device-directory)
+                               (message (format "org-send-ebook: %s finished." target-file-name)))
+                           (user-error "Error on process: org-send-ebook")))
+             :buffer (format "*org-send-ebook: %s*" target-file-name))
+            )))
       )))
 
 
