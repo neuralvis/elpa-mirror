@@ -4,7 +4,7 @@
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Package-Requires: ((cl-lib "0.3"))
-;; Package-Version: 20180318.1323
+;; Package-Version: 20180318.1537
 ;; Homepage: https://github.com/tarsius/keymap-utils
 ;; Keywords: convenience, extensions
 
@@ -45,7 +45,7 @@
   (and (listp   object)
        (keymapp object)))
 
-(defun kmu-prefix-command-p (object &optional boundp)
+(defun kmu-prefix-command-p (object)
   "Return non-nil if OBJECT is a symbol whose function definition is a keymap.
 The value returned is the keymap stored as OBJECT's variable
 definition or else the variable which holds the keymap."
@@ -194,7 +194,7 @@ a symbol from being returned which is dynamically bound to the
 parent keymap."
   (let ((--parmap-- (keymap-parent keymap)))
     (when --parmap--
-      (or (kmu-keymap-variable --parmap-- '--parmap--)
+      (or (apply #'kmu-keymap-variable --parmap-- '--parmap-- exclude)
           (unless need-symbol --parmap--)))))
 
 (defun kmu-mapvar-list (&optional exclude-prefix-commands)

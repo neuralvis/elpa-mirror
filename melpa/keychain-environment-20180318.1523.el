@@ -1,4 +1,4 @@
-;;; keychain-environment.el --- load keychain environment variables
+;;; keychain-environment.el --- load keychain environment variables  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2011-2018  Jonas Bernoulli
 ;; Copyright (C) 2008-2011  Paul Tipper
@@ -8,7 +8,7 @@
 ;; Created: 20081218
 ;; Homepage: https://github.com/tarsius/keychain-environment
 ;; Keywords: gnupg, pgp, ssh
-;; Package-Version: 20180318.1324
+;; Package-Version: 20180318.1523
 
 ;; This file is not part of GNU Emacs.
 

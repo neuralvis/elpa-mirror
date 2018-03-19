@@ -1,11 +1,11 @@
 ;;; imapfilter.el --- run the imapfilter executable  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015-2016  Jonas Bernoulli
+;; Copyright (C) 2015-2018  Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/imapfilter
 ;; Keywords: mail
-;; Package-Version: 20161008.1357
+;; Package-Version: 20180318.1327
 
 ;; This file is not part of GNU Emacs.
 
@@ -66,8 +66,8 @@
     (set-window-configuration winconf))
   (message "Running imapfilter...done"))
 
+;;; _
 (provide 'imapfilter)
-
 ;; Local Variables:
 ;; indent-tabs-mode: nil
 ;; End:
