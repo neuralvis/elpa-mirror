@@ -4,7 +4,7 @@
 ;; Copyright 2011-2018 François-Xavier Bois
 
 ;; Version: 16.0.4
-;; Package-Version: 20180405.513
+;; Package-Version: 20180405.649
 ;; Author: François-Xavier Bois <fxbois AT Google Mail Service>
 ;; Maintainer: François-Xavier Bois
 ;; Package-Requires: ((emacs "23.1"))
@@ -8097,7 +8097,7 @@ another auto-completion with different ac-sources (e.g. ac-php)")
             ;;(message "val=%S tag=%S end=%S | %S" val tag end (plist-get map tag))
             (setq continue (not (> val 0)))
             ) ;unless
-          ;;(message "pos=%S tag=%S val=%S end=%S void=%S" (point) tag val end void)
+          ;(message "pos=%S tag=%S val=%S end=%S void=%S" (point) tag val end void)
           ) ;while
         (cond
          ((> val 0)
@@ -8107,7 +8107,7 @@ another auto-completion with different ac-sources (e.g. ac-php)")
           ;;(re-search-forward "[[:space:]]*")
           (setq offset (+ (current-indentation) web-mode-markup-indent-offset)))
          (t
-          (setq offset nil))
+          (setq offset (current-indentation)))
          )
         ) ;t
        ) ;cond
