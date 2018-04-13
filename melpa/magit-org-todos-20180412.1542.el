@@ -4,10 +4,10 @@
 ;; Author: Daniel Ma
 ;; URL: http://github.com/danielma/magit-org-todos
 ;; Created: 2018
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Keywords: org-mode magit tools
-;; Package-Version: 20180319.859
-;; Package-X-Original-Version: 0.1.1
+;; Package-Version: 20180412.1542
+;; Package-X-Original-Version: 0.1.2
 ;; Package-Requires: ((magit "2.0.0") (emacs "24"))
 
 ;;; Commentary:
@@ -60,11 +60,15 @@
       (magit-insert-section (org-todos-wrapper)
         (magit-insert-heading "Todos:")
         (dolist (todo todos)
-          (let ((keyword (org-element-property :todo-keyword todo))
-                (title (org-element-property :raw-value todo)))
+          (let* ((keyword (org-element-property :todo-keyword todo))
+                 (title (org-element-property :title todo)))
             (magit-insert-section (org-todos title)
-            (insert (concat "* " (propertize keyword 'face 'org-todo) " " title))
-            (insert ?\n))))
+              (insert (concat "* " (propertize keyword 'face 'org-todo) " "))
+              (dolist (el title)
+                (if (and (listp el) (eq (car el) 'link))
+                    (insert (car (last el)))
+                  (insert el)))))
+          (insert ?\n))
         (insert ?\n)))))
 
 ;;;###autoload
