@@ -7,10 +7,10 @@
 ;; Created: 12 Aug 2016
 
 ;; Keywords: coverage gcov c
-;; Package-Version: 20180414.1222
+;; Package-Version: 20180415.1331
 ;; Homepage: https://github.com/AdamNiederer/cov
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "24.4") (f "0.18.2") (s "1.11.0"))
+;; Package-Requires: ((emacs "24.4") (f "0.18.2") (s "1.11.0") (elquery))
 
 ;; This file is not part of GNU Emacs.
 
@@ -39,6 +39,8 @@
 (require 'json)
 (require 'seq)
 (require 'subr-x)
+(require 'filenotify)
+(require 'elquery)
 
 (defgroup cov nil
   "The group for everything in cov.el"
@@ -139,7 +141,7 @@ COVERAGE-TOOL has created the data.
 
 Currently the only supported COVERAGE-TOOL is gcov.")
 
-(defvar cov-coverage-file-paths '("." cov--locate-coveralls)
+(defvar cov-coverage-file-paths '("." cov--locate-coveralls cov--locate-clover)
   "List of paths or functions returning file paths containing coverage files.
 
 Relative paths:
@@ -222,6 +224,14 @@ Looks for a `coverage-final.json' file. Return nil it not found."
     (when dir
       (cons (file-truename (f-join dir "coverage-final.json")) 'coveralls))))
 
+(defun cov--locate-clover (file-dir _file-name)
+  "Locate clover coverage from FILE-DIR for FILE-NAME.
+
+Looks for a `clover.xml' file. Return nil it not found."
+  (let ((dir (locate-dominating-file file-dir "clover.xml")))
+    (when dir
+      (cons (file-truename (f-join dir "clover.xml")) 'clover))))
+
 (defun cov--coverage ()
   "Return coverage file and tool.
 
@@ -277,6 +287,27 @@ of (FILE . (LINE-NUM TIMES-RAN))."
             (push (list linenum count) file-coverage))
           (setq linenum (+ linenum 1)))
         (push (cons (gethash "name" source) file-coverage) matches)))
+    matches))
+
+(defun cov--clover-parse ()
+  "Parse clover coverage.
+
+Parse clover data in `(current-buffer)' and return a list
+of (FILE . (LINE-NUM TIMES-RAN))."
+  (let ((xml (elquery-read-string (buffer-string)))
+        (matches (list)))
+    (when xml
+      (dolist (file (elquery-$ "coverage project package file" xml))
+        (let* ((file-name (elquery-prop file "name"))
+               (common (f-common-parent (list file-name cov-coverage-file)))
+               (file-coverage (list)))
+          (dolist (line (elquery-$ "line" file))
+            (let ((line-num (string-to-number (elquery-prop line "num")))
+                  (line-count (string-to-number (elquery-prop line "count"))))
+              (unless (equal line-num 0)
+                (push (list line-num line-count) file-coverage))))
+          ;; Clover uses absolute filenames, so we remove the common prefix.
+          (push (cons (string-remove-prefix common file-name) file-coverage) matches))))
     matches))
 
 (defun cov--read-and-parse (file-path format)
@@ -347,6 +378,14 @@ DISPLACEMENT to account for lines hidden by narrowing."
           (widen)
           (1- (line-number-at-pos start)))))))
 
+(defmacro cov--file-mtime (file)
+  "Return the last modification time of FILE."
+  (nth 5 (file-attributes file)))
+
+;; Structure for coverage data.
+(cl-defstruct cov-data
+  type mtime buffers watcher coverage)
+
 (defun cov--get-buffer-coverage ()
   "Return coverage for current buffer.
 
@@ -355,44 +394,85 @@ it if necessary, or reloading if the file has changed."
   (let ((cov (cov--coverage)))
     (when cov
       (let* ((file (car cov))
-             (stored-data (gethash file cov-coverages))
-             (buffers (seq-filter (lambda (buffer)
-                                    (and (buffer-live-p buffer)
-                                         (not (eq buffer (current-buffer)))))
-                                  (nth 1 stored-data))))
-        ;; File mtime changed, reload.
-        (when (and stored-data (not (equal (car stored-data)
-                                           (nth 5 (file-attributes file)))))
-          (message "Reloading coverage file.")
-          (setq stored-data nil))
-        ;; Coverage not loaded.
+             (stored-data (gethash file cov-coverages)))
         (unless stored-data
-          (setq stored-data (list (nth 5 (file-attributes file))
-                                  buffers
-                                  (cov--read-and-parse file (cdr cov))))
-          (puthash file stored-data cov-coverages)
-          ;; Update buffers using this coverage.
-          (dolist (buffer buffers)
-            (with-current-buffer buffer
-              (message "Updating coverage for \"%s\"" (buffer-name buffer))
-              (cov-update))))
+          (setq stored-data (make-cov-data :type (cdr cov)))
+          (puthash file stored-data cov-coverages))
         ;; Register current buffer as user of this coverage.
-        (setf (nth 1 stored-data) (cons (current-buffer) buffers))
+        (if (cov-data-buffers stored-data)
+            (unless (member (current-buffer) (cov-data-buffers stored-data))
+              (push (current-buffer) (cov-data-buffers stored-data)))
+          (setf (cov-data-buffers stored-data) (list (current-buffer)))
+          ;; Start file watching, if available.
+          (when file-notify--library
+            ;; We're watching the directory of the file rather than
+            ;; the file itself in order to catch deletion and
+            ;; re-creation of the file.
+            (setf (cov-data-watcher stored-data)
+                  (file-notify-add-watch
+                   (f-dirname file)
+                   '(change)
+                   (lambda (event)
+                     (cov-watch-callback file event))))))
+        ;; Load coverage if needed.
+        (cov--load-coverage stored-data file t)
+
         (add-hook 'kill-buffer-hook 'cov-kill-buffer-hook)
         ;; Find file coverage.
         (let ((common (f-common-parent (list file (buffer-file-name)))))
           (cdr (assoc (string-remove-prefix common (buffer-file-name))
-                      (nth 2 stored-data))))))))
+                      (cov-data-coverage stored-data))))))))
+
+(defun cov--load-coverage (coverage file &rest ignore-current)
+  "Load coverage data into COVERAGE from FILE.
+
+Won't update `(current-buffer)' if IGNORE-CURRENT is non-nil."
+  ;; File mtime changed, reload.
+  (when (not (equal (cov-data-mtime coverage)
+                    (cov--file-mtime file)))
+    (message "Reloading coverage file.")
+    (setf (cov-data-coverage coverage) nil))
+  (unless (cov-data-coverage coverage)
+    (setf (cov-data-coverage coverage) (cov--read-and-parse file (cov-data-type coverage)))
+    (setf (cov-data-mtime coverage) (cov--file-mtime file))
+    ;; Update buffers using this coverage.
+    (let ((buffers (cov-data-buffers coverage)))
+      (when ignore-current
+        (setq buffers (remove (current-buffer) buffers)))
+      (dolist (buffer buffers)
+        (with-current-buffer buffer
+          (message "Updating coverage for \"%s\"" (buffer-name buffer))
+          (cov-update))))))
 
 (defun cov-kill-buffer-hook ()
   "Unregister buffer with coverage data and clean out unused coverage."
-  (let ((keys (hash-table-keys cov-coverages)))
-    (dolist (file keys)
-      (let* ((coverage (gethash file cov-coverages))
-             (buffers (remove (current-buffer)
-                              (nth 1 coverage))))
-        (if buffers (setf (nth 1 coverage) buffers)
-          (remhash file cov-coverages))))))
+  ;; Only clean up when buffer have a file name. Buffers without a file
+  ;; cannot have coverage.
+  (when (buffer-file-name)
+    (let ((keys (hash-table-keys cov-coverages)))
+      (dolist (file keys)
+        (let* ((coverage (gethash file cov-coverages))
+               (buffers (remove (current-buffer)
+                                (cov-data-buffers coverage))))
+          (if buffers (setf (cov-data-buffers coverage) buffers)
+            (progn
+              (when (cov-data-watcher coverage)
+                (file-notify-rm-watch (cov-data-watcher coverage)))
+              (remhash file cov-coverages))))))))
+
+(defun cov-watch-callback (file event)
+  "Trigger reload of coverage data on FILE change.
+
+EVENT is of the form:
+
+  (DESCRIPTOR ACTION FILE [FILE1])"
+  (let ((event-type (nth 1 event))
+        (event-file (nth 2 event)))
+    (when (and (equal file event-file) (member event-type '(created changed)))
+      (let ((coverage (gethash file cov-coverages)))
+        (when coverage
+          (setf (cov-data-coverage coverage) nil)
+          (cov--load-coverage coverage file))))))
 
 (defun cov-set-overlays ()
   "Add cov overlays."
