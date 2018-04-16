@@ -6,10 +6,10 @@
 ;;
 ;; Author: David Landell <david.landell@sunnyhill.email>
 ;;         Roland McGrath <roland@gnu.org>
-;; Version: 1.4.3
-;; Package-Version: 1.4.3
+;; Version: 1.5.0
+;; Package-Version: 1.5.0
 ;; URL: https://github.com/dajva/rg.el
-;; Package-Requires: ((cl-lib "0.5") (emacs "24") (s "1.10.0"))
+;; Package-Requires: ((cl-lib "0.5") (emacs "24.3") (s "1.10.0"))
 ;; Keywords: matching, tools
 
 ;; This file is not part of GNU Emacs.
@@ -71,6 +71,9 @@
 ;; flag for the rg command line.  Such flags can then be toggled from
 ;; the results buffer to repeat the search with updated flags.
 
+;; The `rg-define-search' macro can be used to define custom search
+;; functions that is not available in this package.
+
 ;; The two `rg-save-search' functions will allow for saving search
 ;; result buffers with or without custom naming.
 ;; `rg-list-searches' will display a list of all search buffers with
@@ -106,8 +109,9 @@
   :group 'rg)
 
 (defcustom rg-command-line-flags nil
-  "List of command line flags for rg."
-  :type '(repeat string)
+  "List of command line flags for rg.
+Alternatively a function returning a list of flags."
+  :type '(choice function (repeat string))
   :group 'rg)
 
 (defcustom rg-group-result nil
@@ -153,10 +157,11 @@ NIL means case sensitive search will be forced."
 This hook is called every time the rg buffer has been updated with
 new content and filtered through the `rg-filter' function.")
 
-(defvar rg-finished-functions nil
-  "Functions to call when a search is finished.
-Each function is called with two arguments: the compilation buffer,and
-a string describing how the process finished.")
+(defvar rg-command-line-flags-function 'identity
+  "Function to modify command line flags of a search.
+The argument of the function is an optional list of search specific
+command line flags and the function shall return a list of command
+line flags to use.")
 
 
 ;; Faces
@@ -220,21 +225,33 @@ a string describing how the process finished.")
   :group 'rg-face)
 
 
-;; Internal vars
+;; Internal vars and structs
+
+(cl-defstruct (rg-search (:constructor rg-search-create)
+                         (:constructor rg-search-new (pattern files dir))
+                         (:copier nil))
+  pattern                ; search pattern
+  files                  ; files to search
+  dir                    ; base directory
+  full-command           ; full-command (t or nil)
+  literal                ; literal patterh (t or nil)
+  toggle-flags           ; toggle command line flags
+  flags)                 ; search specific flags
+
 (defvar rg-builtin-type-aliases nil
   "Cache for 'rg --type-list'.")
 
-(defvar rg-command "rg --color always --colors match:fg:red -n"
+(defvar rg-command
+  (concat (executable-find "rg")
+          " --color always --colors match:fg:red -n")
   "Command string for invoking rg.")
 
-(defvar rg-last-search nil
-  "Stores parameters of last search.  Becomes buffer local in `rg-mode' buffers.")
+(defvar rg-cur-search (rg-search-create)
+  "Stores parameters of last search.
+Becomes buffer local in `rg-mode' buffers.")
 
-(defvar rg-hit-count 0
+(defvar-local rg-hit-count 0
   "Stores number of hits in a search.")
-
-(defvar rg-literal nil
-  "If non nil do literal search instead of regexp search.")
 
 (defvar rg-toggle-command-line-flags nil
   "List of command line flags defined by `rg-define-toggle' macro.")
@@ -243,7 +260,7 @@ a string describing how the process finished.")
 (defvar rg-files-history nil "History for files args.")
 (defvar rg-pattern-history nil "History for search patterns.")
 
-(defconst rg-special-type-aliases
+(defconst rg-internal-type-aliases
   '(("all" . "all defined type aliases") ; rg --type all
     ("everything" . "*")) ; rg without '--type' arg
   "Internal type aliases for special purposes.
@@ -334,88 +351,91 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
         (split-string globs) " ")))
    rg-custom-type-aliases))
 
-(defun rg-build-template(&optional type custom)
-  "Create command line template.  When TYPE is non nil, type flag template
-will be added.  Optional CUSTOM is a file matching pattern that will be
-added as a '--type-add' parameter to the rg command line."
-  (let ((args (append
-               (list (if rg-group-result
-                         "--heading"
-                       "--no-heading"))
-               (rg-build-type-add-args)
-               rg-command-line-flags
-               rg-toggle-command-line-flags
-               (list "-e" "<R>"))))
-    (when rg-literal
-      (setq args (cons "--fixed-strings" args)))
-    (when rg-show-columns
-      (setq args (cons "--column" args)))
-    (when type
-      (setq args (cons "--type <F>" args))
-      (when custom
-        (setq args (cons
-                    (concat "--type-add "
-                            (shell-quote-argument (concat "custom:" custom)))
-                    args))))
-    (mapconcat 'identity (cons rg-command (delete-dups args)) " ")))
+(defun rg-is-custom-file-pattern (files)
+  "Return non nil if FILES is a custom file pattern."
+  (not (assoc files (rg-get-type-aliases))))
+
+(defun rg-build-command (pattern files literal flags)
+  "Create the command line for PATTERN and FILES.
+LITERAL determines if search will be literal or regexp based and FLAGS
+are command line flags to use for the search."
+  (let ((command-line
+         (append
+          (rg-build-type-add-args)
+          (if (functionp rg-command-line-flags)
+              (funcall rg-command-line-flags)
+            rg-command-line-flags)
+          flags
+
+          (list
+           (if rg-group-result "--heading" "--no-heading"))
+          (when (rg-is-custom-file-pattern files)
+            (list (concat "--type-add " (shell-quote-argument (concat "custom:" files)))))
+          (when rg-show-columns
+            (list "--column"))
+          (when literal
+            (list "--fixed-strings"))
+          (when (not (equal files "everything"))
+            (list "--type <F>"))
+          (list "-e <R>" "."))))
+
+    (grep-expand-template
+     (mapconcat 'identity (cons rg-command (delete-dups command-line)) " ")
+     pattern
+     (if (rg-is-custom-file-pattern files) "custom" files))))
 
 (defun rg-list-builtin-type-aliases ()
   "Invokes rg --type-list and puts the result in an alist."
   (unless (executable-find "rg")
     (error "'rg' is not in path"))
-  (mapcar
-   (lambda (item)
-     (let ((association (split-string item ":" t)))
-       (cons (s-trim (car association))
+  (let ((type-list (nbutlast (split-string
+                              (shell-command-to-string
+                               (concat (executable-find "rg") " --type-list"))
+                              "\n") 1)))
+    (mapcar
+     (lambda (type-alias)
+       (setq type-alias (split-string type-alias ":" t))
+       (cons (s-trim (car type-alias))
              (s-trim
-              (mapconcat 'identity (split-string (cadr association) "," t ) " ")))))
-   (nbutlast (split-string
-              (shell-command-to-string "rg --type-list") "\n") 1)))
+              (mapconcat 'identity
+                         (split-string (cadr type-alias) "," t )
+                         " "))))
+     type-list)))
 
 
-(defun rg-get-type-aliases (&optional nospecial)
+(defun rg-get-type-aliases (&optional skip-internal)
   "Return supported type aliases.
-If NOSPECIAL is non nil the `rg-special-type-aliases' will not be
-included."
+If SKIP-INTERNAL is non nil the `rg-internal-type-aliases' will be
+excluded."
   (unless rg-builtin-type-aliases
     (setq rg-builtin-type-aliases (rg-list-builtin-type-aliases)))
   (append rg-custom-type-aliases rg-builtin-type-aliases
-          (unless nospecial rg-special-type-aliases)))
+          (unless skip-internal rg-internal-type-aliases)))
 
 (defun rg-default-alias ()
   "Return the default alias by matching alias globs with the buffer file name."
-  (let* ((bn (or (buffer-file-name)
-                 (replace-regexp-in-string "<[0-9]+>\\'" "" (buffer-name))))
-         (fn (and bn
-                  (stringp bn)
-                  (file-name-nondirectory bn))))
+  (let* ((bufname (or (buffer-file-name)
+                      (replace-regexp-in-string "<[0-9]+>\\'" "" (buffer-name))))
+         (filename (and bufname
+                        (stringp bufname)
+                        (file-name-nondirectory bufname))))
     (or
-     (and fn
-          (cl-find-if
-           (lambda (alias)
-             (string-match (mapconcat
-                            'wildcard-to-regexp
-                            (split-string (cdr alias) nil t)
-                            "\\|")
-                           fn))
-           (rg-get-type-aliases t)))
+     (when filename
+       (cl-find-if
+        (lambda (alias)
+          (string-match (mapconcat 'wildcard-to-regexp
+                                   (split-string (cdr alias) nil t)
+                                   "\\|")
+                        filename))
+        (rg-get-type-aliases t)))
+     ;; Default when an alias for the file can't be determined
      '("all" . "*"))))
 
-(defun rg-read-input (&optional literal)
-  "Prompt user for input and return a list of the results.
-If LITERAL is non nil prompt for literal pattern."
-  (let* ((pattern (rg-read-pattern nil literal))
-         (files (rg-read-files pattern))
-         (dir (read-directory-name "In directory: "
-                                   nil default-directory t)))
-    (list pattern files dir)))
-
-(defun rg-read-files (pattern)
-  "Read files argument for interactive rg.  PATTERN is the search string."
+(defun rg-read-files ()
+  "Read files argument for interactive rg."
   (let ((default-alias (rg-default-alias)))
     (completing-read
-     (concat "Search for \"" pattern
-             "\" in files"
+     (concat "Search in files"
              (if default-alias
                  (concat
                   " (default: [" (car default-alias) "] = "
@@ -425,16 +445,12 @@ If LITERAL is non nil prompt for literal pattern."
      nil nil nil 'rg-files-history
      (car default-alias))))
 
-(defun rg-read-pattern (&optional default literal)
+(defun rg-read-pattern (literal &optional default)
   "Read search pattern argument from user.
-DEFAULT is the default pattern to use at the prompt.  If LITERAL is
-  non nil prompt for literal string."
+If LITERAL is non nil prompt for literal string.  DEFAULT is the default pattern to use at the prompt."
   (let ((default (or default (grep-tag-default)))
-        (prompt (concat
-                 (if (or literal rg-literal)
-                     "Literal"
-                   "Regexp")
-                 " search for")))
+        (prompt (concat (if literal "Literal" "Regexp")
+                        " search for")))
     (with-no-warnings
       (if (and (= emacs-major-version 24)
                (< emacs-minor-version 3))
@@ -540,11 +556,8 @@ Commands:
        'rg-process-setup)
   (set (make-local-variable 'compilation-disable-input) t)
   (set (make-local-variable 'compilation-error-screen-columns) nil)
-  (make-local-variable 'rg-last-search)
-  (make-local-variable 'rg-hit-count)
-  (make-local-variable 'rg-toggle-command-line-flags)
-  (make-local-variable 'rg-literal)
-  (rg-update-header-line)
+  (make-local-variable 'rg-cur-search)
+  (rg-create-header-line)
   (add-hook 'compilation-filter-hook 'rg-filter nil t) )
 
 (defun rg-project-root (file)
@@ -570,89 +583,74 @@ Returns the new list."
       (delete elem list)
     (push elem list)))
 
-(defun rg-push-uniq (elem list)
-  "Add ELEM to LIST if not present.
-Returns the new list."
-  (if (member elem list)
-      list
-    (push elem list)))
-
-(defun rg-delete-uniq (elem list)
-  "Remove ELEM from LIST if present.
-Returns the new list."
-  (if (member elem list)
-      (delete elem list)
-    list))
-
-(defun rg-build-command (pattern files)
-  "Create the command for PATTERN and FILES."
-  (concat (grep-expand-template
-           (rg-build-template
-            (not (equal files "everything"))
-            (unless (assoc files (rg-get-type-aliases))
-              (let ((glob files))
-                (setq files "custom")
-                glob)))
-           pattern
-           files)
-          " ."))
-
-(defun rg-header-render-label (name &optional nameface)
+(defun rg-header-render-label (labelform)
   "Return a fontified header label.
-NAME is the label text NAMEFACE is a custom face that will be applied
-to NAME."
-  (concat (propertize "[" 'font-lock-face `(header-line bold))
-          (propertize name 'font-lock-face `(,nameface header-line bold ))
-          (propertize "]" 'font-lock-face `(header-line bold))
-          ": "))
-
-(defun rg-header-render-value (value)
-  "Return a fontified header VALUE."
-  (propertize value 'font-lock-face '(header-line)))
+LABELFORM is either a string to render or a form where the `car' is a
+conditional and the two following items are then and else specs.
+Specs are lists where the the `car' is the labels string and the
+`cadr' is font to use for that string."
+  (list '(:propertize "[" font-lock-face (header-line bold))
+        (cond
+         ((stringp labelform)
+          `(:propertize ,labelform font-lock-face (header-line bold)))
+         ((listp labelform)
+          (let* ((condition (nth 0 labelform))
+                 (then (nth 1 labelform))
+                 (else (nth 2 labelform)))
+            `(:eval (if ,condition
+                        (propertize ,(nth 0 then) 'font-lock-face '(,(nth 1 then) header-line bold))
+                      (propertize ,(nth 0 else) 'font-lock-face '(,(nth 1 else) header-line bold))))))
+         (t (error "Not a string or list")))
+        '(:propertize "]" font-lock-face (header-line bold))
+        '(": ")))
 
 (defun rg-header-render-toggle (on)
   "Return a fontified toggle symbol.
-If ON is render \"on\" string, otherwise render \"off\"."
-  (let ((value (if on "on " "off"))
-        (face (if on 'rg-toggle-on-face 'rg-toggle-off-face)))
-    (propertize value 'font-lock-face `(bold ,face))))
+If ON is non nil, render \"on\" string, otherwise render \"off\"
+string."
+  `(:eval (let* ((on ,on)
+                 (value (if on "on " "off"))
+                 (face (if on 'rg-toggle-on-face 'rg-toggle-off-face)))
+            (propertize value 'font-lock-face `(bold ,face)))))
 
-;; TODO: Improve header structure to alloow for auto updates
-(defun rg-update-header-line ()
-  "Update the header line if `rg-show-header' is enabled."
+(defun rg-create-header-line ()
+  "Create the header line if `rg-show-header' is enabled."
   (when rg-show-header
-    (let ((type (if rg-literal "literal" "regexp"))
-          (typeface (if rg-literal 'rg-literal-face 'rg-regexp-face))
-          (itemspace "  "))
+    (let ((itemspace "  "))
       (setq header-line-format
-            (if (null rg-last-search)
-                (concat
-                 (rg-header-render-label "command line")
-                 (rg-header-render-value "no refinement"))
-              (concat
-               (rg-header-render-label type typeface)
-               (rg-header-render-value (nth 0 rg-last-search)) itemspace
+            (if (rg-search-full-command rg-cur-search)
+                (list (rg-header-render-label "command line") "no refinement")
+              (list
+               (rg-header-render-label '((rg-search-literal rg-cur-search)
+                                         ("literal" rg-literal-face)
+                                         ("regexp" rg-regexp-face)))
+               '(:eval (rg-search-pattern rg-cur-search)) itemspace
                (rg-header-render-label "files")
-               (rg-header-render-value (nth 1 rg-last-search)) itemspace
+               '(:eval (rg-search-files rg-cur-search)) itemspace
                (rg-header-render-label "case")
-               (rg-header-render-toggle (not (member "-i" rg-toggle-command-line-flags))) itemspace
-               (rg-header-render-label "ign")
-               (rg-header-render-toggle (not (member "--no-ignore" rg-toggle-command-line-flags)))))))))
+               (rg-header-render-toggle
+                '(not (member "-i" (rg-search-toggle-flags rg-cur-search)))) itemspace
+                (rg-header-render-label "ign")
+                (rg-header-render-toggle
+                 '(not (member "--no-ignore" (rg-search-toggle-flags rg-cur-search)))) itemspace
+                 (rg-header-render-label "hits")
+                 '(:eval (format "%d" rg-hit-count))))))))
 
-(defun rg-run (pattern files dir &optional literal  confirm)
+(defun rg-run (pattern files dir &optional literal confirm flags)
   "Execute rg command with supplied PATTERN, FILES and DIR.
 If LITERAL is nil interpret PATTERN as regexp, otherwise as a literal.
 CONFIRM allows the user to confirm and modify the command before
-executing."
+executing.  FLAGS is additional command line flags to use in the search."
   (unless (executable-find "rg")
     (error "'rg' is not in path"))
   (unless (and (stringp pattern) (> (length pattern) 0))
     (signal 'user-error '("Empty string: No search done")))
   (unless (and (file-directory-p dir) (file-readable-p dir))
     (setq dir default-directory))
-  (setq rg-literal literal)
   (rg-apply-case-flag pattern)
-  (let ((command (rg-build-command pattern files))
+  (let ((command (rg-build-command
+                  pattern files literal
+                  (append rg-toggle-command-line-flags flags)))
         confirmed)
     (setq dir (file-name-as-directory (expand-file-name dir)))
     (if confirm
@@ -660,13 +658,21 @@ executing."
               (read-from-minibuffer "Confirm: "
                                     command nil nil 'rg-history))
       (add-to-history 'rg-history command))
-    ;; If user changed command we can't know the parts of the
-    ;; search and needs to disable result buffer modifications.
-    (cond ((and confirmed (not (string= confirmed command)))
-           (setq-default rg-last-search nil)
-           (setq command confirmed))
-          (t
-           (setq-default rg-last-search (list pattern files dir))))
+    (cond
+     ((and confirmed (not (string= confirmed command)))
+      ;; If user changed command we can't know the parts of the
+      ;; search and needs to disable result buffer modifications.
+      (setf (rg-search-full-command rg-cur-search) t)
+      (setq command confirmed))
+     (t
+      (setq-default rg-cur-search
+                    (rg-search-create
+                     :pattern pattern
+                     :files files
+                     :dir dir
+                     :literal literal
+                     :toggle-flags rg-toggle-command-line-flags
+                     :flags flags))))
     (let ((default-directory dir))
       ;; Setting process-setup-function makes exit-message-function work
       ;; even when async processes aren't supported.
@@ -675,18 +681,42 @@ executing."
         (setq default-directory dir))))
 
 (defun rg-rerun ()
-  "Run `rg-recompile' with `compilation-arguments' taken from `rg-last-search'."
-  (let ((pattern (nth 0 rg-last-search))
-        (files (nth 1 rg-last-search))
-        (dir (nth 2 rg-last-search)))
+  "Run `rg-recompile' with `compilation-arguments' taken from `rg-cur-search'."
+  (let ((pattern (rg-search-pattern rg-cur-search))
+        (files (rg-search-files rg-cur-search))
+        (dir (rg-search-dir rg-cur-search))
+        (literal (rg-search-literal rg-cur-search))
+        (toggle-flags (rg-search-toggle-flags rg-cur-search))
+        (flags (rg-search-flags rg-cur-search)))
     (setcar compilation-arguments
-            (rg-build-command pattern files))
+            (rg-build-command pattern files literal
+                              (append toggle-flags flags)))
     ;; compilation-directory is used as search dir and
     ;; default-directory is used as the base for file paths.
     (setq compilation-directory dir)
     (setq default-directory compilation-directory)
-    (rg-recompile)
-    (rg-update-header-line)))
+    (rg-recompile)))
+
+(eval-and-compile
+  (defun rg-rerun-local-bindings (varplist)
+    (let ((pattern (plist-get varplist :pattern))
+          (files (plist-get varplist :files))
+          (dir (plist-get varplist :dir))
+          (flags (plist-get varplist :flags))
+          (bindings nil))
+      (when pattern
+        (setq bindings (append bindings
+                               `((,pattern (rg-search-pattern rg-cur-search))))))
+      (when files
+        (setq bindings (append bindings
+                               `((,files (rg-search-files rg-cur-search))))))
+      (when dir
+        (setq bindings (append bindings
+                               `((,dir (rg-search-dir rg-cur-search))))))
+      (when flags
+        (setq bindings (append bindings
+                               `((,flags (rg-search-toggle-flags rg-cur-search))))))
+      bindings)))
 
 (defmacro rg-rerun-with-changes (varplist &rest body)
   "Rerun last search with changed parameters.
@@ -700,30 +730,21 @@ with the non exposed unmodified parameters to rerun the the search.
 
 Supported properties are :pattern, :files, :dir and :flags, where the
 three first are bound to the corresponding parameters in `rg' from
-`rg-last-search' and :flags is bound to
-`rg-toggle-command-line-flags'.
+`rg-cur-search'.
 
 Example:
 \(rg-rerun-with-changes \(:pattern searchstring\)
-  \(setq searchstring \"new string\"\)\)"
+\(setq searchstring \"new string\"\)\)"
   (declare (debug ((&rest symbolp symbolp) body))
            (indent 1))
-  (let ((pattern (or (plist-get varplist :pattern) (cl-gensym)))
-        (files (or (plist-get varplist :files) (cl-gensym)))
-        (dir (or (plist-get varplist :dir) (cl-gensym)))
-        (flags (or (plist-get varplist :flags) (cl-gensym))))
-    `(if rg-last-search
-         (cl-destructuring-bind (,pattern ,files ,dir) rg-last-search
-           (let ((,flags rg-toggle-command-line-flags))
-             ,@body
-             (setq rg-toggle-command-line-flags ,flags)
-             (setq rg-last-search (list ,pattern ,files ,dir))
-             (rg-rerun)))
+  (let ((bindings (rg-rerun-local-bindings varplist)))
+    `(if (null (rg-search-full-command rg-cur-search))
+         (let ,bindings
+           ,@body
+           ,@(cl-loop for binding in bindings
+                   collect `(setf ,@(reverse binding)))
+           (rg-rerun))
        (message "Can't refine search since full command line search was used."))))
-
-(defun rg-regexp-quote (regexp)
-  "Return an 'rg' REGEXP string which match exactly STRING and nothing else."
-  (replace-regexp-in-string "[][*.^\\|+?{}$()\]" "\\\\\\&" regexp))
 
 (defun rg-apply-case-flag (pattern)
   "Make sure -i is added to the command if needed.
@@ -735,9 +756,9 @@ detailed info."
                    (and (eq rg-ignore-case 'case-fold-search) case-fold-search))
                (isearch-no-upper-case-p pattern t)))
       (setq rg-toggle-command-line-flags
-            (rg-push-uniq "-i" rg-toggle-command-line-flags))
+            (add-to-list 'rg-toggle-command-line-flags "-i" ))
     (setq rg-toggle-command-line-flags
-          (rg-delete-uniq "-i" rg-toggle-command-line-flags))))
+          (delete "-i" rg-toggle-command-line-flags))))
 
 (defun rg-single-font-lock-match (face pos limit direction)
   "Return position of next match of 'font-lock-face property that equals FACE.
@@ -801,9 +822,9 @@ optional DEFAULT parameter is non nil the flag will be enabled by default."
     `(progn
        ,(if default
             `(setq rg-toggle-command-line-flags
-                   (rg-push-uniq ,flagvalue rg-toggle-command-line-flags))
+                   (add-to-list 'rg-toggle-command-line-flags ,flagvalue))
           `(setq rg-toggle-command-line-flags
-                 (rg-delete-uniq ,flagvalue rg-toggle-command-line-flags)))
+                 (delete ,flagvalue rg-toggle-command-line-flags)))
        ,(when key
           `(define-key rg-mode-map ,key (quote ,(intern funname))))
        (defun ,(intern funname) ()
@@ -812,25 +833,14 @@ optional DEFAULT parameter is non nil the flag will be enabled by default."
          (rg-rerun-with-changes (:flags flags)
            (setq flags (rg-list-toggle ,flagvalue flags)))))))
 
-(defmacro rg-save-vars (varlist &rest body)
-  "Save variables in VARLIST and restore them to original values after BODY has been run."
-  (declare (indent 1))
-  (let ((set-pairs
-         (cl-loop for var in varlist
-                  collect `(,(cl-gensym) ,var))))
-    `(let ,set-pairs
-       (unwind-protect
-           (progn ,@body)
-         ,@(cl-loop for pair in set-pairs
-                    collect `(setq ,@(reverse pair)))))))
-
 (defun rg-recompile ()
   "Run `recompile' while preserving some buffer local variables."
   (interactive)
   ;; Buffer locals will be reset in recompile so we need save them
   ;; here.
-  (rg-save-vars (rg-literal rg-last-search rg-toggle-command-line-flags)
-    (recompile)))
+  (let ((cur-search rg-cur-search))
+    (recompile)
+    (setq rg-cur-search cur-search)))
 
 (defun rg-rerun-toggle-case ()
   "Rerun last search with toggled case sensitivity setting."
@@ -851,27 +861,28 @@ optional DEFAULT parameter is non nil the flag will be enabled by default."
     ;; pattern in the input area.
     (let ((read-from-minibuffer-orig (symbol-function 'read-from-minibuffer)))
       (cl-letf (((symbol-function #'read-from-minibuffer)
-                  (lambda (prompt &optional _ &rest args)
-                    (apply read-from-minibuffer-orig prompt pattern args))))
-        (setq pattern (rg-read-pattern pattern))))))
+                 (lambda (prompt &optional _ &rest args)
+                   (apply read-from-minibuffer-orig prompt pattern args))))
+        (setq pattern (rg-read-pattern (rg-search-literal rg-cur-search)
+                                       pattern))))))
 
 (defun rg-rerun-change-regexp ()
   "Rerun last search but prompt for new regexp."
   (interactive)
-  (let ((rg-literal-orig rg-literal))
-    (setq rg-literal nil)
+  (let ((literal-orig (rg-search-literal rg-cur-search)))
+    (setf (rg-search-literal rg-cur-search) nil)
     (condition-case nil
         (rg-rerun-change-search-string)
-      ((error quit) (setq rg-literal rg-literal-orig)))))
+      ((error quit) (setf (rg-search-literal rg-cur-search) literal-orig)))))
 
 (defun rg-rerun-change-literal ()
   "Rerun last search but prompt for new literal."
   (interactive)
-  (let ((rg-literal-orig rg-literal))
-    (setq rg-literal t)
+  (let ((literal-orig (rg-search-literal rg-cur-search)))
+    (setf (rg-search-literal rg-cur-search) t)
     (condition-case nil
         (rg-rerun-change-search-string)
-      ((error quit) (setq rg-literal rg-literal-orig)))))
+      ((error quit) (setf (rg-search-literal rg-cur-search) literal-orig)))))
 
 (defun rg-rerun-change-files()
   "Rerun last search but prompt for new files."
@@ -947,6 +958,7 @@ from a saved buffer in which case the saved buffer will be reused."
         (kill-buffer buf)))))
 
 (defun rg-ibuffer-search-updated()
+  "This function is executed when search list buffer is updated."
   (let ((list-buffer (get-buffer rg-search-list-buffer-name)))
     (when list-buffer
       (with-current-buffer list-buffer
@@ -960,7 +972,7 @@ from a saved buffer in which case the saved buffer will be reused."
 (define-ibuffer-column rg-search-term
   (:name "Search" :props ('face 'rg-match-face))
   (ignore mark)
-  (or (car rg-last-search) "N/A"))
+  (or (rg-search-pattern rg-cur-search) "N/A"))
 
 (define-ibuffer-column rg-hit-count
   (:name "Hits")
@@ -970,12 +982,12 @@ from a saved buffer in which case the saved buffer will be reused."
 (define-ibuffer-column rg-search-dir
   (:name "Directory" :props ('face 'rg-filename-face))
   (ignore mark)
-  (or (nth 2 rg-last-search) "N/A"))
+  (or (rg-search-dir rg-cur-search) "N/A"))
 
 (define-ibuffer-column rg-file-types
   (:name "Type")
   (ignore mark)
-  (or (nth 1 rg-last-search) "N/A"))
+  (or (rg-search-files rg-cur-search) "N/A"))
 
 ;;;###autoload
 (defun rg-list-searches ()
@@ -999,8 +1011,8 @@ from a saved buffer in which case the saved buffer will be reused."
 
 ;;;###autoload
 (defun rg-enable-default-bindings(&optional prefix)
-  "Enable the global `rg' default key bindings under PREFIX key. If
-prefix is not supplied `rg-keymap-prefix' is used."
+  "Enable the global `rg' default key bindings under PREFIX key.
+If prefix is not supplied `rg-keymap-prefix' is used."
   (interactive)
   (setq prefix (or prefix rg-keymap-prefix))
   (when prefix
@@ -1008,67 +1020,246 @@ prefix is not supplied `rg-keymap-prefix' is used."
     (message "Global key bindings for `rg' enabled with prefix: %s"
              (edmacro-format-keys prefix))))
 
+(eval-and-compile
+  ;; Copied macroexp-parse-body from macroexp.el since this is only
+  ;; available in emacs > 25.
+  (defun rg-search-parse-body (args)
+    "Parse a function ARGS into (DECLARATIONS . EXPS)."
+    (let ((decls ()))
+      (while (and (cdr args)
+                  (let ((e (car args)))
+                    (or (stringp e)
+                        (memq (car-safe e)
+                              '(:documentation declare interactive cl-declare)))))
+        (push (pop args) decls))
+      (cons (nreverse decls) args))))
+
+(eval-and-compile
+  (defun rg-set-search-defaults (args)
+    "Set defaults for required search options missing from ARGS.
+If the :confirm option is missing, set it to NEVER, if
+the :format option is missing, set it to REGEXP, and if
+the :query option is missing, set it to ASK"
+    (unless (plist-get args :confirm)
+      (setq args (plist-put args :confirm 'never)))
+
+    (unless (plist-get args :format)
+      (setq args (plist-put args :format 'regexp)))
+
+    (unless (plist-get args :query)
+      (setq args (plist-put args :query 'ask)))
+
+    (unless (plist-get args :files)
+      (setq args (plist-put args :files 'ask)))
+
+    (unless (plist-get args :dir)
+      (setq args (plist-put args :dir 'ask)))
+    args))
+
+(eval-and-compile
+  (defun rg-search-parse-local-bindings (search-cfg)
+    "Parse local bindings for search functions from SEARCH-CFG."
+    (let* ((confirm-opt (plist-get search-cfg :confirm))
+           (format-opt (plist-get search-cfg :format))
+           (query-opt (plist-get search-cfg :query))
+           (alias-opt (plist-get search-cfg :files))
+           (dir-opt (plist-get search-cfg :dir))
+           (flags-opt (plist-get search-cfg :flags))
+           (binding-list `((literal ,(eq format-opt 'literal)))))
+
+      ;; confirm binding
+      (cond ((eq confirm-opt 'never)
+             (setq binding-list (append binding-list `((confirm nil)))))
+
+            ((eq confirm-opt 'always)
+             (setq binding-list (append binding-list `((confirm t)))))
+
+            ((eq confirm-opt 'prefix)
+             (setq binding-list (append binding-list
+                                        '((confirm (equal current-prefix-arg
+                                                          '(4))))))))
+
+      ;; query binding
+      (unless (eq query-opt 'ask)
+        (let ((query (cond ((eq query-opt 'point) '(grep-tag-default))
+                           (t query-opt))))
+          (setq binding-list (append binding-list `((query ,query))))))
+
+      ;; dir binding
+      (unless (eq dir-opt 'ask)
+        (let ((dirs (cond ((eq dir-opt 'project) '(rg-project-root
+                                                   buffer-file-name))
+                          ((eq dir-opt 'current) 'default-directory)
+                          (t dir-opt))))
+          (setq binding-list (append binding-list `((dir ,dirs))))))
+
+      ;; file alias binding
+      (unless (eq alias-opt 'ask)
+        (let ((files (if (eq alias-opt 'current)
+                         '(car (rg-default-alias))
+                       alias-opt)))
+          (setq binding-list (append binding-list `((files ,files))))))
+
+      (when (eq flags-opt 'ask)
+        (setq flags-opt 'flags))
+
+      (setq binding-list
+            (append binding-list
+                    `((flags (funcall rg-command-line-flags-function ,flags-opt)))))
+
+      binding-list)))
+
+(eval-and-compile
+  (defun rg-search-parse-interactive-args (search-cfg)
+    "Parse interactive args from SEARCH-CFG for search functions."
+    (let* ((query-opt (plist-get search-cfg :query))
+           (format-opt (plist-get search-cfg :format))
+           (literal (eq format-opt 'literal))
+           (dir-opt (plist-get search-cfg :dir))
+           (files-opt (plist-get search-cfg :files))
+           (flags-opt (plist-get search-cfg :flags))
+           (iargs '()))
+
+      (when (eq query-opt 'ask)
+        (setq iargs
+              (append iargs `((query . (rg-read-pattern ,literal))))))
+
+      (when (eq files-opt 'ask)
+        (setq iargs
+              (append iargs '((files . (rg-read-files))))))
+
+      (when (eq dir-opt 'ask)
+        (setq iargs
+              (append iargs
+                      '((dir . (read-directory-name
+                                "In directory: " nil default-directory t))))))
+
+      (when (eq flags-opt 'ask)
+        (setq iargs
+              (append iargs '((flags . (split-string
+                                        (read-string "Command line flags: ")))))))
+      iargs)))
+
+(defconst rg-elisp-font-lock-keywords
+  '(("(\\(rg-define-search\\)\\_>[ \t']*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
+     (1 font-lock-keyword-face)
+     (2 font-lock-function-name-face nil t))))
+
+(font-lock-add-keywords 'emacs-lisp-mode rg-elisp-font-lock-keywords)
+
 ;;;###autoload
-(defun rg-project (regexp files)
+(defmacro rg-define-search (name &rest args)
+  "Define an rg search functions named NAME.
+ARGS is a search specification that defines parameters of a search.
+It optionally starts with a string that is used as the docstring for
+the defined function.  The rest of ARGS contains key value pairs
+according to the specification below.  All keys are optional with
+specified default if left out.
+
+:query      Method for retrieving the search string.  Allowed values
+            are `point' which means extract thing at point and `ask'
+            which means prompt the user for a string.  Any form that
+            evaulates to a string is allowed.
+            Default is `ask'.
+:format     Specifies if :query is interpreted literally (`literal')
+            or as a regexp (`regexp').
+            Default is `regexp'.
+:files      Form that evaluates to a file alias or custom file glob.
+            `current' means extract alias from current buffer file name,
+            `ask' will prompt the user.
+            Default is `ask'.
+:dir        Root search directory.  Allowed values are `ask' for user
+            prompt, `current' for current dir and `project' for project
+            root.  Any form that evaulates to a directory string is
+            also allowed.
+            Default is `ask'.
+:confirm    `never', `always', or `prefix' are allowed values.  Specifies
+            if the the final search command line string can be modified
+            and confirmed the user.
+            Default is `never'.
+:flags      `ask' or a list of command line flags that will be used when
+            invoking the search.
+
+Example:
+\(rg-define-search search-home-dir-in-elisp
+  \"Doc string.\"
+  :query ask
+  :format literal
+  :files \"elisp\"
+  :dir (getenv \"HOME\"\)\)"
+  (declare (indent defun))
+  (let* ((body (rg-search-parse-body args))
+         (decls (car body))
+         (search-cfg (rg-set-search-defaults (cdr body)))
+         (local-bindings (rg-search-parse-local-bindings search-cfg))
+         (iargs (rg-search-parse-interactive-args search-cfg)))
+    `(defun ,name ,(mapcar 'car iargs)
+       ,@decls
+       (interactive
+        (list ,@(mapcar 'cdr iargs)))
+       (let ,local-bindings
+         (rg-run query files dir literal confirm flags)))))
+
+;;;###autoload (autoload 'rg-project "rg.el" "" t)
+(rg-define-search rg-project
   "Run ripgrep in current project searching for REGEXP in FILES.
 The project root will will be determined by either common project
 packages like projectile and `find-file-in-project' or the source
 version control system."
-  (interactive
-   (progn
-     (let* ((regexp (rg-read-pattern))
-            (files (rg-read-files regexp)))
-       (list regexp files))))
-  (let ((root (rg-project-root buffer-file-name)))
-    (if root
-        (rg-run regexp files root)
-      (signal 'user-error '("No project root found")))))
+  :dir project)
+
+;;;###autoload (autoload 'rg-dwim-project-dir "rg.el" "" t)
+(rg-define-search rg-dwim-project-dir
+  "Search for thing at point in files matching the current file
+under the project root directory."
+  :query point
+  :format literal
+  :files current
+  :dir project)
+
+;;;###autoload (autoload 'rg-dwim-current-dir "rg.el" "" t)
+(rg-define-search rg-dwim-current-dir
+  "Search for thing at point in files matching the current file
+under the current directory."
+  :query point
+  :format literal
+  :files current
+  :dir current)
 
 ;;;###autoload
 (defun rg-dwim (&optional curdir)
   "Run ripgrep without user interaction figuring out the intention by magic(!).
-The default magic searches for thing at point in files matching
-current file under project root directory.
-
-With \\[universal-argument] prefix (CURDIR), search is done in current dir
-instead of project root."
+The default magic searches for thing at
+point in files matching current file under project root
+directory.  With \\[universal-argument] prefix (CURDIR), search is
+done in current dir instead of project root."
   (interactive "P")
-  (let* ((literal (grep-tag-default))
-         (files (car (rg-default-alias)))
-         (dir (or (when curdir default-directory)
-                  (rg-project-root buffer-file-name))))
-    (rg-run literal files dir 'literal)))
+  (if curdir
+      (rg-dwim-current-dir)
+    (rg-dwim-project-dir)))
 
-(defun rg-literal (pattern files dir &optional confirm)
+;;;###autoload (autoload 'rg-literal "rg.el" "" t)
+(rg-define-search rg-literal
   "Run ripgrep, searching for literal PATTERN in FILES in directory DIR.
 With \\[universal-argument] prefix (CONFIRM), you can edit the
 constructed shell command line before it is executed."
-  (interactive
-   (progn
-     (append (rg-read-input 'literal)
-             (list (equal current-prefix-arg '(4))))))
-  (rg-run pattern files dir 'literal confirm))
+  :format literal
+  :confirm prefix)
 
-;;;###autoload
-(defun rg (regexp files dir &optional confirm)
+;;;###autoload (autoload 'rg "rg.el" "" t)
+(rg-define-search rg
   "Run ripgrep, searching for REGEXP in FILES in directory DIR.
 The search is limited to file names matching shell pattern FILES.
-FILES may use abbreviations defined in `rg-custom-type-aliases' or
-ripgrep builtin type aliases, e.g.  entering `elisp' is equivalent to `*.el'.
-
-REGEXP is a regexp as defined by the ripgrep executable.
-
-With \\[universal-argument] prefix (CONFIRM), you can edit the
-constructed shell command line before it is executed.
-
-Collect output in a buffer.  While ripgrep runs asynchronously, you
-can use \\[next-error] (M-x `next-error'), or \\<grep-mode-map>\\[compile-goto-error] \
-in the rg output buffer, to go to the lines where rg found matches."
-  (interactive
-   (progn
-     (append (rg-read-input)
-             (list (equal current-prefix-arg '(4))))))
-  (rg-run regexp files dir nil confirm))
+FILES may use abbreviations defined in `rg-custom-type-aliases'
+or ripgrep builtin type aliases, e.g. entering `elisp' is
+equivalent to `*.el'. REGEXP is a regexp as defined by the
+ripgrep executable. With \\[universal-argument] prefix (CONFIRM),
+you can edit the constructed shell command line before it is
+executed. Collect output in a buffer. While ripgrep runs
+asynchronously, you can use \\[next-error] (M-x `next-error'), or
+\\<grep-mode-map>\\[compile-goto-error] \ in the rg output
+buffer, to go to the lines where rg found matches."
+  :confirm prefix)
 
 (provide 'rg)
 
