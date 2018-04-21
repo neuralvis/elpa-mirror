@@ -5,8 +5,8 @@
 ;; Filename: ido-completing-read+.el
 ;; Author: Ryan Thompson
 ;; Created: Sat Apr  4 13:41:20 2015 (-0700)
-;; Version: 4.7
-;; Package-Version: 4.7
+;; Version: 4.9
+;; Package-Version: 4.9
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (s "0.1") (memoize "1.1"))
 ;; URL: https://github.com/DarwinAwardWinner/ido-completing-read-plus
 ;; Keywords: ido, completion, convenience
@@ -78,7 +78,7 @@
 ;;
 ;;; Code:
 
-(defconst ido-completing-read+-version "4.7"
+(defconst ido-completing-read+-version "4.9"
   "Currently running version of ido-completing-read+.
 
 Note that when you update ido-completing-read+, this variable may
@@ -207,13 +207,13 @@ generally be nil while running an idle timer.")
 
 These are used for falling back to `completing-read-default'.")
 
-(defvar ido-cr+-all-completions-memoized nil
+(defvar ido-cr+-all-completions-memoized 'all-completions
   "Memoized version of `all-completions'.
 
 During completion with dynamic collection, this variable is set
 to a memoized copy of `all-completions'.")
 
-(defvar ido-cr+-all-prefix-completions-memoized nil
+(defvar ido-cr+-all-prefix-completions-memoized 'ido-cr+-all-prefix-completions
   "Memoized version of `ido-cr+-all-prefix-completions'.
 
 During completion with dynamic collection, this variable is set
@@ -521,6 +521,12 @@ completion for them."
           (if ido-cr+-dynamic-collection
               (memoize (indirect-function 'all-completions))
             'all-completions))
+         ;; Disable flx-ido for dynamic collections in Emacs 26.
+         ;; Temporary workaround for #146.
+         (flx-ido-mode
+          (and (bound-and-true-p flx-ido-mode)
+               (or (version< emacs-version "26")
+                   (not ido-cr+-dynamic-collection))))
          ;; If the whitelist is empty, everything is whitelisted
          (whitelisted (not ido-cr+-function-whitelist))
          ;; If non-nil, we need alternate nil DEF handling
@@ -829,15 +835,15 @@ not a function, this is equivalent to
     (cl-loop
      for i from 0 upto (length string)
      append (funcall
-             (or ido-cr+-all-completions-memoized
-                 'all-completions)
+             ido-cr+-all-completions-memoized
              (s-left i string)
              collection
              predicate)
      into completion-list
      finally return (delete-dups completion-list)))
-   ;; Otherwise, just call `all-completions' on the empty string to
-   ;; get every possible completions for a static COLLECTION.
+   ;; If COLLECTION is not dynamic, then just call `all-completions'
+   ;; on the empty string, which will already return every possible
+   ;; completion.
    (t
     (all-completions "" collection predicate))))
 
@@ -874,12 +880,20 @@ result."
        (nreverse filtered-collection)
      filtered-collection)))
 
+(defun ido-cr+-cyclicp (x)
+  "Returns non-nill if X is a list containing a circular reference."
+  (cl-loop
+   for tortoise on x
+   for hare on (cdr x) by #'cddr
+   thereis (eq tortoise hare)))
+
 (defun ido-cr+-update-dynamic-collection ()
   "Update the set of completions for a dynamic collection.
 
 This has no effect unless `ido-cr+-dynamic-collection' is non-nil."
   (when (and (ido-cr+-active)
              ido-cr+-dynamic-collection)
+    ;; (cl-assert (not (ido-cr+-cyclicp ido-cur-list)))
     (let ((orig-ido-cur-list ido-cur-list))
       (condition-case-unless-debug err
           (let* ((ido-text
@@ -903,13 +917,13 @@ This has no effect unless `ido-cr+-dynamic-collection' is non-nil."
                  (new-completions
                   (cl-loop
                    for string in strings-to-check
-                   nconc
+                   append
                    (funcall
-                    (or ido-cr+-all-prefix-completions-memoized
-                        'ido-cr+-all-prefix-completions)
+                    ido-cr+-all-prefix-completions-memoized
                     string ido-cr+-dynamic-collection predicate)
                    into result
                    finally return result)))
+            (cl-assert (not (ido-cr+-cyclicp new-completions)))
             ;; Put the previous first match back at the front if possible
             (when (and new-completions
                        first-match
@@ -946,7 +960,9 @@ This has no effect unless `ido-cr+-dynamic-collection' is non-nil."
          ;; the failed update
          (setq ido-cur-list orig-ido-cur-list)
          ;; Prevent any further attempts at dynamic updating
-         (setq ido-cr+-dynamic-collection nil)))))
+         (setq ido-cr+-dynamic-collection nil)
+         (cl-assert (not (ido-cr+-cyclicp ido-cur-list)))
+         (cl-assert (null ido-cr+-dynamic-collection))))))
   ;; Always cancel an active timer when this function is called.
   (when ido-cr+-dynamic-update-timer
     (cancel-timer ido-cr+-dynamic-update-timer)
@@ -960,6 +976,7 @@ This has no effect unless `ido-cr+-dynamic-collection' is non-nil."
     (when ido-cr+-dynamic-update-timer
       (cancel-timer ido-cr+-dynamic-update-timer)
       (setq ido-cr+-dynamic-update-timer nil))
+    (cl-assert (not (ido-cr+-cyclicp ido-cur-list)))
     (if (<= (length ido-matches) 1)
         ;; If we've narrowed it down to zero or one matches, update
         ;; immediately.
@@ -1157,6 +1174,18 @@ blacklist was modified."
     (ido-cr+--debug-message "Skipping blacklist update by user request.")))
 
 (ido-cr+-maybe-update-blacklist)
+
+;; TODO: Remove this when it's no longer necessary for debugging
+(defun ido-chop@ido-cr+-prevent-infinite-loops (items elem)
+  "This advice checks for conditions that cause infinite loops in `ido-chop'.
+
+If any of these conditions is detected, it throws an error.
+Ideally this should not be necessary, but it helps with
+debugging."
+  (cl-assert (not (ido-cr+-cyclicp items)))
+  (cl-assert (member elem items)))
+(advice-add 'ido-chop :before
+            #'ido-chop@ido-cr+-prevent-infinite-loops)
 
 (provide 'ido-completing-read+)
 
