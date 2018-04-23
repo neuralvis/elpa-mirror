@@ -4,7 +4,7 @@
 
 ;; Author: Andrew Hyatt <ahyatt@gmail.com>
 ;; Keywords: Communication, Websocket, Server
-;; Package-Version: 20180402.2042
+;; Package-Version: 20180422.1446
 ;; Version: 1.9
 ;; Package-Requires: ((cl-lib "0.5"))
 ;;
@@ -731,8 +731,7 @@ to the websocket protocol.
      conn
      (websocket-sentinel url conn key protocols extensions custom-header-alist nowait))
     (set-process-query-on-exit-flag conn nil)
-    (unless nowait
-      (websocket-handshake url conn key protocols extensions custom-header-alist))
+    (websocket-ensure-handshake url conn key protocols extensions custom-header-alist)
     websocket))
 
 (defun websocket-sentinel (url conn key protocols extensions custom-header-alist nowait)
@@ -741,25 +740,26 @@ to the websocket protocol.
         (websocket-debug websocket "State change to %s" change)
         (let ((status (process-status process)))
           (when (and nowait (eq status 'open))
-            (websocket-handshake url conn key protocols extensions custom-header-alist))
+            (websocket-ensure-handshake url conn key protocols extensions custom-header-alist))
 
           (when (and (member status '(closed failed exit signal))
                      (not (eq 'closed (websocket-ready-state websocket))))
             (websocket-try-callback 'websocket-on-close 'on-close websocket))))))
 
-(defun websocket-handshake (url conn key protocols extensions custom-header-alist)
+(defun websocket-ensure-handshake (url conn key protocols extensions custom-header-alist)
   (let ((url-struct (url-generic-parse-url url))
         (websocket (process-get conn :websocket)))
-    (process-send-string conn
-                         (format "GET %s HTTP/1.1\r\n"
-                                 (let ((path (url-filename url-struct)))
-                                   (if (> (length path) 0) path "/"))))
-    (websocket-debug websocket "Sending handshake, key: %s, acceptance: %s"
-                     key (websocket-accept-string websocket))
-    (process-send-string conn
-                         (websocket-create-headers
-                          url key protocols extensions custom-header-alist))
-    (websocket-debug websocket "Websocket opened")))
+    (when (and (eq 'connecting (websocket-ready-state websocket))
+               (eq 'open (process-status conn)))
+      (process-send-string conn
+                           (format "GET %s HTTP/1.1\r\n"
+                                   (let ((path (url-filename url-struct)))
+                                     (if (> (length path) 0) path "/"))))
+      (websocket-debug websocket "Sending handshake, key: %s, acceptance: %s"
+                       key (websocket-accept-string websocket))
+      (process-send-string conn
+                           (websocket-create-headers
+                            url key protocols extensions custom-header-alist)))))
 
 (defun websocket-process-headers (url headers)
   "On opening URL, process the HEADERS sent from the server."
