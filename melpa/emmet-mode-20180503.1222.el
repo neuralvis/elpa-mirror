@@ -6,7 +6,7 @@
 ;; Copyright (C) 2009-2012 Chris Done
 
 ;; Version: 1.0.10
-;; Package-Version: 20161113.2158
+;; Package-Version: 20180503.1222
 ;; Author: Shin Aoyama <smihica@gmail.com>
 ;; URL: https://github.com/smihica/emmet-mode
 ;; Last-Updated: 2014-08-11 Mon
@@ -312,7 +312,7 @@ For more information see `emmet-mode'."
     (define-key map (kbd "<C-return>") 'emmet-expand-line)
     (define-key map (kbd "<C-M-right>") 'emmet-next-edit-point)
     (define-key map (kbd "<C-M-left>") 'emmet-prev-edit-point)
-    (define-key map (kbd "C-c w") 'emmet-wrap-with-markup)
+    (define-key map (kbd "C-c C-c w") 'emmet-wrap-with-markup)
     map)
   "Keymap for emmet minor mode.")
 
@@ -652,6 +652,11 @@ See `emmet-preview-online'."
 		(point))
 	      (forward-char)))))))
 
+(defcustom emmet-postwrap-goto-edit-point f
+  "Goto first edit point after wrapping markup?"
+  :type 'boolean
+  :group 'emmet)
+
 ;;;###autoload
 (defun emmet-wrap-with-markup (wrap-with)
   "Wrap region with markup."
@@ -661,12 +666,23 @@ See `emmet-preview-online'."
          (to-wrap (if multi
                       (split-string txt "\n")
                     (list txt)))
-         (initial-elements (replace-regexp-in-string "\\(.*\\(\\+\\|>\\)\\)?[^>*]+\\*?[[:digit:]]*$" "\\1" wrap-with t))
-         (terminal-element (replace-regexp-in-string "\\(.*>\\)?\\([^>*]+\\)\\(\\*[[:digit:]]+$\\)?\\*?$" "\\2" wrap-with t))
-         (multiplier-expr (replace-regexp-in-string "\\(.*>\\)?\\([^>*]+\\)\\(\\*[[:digit:]]+$\\)?\\*?$" "\\3" wrap-with t))
+         (initial-elements (replace-regexp-in-string
+                            "\\(.*\\(\\+\\|>\\)\\)?[^>*]+\\*?[[:digit:]]*$"
+                            "\\1" wrap-with t))
+         (terminal-element (replace-regexp-in-string
+                            "\\(.*>\\)?\\([^>*]+\\)\\(\\*[[:digit:]]+$\\)?\\*?$"
+                            "\\2" wrap-with t))
+         (multiplier-expr (replace-regexp-in-string
+                           "\\(.*>\\)?\\([^>*]+\\)\\(\\*[[:digit:]]+$\\)?\\*?$"
+                           "\\3" wrap-with t))
          (expr (concat
                 initial-elements
-                (mapconcat (lambda (el) (concat terminal-element "{!!!" (secure-hash 'sha1 el) "!!!}" multiplier-expr))
+                (mapconcat (lambda (el)
+                             (concat terminal-element
+                                     "{!!!"
+                                     (secure-hash 'sha1 el)
+                                     "!!!}"
+                                     multiplier-expr))
                            to-wrap
                            "+")))
          (markup
@@ -682,11 +698,12 @@ See `emmet-preview-online'."
       (delete-region (region-beginning) (region-end))
       (insert markup)
       (indent-region (region-beginning) (region-end))
-      (let ((end (region-end)))
-        (goto-char (region-beginning))
-        (unless (ignore-errors (progn (emmet-next-edit-point 1) t))
-          (goto-char end)))
-      )))
+      (if emmet-postwrap-goto-edit-point
+          (let ((end (region-end)))
+            (goto-char (region-beginning))
+            (unless (ignore-errors (progn (emmet-next-edit-point 1) t))
+              (goto-char end)))
+        ))))
 
 ;;;###autoload
 (defun emmet-next-edit-point (count)
