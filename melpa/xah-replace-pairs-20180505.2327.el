@@ -1,10 +1,10 @@
 ;;; xah-replace-pairs.el --- emacs lisp functions for multi-pair find/replace.  -*- coding: utf-8; lexical-binding: t; -*-
 
-;; Copyright © 2010-2017, by Xah Lee
+;; Copyright © 2010-2018, by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 2.2.20170823
-;; Package-Version: 20170823.2028
+;; Version: 2.3.20180505232634
+;; Package-Version: 20180505.2327
 ;; Created: 17 Aug 2010
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: lisp, tools, find replace
@@ -60,10 +60,9 @@ Once a subsring in the buffer is replaced, that part will not change again.  For
 
 Returns a list, each element is a vector [position findStr replaceStr].
 
-Note: the region's text or any string in @PAIRS is assumed to NOT contain any character from Unicode Private Use Area A. That is, U+F0000 to U+FFFFD. And, there are no more than 65534 pairs.
-Version 2017-05-24"
+Version 2018-05-05"
   (let (
-        ($unicodePriveUseA #xf0000)
+        ($randomStr "ζ北k2rtm")
         ($i 0)
         ($tempMapPoints '())
         ($changeLog '()))
@@ -71,7 +70,7 @@ Version 2017-05-24"
       ;; generate a list of Unicode chars for intermediate replacement. These chars are in  Private Use Area.
       (setq $i 0)
       (while (< $i (length @pairs))
-        (push (char-to-string (+ $unicodePriveUseA $i)) $tempMapPoints)
+        (push (concat $randomStr (char-to-string $i)) $tempMapPoints)
         (setq $i (1+ $i))))
     (save-excursion
       (save-restriction
