@@ -6,7 +6,7 @@
 ;; Maintainer: Nicolas Goaziou <mail@nicolasgoaziou.fr>
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "24.4"))
-;; Version: 1.5
+;; Version: 1.6
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -113,6 +113,7 @@
 
 (require 'easymenu)
 (require 'nadvice)
+(require 'org)
 (require 'org-macs)
 (require 'org-list)
 
@@ -1025,7 +1026,11 @@ for this list."
               (match-beginning 0)))
            (plain-list (save-excursion
                          (goto-char top-point)
-                         (org-list-to-lisp))))
+                         ;; FIXME: Compatibility layer.  Remove when
+                         ;; we require at least Emacs 26.1.
+                         (funcall (if (fboundp 'org-list-to-lisp)
+                                      'org-list-to-lisp)
+                                  'org-list-parse-list))))
       (unless (fboundp transform)
         (error "No such transformation function %s" transform))
       (let ((txt (funcall transform plain-list)))
@@ -1054,6 +1059,21 @@ for this list."
 
 ;;;; ChangeLog:
 
+;; 2018-05-06  Nicolas Goaziou  <mail@nicolasgoaziou.fr>
+;; 
+;; 	Bump to version 1.6
+;; 
+;; 2018-05-06  Nicolas Goaziou  <mail@nicolasgoaziou.fr>
+;; 
+;; 	Compatibility with old Org releases
+;; 
+;; 	* orgalist.el (orgalist-send-list): Add compatibility layer with Org <
+;; 	 9.0 (included in Emacs 26.1).
+;; 
+;; 2018-05-06  Nicolas Goaziou  <mail@nicolasgoaziou.fr>
+;; 
+;; 	Ensure Org is completely loaded first
+;; 
 ;; 2018-05-05  Nicolas Goaziou  <mail@nicolasgoaziou.fr>
 ;; 
 ;; 	Bump to version 1.5
