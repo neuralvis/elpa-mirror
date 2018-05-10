@@ -1,11 +1,11 @@
 ;;; iter2.el --- Reimplementation of Elisp generators  -*- lexical-binding: t -*-
 
-;;; Copyright (C) 2017 Paul Pogonyshev
+;;; Copyright (C) 2017-2018 Paul Pogonyshev
 
 ;; Author:     Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Maintainer: Paul Pogonyshev <pogonyshev@gmail.com>
-;; Version:    0.9.6
-;; Package-Version: 0.9.6
+;; Version:    0.9.7
+;; Package-Version: 0.9.7
 ;; Keywords:   elisp, extensions
 ;; Homepage:   https://github.com/doublep/iter2
 ;; Package-Requires: ((emacs "25.1"))
@@ -196,12 +196,12 @@ See `iter2-defun' for details."
          (lambda (operation value)
            (cond ((eq operation :next)
                   ,@(funcall apply-debugger
-                             `(while (and ,iter2--continuations (not ,iter2--yielding))
-                                (setq value ,(iter2--continuation-invocation-form 'value)))
-                             `(if ,iter2--yielding
-                                  (progn (setq ,iter2--yielding nil)
-                                         value)
-                                (signal 'iter-end-of-sequence value))))
+                             ;; Rewritten in a somewhat weird form to maximize performance.
+                             `(while (progn (setq value ,(iter2--continuation-invocation-form 'value `(or (pop ,iter2--continuations)
+                                                                                                          (signal 'iter-end-of-sequence value))))
+                                            (not ,iter2--yielding)))
+                             `(setq ,iter2--yielding nil)
+                             `value))
                  ((eq operation :close)
                   ,@(funcall apply-debugger
                              (if iter2--cleanups-used
@@ -553,7 +553,9 @@ See `iter2-defun' for details."
                (if (cdr converted-body)
                    (push `(save-excursion ,@(macroexp-unprogn (car converted-body))) converted)
                  (push (iter2--catcher-continuation-adding-form `(save-excursion
-                                                                   (set-buffer buffer)
+                                                                   ;; Byte compiler gives a dumb warning here,
+                                                                   ;; suggesting to use `with-current-buffer'.
+                                                                   (with-no-warnings (set-buffer buffer))
                                                                    (goto-char  point)
                                                                    (prog1 ,(iter2--continuation-invocation-form iter2--value)
                                                                      (unless (eq ,iter2--continuations ,iter2--done)
@@ -599,6 +601,12 @@ See `iter2-defun' for details."
                                                                 '(point-max (point-max)))
                        converted)
                  (setq never-yields nil))))
+
+            ;; Handle `with-no-warnings': while not a special form, it requires special handling.
+            (`(with-no-warnings . ,body)
+             (let ((converted-body (iter2--convert-progn body)))
+               (push `(with-no-warnings ,@(macroexp-unprogn (car converted-body))) converted)
+               (setq never-yields (cdr converted-body))))
 
             ;; Handle all other non-atomic forms.
             (`(,name . ,arguments)
