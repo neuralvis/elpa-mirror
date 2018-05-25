@@ -2,9 +2,9 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 2.1
-;; Package-Version: 2.0.2
-;; Last-Updated: 2014-2-13
+;; Version: 2.0
+;; Package-Version: 2.0.3
+;; Last-Updated: 2015-03-25
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
 ;; Compatability:
@@ -24,6 +24,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.0.3 Add in a small decription of the Flesch-Kincaid score
 ;; 2.0.2 Fix Formatting in Org-mode files, make faces underline
 ;; 2.0.1 Make user additions to word lists dynamic
 ;; 2.0.0 Flesch-Kincaid scoring added to functionality
@@ -56,8 +57,8 @@
 ;; This mode will improve various aspects of your writing in many ways.
 ;; With this mode, text within comments will be searched for the
 ;; the duplicate problem.
-;; The text is searched and aspects (even within comments) are 
-;; highlighted. 
+;; The text is searched and aspects (even within comments) are
+;; highlighted.
 ;; Another benefit is the the finding of duplicates.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -91,23 +92,23 @@
   :group 'writegood)
 
 (defcustom writegood-weasel-words
-  '("many" "various" "very" "fairly" "several" "extremely" 
-    "exceedingly" "quite" "remarkably" "few" "surprisingly" 
-    "mostly" "largely" "huge" "tiny" "are a number" "is a number" 
-    "excellent" "interestingly" "significantly" "substantially" 
-    "clearly" "vast" "relatively" "completely" "literally" 
+  '("many" "various" "very" "fairly" "several" "extremely"
+    "exceedingly" "quite" "remarkably" "few" "surprisingly"
+    "mostly" "largely" "huge" "tiny" "are a number" "is a number"
+    "excellent" "interestingly" "significantly" "substantially"
+    "clearly" "vast" "relatively" "completely" "literally"
     "not rocket science" "outside the box")
   "The weasel words to use"
   :group 'writegood
   :type '(repeat string))
-  
+
 (defun writegood-weasels-font-lock-keywords-regexp ()
   "Generate regex that matches weasel-words"
   (concat "\\b" (regexp-opt writegood-weasel-words) "\\b"))
 
 (defun writegood-weasels-font-lock-keywords ()
   (list (list (writegood-weasels-font-lock-keywords-regexp)
-	      0 (quote 'writegood-weasels-face) 'prepend)))
+        0 (quote 'writegood-weasels-face) 'prepend)))
 
 ;; Passive Voice
 (defface writegood-passive-voice-face
@@ -119,28 +120,28 @@
   :group 'writegood)
 
 (defcustom writegood-passive-voice-irregulars
-  '("awoken" "been" "born" "beat" "become" "begun" "bent" "beset" 
-    "bet" "bid" "bidden" "bound" "bitten" "bled" "blown" "broken" 
-    "bred" "brought" "broadcast" "built" "burnt" "burst" "bought" 
-    "cast" "caught" "chosen" "clung" "come" "cost" "crept" "cut" 
-    "dealt" "dug" "dived" "done" "drawn" "dreamt" "driven" "drunk" 
-    "eaten" "fallen" "fed" "felt" "fought" "found" "fit" "fled" 
-    "flung" "flown" "forbidden" "forgotten" "foregone" "forgiven" 
-    "forsaken" "frozen" "gotten" "given" "gone" "ground" "grown" 
-    "hung" "heard" "hidden" "hit" "held" "hurt" "kept" "knelt" "knit" 
-    "known" "laid" "led" "leapt" "learnt" "left" "lent" "let" "lain" 
-    "lighted" "lost" "made" "meant" "met" "misspelt" "mistaken" "mown" 
-    "overcome" "overdone" "overtaken" "overthrown" "paid" "pled" "proven" 
-    "put" "quit" "read" "rid" "ridden" "rung" "risen" "run" "sawn" 
-    "said" "seen" "sought" "sold" "sent" "set" "sewn" "shaken" "shaven" 
-    "shorn" "shed" "shone" "shod" "shot" "shown" "shrunk" "shut" 
-    "sung" "sunk" "sat" "slept" "slain" "slid" "slung" "slit" 
-    "smitten" "sown" "spoken" "sped" "spent" "spilt" "spun" "spit" 
-    "split" "spread" "sprung" "stood" "stolen" "stuck" "stung" 
-    "stunk" "stridden" "struck" "strung" "striven" "sworn" "swept" 
-    "swollen" "swum" "swung" "taken" "taught" "torn" "told" "thought" 
-    "thrived" "thrown" "thrust" "trodden" "understood" "upheld" "upset" 
-    "woken" "worn" "woven" "wed" "wept" "wound" "won" "withheld" 
+  '("awoken" "been" "born" "beat" "become" "begun" "bent" "beset"
+    "bet" "bid" "bidden" "bound" "bitten" "bled" "blown" "broken"
+    "bred" "brought" "broadcast" "built" "burnt" "burst" "bought"
+    "cast" "caught" "chosen" "clung" "come" "cost" "crept" "cut"
+    "dealt" "dug" "dived" "done" "drawn" "dreamt" "driven" "drunk"
+    "eaten" "fallen" "fed" "felt" "fought" "found" "fit" "fled"
+    "flung" "flown" "forbidden" "forgotten" "foregone" "forgiven"
+    "forsaken" "frozen" "gotten" "given" "gone" "ground" "grown"
+    "hung" "heard" "hidden" "hit" "held" "hurt" "kept" "knelt" "knit"
+    "known" "laid" "led" "leapt" "learnt" "left" "lent" "let" "lain"
+    "lighted" "lost" "made" "meant" "met" "misspelt" "mistaken" "mown"
+    "overcome" "overdone" "overtaken" "overthrown" "paid" "pled" "proven"
+    "put" "quit" "read" "rid" "ridden" "rung" "risen" "run" "sawn"
+    "said" "seen" "sought" "sold" "sent" "set" "sewn" "shaken" "shaven"
+    "shorn" "shed" "shone" "shod" "shot" "shown" "shrunk" "shut"
+    "sung" "sunk" "sat" "slept" "slain" "slid" "slung" "slit"
+    "smitten" "sown" "spoken" "sped" "spent" "spilt" "spun" "spit"
+    "split" "spread" "sprung" "stood" "stolen" "stuck" "stung"
+    "stunk" "stridden" "struck" "strung" "striven" "sworn" "swept"
+    "swollen" "swum" "swung" "taken" "taught" "torn" "told" "thought"
+    "thrived" "thrown" "thrust" "trodden" "understood" "upheld" "upset"
+    "woken" "worn" "woven" "wed" "wept" "wound" "won" "withheld"
     "withstood" "wrung" "written")
   "List of passive voice irregular verbs"
   :group 'writegood
@@ -155,12 +156,12 @@
 (defun writegood-passive-voice-font-lock-keywords-regexp ()
   "Generate font-lock keywords regexp for passive-voice"
   (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
-	  (regexp-opt writegood-passive-voice-irregulars)
-	  "\\)\\b"))
+    (regexp-opt writegood-passive-voice-irregulars)
+    "\\)\\b"))
 
 (defun writegood-passive-voice-font-lock-keywords ()
   (list (list (writegood-passive-voice-font-lock-keywords-regexp)
-	      0 (quote 'writegood-passive-voice-face) 'prepend)))
+        0 (quote 'writegood-passive-voice-face) 'prepend)))
 
 ;; Duplicates
 (defface writegood-duplicates-face
@@ -179,7 +180,7 @@
 
 (defun writegood-duplicates-font-lock-keywords ()
   (list (list writegood-duplicates-font-lock-keywords-regexp
-	      0 (quote 'writegood-duplicates-face) 'prepend)))
+        0 (quote 'writegood-duplicates-face) 'prepend)))
 
 ;;;;;;;;;;;;;;;;;;;; Functions:
 
@@ -258,16 +259,33 @@
          (sentences (float (writegood-count-sentences start end))))
     (list sentences words syllables)))
 
+(defun writegood-reading-ease-score->comment (score)
+  "Rough interpreation of the Flesch-Kincaid Reading ease SCORE.
+
+From Wikipedia URL `https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_tests'."
+   (cond
+    ((< score 0) "Ouch! (Proust literature)")
+    ((and (<= 0 score) (< score 30.0)) "Very difficult (college graduate)")
+    ((and (<= 30.0 score) (< score 50.0)) "Difficult (almost college)")
+    ((and (<= 50.0 score) (< score 60.0)) "Fairly difficult (10-12th grade)")
+    ((and (<= 60.0 score) (< score 70.0)) "Plain English (8-9th grade)")
+    ((and (<= 70.0 score) (< score 80.0)) "Fairly easy (7th grade)")
+    ((and (<= 80.0 score) (< score 90.0)) "Easy (6th grade)")
+    ((<= 90.0 score) "Very easy (5th grade)")))
+
 ;;;###autoload
 (defun writegood-reading-ease (&optional start end)
-  "Flesch-Kincaid reading ease test. Scores roughly between 0 and 100."
+  "Flesch-Kincaid reading ease test in the region bounded by START and END.
+
+Scores roughly between 0 and 100."
    (interactive)
    (let* ((params (writegood-fk-parameters start end))
           (sentences (nth 0 params))
           (words     (nth 1 params))
           (syllables (nth 2 params))
           (score  (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
-     (message "Flesch-Kincaid reading ease score: %.2f" score)))
+     (message "Flesch-Kincaid reading ease score: %.2f %s" score
+            (writegood-reading-ease-score->comment score))))
 
 ;;;###autoload
 (defun writegood-grade-level (&optional start end)
@@ -286,7 +304,7 @@
   :lighter " Wg"
   (progn
     (if writegood-mode
-	(writegood-turn-on)
+  (writegood-turn-on)
       (writegood-turn-off))
     (font-lock-mode 1)))
 

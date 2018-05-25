@@ -4,8 +4,8 @@
 
 ;; Author: Jorgen Schaefer <contact@jorgenschaefer.de>
 ;; URL: http://github.com/jorgenschaefer/pyvenv
-;; Package-Version: 1.14
-;; Version: 1.14
+;; Package-Version: 20180525.530
+;; Version: 1.15
 ;; Keywords: Python, Virtualenv, Tools
 
 ;; This program is free software; you can redistribute it and/or
@@ -177,8 +177,10 @@ This is usually the base name of `pyvenv-virtual-env'.")
                           venv-name)))
     (unless (file-exists-p venv-dir)
       (run-hooks 'pyvenv-pre-create-hooks)
-      (call-process "virtualenv" nil "*virtualenv" t
-                    "-p" python-executable venv-dir)
+      (with-current-buffer (generate-new-buffer "*virtualenv*")
+        (call-process "virtualenv" nil t t
+                      "-p" python-executable venv-dir)
+        (display-buffer (current-buffer)))
       (run-hooks 'pyvenv-post-create-hooks))
     (pyvenv-activate venv-dir)))
 

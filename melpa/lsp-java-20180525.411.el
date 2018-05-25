@@ -1,7 +1,7 @@
 ;;; lsp-java.el --- Java support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20180525.54
+;; Package-Version: 20180525.411
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.0"))
 ;; Keywords: java
 ;; URL: https://github.com/emacs-lsp/lsp-java
@@ -18,6 +18,8 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary: Java specific adapter for LSP mode
 
 ;;; Code:
 (require 'cc-mode)
@@ -38,6 +40,7 @@ The slash is expected at the end."
   :risky t
   :type 'directory)
 
+;;;###autoload
 (defcustom lsp-java-java-path "java"
   "Path of the java executable."
   :group 'lsp-java
@@ -208,12 +211,15 @@ A package or type name prefix (e.g. 'org.eclipse') is a valid entry. An import i
   "Return the jar file location of the language server.
 
 The entry point of the language server is in `lsp-java-server-install-dir'/plugins/org.eclipse.equinox.launcher_`version'.jar."
-  (ignore-errors
-    (let* ((plugindir (expand-file-name "plugins" lsp-java-server-install-dir))
-           (server-jar-filenames (directory-files plugindir t "org.eclipse.equinox.launcher_.*.jar$")))
-      (if (not (= (length server-jar-filenames) 1))
-          (message (format "Found more than one java language server entry points: %s" server-jar-filenames))
-        (car server-jar-filenames)))))
+  (condition-case err
+      (let* ((plugindir (expand-file-name "plugins" lsp-java-server-install-dir))
+             (server-jar-filenames (directory-files plugindir t "org.eclipse.equinox.launcher_.*.jar$")))
+        (if (not (= (length server-jar-filenames) 1))
+            (error (format "Unable to find single point of entry %s" server-jar-filenames))
+          (car server-jar-filenames)))
+    (error
+     (error (format "Failed to find server installation with following message: %s"
+                    (error-message-string err))))))
 
 (defun lsp-java--locate-server-config ()
   "Return the server config based on OS."
@@ -224,7 +230,8 @@ The entry point of the language server is in `lsp-java-server-install-dir'/plugi
                   "config_mac")
                  ((string-equal system-type "gnu/linux") ; linux
                   "config_linux"))))
-    (message (format "using config for %s" config))
+    (let ((inhibit-message t))
+     (message (format "using config for %s" config)))
     (expand-file-name config lsp-java-server-install-dir)))
 
 (defun lsp-java-organize-imports ()
@@ -294,7 +301,10 @@ The current directory is assumed to be the java project’s root otherwise."
             default-directory)))))
 
 (defun lsp-java--language-status-callback (workspace params)
-  "Callback for client initialized."
+  "Callback for client initialized.
+
+WORKSPACE is the currently active workspace.
+PARAMS the parameters for language status notifications."
   (let ((status (gethash "type" params))
         (current-status (lsp-workspace-get-metadata "status" workspace)))
     ;; process the status message only if there is no status or if the status is
@@ -307,11 +317,16 @@ The current directory is assumed to be the java project’s root otherwise."
       (message "%s[%s]" (gethash "message" params) (gethash "type" params)))))
 
 (defun lsp-java--apply-workspace-edit (action)
-  "Callback for java/applyWorkspaceEdit."
+  "Callback for java/applyWorkspaceEdit.
+
+ACTION is the action to execute."
   (lsp--apply-workspace-edit (car (gethash "arguments" action))))
 
 (defun lsp-java--actionable-notification-callback (workspace params)
-  "Handler for actionable notifications."
+  "Handler for actionable notifications.
+
+WORKSPACE is the currently active workspace.
+PARAMS the parameters for actionable notifications."
   (let ((notifications (or (lsp-workspace-get-metadata
                             "actionable-notifications"
                             workspace)
@@ -327,10 +342,13 @@ The current directory is assumed to be the java project’s root otherwise."
               'face 'warning)))))
 
 (defun lsp-java--progress-report (_workspace params)
-  "Progress report handling."
+  "Progress report handling.
+
+PARAMS progress report notification data."
   (message "%s%s" (gethash "status" params) (if (gethash "complete" params) " (done)" "")))
 
 (defun lsp-java--render-string (str)
+  "Render STR with `java-mode' syntax highlight."
   (condition-case nil
       (with-temp-buffer
         (delay-mode-hooks (java-mode))

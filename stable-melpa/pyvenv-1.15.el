@@ -4,8 +4,8 @@
 
 ;; Author: Jorgen Schaefer <contact@jorgenschaefer.de>
 ;; URL: http://github.com/jorgenschaefer/pyvenv
-;; Package-Version: 20180512.315
-;; Version: 1.14
+;; Package-Version: 1.15
+;; Version: 1.15
 ;; Keywords: Python, Virtualenv, Tools
 
 ;; This program is free software; you can redistribute it and/or

@@ -11,7 +11,7 @@
 ;; Author: Chris Done <chrisdone@fpcomplete.com>
 ;; Maintainer: Chris Done <chrisdone@fpcomplete.com>
 ;; URL: https://github.com/commercialhaskell/intero
-;; Package-Version: 20180524.956
+;; Package-Version: 20180525.416
 ;; Created: 3rd June 2016
 ;; Version: 0.1.13
 ;; Keywords: haskell, tools
@@ -113,7 +113,8 @@ This causes it to skip building the target."
 It should be a list of directories.
 
 To use this, use the following mode hook:
-  (add-hook 'haskell-mode-hook 'intero-mode-whitelist)"
+  (add-hook 'haskell-mode-hook 'intero-mode-whitelist)
+or use `intero-global-mode' and add \"/\" to `intero-blacklist'."
   :group 'intero
   :type 'string)
 
@@ -124,7 +125,8 @@ To use this, use the following mode hook:
 It should be a list of directories.
 
 To use this, use the following mode hook:
-  (add-hook 'haskell-mode-hook 'intero-mode-blacklist)"
+  (add-hook 'haskell-mode-hook 'intero-mode-blacklist)
+or use `intero-global-mode'."
   :group 'intero
   :type 'string)
 
