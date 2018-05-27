@@ -4,7 +4,7 @@
 
 ;; Author: Kyle Meyer <kyle@kyleam.com>
 ;; URL: https://github.com/magit/magit-tbdiff
-;; Package-Version: 20180524.1549
+;; Package-Version: 20180526.1142
 ;; Keywords: vc, tools
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.4") (magit "2.10.0"))
@@ -87,6 +87,10 @@
   "Face for '<' and '>' markers in tbdiff output."
   :group 'magit-tbdiff)
 
+(defvar magit-tbdiff-subcommand "tbdiff"
+  "Subcommand used to invoke tbdiff.
+Translates to 'git [global options] <subcommand> ...'.")
+
 
 ;;; Internals
 
@@ -96,7 +100,7 @@
                           (or (one-or-more digit)
                               (one-or-more "-"))))
           (hash-re '(or (repeat 4 40 (char digit (?a . ?f)))
-                        (repeat 7 "-"))))
+                        (repeat 4 40 "-"))))
       (rx-to-string `(and line-start
                           (group ,digit-re)
                           ":" (zero-or-more " ")
@@ -157,7 +161,7 @@
   "Insert tbdiff output into a `magit-tbdiff-mode' buffer."
   (apply #'magit-git-wash
          #'magit-tbdiff-wash
-         "tbdiff" "--no-color" magit-refresh-args))
+         magit-tbdiff-subcommand "--no-color" magit-refresh-args))
 
 (defun magit-tbdiff-refresh-buffer (rev-a rev-b _args)
   (setq header-line-format
