@@ -4,7 +4,7 @@
 
 ;; Author: Eric Danan
 ;; URL: https://github.com/ericdanan/counsel-projectile
-;; Package-Version: 20180502.1325
+;; Package-Version: 20180527.1328
 ;; Keywords: project, convenience
 ;; Version: 0.2.0
 ;; Package-Requires: ((counsel "0.10.0") (projectile "0.14.0"))
@@ -512,8 +512,8 @@ This simply applies the same transformer as in `ivy-switch-buffer', which is `iv
             :keymap counsel-projectile-switch-to-buffer-map
             :caller 'counsel-projectile-switch-to-buffer))
 
-(unless (assq #'counsel-projectile-switch-to-buffer ivy-sort-functions-alist)
-  (push (list #'counsel-projectile-switch-to-buffer) ivy-sort-functions-alist))
+(unless (assq #'counsel-projectile--project-buffers ivy-sort-functions-alist)
+  (push (list #'counsel-projectile--project-buffers) ivy-sort-functions-alist))
 
 (ivy-set-display-transformer
  'counsel-projectile-switch-to-buffer
@@ -1243,8 +1243,8 @@ If not inside a project, call `counsel-projectile-switch-project'."
               :keymap counsel-projectile-map
               :caller 'counsel-projectile)))
 
-(unless (assq #'counsel-projectile ivy-sort-functions-alist)
-  (push (list #'counsel-projectile) ivy-sort-functions-alist))
+(unless (assq #'counsel-projectile--project-buffers-and-files ivy-sort-functions-alist)
+  (push (list #'counsel-projectile--project-buffers-and-files) ivy-sort-functions-alist))
 
 (ivy-set-display-transformer
  'counsel-projectile
