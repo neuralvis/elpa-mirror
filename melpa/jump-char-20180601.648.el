@@ -11,7 +11,7 @@
 
 ;; Created: Mon Jan  9 22:41:43 2012 (+0800)
 ;; Version: 0.1
-;; Package-Version: 20160505.851
+;; Package-Version: 20180601.648
 ;;           By: Le Wang
 ;; URL: https://github.com/lewang/jump-char
 ;; Keywords:
@@ -104,7 +104,6 @@ Set this to nil if you don't need it."
 
 (defvar jump-char-mode nil)
 (defvar jump-char-store (make-hash-table :test 'eq :size 5))
-(defvar jump-char-lazy-highlight-face lazy-highlight-face)
 (defvar jump-char-initial-char nil)
 
 ;;; isearch implementation changed as of Emacs 24.3
@@ -304,14 +303,12 @@ Specifically, make sure point is at beginning of match."
     (unless jump-char-mode
       (puthash 'isearch-mode-map isearch-mode-map jump-char-store)
       (puthash 'isearch-search-fun-function isearch-search-fun-function jump-char-store)
-      (puthash 'lazy-highlight-face lazy-highlight-face jump-char-store)
       (puthash 'isearch-message-prefix (symbol-function 'isearch-message-prefix) jump-char-store)
       (add-hook 'isearch-mode-end-hook 'jump-char-cleanup)
       (add-hook 'isearch-update-post-hook 'jump-char-isearch-update-func)
       (setq jump-char-mode t)
       (setq isearch-mode-map (jump-char-isearch-map))
-      (setq isearch-search-fun-function 'jump-char-search-fun-function)
-      (setq lazy-highlight-face jump-char-lazy-highlight-face))
+      (setq isearch-search-fun-function 'jump-char-search-fun-function))
     (when (and set-mark
              (not (use-region-p)))
       (set-mark-command nil))

@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
-;; Version: 0.7
-;; Package-Version: 20180529.1920
+;; Version: 0.8
+;; Package-Version: 20180601.958
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -156,6 +156,8 @@ deferred to the future.")
            (list
             :workspace (list
                         :applyEdit t
+                        :executeCommand `(:dynamicRegistration :json-false)
+                        :codeAction `(:dynamicRegistration :json-false)
                         :workspaceEdit `(:documentChanges :json-false)
                         :didChangeWatchesFiles `(:dynamicRegistration t)
                         :symbol `(:dynamicRegistration :json-false))
@@ -909,12 +911,15 @@ that case, also signal textDocument/didOpen."
 
 (put 'eglot--mode-line-format 'risky-local-variable t)
 
-(defun eglot--mode-line-call (what)
+(defun eglot--mouse-call (what)
   "Make an interactive lambda for calling WHAT from mode-line."
   (lambda (event)
     (interactive "e")
-    (with-selected-window (posn-window (event-start event))
-      (call-interactively what))))
+    (let ((start (event-start event))) (with-selected-window (posn-window start)
+                                         (save-excursion
+                                           (goto-char (or (posn-point start)
+                                                          (point)))
+                                           (call-interactively what))))))
 
 (defun eglot--mode-line-props (thing face defs &optional prepend)
   "Helper for function `eglot--mode-line-format'.
@@ -922,7 +927,7 @@ Uses THING, FACE, DEFS and PREPEND."
   (cl-loop with map = (make-sparse-keymap)
            for (elem . rest) on defs
            for (key def help) = elem
-           do (define-key map `[mode-line ,key] (eglot--mode-line-call def))
+           do (define-key map `[mode-line ,key] (eglot--mouse-call def))
            concat (format "%s: %s" key help) into blurb
            when rest concat "\n" into blurb
            finally (return `(:propertize ,thing
@@ -968,6 +973,39 @@ Uses THING, FACE, DEFS and PREPEND."
 
 (add-to-list 'mode-line-misc-info
              `(eglot--managed-mode (" [" eglot--mode-line-format "] ")))
+
+
+;; FIXME: A horrible hack of Flymake's insufficient API that must go
+;; into Emacs master, or better, 26.2
+(cl-defstruct (eglot--diag (:include flymake--diag)
+                           (:constructor eglot--make-diag
+                                         (buffer beg end type text props)))
+  props)
+
+(advice-add 'flymake--highlight-line :after
+            (lambda (diag)
+              (when (cl-typep diag 'eglot--diag)
+                (let ((ov (cl-find diag
+                                   (overlays-at (flymake-diagnostic-beg diag))
+                                   :key (lambda (ov)
+                                          (overlay-get ov 'flymake-diagnostic)))))
+                  (cl-loop for (key . value) in (eglot--diag-props diag)
+                           do (overlay-put ov key value)))))
+            '((name . eglot-hacking-in-some-per-diag-overlay-properties)))
+
+
+(defun eglot--overlay-diag-props ()
+  `((mouse-face . highlight)
+    (help-echo . (lambda (window _ov pos)
+                   (with-selected-window window
+                     (mapconcat
+                      #'flymake-diagnostic-text
+                      (flymake-diagnostics pos)
+                      "\n"))))
+    (keymap . ,(let ((map (make-sparse-keymap)))
+                 (define-key map [mouse-1]
+                   (eglot--mouse-call 'eglot-code-actions))
+                 map))))
 
 
 ;;; Protocol implementation (Requests, notifications, etc)
@@ -1038,16 +1076,18 @@ function with the server still running."
       (with-current-buffer buffer
         (cl-loop
          for diag-spec across diagnostics
-         collect (cl-destructuring-bind (&key range severity _group
+         collect (cl-destructuring-bind (&key range ((:severity sev)) _group
                                               _code source message)
                      diag-spec
+                   (setq message (concat source ": " message))
                    (pcase-let ((`(,beg . ,end) (eglot--range-region range)))
-                     (flymake-make-diagnostic (current-buffer)
-                                              beg end
-                                              (cond ((<= severity 1) :error)
-                                                    ((= severity 2)  :warning)
-                                                    (t               :note))
-                                              (concat source ": " message))))
+                     (eglot--make-diag (current-buffer) beg end
+                                       (cond ((<= sev 1) ':error)
+                                             ((= sev 2)  ':warning)
+                                             (t          ':note))
+                                       message (cons
+                                                `(eglot-lsp-diag . ,diag-spec)
+                                                (eglot--overlay-diag-props)))))
          into diags
          finally (cond (eglot--current-flymake-report-fn
                         (funcall eglot--current-flymake-report-fn diags)
@@ -1177,7 +1217,6 @@ Records START, END and PRE-CHANGE-LENGTH locally."
           (cl-loop for (beg end len text) in (reverse eglot--recent-changes)
                    vconcat `[,(list :range `(:start ,beg :end ,end)
                                     :rangeLength len :text text)]))))
-      
       (setq eglot--recent-changes nil)
       (setf (eglot--spinner server) (list nil :textDocument/didChange t))
       (eglot--call-deferred server))))
@@ -1334,7 +1373,9 @@ DUMMY is ignored"
             (mapcar
              (eglot--lambda (&rest all &key label insertText &allow-other-keys)
                (let ((insert (or insertText label)))
-                 (add-text-properties 0 1 all insert) insert))
+                 (add-text-properties 0 1 all insert)
+                 (put-text-property 0 1 'eglot--lsp-completion all insert)
+                 insert))
              items))))
        :annotation-function
        (lambda (obj)
@@ -1353,13 +1394,15 @@ DUMMY is ignored"
                         (or (get-text-property 0 :sortText b) "")))))
        :company-doc-buffer
        (lambda (obj)
-         (let ((documentation
-                (or (get-text-property 0 :documentation obj)
-                    (and (eglot--server-capable :completionProvider
-                                                :resolveProvider)
-                         (plist-get (eglot--request server :completionItem/resolve
-                                                    (text-properties-at 0 obj))
-                                    :documentation)))))
+         (let* ((documentation
+                 (or (get-text-property 0 :documentation obj)
+                     (and (eglot--server-capable :completionProvider
+                                                 :resolveProvider)
+                          (plist-get
+                           (eglot--request server :completionItem/resolve
+                                           (get-text-property
+                                            0 'eglot--lsp-completion obj))
+                           :documentation)))))
            (when documentation
              (with-current-buffer (get-buffer-create " *eglot doc*")
                (insert (eglot--format-markup documentation))
@@ -1515,6 +1558,7 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
                           (pop prepared))))
         (if prepared (eglot--warn "Caution: edits of files %s failed."
                                   (mapcar #'car prepared))
+          (eglot-eldoc-function)
           (eglot--message "Edit successful!"))))))
 
 (defun eglot-rename (newname)
@@ -1528,6 +1572,52 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
                    :textDocument/rename `(,@(eglot--TextDocumentPositionParams)
                                           :newName ,newname))
    current-prefix-arg))
+
+
+(defun eglot-code-actions (&optional beg end)
+  "Get and offer to execute code actions between BEG and END."
+  (interactive
+   (let (diags)
+     (cond ((region-active-p) (list (region-beginning) (region-end)))
+           ((setq diags (flymake-diagnostics (point)))
+            (list (cl-reduce #'min (mapcar #'flymake-diagnostic-beg diags))
+                  (cl-reduce #'max (mapcar #'flymake-diagnostic-end diags))))
+           (t (list (point-min) (point-max))))))
+  (unless (eglot--server-capable :codeActionProvider)
+    (eglot--error "Server can't execute code actions!"))
+  (let* ((server (eglot--current-server-or-lose))
+         (actions (eglot--request
+                   server
+                   :textDocument/codeAction
+                   (list :textDocument (eglot--TextDocumentIdentifier)
+                         :range (list :start (eglot--pos-to-lsp-position beg)
+                                      :end (eglot--pos-to-lsp-position end))
+                         :context
+                         `(:diagnostics
+                           [,@(mapcar (lambda (diag)
+                                        (cdr (assoc 'eglot-lsp-diag
+                                                    (eglot--diag-props diag))))
+                                      (cl-remove-if-not
+                                       (lambda (diag) (cl-typep diag 'eglot--diag))
+                                       (flymake-diagnostics beg end)))]))))
+         (menu-items (mapcar (eglot--lambda (&key title command arguments)
+                               `(,title . (:command ,command :arguments ,arguments)))
+                             actions))
+         (menu (and menu-items `("Eglot code actions:" ("dummy" ,@menu-items))))
+         (command-and-args
+          (and menu
+               (if (listp last-nonmenu-event)
+                   (x-popup-menu last-nonmenu-event menu)
+                 (let ((never-mind (gensym)) retval)
+                   (setcdr (cadr menu)
+                           (cons `("never mind..." . ,never-mind) (cdadr menu)))
+                   (if (eq (setq retval (tmm-prompt menu)) never-mind)
+                       (keyboard-quit)
+                     retval))))))
+    (if command-and-args
+        (eglot--request server :workspace/executeCommand command-and-args)
+      (eglot--message "No code actions here"))))
+
 
 
 ;;; Dynamic registration
@@ -1601,8 +1691,8 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
   "Passes through required cquery initialization options"
   (let* ((root (car (project-roots (eglot--project server))))
          (cache (expand-file-name ".cquery_cached_index/" root)))
-    (vector :cacheDirectory (file-name-as-directory cache)
-            :progressReportFrequencyMs -1)))
+    (list :cacheDirectory (file-name-as-directory cache)
+          :progressReportFrequencyMs -1)))
 
 (cl-defmethod eglot-handle-notification
   ((_server eglot-cquery) (_method (eql :$cquery/progress))
