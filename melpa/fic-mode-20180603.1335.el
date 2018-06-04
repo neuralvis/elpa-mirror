@@ -1,5 +1,5 @@
 ;;; fic-mode.el --- Show FIXME/TODO/BUG(...) in special face only in comments and strings
-;; Package-Version: 20160209.1011
+;; Package-Version: 20180603.1335
 ;;--------------------------------------------------------------------
 ;;
 ;; Copyright (C) 2010, Trey Jackson <bigfaceworm(at)gmail(dot)com>
@@ -105,8 +105,7 @@
         fic-activated-faces))
 
 (defun fic-search-for-keyword (limit)
-  (let ((match-data-to-set nil)
-	found)
+  (let (match-data-to-set)
     (save-match-data
       (while (and (null match-data-to-set)
 		  (re-search-forward (fic-search-re) limit t))

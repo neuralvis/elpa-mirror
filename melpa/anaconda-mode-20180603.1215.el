@@ -4,9 +4,9 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20180602.1823
+;; Package-Version: 20180603.1215
 ;; Version: 0.1.12
-;; Package-Requires: ((emacs "26.1") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
+;; Package-Requires: ((emacs "25") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -112,13 +112,11 @@ if missing_dependencies:
     import site
     import setuptools.command.easy_install
     site.addsitedir(server_directory)
-    setuptools.command.easy_install.main([
-        '--install-dir', server_directory,
-        '--site-dirs', server_directory,
-        '--always-copy',
-        '--always-unzip',
-        *missing_dependencies
-    ])
+    cmd = ['--install-dir', server_directory,
+           '--site-dirs', server_directory,
+           '--always-copy','--always-unzip']
+    cmd.extend(missing_dependencies)
+    setuptools.command.easy_install.main(cmd)
     instrument_installation()
 
 # Setup server.
@@ -216,14 +214,6 @@ service_factory.service_factory(app, server_address, 0, 'anaconda_mode port {por
 
 (defvar anaconda-mode-port nil
   "Port for `anaconda-mode' connection.")
-
-(defvar anaconda-mode-definition-commands
-  '("complete" "goto_definitions" "goto_assignments" "usages")
-  "List of `anaconda-mode' rpc commands returning definitions as result.
-
-This is used to prefix `module-path' field with
-`pythonic-tramp-connection' in the case of remote interpreter or
-virtual environment.")
 
 (defvar anaconda-mode-response-buffer "*anaconda-response*"
   "Buffer name for error report when `anaconda-mode' fail to read server response.")
@@ -461,15 +451,15 @@ submitted."
                         (apply 'message error-template (delq nil (list error-message error-data))))
                     (with-current-buffer anaconda-mode-request-buffer
                       (let ((result (cdr (assoc 'result response))))
-                        (when (and (pythonic-remote-p)
-                                   (member command anaconda-mode-definition-commands))
-                          (setq result (--map (--map (let ((key (car it))
-                                                           (value (cdr it)))
-                                                       (when (and (eq key 'module-path) value)
-                                                         (setq value (concat (pythonic-tramp-connection) value)))
-                                                       (cons key value))
-                                                     it)
-                                              result)))
+                        (when (pythonic-remote-p)
+                          (if (member command '("goto_definitions" "goto_assignments" "usages"))
+                              (mapc (lambda (x)
+                                      (aset x 0 (concat (pythonic-tramp-connection) (aref x 0))))
+                                    result)
+                            (when (string= command "company_complete")
+                              (mapc (lambda (x)
+                                      (aset x 3 (concat (pythonic-tramp-connection) (aref x 3))))
+                                    result))))
                         ;; Terminate `apply' call with empty list so response
                         ;; will be treated as single argument.
                         (apply callback result nil)))))))
