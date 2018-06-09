@@ -4,7 +4,7 @@
 
 ;; Author: Vibhav Pant <vibhavp@gmail.com>
 ;; Version: 1.0
-;; Package-Version: 20180404.819
+;; Package-Version: 20180609.16
 ;; Package-Requires: ((lsp-mode "3.0"))
 ;; Keywords: python
 ;; URL: https://github.com/emacs-lsp/lsp-python
@@ -18,7 +18,7 @@
 						 (directory-files
 						  dir
 						  nil
-						  "setup.py")))
+              "setup.py\\|Pipfile\\|setup.cfg\\|tox.ini")))
 			 '("pyls"))
 
 (provide 'lsp-python)
