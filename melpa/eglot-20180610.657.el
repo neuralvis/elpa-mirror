@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
-;; Version: 0.8
-;; Package-Version: 0.8
+;; Version: 0.9
+;; Package-Version: 20180610.657
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -46,6 +46,13 @@
 ;;
 ;; To "unmanage" these buffers, shutdown the server with M-x
 ;; eglot-shutdown.
+;;
+;; You can also do:
+;;
+;;   (add-hook 'foo-mode-hook 'eglot-ensure)
+;;
+;; To attempt to start an eglot session automatically everytime a
+;; foo-mode buffer is visited.
 ;;
 ;;; Code:
 
@@ -259,7 +266,7 @@ CONTACT is in `eglot'.  Returns a process object."
                  (apply #'open-network-stream name stdout contact))
                 (t (make-process
                     :name name :command contact :buffer stdout
-                    :coding 'no-conversion :connection-type 'pipe
+                    :coding 'utf-8-emacs-unix :connection-type 'pipe
                     :stderr (setq stderr (format "*%s stderr*" name)))))))
     (process-put proc 'eglot-stderr stderr)
     (set-process-buffer proc (get-buffer-create stdout))
@@ -271,7 +278,7 @@ CONTACT is in `eglot'.  Returns a process object."
     proc))
 
 (defun eglot--all-major-modes ()
-  "Return all know major modes."
+  "Return all known major modes."
   (let ((retval))
     (mapatoms (lambda (sym)
                 (when (plist-member (symbol-plist sym) 'derived-mode-parent)
@@ -280,7 +287,7 @@ CONTACT is in `eglot'.  Returns a process object."
 
 (defvar eglot-connect-hook nil "Hook run after connecting in `eglot--connect'.")
 
-(defun eglot--connect (project managed-major-mode contact server-class)
+(defun eglot--connect (managed-major-mode project server-class contact)
   "Connect for PROJECT, MANAGED-MAJOR-MODE and CONTACT.
 INTERACTIVE is t if inside interactive call.  Return an object of
 class SERVER-CLASS."
@@ -332,8 +339,10 @@ class SERVER-CLASS."
 (defvar eglot--command-history nil
   "History of COMMAND arguments to `eglot'.")
 
-(defun eglot--interactive ()
-  "Helper for `eglot'."
+(defun eglot--guess-contact (&optional interactive)
+  "Helper for `eglot'.
+Return (MANAGED-MODE PROJECT CONTACT CLASS).
+If INTERACTIVE, maybe prompt user."
   (let* ((guessed-mode (if buffer-file-name major-mode))
          (managed-mode
           (cond
@@ -350,17 +359,20 @@ class SERVER-CLASS."
          (class (and (consp guess) (symbolp (car guess))
                      (prog1 (car guess) (setq guess (cdr guess)))))
          (program (and (listp guess) (stringp (car guess)) (car guess)))
-         (base-prompt "[eglot] Enter program to execute (or <host>:<port>): ")
+         (base-prompt
+          (and interactive
+               "[eglot] Enter program to execute (or <host>:<port>): "))
          (prompt
-          (cond (current-prefix-arg base-prompt)
-                ((null guess)
-                 (format "[eglot] Sorry, couldn't guess for `%s'\n%s!"
-                         managed-mode base-prompt))
-                ((and program (not (executable-find program)))
-                 (concat (format "[eglot] I guess you want to run `%s'"
-                                 (combine-and-quote-strings guess))
-                         (format ", but I can't find `%s' in PATH!" program)
-                         "\n" base-prompt))))
+          (and base-prompt
+               (cond (current-prefix-arg base-prompt)
+                     ((null guess)
+                      (format "[eglot] Sorry, couldn't guess for `%s'!\n%s"
+                              managed-mode base-prompt))
+                     ((and program (not (executable-find program)))
+                      (concat (format "[eglot] I guess you want to run `%s'"
+                                      (combine-and-quote-strings guess))
+                              (format ", but I can't find `%s' in PATH!" program)
+                              "\n" base-prompt)))))
          (contact
           (if prompt
               (let ((s (read-shell-command
@@ -372,10 +384,10 @@ class SERVER-CLASS."
                     (list (match-string 1 s) (string-to-number (match-string 2 s)))
                   (split-string-and-unquote s)))
             guess)))
-    (list managed-mode project contact class t)))
+    (list managed-mode project class contact)))
 
 ;;;###autoload
-(defun eglot (managed-major-mode project command server-class
+(defun eglot (managed-major-mode project server-class command
                                  &optional interactive)
   "Manage a project with a Language Server Protocol (LSP) server.
 
@@ -406,7 +418,7 @@ SERVER-CLASS is a symbol naming a class that must inherit from
 `eglot-server', or nil to use the default server class.
 
 INTERACTIVE is t if called interactively."
-  (interactive (eglot--interactive))
+  (interactive (append (eglot--guess-contact t) '(t)))
   (let ((current-server (eglot--current-server)))
     (if (and current-server
              (process-live-p (eglot--process current-server))
@@ -416,10 +428,10 @@ INTERACTIVE is t if called interactively."
       (when (and current-server
                  (process-live-p (eglot--process current-server)))
         (ignore-errors (eglot-shutdown current-server)))
-      (let ((server (eglot--connect project
-                                    managed-major-mode
-                                    command
-                                    server-class)))
+      (let ((server (eglot--connect managed-major-mode
+                                    project
+                                    server-class
+                                    command)))
         (eglot--message "Connected! Server `%s' now \
 managing `%s' buffers in project `%s'."
                         (eglot--name server) managed-major-mode
@@ -432,11 +444,33 @@ INTERACTIVE is t if called interactively."
   (interactive (list (eglot--current-server-or-lose) t))
   (when (process-live-p (eglot--process server))
     (ignore-errors (eglot-shutdown server interactive)))
-  (eglot--connect (eglot--project server)
-                  (eglot--major-mode server)
-                  (eglot--contact server)
-                  (eieio-object-class server))
+  (eglot--connect (eglot--major-mode server)
+                  (eglot--project server)
+                  (eieio-object-class server)
+                  (eglot--contact server))
   (eglot--message "Reconnected!"))
+
+(defvar eglot--managed-mode) ;forward decl
+
+(defun eglot-ensure ()
+  "Start Eglot session for current buffer if there isn't one."
+  (let ((buffer (current-buffer)))
+    (cl-labels
+        ((maybe-connect
+          ()
+          (remove-hook 'post-command-hook #'maybe-connect nil)
+          (eglot--with-live-buffer buffer
+            (if eglot--managed-mode
+                (eglot--message "%s is already managed by existing `%s'"
+                                buffer
+                                (eglot--name (eglot--current-server)))
+              (let ((server (apply #'eglot--connect (eglot--guess-contact))))
+                (eglot--message
+                 "Automatically started `%s' to manage `%s' buffers in project `%s'"
+                 (eglot--name server)
+                 major-mode
+                 (eglot--project-nickname server)))))))
+      (add-hook 'post-command-hook #'maybe-connect 'append nil))))
 
 (defun eglot--process-sentinel (proc change)
   "Called when PROC undergoes CHANGE."
@@ -738,7 +772,7 @@ DEFERRED is passed to `eglot--async-request', which see."
     (cadr res)))
 
 (cl-defun eglot--notify (server method params)
-  "Notify SERVER of something, don't expect a reply.e"
+  "Notify SERVER of something, don't expect a reply."
   (eglot--send server `(:jsonrpc  "2.0" :method ,method :params ,params)))
 
 (cl-defun eglot--reply (server id &key result error)
@@ -817,16 +851,26 @@ If optional MARKER, return a marker instead"
       (ignore-errors (funcall mode))
       (insert string) (font-lock-ensure) (buffer-string))))
 
+(defcustom eglot-ignored-server-capabilites (list)
+  "LSP server capabilities that Eglot could use, but won't.
+You could add, for instance, the symbol
+`:documentHighlightProvider' to prevent automatic highlighting
+under cursor."
+  :type '(repeat symbol))
+
 (defun eglot--server-capable (&rest feats)
   "Determine if current server is capable of FEATS."
-  (cl-loop for caps = (eglot--capabilities (eglot--current-server-or-lose))
-           then (cadr probe)
-           for feat in feats
-           for probe = (plist-member caps feat)
-           if (not probe) do (cl-return nil)
-           if (eq (cadr probe) t) do (cl-return t)
-           if (eq (cadr probe) :json-false) do (cl-return nil)
-           finally (cl-return (or probe t))))
+  (unless (cl-some (lambda (feat)
+                     (memq feat eglot-ignored-server-capabilites))
+                   feats)
+    (cl-loop for caps = (eglot--capabilities (eglot--current-server-or-lose))
+             then (cadr probe)
+             for feat in feats
+             for probe = (plist-member caps feat)
+             if (not probe) do (cl-return nil)
+             if (eq (cadr probe) t) do (cl-return t)
+             if (eq (cadr probe) :json-false) do (cl-return nil)
+             finally (cl-return (or probe t)))))
 
 (defun eglot--range-region (range &optional markers)
   "Return region (BEG . END) that represents LSP RANGE.
@@ -891,6 +935,9 @@ If optional MARKERS, make markers."
 (add-hook 'eglot--managed-mode-hook 'flymake-mode)
 (add-hook 'eglot--managed-mode-hook 'eldoc-mode)
 
+(defvar-local eglot--unreported-diagnostics nil
+  "Unreported Flymake diagnostics for this buffer.")
+
 (defun eglot--maybe-activate-editing-mode (&optional server)
   "Maybe activate mode function `eglot--managed-mode'.
 If SERVER is supplied, do it only if BUFFER is managed by it.  In
@@ -899,6 +946,7 @@ that case, also signal textDocument/didOpen."
   (let* ((cur (and buffer-file-name (eglot--current-server)))
          (server (or (and (null server) cur) (and server (eq server cur) cur))))
     (when server
+      (setq eglot--unreported-diagnostics `(:just-opened . nil))
       (eglot--managed-mode-onoff server 1)
       (eglot--signal-textDocument/didOpen))))
 
@@ -974,38 +1022,20 @@ Uses THING, FACE, DEFS and PREPEND."
 (add-to-list 'mode-line-misc-info
              `(eglot--managed-mode (" [" eglot--mode-line-format "] ")))
 
-
-;; FIXME: A horrible hack of Flymake's insufficient API that must go
-;; into Emacs master, or better, 26.2
-(cl-defstruct (eglot--diag (:include flymake--diag)
-                           (:constructor eglot--make-diag
-                                         (buffer beg end type text props)))
-  props)
+(put 'eglot-note 'flymake-category 'flymake-note)
+(put 'eglot-warning 'flymake-category 'flymake-warning)
+(put 'eglot-error 'flymake-category 'flymake-error)
 
-(advice-add 'flymake--highlight-line :after
-            (lambda (diag)
-              (when (cl-typep diag 'eglot--diag)
-                (let ((ov (cl-find diag
-                                   (overlays-at (flymake-diagnostic-beg diag))
-                                   :key (lambda (ov)
-                                          (overlay-get ov 'flymake-diagnostic)))))
-                  (cl-loop for (key . value) in (eglot--diag-props diag)
-                           do (overlay-put ov key value)))))
-            '((name . eglot-hacking-in-some-per-diag-overlay-properties)))
+(defalias 'eglot--make-diag 'flymake-make-diagnostic)
+(defalias 'eglot--diag-data 'flymake-diagnostic-data)
 
-
-(defun eglot--overlay-diag-props ()
-  `((mouse-face . highlight)
-    (help-echo . (lambda (window _ov pos)
-                   (with-selected-window window
-                     (mapconcat
-                      #'flymake-diagnostic-text
-                      (flymake-diagnostics pos)
-                      "\n"))))
-    (keymap . ,(let ((map (make-sparse-keymap)))
-                 (define-key map [mouse-1]
-                   (eglot--mouse-call 'eglot-code-actions))
-                 map))))
+(dolist (type '(eglot-error eglot-warning eglot-note))
+  (put type 'flymake-overlay-control
+       `((mouse-face . highlight)
+         (keymap . ,(let ((map (make-sparse-keymap)))
+                      (define-key map [mouse-1]
+                        (eglot--mouse-call 'eglot-code-actions))
+                      map)))))
 
 
 ;;; Protocol implementation (Requests, notifications, etc)
@@ -1066,9 +1096,6 @@ function with the server still running."
   (_server (_method (eql :telemetry/event)) &rest _any)
   "Handle notification telemetry/event") ;; noop, use events buffer
 
-(defvar-local eglot--unreported-diagnostics nil
-  "Unreported diagnostics for this buffer.")
-
 (cl-defmethod eglot-handle-notification
   (server (_method (eql :textDocument/publishDiagnostics)) &key uri diagnostics)
   "Handle notification publishDiagnostics"
@@ -1082,14 +1109,12 @@ function with the server still running."
                    (setq message (concat source ": " message))
                    (pcase-let ((`(,beg . ,end) (eglot--range-region range)))
                      (eglot--make-diag (current-buffer) beg end
-                                       (cond ((<= sev 1) ':error)
-                                             ((= sev 2)  ':warning)
-                                             (t          ':note))
-                                       message (cons
-                                                `(eglot-lsp-diag . ,diag-spec)
-                                                (eglot--overlay-diag-props)))))
+                                       (cond ((<= sev 1) 'eglot-error)
+                                             ((= sev 2)  'eglot-warning)
+                                             (t          'eglot-note))
+                                       message `((eglot-lsp-diag . ,diag-spec)))))
          into diags
-         finally (cond (eglot--current-flymake-report-fn
+         finally (cond ((and flymake-mode eglot--current-flymake-report-fn)
                         (funcall eglot--current-flymake-report-fn diags)
                         (setq eglot--unreported-diagnostics nil))
                        (t
@@ -1164,7 +1189,7 @@ THINGS are either registrations or unregisterations."
 (defvar-local eglot--recent-changes nil
   "Recent buffer changes as collected by `eglot--before-change'.")
 
-(defmethod eglot-server-ready-p (_s _what)
+(cl-defmethod eglot-server-ready-p (_s _what)
   "Normally ready if no outstanding changes." (not eglot--recent-changes))
 
 (defvar-local eglot--change-idle-timer nil "Idle timer for didChange signals.")
@@ -1273,7 +1298,7 @@ Calls REPORT-FN maybe if server publishes diagnostics in time."
 
 (defun eglot--xref-reset-known-symbols (&rest _dummy)
   "Reset `eglot--xref-reset-known-symbols'.
-DUMMY is ignored"
+DUMMY is ignored."
   (setq eglot--xref-known-symbols nil))
 
 (advice-add 'xref-find-definitions :after #'eglot--xref-reset-known-symbols)
@@ -1596,10 +1621,8 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
                          `(:diagnostics
                            [,@(mapcar (lambda (diag)
                                         (cdr (assoc 'eglot-lsp-diag
-                                                    (eglot--diag-props diag))))
-                                      (cl-remove-if-not
-                                       (lambda (diag) (cl-typep diag 'eglot--diag))
-                                       (flymake-diagnostics beg end)))]))))
+                                                    (eglot--diag-data diag))))
+                                      (flymake-diagnostics beg end))]))))
          (menu-items (mapcar (eglot--lambda (&key title command arguments)
                                `(,title . (:command ,command :arguments ,arguments)))
                              actions))
@@ -1622,6 +1645,18 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
 
 ;;; Dynamic registration
 ;;;
+(defun eglot--wildcard-to-regexp (wildcard)
+  "(Very lame attempt to) convert WILDCARD to a Elisp regexp."
+  (cl-loop
+   with substs = '(("{" . "\\\\(")
+                   ("}" . "\\\\)")
+                   ("," . "\\\\|"))
+   with string = (wildcard-to-regexp wildcard)
+   for (pattern . rep) in substs
+   for target = string then result
+   for result = (replace-regexp-in-string pattern rep target)
+   finally return result))
+
 (cl-defun eglot--register-workspace/didChangeWatchedFiles (server &key id watchers)
   "Handle dynamic registration of workspace/didChangeWatchedFiles"
   (eglot--unregister-workspace/didChangeWatchedFiles server :id id)
@@ -1635,7 +1670,7 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
              ((and (memq action '(created changed deleted))
                    (cl-find file globs
                             :test (lambda (f glob)
-                                    (string-match (wildcard-to-regexp
+                                    (string-match (eglot--wildcard-to-regexp
                                                    (expand-file-name glob))
                                                   f))))
               (eglot--notify
@@ -1708,6 +1743,40 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
   ((_server eglot-cquery) (_method (eql :$cquery/publishSemanticHighlighting))
    &key _uri _symbols &allow-other-keys)
   "No-op for unsupported $cquery/publishSemanticHighlighting extension")
+
+
+;; FIXME: A horrible hack of Flymake's insufficient API that must go
+;; into Emacs master, or better, 26.2
+(when (version< emacs-version "27.0")
+  (cl-defstruct (eglot--diag (:include flymake--diag)
+                             (:constructor eglot--make-diag-1))
+    data-1)
+  (defsubst eglot--make-diag (buffer beg end type text data)
+    (let ((sym (alist-get type eglot--diag-error-types-to-old-types)))
+      (eglot--make-diag-1 :buffer buffer :beg beg :end end :type sym
+                          :text text :data-1 data)))
+  (defsubst eglot--diag-data (diag)
+    (and (eglot--diag-p diag) (eglot--diag-data-1 diag)))
+  (defvar eglot--diag-error-types-to-old-types
+    '((eglot-error . :error)
+      (eglot-warning . :warning)
+      (eglot-note . :note)))
+  (advice-add
+   'flymake--highlight-line :after
+   (lambda (diag)
+     (when (eglot--diag-p diag)
+       (let ((ov (cl-find diag
+                          (overlays-at (flymake-diagnostic-beg diag))
+                          :key (lambda (ov)
+                                 (overlay-get ov 'flymake-diagnostic))))
+             (overlay-properties
+              (get (car (rassoc (flymake-diagnostic-type diag)
+                                eglot--diag-error-types-to-old-types))
+                   'flymake-overlay-control)))
+         (cl-loop for (k . v) in overlay-properties
+                  do (overlay-put ov k v)))))
+   '((name . eglot-hacking-in-some-per-diag-overlay-properties))))
+
 
 (provide 'eglot)
 ;;; eglot.el ends here

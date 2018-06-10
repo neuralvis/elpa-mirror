@@ -4,8 +4,8 @@
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-helm-tramp
-;; Package-Version: 20180311.2157
-;; Version: 0.9.5
+;; Package-Version: 1.0.5
+;; Version: 1.0.5
 ;; Package-Requires: ((emacs "24.3") (helm "2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -131,12 +131,18 @@ Kill all remote buffers."
   "Tramp open with PATH."
   (find-file path))
 
+(defun helm-tramp-open-shell (path)
+  "Tramp open shell at PATH."
+  (let ((default-directory path))
+    (shell (concat "* Helm tramp shell - " path))))
+
 (defvar helm-tramp--source
   (helm-build-sync-source "Tramp"
     :candidates #'helm-tramp--candidates
     :volatile t
     :action (helm-make-actions
-             "Tramp" #'helm-tramp-open)))
+             "Tramp" #'helm-tramp-open
+             "Shell" #'helm-tramp-open-shell)))
 
 ;;;###autoload
 (defun helm-tramp ()
