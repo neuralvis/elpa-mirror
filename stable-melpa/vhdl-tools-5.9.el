@@ -3,20 +3,18 @@
 ;; Based on `vhdl-goto-def' at `http://www.emacswiki.org/emacs/vhdl-goto-def.el'
 
 ;; Copyright (C) 2003 Free Software Foundation, Inc.
-;; Copyright (C) 2015-2017 Cayetano Santos
+;; Copyright (C) 2015-2018 Cayetano Santos
 
 ;; Original author:  wandad guscheh <wandad.guscheh@fh-hagenberg.at>
 ;; Author:           Cayetano Santos
-;; Keywords: vhdl
-;; Package-Version: 5.8
-
+;; Keywords: languages, convenience
+;; Package-Version: 5.9
 ;; Filename: vhdl-tools.el
 ;; Description: Utilities for navigating vhdl sources.
-;; URL: https://csantosb.github.io/vhdl-tools/
-;; Keywords: convenience
+;; URL: https://github.com/csantosb/vhdl-tools/wiki
 ;; Compatibility: GNU Emacs >= 25.2
-;; Version: 5.8
-;; Package-Requires: ((ggtags "0.8.12") (emacs "25.2") (outshine "2.0") (helm "2.8.5"))
+;; Version: 5.9
+;; Package-Requires: ((ggtags "0.8.12") (emacs "26.1") (outshine "2.0") (helm "2.9.6"))
 
 ;;; License:
 ;;
@@ -43,8 +41,6 @@
 ;; `imenu' and `outshine' features to ease navigating vhdl
 ;; sources.  Additionally, it provides `vOrg' mode too, which benefits of all
 ;; `Org' features.
-;;
-;; For details, refer to  https://github.com/csantosb/vhdl-tools/wiki
 
 ;;; Install:
 ;;
@@ -66,34 +62,9 @@
 
 ;;; Use:
 ;;
-;; The minor mode provide utilities to ease navigating vhdl sources beyond what
-;; is available with plain `ggtags'.
+;; Have a look at customization possibilities with \M-x customize-group `vhdl-tools'.
 ;;
-;;   - Jumping into instances
-;;   - Jump to upper level
-;;   - Searching for references
-;;   - Link management
-;;   - Custom use of imenu
-;;
-;; Open any vhdl file and invoke the following keybinds
-;;
-;;   C-c M-D     jumps to the definition of symbol at point
-;;   C-c M-j     follows the link at point
-;;   C-c M-w     stores a link
-;;   C-c M-y     pastes a link
-;;   C-c M-.     jumps into the instance at point
-;;   C-c M-a     moves point to first appearance of symbol at point
-;;   C-c M-u     jumps to upper hierarchy level
-;;
-;; Cursor will jump to the target if there is one, searching packages
-;; too. The ring mark is push after jumping, so to get back, press \C-c\C-p
-;; or \M-, (default binds under `ggtags') if corresponding definition has been
-;; found. Works better for files with correct syntax: think
-;; `vhdl-beautify-buffer' before using `vhdl-tools'.
-;;
-;; Also have a look at customization possibilities with \M-x customize-group `vhdl-tools'.
-;;
-;; See README for details
+;; For details, refer to  https://github.com/csantosb/vhdl-tools/wiki
 
 ;;; Todo:
 
@@ -164,10 +135,6 @@ Needed to determine end of name."
 
 (defcustom vhdl-tools-use-outshine nil
   "Flag to activate `outshine' when `vhdl-tools' minor mode in active."
-  :type 'boolean :group 'vhdl-tools)
-
-(defcustom vhdl-tools-remap-smartscan nil
-  "Flag to allow remapping `smartscan' when `vhdl-tools' minor mode in active."
   :type 'boolean :group 'vhdl-tools)
 
 (defcustom vhdl-tools-manage-folding nil
@@ -473,9 +440,7 @@ displayed.  To go back to original vhdl file press."
 Additionally, move point to signal at point.
 Declare a key-bind to get back to the original point."
   (interactive)
-  ;; when no symbol at point, move forward to next symbol
-  (when (not (vhdl-tools--get-name))
-    (back-to-indentation))
+  (back-to-indentation)
   ;; when nil, do nothing
   (when (vhdl-tools--get-name)
     ;; necessary during hook (see later)
@@ -578,44 +543,6 @@ When no symbol at point, move point to indentation."
 	  (vhdl-tools--fold)
 	  (vhdl-tools--post-jump-function))))))
 
-;;; SmartScan
-
-;; Custom version of `smartscan' jumping functions.  Here, I manage
-;; folding/unfolding of code headings, so that upon jumping only the
-;; relevant section is shown
-
-;;;; Go Forward
-
-(defun vhdl-tools-smcn-next()
-  (interactive)
-  (smartscan-symbol-go-forward)
-  (backward-char 1)
-  (vhdl-tools--fold)
-  (recenter-top-bottom vhdl-tools-recenter-nb-lines))
-
-(defun vhdl-tools-vorg-smcn-next()
-  (interactive)
-  (smartscan-symbol-go-forward)
-  (backward-char 1)
-  (vhdl-tools--fold)
-  (recenter-top-bottom vhdl-tools-recenter-nb-lines))
-
-;;;; Go Backwards
-
-(defun vhdl-tools-smcn-prev()
-  (interactive)
-  (smartscan-symbol-go-backward)
-  (forward-char 1)
-  (vhdl-tools--fold)
-  (recenter-top-bottom vhdl-tools-recenter-nb-lines))
-
-(defun vhdl-tools-vorg-smcn-prev()
-  (interactive)
-  (smartscan-symbol-go-backward)
-  (forward-char 1)
-  (vhdl-tools--fold)
-  (recenter-top-bottom vhdl-tools-recenter-nb-lines))
-
 ;;; Org / VHDL
 
 ;; Following the literate programming paradigm, here we intend to provide some
@@ -658,8 +585,7 @@ When no symbol at point, move point to indentation."
 ;;;; VOrg to VHDL
 
 (defun vhdl-tools-vorg-jump-from-vorg()
-  "From `vorg' file, jump to same line in `vhdl' file, tangling the
-code before if necessary."
+  "From `vorg' file, jump to `vhdl' file, tangling before if necessary."
   (interactive)
   (call-interactively 'vhdl-tools-vorg-tangle)
   (let* ((vhdlfile (vhdl-tools--get-vhdl-file (file-name-base)))
@@ -683,8 +609,8 @@ code before if necessary."
 ;;;; VOrg to module
 
 (defun vhdl-tools-vorg-jump-from-vorg-into-module()
-  "From `vorg' file, jump to same line in `vhdl' file, tangling the
-code before if necessary, then jump into module."
+  "From `vorg' file, jump to same line in `vhdl' file.
+Tangle the code before if necessary, then jump into module."
   (interactive)
   (vhdl-tools-vorg-jump-from-vorg)
   (vhdl-tools-jump-into-module))
@@ -997,6 +923,7 @@ Beautifies source code blocks before editing."
 ;;;; Standard Imenu
 
 (defun vhdl-tools-imenu()
+  "Bla."
   (interactive)
   (let ((imenu-generic-expression vhdl-imenu-generic-expression))
     (set-buffer-modified-p t)
@@ -1008,6 +935,7 @@ Beautifies source code blocks before editing."
 ;;;; Instances
 
 (defun vhdl-tools-imenu-instance()
+  "."
   (interactive)
   (let ((imenu-generic-expression vhdl-imenu-generic-expression)
 	(helm-autoresize-max-height 100)
@@ -1021,6 +949,7 @@ Beautifies source code blocks before editing."
 ;;;; Processes
 
 (defun vhdl-tools-imenu-processes()
+  "."
   (interactive)
   (let ((imenu-generic-expression vhdl-imenu-generic-expression)
 	(helm-autoresize-max-height 100)
@@ -1034,6 +963,7 @@ Beautifies source code blocks before editing."
 ;;;; Components
 
 (defun vhdl-tools-imenu-component()
+  "."
   (interactive)
   (let ((imenu-generic-expression vhdl-imenu-generic-expression)
 	(helm-autoresize-max-height 100)
@@ -1047,6 +977,7 @@ Beautifies source code blocks before editing."
 ;;;; Headings
 
 (defun vhdl-tools-imenu-headers()
+  "."
   (interactive)
   (let ((imenu-generic-expression `(("" ,vhdl-tools-imenu-regexp 1)))
 	(helm-autoresize-max-height 100)
@@ -1060,6 +991,7 @@ Beautifies source code blocks before editing."
 ;;;; Outshine - imenu
 
 (defun vhdl-tools-outshine-imenu-headers()
+  "."
   (interactive)
   (let ((helm-split-window-default-side
 	 (if (> (window-width) 100)
@@ -1073,7 +1005,7 @@ Beautifies source code blocks before editing."
 
 (defun vhdl-tools-imenu-all()
   "In a vhdl buffer, call `helm-semantic-or-imenu', show all items.
-  Processes, instances and doc headers are shown in order of appearance."
+Processes, instances and doc headers are shown in order of appearance."
   (interactive)
   (let ((imenu-generic-expression
 	 `(;; process
@@ -1126,17 +1058,6 @@ Key bindings:
 		    (vc-find-root (buffer-file-name) ".git"))))
       (progn
 
-        ;; optional smartscan remapping
-	(when (and (require 'outshine)
-		   vhdl-tools-use-outshine
-                   (require 'smartscan)
-		   vhdl-tools-remap-smartscan
-		   (smartscan-mode 1))
-	  (define-key vhdl-mode-map [remap smartscan-symbol-go-forward]
-	    #'vhdl-tools-smcn-next)
-	  (define-key vhdl-mode-map [remap smartscan-symbol-go-backward]
-	    #'vhdl-tools-smcn-prev))
-
 	;; optional outshine use
 	(when (and (require 'outshine)
 		   vhdl-tools-use-outshine)
@@ -1170,7 +1091,7 @@ Key bindings:
 
 (with-eval-after-load 'vhdl-tools
   (define-key vhdl-tools-mode-map (kbd "C-c M-D") #'vhdl-tools-goto-type-def)
-  (define-key vhdl-tools-mode-map (kbd "C-c M-j") #'vhdl-tools-follow-links)
+  (define-key vhdl-tools-mode-map (kbd "C-c M-l") #'vhdl-tools-follow-links)
   (define-key vhdl-tools-mode-map (kbd "C-c M-w") #'vhdl-tools-store-link)
   (define-key vhdl-tools-mode-map (kbd "C-c M-y") #'vhdl-tools-paste-link)
   (define-key vhdl-tools-mode-map (kbd "C-c M-.") #'vhdl-tools-jump-into-module)
@@ -1205,14 +1126,6 @@ Key bindings:
 \\{vhdl-tools-vorg-mode-map}"
 
   (progn
-    ;; optional smartscan remapping
-    (when (and (require 'smartscan)
-	       vhdl-tools-remap-smartscan
-	       (smartscan-mode 1))
-      (define-key vhdl-tools-vorg-mode-map [remap smartscan-symbol-go-forward]
-	#'vhdl-tools-vorg-smcn-next)
-      (define-key vhdl-tools-vorg-mode-map [remap smartscan-symbol-go-backward]
-	#'vhdl-tools-vorg-smcn-prev))
 
     ;; update hook
     (add-to-list 'org-src-mode-hook 'vhdl-tools-vorg-src-edit-beautify)
