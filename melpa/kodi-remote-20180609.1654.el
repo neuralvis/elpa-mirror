@@ -4,7 +4,7 @@
 
 ;; Author: Stefan Huchler <stefan.huchler@mail.de>
 ;; URL: http://github.com/spiderbit/kodi-remote.el
-;; Package-Version: 20180605.1822
+;; Package-Version: 20180609.1654
 ;; Package-Requires: ((request "0.2.0")(let-alist "1.0.4")(json "1.4")(elnode "20140203.1506"))
 ;; Keywords: kodi tools convinience
 
@@ -193,7 +193,8 @@ Argument DIRECTION which direction and how big of step to seek."
     (kodi-remote-post "Player.Seek" params)))
 
 (defun kodi-remote-play-database-id (field-name id resume)
-  "Play kodi item with the id type in FIELD-NAME and the given ID."
+  "Play kodi item with the id type in FIELD-NAME and the given ID.
+Argument RESUME continue playback where stopped before else start from beginning."
   (let* ((do-resume
   	    (if (and
 		 resume
@@ -403,14 +404,16 @@ Optional argument ID limits to a specific artist."
     (kodi-remote-get "AudioLibrary.GetSongs" params)))
 
 (defun kodi-remote-get-item-size (file)
-  "Poll item Size."
+  "Poll item Size.
+Argument FILE the name of the file you want the size."
   (let* ((params `(("params" . (("file" . ,file)
 				("properties" .
 				 ["size"]))))))
   (kodi-remote-get "Files.GetFileDetails" params)))
 
 (defun kodi-remote-get-sources (type)
-  "Poll item sources."
+  "Poll item sources.
+Argument TYPE video or audio."
   (let* ((params `(("params" . (("media" . ,type))))))
     (kodi-remote-get "Files.GetSources" params))
   (assoc-default 'sources kodi-properties))
@@ -461,7 +464,7 @@ Optional argument SHOW-ID limits to a specific show."
 	(kodi-remote-append-disk-free data-field category sources))))
 
 (defun kodi-remote-append-disk-free (data-name category sources)
-  "Helper Function to get free space of items"
+  "Helper Function to get free space of items."
   (let ((kodi-path-df '()))
     (setq kodi-properties
 	  `((,data-name
@@ -490,7 +493,7 @@ Optional argument SHOW-ID limits to a specific show."
 				 size-part)))
 			  (diskused
 			   (elt (split-string (eshell-command-result
-					       (format "du '%s' -hs"
+					       (format "du \"%s\" -hs"
 						       (substring file-name 1))))
 				0)))
 		     ;; (kodi-remote-get-item-size file-name)
@@ -1127,7 +1130,7 @@ Optional argument _NOCONFIRM revert excepts this param."
 Optional argument _ARG revert excepts this param.
 Optional argument _NOCONFIRM revert excepts this param."
   (interactive)
-  (kodi-remote-tab-header "Series" "series")
+  (kodi-remote-tab-header "Series" "series" t)
   (kodi-remote-video-scan)
   (kodi-remote-get-show-list)
   (kodi-draw-tab-list 'kodi-remote-series-episodes-wrapper t
@@ -1139,21 +1142,26 @@ Optional argument _NOCONFIRM revert excepts this param."
 Optional argument _ARG revert excepts this param.
 Optional argument _NOCONFIRM revert excepts this param."
   (interactive)
-  (kodi-remote-tab-header "Episode" "series-episode")
+  (kodi-remote-tab-header "Episode" "series-episodes")
   (kodi-remote-video-scan)
   (kodi-remote-get-series-episodes
    kodi-selected-show)
   (kodi-draw-tab-list 'episodeid nil
 		      'episodeid 'episodes nil))
 
-(defun kodi-remote-tab-header (media-column-name mode-tail-name)
-  "docstring"
+(defun kodi-remote-tab-header (media-column-name mode-tail-name &optional subitems)
+  "Generate the header of a kodi media mode.
+Argument MEDIA-COLUMN-NAME Entry name.
+Argument MODE-TAIL-NAME Name of the media buffer type.
+Optional argument SUBITEMS has this mode subitems."
   (setq tabulated-list-format
 	(concatenate 'vector
+		     (if subitems
+			 '[("entries" 10 t)])
 		     (if (and kodi-dangerous-options
 			      kodi-show-df)
 			 '[("Disk Free" 10 t)
-			  ("Disk Used" 10 t)])
+			   ("Disk Used" 10 t)])
 		     `[(,media-column-name  30 t)]))
   (setq mode-name
 	(format	"kodi-remote-%s: %s" mode-tail-name

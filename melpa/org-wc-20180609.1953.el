@@ -1,5 +1,5 @@
 ;;; org-wc.el --- Count words in org mode trees.  -*- lexical-binding: t -*-
-;; Package-Version: 20180415.2219
+;; Package-Version: 20180609.1953
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -125,6 +125,9 @@ LaTeX macros are counted as 1 word. "
         (latex-macro-regexp "\\\\[A-Za-z]+\\(\\[[^]]*\\]\\|\\){\\([^}]*\\)}"))
     (save-excursion
       (goto-char beg)
+      ;; Handle the case where we start in a drawer
+      (when (org-at-drawer-p)
+        (org-end-of-meta-data t))
       (while (< (point) end)
         (cond
          ;; Ignore heading lines, and sections with org-wc-ignored-tags
@@ -147,9 +150,7 @@ LaTeX macros are counted as 1 word. "
           (org-wc--goto-char (point-at-eol) end))
          ;; Ignore drawers.
          ((org-at-drawer-p)
-          (progn (goto-char (match-end 0))
-                 (re-search-forward org-property-end-re end t)
-                 (org-wc--goto-char (point-at-eol) end)))
+          (org-end-of-meta-data t))
          ;; Handle links
          ((save-excursion
             (when (< (1+ (point-min)) (point)) (backward-char 2))
@@ -163,22 +164,22 @@ LaTeX macros are counted as 1 word. "
                            ((member type org-wc-description-or-path-link-types)
                             'description-or-path)
                            (t org-wc-default-link-count))
-              (ignore (org-wc--goto-char-pass-non-words (match-end 0) end))
-              (oneword (org-wc--goto-char-pass-non-words (match-end 0) end)
+              (ignore (org-wc--goto-char (match-end 0) end))
+              (oneword (org-wc--goto-char (match-end 0) end)
                        (cl-incf wc))
               (description (if (match-beginning 5)
                                (goto-char (match-beginning 5))
-                             (org-wc--goto-char-pass-non-words
+                             (org-wc--goto-char
                               (match-end 0) end)))
               (path (cl-incf wc (count-words-region (match-beginning 3)
                                                     (match-end 3)))
-                    (org-wc--goto-char-pass-non-words (match-end 0) end))
+                    (org-wc--goto-char (match-end 0) end))
               (description-or-path
                (if (match-beginning 5)
                    (goto-char (match-beginning 5))
                  (cl-incf wc (count-words-region (match-beginning 3)
                                                  (match-end 3)))
-                 (org-wc--goto-char-pass-non-words (match-end 0) end)))
+                 (org-wc--goto-char (match-end 0) end)))
               (t (user-error "Error in org-wc link configuration")))))
          ;; Count latex macros as 1 word, ignoring their arguments.
          ((save-excursion
