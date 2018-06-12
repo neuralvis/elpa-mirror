@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20180610.2320
+;; Package-Version: 20180612.623
 ;; Version: 0.1.12
 ;; Package-Requires: ((emacs "25") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
@@ -334,11 +334,12 @@ be bound."
                                 :query-on-exit nil
                                 :filter (lambda (process output)
                                           (anaconda-mode-bootstrap-filter process output callback))
-                                :args (list "-c"
-                                            anaconda-mode-server-command
-                                            (anaconda-mode-server-directory)
-                                            (if (pythonic-remote-p) "0.0.0.0" "127.0.0.1")
-                                            (or python-shell-virtualenv-root ""))))
+                                :sentinel (lambda (process event))
+                                :args `("-c"
+                                        ,anaconda-mode-server-command
+                                        ,(anaconda-mode-server-directory)
+                                        ,(if (pythonic-remote-p) "0.0.0.0" "127.0.0.1")
+                                        ,(or python-shell-virtualenv-root ""))))
   (process-put anaconda-mode-process 'interpreter python-shell-interpreter)
   (process-put anaconda-mode-process 'virtualenv python-shell-virtualenv-root)
   (when (pythonic-remote-p)

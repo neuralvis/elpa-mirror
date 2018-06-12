@@ -4,7 +4,7 @@
 
 ;; Authors: Valeriy Savchenko <sinmipt@gmail.com>
 ;; URL: http://github.com/SavchenkoValeriy/emacs-powerthesaurus
-;; Package-Version: 20180611.519
+;; Package-Version: 20180612.447
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (request "0.3.0") (s "1.12.0"))
 ;; Keywords: convenience, writing
@@ -37,6 +37,33 @@
 (require 'request)
 (require 'rx)
 (require 's)
+
+;;;###autoload
+(defun powerthesaurus-lookup-word-at-point (word-point)
+  "Find word at `WORD-POINT', look it up in powerthesaurs, and replace it."
+  (interactive (list (point)))
+  (save-mark-and-excursion
+    (unless (powerthesaurus-is-at-the-beginning-of-word word-point)
+      (backward-word))
+    (set-mark (point))
+    (forward-word)
+    (activate-mark)
+    (powerthesaurus-lookup-word (region-beginning) (region-end))))
+
+(defun powerthesaurus-is-at-the-beginning-of-word (word-point)
+  "Predicate to check whether `WORD-POINT' points to the beginning of the word."
+  (save-excursion
+    ;; If we are at the beginning of a word
+    ;; this will take us to the beginning of the previous word.
+    ;; Otherwise, this will take us to the beginning of the current word.
+    (backward-word)
+    ;; This will take us to the end of the previous word or to the end
+    ;; of the current word depending on whether we were at the beginning
+    ;; of a word.
+    (forward-word)
+    ;; Compare our original position with wherever we're now to
+    ;; separate those two cases
+    (< (point) word-point)))
 
 ;;;###autoload
 (defun powerthesaurus-lookup-word (&optional beginning end)
