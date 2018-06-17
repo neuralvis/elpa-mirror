@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20081202
 ;; Package-Requires: ((emacs "26"))
-;; Package-Version: 20180324.936
+;; Package-Version: 20180614.1957
 ;; Homepage: https://github.com/emacscollective/elx
 ;; Keywords: docs, libraries, packages
 
@@ -43,7 +43,7 @@
 (defgroup elx nil
   "Extract information from Emacs Lisp libraries."
   :group 'maint
-  :link '(url-link :tag "Homepage" "https://github.com/tarsius/elx"))
+  :link '(url-link :tag "Homepage" "https://github.com/emacscollective/elx"))
 
 ;;; Extract Summary
 
@@ -53,33 +53,34 @@ If optional FILE is nil return the summary of the current buffer
 instead.  When optional SANITIZE is non-nil a trailing period is
 removed and the first word is upcases."
   (lm-with-file file
-    (let ((summary-match
-           (lambda ()
-             (and (looking-at lm-header-prefix)
-                  (progn (goto-char (match-end 0))
-                         ;; There should be three dashes after the
-                         ;; filename but often there are only two or
-                         ;; even just one.
-                         (looking-at "[^ ]+[ \t]+-+[ \t]+\\(.*\\)"))))))
-      (if (or (funcall summary-match)
-              ;; Some people put the -*- specification on a separate
-              ;; line, pushing the summary to the second or third line.
-              (progn (forward-line) (funcall summary-match))
-              (progn (forward-line) (funcall summary-match)))
-          (let ((summary (match-string-no-properties 1)))
-            (unless (equal summary "")
-              ;; Strip off -*- specifications.
-              (when (string-match "[ \t]*-\\*-.*-\\*-" summary)
-                (setq summary (substring summary 0 (match-beginning 0))))
-              (when sanitize
-                (when (string-match "\\.$" summary)
-                  (setq summary (substring summary 0 -1)))
-                (when (string-match "^[a-z]" summary)
-                  (setq summary
-                        (concat (upcase (substring summary 0 1))
-                                (substring summary 1)))))
-              (unless (equal summary "")
-                summary)))))))
+    (and (cl-flet ((summary-match
+                    ()
+                    (and (looking-at lm-header-prefix)
+                         (progn (goto-char (match-end 0))
+                                ;; There should be three dashes after the
+                                ;; filename but often there are only two or
+                                ;; even just one.
+                                (looking-at "[^ ]+[ \t]+-+[ \t]+\\(.*\\)")))))
+           (or (summary-match)
+               ;; Some people put the -*- specification on a separate
+               ;; line, pushing the summary to the second or third line.
+               (progn (forward-line) (summary-match))
+               (progn (forward-line) (summary-match))))
+         (let ((summary (match-string-no-properties 1)))
+           (and (not (equal summary ""))
+                (progn
+                  ;; Strip off -*- specifications.
+                  (when (string-match "[ \t]*-\\*-.*-\\*-" summary)
+                    (setq summary (substring summary 0 (match-beginning 0))))
+                  (when sanitize
+                    (when (string-match "\\.$" summary)
+                      (setq summary (substring summary 0 -1)))
+                    (when (string-match "^[a-z]" summary)
+                      (setq summary
+                            (concat (upcase (substring summary 0 1))
+                                    (substring summary 1)))))
+                  (and (not (equal summary ""))
+                       summary)))))))
 
 ;;; Extract Keywords
 
@@ -115,11 +116,10 @@ else as strings."
                                   "\\|[ \t]+and[ \t]+\\)")
                           t))
           (when sanitize
-            (let ((remap (assoc keyword elx-remap-keywords)))
-              (and remap (setq keyword (cadr remap))))
-            (and keyword
-                 (string-match elx-keywords-regexp keyword)
-                 (push keyword keywords)))))
+            (when-let ((remap (assoc keyword elx-remap-keywords)))
+              (setq keyword (cadr remap)))
+            (when (and keyword (string-match elx-keywords-regexp keyword))
+              (push keyword keywords)))))
       (setq keywords (delete-dups (sort keywords 'string<)))
       (if symbols (mapcar #'intern keywords) keywords))))
 
@@ -139,8 +139,8 @@ the leading semicolons and exactly one space are removed,
 likewise leading \"\(\" is replaced with just \"(\".  Lines
 consisting only of whitespace are converted to empty lines."
   (lm-with-file file
-    (let ((start (lm-section-start lm-commentary-header t)))
-      (when start
+    (and-let* ((start (lm-section-start lm-commentary-header t)))
+      (progn
         (goto-char start)
         (let ((commentary (buffer-substring-no-properties
                            start (lm-commentary-end))))
@@ -155,18 +155,16 @@ consisting only of whitespace are converted to empty lines."
                     ("\\`[\n\t\s]*" . "")
                     ("[\n\t\s]*\\'" . "")))
             (setq commentary
-                  (when (string-match "[^\s\t\n]" commentary)
-                    (concat commentary "\n"))))
+                  (and (string-match "[^\s\t\n]" commentary)
+                       (concat commentary "\n"))))
           commentary)))))
 
 ;;; Extract Pages
 
 (defun elx-wikipage (&optional file)
   "Extract the Emacswiki page of the specified package."
-  (let ((page (lm-with-file file
-                (lm-header "Doc URL"))))
-    (and page
-         (string-match
+  (and-let* ((page (lm-with-file file (lm-header "Doc URL"))))
+    (and (string-match
           "^<?http://\\(?:www\\.\\)?emacswiki\\.org.*?\\([^/]+\\)>?$"
           page)
          (match-string 1 page))))
@@ -415,7 +413,9 @@ Public License as published by the Free Software Foundation\\.")) ; lmselect, ti
   '(("Apache License 2.0"                          . "Apache-2.0")
     ("Artistic License 2.0"                        . "Artistic-2.0")
     ("BSD 2-clause \"Simplified\" License"         . "BSD-2-clause")
+    ("BSD 2-Clause \"Simplified\" License"         . "BSD-2-clause")
     ("BSD 3-clause \"New\" or \"Revised\" License" . "BSD-3-clause")
+    ("BSD 3-Clause \"New\" or \"Revised\" License" . "BSD-3-clause")
     ("Creative Commons Zero v1.0 Universal"        . "CC0 1.0")
     ("Do What The F*ck You Want To Public License" . "WTFPL")
     ("Eclipse Public License 1.0"                  . "EPL-1.0")
@@ -524,6 +524,9 @@ An effort is made to normalize the returned value."
           (`(nil "edit-at-point")   "MIT")          ; https://github.com/enoson/edit-at-point.el/blob/master/README.md
           (`(nil "emacs-setup")     "GPL-3+")       ; https://github.com/echosa/emacs-setup/blob/master/LICENSE
           (`(nil "eno")             "MIT")          ; https://github.com/enoson/eno.el/blob/master/README.md
+          (`(nil "evil-mc")         "MIT")          ; PENDING https://github.com/gabesoft/evil-mc/issues/80
+          (`(nil "evil-mc-extras")  "MIT")          ; PENDING https://github.com/gabesoft/evil-mc/issues/80
+          (`(nil "flow-minor-mode") "BSD-3-clause") ; PENDING https://github.com/an-sh/flow-minor-mode/issues/18
           (`(nil "glsl-mode")       "GPL-1+")       ; https://github.com/jimhourihan/glsl-mode/issues/8
           (`(nil "golint")          "BSD-3-clause") ; https://github.com/golang/lint/blob/master/LICENSE
           (`(nil "llvm-mode")       "UIUC")         ; http://llvm.org/viewvc/llvm-project/llvm/trunk/LICENSE.TXT
@@ -538,22 +541,30 @@ An effort is made to normalize the returned value."
 
 
 (defun elx-licensee (&optional directory-or-file)
-  (let* ((lines (ignore-errors
-                  (process-lines "licensee"
-                                 (or directory-or-file default-directory))))
-         (license (cl-find-if (lambda (s) (string-prefix-p "License: " s)) lines))
-         (license (and license (substring license 9)))
-         (file (cl-find-if (lambda (s) (string-prefix-p "License file: " s)) lines))
-         (file (and file (substring file 14))))
-    (when (and (equal license "ISC License") file)
-      (with-temp-buffer
-        (insert-file-contents file)
-        (re-search-forward
-         "Permission to use, copy, modify,? and\\(/or\\)? distribute")
-        (setq license
-              (if (match-beginning 1) "ISC (and/or)" "ISC (and)"))))
-    (or (cdr (assoc license elx-licensee-abbreviation-alist))
-        (and (not (equal license "")) license))))
+  (save-match-data
+    (let* ((lines (ignore-errors
+                    (process-lines "licensee"
+                                   (or directory-or-file default-directory))))
+           (license (or (cl-find-if (lambda (s) (string-match "  License: " s)) lines)
+                        ;; ^ Use the first of several found licenses.
+                        ;; v Use the only found license.
+                        (cl-find-if (lambda (s) (string-match "License: " s)) lines)))
+           (license (and license (substring license (match-end 0))))
+           (file (cl-find-if (lambda (s) (string-prefix-p "License file: " s)) lines))
+           (file (and file (substring file 14))))
+      (cond
+       ((equal license "No-license") ; e.g. heroku
+        (setq license nil))
+       ((and (equal license "ISC License") file)
+        (with-temp-buffer
+          (insert-file-contents file)
+          (re-search-forward
+           "Permission to use, copy, modify,? and\\(/or\\)? distribute")
+          (setq license
+                (if (match-beginning 1) "ISC (and/or)" "ISC (and)")))))
+      (if-let ((elt (assoc license elx-licensee-abbreviation-alist)))
+          (cdr elt)
+        (and (not (equal license "")) license)))))
 
 (defcustom elx-license-url-alist
   '(("GPL-3"         . "http://www.fsf.org/licensing/licenses/gpl.html")
@@ -604,49 +615,50 @@ the \"Updated\" or \"Last-Updated\" header keyword."
 
 ;; Yes, I know.
 (defun elx--date-1 (string)
-  (when (stringp string)
-    (let ((ymd "\
+  (and (stringp string)
+       (let ((ymd "\
 \\([0-9]\\{4,4\\}\\)\\(?:[-/.]?\
 \\([0-9]\\{1,2\\}\\)\\(?:[-/.]?\
 \\([0-9]\\{1,2\\}\\)?\\)?\\)")
-          (dmy "\
+             (dmy "\
 \\(?3:[0-9]\\{1,2\\}\\)\\(?:[-/.]?\\)\
 \\(?2:[0-9]\\{1,2\\}\\)\\(?:[-/.]?\\)\
 \\(?1:[0-9]\\{4,4\\}\\)"))
-      (or (elx--date-2 string ymd t)
-          (elx--date-2 string dmy t)
-          (let ((a (elx--date-3 string))
-                (b (or (elx--date-2 string ymd nil)
-                       (elx--date-2 string dmy nil))))
-            (cond ((not a) b)
-                  ((not b) a)
-                  ((> (length a) (length b)) a)
-                  ((> (length b) (length a)) b)
-                  (t a)))))))
+         (or (elx--date-2 string ymd t)
+             (elx--date-2 string dmy t)
+             (let ((a (elx--date-3 string))
+                   (b (or (elx--date-2 string ymd nil)
+                          (elx--date-2 string dmy nil))))
+               (cond ((not a) b)
+                     ((not b) a)
+                     ((> (length a) (length b)) a)
+                     ((> (length b) (length a)) b)
+                     (t a)))))))
   
 (defun elx--date-2 (string regexp anchored)
-  (when (string-match (if anchored (format "^%s$" regexp) regexp) string)
-    (let ((m  (match-string 2 string))
-          (d  (match-string 3 string)))
-      (concat (match-string 1 string)
-              (and m d (concat (if (= (length m) 2) m (concat "0" m))
-                               (if (= (length d) 2) d (concat "0" d))))))))
+  (and (string-match (if anchored (format "^%s$" regexp) regexp) string)
+       (let ((m  (match-string 2 string))
+             (d  (match-string 3 string)))
+         (concat (match-string 1 string)
+                 (and m d (concat (if (= (length m) 2) m (concat "0" m))
+                                  (if (= (length d) 2) d (concat "0" d))))))))
 
 (defun elx--date-3 (string)
   (let ((time (mapcar (lambda (e) (or e 0))
                       (butlast (ignore-errors (parse-time-string string))))))
-    (when (and time (not (= (nth 5 time) 0)))
-      (format-time-string
-       (if (and (> (nth 4 time) 0)
-                (> (nth 3 time) 0))
-           "%Y%m%d"
-         ;; (format-time-string "%Y" (encode-time x x x 0 0 2012))
-         ;; => "2011"
-         (setcar (nthcdr 3 time) 1)
-         (setcar (nthcdr 4 time) 1)
-         "%Y")
-       (apply 'encode-time time)
-       t))))
+    (and time
+         (not (= (nth 5 time) 0))
+         (format-time-string (if (and (> (nth 4 time) 0)
+                                      (> (nth 3 time) 0))
+                                 "%Y%m%d"
+                               ;; (format-time-string
+                               ;;  "%Y" (encode-time x x x 0 0 2012))
+                               ;; => "2011"
+                               (setcar (nthcdr 3 time) 1)
+                               (setcar (nthcdr 4 time) 1)
+                               "%Y")
+                             (apply 'encode-time time)
+                             t))))
 
 ;; FIXME implement range extraction in lm-crack-copyright
 (defun elx--date-copyright ()
@@ -674,29 +686,29 @@ The value is a cons of the form (FULLNAME . ADDRESS)."
   (let (name mail)
     (cond ((string-match (concat "\\(.+\\) "
                                  "?[(<]\\(\\S-+@\\S-+\\)[>)]") x)
-           (setq name (match-string 1 x)
-                 mail (match-string 2 x)))
+           (setq name (match-string 1 x))
+           (setq mail (match-string 2 x)))
           ((string-match (concat "\\(.+\\) "
                                  "[(<]\\(?:\\(\\S-+\\) "
                                  "\\(?:\\*?\\(?:AT\\|[.*]\\)\\*?\\) "
                                  "\\(\\S-+\\) "
                                  "\\(?:\\*?\\(?:DOT\\|[.*]\\)\\*? \\)?"
                                  "\\(\\S-+\\)\\)[>)]") x)
-           (setq name (match-string 1 x)
-                 mail (concat (match-string 2 x) "@"
+           (setq name (match-string 1 x))
+           (setq mail (concat (match-string 2 x) "@"
                               (match-string 3 x) "."
                               (match-string 4 x))))
           ((string-match (concat "\\(.+\\) "
                                  "[(<]\\(?:\\(\\S-+\\) "
                                  "\\(?:\\*?\\(?:AT\\|[.*]\\)\\*?\\) "
                                  "\\(\\S-+\\)[>)]\\)") x)
-           (setq name (match-string 1 x)
-                 mail (concat (match-string 2 x) "@"
+           (setq name (match-string 1 x))
+           (setq mail (concat (match-string 2 x) "@"
                               (match-string 3 x))))
           ((string-match (concat "\\(\\S-+@\\S-+\\) "
                                  "[(<]\\(.*\\)[>)]") x)
-           (setq name (match-string 2 x)
-                 mail (match-string 1 x)))
+           (setq name (match-string 2 x))
+           (setq mail (match-string 1 x)))
           ((string-match "\\S-+@\\S-+" x)
            (setq mail x))
           (t
@@ -713,20 +725,17 @@ The value is a cons of the form (FULLNAME . ADDRESS)."
                              "[a-z0-9]\\(?:[a-z0-9-]*[a-z0-9]\\)?"
                              "\\)\\s-*$") mail)
                     (downcase (match-string 1 mail))))
-    (let ((elt (assoc name elx-remap-names)))
-      (when elt
-        (setq name (cadr elt))))
-    (when (or name mail)
-      (cons name mail))))
+    (when-let ((elt (assoc name elx-remap-names)))
+      (setq name (cadr elt)))
+    (and (or name mail)
+         (cons name mail))))
 
 (defun elx-people (header file)
   (lm-with-file file
     (let (people)
       (dolist (p (lm-header-multiline header))
-        (when p
-          (setq p (elx-crack-address p))
-          (when p
-            (push p people))))
+        (when-let ((p (and p (elx-crack-address p))))
+          (push p people)))
       (nreverse people))))
 
 (defun elx-authors (&optional file)
