@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180607.1525
+;; Package-Version: 20180618.1509
 ;; Keywords: help, lisp
 ;; Version: 0.11
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -770,7 +770,6 @@ vector suitable for `key-description', and COMMAND is a smbol."
     ;; inherited bindings last. Sort so that we group by prefix.
     (s-join "\n" (-sort #'string< lines))))
 
-;; TODO: \\<foo>
 (defun helpful--format-command-keys (docstring)
   "Convert command key references and keymap references
 in DOCSTRING to buttons.
@@ -1009,7 +1008,11 @@ buffer."
          (path nil)
          (buf nil)
          (pos nil)
-         (opened nil))
+         (opened nil)
+         ;; If we end up opening a buffer, don't bother with file
+         ;; variables. It prompts the user, and we discard the buffer
+         ;; afterwards anyway.
+         (enable-local-variables nil))
     (when (and (symbolp sym) callable-p)
       (-let [(_ . src-path) (find-function-library sym)]
         (setq path src-path)))
@@ -1031,11 +1034,7 @@ buffer."
         ;;
         ;; Bind `auto-mode-alist' to nil, so we open the buffer in
         ;; `fundamental-mode' if it isn't already open.
-        (let (auto-mode-alist
-              ;; Don't both setting buffer-local variables, it's
-              ;; annoying to prompt the user since we immediately
-              ;; discard the buffer.
-              enable-local-variables)
+        (let ((auto-mode-alist nil))
           (setq buf (find-file-noselect src-path)))
 
         (unless (-contains-p initial-buffers buf)
@@ -1047,8 +1046,7 @@ buffer."
         ;; table for searching.
         (when opened
           (with-current-buffer buf
-            (let (enable-local-variables)
-              (delay-mode-hooks (normal-mode t)))))
+            (delay-mode-hooks (normal-mode t))))
 
         ;; Based on `find-function-noselect'.
         (with-current-buffer buf

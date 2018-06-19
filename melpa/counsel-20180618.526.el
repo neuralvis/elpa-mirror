@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20180615.1400
+;; Package-Version: 20180618.526
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.9.0"))
 ;; Keywords: convenience, matching, tools
@@ -2172,7 +2172,7 @@ string - the full shell command to run."
 (defun counsel-locate-cmd-es (input)
   "Return a shell command based on INPUT."
   (counsel-require-program "es.exe")
-  (format "es.exe -i -r %s"
+  (format "es.exe -i -r -p %s"
           (counsel-unquote-regex-parens
            (ivy--regex input t))))
 
