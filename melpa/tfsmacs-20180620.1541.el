@@ -4,7 +4,7 @@
 ;;
 ;; Author: Dino Chiesa <dpchiesa@outlook.com>, Sebastian Monia <smonia@outlook.com>
 ;; URL: http://github.com/sebasmonia/tfsmacs/
-;; Package-Version: 20180619.1145
+;; Package-Version: 20180620.1541
 ;; Package-Requires: ((emacs "25") (tablist "0.70"))
 ;; Version: 1.25
 ;; Keywords: tfs, vc
@@ -70,7 +70,7 @@
   :type 'integer)
 
 (defcustom tfsmacs-workspaces-alist nil
-  "A string-string alist of all your workspaces, for easy switching. Used by `tfsmacs-switch-workspace`."
+  "A string-string alist of all your workspaces, for easy switching.  Used by `tfsmacs-switch-workspace`."
   :type 'alist)
 
 (defvar tfsmacs--process-name "TEECLI")
@@ -168,8 +168,8 @@ If NO-WORKSPACE is provided, said parameter won't be added."
     ;; I prefer to do command-string in two parts to show a cleaner log
     ;; of the commands being executed
     (setq command-string (mapconcat 'identity command " "))
+    (setq command-string (concat command-string " -exitcode\n"))
     (tfsmacs--append-to-log (format "COMMAND (async): %s" command-string))
-    (setq command-string (concat command-string "\nhelp eula\n"))
     (setq tfsmacs--command-output-buffer "")
     (setq tfsmacs--command-retries 1)
     (message "TFS: Running command...")
@@ -186,23 +186,27 @@ If NO-WORKSPACE is provided, said parameter won't be added."
   "Check if the last command finished running using a marker.
 If it did invoke CALLBACK, else re-schedule the function."
   (setq tfsmacs--command-retries (+ tfsmacs--command-retries 1))
-  (if (string-match "eula [/accept]" tfsmacs--command-output-buffer)
-      (progn
-        (let ((output (substring tfsmacs--command-output-buffer 0 (string-match "Team Explorer Everywhere Command Line Client" tfsmacs--command-output-buffer))))
-          (message "TFS: Processing command output...")
-          (funcall callback output)))
-    (progn
-      (if (< tfsmacs--command-retries tfsmacs-async-command-retries)
-          (tfsmacs--async-command-schedule-check callback)
-        (progn
-          (tfsmacs--append-to-log "---Incomplete output:---")
-          (tfsmacs--append-to-log tfsmacs--command-output-buffer)
-          (tfsmacs--append-to-log "-----------------------")
-          ;; Just in case the command killed the process instance, this will start another one
-          ;; or just return the existing one, which is inexpensive
-          (tfsmacs--get-or-create-process)
-          (message "TFS: Command not completed. See log for details.")
-          (funcall callback ""))))))
+  (cond ((string-match "ExitCode: 0\n" tfsmacs--command-output-buffer)
+         (let ((output (replace-regexp-in-string "ExitCode: 0\n" "" tfsmacs--command-output-buffer)))
+           (message "TFS: Processing command output...")
+           (funcall callback output)))
+        ((string-match "ExitCode: " tfsmacs--command-output-buffer) ;; this will match all exit codes BUT 0 (since it matches in prev. expression)
+         (tfsmacs--async-command-handle-error)
+         (funcall callback ""))
+        (t
+         (if (< tfsmacs--command-retries tfsmacs-async-command-retries)
+             (tfsmacs--async-command-schedule-check callback)
+           (progn
+             (tfsmacs--async-command-handle-error)
+             (funcall callback ""))))))
+
+(defun tfsmacs--async-command-handle-error ()
+  "Reset the state after a command didn't complete successfully."
+  (tfsmacs--append-to-log (format "---Incomplete output:---\n%s\n-----------------------" tfsmacs--command-output-buffer))
+  ;; Just in case the command killed the process instance, this will start another one
+  ;; or just return the existing one, which is inexpensive
+  (tfsmacs--get-or-create-process)
+  (message "TFS: Command not completed. See log for details."))
 
 (defun tfsmacs--async-command-schedule-check (callback)
   "Schedule `tfsmacs--async-command-complete` with CALLBACK."
@@ -282,6 +286,11 @@ It spins off a new instance of the TEE tool by calling 'tfsmacs--sync-command-to
   ;; Maybe it is worth it to do proper date formatting. TODO?
   (replace-regexp-in-string "T" " " (substring date-string  0 -9)))
 
+(defun tfsmacs--trim-string (string)
+  "Remove white spaces in beginning and ending of STRING.
+From http://ergoemacs.org/emacs/modernization_elisp_lib_problem.html."
+  (replace-regexp-in-string "\\`[ \t\n]*" "" (replace-regexp-in-string "[ \t\n]*\\'" "" string)))
+
 (defun tfsmacs-switch-workspace ()
   "Change to configuration to use a different workspace.
 The list of possible values is read from the alist `tfsmacs-workspaces`."
@@ -333,7 +342,7 @@ Not bound by default, you would run this operation once per collection."
   ;; For some mystical reason the workfold command has ZERO output.
   ;; On error we get more info though, so let's assume that "empty output" = "good"
   (tfsmacs--append-to-log (concat "Mapping: -" output "-"))
-  (when (not (string-empty-p output))
+  (when (not (string-empty-p (tfsmacs--trim-string output)))
     (error "Mapping setup failed.  See log for details"))
   (message "TFS: Setup completed. If you plan to switch between different workspaces, you should customize `tfsmacs-workspaces-alist`."))
 
@@ -524,7 +533,7 @@ PATH and FILES are used only for internal calls."
   (tfsmacs--show-help))
 
 (defun tfsmacs--server-show-files ()
-  "Show files in the current directory. 
+  "Show files in the current directory.
 Showing files all the time could get quite slow.  Hence this command."
   (interactive)
   (tfsmacs-server-directories tfsmacs--server-current-dir t))
@@ -682,7 +691,8 @@ The file to undo is deteremined this way:
    (tfsmacs--quote-string (cadr item-pair))))
 
 (defun tfsmacs--history-mode-get-marked-items ()
-  "Return the selected items in ‘tfsmacs-history-mode’."
+  "Return the selected items in ‘tfsmacs-history-mode’.
+The function returns (changesed-id server-path) for each element."
   (mapcar 'car (tablist-get-marked-items)))
 
 (defun tfsmacs--history-mode-get-this-version ()
@@ -739,7 +749,6 @@ How the file is determined:
    the file being visited by the current buffer.
 
  - else, prompt the user for the file"
-  
   (interactive)
   (let ((files-for-history (tfsmacs--determine-target-files filename "File: ")))
     (if (equal (length files-for-history) 1)
@@ -853,7 +862,8 @@ If VERSION to get is not provided, it will be prompted."
   "Process files marked in ‘tfsmacs-status-mode’ for check in."
   (interactive)
   (let* ((items (tfsmacs--status-mode-get-marked-items))
-         (command (append '("checkin") (tfsmacs--checkin-parameters-builder) items)))
+         (quoted-items (mapcar 'tfsmacs--quote-string items))
+         (command (append '("checkin") (tfsmacs--checkin-parameters-builder) quoted-items)))
     (tfsmacs--async-command command 'tfsmacs--message-callback)))
 
 (defun tfsmacs--status-mode-revert ()
@@ -937,6 +947,8 @@ If VERSION to get is not provided, it will be prompted."
 (defun tfsmacs--status-callback (output)
   "Process the output of tf status and display the ‘tfsmacs-status-mode’ buffer.
 OUTPUT is the XML result of \"tf status\"."
+  (when (string-empty-p (tfsmacs--trim-string output))
+    (error "See log for details"))
   (let ((parsed-data (tfsmacs--get-status-data-for-tablist output)))
     (let* ((directory tfsmacs--buffer-status-dir)
            (last-dir-in-path (tfsmacs--get-last-dir-name directory))
@@ -983,6 +995,19 @@ OUTPUT is the XML result of \"tf status\"."
       (setq default-dir-prompt default-directory))
     (read-directory-name "Status for directory: " default-dir-prompt nil t)))
 
+(defun tfsmacs--shelvesets-mode-unshelve ()
+  "Unshelve to current workspace when in tfsmacs-shelvesets-mode."
+  (interactive)
+  (let* ((items (tfsmacs--shelvesets-mode-get-marked-items))
+         (to-unshelve (car items))
+         (as-string (format "\"%s;%s\"" (car to-unshelve) (cadr to-unshelve))))
+    (if (equal (length items) 1)
+        (progn
+          (message "TFS: unshelving...")
+          (tfsmacs--async-command (list "unshelve" as-string) 'tfsmacs--message-callback)))
+      (error "Only one item should be selected for this operation")))
+
+
 (define-derived-mode tfsmacs-shelvesets-mode tabulated-list-mode "TFS Shelvesets Mode" "Major mode TFS Shelvesets, displays a list of shelvesets by user and allows operations on them."
   (setq tabulated-list-format [("Owner" 30 t)
                                ("Date" 20 t)
@@ -992,11 +1017,9 @@ OUTPUT is the XML result of \"tf status\"."
   (tabulated-list-init-header)
   (tablist-minor-mode))
 
-(define-key tfsmacs-shelvesets-mode-map (kbd "U") 'tfsmacs--shelvesets-mode-unshelve)
-(define-key tfsmacs-shelvesets-mode-map (kbd "C") 'tfsmacs--shelvesets-changeset-details)
-(define-key tfsmacs-shelvesets-mode-map (kbd "D") 'tfsmacs--history-mode-difference)
-;;(define-key tfsmacs-shelvesets-mode-map (kbd "h") 'tfsmacs--shelvesets-mode-help)
-;; Not ready for prime time :)
+(define-key tfsmacs-shelvesets-mode-map (kbd "R") 'tfsmacs--shelvesets-mode-unshelve)
+(define-key tfsmacs-shelvesets-mode-map (kbd "h") 'tfsmacs--shelvesets-mode-help)
+
 (defun tfsmacs--shelvesets-mode-help ()
   "Show help for the shelvesets mode."
   (interactive)
@@ -1005,15 +1028,7 @@ OUTPUT is the XML result of \"tf status\"."
          "--TFS Shelvesets help--\n\n"
          "This mode is derived from tabulated-list, so the usual bindings for marking elements work "
          "as expected (m and u to mark and unmark, for example).\n\n"
-         "U unshelves the shelve under point.\n\n"
-         "C will check in the files marked. You will be prompted for a changeset comment, a PBI to "
-         "associate and an override reason. Blank for any of the latter two means they are ignored.\n\n"
-         "R runs \"undo\" in the files marked. R from \"Revert\" :).\n\n"
-         "g updates the list of pending changes. It can take a couple seconds since it runs a check "
-         "against the server.\n\n"
-         "D runs ediff between a file marked in the list (or the one under point if none are marked)."
-         " It will compare your local with the latest on the server. The get for file is synchronous, "
-         "Emacs will be unresponsive until the operation is completed."))
+         "R (retrieve) unshelves the shelve under point or marked (only one can be marked).\n\n"))
   (tfsmacs--show-help))
 
 (defun tfsmacs-shelvesets (&optional owner)
@@ -1057,6 +1072,11 @@ OUTPUT is the XML output from \"tf shelvesets\"."
          (date (tfsmacs--format-xml-date (alist-get 'date data))))
     (list (list name owner)
           (vector owner date name))))
+
+(defun tfsmacs--shelvesets-mode-get-marked-items ()
+  "Obtain only (name owner) of the files selected in the list."
+  (mapcar 'car (tablist-get-marked-items)))
+
 
 ;; is it questionable to start the process as soon as the package loads?
 (tfsmacs--get-or-create-process)
