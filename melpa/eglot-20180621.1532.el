@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 0.10
-;; Package-Version: 20180621.558
+;; Package-Version: 20180621.1532
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -897,10 +897,7 @@ If optional MARKERS, make markers."
   (let* ((st (plist-get range :start))
          (beg (eglot--lsp-position-to-point st markers))
          (end (eglot--lsp-position-to-point (plist-get range :end) markers)))
-    ;; Fallback to `flymake-diag-region' if server botched the range
-    (if (/= beg end) (cons beg end) (flymake-diag-region
-                                     (current-buffer) (plist-get st :line)
-                                     (1- (plist-get st :character))))))
+    (cons beg end)))
 
 
 ;;; Minor modes
@@ -1126,7 +1123,18 @@ Don't leave this function with the server still running."
                                               _code source message)
                      diag-spec
                    (setq message (concat source ": " message))
-                   (pcase-let ((`(,beg . ,end) (eglot--range-region range)))
+                   (pcase-let
+                       ((`(,beg . ,end) (eglot--range-region range)))
+                     ;; Fallback to `flymake-diag-region' if server
+                     ;; botched the range
+                     (if (= beg end)
+                         (let* ((st (plist-get range :start))
+                                (diag-region
+                                 (flymake-diag-region
+                                  (current-buffer) (plist-get st :line)
+                                  (1- (plist-get st :character)))))
+                           (setq beg (car diag-region)
+                                 end (cdr diag-region))))
                      (eglot--make-diag (current-buffer) beg end
                                        (cond ((<= sev 1) 'eglot-error)
                                              ((= sev 2)  'eglot-warning)
@@ -1584,18 +1592,30 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
   (unless (or (not version) (equal version eglot--versioned-identifier))
     (eglot--error "Edits on `%s' require version %d, you have %d"
                   (current-buffer) version eglot--versioned-identifier))
-  (mapc (pcase-lambda (`(,newText ,beg . ,end))
-          (save-restriction
-            (narrow-to-region beg end)
-            (let ((source (current-buffer)))
-              (with-temp-buffer
-                (insert newText)
-                (let ((temp (current-buffer)))
-                  (with-current-buffer source (replace-buffer-contents temp)))))))
-        (mapcar (eglot--lambda (&key range newText)
-                  (cons newText (eglot--range-region range 'markers)))
-                edits))
-  (eglot--message "%s: Performed %s edits" (current-buffer) (length edits)))
+  (atomic-change-group
+    (let* ((change-group (prepare-change-group))
+           (howmany (length edits))
+           (reporter (make-progress-reporter
+                      (format "[eglot] applying %s edits to `%s'..."
+                              howmany (current-buffer))
+                      0 howmany))
+           (done 0))
+      (mapc (pcase-lambda (`(,newText ,beg . ,end))
+              (let ((source (current-buffer)))
+                (with-temp-buffer
+                  (insert newText)
+                  (let ((temp (current-buffer)))
+                    (with-current-buffer source
+                      (save-excursion
+                        (save-restriction
+                          (narrow-to-region beg end)
+                          (replace-buffer-contents temp)))
+                      (progress-reporter-update reporter (cl-incf done)))))))
+            (mapcar (eglot--lambda (&key range newText)
+                      (cons newText (eglot--range-region range 'markers)))
+                    edits))
+      (undo-amalgamate-change-group change-group)
+      (progress-reporter-done reporter))))
 
 (defun eglot--apply-workspace-edit (wedit &optional confirm)
   "Apply the workspace edit WEDIT.  If CONFIRM, ask user first."
