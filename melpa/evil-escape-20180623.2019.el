@@ -4,7 +4,7 @@
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; Keywords: convenience editing evil
-;; Package-Version: 20170913.618
+;; Package-Version: 20180623.2019
 ;; Created: 22 Oct 2014
 ;; Version: 3.15
 ;; Package-Requires: ((emacs "24") (evil "1.0.9") (cl-lib "0.5"))
@@ -169,7 +169,7 @@ with a key sequence."
     (`iedit 'evil-iedit-state/quit-iedit-mode)
     (`iedit-insert 'evil-iedit-state/quit-iedit-mode)
     (`multiedit 'evil-multiedit-abort)
-    (`multiedit-insert 'evil-multiedit-abort)
+    (`multiedit-insert 'evil-multiedit-state)
     (_ (evil-escape--escape-normal-state))))
 
 (defun evil-escape-pre-command-hook ()
@@ -331,7 +331,7 @@ with a key sequence."
 
 (defun evil-escape--is-magit-buffer ()
   "Return non nil if the current buffer is a Magit buffer."
-  (string-match "magit" (symbol-name major-mode)))
+  (string-match-p "magit" (symbol-name major-mode)))
 
 (provide 'evil-escape)
 
