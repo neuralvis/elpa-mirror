@@ -5,8 +5,8 @@
 
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/yankpad
-;; Package-Version: 20180511.1535
-;; Version: 2.10
+;; Package-Version: 20180624.1615
+;; Version: 2.15
 ;; Keywords: abbrev convenience
 ;; Package-Requires: ((emacs "24"))
 
@@ -86,9 +86,11 @@
 ;;
 ;; * Category 2
 ;;
-;;   Descriptive lists at the top-level of a category will be treated as
-;;   snippets.  You can set them to be treated as `abbrev-mode' abbrevs instead,
-;;   by setting `yankpad-descriptive-list-treatment' to abbrev.
+;;   Descriptive lists will be treated as snippets.  You can set them to be
+;;   treated as `abbrev-mode' abbrevs instead, by setting
+;;   `yankpad-descriptive-list-treatment' to abbrev.  If a heading could be considered
+;;   to be a snippet, add the `snippetlist' tag to ignore the snippet and scan
+;;   it for descriptive lists instead.
 ;;
 ;;   - name :: Erik Sjöstrand
 ;;   - key :: Typing "key" followed by `yankpad-expand' will insert this snippet.
@@ -510,10 +512,12 @@ removed from the snippet text."
 			     (org-element-map
 				 (with-temp-buffer (insert text) (org-element-parse-buffer))
 				 'src-block #'identity))))
-          (when remove-props
-            (setq text (string-trim-left
-                        (replace-regexp-in-string org-property-drawer-re "" text))))
-          (list (list heading tags src-blocks text)))))))
+          (if (member "snippetlist" tags)
+              nil
+            (when remove-props
+              (setq text (string-trim-left
+                          (replace-regexp-in-string org-property-drawer-re "" text))))
+            (list (list heading tags src-blocks text))))))))
 
 (defun yankpad--snippets (category-name)
   "Get an alist of the snippets in CATEGORY-NAME.
@@ -615,21 +619,25 @@ If successful, make `yankpad-category' buffer-local."
 Descriptions are fetched from descriptive lists in `org-mode',
 under the same heading level as CATEGORY.
 Each element is (KEY . DESCRIPTION), both strings."
-  (apply
-   #'append
-   (org-element-map (yankpad--file-elements) 'plain-list
-     (lambda (dl)
-       (let ((parent (funcall (if (version< (org-version) "8.3")
-                                  #'org-export-get-genealogy
-                                #'org-element-lineage)
-                              dl '(headline))))
-         (when (and (equal (org-element-property :type dl) 'descriptive)
-                    (equal (org-element-property :level parent) yankpad-category-heading-level)
-                    (string-equal category (org-element-property :raw-value parent)))
-           (org-element-map dl 'item
-             (lambda (i)
-               (cons (org-no-properties (car (org-element-property :tag i)))
-                     (org-no-properties (string-trim (caddar (org-element-contents i)))))))))))))
+  (org-with-point-at (yankpad-category-marker category)
+    (org-narrow-to-subtree)
+    (apply
+     #'append
+     (org-element-map (org-element-parse-buffer) 'plain-list
+       (lambda (dl)
+         (let ((parent (funcall (if (version< (org-version) "8.3")
+                                    #'org-export-get-genealogy
+                                  #'org-element-lineage)
+                                dl '(headline))))
+           (when (and (equal (org-element-property :type dl) 'descriptive)
+                      (or (save-excursion
+                            (goto-char (org-element-property :begin parent))
+                            (org-goto-first-child))
+                          (member "snippetlist" (org-element-property :tags parent))))
+             (org-element-map dl 'item
+               (lambda (i)
+                 (cons (org-no-properties (car (org-element-property :tag i)))
+                       (org-no-properties (string-trim (caddar (org-element-contents i))))))))))))))
 
 ;; `company-yankpad--name-or-key' and `company-yankpad' are Copyright (C) 2017
 ;; Sidart Kurias (https://github.com/sid-kurias/) and are included by permission

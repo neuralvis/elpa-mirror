@@ -5,7 +5,7 @@
 ;; Author: Andrew Stahlman <andrewstahlman@gmail.com>
 ;; Created: 10 Feb 2017
 ;; Version: 0.1
-;; Package-Version: 20180621.651
+;; Package-Version: 20180624.1553
 
 ;; Keywords: tools
 ;; Homepage: https://github.com/astahlman/ob-async
@@ -39,6 +39,9 @@
 (require 'async)
 (require 'dash)
 
+(defvar ob-async-no-async-languages-alist nil
+  "async is not used for languages listed here. Enables compatability for other languages, e.g. ipython, for which async functionality may be implemented separately.")
+
 ;;;###autoload
 (defalias 'org-babel-execute-src-block:async 'ob-async-org-babel-execute-src-block)
 
@@ -70,6 +73,11 @@ block."
     nil)
    ;; If there is no :async parameter, call the original function
    ((not (assoc :async (nth 2 (or info (org-babel-get-src-block-info)))))
+    (funcall orig-fun arg info params))
+   ;; If the src block language is in the list of languages async is not to be
+   ;; used for, call the original function
+   ((member (nth 0 (or info (org-babel-get-src-block-info)))
+	    ob-async-no-async-languages-alist)
     (funcall orig-fun arg info params))
    ;; Otherwise, perform asynchronous execution
    (t

@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20180618.1208
+;; Package-Version: 20180624.1440
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.0.2
 
@@ -1078,10 +1078,10 @@ Only available with PDF Tools."
                    (title (alist-get 'title item))
                    (top   (alist-get 'top item)))
                (when (and (eq type 'goto-dest) (> page 0))
-                 (push (vector title (cons page top) (1+ depth)) output-data))))
+                 (push (vector title (cons page top) (1+ depth) nil) output-data))))
            (when output-data
              (setq output-data (nreverse output-data))
-             (push (vector "Outline" nil 1) output-data)))
+             (push (vector "Outline" nil 1 nil) output-data)))
           (t
            (let ((possible-annots (list '("Highlights" . highlight)
                                         '("Underlines" . underline)
