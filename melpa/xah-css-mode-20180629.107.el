@@ -3,8 +3,8 @@
 ;; Copyright © 2013-2017 by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 2.9.20180623231913
-;; Package-Version: 20180623.2319
+;; Version: 2.9.20180629010654
+;; Package-Version: 20180629.107
 ;; Created: 18 April 2013
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: languages, convenience, css, color
@@ -1116,7 +1116,7 @@ Version 2016-10-24"
     ("translateX" "translateX(▮)" xah-css--ahf)
     ("translateY" "translateY(▮)" xah-css--ahf)
     ("translateZ" "translateZ(▮)" xah-css--ahf)
-    ("vertical-align" "vertical-align: 3px;" xah-css--ahf)
+    ("vertical-align" "vertical-align: top middle bottom baseline sub;" xah-css--ahf)
     ("visibility" "visibility: hidden visible;" xah-css--ahf)
     ("white-space" "white-space: pre-wrap" xah-css--ahf)
     ("width" "width: 200px;" xah-css--ahf)
