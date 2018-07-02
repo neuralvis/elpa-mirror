@@ -3,8 +3,8 @@
 ;; Copyright © 2013-2017, by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 10.3.20180618151900
-;; Package-Version: 20180618.1519
+;; Version: 10.3.20180701153739
+;; Package-Version: 20180701.1537
 ;; Created: 10 Sep 2013
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: convenience, emulations, vim, ergoemacs
@@ -140,7 +140,7 @@
   "Move cursor to last mark position of current buffer.
 Call this repeatedly will cycle all positions in `mark-ring'.
 URL `http://ergoemacs.org/emacs/emacs_jump_to_previous_position.html'
-version 2016-04-04"
+Version 2016-04-04"
   (interactive)
   (set-mark-command t))
 
@@ -2319,7 +2319,7 @@ File suffix is used to determine what program to run.
 If the file is modified or not saved, save it automatically before run.
 
 URL `http://ergoemacs.org/emacs/elisp_run_current_file.html'
-Version 2018-03-01"
+Version 2018-07-01"
   (interactive)
   (let (
         ($outputb "*xah-run output*")
