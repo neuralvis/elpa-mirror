@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20180625.634
+;; Package-Version: 20180703.840
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.9.0"))
 ;; Keywords: convenience, matching, tools
@@ -648,10 +648,15 @@ When the selected variable is a `defcustom' with the type boolean
 or radio, offer completion of all possible values.
 
 Otherwise, offer a variant of `eval-expression', with the initial
-input corresponding to the chosen variable."
+input corresponding to the chosen variable.
+
+With a prefix arg, restrict list to variables defined using
+`defcustom'."
   (interactive (list (intern
-                      (ivy-read "Variable: "
-                                (counsel-variable-list)
+                      (ivy-read "Variable: " (counsel-variable-list)
+                                :predicate (and current-prefix-arg
+                                                (lambda (varname)
+                                                  (get (intern varname) 'custom-type)))
                                 :preselect (ivy-thing-at-point)
                                 :history 'counsel-set-variable-history))))
   (let ((doc (and (require 'cus-edit)
@@ -2657,12 +2662,15 @@ When non-nil, INITIAL-INPUT is the initial search pattern."
          (setq res (ivy-read "grep: " 'counsel-grep-function
                              :initial-input initial-input
                              :dynamic-collection t
-                             :preselect (format "%d:%s"
-                                                (line-number-at-pos)
-                                                (regexp-quote
-                                                 (buffer-substring-no-properties
-                                                  (line-beginning-position)
-                                                  (line-end-position))))
+                             :preselect
+                             (when (< (- (line-end-position) (line-beginning-position)) 300)
+                               (format "%d:%s"
+                                       (line-number-at-pos)
+                                       (regexp-quote
+                                        (buffer-substring-no-properties
+                                         (line-beginning-position)
+                                         (line-end-position)))))
+
                              :history 'counsel-git-grep-history
                              :update-fn (lambda ()
                                           (counsel-grep-action (ivy-state-current ivy-last)))
