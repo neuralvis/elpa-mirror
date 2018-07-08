@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20180705.200
+;; Package-Version: 20180707.2138
 ;; Version: 0.4.1
 ;; Keywords: tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -162,15 +162,18 @@ frame.")
                                      background-color
                                      left-fringe
                                      right-fringe
+                                     internal-border-width
                                      font
                                      keep-ratio
                                      override-parameters
                                      respect-header-line
-                                     respect-mode-line)
+                                     respect-mode-line
+                                     face-remap)
   "Create a child-frame for posframe.
 This posframe's buffer is POSFRAME-BUFFER."
   (let ((left-fringe (or left-fringe 0))
         (right-fringe (or right-fringe 0))
+        (internal-border-width (or internal-border-width 0))
         (posframe-buffer (get-buffer-create posframe-buffer))
         (after-make-frame-functions nil)
         (args (list parent-frame
@@ -178,11 +181,13 @@ This posframe's buffer is POSFRAME-BUFFER."
                     background-color
                     right-fringe
                     left-fringe
+                    internal-border-width
                     font
                     keep-ratio
                     override-parameters
                     respect-header-line
-                    respect-mode-line)))
+                    respect-mode-line
+                    face-remap)))
     (with-current-buffer posframe-buffer
       ;; Many variables take effect after call `set-window-buffer'
       (setq-local left-fringe-width nil)
@@ -192,6 +197,7 @@ This posframe's buffer is POSFRAME-BUFFER."
       (setq-local cursor-type nil)
       (setq-local cursor-in-non-selected-windows nil)
       (setq-local show-trailing-whitespace nil)
+      (setq-local face-remapping-alist face-remap)
       (unless respect-mode-line
         (setq-local mode-line-format nil))
       (unless respect-header-line
@@ -226,7 +232,7 @@ This posframe's buffer is POSFRAME-BUFFER."
                        (min-width  . 0)
                        (min-height . 0)
                        (border-width . 0)
-                       (internal-border-width . 0)
+                       (internal-border-width . ,internal-border-width)
                        (vertical-scroll-bars . nil)
                        (horizontal-scroll-bars . nil)
                        (left-fringe . ,left-fringe)
@@ -268,11 +274,13 @@ This posframe's buffer is POSFRAME-BUFFER."
                          y-pixel-offset
                          left-fringe
                          right-fringe
+                         internal-border-width
                          font
                          foreground-color
                          background-color
                          respect-header-line
                          respect-mode-line
+                         face-remap
                          no-properties
                          keep-ratio
                          override-parameters
@@ -325,6 +333,11 @@ size too small, MIN-WIDTH and MIN-HEIGTH will be useful
 If LEFT-FRINGE or RIGHT-FRINGE is a number, Left fringe or
 right fringe with be showed with number width.
 
+By default, posframe shows no border, user can let border
+showed by setting INTERNAL-BORDER-WIDTH to a postive number,
+by the way, border's color is specified by the background of
+the ‘internal-border’ face.
+
 By default, posframe's font is deriverd from current frame
 user can set posframe's font with FONT argument.
 
@@ -335,6 +348,11 @@ of FOREGROUND-COLOR and BACKGROUND-COLOR.
 By default, posframe will force hide header-line and mode-line
 If user want to show header-line or mode-line in posframe,
 set RESPECT-HEADER-LINE or RESPECT-MODE-LINE to t.
+
+If user want to let posframe use different faces from other frame.
+user can set FACE-REMAP, more setting details can be found:
+
+  C-h v face-remapping-alist
 
 OVERRIDE-PARAMETERS is very powful, *all* the frame parameters
 used by posframe's frame can be overrided by it.
@@ -373,11 +391,13 @@ you can use `posframe-delete-all' to delete all posframes."
              :parent-frame parent-frame
              :left-fringe left-fringe
              :right-fringe right-fringe
+             :internal-border-width internal-border-width
              :foreground-color foreground-color
              :background-color background-color
              :keep-ratio keep-ratio
              :respect-header-line respect-header-line
              :respect-mode-line respect-mode-line
+             :face-remap face-remap
              :override-parameters override-parameters))
 
       ;; Insert string to posframe-buffer.
