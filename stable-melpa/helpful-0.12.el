@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180707.1402
+;; Package-Version: 0.12
 ;; Keywords: help, lisp
 ;; Version: 0.12
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -589,6 +589,8 @@ or disable if already enabled."
                  'callable-p t)
                 "\n"))
       (goto-char (point-min))
+      ;; TODO: define our own mode, so we can move between links
+      ;; conveniently.
       (special-mode))))
 
 (define-button-type 'helpful-manual-button
@@ -2191,6 +2193,9 @@ See also `helpful-max-buffers'."
 
 (define-key helpful-mode-map (kbd "TAB") #'forward-button)
 (define-key helpful-mode-map (kbd "<backtab>") #'backward-button)
+
+(define-key helpful-mode-map (kbd "n") #'forward-button)
+(define-key helpful-mode-map (kbd "p") #'backward-button)
 
 (provide 'helpful)
 ;;; helpful.el ends here

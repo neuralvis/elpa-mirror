@@ -4,9 +4,9 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 0.2
+;; Package-Version: 0.3
 ;; Keywords: tools
-;; Version: 0.2
+;; Version: 0.3
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3") (projectile "0.14.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -141,6 +141,9 @@ We save the last line here, in case we need to append more text to it.")
               (insert "\n" pretty-filename "\n")))
             (setq deadgrep--current-file filename)
 
+            ;; TODO: apply the invisible property if the user decided
+            ;; to hide this filename before we finished finding
+            ;; results in it.
             (insert pretty-line-num content)
             (when truncate-p
               (insert
@@ -299,7 +302,7 @@ with Emacs text properties."
   (let* ((output (shell-command-to-string (format "%s --type-list" deadgrep-executable)))
          (lines (s-lines (s-trim output)))
          (types (--map
-                 (-first-item (s-split (rx ":") it))
+                 (s-split (rx ": ") it)
                  lines)))
     types))
 
@@ -308,6 +311,26 @@ with Emacs text properties."
   'case nil
   'help-echo "Change case sensitivity")
 
+(defun deadgrep--read-file-type (filename)
+  "Read a ripgrep file type, defaulting to the type that matches FILENAME."
+  (let* ((types-and-exts (deadgrep--type-list))
+         (types (-map #'-first-item types-and-exts))
+         matching-type-and-ext)
+    ;; If we've been given a filename with an extension.
+    (when (and filename (file-name-extension filename))
+      ;; Get the first type whose list of extensions contains this extension.
+      (setq matching-type-and-ext
+            (-find
+             (-lambda ((_ extensions))
+               (s-contains-p
+                (format "*.%s" (file-name-extension filename))
+                extensions))
+             types-and-exts)))
+    (completing-read "File type: "
+                     types
+                     nil t nil nil
+                     (car-safe matching-type-and-ext))))
+
 (defun deadgrep--file-type (button)
   (let ((button-type (button-get button 'file-type)))
     (cond
@@ -315,7 +338,7 @@ with Emacs text properties."
       (setq deadgrep--file-type 'all))
      ((eq button-type 'type)
       (let ((new-file-type
-             (completing-read "File type: " (deadgrep--type-list))))
+             (deadgrep--read-file-type deadgrep--initial-filename)))
         (setq deadgrep--file-type (cons 'type new-file-type))))
      ((eq button-type 'glob)
       (let ((glob
@@ -400,94 +423,95 @@ to obtain ripgrep results."
 (defun deadgrep--write-heading ()
   "Write the deadgrep heading with buttons reflecting the current
 search settings."
-  (insert (propertize "Search term: "
-                      'face 'font-lock-comment-face)
-          (if (eq deadgrep--search-type 'regexp)
-              (deadgrep--propertize-regexp deadgrep--search-term)
-            deadgrep--search-term)
-          " "
-          (deadgrep--button "change" 'deadgrep-search-term)
-          "\n"
-          (propertize "Search type: "
-                      'face 'font-lock-comment-face)
+  (let ((inhibit-read-only t))
+    (insert (propertize "Search term: "
+                        'face 'font-lock-comment-face)
+            (if (eq deadgrep--search-type 'regexp)
+                (deadgrep--propertize-regexp deadgrep--search-term)
+              deadgrep--search-term)
+            " "
+            (deadgrep--button "change" 'deadgrep-search-term)
+            "\n"
+            (propertize "Search type: "
+                        'face 'font-lock-comment-face)
 
-          (if (eq deadgrep--search-type 'string)
-              "string"
-            (deadgrep--button "string" 'deadgrep-type
-                              'search-type 'string))
-          " "
-          (if (eq deadgrep--search-type 'words)
-              "words"
-            (deadgrep--button "words" 'deadgrep-type
-                              'search-type 'words))
-          " "
-          (if (eq deadgrep--search-type 'regexp)
-              "regexp"
-            (deadgrep--button "regexp" 'deadgrep-type
-                              'search-type 'regexp))
-          "\n"
-          (propertize "Case: "
-                      'face 'font-lock-comment-face)
-          (if (eq deadgrep--search-case 'smart)
-              "smart"
-            (deadgrep--button "smart" 'deadgrep-case
-                              'case 'smart))
-          " "
-          (if (eq deadgrep--search-case 'sensitive)
-              "sensitive"
-            (deadgrep--button "sensitive" 'deadgrep-case
-                              'case 'sensitive))
-          " "
-          (if (eq deadgrep--search-case 'ignore)
-              "ignore"
-            (deadgrep--button "ignore" 'deadgrep-case
-                              'case 'ignore))
-          "\n"
-          (propertize "Context: "
-                      'face 'font-lock-comment-face)
-          (if deadgrep--context
-              (deadgrep--button "none" 'deadgrep-context
-                                'context nil)
-            "none")
-          " "
-          (deadgrep--button "before" 'deadgrep-context
-                            'context 'before)
-          (if deadgrep--context
-              (format ":%d" (car deadgrep--context))
-            "")
-          " "
-          (deadgrep--button "after" 'deadgrep-context
-                            'context 'after)
-          (if deadgrep--context
-              (format ":%d" (cdr deadgrep--context))
-            "")
+            (if (eq deadgrep--search-type 'string)
+                "string"
+              (deadgrep--button "string" 'deadgrep-type
+                                'search-type 'string))
+            " "
+            (if (eq deadgrep--search-type 'words)
+                "words"
+              (deadgrep--button "words" 'deadgrep-type
+                                'search-type 'words))
+            " "
+            (if (eq deadgrep--search-type 'regexp)
+                "regexp"
+              (deadgrep--button "regexp" 'deadgrep-type
+                                'search-type 'regexp))
+            "\n"
+            (propertize "Case: "
+                        'face 'font-lock-comment-face)
+            (if (eq deadgrep--search-case 'smart)
+                "smart"
+              (deadgrep--button "smart" 'deadgrep-case
+                                'case 'smart))
+            " "
+            (if (eq deadgrep--search-case 'sensitive)
+                "sensitive"
+              (deadgrep--button "sensitive" 'deadgrep-case
+                                'case 'sensitive))
+            " "
+            (if (eq deadgrep--search-case 'ignore)
+                "ignore"
+              (deadgrep--button "ignore" 'deadgrep-case
+                                'case 'ignore))
+            "\n"
+            (propertize "Context: "
+                        'face 'font-lock-comment-face)
+            (if deadgrep--context
+                (deadgrep--button "none" 'deadgrep-context
+                                  'context nil)
+              "none")
+            " "
+            (deadgrep--button "before" 'deadgrep-context
+                              'context 'before)
+            (if deadgrep--context
+                (format ":%d" (car deadgrep--context))
+              "")
+            " "
+            (deadgrep--button "after" 'deadgrep-context
+                              'context 'after)
+            (if deadgrep--context
+                (format ":%d" (cdr deadgrep--context))
+              "")
 
-          "\n\n"
-          (propertize "Directory: "
-                      'face 'font-lock-comment-face)
-          (deadgrep--button
-           (abbreviate-file-name default-directory)
-           'deadgrep-directory)
-          "\n"
-          (propertize "Files: "
-                      'face 'font-lock-comment-face)
-          (if (eq deadgrep--file-type 'all)
-              "all"
-            (deadgrep--button "all" 'deadgrep-file-type
-                              'file-type 'all))
-          " "
-          (deadgrep--button "type" 'deadgrep-file-type
-                            'file-type 'type)
-          (if (eq (car-safe deadgrep--file-type) 'type)
-              (format ":%s" (cdr deadgrep--file-type))
-            "")
-          " "
-          (deadgrep--button "glob" 'deadgrep-file-type
-                            'file-type 'glob)
-          (if (eq (car-safe deadgrep--file-type) 'glob)
-              (format ":%s" (cdr deadgrep--file-type))
-            "")
-          "\n\n"))
+            "\n\n"
+            (propertize "Directory: "
+                        'face 'font-lock-comment-face)
+            (deadgrep--button
+             (abbreviate-file-name default-directory)
+             'deadgrep-directory)
+            "\n"
+            (propertize "Files: "
+                        'face 'font-lock-comment-face)
+            (if (eq deadgrep--file-type 'all)
+                "all"
+              (deadgrep--button "all" 'deadgrep-file-type
+                                'file-type 'all))
+            " "
+            (deadgrep--button "type" 'deadgrep-file-type
+                              'file-type 'type)
+            (if (eq (car-safe deadgrep--file-type) 'type)
+                (format ":%s" (cdr deadgrep--file-type))
+              "")
+            " "
+            (deadgrep--button "glob" 'deadgrep-file-type
+                              'file-type 'glob)
+            (if (eq (car-safe deadgrep--file-type) 'glob)
+                (format ":%s" (cdr deadgrep--file-type))
+              "")
+            "\n\n")))
 
 ;; TODO: could we do this in the minibuffer too?
 (defun deadgrep--propertize-regexp (regexp)
@@ -530,7 +554,17 @@ Returns a copy of REGEXP with properties set."
           search-term
           (abbreviate-file-name directory)))
 
+(defun deadgrep--buffers ()
+  "All the current deadgrep results buffers.
+Returns a list ordered by the most recently accessed."
+  (--filter (with-current-buffer it
+              (eq major-mode 'deadgrep-mode))
+            ;; `buffer-list' seems to be ordered by most recently
+            ;; visited first.
+            (buffer-list)))
+
 (defun deadgrep--buffer (search-term directory)
+  "Create and initialise a search results buffer."
   (let* ((initial-filename (buffer-file-name))
          (buf-name (deadgrep--buffer-name search-term directory))
          (buf (get-buffer buf-name)))
@@ -538,19 +572,14 @@ Returns a copy of REGEXP with properties set."
       ;; If we need to create the buffer, ensure we don't exceed
       ;; `deadgrep-max-buffers' by killing the least recently used.
       (when (numberp deadgrep-max-buffers)
-        (let* ((buffers (buffer-list))
-               (helpful-bufs (--filter (with-current-buffer it
-                                         (eq major-mode 'deadgrep-mode))
-                                       buffers))
-               ;; `buffer-list' seems to be ordered by most recently
-               ;; visited first, so keep those.
-               (excess-buffers (-drop (1- deadgrep-max-buffers) helpful-bufs)))
+        (let* ((excess-buffers (-drop (1- deadgrep-max-buffers)
+                                      (deadgrep--buffers))))
           ;; Kill buffers so we have one buffer less than the maximum
           ;; before we create a new one.
           (-each excess-buffers #'kill-buffer)))
 
       (setq buf (get-buffer-create buf-name)))
-    
+
     (with-current-buffer buf
       (setq default-directory directory)
       (let ((inhibit-read-only t))
@@ -561,8 +590,7 @@ Returns a copy of REGEXP with properties set."
 
         (setq deadgrep--search-term search-term)
         (setq deadgrep--current-file nil)
-        (setq deadgrep--initial-filename initial-filename)
-        (deadgrep--write-heading))
+        (setq deadgrep--initial-filename initial-filename))
       (setq buffer-read-only t))
     buf))
 
@@ -606,6 +634,56 @@ buffer."
 ;; TODO: we should still be able to click on buttons.
 
 (define-key deadgrep-mode-map (kbd "g") #'deadgrep-restart)
+
+(defvar-local deadgrep--hidden-files nil
+  "An alist recording which files currently have their lines
+hidden in this deadgrep results buffer.
+
+Keys are interned filenames, so they compare with `eq'.")
+
+(defun deadgrep-toggle-file-results ()
+  "Show/hide the results of the file at point."
+  (interactive)
+  (let* ((pos (line-beginning-position))
+         (file-name (get-text-property pos 'deadgrep-filename))
+         (line-number (get-text-property pos 'deadgrep-line-number)))
+    (when (and file-name (not line-number))
+      ;; We're on a file heading.
+      (if (alist-get (intern file-name) deadgrep--hidden-files)
+          (deadgrep--show)
+        (deadgrep--hide)))))
+
+(defun deadgrep--show ()
+  (-let* ((pos (line-beginning-position))
+          (file-name (get-text-property pos 'deadgrep-filename))
+          ((start-pos end-pos) (alist-get (intern file-name) deadgrep--hidden-files)))
+    (remove-overlays start-pos end-pos 'invisible t)
+    (setf (alist-get (intern file-name) deadgrep--hidden-files)
+          nil)))
+
+(defun deadgrep--hide ()
+  "Hide the file results immediately after point."
+  (save-excursion
+    (let* ((pos (line-beginning-position))
+           (file-name (get-text-property pos 'deadgrep-filename))
+           (start-pos
+            (progn
+              (forward-line)
+              (point)))
+           (end-pos
+            (progn
+              (while (and
+                      (get-text-property (point) 'deadgrep-line-number)
+                      (not (bobp)))
+                (forward-line))
+              ;; Step over the newline.
+              (1+ (point))))
+           (o (make-overlay start-pos end-pos)))
+      (overlay-put o 'invisible t)
+      (setf (alist-get (intern file-name) deadgrep--hidden-files)
+            (list start-pos end-pos)))))
+
+(define-key deadgrep-mode-map (kbd "TAB") #'deadgrep-toggle-file-results)
 
 (defun deadgrep--item-p (pos)
   "Is there something at POS that we can interact with?"
@@ -683,6 +761,7 @@ This will either be a button, a filename, or a search result."
         (inhibit-read-only t))
     (erase-buffer)
     (setq deadgrep--current-file nil)
+    (setq deadgrep--hidden-files nil)
 
     (deadgrep--write-heading)
     ;; If the point was in the heading, ensure that we restore its
@@ -699,7 +778,9 @@ This will either be a button, a filename, or a search result."
 If region is active, return that immediately.  Otherwise, prompt
 for a string, offering the current word as a default."
   (if (use-region-p)
-      (buffer-substring-no-properties (region-beginning) (region-end))
+      (prog1
+          (buffer-substring-no-properties (region-beginning) (region-end))
+        (deactivate-mark))
     (let* ((sym (symbol-at-point))
            (sym-name (when sym
                        (substring-no-properties (symbol-name sym))))
@@ -730,8 +811,25 @@ for a string, offering the current word as a default."
   (interactive)
   (let* ((search-term (deadgrep--read-search-term))
          (dir (deadgrep--project-root default-directory))
-         (buf (deadgrep--buffer search-term dir)))
+         (buf (deadgrep--buffer search-term dir))
+         (last-results-buf (car-safe (deadgrep--buffers)))
+         prev-search-type
+         prev-search-case)
+    ;; Find out what search settings were used last time.
+    (when last-results-buf
+      (with-current-buffer last-results-buf
+        (setq prev-search-type deadgrep--search-type)
+        (setq prev-search-case deadgrep--search-case)))
+
     (switch-to-buffer buf)
+
+    ;; If we have previous search settings, apply them to our new
+    ;; search results buffer.
+    (when last-results-buf
+      (setq deadgrep--search-type prev-search-type)
+      (setq deadgrep--search-case prev-search-case))
+
+    (deadgrep--write-heading)
     (deadgrep--start
      search-term
      deadgrep--search-type
