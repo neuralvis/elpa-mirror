@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20180709.1217
+;; Package-Version: 20180711.102
 ;; Keywords: project, convenience
 ;; Version: 1.0.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -530,6 +530,14 @@ When set to nil you'll have always add projects explicitly with
   :type 'boolean
   :package-version '(projectile . "1.0.0"))
 
+(defcustom projectile-project-search-path nil
+  "List of folders where projectile is automatically going to look for projects.
+You can think of something like $PATH, but for projects instead of executables.
+Examples of such paths might be ~/projects, ~/work, etc."
+  :group 'projectile
+  :type 'list
+  :package-version '(projectile . "1.0.0"))
+
 
 ;;; Version information
 
@@ -739,6 +747,12 @@ at the top level of DIRECTORY."
            (when (projectile-project-p)
              (projectile-add-known-project (projectile-project-root))))))
      subdirs)))
+
+(defun projectile-discover-projects-in-search-path ()
+  "Discover projects in `projectile-project-search-path'.
+Invoked automatically when `projectile-mode' is enabled."
+  (interactive)
+  (mapcar #'projectile-discover-projects-in-directory projectile-project-search-path))
 
 
 (defadvice delete-file (before purge-from-projectile-cache (filename &optional trash))
@@ -3960,6 +3974,9 @@ Otherwise behave as if called interactively.
     (unless projectile-projects-cache-time
       (setq projectile-projects-cache-time
             (make-hash-table :test 'equal)))
+    ;; update the list of known projects
+    (projectile-cleanup-known-projects)
+    (projectile-discover-projects-in-search-path)
     (add-hook 'find-file-hook 'projectile-find-file-hook-function)
     (add-hook 'projectile-find-dir-hook #'projectile-track-known-projects-find-file-hook t)
     (add-hook 'dired-before-readin-hook #'projectile-track-known-projects-find-file-hook t t)
@@ -3970,6 +3987,9 @@ Otherwise behave as if called interactively.
     (remove-hook 'dired-before-readin-hook #'projectile-track-known-projects-find-file-hook t)
     (ad-deactivate 'compilation-find-file)
     (ad-deactivate 'delete-file))))
+
+;;;###autoload
+(define-obsolete-function-alias 'projectile-global-mode 'projectile-mode "1.0")
 
 (provide 'projectile)
 
