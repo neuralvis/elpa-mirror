@@ -4,7 +4,7 @@
 
 ;; Author: Austin Bingham <austin.bingham@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20180527.728
+;; Package-Version: 20180713.304
 ;; Keywords: tools
 ;; URL: https://github.com/abingham/emacs-counsel-codesearch
 ;; Package-Requires: ((codesearch "1") (counsel "0.10.0") (emacs "24") (ivy "0.10.0"))
@@ -100,13 +100,13 @@
           (forward-line (- line-number 1)))))))
 
 ;;;###autoload
-(defun counsel-codesearch (&optional initial-input)
+(defun counsel-codesearch ()
   "Call the \"csearch\" shell command.
 
 INITIAL-INPUT can be given as the initial minibuffer input."
   (interactive)
   (ivy-read "Locate: " #'counsel-codesearch--function
-            :initial-input initial-input
+            :initial-input (thing-at-point 'symbol)
             :dynamic-collection t
             :history #'counsel-locate-history
             :action #'counsel-codesearch--handle-selection

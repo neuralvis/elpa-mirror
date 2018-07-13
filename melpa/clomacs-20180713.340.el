@@ -4,7 +4,7 @@
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/clojure-emacs/clomacs
-;; Package-Version: 20180628.750
+;; Package-Version: 20180713.340
 ;; Keywords: clojure, interaction
 ;; Version: 0.0.3
 ;; Package-Requires: ((emacs "24.3") (cider "0.16.0") (s "1.12.0") (simple-httpd "1.4.6"))
@@ -57,8 +57,8 @@ Clojure code directly in the same REPL."
   :type 'boolean)
 
 (defvar clomacs-repl-buffer-name-prefix
-  "First part of the CIDER nREPL buffer name: \"*cider-repl <lib-name>\"."
-  (concat (car (split-string nrepl-repl-buffer-name-template "%s")) " "))
+  (concat (car (split-string nrepl-repl-buffer-name-template "%s")) " ")
+  "First part of the CIDER nREPL buffer name: \"*cider-repl <lib-name>\".")
 
 (defun clomacs-search-connection (repl-buffer-project-name)
   "Search nREPL connection buffer.
@@ -71,11 +71,11 @@ REPL-BUFFER-PROJECT-NAME \"clomacs\"."
                      (substring (car v) 0 (length repl-buffer-project-name))
                      repl-buffer-project-name)
                     (equal
-                     (cadr (substring (split-string
+                     (substring (cadr (split-string
                                        (car v)
-                                       clomacs-repl-buffer-name-prefix)
-                                      0
-                                      (length repl-buffer-project-name)))
+                                       clomacs-repl-buffer-name-prefix))
+                                0
+                                (length repl-buffer-project-name))
                      repl-buffer-project-name))
                 (buffer-name (cadr v)))
            (setq result (cadr v))))

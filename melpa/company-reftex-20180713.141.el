@@ -4,7 +4,7 @@
 ;;
 ;; Author: Eivind Fonn <evfonn@gmail.com>
 ;; URL: https://github.com/TheBB/company-reftex
-;; Package-Version: 20180429.25
+;; Package-Version: 20180713.141
 ;; Version: 0.1.0
 ;; Keywords: bib tex company latex reftex references labels citations
 ;; Package-Requires: ((emacs "25.1") (s "1.12") (company "0.8"))
@@ -79,7 +79,7 @@ Group number 1 should be the prefix itself."
   :group 'company-reftex)
 
 (defcustom company-reftex-citations-regexp
-  "\\\\cite[^[{]*\\(?:\\[[^]]*\\]\\)?{\\(?:[^},]*,\\)*\\([^},]*\\)"
+  "\\\\\\(?:foot\\)?cite[^[{]*\\(?:\\[[^]]*\\]\\)*{\\(?:[^},]*,\\)*\\([^},]*\\)"
   "Regular expression to use when lookng for the citation prefix.
 Group number 1 should be the prefix itself."
   :type 'string
