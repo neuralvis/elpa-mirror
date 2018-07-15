@@ -4,9 +4,9 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 0.3
+;; Package-Version: 20180714.1716
 ;; Keywords: tools
-;; Version: 0.3
+;; Version: 0.5
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3") (projectile "0.14.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,12 @@
 (require 's)
 (require 'dash)
 (require 'spinner)
-(autoload 'projectile-project-root "projectile")
+(require 'projectile)
+
+(defgroup deadgrep nil
+  "A powerful text search UI using ripgrep."
+  :group 'tools
+  :group 'matching)
 
 (defvar deadgrep-executable
   (executable-find "rg"))
@@ -48,6 +53,15 @@ if there are more than this many.
 
 To disable cleanup entirely, set this variable to nil.")
 
+(defvar deadgrep-project-root-function
+  #'deadgrep--project-root
+  "Function called by `deadgrep' to work out the root directory
+to search from.")
+
+(defvar deadgrep-history
+  nil
+  "A list of the previous search terms.")
+
 (defvar deadgrep-max-line-length
   500
   "Truncate lines if they are longer than this.
@@ -58,6 +72,29 @@ results buffers.
 
 In extreme cases (100KiB+ single-line files), we can get a stack
 overflow on our regexp matchers if we don't apply this.")
+
+(defface deadgrep-meta-face
+  '((t :inherit font-lock-comment-face))
+  "Face used for deadgrep UI text."
+  :group 'deadgrep)
+
+(defface deadgrep-filename-face
+  '((t :inherit bold))
+  "Face used for filename headings in results buffers."
+  :group 'deadgrep)
+
+(defface deadgrep-regexp-metachar-face
+  '((t :inherit
+       ;; TODO: I've seen a more appropriate face in some themes,
+       ;; find out what to use instead here.
+       font-lock-constant-face))
+  "Face used for regexp metacharacters in search terms."
+  :group 'deadgrep)
+
+(defface deadgrep-match-face
+  '((t :inherit match))
+  "Face used for the portion of a line that matches the search term."
+  :group 'deadgrep)
 
 (defvar-local deadgrep--search-term nil)
 (defvar-local deadgrep--search-type 'string)
@@ -125,12 +162,12 @@ We save the last line here, in case we need to append more text to it.")
                                 (number-to-string line-num)))
                   (pretty-line-num
                    (propertize formatted-line-num
-                               'face 'font-lock-comment-face
+                               'face 'deadgrep-meta-face
                                'deadgrep-filename filename
                                'deadgrep-line-number line-num))
                   (pretty-filename
                    (propertize filename
-                               'face 'bold
+                               'face 'deadgrep-filename-face
                                'deadgrep-filename filename)))
             (cond
              ;; This is the first file we've seen, print the heading.
@@ -148,7 +185,7 @@ We save the last line here, in case we need to append more text to it.")
             (when truncate-p
               (insert
                (propertize " ... (truncated)"
-                           'face 'font-lock-comment-face)))
+                           'face 'deadgrep-meta-face)))
             (insert "\n"))))))))
 
 (defun deadgrep--process-sentinel (process output)
@@ -162,7 +199,10 @@ We save the last line here, in case we need to append more text to it.")
         (deadgrep--insert-output "" t)
 
         ;; Report any errors that occurred.
-        (unless (equal output "finished\n")
+        (unless (member output
+                        (list
+                         "exited abnormally with code 1\n"
+                         "finished\n"))
           (save-excursion
             (let ((inhibit-read-only t))
               (goto-char (point-max))
@@ -238,7 +278,7 @@ with Emacs text properties."
    (lambda (s)
      (propertize
       (match-string 1 s)
-      'face 'match))
+      'face 'deadgrep-match-face))
    line-contents))
 
 (define-button-type 'deadgrep-search-term
@@ -425,7 +465,7 @@ to obtain ripgrep results."
 search settings."
   (let ((inhibit-read-only t))
     (insert (propertize "Search term: "
-                        'face 'font-lock-comment-face)
+                        'face 'deadgrep-meta-face)
             (if (eq deadgrep--search-type 'regexp)
                 (deadgrep--propertize-regexp deadgrep--search-term)
               deadgrep--search-term)
@@ -433,7 +473,7 @@ search settings."
             (deadgrep--button "change" 'deadgrep-search-term)
             "\n"
             (propertize "Search type: "
-                        'face 'font-lock-comment-face)
+                        'face 'deadgrep-meta-face)
 
             (if (eq deadgrep--search-type 'string)
                 "string"
@@ -451,7 +491,7 @@ search settings."
                                 'search-type 'regexp))
             "\n"
             (propertize "Case: "
-                        'face 'font-lock-comment-face)
+                        'face 'deadgrep-meta-face)
             (if (eq deadgrep--search-case 'smart)
                 "smart"
               (deadgrep--button "smart" 'deadgrep-case
@@ -468,7 +508,7 @@ search settings."
                                 'case 'ignore))
             "\n"
             (propertize "Context: "
-                        'face 'font-lock-comment-face)
+                        'face 'deadgrep-meta-face)
             (if deadgrep--context
                 (deadgrep--button "none" 'deadgrep-context
                                   'context nil)
@@ -488,13 +528,13 @@ search settings."
 
             "\n\n"
             (propertize "Directory: "
-                        'face 'font-lock-comment-face)
+                        'face 'deadgrep-meta-face)
             (deadgrep--button
              (abbreviate-file-name default-directory)
              'deadgrep-directory)
             "\n"
             (propertize "Files: "
-                        'face 'font-lock-comment-face)
+                        'face 'deadgrep-meta-face)
             (if (eq deadgrep--file-type 'all)
                 "all"
               (deadgrep--button "all" 'deadgrep-file-type
@@ -536,14 +576,12 @@ Returns a copy of REGEXP with properties set."
         (put-text-property
          it-index (1+ it-index)
          'face
-         ;; TODO: I've seen a more appropriate face in some themes,
-         ;; find out what to use instead here.
-         'font-lock-constant-face
+         'deadgrep-regexp-metachar-face
          regexp))
        ((and (memq it escape-metachars) (equal prev-char ?\\))
         (put-text-property
          (1- it-index) (1+ it-index)
-         'face 'font-lock-constant-face
+         'face 'deadgrep-regexp-metachar-face
          regexp)))
 
       (setq prev-char it)))
@@ -563,10 +601,9 @@ Returns a list ordered by the most recently accessed."
             ;; visited first.
             (buffer-list)))
 
-(defun deadgrep--buffer (search-term directory)
+(defun deadgrep--buffer (search-term directory initial-filename)
   "Create and initialise a search results buffer."
-  (let* ((initial-filename (buffer-file-name))
-         (buf-name (deadgrep--buffer-name search-term directory))
+  (let* ((buf-name (deadgrep--buffer-name search-term directory))
          (buf (get-buffer buf-name)))
     (unless buf
       ;; If we need to create the buffer, ensure we don't exceed
@@ -616,19 +653,68 @@ buffer."
      (- char-count line-number-width)
      0)))
 
+(defun deadgrep--flash-column-offsets (start end)
+  "Temporarily highlight column offset from START to END."
+  (let* ((line-start (line-beginning-position))
+         (overlay (make-overlay
+                   (+ line-start start)
+                   (+ line-start end))))
+    (overlay-put overlay 'face 'highlight)
+    (run-with-timer 1.0 nil 'delete-overlay overlay)))
+
+(defun deadgrep--match-face-p (pos)
+  "Is there a match face at POS?"
+  (eq (get-text-property pos 'face) 'deadgrep-match-face))
+
+(defun deadgrep--match-positions ()
+  "Return a list of indexes of the current line's matches."
+  (let (positions)
+    (save-excursion
+      (beginning-of-line)
+
+      (let* ((line-number
+              (get-text-property (point) 'deadgrep-line-number))
+             (line-number-width
+              (max deadgrep--position-column-width
+                   (length (number-to-string line-number))))
+             (i 0)
+             (start-pos 0))
+
+        (forward-char line-number-width)
+
+        (while (and (not (looking-at "\n"))
+                    (not (bobp)))
+          ;; If we've just entered a match, record the start position.
+          (when (and (deadgrep--match-face-p (point))
+                     (not (deadgrep--match-face-p (1- (point)))))
+            (setq start-pos i))
+          ;; If we've just left a match, record the match range.
+          (when (and (not (deadgrep--match-face-p (point)))
+                     (deadgrep--match-face-p (1- (point))))
+            (push (list start-pos i) positions))
+
+          (setq i (1+ i))
+          (forward-char 1))))
+
+    (nreverse positions)))
+
 (defun deadgrep-visit-result ()
   "Goto the search result at point."
   (interactive)
   (let* ((pos (line-beginning-position))
          (file-name (get-text-property pos 'deadgrep-filename))
          (line-number (get-text-property pos 'deadgrep-line-number))
-         (column-offset (when line-number (deadgrep--current-column))))
+         (column-offset (when line-number (deadgrep--current-column)))
+         (match-positions (when line-number (deadgrep--match-positions))))
     (when file-name
       (find-file file-name)
       (goto-char (point-min))
       (when line-number
         (forward-line (1- line-number))
-        (forward-char column-offset)))))
+        (forward-char column-offset)
+        (-each match-positions
+          (-lambda ((start end))
+            (deadgrep--flash-column-offsets start end)))))))
 
 (define-key deadgrep-mode-map (kbd "RET") #'deadgrep-visit-result)
 ;; TODO: we should still be able to click on buttons.
@@ -684,6 +770,16 @@ Keys are interned filenames, so they compare with `eq'.")
             (list start-pos end-pos)))))
 
 (define-key deadgrep-mode-map (kbd "TAB") #'deadgrep-toggle-file-results)
+
+(defun deadgrep-kill-process ()
+  "Kill the deadgrep process associated with the current buffer."
+  (interactive)
+  (if (get-buffer-process (current-buffer))
+      (interrupt-process)
+    (message "No process running.")))
+
+;; Keybinding chosen to match `kill-compilation'.
+(define-key deadgrep-mode-map (kbd "C-c C-k") #'deadgrep-kill-process)
 
 (defun deadgrep--item-p (pos)
   "Is there something at POS that we can interact with?"
@@ -777,41 +873,46 @@ This will either be a button, a filename, or a search result."
   "Read a search term from the minibuffer.
 If region is active, return that immediately.  Otherwise, prompt
 for a string, offering the current word as a default."
-  (if (use-region-p)
-      (prog1
-          (buffer-substring-no-properties (region-beginning) (region-end))
-        (deactivate-mark))
-    (let* ((sym (symbol-at-point))
-           (sym-name (when sym
-                       (substring-no-properties (symbol-name sym))))
-           ;; TODO: prompt should say search string or search regexp
-           ;; as appropriate.
-           (prompt
-            (if sym
-                (format "Search term (default %s): " sym-name)
-              "Search term: "))
-           (user-input
-            (read-from-minibuffer
-             prompt nil nil nil nil sym-name)))
-      (if (equal user-input "")
-          sym-name
-        user-input))))
+  (let (search-term)
+    (if (use-region-p)
+        (progn
+          (setq search-term
+                (buffer-substring-no-properties (region-beginning) (region-end)))
+          (deactivate-mark))
+      (let* ((sym (symbol-at-point))
+             (sym-name (when sym
+                         (substring-no-properties (symbol-name sym))))
+             ;; TODO: prompt should say search string or search regexp
+             ;; as appropriate.
+             (prompt
+              (if sym
+                  (format "Search term (default %s): " sym-name)
+                "Search term: ")))
+        (setq search-term
+              (read-from-minibuffer
+               prompt nil nil nil 'deadgrep-history sym-name))
+        (when (equal search-term "")
+          (setq search-term sym-name))))
+    (unless (equal (car deadgrep-history) search-term)
+      (push search-term deadgrep-history))
+    search-term))
 
-(defun deadgrep--project-root (file-path)
+(defun deadgrep--project-root ()
   "Guess the project root of the given FILE-PATH."
-  (or
-   (ignore-errors
-     ;; This raises an error if we're not in a project.
-     (projectile-project-root))
-   file-path))
+  (let ((projectile-require-project-root nil))
+    (projectile-project-root)))
 
 ;;;###autoload
 (defun deadgrep ()
   "Start a ripgrep search for SEARCH-TERM."
   (interactive)
   (let* ((search-term (deadgrep--read-search-term))
-         (dir (deadgrep--project-root default-directory))
-         (buf (deadgrep--buffer search-term dir))
+         (dir (funcall deadgrep-project-root-function))
+         (buf (deadgrep--buffer
+               search-term
+               dir
+               (or deadgrep--initial-filename
+                   (buffer-file-name))))
          (last-results-buf (car-safe (deadgrep--buffers)))
          prev-search-type
          prev-search-case)
