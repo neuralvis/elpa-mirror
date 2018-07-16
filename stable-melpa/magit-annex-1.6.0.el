@@ -5,9 +5,9 @@
 ;; Author: Kyle Meyer <kyle@kyleam.com>
 ;;         Rémi Vanicat <vanicat@debian.org>
 ;; URL: https://github.com/magit/magit-annex
-;; Package-Version: 1.5.0
+;; Package-Version: 1.6.0
 ;; Keywords: vc tools
-;; Version: 1.5.0
+;; Version: 1.6.0
 ;; Package-Requires: ((cl-lib "0.3") (magit "2.12.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -38,10 +38,21 @@
 ;; Managing file content:
 ;;   @fu   Unlock files.
 ;;   @fl   Lock files.
+;;   @fU   Undo files.
+;;
 ;;   @fg   Get files.
 ;;   @fd   Drop files.
 ;;   @fc   Copy files.
 ;;   @fm   Move files.
+;;
+;;    The above commands, which operate on paths, are also useful
+;;    outside of Magit buffers, especially in Dired buffers.  To make
+;;    these commands easily accessible in Dired, you can add a binding
+;;    for `magit-annex-file-action-popup'.  If you use git-annex.el,
+;;    you can put the popup under the same binding (@f) with
+;;
+;;     (define-key git-annex-dired-map "f"
+;;       #'magit-annex-file-action-popup)
 ;;
 ;;   @u    Browse unused files.
 ;;   @l    List annex files.
@@ -164,11 +175,15 @@ program used to open the unused file."
               (?c "Copy" magit-annex-copy-files)
               (?m "Move" magit-annex-move-files)
               (?l "Lock" magit-annex-lock-files)
-              (?u "Unlock" magit-annex-unlock-files))
-  :switches '((?f "Fast" "--fast")
+              (?u "Unlock" magit-annex-unlock-files) nil nil
+              (?U "Undo" magit-annex-undo-files))
+  :switches '("Switches"
+              (?f "Fast" "--fast")
               (?F "Force" "--force")
+              "Switches for get, drop, copy, and move"
               (?a "Auto" "--auto"))
-  :options  '((?t "To remote" "--to=" magit-read-remote)
+  :options  '("Options for get, drop, copy, and move"
+              (?t "To remote" "--to=" magit-read-remote)
               (?f "From remote" "--from=" magit-read-remote)
               (?n "Number of copies" "--numcopies=")
               (?j "Number of jobs" "--jobs="))
@@ -205,8 +220,7 @@ program used to open the unused file."
   :actions  '((?l "List files" magit-annex-list-files)
               (?d "List files in directory" magit-annex-list-dir-files))
   :switches '((?a "All repos" "--allrepos"))
-  :default-action 'magit-annex-list-files
-  :use-prefix 'popup)
+  :default-action 'magit-annex-list-files)
 
 (magit-define-popup magit-annex-run-popup
   "Popup console for running git-annex commands."
@@ -383,37 +397,67 @@ With a prefix argument, prompt for FILE.
                      (list f)))
                  input)))))
 
+(defun magit-annex--dired-relist (files)
+  ;; Modified from git-annex.el
+  (let ((here (point)))
+    (unwind-protect
+        (dolist (file files)
+          (dired-relist-file (expand-file-name file)))
+      (goto-char here))))
+
 (defmacro magit-annex-files-action (command &optional limit no-async)
   (declare (indent defun) (debug t))
-  `(defun ,(intern (concat "magit-annex-" command "-files")) (files &optional args)
+  `(defun ,(intern (concat "magit-annex-" command "-files"))
+       (files &optional args)
      ,(format "%s FILES.\n\n  git annex %s [ARGS] [FILE...]"
               (capitalize command) command)
      (interactive
-      (list (let ((atpoint (magit-annex-list-file-at-point)))
-              (magit-annex-read-files
-               (concat ,(capitalize command)
-                       " file,s"
-                       (and atpoint (format " (%s)" atpoint))
-                       ": ")
-               ,limit
-               atpoint))
-            (magit-annex-file-action-arguments)))
-     (magit-with-toplevel
-       (,(if no-async 'magit-annex-run 'magit-annex-run-async)
-        ,command args files))))
+      (list
+       (let ((default
+               (--when-let
+                   (or (mapcar #'cdr (magit-region-values 'annex-list-file))
+                       (-some-> (cdr (magit-section-when annex-list-file))
+                                (list))
+                       (and (derived-mode-p 'dired-mode)
+                            (dired-get-marked-files t)))
+                 (mapconcat #'identity it ","))))
+         (magit-annex-read-files
+          (concat ,(capitalize command)
+                  " file,s"
+                  (and default (format " (%s)" default))
+                  ": ")
+          ,limit
+          default))
+       (magit-annex-file-action-arguments)))
+     (,(if no-async 'magit-annex-run 'magit-annex-run-async)
+      ,command args files)
+     (when (derived-mode-p 'dired-mode)
+       (if ,no-async
+           (magit-annex--dired-relist files)
+         (set-process-sentinel
+          magit-this-process
+          (lambda (process event)
+            (magit-process-sentinel process event)
+            (when (eq (process-status process) 'exit)
+              (magit-annex--dired-relist files)))))
+       (let ((magit-display-buffer-noselect t))
+         (magit-process-buffer)))))
 
 (magit-annex-files-action "get" 'absent)
 (magit-annex-files-action "drop"
-  (unless (magit-annex-from-in-options-p) 'present))
+  (and (not (magit-annex-from-in-options-p)) 'present))
 (magit-annex-files-action "copy"
-  (unless (magit-annex-from-in-options-p) 'present))
+  (and (not (magit-annex-from-in-options-p)) 'present))
 (magit-annex-files-action "move"
-  (unless (magit-annex-from-in-options-p) 'present))
+  (and (not (magit-annex-from-in-options-p)) 'present))
 (magit-annex-files-action "unlock" 'present t)
 (magit-annex-files-action "lock" 'unlocked t)
 
+(magit-annex-files-action "undo" nil t)
+
 (defun magit-annex-from-in-options-p ()
-  (cl-some (lambda (it) (string-match "--from=" it)) magit-current-popup-args))
+  (cl-some (lambda (it) (string-match-p "--from=" it))
+           magit-current-popup-args))
 
 (defun magit-annex-files ()
   "Return all annex files."
@@ -613,7 +657,7 @@ Type \\[magit-annex-unused-open] to open the file.
 
 \\<magit-annex-list-mode-map>\
 Type \\[magit-annex-file-action-popup] to perform git-annex action
-on the file at point.
+on the files selected by the region (if active) or the file at point.
 \n\\{magit-annex-list-mode-map}"
   :group 'magit-modes
   (hack-dir-local-variables-non-file-buffer))
@@ -679,9 +723,6 @@ on the file at point.
       (magit-insert-section (annex-list-file (cons locs file))
         (insert (format "%s %s" locs file))
         (forward-line)))))
-
-(defun magit-annex-list-file-at-point ()
-  (cdr (magit-section-when annex-list-file)))
 
 (provide 'magit-annex)
 

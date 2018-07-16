@@ -5,9 +5,9 @@
 ;; Author: Kyle Meyer <kyle@kyleam.com>
 ;;         Rémi Vanicat <vanicat@debian.org>
 ;; URL: https://github.com/magit/magit-annex
-;; Package-Version: 20180710.1954
+;; Package-Version: 20180715.1427
 ;; Keywords: vc tools
-;; Version: 1.5.0
+;; Version: 1.6.0
 ;; Package-Requires: ((cl-lib "0.3") (magit "2.12.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
