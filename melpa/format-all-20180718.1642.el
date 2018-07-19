@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20180710.329
+;; Package-Version: 20180718.1642
 ;; Version: 0.1.0
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; Keywords: languages util
@@ -28,6 +28,7 @@
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
 ;; - Haskell (hindent)
+;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX/TypeScript/Vue (prettier)
 ;; - Kotlin (ktlint)
 ;; - Markdown (prettier)
@@ -170,10 +171,18 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable nil nil "-"))
 
 (defun format-all-buffer-clang-format (executable)
-  "Format the current buffer as C/C++ using \"clang-format\".
+  "Format the current buffer as C/C++/Java/Objective-C using \"clang-format\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-process
+   executable nil nil
+   (concat "-assume-filename="
+           (or (buffer-file-name)
+               (cl-ecase major-mode
+                 (c-mode ".c")
+                 (c++-mode ".cpp")
+                 (java-mode ".java")
+                 (objc-mode ".m"))))))
 
 (defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
@@ -336,7 +345,7 @@ EXECUTABLE is the full path to the formatter."
      (:executable "clang-format")
      (:install (macos "brew install clang-format"))
      (:function format-all-buffer-clang-format)
-     (:modes c-mode c++-mode objc-mode))
+     (:modes c-mode c++-mode java-mode objc-mode))
     (dfmt
      (:executable "dfmt")
      (:install (macos "brew install dfmt"))
