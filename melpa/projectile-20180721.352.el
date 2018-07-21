@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20180721.252
+;; Package-Version: 20180721.352
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -2898,14 +2898,18 @@ SEARCH-TERM is a regexp."
 
 ;;;###autoload
 (defun projectile-run-shell ()
-  "Invoke `shell' in the project's root."
+  "Invoke `shell' in the project's root.
+
+Switch to the project specific shell buffer if it already exists."
   (interactive)
   (projectile-with-default-dir (projectile-project-root)
     (shell (concat "*shell " (projectile-project-name) "*"))))
 
 ;;;###autoload
 (defun projectile-run-eshell ()
-  "Invoke `eshell' in the project's root."
+  "Invoke `eshell' in the project's root.
+
+Switch to the project specific eshell buffer if it already exists."
   (interactive)
   (let ((eshell-buffer-name (concat "*eshell " (projectile-project-name) "*")))
     (projectile-with-default-dir (projectile-project-root)
@@ -2913,15 +2917,23 @@ SEARCH-TERM is a regexp."
 
 ;;;###autoload
 (defun projectile-run-ielm ()
-  "Invoke `ielm' in the project's root."
+  "Invoke `ielm' in the project's root.
+
+Switch to the project specific ielm buffer if it already exists."
   (interactive)
-  (projectile-with-default-dir (projectile-project-root)
-    (ielm))
-  (rename-buffer (format "*ielm %s*" (projectile-project-name))))
+  (let ((ielm-buffer-name (format "*ielm %s*" (projectile-project-name))))
+    (if (get-buffer ielm-buffer-name)
+        (switch-to-buffer ielm-buffer-name)
+      (projectile-with-default-dir (projectile-project-root)
+        (ielm))
+      ;; ielm's buffer name is hardcoded, so we have to rename it after creation
+      (rename-buffer ielm-buffer-name))))
 
 ;;;###autoload
 (defun projectile-run-term (program)
-  "Invoke `term' in the project's root."
+  "Invoke `term' in the project's root.
+
+Switch to the project specific term buffer if it already exists."
   (interactive (list nil))
   (let* ((term (concat "term " (projectile-project-name)))
          (buffer (concat "*" term "*")))
