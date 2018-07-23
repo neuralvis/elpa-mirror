@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180708.1356
+;; Package-Version: 20180722.1557
 ;; Keywords: help, lisp
 ;; Version: 0.13
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -445,9 +445,10 @@ or disable if already enabled."
   (let ((buf (button-get button 'buffer))
         (pos (button-get button 'position)))
     (switch-to-buffer buf)
-    (goto-char pos)))
+    (when pos
+      (goto-char pos))))
 
-(defun helpful--buffer-button (buffer pos)
+(defun helpful--buffer-button (buffer &optional pos)
   "Return a button that switches to BUFFER and puts point at POS."
   (helpful--button
    (buffer-name buffer)
@@ -464,6 +465,38 @@ or disable if already enabled."
 (defun helpful--customize (button)
   "Open Customize for this symbol."
   (customize-variable (button-get button 'symbol)))
+
+(define-button-type 'helpful-associated-buffer-button
+  'action #'helpful--associated-buffer
+  'symbol nil
+  'prompt-p nil
+  'follow-link t
+  'help-echo "Change associated buffer")
+
+(defun helpful--read-live-buffer (prompt predicate)
+  "Read a live buffer name, and return the buffer object.
+
+This is largely equivalent to `read-buffer', but counsel.el
+overrides that to include previously opened buffers."
+  (get-buffer
+   (completing-read
+    prompt
+    (-map #'buffer-name (buffer-list))
+    predicate
+    t)))
+
+(defun helpful--associated-buffer (button)
+  "Change the associated buffer, so we can see buffer-local values."
+  (let ((sym (button-get button 'symbol))
+        (prompt-p (button-get button 'prompt-p)))
+    (if prompt-p
+        (setq helpful--associated-buffer
+              (helpful--read-live-buffer
+               "View variable in: "
+               (lambda (buf-name)
+                 (local-variable-p sym (get-buffer buf-name)))))
+      (setq helpful--associated-buffer nil)))
+  (helpful-update))
 
 (define-button-type 'helpful-toggle-button
   'action #'helpful--toggle
@@ -1379,8 +1412,19 @@ POSITION-HEADS takes the form ((123 (defun foo)) (456 (defun bar)))."
 
 (defun helpful--sym-value (sym buf)
   "Return the value of SYM in BUF."
-  (with-current-buffer buf
-    (symbol-value sym)))
+  (cond
+   ;; If we're given a buffer, look up the variable in that buffer.
+   (buf
+    (with-current-buffer buf
+      (symbol-value sym)))
+   ;; If we don't have a buffer, and this is a buffer-local variable,
+   ;; ensure we return the default value.
+   ((local-variable-if-set-p sym)
+    (default-value sym))
+   ;; Otherwise, just return the value in the current buffer, which is
+   ;; the global value.
+   (t
+    (symbol-value sym))))
 
 (defun helpful--insert-section-break ()
   "Insert section break into helpful buffer."
@@ -1427,6 +1471,8 @@ POSITION-HEADS takes the form ((123 (defun foo)) (456 (defun bar)))."
   "Make set button for SYM in BUFFER."
   (helpful--button
    (if helpful--view-literal
+       ;; TODO: only offer for strings that have newlines, tabs or
+       ;; properties.
        "Pretty view"
      "View as literal")
    'helpful-view-literal-button))
@@ -1515,6 +1561,11 @@ OBJ may be a symbol or a compiled function object."
             "autoloaded"
             'helpful-info-button
             'info-node "(elisp)Autoload"))
+          (buffer-local-button
+           (helpful--button
+            "buffer-local"
+            'helpful-info-button
+            'info-node "(elisp)Buffer-Local Variables"))
           ;; TODO: this only reports if a function is autoloaded
           ;; because we autoloaded it. This ignores newly defined
           ;; functions that are autoloaded. Built-in help has this
@@ -1535,6 +1586,9 @@ OBJ may be a symbol or a compiled function object."
              (format "an %s" interactive-button))
             ((and callable-p autoloaded-p)
              (format "an %s" autoload-button))
+            ((and (not callable-p)
+                  (local-variable-if-set-p sym))
+             (format "a %s" buffer-local-button))
             (t
              "a")))
           (kind
@@ -1708,27 +1762,34 @@ state of the current symbol."
        (helpful--heading (format "%s Signature" sym-type))
        (helpful--syntax-highlight (helpful--signature helpful--sym))))
 
-    (-when-let (docstring (helpful--docstring helpful--sym helpful--callable-p))
-      (helpful--insert-section-break)
-      (insert
-       (helpful--heading (format "%s Documentation" sym-type))
-       (helpful--format-docstring docstring))
-      (when (helpful--in-manual-p helpful--sym)
-        (insert "\n\n")
-        (insert (helpful--make-manual-button helpful--sym))))
-
     (when (not helpful--callable-p)
       (helpful--insert-section-break)
       (let* ((sym helpful--sym)
-             (val-buf (or helpful--associated-buffer (current-buffer)))
-             (val (helpful--sym-value sym val-buf))
+             (val (helpful--sym-value sym helpful--associated-buffer))
              (multiple-views-p
               (or (stringp val)
                   (keymapp val)
                   (and (s-ends-with-p "-hook" (symbol-name sym))
                        (consp val)))))
         (insert
-         (helpful--heading "Value")
+         (helpful--heading
+          (cond
+           ;; Buffer-local variable and we're looking at the value in
+           ;; a specific buffer.
+           ((and
+             helpful--associated-buffer
+             (local-variable-p sym helpful--associated-buffer))
+            (format "Value in %s"
+                    (helpful--button
+                     (format "#<buffer %s>" (buffer-name helpful--associated-buffer))
+                     'helpful-buffer-button
+                     'buffer helpful--associated-buffer
+                     'position pos)))
+           ;; Buffer-local variable but default value.
+           ((local-variable-if-set-p sym)
+            "Default Value")
+           ;; This variable is not buffer-local.
+           (t "Value")))
          (cond
           (helpful--view-literal
            (helpful--pretty-print val))
@@ -1749,11 +1810,35 @@ state of the current symbol."
          "\n\n")
         (when multiple-views-p
           (insert (helpful--make-toggle-literal-button) " "))
-        (when (memq (helpful--sym-value helpful--sym val-buf) '(nil t))
-          (insert (helpful--make-toggle-button helpful--sym val-buf) " "))
-        (insert (helpful--make-set-button helpful--sym val-buf))
+
+        (when (local-variable-if-set-p sym)
+          (insert
+           (helpful--button
+            "Buffer values"
+            'helpful-associated-buffer-button
+            'symbol sym
+            'prompt-p t)
+           " "
+           (helpful--button
+            "Default value"
+            'helpful-associated-buffer-button
+            'symbol sym
+            'prompt-p nil)
+           " "))
+        (when (memq (helpful--sym-value helpful--sym helpful--associated-buffer) '(nil t))
+          (insert (helpful--make-toggle-button helpful--sym helpful--associated-buffer) " "))
+        (insert (helpful--make-set-button helpful--sym helpful--associated-buffer))
         (when (custom-variable-p helpful--sym)
           (insert " " (helpful--make-customize-button helpful--sym)))))
+
+    (-when-let (docstring (helpful--docstring helpful--sym helpful--callable-p))
+      (helpful--insert-section-break)
+      (insert
+       (helpful--heading (format "%s Documentation" sym-type))
+       (helpful--format-docstring docstring))
+      (when (helpful--in-manual-p helpful--sym)
+        (insert "\n\n")
+        (insert (helpful--make-manual-button helpful--sym))))
 
     ;; Show keybindings.
     ;; TODO: allow users to conveniently add and remove keybindings.
