@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20180725.1119
+;; Package-Version: 20180726.332
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -90,7 +90,8 @@
                                  . ("solargraph" "socket" "--port"
                                     :autoport))
                                 (php-mode . ("php" "vendor/felixfbecker/\
-language-server/bin/php-language-server.php")))
+language-server/bin/php-language-server.php"))
+                                (haskell-mode . ("hie-wrapper")))
   "How the command `eglot' guesses the server to start.
 An association list of (MAJOR-MODE . CONTACT) pairs.  MAJOR-MODE
 is a mode symbol, or a list of mode symbols.  The associated
