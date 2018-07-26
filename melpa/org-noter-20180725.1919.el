@@ -5,9 +5,9 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 1.1.0
+;; Package-Version: 20180725.1919
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
-;; Version: 1.1.0
+;; Version: 1.1.1
 
 ;; This file is not part of GNU Emacs.
 
@@ -423,13 +423,26 @@ This is needed in order to keep Emacs from hanging when doing many syncs."
            (scroll-right current-scroll)
            (scroll-left goal t)))))))
 
-(defun org-noter--insert-heading (level)
+(defun org-noter--insert-heading (level title &optional newlines-number)
+  "Insert a new heading at LEVEL with TITLE.
+The point will be at the start of the contents, after any
+properties, by a margin of NEWLINES-NUMBER."
   (org-insert-heading)
   (let* ((initial-level (org-element-property :level (org-element-at-point)))
          (changer (if (> level initial-level) 'org-do-demote 'org-do-promote))
          (number-of-times (abs (- level initial-level))))
     (dotimes (_ number-of-times)
-      (funcall changer))))
+      (funcall changer))
+
+    (insert title)
+
+    (org-end-of-subtree)
+    (while (= 32 (char-syntax (char-before))) (backward-char))
+
+    (dotimes (_ (or newlines-number 1))
+      (if (and (not (eobp)) (org-next-line-empty-p))
+          (forward-line)
+        (insert "\n")))))
 
 (defun org-noter--narrow-to-root (ast)
   (when ast
@@ -822,6 +835,7 @@ a continuous group of notes."
                (vector 'nov (org-noter--doc-approx-location (window-start))
                        (org-noter--doc-approx-location (window-end nil t))))))
             result group)
+
        (org-element-map contents 'headline
          (lambda (headline)
            (let ((property (org-noter--location-property headline)))
@@ -859,17 +873,17 @@ a continuous group of notes."
 ;; NOTE(nox): From machc/pdf-tools-org
 (defun org-noter--pdf-tools-edges-to-region (edges)
   "Get 4-entry region (LEFT TOP RIGHT BOTTOM) from several EDGES."
-  (let ((left0 (nth 0 (car edges)))
-        (top0 (nth 1 (car edges)))
-        (bottom0 (nth 3 (car edges)))
-        (top1 (nth 1 (car (last edges))))
-        (right1 (nth 2 (car (last edges))))
-        (bottom1 (nth 3 (car (last edges))))
-        (n (safe-length edges)))
-    (list left0
-          (+ top0 (/ (- bottom0 top0) 3))
-          right1
-          (- bottom1 (/ (- bottom1 top1) 3)))))
+  (when edges
+    (let ((left0 (nth 0 (car edges)))
+          (top0 (nth 1 (car edges)))
+          (bottom0 (nth 3 (car edges)))
+          (top1 (nth 1 (car (last edges))))
+          (right1 (nth 2 (car (last edges))))
+          (bottom1 (nth 3 (car (last edges)))))
+      (list left0
+            (+ top0 (/ (- bottom0 top0) 3))
+            right1
+            (- bottom1 (/ (- bottom1 top1) 3))))))
 
 (defun org-noter--check-if-document-is-annotated-on-file (document-path notes-path)
   ;; NOTE(nox): In order to insert the correct file contents
@@ -1093,11 +1107,15 @@ Only available with PDF Tools."
    (cond
     ((eq (org-noter--session-doc-mode session) 'pdf-view-mode)
      (let* ((ast (org-noter--parse-root))
-            (level (org-element-property :level ast))
-            output-data)
+            (top-level (org-element-property :level ast))
+            (options '(("Outline" . (outline))
+                       ("Annotations" . (annots))
+                       ("Both" . (outline annots))))
+            answer output-data)
        (with-current-buffer (org-noter--session-doc-buffer session)
-         (cond
-          ((string= "Outline" (completing-read "What do you want to import? " '("Outline" "Annotations")))
+         (setq answer (assoc (completing-read "What do you want to import? " options nil t) options))
+
+         (when (memq 'outline answer)
            (dolist (item (pdf-info-outline))
              (let ((type  (alist-get 'type item))
                    (page  (alist-get 'page item))
@@ -1105,85 +1123,134 @@ Only available with PDF Tools."
                    (title (alist-get 'title item))
                    (top   (alist-get 'top item)))
                (when (and (eq type 'goto-dest) (> page 0))
-                 (push (vector title (cons page top) (1+ depth) nil) output-data))))
-           (when output-data
-             (setq output-data (nreverse output-data))
-             (push (vector "Outline" nil 1 nil) output-data)))
-          (t
+                 (push (vector title (cons page top) (1+ depth) nil) output-data)))))
+
+         (when (memq 'annots answer)
            (let ((possible-annots (list '("Highlights" . highlight)
                                         '("Underlines" . underline)
                                         '("Squigglies" . squiggly)
                                         '("Text notes" . text)
                                         '("Strikeouts" . strike-out)
-                                        '("Links" . link)))
-                 chosen-annots insert-contents)
+                                        '("Links" . link)
+                                        '("ALL" . all)))
+                 chosen-annots insert-contents pages-with-links)
              (while (> (length possible-annots) 1)
                (let* ((chosen-string (completing-read "Which types of annotations do you want? "
                                                       possible-annots nil t))
                       (chosen-pair (assoc chosen-string possible-annots)))
-                 (if (not (cdr chosen-pair))
-                     (setq possible-annots nil)
-                   (push (cdr chosen-pair) chosen-annots)
-                   (setq possible-annots (delq chosen-pair possible-annots))
-                   (when (= 1 (length chosen-annots)) (push '("DONE") possible-annots)))))
+                 (cond ((eq (cdr chosen-pair) 'all)
+                        (dolist (annot possible-annots)
+                          (when (and (cdr annot) (not (eq (cdr annot) 'all)))
+                            (push (cdr annot) chosen-annots)))
+                        (setq possible-annots nil))
+                       ((cdr chosen-pair)
+                        (push (cdr chosen-pair) chosen-annots)
+                        (setq possible-annots (delq chosen-pair possible-annots))
+                        (when (= 1 (length chosen-annots)) (push '("DONE") possible-annots)))
+                       (t
+                        (setq possible-annots nil)))))
 
              (setq insert-contents (y-or-n-p "Should we insert the annotations contents? "))
 
              (dolist (item (pdf-info-getannots))
                (let* ((type  (alist-get 'type item))
                       (page  (alist-get 'page item))
-                      (markup-edges (alist-get 'markup-edges item))
-                      (edges (or (car markup-edges)
+                      (edges (or (org-noter--pdf-tools-edges-to-region (alist-get 'markup-edges item))
                                  (alist-get 'edges item)))
+                      (top (nth 1 edges))
                       (item-subject (alist-get 'subject item))
                       (item-contents (alist-get 'contents item))
                       name contents)
                  (when (and (memq type chosen-annots) (> page 0))
-                   (setq name (cond ((eq type 'highlight) "Highlight")
-                                    ((eq type 'underline) "Underline")
-                                    ((eq type 'squiggly) "Squiggly")
-                                    ((eq type 'text) "Text note")
-                                    ((eq type 'strike-out) "Strikeout")
-                                    ((eq type 'link) "Link")))
-                   (when insert-contents
-                     (setq contents (concat (or item-subject "") (if (and item-subject item-contents) "\n" "")
-                                            (or item-contents "")))
-                     (when markup-edges
-                       (setq contents
-                             (concat
-                              (if (> (length contents) 0) "\n" "")
-                              (pdf-info-gettext page (org-noter--pdf-tools-edges-to-region markup-edges))))))
-                   (push (vector (format "%s on page %d" name page) (cons page (nth 1 edges)) 2 contents)
-                         output-data)))))
-           (when output-data
-             (setq output-data
-                   (sort output-data
-                         (lambda (e1 e2)
-                           (or (not (aref e1 1))
-                               (and (aref e2 1)
-                                    (org-noter--compare-location-cons '< (aref e1 1) (aref e2 1)))))))
-             (push (vector "Annotations" nil 1 nil) output-data)))))
+                   (if (eq type 'link)
+                       (cl-pushnew page pages-with-links)
+                     (setq name (cond ((eq type 'highlight)  "Highlight")
+                                      ((eq type 'underline)  "Underline")
+                                      ((eq type 'squiggly)   "Squiggly")
+                                      ((eq type 'text)       "Text note")
+                                      ((eq type 'strike-out) "Strikeout")))
+
+                     (when insert-contents
+                       (setq contents (cons (pdf-info-gettext page edges)
+                                            (and (or (and item-subject (> (length item-subject) 0))
+                                                     (and item-contents (> (length item-contents) 0)))
+                                                 (concat (or item-subject "")
+                                                         (if (and item-subject item-contents) "\n" "")
+                                                         (or item-contents ""))))))
+
+                     (push (vector (format "%s on page %d" name page) (cons page top) 'inside contents)
+                           output-data)))))
+
+             (dolist (page pages-with-links)
+               (let ((links (pdf-info-pagelinks page))
+                     type)
+                 (dolist (link links)
+                   (setq type (alist-get 'type  link))
+                   (unless (eq type 'goto-dest) ;; NOTE(nox): Ignore internal links
+                     (let* ((edges (alist-get 'edges link))
+                            (title (alist-get 'title link))
+                            (top (nth 1 edges))
+                            (target-page (alist-get 'page link))
+                            target heading-text)
+
+                       (unless (and title (> (length title) 0)) (setq title (pdf-info-gettext page edges)))
+
+                       (cond
+                        ((eq type 'uri)
+                         (setq target (alist-get 'uri link)
+                               heading-text (format "Link on page %d: [[%s][%s]]" page target title)))
+
+                        ((eq type 'goto-remote)
+                         (setq target (concat "file:" (alist-get 'filename link))
+                               heading-text (format "Link to document on page %d: [[%s][%s]]" page target title))
+                         (when target-page
+                           (setq heading-text (concat heading-text (format " (target page: %d)" target-page)))))
+
+                        (t (error "Unexpected link type")))
+
+                       (push (vector heading-text (cons page top) 'inside nil) output-data))))))))
+
+         (when output-data
+           (setq output-data
+                 (sort output-data
+                       (lambda (e1 e2)
+                         (or (not (aref e1 1))
+                             (and (aref e2 1)
+                                  (org-noter--compare-location-cons '< (aref e1 1) (aref e2 1)))))))
+           (push (vector "Skeleton" nil 1 nil) output-data)))
 
        (with-current-buffer (org-noter--session-notes-buffer session)
-         ;; NOTE(nox): org-with-wide-buffer can't be used because we want to set the
-         ;; narrow region
+         ;; NOTE(nox): org-with-wide-buffer can't be used because we want to reset the
+         ;; narrow region to include the new headings
          (widen)
          (save-excursion
            (goto-char (org-element-property :end ast))
 
-           (dolist (data output-data)
-             (org-noter--insert-heading (+ level (aref data 2)))
-             (insert (aref data 0))
-             (when (aref data 1)
-               (org-entry-put
-                nil org-noter-property-note-location (org-noter--pretty-print-location (aref data 1))))
-             (org-end-of-subtree)
-             (when (aref data 3)
-               (while (= 32 (char-syntax (char-before))) (backward-char))
-               (if (and (not (eobp)) (org-next-line-empty-p))
-                   (forward-line)
-                 (insert "\n"))
-               (insert (aref data 3))))
+           (let (last-absolute-level
+                 title location relative-level contents
+                 level)
+             (dolist (data output-data)
+               (setq title          (aref data 0)
+                     location       (aref data 1)
+                     relative-level (aref data 2)
+                     contents       (aref data 3))
+
+               (if (symbolp relative-level)
+                   (setq level (1+ last-absolute-level))
+                 (setq last-absolute-level (+ top-level relative-level)
+                       level last-absolute-level))
+
+               (org-noter--insert-heading level title)
+
+               (when location
+                 (org-entry-put nil org-noter-property-note-location (org-noter--pretty-print-location location)))
+
+               (when (car contents)
+                 (org-noter--insert-heading (1+ level) "Contents")
+                 (insert (car contents)))
+               (when (cdr contents)
+                 (org-noter--insert-heading (1+ level) "Comment")
+                 (insert (cdr contents)))))
 
            (setq ast (org-noter--parse-root))
            (org-noter--narrow-to-root ast)
@@ -1254,8 +1321,9 @@ on how to copy the selected text into a note."
          (select-frame-set-input-focus (window-frame window))
          (select-window window)
 
-         ;; NOTE(nox): Need to be careful changing the next part, it is a bit complicated to
-         ;; get it right...
+         ;; IMPORTANT(nox): Need to be careful changing the next part, it is a bit
+         ;; complicated to get it right...
+
          (if (and notes-in-view (not arg))
              (let ((point (point))
                    default note collection)
@@ -1316,7 +1384,9 @@ on how to copy the selected text into a note."
              (if best-previous-element
                  (progn
                    (goto-char (org-element-property :end best-previous-element))
-                   (org-noter--insert-heading (org-element-property :level best-previous-element)))
+                   (org-noter--insert-heading (org-element-property :level best-previous-element) title
+                                              wanted-post-blank))
+
                (goto-char
                 (org-element-map contents 'section
                   (lambda (section)
@@ -1324,17 +1394,9 @@ on how to copy the selected text into a note."
                   nil t org-element-all-elements))
                ;; NOTE(nox): This is needed to insert in the right place...
                (outline-show-entry)
-               (org-noter--insert-heading (1+ (org-element-property :level ast))))
-             (insert title)
-             (org-entry-put nil org-noter-property-note-location
-                            (org-noter--pretty-print-location location-cons))
+               (org-noter--insert-heading (1+ (org-element-property :level ast)) title wanted-post-blank))
 
-             (goto-char (org-element-property :contents-end (org-element-at-point)))
-             (while (= 32 (char-syntax (char-before))) (backward-char))
-             (dotimes (_ wanted-post-blank)
-               (if (and (not (eobp)) (org-next-line-empty-p))
-                   (forward-line)
-                 (insert "\n")))
+             (org-entry-put nil org-noter-property-note-location (org-noter--pretty-print-location location-cons))
 
              (setf (org-noter--session-num-notes-in-view session)
                    (1+ (org-noter--session-num-notes-in-view session)))))
@@ -1665,7 +1727,7 @@ notes file, even if it finds one."
         ;; and it will end up in the correct order
         (dolist (name search-names)
           (let ((directory (locate-dominating-file document-directory name))
-                file buffer)
+                file)
             (when directory
               (setq file (expand-file-name name directory))
               (unless (member file notes-files) (push file notes-files))
