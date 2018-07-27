@@ -1,0 +1,2 @@
+
+(all-the-icons-dired . [(20170418 2131) ((emacs (24 4)) (all-the-icons (2 2 0))) "Shows icons for each file in dired mode" single])

@@ -1,0 +1,2 @@
+
+(apib-mode . [(20170520 1358) ((markdown-mode (2 1))) "Major mode for API Blueprint files" single])

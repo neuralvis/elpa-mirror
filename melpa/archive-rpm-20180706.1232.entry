@@ -1,0 +1,2 @@
+
+(archive-rpm . [(20180706 1232) ((emacs (24 4))) "RPM and CPIO support for archive-mode" tar])

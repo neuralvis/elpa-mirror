@@ -1,0 +1,2 @@
+
+(arch-packer . [(20170730 1321) ((emacs (25 1)) (s (1 11 0)) (async (1 9 2)) (dash (2 12 0))) "Arch Linux package management frontend" single])

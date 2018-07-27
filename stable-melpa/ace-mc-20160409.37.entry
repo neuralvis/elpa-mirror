@@ -1,0 +1,2 @@
+
+(ace-mc . [(20160409 37) ((ace-jump-mode (1 0)) (multiple-cursors (1 0)) (dash (2 10 0))) "Add multiple cursors quickly using ace jump" single])

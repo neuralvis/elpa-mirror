@@ -1,0 +1,2 @@
+
+(ace-flyspell . [(20170309 509) ((avy (0 4 0))) "Jump to and correct spelling errors using `ace-jump-mode' and flyspell" single])

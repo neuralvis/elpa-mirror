@@ -1,0 +1,2 @@
+
+(ahungry-theme . [(20180131 328) ((emacs (24))) "Ahungry color theme for Emacs.  Make sure to (load-theme 'ahungry)." single])

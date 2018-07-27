@@ -1,0 +1,2 @@
+
+(apt-sources-list . [(20180527 1241) ((emacs (24 4))) "Mode for editing APT source.list files" single])

@@ -1,0 +1,2 @@
+
+(ac-js2 . [(20140906 1142) ((js2-mode (20090723)) (skewer-mode (1 4))) "Auto-complete source for Js2-mode, with navigation" tar])

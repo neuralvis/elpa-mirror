@@ -1,0 +1,2 @@
+
+(add-hooks . [(20171217 123) nil "Functions for setting multiple hooks" single])

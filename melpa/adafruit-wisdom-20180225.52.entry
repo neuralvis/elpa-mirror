@@ -1,0 +1,2 @@
+
+(adafruit-wisdom . [(20180225 52) ((emacs (25))) "Get/display adafruit.com quotes" single])

@@ -1,0 +1,2 @@
+
+(ace-isearch . [(20170506 712) ((emacs (24))) "A seamless bridge between isearch, ace-jump-mode, avy, helm-swoop and swiper" single])

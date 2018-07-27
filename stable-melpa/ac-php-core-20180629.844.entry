@@ -1,0 +1,2 @@
+
+(ac-php-core . [(20180629 844) ((emacs (24)) (dash (1)) (php-mode (1)) (xcscope (1)) (s (1)) (f (0 17 0)) (popup (0 5 0))) "gen tags for php" tar])

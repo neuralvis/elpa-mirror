@@ -1,0 +1,2 @@
+
+(annotate-depth . [(20160520 2040) nil "Annotate buffer if indentation depth is beyond threshold." single])

@@ -1,0 +1,2 @@
+
+(ack-menu . [(20150504 2022) ((mag-menu (0 1 0))) "A menu-based front-end for ack" single])

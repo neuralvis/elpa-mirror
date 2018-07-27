@@ -1,0 +1,2 @@
+
+(aggressive-fill-paragraph . [(20170902 1405) ((dash (2 10 0))) "A mode to automatically keep paragraphs filled" single])

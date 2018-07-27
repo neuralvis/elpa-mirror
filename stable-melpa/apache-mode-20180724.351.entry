@@ -1,0 +1,2 @@
+
+(apache-mode . [(20180724 351) nil "major mode for editing Apache configuration files" single])

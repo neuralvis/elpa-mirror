@@ -1,0 +1,2 @@
+
+(ac-rtags . [(20170523 454) ((auto-complete (1 4 0)) (rtags (2 10))) "auto-complete back-end for RTags" single])

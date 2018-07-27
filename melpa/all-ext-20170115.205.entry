@@ -1,0 +1,2 @@
+
+(all-ext . [(20170115 205) ((all (1 0))) "M-x all with helm-swoop/anything/multiple-cursors/line-number" single])
