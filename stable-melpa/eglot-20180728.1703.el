@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20180727.906
+;; Package-Version: 20180728.1703
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1108,7 +1108,7 @@ When called interactively, use the currently active server"
     (when (eglot--server-capable :textDocumentSync :willSaveWaitUntil)
       (ignore-errors
         (eglot--apply-text-edits
-         (jsonrpc-request server :textDocument/willSaveWaituntil params
+         (jsonrpc-request server :textDocument/willSaveWaitUntil params
                           :timeout 0.5))))))
 
 (defun eglot--signal-textDocument/didSave ()
@@ -1439,7 +1439,23 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
                       (save-excursion
                         (save-restriction
                           (narrow-to-region beg end)
-                          (replace-buffer-contents temp)))
+
+                          ;; On emacs versions < 26.2,
+                          ;; `replace-buffer-contents' is buggy - it calls
+                          ;; change functions with invalid arguments - so we
+                          ;; manually call the change functions here.
+                          ;;
+                          ;; See emacs bugs #32237, #32278:
+                          ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=32237
+                          ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=32278
+                          (let ((inhibit-modification-hooks t)
+                                (length (- end beg)))
+                            (run-hook-with-args 'before-change-functions
+                                                beg end)
+                            (replace-buffer-contents temp)
+                            (run-hook-with-args 'after-change-functions
+                                                beg (+ beg (length newText))
+                                                length))))
                       (progress-reporter-update reporter (cl-incf done)))))))
             (mapcar (jsonrpc-lambda (&key range newText)
                       (cons newText (eglot--range-region range 'markers)))

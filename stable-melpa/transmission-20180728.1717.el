@@ -4,7 +4,7 @@
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 0.12.1
-;; Package-Version: 20180610.2353
+;; Package-Version: 20180728.1717
 ;; Package-Requires: ((emacs "24.4") (let-alist "1.0.5"))
 ;; Keywords: comm, tools
 
@@ -1626,9 +1626,9 @@ Otherwise, with a prefix arg, mark files on the next ARG lines."
   "Toggle mark on all items."
   (interactive)
   (let ((inhibit-read-only t) ids tag key)
-    (when (setq key (pcase-exhaustive major-mode
-                      (`transmission-mode 'id)
-                      (`transmission-files-mode 'index)))
+    (when (setq key (cl-ecase major-mode
+                      (transmission-mode 'id)
+                      (transmission-files-mode 'index)))
       (save-excursion
         (save-restriction
           (widen)
@@ -1990,9 +1990,9 @@ torrent is marked.
 ID is a Lisp object identifying the entry to print, and COLS is a vector
 of column descriptors."
   (tabulated-list-print-entry id cols)
-  (let* ((key (pcase-exhaustive major-mode
-                (`transmission-mode 'id)
-                (`transmission-files-mode 'index)))
+  (let* ((key (cl-ecase major-mode
+                (transmission-mode 'id)
+                (transmission-files-mode 'index)))
          (item-id (cdr (assq key id))))
     (when (memq item-id transmission-marked-ids)
       (save-excursion
