@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20180726.616
+;; Package-Version: 20180729.943
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.9.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
@@ -1734,7 +1734,7 @@ Useful if a file has been renamed."
                 (replace-match nsname nil nil nil 4)
                 (message "ns form updated to `%s'" nsname)
                 (setq clojure-cached-ns nsname))
-            (error "Namespace not found")))))))
+            (user-error "Can't find ns form")))))))
 
 (defun clojure--sort-following-sexps ()
   "Sort sexps between point and end of current sexp.
@@ -1800,7 +1800,7 @@ content) are considered part of the preceding sexp."
             (redisplay)
             (message "ns form has been sorted")
             (sleep-for 0.1))))
-    (user-error "Namespace not found")))
+    (user-error "Can't find ns form")))
 
 (defconst clojure-namespace-name-regex
   (rx line-start
