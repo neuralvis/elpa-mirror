@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20180728.1703
+;; Package-Version: 20180728.1826
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -184,6 +184,7 @@ lasted more than that many seconds."
              :documentHighlight  `(:dynamicRegistration :json-false)
              :codeAction         `(:dynamicRegistration :json-false)
              :formatting         `(:dynamicRegistration :json-false)
+             :rangeFormatting    `(:dynamicRegistration :json-false)
              :rename             `(:dynamicRegistration :json-false)
              :publishDiagnostics `(:relatedInformation :json-false))
             :experimental (list))))
@@ -598,10 +599,10 @@ CONNECT-ARGS are passed as additional arguments to
 
 (defun eglot--pos-to-lsp-position (&optional pos)
   "Convert point POS to LSP position."
-  (save-excursion
-    (list :line (1- (line-number-at-pos pos t)) ; F!@&#$CKING OFF-BY-ONE
-          :character (- (goto-char (or pos (point)))
-                        (line-beginning-position)))))
+  (eglot--widening
+   (list :line (1- (line-number-at-pos pos t)) ; F!@&#$CKING OFF-BY-ONE
+         :character (- (goto-char (or pos (point)))
+                       (line-beginning-position)))))
 
 (defun eglot--lsp-position-to-point (pos-plist &optional marker)
   "Convert LSP position POS-PLIST to Emacs point.
@@ -1228,17 +1229,35 @@ DUMMY is ignored."
 (defun eglot-format-buffer ()
   "Format contents of current buffer."
   (interactive)
-  (unless (eglot--server-capable :documentFormattingProvider)
-    (eglot--error "Server can't format!"))
-  (eglot--apply-text-edits
-   (jsonrpc-request
-    (eglot--current-server-or-lose)
-    :textDocument/formatting
-    (list :textDocument (eglot--TextDocumentIdentifier)
-          :options (list :tabSize tab-width
-                         :insertSpaces
-                         (if indent-tabs-mode :json-false t)))
-    :deferred :textDocument/formatting)))
+  (eglot-format nil nil))
+
+(defun eglot-format (&optional beg end)
+  "Format region BEG END.
+If either BEG or END is nil, format entire buffer.
+Interactively, format active region, or entire buffer if region
+is not active."
+  (interactive (and (region-active-p) (list (region-beginning) (region-end))))
+  (pcase-let ((`(,method ,cap ,args)
+               (cond
+                ((and beg end)
+                 `(:textDocument/rangeFormatting
+                   :documentRangeFormattingProvider
+                   (:range ,(list :start (eglot--pos-to-lsp-position beg)
+                                  :end (eglot--pos-to-lsp-position end)))))
+                (t
+                 '(:textDocument/formatting :documentFormattingProvider nil)))))
+    (unless (eglot--server-capable cap)
+      (eglot--error "Server can't format!"))
+    (eglot--apply-text-edits
+     (jsonrpc-request
+      (eglot--current-server-or-lose)
+      method
+      (cl-list*
+       :textDocument (eglot--TextDocumentIdentifier)
+       :options (list :tabSize tab-width
+                      :insertSpaces (if indent-tabs-mode :json-false t))
+       args)
+      :deferred method))))
 
 (defun eglot-completion-at-point ()
   "EGLOT's `completion-at-point' function."
