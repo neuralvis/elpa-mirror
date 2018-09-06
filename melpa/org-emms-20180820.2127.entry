@@ -1,0 +1,2 @@
+
+(org-emms . [(20180820 2127) ((emacs (24))) "Play multimedia files from org-mode" single ((:commit . "69752f482dbc265aafedbf1d19e7fd8f4265ca0b") (:keywords "multimedia") (:authors ("Jonathan Gregory <jgrg at autistici dot org>")) (:maintainer "Jonathan Gregory <jgrg at autistici dot org>") (:url . "https://github.com/jagrg/org-emms"))])

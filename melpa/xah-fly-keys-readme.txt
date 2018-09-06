@@ -13,14 +13,19 @@ put the following in your emacs init file:
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 (require 'xah-fly-keys)
 (xah-fly-keys-set-layout "qwerty") ; required if you use qwerty
-for other layout, use one of
+
+possible layout values:
+"qwerty"
+"qwerty-abnt"
 "qwertz"
-"workman"
-"programer-dvorak"
 "dvorak"
+"programer-dvorak"
 "colemak"
 "colemak-mod-dh"
-default is dvorak
+"workman"
+
+dvorak is the default
+
 (xah-fly-keys 1)
 
 --------------------------------------------------

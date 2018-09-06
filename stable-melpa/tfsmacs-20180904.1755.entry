@@ -1,0 +1,2 @@
+
+(tfsmacs . [(20180904 1755) ((emacs (25)) (tablist (0 70))) "MS TFS source control interaction." single ((:commit . "32d40a7030775864cbb4d2377bf681dbd2c68e6f") (:keywords "tfs" "vc") (:authors ("Dino Chiesa <dpchiesa@outlook.com>, Sebastian Monia" . "smonia@outlook.com")) (:maintainer "Dino Chiesa <dpchiesa@outlook.com>, Sebastian Monia" . "smonia@outlook.com") (:url . "http://github.com/sebasmonia/tfsmacs/"))])

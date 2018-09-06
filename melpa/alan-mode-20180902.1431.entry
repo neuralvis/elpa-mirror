@@ -1,0 +1,2 @@
+
+(alan-mode . [(20180902 1431) ((flycheck (32)) (emacs (25 1)) (s (1 12))) "Major mode for editing M-industries Alan files" single ((:commit . "998bf0a8a494783c65fd9fa2c1fd6f081002dc59") (:keywords "alan" "languages") (:authors ("Paul van Dam" . "pvandam@m-industries.com")) (:maintainer "Paul van Dam" . "pvandam@m-industries.com") (:url . "https://github.com/M-industries/AlanForEmacs"))])

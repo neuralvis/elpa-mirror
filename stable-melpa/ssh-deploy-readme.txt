@@ -1,8 +1,9 @@
 ssh-deploy enables automatic deploys on explicit-save actions, manual uploads, renaming,
 deleting, downloads, file and directory differences, launching remote terminals (eshell, shell),
-detection of remote changes, remote directory browsing, remote SQL database sessions via TRAMP.
+detection of remote changes, remote directory browsing, remote SQL database sessions and
+running custom deployment scripts via TRAMP.
 
-For asynchrous operations it uses package async.el.
+For asynchronous operations it uses package `async.el'.
 
 By setting the variables (globally, per directory or per file):
 ssh-deploy-root-local,ssh-deploy-root-remote, ssh-deploy-on-explicit-save
@@ -39,6 +40,7 @@ Set permissions to this file to 600 with your user as the owner.
     (global-set-key (kbd "C-c C-z B") (lambda() (interactive)(ssh-deploy-browse-remote-handler) ))
     (global-set-key (kbd "C-c C-z o") (lambda() (interactive)(ssh-deploy-open-remote-file-handler) ))
     (global-set-key (kbd "C-c C-z m") (lambda() (interactive)(ssh-deploy-remote-sql-mysql-handler) ))
+    (global-set-key (kbd "C-c C-z s") (lambda() (interactive)(ssh-deploy-run-deploy-script-handler) ))
 
 - To install and set-up using use-package and hydra do this:
   (use-package ssh-deploy
@@ -60,6 +62,7 @@ _e_: Detect Remote Changes
 _R_: Rename
 _b_: Browse Base                         _B_: Browse Relative
 _o_: Open current file on remote         _m_: Open sql-mysql on remote
+_s_: Run deploy script
 "
       ("f" ssh-deploy-upload-handler-forced)
       ("u" ssh-deploy-upload-handler)
@@ -75,7 +78,8 @@ _o_: Open current file on remote         _m_: Open sql-mysql on remote
       ("b" ssh-deploy-browse-remote-base-handler)
       ("B" ssh-deploy-browse-remote-handler)
       ("o" ssh-deploy-open-remote-file-handler)
-      ("m" ssh-deploy-remote-sql-mysql-handler)))
+      ("m" ssh-deploy-remote-sql-mysql-handler)
+      ("s" ssh-deploy-run-deploy-script-handler)))
 
 
 Here is an example for SSH deployment, /Users/Chris/Web/Site1/.dir-locals.el:
@@ -92,6 +96,7 @@ Here is an example for SFTP deployment, /Users/Chris/Web/Site2/.dir-locals.el:
   (ssh-deploy-root-remote . "/sftp:myuser@myserver.com:/var/www/site2/")
   (ssh-deploy-on-explicit-save . nil)
   (ssh-deploy-async . nil)
+  (ssh-deploy-script . (lambda() (let ((default-directory ssh-deploy-root-remote))(shell-command "bash compile.sh"))))
 )))
 
 Here is an example for FTP deployment, /Users/Chris/Web/Site3/.dir-locals.el:
@@ -119,5 +124,7 @@ Here is a list of other variables you can set globally or per directory:
 * `ssh-deploy-remote-sql-server' - Default server when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-sql-user' - Default user when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-shell-executable' - Default shell executable when launching shell on remote host
+* `ssh-deploy-verbose' - Show messages in message buffer when starting and ending actions, default t *(boolean)*
+* `ssh-deploy-script' - Our custom lambda function that will be called using (funcall) when running deploy script
 
 Please see README.md from the same repository for extended documentation.

@@ -1,2 +1,2 @@
 
-(thrift . [(20140312 2048) nil "Major mode for Apache Thrift files" single ((:commit . "f2867c24984aa53edec54a138c03db934221bdea") (:keywords "files"))])
+(thrift . [(20140312 2048) nil "Major mode for Apache Thrift files" single ((:commit . "2566ecd5d9999f7ff70e6ac702243f0dfb24e7aa") (:keywords "files"))])

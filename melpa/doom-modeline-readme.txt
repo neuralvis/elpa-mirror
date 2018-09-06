@@ -8,6 +8,9 @@ The DOOM modeline was designed for minimalism, and offers:
 3. Local python/ruby version in the major-mode
 4. A customizable mode-line height (see doom-modeline-height)
 5. An error/warning count segment for flycheck
+6. A workspace number segment for eyebrowse
+7. A window number segment for winum and window-numbering
+8. An indicator for evil state
 
 Installation:
 From melpa, `M-x package-install RET doom-modeline RET`.

@@ -1,0 +1,2 @@
+
+(gf . [(20180822 2025) ((s (1 0)) (ht (2 0))) "Major mode for editing GF code" single ((:commit . "e8e55584b0a473922c58cbb4860306a84c3336e5") (:keywords "languages") (:authors ("Johan Bockgård" . "bojohan+mail@dd.chalmers.se")) (:maintainer "bruno cuconato" . "bcclaro+emacs@gmail.com") (:url . "https://github.com/GrammaticalFramework/gf-emacs-mode"))])

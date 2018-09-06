@@ -1,0 +1,2 @@
+
+(lsp-go . [(20180818 704) ((lsp-mode (3 0))) "Go support for lsp-mode" single ((:commit . "55601ec667df887fc1f9645e8bb8f29c774a175d") (:keywords "go" "golang") (:authors ("Vibhav Pant" . "vibhavp@gmail.com")) (:maintainer "Vibhav Pant" . "vibhavp@gmail.com") (:url . "https://github.com/emacs-lsp/lsp-go"))])

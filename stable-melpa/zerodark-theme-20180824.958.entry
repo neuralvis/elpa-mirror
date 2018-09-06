@@ -1,0 +1,2 @@
+
+(zerodark-theme . [(20180824 958) ((all-the-icons (2 0 0)) (magit (2 8 0)) (flycheck (29))) "A dark, medium contrast theme for Emacs" single ((:commit . "2391e094bf4e44bf7ec37e17456aae7df1bcd8fb") (:keywords "themes") (:authors ("Nicolas Petton" . "nicolas@petton.fr")) (:maintainer "Nicolas Petton" . "nicolas@petton.fr") (:url . "https://github.com/NicolasPetton/zerodark-theme"))])

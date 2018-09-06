@@ -1,13 +1,29 @@
-C-x 7 <command> causes a buffer displayed by <command>
-to appear in another window in the same frame; a window
+other-frame-window provides prefix key sequences to control where a
+new buffer is created by a subsequent command. With no prefix, the
+buffer is created where the command decides (nominally the currently
+selected window). Prefix C-x 7 causes the buffer to appear in
+another window in the same frame; a window is created if necessary.
+Prefix C-x 9 causes the buffer to appear in another frame; a frame
 is created if necessary.
 
-C-x 9 <command> causes a buffer displayed by <command>
-to appear in another frame; a frame is created if necessary.
+Some commands display new buffers in other than the currently
+selected window, which defeats the purpose of ‘other-frame-window’ in
+the absense of a prefix. To override that, customize
+‘display-buffer-alist’ for those commands. For example, to override
+‘gud-gdb’:
+
+(add-to-list
+ 'display-buffer-alist
+ (cons "\\*gud"
+	 (cons 'display-buffer-same-window nil)))
+)
+
+Other key bindings provided by other-frame-window:
 
 C-x W moves the current buffer to another window in the same frame.
 
 C-x F moves the current buffer to another frame.
+
 
 In addition, C-x 7 and C-x 9 can be followed by these keys:
 

@@ -5,6 +5,7 @@ package and formatting command for each language.  Just do M-x
 
 Supported languages:
 
+- Assembly (asmfmt)
 - C/C++/Objective-C (clang-format)
 - Crystal (crystal tool format)
 - CSS/Less/SCSS (prettier)
@@ -23,7 +24,7 @@ Supported languages:
 - OCaml (ocp-indent)
 - Perl (perltidy)
 - Protocol Buffers (clang-format)
-- Python (autopep8)
+- Python (black)
 - Ruby (rufo)
 - Rust (rustfmt)
 - Shell script (shfmt)

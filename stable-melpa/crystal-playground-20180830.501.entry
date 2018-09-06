@@ -1,0 +1,2 @@
+
+(crystal-playground . [(20180830 501) ((emacs (25)) (crystal-mode (0 1 2))) "Local crystal playground for short code snippets." single ((:commit . "532dc7e4239eb4bdd241bc4347d34760344c1ebb") (:keywords "tools" "crystal") (:authors ("Jason Howell")) (:maintainer "Jason Howell") (:url . "https://github.com/jasonrobot/crystal-playground"))])
