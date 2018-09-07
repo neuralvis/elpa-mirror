@@ -1,2 +1,2 @@
 
-(fuel . [(20180224 2211) ((cl-lib (0 2)) (emacs (24 2))) "Major mode for the Factor programming language." tar ((:commit . "a51fd04d0b88bdbe16fc6adbc5fe2e0b9a68fa66"))])
+(fuel . [(20180224 2211) ((cl-lib (0 2)) (emacs (24 2))) "Major mode for the Factor programming language." tar ((:commit . "fd7e19b6a0e17162180bfa1f6d803441736e3e9e"))])
