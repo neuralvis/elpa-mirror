@@ -3,7 +3,7 @@
 ;; Author: 纪秀峰 <jixiuf at gmail dot com>
 ;; Copyright (C) 2011~2015,纪秀峰 , all rights reserved.
 ;; Version: 1.0
-;; Package-Version: 20160822.1355
+;; Package-Version: 20180907.1339
 ;; URL:   https://github.com/jixiuf/dired-filetype-face
 ;; Keywords: dired filetype face
 ;;
@@ -391,7 +391,7 @@ file extensions only, no glob or regexp patterns."
     "sql"
     "st"))
 
-(deffiletype-face "program" "blue")
+(deffiletype-face "program" "green3")
 
 (deffiletype-face-regexp program
   :regexp

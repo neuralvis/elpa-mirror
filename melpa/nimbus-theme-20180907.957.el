@@ -5,7 +5,7 @@
 ;; Author: Marcin Swieczkowski <scatman@bu.edu>
 ;; Created: Thu Mar  2 22:19:19 CET 2017
 ;; Version: 1.0.0
-;; Package-Version: 20180607.236
+;; Package-Version: 20180907.957
 ;; Last-Updated: Wed Apr 12 16:11:07 CEST 2017
 ;;           By: Marcin Swieczkowski
 ;;     Update #: 3
@@ -82,7 +82,7 @@
       (nimbus/black          "black")
 
       (nimbus/cursor         "#f57e00")
-      (nimbus/fringe         "gray11")
+      (nimbus/fringe         "gray10")
       (nimbus/region         "gray35")
 
       (nimbus/bg             "gray10")
