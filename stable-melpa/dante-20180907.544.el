@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20180906.1244
+;; Package-Version: 20180907.544
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -121,7 +121,7 @@ method should not apply."
 (defcustom dante-repl-command-line-methods (-map 'car dante-repl-command-line-methods-alist)
   "Keys in `dante-repl-command-line-methods-alist' to try, in order.
 Consider setting this variable as a directory variable."
-   :group dante :safe t :type '(repeat symbol))
+   :group 'dante :safe t :type '(repeat symbol))
 
 (defvar dante-command-line "command line used to start GHCi")
 
@@ -171,7 +171,7 @@ if the argument is omitted or nil or a positive integer).
 \\{dante-mode-map}"
   :lighter (:eval (concat " Danté:" (dante-status)))
   :keymap dante-mode-map
-  :group dante
+  :group 'dante
   (if dante-mode
       (progn (flycheck-select-checker 'haskell-dante))
       (progn (flycheck-select-checker nil))))

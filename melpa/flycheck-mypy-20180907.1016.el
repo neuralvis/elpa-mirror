@@ -5,7 +5,7 @@
 ;; Author: Lorenzo Bolla <lbolla@gmail.com>
 ;; Created: 14 Septermber 2015
 ;; Version: 1.0
-;; Package-Version: 20180518.704
+;; Package-Version: 20180907.1016
 ;; Package-Requires: ((flycheck "0.18"))
 
 ;;; Commentary:
@@ -66,7 +66,9 @@ See URL `http://mypy-lang.org/'."
             (eval flycheck-python-mypy-args)
             source-original)
   :error-patterns
-  ((error line-start (file-name) ":" line ": error:" (message) line-end))
+  ((error line-start (file-name) ":" line ": error:" (message) line-end)
+   (warning line-start (file-name) ":" line ": note:" (message) line-end)
+   (info line-start (file-name) ":" line ": note:" (message) line-end))
   :modes python-mode)
 
 (add-to-list 'flycheck-checkers 'python-mypy t)
