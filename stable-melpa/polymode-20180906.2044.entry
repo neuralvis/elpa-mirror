@@ -1,0 +1,2 @@
+
+(polymode . [(20180906 2044) ((emacs (25))) "Extensible framework for multiple major modes" tar ((:commit . "9677a35c9a17d8a8a79c1dbe255f1e7bed3e235a") (:keywords "languages" "multi-modes" "processes") (:authors ("Vitalie Spinu")) (:maintainer "Vitalie Spinu") (:url . "https://github.com/vitoshka/polymode"))])

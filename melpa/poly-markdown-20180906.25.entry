@@ -1,2 +1,0 @@
-
-(poly-markdown . [(20180906 25) ((emacs (25)) (polymode (0 1)) (markdown-mode (2 3))) "Polymode for markdown-mode" single ((:commit . "12d4b02b5b8410b27d7d6c78324b2b137c10083c") (:keywords "emacs") (:authors ("Vitalie Spinu")) (:maintainer "Vitalie Spinu") (:url . "https://github.com/polymode/poly-markdown"))])
