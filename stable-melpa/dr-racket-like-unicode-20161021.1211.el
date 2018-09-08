@@ -4,6 +4,7 @@
 
 ;; Author: David Christiansen <david@davidchristiansen.dk>
 ;; Keywords: i18n tools
+;; Package-Version: 20161021.1211
 ;; Package-Requires: ((emacs "24.1"))
 ;; Version: 1.1
 
