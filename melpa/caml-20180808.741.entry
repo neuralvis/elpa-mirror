@@ -1,2 +1,2 @@
 
-(caml . [(20180808 741) nil "OCaml code editing commands for Emacs" tar ((:commit . "5ad0a86fa26f107ab44791b28ee76b8a1e2e15bd") (:keywords "ocaml") (:authors ("Jacques Garrigue" . "garrigue@kurims.kyoto-u.ac.jp") ("Ian T Zimmerman" . "itz@rahul.net")) (:maintainer "Damien Doligez" . "damien.doligez@inria.fr") (:url . "https://github.com/ocaml/ocaml/"))])
+(caml . [(20180808 741) nil "OCaml code editing commands for Emacs" tar ((:commit . "cbae94c0d05dc346e96e62eed47f04f3a1591385") (:keywords "ocaml") (:authors ("Jacques Garrigue" . "garrigue@kurims.kyoto-u.ac.jp") ("Ian T Zimmerman" . "itz@rahul.net")) (:maintainer "Damien Doligez" . "damien.doligez@inria.fr") (:url . "https://github.com/ocaml/ocaml/"))])

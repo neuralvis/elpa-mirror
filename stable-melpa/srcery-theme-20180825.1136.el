@@ -3,7 +3,7 @@
 
 ;; Author: Daniel Berg
 ;; URL: https://github.com/srcery-colors/srcery-emacs
-;; Package-Version: 20180803.846
+;; Package-Version: 20180825.1136
 
 ;; Version: 0.1.0
 ;; Keywords: faces
@@ -2331,8 +2331,8 @@
       (,srcery-256-class (:foreground ,srcery-256-green :weight bold))))
 
    `(sh-quoted-exec
-     ((,srcery-class (:foreground ,srcery-yellow :weight bold))
-      (,srcery-256-class (:foreground ,srcery-256-yellow :weight bold))))
+     ((,srcery-class (:foreground ,srcery-orange))
+      (,srcery-256-class (:foreground ,srcery-256-orange))))
 
    ;; shm
    `(shm-current-face

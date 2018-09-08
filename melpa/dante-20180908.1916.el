@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20180907.2028
+;; Package-Version: 20180908.1916
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -205,16 +205,6 @@ to destroy the buffer and create a fresh one without this variable enabled.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive utils
-
-(defun dante-list-buffers ()
-  "List hidden process buffers created by dante.
-You can use this to kill them or look inside."
-  (interactive)
-  (let ((buffers
-         (--filter (s-matches? " dante:" (buffer-name it)) (buffer-list))))
-    (if buffers
-        (display-buffer (list-buffers-noselect nil buffers))
-      (error "There are no Dante process buffers"))))
 
 (defun dante-fontify-expression (expression)
   "Return a haskell-fontified version of EXPRESSION.
@@ -661,7 +651,7 @@ Process state change: " change "
   "Create a dante process buffer name."
   (let* ((root (dante-project-root))
          (package-name (dante-package-name)))
-    (concat " dante:" package-name ":" dante-target ":" root)))
+    (concat "*dante:" package-name ":" dante-target ":" root "*")))
 
 (defun dante-buffer-create ()
   "Create the buffer for GHCi."
@@ -669,6 +659,7 @@ Process state change: " change "
     (with-current-buffer (get-buffer-create (dante-buffer-name))
       (cd root)
       (fundamental-mode) ;; this has several effects, including resetting the local variables
+      (buffer-disable-undo)
       (current-buffer))))
 
 (defun dante-set-state (state)
