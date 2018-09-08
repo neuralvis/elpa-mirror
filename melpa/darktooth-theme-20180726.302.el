@@ -4,7 +4,6 @@
 
 ;; Authors: Jason Milkins <jasonm23@gmail.com>
 ;; URL: http://github.com/emacsfodder/emacs-theme-darktooth
-;; Package-Version: 20180726.302
 ;; Version: 0.3.10
 
 ;; Package-Requires: ((autothemer "0.2"))
@@ -949,4 +948,5 @@
 ;; eval: (when (fboundp 'rainbow-mode) (rainbow-mode 1))
 ;; End:
 
+;;; darktooth-theme.el ends here
 ;;; darktooth-theme.el ends here
