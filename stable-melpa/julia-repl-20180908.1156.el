@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016  Tamas K. Papp
 ;; Author: Tamas Papp <tkpapp@gmail.com>
 ;; Keywords: languages
-;; Package-Version: 20180905.1152
+;; Package-Version: 20180908.1156
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25"))
 ;; URL: https://github.com/tpapp/julia-repl
@@ -105,7 +105,7 @@ first entry is the default.")
 (defun julia-repl--default-executable-key ()
   "Return the default executable key."
   (let ((key (caar julia-repl-executable-records)))
-    (assert key "Could not find any key in JULIA-REPL-EXECUTABLE-RECORDS.")
+    (cl-assert key "Could not find any key in JULIA-REPL-EXECUTABLE-RECORDS.")
     key))
 
 (defvar julia-repl-inferior-buffer-name-suffix nil

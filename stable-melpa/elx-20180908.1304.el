@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20081202
 ;; Package-Requires: ((emacs "26"))
-;; Package-Version: 20180830.1414
+;; Package-Version: 20180908.1304
 ;; Homepage: https://github.com/emacscollective/elx
 ;; Keywords: docs, libraries, packages
 
@@ -457,7 +457,7 @@ An effort is made to normalize the returned value."
                      (prefix  (match-string 4 object)))
                  (concat (if prefix
                              (upcase prefix)
-                           (pcase (downcase abbrev)
+                           (pcase (and abbrev (downcase abbrev))
                              ("lesser "  "LGPL")
                              ("library " "LGBL")
                              ("affero "  "AGPL")

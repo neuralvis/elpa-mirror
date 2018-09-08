@@ -21,7 +21,7 @@
 ;; -------------------------------------------------------------------------------------------
 
 ;; URL: http://github.com/ananthakumaran/typescript.el
-;; Package-Version: 20180802.1114
+;; Package-Version: 20180908.1312
 ;; Version: 0.1
 ;; Keywords: typescript languages
 ;; Package-Requires: ()
@@ -2004,8 +2004,7 @@ This performs fontification according to `typescript--class-styles'."
 
 (defconst typescript--possibly-braceless-keyword-re
   (typescript--regexp-opt-symbol
-   '("catch" "do" "else" "finally" "for" "if" "try" "while" "with"
-     "each"))
+   '("catch" "do" "else" "finally" "for" "if" "try" "while" "with"))
   "Regexp matching keywords optionally followed by an opening brace.")
 
 (defconst typescript--indent-keyword-re

@@ -1,2 +1,0 @@
-
-(tao-theme . [(20180908 824) nil "This package provides two parametrized uncoloured color themes for Emacs: tao-yin and tao-yang." tar ((:commit . "cf4718c84898adf2560d13edb7b8c4d6fcc82b68"))])
