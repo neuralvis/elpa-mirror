@@ -1,2 +1,2 @@
 
-(notmuch . [(20180829 927) nil "run notmuch within emacs" tar ((:commit . "4cd5a0a3d5416fd4601f2c14da0845fee5d9ede1") (:url . "https://notmuchmail.org/"))])
+(notmuch . [(20180829 927) nil "run notmuch within emacs" tar ((:commit . "8dcc38ce85ce084d3f0f3cbeac7e4a768e651614") (:url . "https://notmuchmail.org/"))])

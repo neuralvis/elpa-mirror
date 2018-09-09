@@ -3,7 +3,7 @@
 ;; Copyright (C) DIKU 2013-2017, University of Copenhagen
 ;;
 ;; URL: https://github.com/diku-dk/futhark
-;; Package-Version: 20180909.953
+;; Package-Version: 20180909.1513
 ;; Keywords: languages
 ;; Version: 0.1
 ;; Package-Requires: ((cl-lib "0.5"))
@@ -87,6 +87,7 @@
                     "\\|"
                     "[0-9]+"
                     "\\(?:\\.[0-9]+\\)?"
+                    "\\(?:e-?[0-9]+\\)?"
                     "\\)"
                     )
             "\\(?:i8\\|i16\\|i32\\|i64\\|u8\\|u16\\|u32\\|u64\\|f32\\|f64\\)?"
@@ -162,6 +163,14 @@
       (,(regexp-opt futhark-keywords 'words)
        . font-lock-keyword-face)
 
+      ;; Constants.
+      ;;; Booleans.
+      (,(regexp-opt futhark-booleans 'words)
+       . font-lock-constant-face)
+
+      (,(concat "\\(" futhark-number "\\)")
+       . font-lock-constant-face)
+
       ;; Types.
       ;;; Type aliases.  FIXME: It would be nice to highlight also the right
       ;;; hand side.
@@ -182,15 +191,6 @@
       ;;; Operators.
       (,futhark-operator
        . font-lock-builtin-face)
-
-      ;; Constants.
-      ;;; Booleans.
-      (,(regexp-opt futhark-booleans 'words)
-       . font-lock-constant-face)
-
-      (,(concat "\\(" futhark-number "\\)")
-       . font-lock-constant-face)
-
       )
     "Highlighting expressions for Futhark.")
   )
@@ -547,20 +547,9 @@ Do not put command-line options here; they go in `futhark-interpreter-args'."
 (defun run-futhark ()
   "Run an inferior instance of `futharki' inside Emacs."
   (interactive)
-  (let* ((futharki-program futhark-interpreter-name)
-         (buffer (comint-check-proc "futharki")))
-    ;; pop to the "*futharki*" buffer if the process is dead, the
-    ;; buffer is missing or it's got the wrong mode.
-    (pop-to-buffer-same-window
-     (if (or buffer (not (derived-mode-p 'inferior-futhark-mode))
-             (comint-check-proc (current-buffer)))
-         (get-buffer-create (or buffer "*futharki*"))
-       (current-buffer)))
-    ;; create the comint process if there is no buffer.
-    (unless buffer
-      (apply 'make-comint-in-buffer "futharki" buffer
-             futharki-program futhark-interpreter-args)
-      (inferior-futhark-mode))))
+  (pop-to-buffer
+   (apply 'make-comint "futharki" futhark-interpreter-name futhark-interpreter-args))
+  (inferior-futhark-mode))
 
 (defvar inferior-futhark-mode-map
   (let ((map (make-sparse-keymap)))
@@ -581,17 +570,23 @@ Do not put command-line options here; they go in `futhark-interpreter-args'."
 
 (defun futhark-load-file (file)
   "Load FILE into the futharki process.
-FILE is the file visited by the current buffer."
+FILE is the file visited by the current buffer.
+
+Automatically starts an inferior futharki process with `run-futhark`
+if a running futharki instance cannot be found."
   (interactive
    (list (or buffer-file-name
              (read-file-name "File to load: " nil nil t))))
   (comint-check-source file)
   (let ((b (get-buffer "*futharki*"))
-        (p (get-process "futharki")))
-    (when (and b p)
-      (with-current-buffer b
-        (apply comint-input-sender (list p (concat ":load " file))))
-      (pop-to-buffer b))))
+        (p (comint-check-proc b)))
+    (if (and b p)
+        (progn
+         (with-current-buffer b
+           (apply comint-input-sender (list p (concat ":load " file))))
+         (pop-to-buffer b))
+      (run-futhark)
+      (futhark-load-file file))))
 
 ;;; Actual mode declaration
 
