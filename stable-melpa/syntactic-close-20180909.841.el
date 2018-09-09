@@ -4,7 +4,7 @@
 ;; Maintainer: Emacs User Group Berlin <emacs-berlin@emacs-berlin.org>
 
 ;; Version: 0.1
-;; Package-Version: 20180905.629
+;; Package-Version: 20180909.841
 
 ;; URL: https://github.com/emacs-berlin/syntactic-close
 
@@ -541,6 +541,11 @@ Optional argument PPS is result of a call to function ‘parse-partial-sexp’"
 		(lambda ()(beginning-of-line)(back-to-indentation)))))
 	 (syntactic-close-beginning-of-block-re (or b-of-bl "[ 	]*\\_<\\(class\\|def\\|async def\\|async for\\|for\\|if\\|try\\|while\\|with\\|async with\\)\\_>[:( \n	]*")))
     (cond
+     ((and (not (bolp)) (not (nth 3 pps)) (not (char-equal ?\) (char-before)))(not (char-equal ?: (char-before)))
+	   (save-excursion
+	     (funcall syntactic-close-beginning-of-statement)
+	     (looking-at syntactic-close-beginning-of-block-re)))
+      "():")
      ((and (not (bolp)) (not (nth 3 pps)) (not (char-equal ?: (char-before)))
 	   (save-excursion
 	     (funcall syntactic-close-beginning-of-statement)
@@ -582,6 +587,10 @@ Argument PPS, the result of ‘parse-partial-sexp’."
 		  (and (nth 1 pps) (syntactic-close-pure-syntax-intern pps))))
 	       (t (syntactic-close--generic)))))
     (cond
+     ;; ((and closer (string-match "]" closer))
+     ;;  (if (save-excursion (skip-chars-backward " \t\r\n\f") (member (char-before) (list ?, ?})))
+     ;; 	  closer
+     ;; 	","))
      ((and closer (string-match "}" closer))
       (if (save-excursion (skip-chars-backward " \t\r\n\f") (member (char-before) (list ?\; ?})))
 	  closer
