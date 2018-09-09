@@ -1,0 +1,2 @@
+
+(ess . [(20180908 1821) nil "Emacs Speaks Statistics" tar ((:commit . "86a0d39b668bda716d08803dc5df108e41392f97") (:authors ("David Smith" . "dsmith@stats.adelaide.edu.au")) (:maintainer "ESS-core" . "ESS-core@r-project.org"))])

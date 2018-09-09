@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20180907.1146
+;; Package-Version: 20180908.2219
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -560,10 +560,10 @@ This docstring appeases checkdoc, that's all."
                           (push server
                                 (gethash project eglot--servers-by-project))
                           (setf (eglot--capabilities server) capabilities)
+                          (jsonrpc-notify server :initialized `(:__dummy__ t))
                           (dolist (buffer (buffer-list))
                             (with-current-buffer buffer
                               (eglot--maybe-activate-editing-mode server)))
-                          (jsonrpc-notify server :initialized `(:__dummy__ t))
                           (setf (eglot--inhibit-autoreconnect server)
                                 (cond
                                  ((booleanp eglot-autoreconnect)
