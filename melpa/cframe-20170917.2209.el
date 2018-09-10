@@ -3,6 +3,7 @@
 ;; Copyright (C) 2015 - 2017 Paul Landes
 
 ;; Version: 0.1
+;; Package-Version: 20170917.2209
 ;; Author: Paul Landes
 ;; Maintainer: Paul Landes
 ;; Keywords: frame customize
@@ -310,8 +311,5 @@ wipe the state on the storage call `cframe-restore' or
       (error "No display entries--use `cframe-add-or-advance-setting'"))))
 
 (provide 'cframe)
-
-;;; cframe.el ends here
-'cframe)
 
 ;;; cframe.el ends here

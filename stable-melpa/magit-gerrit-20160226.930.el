@@ -4,7 +4,6 @@
 ;;
 ;; Author: Brian Fransioli <assem@terranpro.org>
 ;; URL: https://github.com/terranpro/magit-gerrit
-;; Package-Version: 20160226.930
 ;; Package-Requires: ((magit "2.3.1"))
 ;;
 ;; This program is free software; you can redistribute it and/or
@@ -591,5 +590,8 @@ and port is the default gerrit ssh port."
 (add-hook 'magit-log-mode-hook #'magit-gerrit-check-enable t)
 
 (provide 'magit-gerrit)
+
+;;; magit-gerrit.el ends here
+)
 
 ;;; magit-gerrit.el ends here

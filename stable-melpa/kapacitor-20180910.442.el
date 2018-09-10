@@ -4,7 +4,7 @@
 
 ;; Author: Manoj Kumar Manikchand <manojm.321@gmail.com>
 ;; URL: http://github.com/Manoj321/kapacitor-el
-;; Package-Version: 20180827.516
+;; Package-Version: 20180910.442
 ;; Keywords: kapacitor, emacs, magit, tools
 ;; Package-Requires: ((emacs "25.1") (magit "2.13.0") (magit-popup "2.12.4"))
 ;; Version: 0.0.1
@@ -60,7 +60,9 @@
 
     ;; popups
     (define-key keymap (kbd "?") #'kapacitor-overview-popup)
+    (define-key keymap (kbd "w") #'kapacitor-watch-popup)
     (define-key keymap (kbd "S") #'kapacitor-show-stats-popup)
+    (define-key keymap (kbd "l") #'kapacitor-log-popup)
 
     keymap)
   "Keymap for `kapacitor-mode'." )
@@ -160,6 +162,80 @@ On error call CB-ERR with err buffer."
                      "DELETE"
                      (lambda (_)
                        (funcall cb))))
+
+(defun kapacitor--show-logs (bufname &optional filter)
+  "Display log in given buf BUFNAME and use FILTER as filter.
+
+  FILTER should be a list of key value pair"
+  (let* ((buf (get-buffer-create bufname)))
+    (with-current-buffer buf
+      (let* ((inhibit-read-only t)
+             (args (list "-X" "GET"
+                         "-H" "Accept: application/json"
+                         (concat kapacitor-url "/kapacitor/v1preview/logs"
+                                 (if filter
+                                     (concat "?" (string-join filter "&")))))))
+
+        ;; delete any existing process associated with this buffer
+        (let ((proc (get-buffer-process buf)))
+          (if proc (delete-process proc)))
+
+        (erase-buffer)
+        ;; a buffer local variable to store an incomplete line, command loop
+        ;; might copy incomplete lines.
+        (setq-local incomplete-process-output "")
+        (insert (propertize (concat "curl " (string-join args " "))
+                            'face 'magit-dimmed
+                            'read-only t))
+        (insert "\n\n")
+        (let ((proc (apply #'start-process bufname buf "curl" args)))
+          (set-process-filter proc #'kapacitor--logs-process-filter))
+        (pop-to-buffer buf)))))
+
+(defun kapacitor--logs-process-filter (proc output)
+  "Pretty print logs.
+
+ PROC is the log process and OUTPUT is stdout and stderr."
+  (when (buffer-live-p (process-buffer proc))
+    (with-current-buffer (process-buffer proc)
+      (let ((moving (= (point) (process-mark proc))))
+        (save-excursion
+          (let* ((output (concat incomplete-process-output output))
+                 (lines (split-string output "\n" t " ")))
+            (dolist (line lines)
+              (condition-case nil
+                  (let* ((json (json-read-from-string line)))
+                    ;; Insert the text, advancing the process marker.
+                    (goto-char (process-mark proc))
+                    (insert (propertize (cdr-safe (assoc 'ts json))
+                                        'face 'magit-dimmed))
+                    (insert " | ")
+                    (insert (cdr-safe (assoc 'service json)))
+                    (insert " | ")
+                    (insert (kapacitor--propertize-level (cdr-safe (assoc 'lvl json))))
+                    (insert " | ")
+                    (insert (propertize (cdr-safe (assoc 'msg json))
+                                        'face 'magit-sequence-part))
+                    (insert " | ")
+                    (dolist (kv json)
+                      (unless (member (car kv) (list 'ts 'service 'lvl 'msg))
+                        (insert (cdr kv))
+                        (insert " | ")))
+                    (insert "\n")
+                    (set-marker (process-mark proc) (point)))
+                ;; if json parsing errors out then probably the line is
+                ;; incomplete store it and prepend it with future output
+                (error (setq incomplete-process-output line))))))
+        (if moving (goto-char (process-mark proc)))))))
+
+
+(defun kapacitor--propertize-level (level)
+  "Propertize log LEVEL string."
+  (propertize (upcase level) 'face (pcase level
+                                     ("info"  'magit-filename)
+                                     ("error" 'magit-log-author)
+                                     ("debug" 'magit-diff-hunk-region)
+                                     ("warn"  'magit-reflog-checkout))))
 
 ;;;;; kapacitor-mode functions
 
@@ -358,7 +434,45 @@ On error call CB-ERR with err buffer."
         (kapacitor--delete-task 'kapacitor-overview-refresh taskid)
       (message "No task under point"))))
 
+(defun kapacitor-watch-task ()
+  "Watch logs of task under point."
+  (interactive)
+  (let* ((taskid (get-text-property (point) 'kapacitor-nav)))
+    (if taskid
+        (let ((buf-name (format "*kapacitor-logs-%s*" taskid)))
+          (kapacitor--show-logs buf-name
+                                (seq-concatenate 'list
+                                                 (list (concat "task=" taskid))
+                                                 (kapacitor-watch-arguments))))
+      (message "No task under point"))))
+
+(defun kapacitor-show-logs (&rest _)
+  "Display kapacitor logs."
+  (interactive)
+  (kapacitor--show-logs "*kapacitor-logs*" (kapacitor-log-arguments)))
+
 ;;;;; magit popups
+
+(magit-define-popup kapacitor-log-popup
+  "Popup console for log command."
+  :group 'kapacitor
+  :options
+  '("Filter options"
+    (?L "Level"  "lvl=")
+    (?m "Message" "msg=")
+    (?s "Service" "service=")
+    (?c "Content Type" "content-type="))
+  :actions
+  '((?l "log" kapacitor-show-logs)))
+
+(magit-define-popup kapacitor-watch-popup
+  "Popup console for watch command."
+  :group 'kapacitor
+  :options
+  '("Options"
+    (?n "Node" "node="))
+  :actions
+  '((?w "watch" kapacitor-watch-task)))
 
 (magit-define-popup kapacitor-show-stats-popup
   "Popup console for stats command."
@@ -373,13 +487,15 @@ On error call CB-ERR with err buffer."
   :actions
   '("Environment"
     (?c "Change server" kapacitor-set-url)
-    "Popup commands"
+    "Commands"
+    (?l "Log" kapacitor-log-popup)
     (?S "Stats" kapacitor-show-stats-popup)
     "Task Commands"
     (?\r  "Show"     kapacitor-show-task)
     (?d   "Disable"  kapacitor-disable-task)
     (?e   "Enable"   kapacitor-enable-task)
     (?D   "Delete"   kapacitor-delete-task)
+    (?w   "Watch"    kapacitor-watch-popup)
     (?g   "Refresh"  kapacitor-overview-refresh)))
 
 
