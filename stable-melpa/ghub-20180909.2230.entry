@@ -1,0 +1,2 @@
+
+(ghub . [(20180909 2230) ((emacs (24 4)) (let-alist (1 0 5))) "minuscule client library for the Github API" tar ((:commit . "e007a41f9e3351dd37a0277f7f8073432b3a2c53") (:keywords "tools") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/ghub"))])
