@@ -1,10 +1,10 @@
-;;; evil-escape.el --- Escape from anything with a customizable key sequence
+ ;;; evil-escape.el --- Escape from anything with a customizable key sequence
 
 ;; Copyright (C) 2014-2015 syl20bnr
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; Keywords: convenience editing evil
-;; Package-Version: 20180624.319
+;; Package-Version: 20180910.1234
 ;; Created: 22 Oct 2014
 ;; Version: 3.15
 ;; Package-Requires: ((emacs "24") (evil "1.0.9") (cl-lib "0.5"))
@@ -103,6 +103,11 @@
   :type 'key-sequence
   :group 'evil-escape)
 
+(defcustom evil-escape-lighter '(concat " " evil-escape-key-sequence)
+  "The lighter for the evil escape mode."
+  :type 'sexp
+  :group 'evil-escape)
+
 (defcustom evil-escape-delay 0.1
   "Max time delay between two key presses."
   :type 'number
@@ -142,7 +147,7 @@ key first."
 (define-minor-mode evil-escape-mode
   "Buffer-local minor mode to escape insert state and everything else
 with a key sequence."
-  :lighter (:eval (concat " " evil-escape-key-sequence))
+  :lighter (:eval evil-escape-lighter)
   :group 'evil
   :global t
   (if evil-escape-mode
