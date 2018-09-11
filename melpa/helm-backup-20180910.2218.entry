@@ -1,2 +1,0 @@
-
-(helm-backup . [(20180910 2218) ((helm (1 5 5)) (s (1 8 0)) (cl-lib (0))) "Backup each file change using git" single ((:commit . "d9ec2d8f56f147c3ef4ad8decaa07c4bd838a71b") (:keywords "backup" "convenience" "files" "tools" "vc") (:authors ("Anthony HAMON" . "hamon.anth@gmail.com")) (:maintainer "Anthony HAMON" . "hamon.anth@gmail.com") (:url . "http://github.com/antham/helm-backup"))])

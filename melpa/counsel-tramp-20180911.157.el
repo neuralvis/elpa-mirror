@@ -4,8 +4,8 @@
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-counsel-tramp
-;; Package-Version: 20180821.941
-;; Version: 0.4.2
+;; Package-Version: 20180911.157
+;; Version: 0.5.2
 ;; Package-Requires: ((emacs "24.3") (counsel "0.10"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -63,6 +63,11 @@ The hook is called with one argument that is non-nil."
 The hook is called with one argument that is non-nil."
   :type 'hook)
 
+(defcustom counsel-tramp-custom-connections '()
+  "A list to manually add extra connections.
+E.g.: '(\"/ssh:domain|sudo:user@localhost:/\")."
+  :type 'string)
+
 (defun counsel-tramp-quit ()
   "Quit counsel-tramp.
 Kill all remote buffers."
@@ -77,7 +82,7 @@ Kill all remote buffers."
                    (insert-file-contents "~/.ssh/config")
                    (buffer-string))
                  "\n"))
-        (hosts (list)))
+        (hosts counsel-tramp-custom-connections))
     (dolist (host source)
       (when (string-match "[H\\|h]ost +\\(.+?\\)$" host)
 	(setq host (match-string 1 host))

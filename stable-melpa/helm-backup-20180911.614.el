@@ -4,8 +4,8 @@
 
 ;; Author: Anthony HAMON <hamon.anth@gmail.com>
 ;; URL: http://github.com/antham/helm-backup
-;; Package-Version: 20180910.2218
-;; Version: 1.1.0
+;; Package-Version: 20180911.614
+;; Version: 1.1.1
 ;; Package-Requires: ((helm "1.5.5") (s "1.8.0") (cl-lib "0"))
 ;; Keywords: backup, convenience, files, tools, vc
 
@@ -231,7 +231,7 @@
 (defun helm-backup-remove-file-backups ()
   "Remove all history of a file and the file itself from backup directory."
   (interactive)
-  (helm-backup--remove-file-from-repository (buffer-file-name)))
+  (helm-backup--remove-file-backups (buffer-file-name)))
 
 ;;;###autoload
 (defun helm-backup ()
