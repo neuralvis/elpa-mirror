@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.4.0
-;; Package-Version: 20180910.1638
+;; Package-Version: 20180911.941
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -207,7 +207,7 @@ active.")
 (defface doom-modeline-evil-visual-state'((t (:inherit doom-modeline-buffer-file)))
   "Face for the visual state tag in evil state indicator.")
 
-(defface doom-modeline-evil-replace-state'((t (:inherit doom-modeline-error)))
+(defface doom-modeline-evil-replace-state'((t (:inherit doom-modeline-buffer-modified)))
   "Face for the replace state tag in evil state indicator.")
 
 ;;
@@ -256,14 +256,14 @@ active.")
 (defun doom-modeline-def-modeline (name lhs &optional rhs)
   "Defines a modeline format and byte-compiles it.
 
-NAME is a symbol to identify it (used by `doom-modeline' for retrieval).
-LHS and RHS are lists of symbols of modeline segments defined with
-`doom-modeline-def-segment'.
+  NAME is a symbol to identify it (used by `doom-modeline' for retrieval).
+  LHS and RHS are lists of symbols of modeline segments defined with
+  `doom-modeline-def-segment'.
 
-Example:
+  Example:
   (doom-modeline-def-modeline 'minimal
-    '(bar matches \" \" buffer-info)
-    '(media-info major-mode))
+                              '(bar matches \" \" buffer-info)
+                              '(media-info major-mode))
   (doom-modeline-set-modeline 'minimal t)"
   (let ((sym (intern (format "doom-modeline-format--%s" name)))
         (lhs-forms (doom-modeline--prepare-segments lhs))
@@ -295,7 +295,7 @@ Example:
 (defun doom-modeline-set-modeline (key &optional default)
   "Set the modeline format. Does nothing if the modeline KEY doesn't exist.
 
-If DEFAULT is non-nil, set the default mode-line for all buffers."
+  If DEFAULT is non-nil, set the default mode-line for all buffers."
   (when-let ((modeline (doom-modeline key)))
     (setf (if default
               (default-value 'mode-line-format)
@@ -305,8 +305,8 @@ If DEFAULT is non-nil, set the default mode-line for all buffers."
 (defun doom-modeline-project-root ()
   "Get the path to the root of your project.
 
-If STRICT-P, return nil if no project was found, otherwise return
-`default-directory'."
+  If STRICT-P, return nil if no project was found, otherwise return
+  `default-directory'."
   (let (projectile-require-project-root)
     (projectile-project-root)))
 
@@ -1030,7 +1030,7 @@ See `mode-line-percent-position'.")
   "The current evil state. Requires `evil-mode' to be enabled."
   (when (bound-and-true-p evil-local-mode)
     (let ((tag (evil-state-property evil-state :tag t)))
-      (propertize tag 'face
+      (propertize (s-trim-right tag) 'face
                   (if (doom-modeline--active)
                       (cond ((eq tag evil-normal-state-tag) 'doom-modeline-evil-normal-state)
                             ((eq tag evil-emacs-state-tag) 'doom-modeline-evil-emacs-state)

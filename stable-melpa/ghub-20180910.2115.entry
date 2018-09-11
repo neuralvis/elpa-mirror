@@ -1,2 +1,0 @@
-
-(ghub . [(20180910 2115) ((emacs (24 4)) (let-alist (1 0 5))) "minuscule client libraries for Git forge APIs" tar ((:commit . "1653e6f1f178a8d45c55c687022641f38d79a588") (:keywords "tools") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/ghub"))])
