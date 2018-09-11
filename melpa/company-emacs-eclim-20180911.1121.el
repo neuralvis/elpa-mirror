@@ -1,10 +1,10 @@
-;;; company-emacs-eclim.el --- company-mode backend for eclim  -*- lexical-binding: t -*-
+;;; company-emacs-eclim.el --- Eclim company backend -*- lexical-binding: t -*-
 ;;
 ;; Copyright (C) 2009-2012   Fredrik Appelberg
 ;; Copyright (C) 2013-2014   Dmitry Gutov
 ;;
 ;; Package-Requires: ((eclim "0.3") (company "0.7") (cl-lib "0.5"))
-;; Package-Version: 20170104.1543
+;; Package-Version: 20180911.1121
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 (require 'eclim-completion)
 (require 'eclim-java)
 (require 'company)
-(require 'cl-lib)
+(eval-when-compile (require 'cl-lib))
 
 (defcustom company-emacs-eclim-ignore-case t
   "If t, case is ignored in completion matches."
@@ -41,15 +41,16 @@
 
 ;;;###autoload
 (defun company-emacs-eclim-setup ()
-  "Convenience function that adds company-emacs-eclim to the list
-  of available company backends."
+  "Convenience function that adds ‘company-emacs-eclim’ to the list \
+of available company backends."
   (setq company-backends
         (cons 'company-emacs-eclim
               (cl-remove-if (lambda (b) (cl-find b '(company-nxml company-eclim)))
                             company-backends))))
 
 (defun company-emacs-eclim--before-prefix-in-buffer (prefix)
-  "Search for the text before prefix that may be included as part of completions"
+  "Search for the text before PREFIX that may be included as part of \
+completions."
   (ignore-errors
     (save-excursion
       (let ((end (progn
@@ -65,19 +66,20 @@
         (buffer-substring-no-properties start end)))))
 
 (defun company-emacs-eclim--candidates (prefix)
-  (let ((before-prefix-in-buffer (company-emacs-eclim--before-prefix-in-buffer prefix)))
+  (let ((before-prefix-in-buffer
+         (company-emacs-eclim--before-prefix-in-buffer prefix)))
     (cl-labels
         ((annotate (str)
-                   (if (string-match "(" str)
-                       (propertize
-                        (substring str 0 (match-beginning 0)) 'eclim-meta str)
-                     str))
+           (if (string-match "(" str)
+               (propertize
+                (substring str 0 (match-beginning 0)) 'eclim-meta str)
+             str))
          (without-redundant-prefix (str)
-                                   (if (and before-prefix-in-buffer
-                                            (> (length before-prefix-in-buffer) 0)
-                                            (string-prefix-p before-prefix-in-buffer str))
-                                       (substring str (length before-prefix-in-buffer))
-                                     str)))
+           (if (and before-prefix-in-buffer
+                    (> (length before-prefix-in-buffer) 0)
+                    (string-prefix-p before-prefix-in-buffer str))
+               (substring str (length before-prefix-in-buffer))
+             str)))
       (mapcar
        (lambda (candidate)
          (annotate (without-redundant-prefix candidate)))
@@ -93,8 +95,10 @@
       (substring str (match-beginning 0)))))
 
 ;;;###autoload
-(defun company-emacs-eclim (command &optional arg &rest ignored)
-  "`company-mode' back-end for Eclim completion"
+(defun company-emacs-eclim (command &optional arg &rest _ignored)
+  "Eclim `company' completion backend.
+
+See `company' for explanation of COMMAND and ARG."
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-emacs-eclim))

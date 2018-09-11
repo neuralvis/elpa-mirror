@@ -3,7 +3,7 @@
 ;; Copyright (C) 2009   Fredrik Appelberg
 ;;
 ;; Package-Requires: ((eclim "0.3") (auto-complete "1.5"))
-;; Package-Version: 20170924.2039
+;; Package-Version: 20180911.1121
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -84,8 +84,8 @@
 ;;;###autoload
 (defun ac-emacs-eclim-config ()
   (add-hook 'java-mode-hook 'ac-emacs-eclim-java-setup)
-  (add-hook 'groovy-mode-hook '(lambda ()
-                                 (add-to-list 'ac-sources 'ac-source-emacs-eclim)))
+  (add-hook 'groovy-mode-hook
+            '(lambda () (add-to-list 'ac-sources 'ac-source-emacs-eclim)))
   (add-hook 'xml-mode-hook 'ac-emacs-eclim-xml-setup)
   (add-hook 'nxml-mode-hook 'ac-emacs-eclim-xml-setup)
   (add-hook 'php-mode-hook 'ac-emacs-eclim-php-setup)
