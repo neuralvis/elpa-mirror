@@ -1,2 +1,2 @@
 
-(ac-emacs-eclim . [(20180911 1121) ((eclim (0 3)) (auto-complete (1 5))) "auto-complete source for eclim" single ((:commit . "2275ce5f029f6c0a2b5bdcc2dd1832c0709b0465"))])
+(ac-emacs-eclim . [(20180911 1121) ((eclim (0 3)) (auto-complete (1 5))) "auto-complete source for eclim" single ((:commit . "99fda18e661c3420fe997a217024cf7186303c2b"))])
