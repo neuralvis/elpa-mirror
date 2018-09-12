@@ -4,7 +4,7 @@
 ;; Maintainer: Vitalie Spinu
 ;; Copyright (C) 2018
 ;; Version: 0.1
-;; Package-Version: 20180906.2047
+;; Package-Version: 20180912.1853
 ;; Package-Requires: ((emacs "25") (polymode "0.1") (markdown-mode "2.3"))
 ;; URL: https://github.com/polymode/poly-markdown
 ;; Keywords: emacs
@@ -42,9 +42,7 @@
 (defcustom pm-host/markdown
   (pm-host-chunkmode :name "Markdown"
                      :mode 'markdown-mode
-                     :init-functions '(poly-markdown-remove-markdown-hooks)
-                     :protect-syntax nil
-                     :protect-font-lock nil)
+                     :init-functions '(poly-markdown-remove-markdown-hooks))
   "Markdown host chunkmode"
   :group 'poly-hostmodes
   :type 'object)
