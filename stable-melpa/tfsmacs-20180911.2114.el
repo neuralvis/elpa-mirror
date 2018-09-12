@@ -4,7 +4,7 @@
 ;;
 ;; Author: Dino Chiesa <dpchiesa@outlook.com>, Sebastian Monia <smonia@outlook.com>
 ;; URL: http://github.com/sebasmonia/tfsmacs/
-;; Package-Version: 20180904.1755
+;; Package-Version: 20180911.2114
 ;; Package-Requires: ((emacs "25") (tablist "0.70"))
 ;; Version: 1.25
 ;; Keywords: tfs, vc
@@ -77,7 +77,7 @@
   "A string-string alist of all your workspaces, for easy switching.  Used by `tfsmacs-switch-workspace`."
   :type 'alist)
 
-(defvar tfsmacs--process-name "TEECLI")
+(defvar tfsmacs--process-name "*TEECLI*")
 (defvar tfsmacs--changeset-buffer-name "*TFS Changeset*")
 (defvar tfsmacs--shelveset-buffer-name "*TFS Shelveset*")
 (defvar tfsmacs--server-dirs-buffer-name "*TFS Directories*")
@@ -141,10 +141,12 @@ Intended for internal use only."
 
 (defun tfsmacs--get-or-create-process ()
   "Create or return the TEE process."
-  (let ((buffer-name (format "*%s*" tfsmacs--process-name))
-        (process (get-process tfsmacs--process-name)))
+  (let ((buffer-name tfsmacs--process-name)
+        (process (get-process tfsmacs--process-name))
+        (new-process-message "Creating new process instance..."))
     (when (not process)
-      (tfsmacs--append-to-log "Creating new process instance...")
+      (tfsmacs--append-to-log new-process-message)
+      (tfsmacs--optional-message new-process-message)
       (setq process (start-process tfsmacs--process-name buffer-name
                                    tfsmacs-cmd "@"))
       (set-process-filter process 'tfsmacs--async-command-callback))
@@ -218,7 +220,7 @@ If it did invoke CALLBACK, else re-schedule the function."
          (funcall callback ""))
         (t
          (if (< tfsmacs--command-retries tfsmacs-async-command-retries)
-             (run-at-time tfsmacs-async-command-timer nil 'tfsmacs--async-command-complete callback)
+             (tfsmacs--async-command-schedule-check callback)
            (progn
              (tfsmacs--async-command-handle-timeout)
              (funcall callback ""))))))
@@ -327,6 +329,18 @@ It spins off a new instance of the TEE tool by calling 'tfsmacs--sync-command-to
 From http://ergoemacs.org/emacs/modernization_elisp_lib_problem.html."
   (replace-regexp-in-string "\\`[ \t\n]*" "" (replace-regexp-in-string "[ \t\n]*\\'" "" string)))
 
+(defun tfsmacs--quote-string (param)
+  "Surround PARAM with quotes using format.  Useful for paths and comments."
+  (format "\"%s\"" param))
+
+(defun tfsmacs--quote-list (param-list)
+  "Surround each item in PARAM-LIST with quotes using `tfsmacs--quote-string`."
+  (mapcar 'tfsmacs--quote-string param-list))
+
+(defun tfsmacs--single-item-list (lst)
+  "Return non-nil if LST is a single item lst."
+  ( list(equal (length lst) 1)))
+
 (defun tfsmacs-switch-workspace ()
   "Change to configuration to use a different workspace.
 The list of possible values is read from the alist `tfsmacs-workspaces`."
@@ -375,7 +389,7 @@ Not bound by default, you would run this operation once per collection."
 (defun tfsmacs--mapping-callback (_output)
   "Process OUTPUT of setting the $/ mapping."
   ;; For some mystical reason the workfold command has ZERO output.
-  ;; On error we have the  retries "flagged" with -1
+  ;; On error we have the retries "flagged" with -1
   (when (equal tfsmacs--command-retries -1)
     (error "Mapping setup failed.  See log for details"))
   (message "TFS: Setup completed. If you plan to switch between different workspaces, you should customize `tfsmacs-workspaces-alist`."))
@@ -471,7 +485,7 @@ buffer to the new name."
 (defun tfsmacs-add (&optional filename)
   "Perform a tf add on a file.
 
-The file to add is deteremined this way:
+The file to add is determined this way:
 
  - if FILENAME is specified, then this function selects that file
    to add.
@@ -487,7 +501,7 @@ The file to add is deteremined this way:
   (interactive)
   (let ((files-to-add (tfsmacs--determine-target-files filename "File(s) to add: ")))
     (if files-to-add
-        (let* ((items (mapcar 'tfsmacs--quote-string files-to-add))
+        (let* ((items (tfsmacs--quote-list files-to-add))
                (command (append '("add") items)))
           (tfsmacs--async-command command 'tfsmacs--message-callback))
       (error "Error tfsmacs-add: No file"))))
@@ -495,7 +509,7 @@ The file to add is deteremined this way:
 (defun tfsmacs-delete (&optional filename)
   "Perform a tf delete on a file.
 
-The file to delete is deteremined this way:
+The file to delete is determined this way:
 
  - if FILENAME is specified, then this function selects that file.
 
@@ -513,7 +527,7 @@ is being deleted, then this function also kills the buffer."
   (interactive)
   (let ((files-to-delete (tfsmacs--determine-target-files filename "File to delete: ")))
     (if files-to-delete
-        (let* ((items (mapcar 'tfsmacs--quote-string files-to-delete))
+        (let* ((items (tfsmacs--quote-list files-to-delete))
                (command (append '("delete") items)))
           (tfsmacs--async-command command 'tfsmacs--message-callback))
       (error "Error tfsmacs-delete: No file"))))
@@ -660,11 +674,10 @@ Showing files all the time could get quite slow.  Hence this command."
       (substring a-string 1)
     a-string))
 
-
 (defun tfsmacs-get (&optional filename version)
   "Perform a tf get on a file.
 
-The file to get is deteremined this way:
+The file to get is determined this way:
 
  - if FILENAME is specified, then this function selects that file.
 
@@ -681,7 +694,7 @@ If VERSION to get is not provided, it will be prompted."
   (interactive)
   (let ((files-to-get (tfsmacs--determine-target-files filename "File(s) to get: ")))
     (when files-to-get
-        (let* ((items (mapcar 'tfsmacs--quote-string files-to-get))
+        (let* ((items (tfsmacs--quote-list files-to-get))
                (version (list (tfsmacs--get-version-param version)))
                (command (append '("get") items version)))
           (tfsmacs--async-command command 'tfsmacs--short-message-callback t)))))
@@ -701,7 +714,7 @@ If VERSION is provided return said version as changeset."
 Use FORCE (or prefix arg) to overwrite writeable files not checked out
 and get even up-to-date files.
 
-The directory to get is deteremined this way:
+The directory to get is determined this way:
 
  - if DIRNAME is specified, then this function selects that file.
 
@@ -727,7 +740,7 @@ The directory to get is deteremined this way:
 (defun tfsmacs-undo (&optional filename)
   "Perform a tf undo on a file.
 
-The file to undo is deteremined this way:
+The file to undo is determined this way:
 
  - if FILENAME is specified, then this function selects that file.
 
@@ -742,7 +755,7 @@ The file to undo is deteremined this way:
   (interactive)
   (let ((files-to-undo (tfsmacs--determine-target-files filename "File(s) to undo: ")))
     (when files-to-undo
-        (let* ((items (mapcar 'tfsmacs--quote-string files-to-undo))
+        (let* ((items (tfsmacs--quote-list files-to-undo))
                 (command (append '("undo") items)))
              (when (yes-or-no-p "Undo changes to file(s)? ")
                (tfsmacs--async-command command 'tfsmacs--message-callback))))))
@@ -793,7 +806,7 @@ The function returns (changesed-id server-path) for each element."
   (interactive)
   (let* ((items (tfsmacs--history-mode-get-marked-items))
          (to-get (car items)))
-    (if (equal (length items) 1)
+    (if (tfsmacs--single-item-list items)
         (progn
           (message (format "TFS: Getting changeset %s" (car to-get)))
           (tfsmacs-get (cadr to-get) (car to-get)))
@@ -804,7 +817,7 @@ The function returns (changesed-id server-path) for each element."
   (interactive)
   (let* ((items (tfsmacs--history-mode-get-marked-items))
          (to-get (car items)))
-    (if (equal (length items) 1)
+    (if (tfsmacs--single-item-list items)
         (progn
           (message (format "TFS: Getting changeset details %s" (car to-get)))
           (tfsmacs-changeset (car to-get)))
@@ -950,15 +963,11 @@ If VERSION to get is not provided, it will be prompted."
   (tabulated-list-init-header)
   (tablist-minor-mode))
 
-(defun tfsmacs--quote-string (param)
-  "Surround PARAM with quotes using format.  Useful for paths and comments."
-  (format "\"%s\"" param))
-
 (defun tfsmacs--status-mode-checkin ()
   "Process files marked in ‘tfsmacs-status-mode’ for check in."
   (interactive)
   (let* ((items (tfsmacs--status-mode-get-marked-items))
-         (quoted-items (mapcar 'tfsmacs--quote-string items))
+         (quoted-items (tfsmacs--quote-list items))
          (command (append '("checkin") (tfsmacs--checkin-parameters-builder) quoted-items)))
     (tfsmacs--async-command command 'tfsmacs--message-callback)))
 
@@ -966,7 +975,7 @@ If VERSION to get is not provided, it will be prompted."
   "Revert (undo) the files marked using ‘tfsmacs-status-mode’."
   (interactive)
   (let* ((items (tfsmacs--status-mode-get-marked-items))
-         (quoted-items (mapcar 'tfsmacs--quote-string items))
+         (quoted-items (tfsmacs--quote-list items))
          (command '("undo")))
     (when (yes-or-no-p "Undo changes to the  files marked? ")
       (setq command (append command quoted-items))
@@ -976,7 +985,7 @@ If VERSION to get is not provided, it will be prompted."
   "Compares pending change to latest version."
   (interactive)
   (let ((items (tfsmacs--status-mode-get-marked-items)))
-    (if (equal (length items) 1)
+    (if (tfsmacs--single-item-list items)
         (progn
           (message "TFS: Retrieving files to compare. This operation can take a few seconds.")
           (let* ((local (car items))
@@ -988,7 +997,7 @@ If VERSION to get is not provided, it will be prompted."
   "Shelve files marked in the tfs-status-mode buffer."
   (interactive)
   (let* ((items (tfsmacs--status-mode-get-marked-items))
-         (quoted-items (mapcar 'tfsmacs--quote-string items))
+         (quoted-items (tfsmacs--quote-list items))
          (name (read-string "Shelveset name (must be unique): "))
          (comment (read-string "Comments: "))
          (command nil))
@@ -1115,7 +1124,7 @@ If VERSION to get is not provided, it will be prompted."
   (let* ((items (tfsmacs--shelvesets-mode-get-marked-items))
          (to-unshelve (car items))
          (as-string (format "\"%s;%s\"" (car to-unshelve) (cadr to-unshelve))))
-    (if (equal (length items) 1)
+    (if (tfsmacs--single-item-list items)
         (progn
           (message (format "TFS: Unshelving %s" as-string))
           (tfsmacs--async-command (list "unshelve" as-string) 'tfsmacs--shelvesets-mode-unshelve-callback))
@@ -1134,7 +1143,7 @@ If VERSION to get is not provided, it will be prompted."
   (let* ((items (tfsmacs--shelvesets-mode-get-marked-items))
          (to-unshelve (car items))
          (as-string (format "\"%s;%s\"" (car to-unshelve) (cadr to-unshelve))))
-    (if (equal (length items) 1)
+    (if (tfsmacs--single-item-list items)
         (progn
           (when (get-buffer tfsmacs--shelveset-buffer-name)
             (kill-buffer tfsmacs--shelveset-buffer-name))

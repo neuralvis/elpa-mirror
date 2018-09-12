@@ -5,7 +5,7 @@
 ;; Author: J. Alexander Branham <branham@utexas.edu>
 ;; Maintainer: J. Alexander Branham <branham@utexas.edu>
 ;; URL: https://gitlab.com/jabranham/system-packages
-;; Package-Version: 20180821.17
+;; Package-Version: 20180911.2248
 ;; Package-Requires: ((emacs "24.3"))
 ;; Version: 1.0.7
 
@@ -267,6 +267,8 @@
 The key is the package manager and values (usually) commands.")
 (put 'system-packages-supported-package-managers 'risky-local-variable t)
 
+(define-obsolete-variable-alias 'system-packages-packagemanager
+  'system-packages-package-manager "2017-12-25")
 (defcustom system-packages-package-manager
   (cl-loop for (name . prop) in system-packages-supported-package-managers
            for path = (executable-find (symbol-name name))
@@ -290,9 +292,8 @@ default."
           (const dnf)
           (const xbps-install)))
 
-(define-obsolete-variable-alias 'system-packages-packagemanager
-  'system-packages-package-manager "2017-12-25")
-
+(define-obsolete-variable-alias 'system-packages-usesudo
+  'system-packages-use-sudo "2017-12-25")
 (defcustom system-packages-use-sudo
   (cdr (assoc 'default-sudo (cdr (assoc system-packages-package-manager
                                         system-packages-supported-package-managers))))
@@ -300,9 +301,6 @@ default."
 
 Tries to be smart for selecting the default."
   :type 'boolean)
-
-(define-obsolete-variable-alias 'system-packages-usesudo
-  'system-packages-use-sudo "2017-12-25")
 
 (defcustom system-packages-noconfirm nil
   "If non-nil, bypass prompts asking the user to confirm package upgrades."
