@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2018  hiro方圆
 ;; Version: 1.0
-;; Package-Version: 20180430.122
+;; Package-Version: 20180912.313
 ;; URL: https://github.com/nicehiro/netease-music
 ;; Package-Requires: ((names "0.5") (emacs "25"))
 ;; Author: hiro方圆 <wfy11235813@gmail.com>
@@ -242,8 +242,8 @@ Argument TRACKS is json string."
 (defun set-artist-id (tracks)
   "Return artist id about this song.
 Argument TRACKS is json string."
-  (let* ((count (length (cdr (assoc 'artists tracks))))
-         (artist-id (cdr (assoc 'id (aref (cdr (assoc 'artists tracks)) 0)))))
+  (let* ((count (length (cdr (assoc 'ar tracks))))
+         (artist-id (cdr (assoc 'id (aref (cdr (assoc 'ar tracks)) 0)))))
     artist-id))
 
 (defun format-song-detail (tracks instance)
@@ -253,6 +253,21 @@ Argument TRACKS is json string."
   (setf (slot-value instance 'artist) (set-artist-name tracks))
   (setf (slot-value instance 'album) (set-album-name tracks))
   (setf (slot-value instance 'artist-id) (set-artist-id tracks)))
+
+(defun set-artist-id-for-search-result (tracks)
+  "Return artist id about this song.
+Argument TRACKS is json string."
+  (let* ((count (length (cdr (assoc 'artists tracks))))
+         (artist-id (cdr (assoc 'id (aref (cdr (assoc 'artists tracks)) 0)))))
+    artist-id))
+
+(defun format-song-detail-for-search-result (tracks instance)
+  "Use json string TRACKS to initialize an song's INSTANCE."
+  (setf (slot-value instance 'name) (set-song-name tracks))
+  (setf (slot-value instance 'song-id) (set-song-id tracks))
+  (setf (slot-value instance 'artist) (set-artist-name tracks))
+  (setf (slot-value instance 'album) (set-album-name tracks))
+  (setf (slot-value instance 'artist-id) (set-artist-id-for-search-result tracks)))
 
 (defun set-playlist-name (json)
   "Return playlist name from JSON string."
@@ -327,17 +342,6 @@ Argument TRACKS is json string."
 (define-derived-mode mode org-mode "netease-music"
   "Key bindings of netease-music-mode.")
 
-(defun init-user-id ()
-  "Initialize netease music information."
-  (interactive)
-  (login username user-password))
-
-(defun login (username password)
-  "Login netease music with user USERNAME and PASSWORD."
-  (interactive)
-  (let* ((json (request login-url (format-args netease-music-login-args (username password)))))
-    (message (set-user-id json))))
-
 (defun request (url-pattern args)
   "Return json by requesting the url.  The url is consists of URL-PATTERN and ARGS."
   (let (json)
@@ -368,7 +372,7 @@ Argument TRACKS is json string."
 
 (defun get-playlist-tracks (json)
   "Get tracks from playlist from JSON string."
-  (cdr (assoc 'tracks (cdr (assoc 'result json)))))
+  (cdr (assoc 'tracks (cdr (assoc 'playlist json)))))
 
 (defun get-song-from-tracks (json index)
   "Get the specific ordered song from JSON string.
@@ -416,7 +420,7 @@ Argument: INDEX, the song's order."
              (song-name (cdr (assoc 'name song)))
              (song-id (cdr (assoc 'id song)))
              (song-ins (make-instance 'song)))
-        (format-song-detail song song-ins)
+        (format-song-detail-for-search-result song song-ins)
         (push (cons song-id song-ins) search-songs-list)))
     (setq search-songs-list (reverse-list search-songs-list))
     ;;; popup window
@@ -653,17 +657,19 @@ Argument LST: play this song from LST."
     (if (equal song-real-url nil)
         (progn
           (message "Cannot play current song. Don't get the song's real url.")
-          (kill-process)))
-    (play-song song-real-url)
-    (setq global-mode-string song-name)
-    (with-current-buffer "netease-music-playing"
-      (erase-buffer)
-      (mode)
-      (insert (format-netease-title song-name
-                                    (format "Artist: %s  Album: %s" artist album)))
-      (if lyric lyric (setq lyric "纯音乐"))
-      (insert lyric)
-      (goto-char (point-min)))))
+          (kill-process))
+      (progn
+        (play-song song-real-url)
+        (setq global-mode-string song-name)
+        (with-current-buffer "netease-music-playing"
+          (erase-buffer)
+          (mode)
+          (insert (format-netease-title song-name
+                                        (format "Artist: %s  Album: %s" artist album)))
+          (if lyric lyric (setq lyric "纯音乐"))
+          (insert lyric)
+          (goto-char (point-min)))))
+    ))
 
 (defun move-to-current-song ()
   "Move to current playing song's position."
