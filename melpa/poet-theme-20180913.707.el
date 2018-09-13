@@ -4,7 +4,7 @@
 
 ;; Author: Kunal Bhalla <bhalla.kunal@gmail.com>
 ;; URL: https://github.com/kunalb/poet/
-;; Package-Version: 20180812.1815
+;; Package-Version: 20180913.707
 ;; Version: 1.1
 
 ;;; Commentary:
@@ -138,7 +138,7 @@
          :slant italic)
         (highlight
          :background ,highlight
-         :overline ,highlight)
+         :overline nil)
         (region
          :background ,bg-highlight)
         (fringe

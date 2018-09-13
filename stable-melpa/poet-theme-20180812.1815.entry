@@ -1,2 +1,0 @@
-
-(poet-theme . [(20180812 1815) nil "A prose friendly theme." single ((:commit . "656ce7201b66a2d41109068b9f49efd18f7539d1") (:authors ("Kunal Bhalla" . "bhalla.kunal@gmail.com")) (:maintainer "Kunal Bhalla" . "bhalla.kunal@gmail.com") (:url . "https://github.com/kunalb/poet/"))])

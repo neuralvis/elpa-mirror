@@ -3,8 +3,8 @@
 ;; Copyright (C) 2018  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
-;; Version: 0.1
-;; Keywords: 
+;; Version: 0.2
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -36,10 +36,16 @@
 
 ;;; Code:
 
+(declare-function ad-remove-advice "advice")
+
 (unless (fboundp 'add-function)
   ;; If `add-function' is defined, we're presumably running on
   ;; an Emacs that comes with the real nadvice.el, so let's be careful
   ;; to do nothing in that case!
+
+  ;; Load `advice' manually, in case `advice-remove' is called first,
+  ;; since ad-remove-advice is not autoloaded.
+  (require 'advice)
 
 ;;;###autoload
 (defun advice-add (symbol where function &optional props)
@@ -74,8 +80,18 @@
   (ad-remove-advice symbol 'around function)
   (ad-activate symbol))
 
+)
+
 ;;;; ChangeLog:
 
+;; 2018-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+;; 
+;; 	* nadvice.el: ad-remove-advice is not autoloaded
+;; 
+;; 2018-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
+;; 
+;; 	* nadvice.el: Fix typo
+;; 
 ;; 2018-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
 ;; 
 ;; 	* nadvice/nadvice.el (advice-add): Add support for :override

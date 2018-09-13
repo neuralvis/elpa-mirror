@@ -1,0 +1,2 @@
+
+(slack . [(20180913 651) ((websocket (1 8)) (request (0 2 0)) (oauth2 (0 10)) (circe (2 2)) (alert (1 2)) (emojify (0 2))) "Slack client for Emacs" tar ((:commit . "f58b107d7073d165e0aab09d02a8f8d87a010f7d") (:url . "https://github.com/yuya373/emacs-slack"))])
