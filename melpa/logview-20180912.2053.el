@@ -5,10 +5,10 @@
 ;; Author:     Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Maintainer: Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Version:    0.11.1
-;; Package-Version: 20180522.1754
+;; Package-Version: 20180912.2053
 ;; Keywords:   files, tools
 ;; Homepage:   https://github.com/doublep/logview
-;; Package-Requires: ((emacs "24.4") (datetime "0.3"))
+;; Package-Requires: ((emacs "24.4") (datetime "0.3") (extmap "1.0"))
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -54,6 +54,7 @@
 (eval-when-compile (require 'cl-lib)
                    (require 'help-mode))
 (require 'datetime)
+(require 'extmap)
 
 ;; We _append_ self to the list of mode rules so as to not clobber
 ;; other rules, as '.log' is a common file extension.  This also gives
@@ -2002,6 +2003,12 @@ returns non-nil."
 
 ;;; Internal functions (except helpers for specific command groups).
 
+(defmacro logview--internal-log (format-string &rest arguments)
+  ;; No such variable present on old Emacses, just don't print anything.
+  `(when (boundp 'inhibit-message)
+     (let ((inhibit-message t))
+       (message ,format-string ,@arguments))))
+
 (defun logview--guess-submode ()
   (save-excursion
     (save-restriction
@@ -2159,47 +2166,61 @@ returns non-nil."
 
 (defun logview--all-timestamp-formats ()
   (unless logview--all-timestamp-formats-cache
-    (let ((start-time (float-time))
-          (patterns (make-hash-table :test 'equal :size 1000))
-          (uniques  (make-hash-table :test 'equal :size 1000)))
-      (dolist (locale (datetime-list-locales t))
-        (let ((decimal-separator (char-to-string (datetime-locale-field locale :decimal-separator)))
-              last-time-pattern)
-          (dolist (time-variant '(:short :medium :long :full))
-            (let ((time-pattern (datetime-locale-time-pattern locale time-variant)))
-              (unless (string= time-pattern last-time-pattern)
-                (setq last-time-pattern time-pattern)
-                (when (and (datetime-pattern-includes-second-p 'java time-pattern)
-                           (not (datetime-pattern-includes-timezone-p 'java time-pattern)))
-                  (let (variants)
-                    (dolist (pattern (cons time-pattern
-                                           (mapcar (lambda (date-variant) (datetime-locale-date-time-pattern locale date-variant time-variant))
-                                                   '(:short :medium :long :full))))
-                      (push pattern                                                                                   variants)
-                      (push (replace-regexp-in-string "\\<s+\\>" (concat "\\&" decimal-separator "SSS")    pattern t) variants)
-                      (push (replace-regexp-in-string "\\<s+\\>" (concat "\\&" decimal-separator "SSSSSS") pattern t) variants))
-                    (dolist (pattern variants)
-                      (let* ((parts            (datetime-recode-pattern 'java 'parsed pattern))
-                             (locale-dependent (datetime-pattern-locale-dependent-p 'parsed parts))
-                             (key              (cons pattern (when locale-dependent locale))))
-                        (when (or locale-dependent (null (gethash key patterns)))
-                          (puthash key
-                                   (apply #'datetime-matching-regexp 'parsed parts :locale locale logview--datetime-options)
-                                   patterns)))))))))))
-      (maphash (lambda (key regexp)
-                 (let ((existing (gethash regexp uniques)))
-                   (if existing
-                       (unless (memq (cdr key) (cdr existing))
-                         (push (cdr key) (cdr existing)))
-                     (puthash regexp (cons (car key) (list (cdr key))) uniques))))
-               patterns)
-      (maphash (lambda (regexp key)
-                 (push `(,(car key) (regexp . ,regexp)) logview--all-timestamp-formats-cache))
-               uniques)
-      ;; No such variable present on old Emacses, just don't print anything.
-      (when (boundp 'inhibit-message)
-        (let ((inhibit-message t))
-          (message "Logview/datetime: built list of %d timestamp regexps in %.3f s" (hash-table-count uniques) (- (float-time) start-time))))))
+    ;; Since there are now really lots of locales known by `datetime', cache this value
+    ;; not only in memory, but also on disk.  We use `extmap' to create and read the cache
+    ;; file.  If `datetime' reports a different locale database version, cache is
+    ;; discarded.
+    (let* ((cache-filename          (locate-user-emacs-file "logview-cache.extmap"))
+           (cache-file              (ignore-errors (extmap-init cache-filename)))
+           (locale-database-version (if (fboundp #'datetime-locale-database-version) (with-no-warnings (datetime-locale-database-version)) 0)))
+      (when cache-file
+        (let ((cached-externally (extmap-get cache-file 'timestamp-formats t)))
+          (when (and cached-externally (equal (extmap-get cache-file 'locale-database-version t) locale-database-version))
+            (setq logview--all-timestamp-formats-cache (extmap-get cache-file 'timestamp-formats t)))))
+      (if logview--all-timestamp-formats-cache
+          (logview--internal-log "Logview: loaded locale timestamp formats from `%s'" cache-filename)
+        (let ((start-time (float-time))
+              (patterns (make-hash-table :test 'equal :size 1000))
+              (uniques  (make-hash-table :test 'equal :size 1000)))
+          (dolist (locale (datetime-list-locales t))
+            (let ((decimal-separator (char-to-string (datetime-locale-field locale :decimal-separator)))
+                  last-time-pattern)
+              (dolist (time-variant '(:short :medium :long :full))
+                (let ((time-pattern (datetime-locale-time-pattern locale time-variant)))
+                  (unless (string= time-pattern last-time-pattern)
+                    (setq last-time-pattern time-pattern)
+                    (when (and (datetime-pattern-includes-second-p 'java time-pattern)
+                               (not (datetime-pattern-includes-timezone-p 'java time-pattern)))
+                      (let (variants)
+                        (dolist (pattern (cons time-pattern
+                                               (mapcar (lambda (date-variant) (datetime-locale-date-time-pattern locale date-variant time-variant))
+                                                       '(:short :medium :long :full))))
+                          (push pattern                                                                                   variants)
+                          (push (replace-regexp-in-string "\\<s+\\>" (concat "\\&" decimal-separator "SSS")    pattern t) variants)
+                          (push (replace-regexp-in-string "\\<s+\\>" (concat "\\&" decimal-separator "SSSSSS") pattern t) variants))
+                        (dolist (pattern variants)
+                          (let* ((parts            (datetime-recode-pattern 'java 'parsed pattern))
+                                 (locale-dependent (datetime-pattern-locale-dependent-p 'parsed parts))
+                                 (key              (cons pattern (when locale-dependent locale))))
+                            (when (or locale-dependent (null (gethash key patterns)))
+                              (puthash key
+                                       (apply #'datetime-matching-regexp 'parsed parts :locale locale logview--datetime-options)
+                                       patterns)))))))))))
+          (maphash (lambda (key regexp)
+                     (let ((existing (gethash regexp uniques)))
+                       (if existing
+                           (unless (memq (cdr key) (cdr existing))
+                             (push (cdr key) (cdr existing)))
+                         (puthash regexp (cons (car key) (list (cdr key))) uniques))))
+                   patterns)
+          (maphash (lambda (regexp key)
+                     (push `(,(car key) (regexp . ,regexp)) logview--all-timestamp-formats-cache))
+                   uniques)
+          (logview--internal-log "Logview/datetime: built list of %d timestamp regexps in %.3f s" (hash-table-count uniques) (- (float-time) start-time))
+          (ignore-errors
+            (extmap-from-alist cache-filename `((locale-database-version . ,locale-database-version)
+                                                (timestamp-formats       . ,logview--all-timestamp-formats-cache))
+                               :overwrite t))))))
   logview--all-timestamp-formats-cache)
 
 
@@ -2740,69 +2761,70 @@ This list is preserved across Emacs session in
       (remove-list-of-text-properties region-start region-end '(logview-entry fontified)))))
 
 (defun logview--fontify-region (region-start region-end _loudly)
-  (logview--std-temporarily-widening
-    ;; We are very fast.  Don't fontify too little to avoid overhead.
-    (when (and (< region-end (point-max)) (not (get-text-property (1+ region-end) 'fontified)))
-      (let ((expanded-region-end (+ region-start logview--lazy-region-size)))
-        (when (< region-end expanded-region-end)
-          (setq region-end (or (next-single-property-change (1+ region-end) 'fontified nil expanded-region-end) expanded-region-end)))))
-    (when (and (> region-start (point-min)) (not (get-text-property (1- region-start) 'fontified)))
-      (let ((expanded-region-start (max 1 (- region-end logview--lazy-region-size))))
-        (when (> region-start expanded-region-start)
-          (setq region-start (or (previous-single-property-change (1- region-start) 'fontified nil expanded-region-start) expanded-region-start)))))
-    (let ((first-entry-start (cdr (logview--do-locate-current-entry region-start))))
-      (when first-entry-start
-        (setq region-start first-entry-start)
-        (logview--std-altering
-          (save-match-data
-            (let ((have-timestamp   (memq 'timestamp logview--submode-features))
-                  (have-level       (memq 'level     logview--submode-features))
-                  (have-name        (memq 'name      logview--submode-features))
-                  (have-thread      (memq 'thread    logview--submode-features))
-                  (validator        (cdr logview--current-filter))
-                  (highlighter      (cdr logview--highlighted-filter))
-                  (highlighted-part logview-highlighted-entry-part)
-                  found-anything-visible)
-              (logview--iterate-entries-forward
-               region-start
-               (lambda (entry start)
-                 (let ((end (logview--entry-end entry start))
-                       filtered)
-                   (if (or (null validator) (funcall validator entry start))
-                       (progn
-                         (when have-level
-                           (let ((entry-faces (aref logview--submode-level-faces (logview--entry-level entry))))
-                             (put-text-property start end 'face (car entry-faces))
-                             (add-face-text-property (logview--entry-group-start entry start logview--level-group)
-                                                     (logview--entry-group-end   entry start logview--level-group)
-                                                     (cdr entry-faces))))
-                         (when have-timestamp
-                           (add-face-text-property (logview--entry-group-start entry start logview--timestamp-group)
-                                                   (logview--entry-group-end   entry start logview--timestamp-group)
-                                                   'logview-timestamp))
-                         (when have-name
-                           (add-face-text-property (logview--entry-group-start entry start logview--name-group)
-                                                   (logview--entry-group-end   entry start logview--name-group)
-                                                   'logview-name))
-                         (when have-thread
-                           (add-face-text-property (logview--entry-group-start entry start logview--thread-group)
-                                                   (logview--entry-group-end   entry start logview--thread-group)
-                                                   'logview-thread))
-                         (when (and highlighter (funcall highlighter entry start))
-                           (add-face-text-property (if (eq highlighted-part 'message) (logview--entry-message-start entry start) start)
-                                                   (if (eq highlighted-part 'header)  (logview--space-back (logview--entry-message-start entry start)) end)
-                                                   'logview-highlight)))
-                     (setq filtered t))
-                   (when (logview--update-entry-invisibility start (logview--entry-details-start entry start) end filtered 'propagate 'propagate)
-                     (setq found-anything-visible t))
-                   (or (< end region-end)
-                       ;; There appears to be a bug in displaying code for the unlikely case
-                       ;; that fontifying function hides all the text in the region it has
-                       ;; been called for: Emacs still displays an empty line or at least the
-                       ;; ellipses to denote hidden text (i.e. not merged with the previous
-                       ;; ellipses).  So, to avoid this bug we just continue.  Besides, font
-                       ;; lock would do this anyway.
-                       (not found-anything-visible)))))))))))
+  (when (logview-initialized-p)
+    (logview--std-temporarily-widening
+      ;; We are very fast.  Don't fontify too little to avoid overhead.
+      (when (and (< region-end (point-max)) (not (get-text-property (1+ region-end) 'fontified)))
+        (let ((expanded-region-end (+ region-start logview--lazy-region-size)))
+          (when (< region-end expanded-region-end)
+            (setq region-end (or (next-single-property-change (1+ region-end) 'fontified nil expanded-region-end) expanded-region-end)))))
+      (when (and (> region-start (point-min)) (not (get-text-property (1- region-start) 'fontified)))
+        (let ((expanded-region-start (max 1 (- region-end logview--lazy-region-size))))
+          (when (> region-start expanded-region-start)
+            (setq region-start (or (previous-single-property-change (1- region-start) 'fontified nil expanded-region-start) expanded-region-start)))))
+      (let ((first-entry-start (cdr (logview--do-locate-current-entry region-start))))
+        (when first-entry-start
+          (setq region-start first-entry-start)
+          (logview--std-altering
+            (save-match-data
+              (let ((have-timestamp   (memq 'timestamp logview--submode-features))
+                    (have-level       (memq 'level     logview--submode-features))
+                    (have-name        (memq 'name      logview--submode-features))
+                    (have-thread      (memq 'thread    logview--submode-features))
+                    (validator        (cdr logview--current-filter))
+                    (highlighter      (cdr logview--highlighted-filter))
+                    (highlighted-part logview-highlighted-entry-part)
+                    found-anything-visible)
+                (logview--iterate-entries-forward
+                 region-start
+                 (lambda (entry start)
+                   (let ((end (logview--entry-end entry start))
+                         filtered)
+                     (if (or (null validator) (funcall validator entry start))
+                         (progn
+                           (when have-level
+                             (let ((entry-faces (aref logview--submode-level-faces (logview--entry-level entry))))
+                               (put-text-property start end 'face (car entry-faces))
+                               (add-face-text-property (logview--entry-group-start entry start logview--level-group)
+                                                       (logview--entry-group-end   entry start logview--level-group)
+                                                       (cdr entry-faces))))
+                           (when have-timestamp
+                             (add-face-text-property (logview--entry-group-start entry start logview--timestamp-group)
+                                                     (logview--entry-group-end   entry start logview--timestamp-group)
+                                                     'logview-timestamp))
+                           (when have-name
+                             (add-face-text-property (logview--entry-group-start entry start logview--name-group)
+                                                     (logview--entry-group-end   entry start logview--name-group)
+                                                     'logview-name))
+                           (when have-thread
+                             (add-face-text-property (logview--entry-group-start entry start logview--thread-group)
+                                                     (logview--entry-group-end   entry start logview--thread-group)
+                                                     'logview-thread))
+                           (when (and highlighter (funcall highlighter entry start))
+                             (add-face-text-property (if (eq highlighted-part 'message) (logview--entry-message-start entry start) start)
+                                                     (if (eq highlighted-part 'header)  (logview--space-back (logview--entry-message-start entry start)) end)
+                                                     'logview-highlight)))
+                       (setq filtered t))
+                     (when (logview--update-entry-invisibility start (logview--entry-details-start entry start) end filtered 'propagate 'propagate)
+                       (setq found-anything-visible t))
+                     (or (< end region-end)
+                         ;; There appears to be a bug in displaying code for the unlikely case
+                         ;; that fontifying function hides all the text in the region it has
+                         ;; been called for: Emacs still displays an empty line or at least the
+                         ;; ellipses to denote hidden text (i.e. not merged with the previous
+                         ;; ellipses).  So, to avoid this bug we just continue.  Besides, font
+                         ;; lock would do this anyway.
+                         (not found-anything-visible))))))))))))
   `(jit-lock-bounds ,region-start . ,region-end))
 
 ;; Returns non-nil if any part of the entry is visible as a result.

@@ -5,9 +5,9 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20180910.1114
+;; Package-Version: 20180912.2047
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
-;; Version: 1.2.1
+;; Version: 1.3.0
 
 ;; This file is not part of GNU Emacs.
 
@@ -521,22 +521,17 @@ If nil, the session used will be `org-noter--session'."
   "Insert a new heading at LEVEL with TITLE.
 The point will be at the start of the contents, after any
 properties, by a margin of NEWLINES-NUMBER."
-  (org-insert-heading)
+  (setq newlines-number (or newlines-number 1))
+  (org-insert-heading nil t)
   (let* ((initial-level (org-element-property :level (org-element-at-point)))
          (changer (if (> level initial-level) 'org-do-demote 'org-do-promote))
          (number-of-times (abs (- level initial-level))))
-    (dotimes (_ number-of-times)
-      (funcall changer))
-
+    (dotimes (_ number-of-times) (funcall changer))
     (insert (org-trim (replace-regexp-in-string "\n" " " title)))
 
     (org-end-of-subtree)
-    (while (= 32 (char-syntax (char-before))) (backward-char))
-
-    (dotimes (_ (or newlines-number 1))
-      (if (and (not (eobp)) (org-next-line-empty-p))
-          (forward-line)
-        (insert "\n")))))
+    (unless (bolp) (insert "\n"))
+    (org-N-empty-lines-before-current (1- newlines-number))))
 
 (defun org-noter--narrow-to-root (ast)
   (when ast
@@ -1594,7 +1589,7 @@ info).
 When you insert into an existing note and have text selected on
 the document buffer, the variable `org-noter-insert-selected-text-inside-note'
 defines if the text should be inserted inside the note."
-  (interactive "P")
+  (interactive)
   (org-noter--with-valid-session
    (let* ((ast (org-noter--parse-root)) (contents (org-element-contents ast))
           (window (org-noter--get-notes-window 'force))
@@ -1622,23 +1617,25 @@ defines if the text should be inserted inside the note."
          (let ((point (point))
                (minibuffer-local-completion-map org-noter--completing-read-keymap)
                collection default default-begin title selection
-               (target-post-blank (if org-noter-separate-notes-from-heading 2 1)))
+               (empty-lines-number (if org-noter-separate-notes-from-heading 2 1)))
 
-           ;; NOTE(nox): When precise, it will certainly be a new note
-           (if precise-location
-               (setq default (and selected-text (replace-regexp-in-string "\n" " " selected-text)))
-
+           (cond
+            ;; NOTE(nox): Both precise and without questions will create new notes
+            (precise-location
+             (setq default (and selected-text (replace-regexp-in-string "\n" " " selected-text))))
+            (org-noter-insert-note-no-questions)
+            (t
              (dolist (note-cons (org-noter--view-info-notes view-info))
                (let ((display (org-element-property :raw-value (car note-cons)))
                      (begin   (org-element-property :begin     (car note-cons))))
                  (push (cons display note-cons) collection)
                  (when (and (>= point begin) (> begin (or default-begin 0)))
                    (setq default display
-                         default-begin begin)))))
+                         default-begin begin))))))
 
            (setq collection (nreverse collection)
                  title (if org-noter-insert-note-no-questions
-                           (and precise-location default)
+                           default
                          (completing-read "Note: " collection nil nil nil nil default))
                  selection (unless org-noter-insert-note-no-questions (cdr (assoc title collection))))
 
@@ -1648,28 +1645,16 @@ defines if the text should be inserted inside the note."
                       (has-content
                        (org-element-map (org-element-contents reference-element) org-element-all-elements
                          (lambda (element) (not (memq (org-element-type element) '(section property-drawer))))
-                         nil t))
-                      (post-blank (org-element-property :post-blank reference-element)))
-
-                 (when has-content (setq target-post-blank 2))
-
+                         nil t)))
+                 (when has-content (setq empty-lines-number 2))
                  (goto-char (org-element-property :end reference-element))
 
-                 ;; NOTE(nox): Org doesn't count `:post-blank' when at the end of the buffer
-                 (when (org-next-line-empty-p) ;; This is only true at the end, I think
-                   (goto-char (point-max))
-                   (save-excursion
-                     (beginning-of-line)
-                     (while (looking-at "[[:space:]]*$")
-                       (setq post-blank (1+ post-blank))
-                       (beginning-of-line 0))))
-
-                 (while (< post-blank target-post-blank)
-                   (insert "\n")
-                   (setq post-blank (1+ post-blank)))
-
-                 (when (org-at-heading-p)
-                   (forward-line -1))
+                 (if (org-at-heading-p)
+                     (progn
+                       (org-N-empty-lines-before-current empty-lines-number)
+                       (forward-line -1))
+                   (unless (bolp) (insert "\n"))
+                   (org-N-empty-lines-before-current (1- empty-lines-number)))
 
                  (when (and org-noter-insert-selected-text-inside-note selected-text) (insert selected-text)))
 
@@ -1688,6 +1673,9 @@ defines if the text should be inserted inside the note."
                       ((eq (car reference-element-cons) 'after)
                        (goto-char (org-element-property :end (cdr reference-element-cons)))))
 
+                     ;; NOTE(nox): This is here to make the automatic "should insert blank" work better.
+                     (when (= 32 (char-syntax (char-before))) (backward-char))
+
                      (setq level (org-element-property :level (cdr reference-element-cons))))
 
                  (goto-char (org-element-map contents 'section
@@ -1695,9 +1683,9 @@ defines if the text should be inserted inside the note."
                               nil t org-element-all-elements))
                  (setq level (1+ (org-element-property :level ast))))
 
-               ;; NOTE(nox): This is needed to insert in the right place...
+               ;; NOTE(nox): This is needed to insert in the right place
                (outline-show-entry)
-               (org-noter--insert-heading level title target-post-blank)
+               (org-noter--insert-heading level title empty-lines-number)
                (when (org-noter--session-hide-other session) (org-overview))
 
                (org-entry-put nil org-noter-property-note-location (org-noter--pretty-print-location location-cons))
