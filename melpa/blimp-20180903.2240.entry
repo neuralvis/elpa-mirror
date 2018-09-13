@@ -1,2 +1,2 @@
 
-(blimp . [(20180903 2240) ((emacs (25)) (eimp (1 4 0))) "Bustling Image Manipulation Package" single ((:commit . "e420763d6d18b5d1be552cdbc47f91418343db03") (:keywords "multimedia" "unix") (:authors ("Sebastian Wålinder" . "s.walinder@gmail.com")) (:maintainer "Sebastian Wålinder" . "s.walinder@gmail.com") (:url . "https://github.com/walseb/blimp"))])
+(blimp . [(20180903 2240) ((emacs (25)) (eimp (1 4 0))) "Bustling Image Manipulation Package" single ((:commit . "cbee896dc9fa9bb6208df1b47e78380402ab2426") (:keywords "multimedia" "unix") (:authors ("Sebastian Wålinder" . "s.walinder@gmail.com")) (:maintainer "Sebastian Wålinder" . "s.walinder@gmail.com") (:url . "https://github.com/walseb/blimp"))])
