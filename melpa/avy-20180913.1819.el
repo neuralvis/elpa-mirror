@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/avy
-;; Package-Version: 20180814.2121
+;; Package-Version: 20180913.1819
 ;; Version: 0.4.0
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5"))
 ;; Keywords: point, location
@@ -1918,6 +1918,9 @@ Otherwise, the whole regex is highlighted."
                 (let ((l (length str)))
                   (when (>= l 1)
                     (setq str (substring str 0 (1- l))))))
+               ;; Handle ESC
+               ((= char 27)
+                (keyboard-quit))
                (t
                 (setq str (concat str (list char)))))
              ;; Highlight
