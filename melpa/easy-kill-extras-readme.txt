@@ -34,6 +34,10 @@ default.  `ace-jump-*-mode' can be invoked for selection when in
 easy-kill/easy-mark mode.  You can disable this feature via a
 customize variable `easy-kill-ace-jump-enable-p'.
 
+Experimental multiple-cursors-mode support for easy-kill is enabled
+by default.  `easy-kill' and `easy-mark' will mostly work in
+`multiple-cursors-mode'.
+
 Suggested settings are as follows:
 
   ;; Upgrade `mark-word' and `mark-sexp' with easy-mark
