@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20180829.2124
+;; Package-Version: 20180912.2303
 ;; Keywords: tools
 ;; Version: 0.6
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3") (projectile "0.14.0"))
@@ -147,6 +147,7 @@ We save the last line here, in case we need to append more text to it.")
          ((s-blank? line))
          ;; Lines of just -- are used as a context separator when
          ;; calling ripgrep with context flags.
+         ;; TODO: don't always use three ---.
          ((string= line "--")
           (insert
            (propertize "---\n"

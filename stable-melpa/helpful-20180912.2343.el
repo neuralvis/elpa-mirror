@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180816.2217
+;; Package-Version: 20180912.2343
 ;; Keywords: help, lisp
 ;; Version: 0.14
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -1093,7 +1093,19 @@ If the source code cannot be found, return the sexp used."
           (save-excursion
             (save-restriction
               (goto-char pos)
-              (narrow-to-defun t)
+
+              (if (and (helpful--primitive-p sym callable-p)
+                       (not callable-p))
+                  ;; For variables defined in .c files, only show the
+                  ;; DEFVAR expression rather than the huge containing
+                  ;; function.
+                  (progn
+                    (setq pos (line-beginning-position))
+                    (forward-list)
+                    (forward-char)
+                    (narrow-to-region pos (point)))
+                ;; Narrow to the top-level definition.
+                (narrow-to-defun t))
 
               ;; If there was a preceding comment, POS will be
               ;; after that comment. Move the position to include that comment.
@@ -1845,9 +1857,9 @@ state of the current symbol."
                      'helpful-buffer-button
                      'buffer helpful--associated-buffer
                      'position pos)))
-           ;; Buffer-local variable but default value.
+           ;; Buffer-local variable but default/global value.
            ((local-variable-if-set-p sym)
-            "Default Value")
+            "Global Value")
            ;; This variable is not buffer-local.
            (t "Value")))
          (cond
@@ -1880,7 +1892,7 @@ state of the current symbol."
             'prompt-p t)
            " "
            (helpful--button
-            "Default value"
+            "Global value"
             'helpful-associated-buffer-button
             'symbol sym
             'prompt-p nil)
