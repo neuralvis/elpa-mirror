@@ -4,7 +4,7 @@
 
 ;; Author: Vibhav Pant <vibhavp@gmail.com>
 ;; Version: 1.0
-;; Package-Version: 20180818.704
+;; Package-Version: 20180914.515
 ;; Package-Requires: ((lsp-mode "3.0"))
 ;; Keywords: go, golang
 ;; URL: https://github.com/emacs-lsp/lsp-go
@@ -21,7 +21,7 @@
   :group 'lsp-go)
 
 (defcustom lsp-go-language-server-flags '("-gocodecompletion")
-  "Extra arguments for the go-langserver"
+  "Extra arguments for the go-langserver."
   :type '(repeat string)
   :group 'lsp-go)
 
@@ -31,7 +31,7 @@
   :type 'bool
   :group 'lsp-go)
 
-(defcustom lsp-go-gocode-completion-enabled nil
+(defcustom lsp-go-gocode-completion-enabled t
   "Enable code completion feature (using gocode)."
   :type 'bool
   :group 'lsp-go)
@@ -39,7 +39,7 @@
 (defcustom lsp-go-format-tool "goimports"
   "The tool to be used for formatting documents.  Defaults to `goimports' if nil."
   :type '(choice (const :tag "goimports" "goimports")
-		 (const :tag "gofmt" "gofmt"))
+                 (const :tag "gofmt" "gofmt"))
   :group 'lsp-go)
 
 (defcustom lsp-go-imports-local-prefix ""
@@ -65,11 +65,11 @@ defaults to half of your CPU cores."
 
 (defun lsp-go--make-init-options (_)
   `(:funcSnippetEnabled ,(lsp-go--bool-to-json lsp-go-func-snippet-enabled)
-			:gocodeCompletionEnabled ,(lsp-go--bool-to-json lsp-go-gocode-completion-enabled)
-			:formatTool ,lsp-go-format-tool
-			:goimportsLocalPrefix ,lsp-go-imports-local-prefix
-			:maxParallelism ,lsp-go-max-parallelism
-			:useBinaryPkgCache ,lsp-go-use-binary-pkg-cache))
+                        :gocodeCompletionEnabled ,(lsp-go--bool-to-json lsp-go-gocode-completion-enabled)
+                        :formatTool ,lsp-go-format-tool
+                        :goimportsLocalPrefix ,lsp-go-imports-local-prefix
+                        :maxParallelism ,lsp-go-max-parallelism
+                        :useBinaryPkgCache ,lsp-go-use-binary-pkg-cache))
 
 (lsp-define-stdio-client lsp-go "go" #'(lambda () default-directory)
                          `(,lsp-go-executable-path
@@ -77,7 +77,7 @@ defaults to half of your CPU cores."
                            ,@lsp-go-language-server-flags)
                          :ignore-regexps
                          '("^langserver-go: reading on stdin, writing on stdout$")
-			 :extra-init-params #'lsp-go--make-init-options)
+                         :extra-init-params #'lsp-go--make-init-options)
 
 (provide 'lsp-go)
 ;;; lsp-go.el ends here

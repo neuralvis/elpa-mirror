@@ -1,0 +1,2 @@
+
+(lsp-ui . [(20180914 547) ((emacs (25 1)) (dash (2 14)) (dash-functional (1 2 0)) (flycheck (31)) (lsp-mode (4 2)) (markdown-mode (2 3))) "UI modules for lsp-mode" tar ((:commit . "636d834a40867d3ae81068ec7383ff948bf7e620") (:keywords "lsp") (:authors ("Tobias Pisani" . "topisani@hamsterpoison.com")) (:maintainer "Tobias Pisani" . "topisani@hamsterpoison.com") (:url . "https://github.com/emacs-lsp/lsp-ui"))])
