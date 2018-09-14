@@ -2,7 +2,7 @@
 
 ;; Copyright (c) 2013 Spotify AB
 ;; Package-Requires: ((emacs "24") (s "1.12"))
-;; Package-Version: 20180628.1659
+;; Package-Version: 20180914.1116
 ;; Homepage: https://github.com/spotify/dockerfile-mode
 ;;
 ;; Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -64,6 +64,9 @@ Each element of the list will be passed as a separate
   '((t (:inherit (font-lock-constant-face bold))))
   "Face to highlight the base image alias inf FROM ... AS <alias> construct.")
 
+(defconst dockerfile--from-regex
+  (rx "from " (group (+? nonl)) (or " " eol) (? "as " (group (1+ nonl)))))
+
 (defvar dockerfile-font-lock-keywords
   `(,(cons (rx (or line-start "onbuild ")
                (group (or "from" "maintainer" "run" "cmd" "expose" "env" "arg"
@@ -71,7 +74,7 @@ Each element of the list will be passed as a separate
                           "label" "stopsignal" "shell" "healthcheck"))
                word-boundary)
            font-lock-keyword-face)
-    (,(rx "FROM " (group (+? nonl)) (or " " eol) (? "as " (group (1+ nonl))))
+    (,dockerfile--from-regex
      (1 'dockerfile-image-name)
      (2 'dockerfile-image-alias nil t))
     ,@(sh-font-lock-keywords)
@@ -112,6 +115,21 @@ Each element of the list will be passed as a separate
 
 (unless dockerfile-mode-abbrev-table
   (define-abbrev-table 'dockerfile-mode-abbrev-table ()))
+
+(defun dockerfile-indent-line-function ()
+  "Indent lines in a Dockerfile.
+
+Lines beginning with a keyword are ignored, and any others are
+indented by one `tab-width'."
+  (unless (eq (get-text-property (point-at-bol) 'face)
+              'font-lock-keyword-face)
+    (save-excursion
+      (beginning-of-line)
+      (skip-chars-forward "[ \t]" (point-at-eol))
+      (unless (equal (point) (point-at-eol)) ; Ignore empty lines.
+        ;; Delete existing whitespace.
+        (delete-char (- (point-at-bol) (point)))
+        (indent-to tab-width)))))
 
 (defun dockerfile-build-arg-string ()
   "Create a --build-arg string for each element in `dockerfile-build-args'."
@@ -165,12 +183,28 @@ If prefix arg NO-CACHE is set, don't cache the image."
   (interactive (list (dockerfile-read-image-name)))
   (dockerfile-build-buffer image-name t))
 
+(defun dockerfile--imenu-function ()
+  "Find the previous headline from point.
+
+Search for a FROM instruction.  If an alias is used this is
+returned, otherwise the base image name is used."
+  (when (re-search-backward dockerfile--from-regex nil t)
+    (let ((data (match-data)))
+      (when (match-string 2)
+        ;; we drop the first match group because
+        ;; imenu-generic-expression can only use one offset, so we
+        ;; normalize to `1'.
+        (set-match-data (list (nth 0 data) (nth 1 data) (nth 4 data) (nth 5 data))))
+      t)))
+
 ;;;###autoload
 (define-derived-mode dockerfile-mode prog-mode "Dockerfile"
   "A major mode to edit Dockerfiles.
 \\{dockerfile-mode-map}
 "
   (set-syntax-table dockerfile-mode-syntax-table)
+  (set (make-local-variable 'imenu-generic-expression)
+       `(("Stage" dockerfile--imenu-function 1)))
   (set (make-local-variable 'require-final-newline) mode-require-final-newline)
   (set (make-local-variable 'comment-start) "#")
   (set (make-local-variable 'comment-end) "")
@@ -178,7 +212,8 @@ If prefix arg NO-CACHE is set, don't cache the image."
   (set (make-local-variable 'parse-sexp-ignore-comments) t)
   (set (make-local-variable 'font-lock-defaults)
        '(dockerfile-font-lock-keywords nil t))
-  (setq local-abbrev-table dockerfile-mode-abbrev-table))
+  (setq local-abbrev-table dockerfile-mode-abbrev-table)
+  (setq indent-line-function #'dockerfile-indent-line-function))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("Dockerfile\\(?:\\..*\\)?\\'" . dockerfile-mode))

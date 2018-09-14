@@ -5,7 +5,7 @@
 ;; Author: Takuma Matsushita <cs14095@gmail.com>
 ;; Created: 2 Jul 2016
 ;; Version: 0.0.1
-;; Package-Version: 20170330.1226
+;; Package-Version: 20180914.815
 ;; Keywords: convinience
 ;; Homepage: https://github.com/cs14095/ciel.el
 ;; Package-Requires: ((emacs "24"))
@@ -132,7 +132,7 @@
 	(newline)
 	(newline)
 	(indent-according-to-mode)
-	(previous-line)
+        (forward-line -1)
 	(indent-according-to-mode)))))
 
 ;;;###autoload
@@ -212,7 +212,7 @@
 	(newline)
 	(newline)
 	(indent-according-to-mode)
-	(previous-line)
+	(forward-line -1)
 	(indent-according-to-mode)))))
 
 ;;;###autoload

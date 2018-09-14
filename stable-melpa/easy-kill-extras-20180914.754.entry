@@ -1,0 +1,2 @@
+
+(easy-kill-extras . [(20180914 754) ((easy-kill (0 9 4))) "Extra functions for easy-kill." tar ((:commit . "8ec0e03f7de50c292ddaba696d542a33dd583e8e") (:keywords "killing" "convenience") (:authors ("Akinori MUSHA" . "knu@iDaemons.org")) (:maintainer "Akinori MUSHA" . "knu@iDaemons.org") (:url . "https://github.com/knu/easy-kill-extras.el"))])
