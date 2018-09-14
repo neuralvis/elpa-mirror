@@ -4,7 +4,7 @@
 
 ;; Author: Felipe Ochoa <felipe@fov.space>
 ;; URL: https://github.com/felipeochoa/rjsx-mode/
-;; Package-Version: 20180823.1645
+;; Package-Version: 20180913.2224
 ;; Package-Requires: ((emacs "24.4") (js2-mode "20170504"))
 ;; Version: 1.1
 ;; Keywords: languages
@@ -1294,9 +1294,16 @@ Fixes:
 "
   (unless rjsx--indent-region-p
     (js2-reparse))
+  (let ((delta (- (point) (progn (back-to-indentation) (point)))))
+    (rjsx--indent-line-1)
+    (back-to-indentation)
+    (when (> delta 0)
+      (forward-char delta))))
 
+(defun rjsx--indent-line-1 ()
+  "Helper for `rjsx-indent-line'."
   (let* ((indent-tabs-mode nil)
-         (cur-pos (save-excursion (back-to-indentation) (point)))
+         (cur-pos (point))
          (cur-char (char-after cur-pos))
          (node (js2-node-at-point (- cur-pos rjsx--indent-running-offset)))
          (parent (js2-node-parent node)))
