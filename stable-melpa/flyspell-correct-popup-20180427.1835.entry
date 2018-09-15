@@ -1,2 +1,2 @@
 
-(flyspell-correct-popup . [(20180427 1835) ((flyspell-correct (0 4 0)) (popup (0 5 3))) "correcting words with flyspell via popup interface" single ((:commit . "57667720663af6143e6a486fa27460db06304939") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
+(flyspell-correct-popup . [(20180427 1835) ((flyspell-correct (0 4 0)) (popup (0 5 3))) "correcting words with flyspell via popup interface" single ((:commit . "5e54974199bee2fd1ef0283a9accb37395840322") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
