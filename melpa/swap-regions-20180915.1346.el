@@ -4,7 +4,7 @@
 
 ;; Author: Xu Chunyang <mail@xuchunyang.me>
 ;; Keywords: convenience
-;; Package-Version: 20180116.1053
+;; Package-Version: 20180915.1346
 ;; Homepage: https://github.com/xuchunyang/swap-regions.el
 ;; Package-Requires: ((emacs "24.3"))
 ;; Version: 0
@@ -80,8 +80,10 @@
      (deactivate-mark)
      (list buf-A reg-A-beg reg-A-end buf-B reg-B-beg reg-B-end)))
   ;; Swap these two regions
-  (let ((reg-A-str (buffer-substring reg-A-beg reg-A-end))
-        (reg-B-str (buffer-substring reg-B-beg reg-B-end)))
+  (let ((reg-A-str (with-current-buffer buf-A
+                     (buffer-substring reg-A-beg reg-A-end)))
+        (reg-B-str (with-current-buffer buf-B
+                     (buffer-substring reg-B-beg reg-B-end))))
     (when (< reg-B-beg reg-A-beg)
       (cl-psetq buf-A buf-B
                 reg-A-beg reg-B-beg
