@@ -4,6 +4,7 @@
 
 ;; Author: Hiroaki Otsu <ootsuhiroaki@gmail.com>
 ;; Keywords: bbdb, news, mail
+;; Package-Version: 20140221.2354
 ;; URL: https://github.com/aki2o/bbdb-
 ;; Package-Requires: ((bbdb "20140123.1541") (log4e "0.2.0") (yaxception "0.1"))
 ;; Version: 0.0.2
@@ -974,6 +975,4 @@
 
 
 (provide 'bbdb-)
-;;; bbdb-.el ends here
-de 'bbdb-)
 ;;; bbdb-.el ends here
