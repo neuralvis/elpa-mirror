@@ -1,2 +1,0 @@
-
-(guix . [(20180910 1513) ((emacs (24 3)) (dash (2 11 0)) (geiser (0 8)) (bui (1 1 0)) (magit-popup (2 1 0)) (edit-indirect (0 1 4))) "Interface for GNU Guix" tar ((:commit . "6ac7b47fa1ce4dbb8b897de7c73ff6802b15e52e") (:keywords "tools") (:authors ("Alex Kost" . "alezost@gmail.com")) (:maintainer "Alex Kost" . "alezost@gmail.com") (:url . "https://emacs-guix.gitlab.io/website/"))])
