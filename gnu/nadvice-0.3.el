@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018  Free Software Foundation, Inc.
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
-;; Version: 0.2
+;; Version: 0.3
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -77,13 +77,27 @@
 
 ;;;###autoload
 (defun advice-remove (symbol function)
-  (ad-remove-advice symbol 'around function)
-  (ad-activate symbol))
+  ;; Just return nil if there is no advice, rather than signaling an
+  ;; error.
+  (condition-case nil
+      (ad-remove-advice symbol 'around function)
+    (error nil))
+  (condition-case nil
+      (ad-activate symbol)
+    (error nil)))
 
 )
 
 ;;;; ChangeLog:
 
+;; 2018-09-15  Thomas Fitzsimmons	<fitzsim@fitzsim.org>
+;; 
+;; 	packages/nadvice: Fix advice-remove behaviour
+;; 
+;; 	* packages/nadvice/nadvice.el: Bump version to 0.3.
+;; 	(advice-remove): Do not signal an error if the function already has no
+;; 	advice.
+;; 
 ;; 2018-09-12  Stefan Monnier  <monnier@iro.umontreal.ca>
 ;; 
 ;; 	* nadvice.el: ad-remove-advice is not autoloaded

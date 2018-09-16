@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20180908.1916
+;; Package-Version: 20180916.729
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -106,6 +106,9 @@ otherwise look for a .cabal file, or use the current dir."
   `((styx  . ,(lambda (root) (dante-repl-by-file root '("styx.yaml") '("styx" "repl" dante-target))))
     (nix   . ,(lambda (root) (dante-repl-by-file root '("shell.nix" "default.nix")
                                                       '("nix-shell" "--pure" "--run" (concat "cabal repl " (or dante-target "") " --builddir=dist/dante")))))
+    (impure-nix
+           . ,(lambda (root) (dante-repl-by-file root '("shell.nix" "default.nix")
+                                                      '("nix-shell" "--run" (concat "cabal repl " (or dante-target "") " --builddir=dist/dante")))))
     (stack . ,(lambda (root) (dante-repl-by-file root '("stack.yaml") '("stack" "repl" dante-target))))
     (mafia . ,(lambda (root) (dante-repl-by-file root '("mafia") '("mafia" "repl" dante-target))))
     (new-build . ,(lambda (root) (when (or (directory-files root nil ".+\\.cabal$") (file-exists-p "cabal.project"))
