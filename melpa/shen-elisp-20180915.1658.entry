@@ -1,2 +1,0 @@
-
-(shen-elisp . [(20180915 1658) ((emacs (24 4))) "Shen implementation in Elisp" tar ((:commit . "27c8110c63cb2a72df78fcb67b7622414dbfc2b1") (:keywords "shen" "elisp") (:url . "http://github.com/deech/shen-elisp"))])

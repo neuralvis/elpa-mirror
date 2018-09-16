@@ -854,7 +854,7 @@
 	    ((:keywords "convenience" "text" "org")
 	     (:url . "https://savannah.nongnu.org/projects/org-edna-el/"))])
  (orgalist .
-	   [(1 8)
+	   [(1 9)
 	    ((emacs
 	      (24 4)))
 	    "Manage Org-like lists in non-Org buffers" single
