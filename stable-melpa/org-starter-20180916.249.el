@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1.0
-;; Package-Version: 20180907.2116
+;; Package-Version: 20180916.249
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; URL: https://github.com/akirak/org-starter
 
@@ -646,10 +646,11 @@ is returned as the result of this function."
                   (if pair
                       (setf (cdr pair) refile)
                     (add-to-list 'org-refile-targets (cons fpath refile) 'append))))
-              (dolist (spec (mapcar (or org-starter-capture-template-map-function
-                                        #'identity)
-                                    capture))
-                (org-starter-add-file-capture-template fpath spec))
+              (unless deprecated
+                (dolist (spec (mapcar (or org-starter-capture-template-map-function
+                                          #'identity)
+                                      capture))
+                  (org-starter-add-file-capture-template fpath spec)))
               (when key
                 (org-starter--bind-file-key key fpath))
               (when local-variables
@@ -846,6 +847,14 @@ by `org-starter-define-file'."
     (cl-delete fpath org-starter-deprecated-files)
     (cl-delete fpath org-agenda-files)
     (cl-delete fpath org-refile-targets :key #'car)
+    (cl-delete fpath org-capture-templates
+               :test #'equal
+               :key (lambda (spec)
+                      (pcase (nth 3 spec)
+                        (`(file ,fpath) fpath)
+                        ((and `(,key ,fpath . ,_)
+                              (guard (string-prefix-p "file+" (symbol-name key))))
+                         fpath))))
     (cl-delete fpath org-starter-known-files)
     (message "Deleted %s from org-starter-known-files" fpath)))
 
@@ -875,6 +884,28 @@ SPEC is the same as an item in :capture option of `org-starter-define-file'."
     (when target
       (setf (car (nthcdr 3 spec)) target))
     (org-starter--add-capture-template spec)))
+
+;;;; Org-agenda
+(defun org-starter-add-agenda-custom-command (key desc &rest args)
+  "`org-add-agenda-custom-command' with extra features.
+
+This function basically adds (KEY DESC ARGS) to
+`org-agnda-custom-commands', but if it also checks if KEY does not
+conflict with existing custom agenda commands.
+
+Some extra features may be added in the future.
+
+Note you have to quote ARGS."
+  (declare (indent 2))
+  (if-let ((current (assoc key org-agenda-custom-commands))
+           (old-desc (nth 1 current)))
+      ;; If it has the same description, override it
+      (when (or (string-equal desc old-desc)
+                ;; Otherwise, confirmation is needed
+                (yes-or-no-p (format "Replace custom agenda command '%s' with '%s'?"
+                                     old-desc desc)))
+        (setcdr current (cons desc args)))
+    (push `(,key ,desc ,@args) org-agenda-custom-commands)))
 
 ;;;; Miscellaneous functionality
 
