@@ -3,8 +3,8 @@
 ;; Copyright (C) 2012-2017  Takeshi Arabiki
 
 ;; Author: Takeshi Arabiki
-;; Version: 0.1.7
-;; Package-Version: 20180917.1437
+;; Version: 0.2.0
+;; Package-Version: 20180917.1702
 
 ;;  This program is free software: you can redistribute it and/or modify
 ;;  it under the terms of the GNU General Public License as published by
@@ -45,6 +45,26 @@
 ;;                 (define-key js-mode-map (kbd "C-c C-l") 'nodejs-repl-load-file)
 ;;                 (define-key js-mode-map (kbd "C-c C-z") 'nodejs-repl-switch-to-repl)))
 ;;
+;; When a version manager such as nvm is used to run different versions
+;; of Node.js, it is often desirable to start the REPL of the version
+;; specified in the .nvmrc file per project.  In such case, customize the
+;; `nodejs-repl-command` variable with a function symbol.  That function
+;; should query nvm for the Node.js command to run.  For example:
+;;
+;;     (require 'nodejs-repl)
+;;     (defun nvm-which ()
+;;       (let* ((shell (concat (getenv "SHELL") " -l -c 'nvm which'"))
+;;              (output (shell-command-to-string shell)))
+;;         (cadr (split-string output "[\n]+" t))))
+;;     (setq nodejs-repl-command #'nvm-which)
+;;
+;; The `nvm-which` function can be simpler, and perhaps can run faster,
+;; too, if using Bash:
+;;
+;;     (defun nvm-which ()
+;;       (let ((output (shell-command-to-string "source ~/.nvm/nvm.sh; nvm which")))
+;;         (cadr (split-string output "[\n]+" t))))
+;;
 
 (require 'cc-mode)
 (require 'comint)
@@ -54,7 +74,7 @@
   "Run Node.js REPL and communicate the process."
   :group 'processes)
 
-(defconst nodejs-repl-version "0.1.7"
+(defconst nodejs-repl-version "0.2.0"
   "Node.js mode Version.")
 
 (defcustom nodejs-repl-command "node"
@@ -147,7 +167,7 @@ See also `comint-process-echoes'"
 (defvar nodejs-repl-cache-completions ())
 
 (defvar nodejs-repl-get-completions-for-require-p nil)
-(defvar nodejs-repl-completion-at-point-called-p nil)
+(defvar nodejs-repl-prompt-deletion-required-p nil)
 
 ;;;--------------------------
 ;;; Private functions
@@ -270,6 +290,9 @@ when receive the output string"
   (setq nodejs-repl-cache-token "")
   (setq nodejs-repl-cache-completions ()))
 
+(defun nodejs-repl--set-prompt-deletion-required-p ()
+  (setq nodejs-repl-prompt-deletion-required-p t))
+
 (defun nodejs-repl--remove-duplicated-prompt (string)
   ;; `.load` command of Node.js repl outputs a duplicated prompt
   (let ((beg (or comint-last-output-start
@@ -280,10 +303,10 @@ when receive the output string"
       (when (re-search-forward (concat nodejs-repl-prompt nodejs-repl-prompt) end t)
         (replace-match nodejs-repl-prompt)))))
 
-(defun nodejs-repl--remove-unexpected-prompts (string)
-  ;; Unexpected prompts are inserted if `completion-auto-help' is t
-  (when nodejs-repl-completion-at-point-called-p
-    (setq nodejs-repl-completion-at-point-called-p nil)
+(defun nodejs-repl--delete-prompt (string)
+  ;; A prompt will be inserted if window--adjust-process-windows is called
+  (when nodejs-repl-prompt-deletion-required-p
+    (setq nodejs-repl-prompt-deletion-required-p nil)
     (let ((beg (or comint-last-output-start
                    (point-min-marker)))
           (end (process-mark (get-buffer-process (current-buffer)))))
@@ -452,10 +475,6 @@ when receive the output string"
                            (point)))
 
 ;;;###autoload
-(defun nodejs-repl-send-last-sexp () (interactive))  ;; Dummy definition for autoload
-(define-obsolete-function-alias 'nodejs-repl-send-last-sexp 'nodejs-repl-send-last-expression)
-
-;;;###autoload
 (defun nodejs-repl-switch-to-repl ()
   "If there is a `nodejs-repl-process' running switch to it,
 otherwise spawn one."
@@ -481,13 +500,15 @@ otherwise spawn one."
   "Major mode for Node.js REPL"
   :syntax-table nodejs-repl-mode-syntax-table
   (set (make-local-variable 'font-lock-defaults) '(nil nil t))
-  (add-hook 'comint-output-filter-functions 'nodejs-repl--remove-unexpected-prompts nil t)
+  (add-hook 'comint-output-filter-functions 'nodejs-repl--delete-prompt nil t)
   (add-hook 'comint-output-filter-functions 'nodejs-repl--remove-duplicated-prompt nil t)
   (add-hook 'comint-output-filter-functions 'nodejs-repl--filter-escape-sequnces nil t)
   (add-hook 'comint-output-filter-functions 'nodejs-repl--clear-cache nil t)
   (setq comint-input-ignoredups nodejs-repl-input-ignoredups)
   (setq comint-process-echoes nodejs-repl-process-echoes)
   (add-hook 'completion-at-point-functions 'nodejs-repl--completion-at-point-function nil t)
+  (make-local-variable 'window-configuration-change-hook)
+  (add-hook 'window-configuration-change-hook 'nodejs-repl--set-prompt-deletion-required-p)
   (ansi-color-for-comint-mode-on))
 
 ;;;###autoload

@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.4.0
-;; Package-Version: 20180911.941
+;; Package-Version: 20180917.1609
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -68,7 +68,7 @@
 ;; Variables
 ;;
 
-(defvar doom-modeline-height 29
+(defvar doom-modeline-height 23
   "How tall the mode-line should be (only respected in GUI Emacs).")
 
 (defvar doom-modeline-bar-width 1
@@ -772,9 +772,11 @@ segment.")
 (doom-modeline-def-segment selection-info
   "Information about the current selection, such as how many characters and
 lines are selected, or the NxM dimensions of a block selection."
-  (when (and mark-active (doom-modeline--active))
+  (when (and (or mark-active (and (bound-and-true-p evil-local-mode)
+                                  (eq evil-state 'visual)))
+             (doom-modeline--active))
     (cl-destructuring-bind (beg . end)
-        (if (and (bound-and-true-p evil-state) (eq evil-state 'visual))
+        (if (and (bound-and-true-p evil-local-mode) (eq evil-state 'visual))
             (cons evil-visual-beginning evil-visual-end)
           (cons (region-beginning) (region-end)))
       (propertize
