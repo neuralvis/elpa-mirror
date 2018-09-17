@@ -1,2 +1,0 @@
-
-(flyspell-correct-helm . [(20180427 1835) ((flyspell-correct (0 4 0)) (helm (1 9 0))) "correcting words with flyspell via helm interface" single ((:commit . "8aae6cf10527651b4a07b0b5f33257713d8f4211") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
