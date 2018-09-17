@@ -5,7 +5,7 @@
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/flycheck-clang-analyzer
-;; Package-Version: 20180904.304
+;; Package-Version: 20180917.1425
 ;; Version: 0.5
 ;; Package-Requires: ((flycheck "0.24") (emacs "24.4"))
 
@@ -137,7 +137,8 @@
   (and (boundp 'rtags-enabled)
        rtags-enabled
        (fboundp 'rtags-is-running)
-       (rtags-is-running)))
+       (rtags-is-running)
+       (> (length (rtags-compilation-flags)) 0)))
 
 (defun flycheck-clang-analyzer--rtags-get-compile-options ()
   "Get compile options from rtags."

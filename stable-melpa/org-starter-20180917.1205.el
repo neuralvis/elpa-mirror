@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1.0
-;; Package-Version: 20180916.249
+;; Package-Version: 20180917.1205
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; URL: https://github.com/akirak/org-starter
 
@@ -39,6 +39,7 @@
 (require 'org-capture)
 
 (declare-function -not "dash")
+(defvar org-agenda-custom-commands)
 
 ;;;; Compatibility
 
@@ -852,9 +853,10 @@ by `org-starter-define-file'."
                :key (lambda (spec)
                       (pcase (nth 3 spec)
                         (`(file ,fpath) fpath)
-                        ((and `(,key ,fpath . ,_)
-                              (guard (string-prefix-p "file+" (symbol-name key))))
-                         fpath))))
+                        (`(,key ,fpath . ,_)
+                         (when (string-prefix-p "file+"
+                                                (symbol-name key))
+                           fpath)))))
     (cl-delete fpath org-starter-known-files)
     (message "Deleted %s from org-starter-known-files" fpath)))
 
