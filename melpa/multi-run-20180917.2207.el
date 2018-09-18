@@ -4,7 +4,7 @@
 
 ;; Author: Sagar Jha
 ;; URL: https://www.github.com/sagarjha/multi-run
-;; Package-Version: 20180122.1509
+;; Package-Version: 20180917.2207
 ;; Package-Requires: ((emacs "24") (window-layout "1.4"))
 ;; Version: 1.0
 ;; Keywords: tools, terminals
@@ -98,8 +98,7 @@
         ('term (term "/bin/bash"))
         ('multi-term (multi-term))
         (multi-run-term-type (error "Value of multi-run-term-type should be one of the following symbols: eshell, shell, ansi-term, term, multi-term")))
-      (rename-buffer (multi-run-get-buffer-name term-num))))
-  (switch-to-buffer (multi-run-get-buffer-name term-num)))
+      (rename-buffer (multi-run-get-buffer-name term-num)))))
 
 ;; run a command on a single terminal
 (defun multi-run-on-single-terminal (command term-num)

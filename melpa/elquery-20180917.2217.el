@@ -7,7 +7,7 @@
 ;; Created: 19 Feb 2017
 
 ;; Keywords: html hypermedia tools webscale
-;; Package-Version: 20180514.212
+;; Package-Version: 20180917.2217
 ;; Homepage: https://github.com/AdamNiederer/elquery
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1") (s "1.11.0") (dash "2.13.0"))
@@ -271,7 +271,7 @@ If VAL is supplied, destructively set NODE's data-KEY property to VAL"
   "Return the AST of the HTML string STRING as a plist."
   (with-temp-buffer
     (set-buffer-multibyte nil) ; ref debbugs.gnu.org/cgi/bugreport.cgi?bug=31427
-    (insert-string string)
+    (insert string)
     (let ((tree (libxml-parse-html-region (point-min) (point-max))))
       (thread-last tree
         (--tree-map (if (stringp it) (s-trim (s-collapse-whitespace it)) it))

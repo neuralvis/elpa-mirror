@@ -2,8 +2,8 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Url: http://github.com/alphapapa/org-web-tools
-;; Package-Version: 20180903.734
-;; Version: 1.0
+;; Package-Version: 20180917.2305
+;; Version: 1.0.1
 ;; Package-Requires: ((emacs "25.1") (org "9.0") (dash "2.12") (esxml "0.3.4") (s "1.10.0"))
 ;; Keywords: hypermedia, outlines, Org, Web
 
@@ -124,6 +124,7 @@ When SELECTOR is non-nil, the HTML is filtered using
                       (insert html)
                       (libxml-parse-html-region 1 (point-max)))
                     (esxml-query selector)
+                    ;; MAYBE: Should probably use `shr-dom-print' instead.
                     (org-web-tools--dom-to-html))))
   (with-temp-buffer
     (insert html)
@@ -198,16 +199,22 @@ Bad characters are matched by `org-web-tools-pandoc-replacements'."
       (replace-match ""))))
 
 (defun org-web-tools--remove-custom_id_properties ()
-  "Remove property drawers containing only CUSTOM_ID properties."
-  ;; TODO: Might be good to also remove just the CUSTOM_ID in drawers containing other properties.
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward (rx (optional (1+ blank)) ":PROPERTIES:\n"
-                                  (optional (1+ blank)) ":CUSTOM_ID:" (1+ not-newline) "\n"
-                                  (optional (1+ blank)) ":END:"
-                                  (optional "\n"))
-                              nil t)
-      (replace-match ""))))
+  "Remove property drawers containing CUSTOM_ID properties.
+This is a blunt instrument: any drawer containing the CUSTOM_ID
+property is removed, regardless of other properties it may
+contain.  This seems to be the best course of action in current
+Pandoc output."
+  (let ((regexp (org-re-property "CUSTOM_ID" nil nil)))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward regexp nil t)
+        (when (org-at-property-p)
+          (org-back-to-heading)
+          ;; As a minor optimization, we don't bound the search to the current entry.  Unless the
+          ;; current property drawer is malformed, which shouldn't happen in Pandoc output, it
+          ;; should work.
+          (re-search-forward org-property-drawer-re)
+          (setf (buffer-substring (match-beginning 0) (match-end 0)) ""))))))
 
 (defconst org-web-tools--pandoc-no-wrap-option nil
   "Option to pass to Pandoc to disable wrapping.
@@ -392,6 +399,7 @@ first-level entry for writing comments."
       ;; Insert article text
       (insert converted)
       ;; Demote in-article headings
+      ;; MAYBE: Use `org-paste-subtree' instead of demoting headings ourselves.
       (org-web-tools--demote-headings-below 2)
       ;; Insert headings at top
       (goto-char (point-min))
