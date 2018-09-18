@@ -4,7 +4,7 @@
 
 ;; Author: Nikita Sivakov <cryptomaniac.512@gmail.com>
 ;; Version: 1.0
-;; Package-Version: 20180628.715
+;; Package-Version: 20180918.1558
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.0"))
 ;; URL: https://github.com/emacs-lsp/lsp-vue
 
@@ -115,12 +115,12 @@
           (const "js-beautify-html" :tag "html formatter of js-beautify")))
 
 (defcustom vetur.format.defaultFormatter.css
-  "pretter"
+  "prettier"
   "Default formatter for <style> region"
   :group 'vetur
   :type '(radio
           (const "none" :tag "disable formatting")
-          (const "pretter" :tag "css formatter using css parser from prettier")))
+          (const "prettier" :tag "css formatter using css parser from prettier")))
 
 (defcustom vetur.format.defaultFormatter.postcss
   "prettier"
@@ -128,7 +128,7 @@
   :group 'vetur
   :type '(radio
           (const "none" :tag "disable formatting")
-          (const "pretter" :tag "css formatter using css parser from prettier")) )
+          (const "prettier" :tag "css formatter using css parser from prettier")) )
 
 (defcustom vetur.format.defaultFormatter.scss
   "prettier"
@@ -136,7 +136,7 @@
   :group 'vetur
   :type '(radio
           (const "none" :tag "disable formatting")
-          (const "pretter" :tag "css formatter using css parser from prettier")) )
+          (const "prettier" :tag "css formatter using css parser from prettier")) )
 
 
 (defcustom vetur.format.defaultFormatter.less
@@ -145,7 +145,7 @@
   :group 'vetur
   :type '(radio
           (const "none" :tag "disable formatting")
-          (const "pretter" :tag "css formatter using css parser from prettier")) )
+          (const "prettier" :tag "css formatter using css parser from prettier")) )
 
 (defcustom vetur.format.defaultFormatter.stylus
   "stylus-supremacy"
