@@ -5,7 +5,7 @@
 
 ;; Author: Gergely Nagy
 ;; Version: 0.1
-;; Package-Version: 20180831.636
+;; Package-Version: 20180918.1202
 ;; URL: https://git.madhouse-project.org/algernon/brutalist-theme.el
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -103,7 +103,7 @@
    `(ido-only-match ((t (:foreground ,fg))))
    `(ido-subdir ((t (:foreground ,fg))))
    `(isearch ((t (:background ,bg-highlight-dim :foreground ,fg))))
-   `(link ((t (:foreground ,string :underline t))))
+   `(link ((t (:foreground ,string :underline t :inherit fixed-pitch))))
    `(minibuffer-prompt ((t (:foreground ,fg :weight bold))))
    `(mode-line ((t (:background ,bg-light :foreground ,fg :height 0.8))))
    `(mode-line-buffer ((t (:foreground ,fg :weight bold))))
@@ -274,6 +274,10 @@
    `(markdown-inline-code-face ((t (:slant italic))))
    `(markdown-pre-face ((t (:inherit markdown-inline-code-face))))
    `(markdown-reference-face ((t (:inherit markdown-link-face))))
+   `(markdown-url-face ((t (:inherit markdown-link-face))))
+   `(markdown-metadata-key-face ((t (:inherit fixed-pitch))))
+   `(markdown-markup-face ((t (:inherit fixed-pitch :foreground ,fg-dim))))
+   `(markdown-metadata-value-face ((t (:inherit fixed-pitch :foreground ,string))))
 
    ;; misc
    `(idle-highlight ((t (:background ,bg-highlight))))

@@ -21,7 +21,7 @@
 ;; -------------------------------------------------------------------------------------------
 
 ;; URL: http://github.com/ananthakumaran/typescript.el
-;; Package-Version: 20180918.706
+;; Package-Version: 20180918.934
 ;; Version: 0.1
 ;; Keywords: typescript languages
 ;; Package-Requires: ()
@@ -2251,7 +2251,10 @@ nil."
                    (when (= (char-before) ?\)) (backward-list))
                    (skip-syntax-backward " ")
                    (skip-syntax-backward "w_")
-                   (looking-at typescript--possibly-braceless-keyword-re))
+                   (and
+                    (looking-at typescript--possibly-braceless-keyword-re)
+                    ;; If preceded by period, it's a method call.
+                    (not (= (char-before) ?.))))
                  (not (typescript--end-of-do-while-loop-p))))
       (save-excursion
         (goto-char (match-beginning 0))

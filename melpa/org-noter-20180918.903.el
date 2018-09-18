@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20180912.2047
+;; Package-Version: 20180918.903
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.3.0
 
@@ -392,6 +392,7 @@ The title used will be the default one."
       nil)))
 
 (defmacro org-noter--with-valid-session (&rest body)
+  (declare (debug (body)))
   `(let ((session org-noter--session))
      (when (org-noter--valid-session session)
        (progn ,@body))))
@@ -601,6 +602,7 @@ properties, by a margin of NEWLINES-NUMBER."
           (org-noter--set-notes-scroll notes-window))))))
 
 (defmacro org-noter--with-selected-notes-window (error-str &rest body)
+  (declare (debug ([&optional stringp] body)))
   (let ((with-error (stringp error-str)))
     `(org-noter--with-valid-session
       (let ((notes-window (org-noter--get-notes-window)))
@@ -947,7 +949,8 @@ document property) will be opened."
 
 (defmacro org-noter--view-region-add (info list-name headline)
   `(progn
-     (when (and ,info (not (eq (aref ,info 0) ,list-name))) (org-noter--view-region-finish ,info ,headline))
+     (when (and ,info (not (eq (aref ,info 3) ',list-name)))
+       (org-noter--view-region-finish ,info ,headline))
 
      (if ,info
          (setf (aref ,info 2) (max (aref ,info 2) (org-element-property :end ,headline)))
