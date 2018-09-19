@@ -1,2 +1,0 @@
-
-(base16-theme . [(20180919 32) nil "Collection of themes built on combinations of 16 base colors" tar ((:commit . "fd3847a13a416d1f49d61b152f6662b6dfc1c0e9") (:url . "https://github.com/belak/base16-emacs"))])
