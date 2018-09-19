@@ -1,2 +1,0 @@
-
-(evil-matchit . [(20180822 712) ((evil (1 0 7))) "Vim matchit ported to Evil" tar ((:commit . "47894a6cc02c037dd782d0c0023a3193b6b49e89") (:keywords "matchit" "vim" "evil") (:authors ("Chen Bin" . "chenbin.sh@gmail.com")) (:maintainer "Chen Bin" . "chenbin.sh@gmail.com") (:url . "http://github.com/redguardtoo/evil-matchit"))])

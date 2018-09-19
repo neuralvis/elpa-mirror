@@ -5,7 +5,7 @@
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 5 Dec 2015
 ;; Version: 0.0.8
-;; Package-Version: 20180820.121
+;; Package-Version: 20180919.1111
 ;; Keywords: tools php dependency manager
 ;; Homepage: https://github.com/zonuexe/composer.el
 ;; Package-Requires: ((emacs "24") (s "1.9.0") (f "0.17") (request "0.2.0") (seq "1.9") (php-runtime "0.1.0"))
@@ -44,6 +44,7 @@
 ;;; Code:
 (require 'php-runtime nil t)
 (require 'compile)
+(require 'json)
 (require 'seq)
 (require 's)
 (require 'f)
@@ -198,7 +199,7 @@
      (getenv "COMPOSER_HOME")
      (when (eq system-type 'windows-nt) (f-join (getenv "APPDATA") "Composer"))
      (when (getenv "XDG_CONFIG_HOME") (f-join (getenv "XDG_CONFIG_HOME") "composer"))
-     (when (getenv "HOME")) (f-join (getenv "HOME") ".composer")))))
+     (when (getenv "HOME") (f-join (getenv "HOME") ".composer"))))))
 
 (defun composer--download-composer-phar (path-to-dest)
   "Download composer.phar and copy to `PATH-TO-DEST'.
@@ -242,7 +243,7 @@ https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md"
   "Retrurn path to Composer bin directory."
   (if composer-global-command
       (or (getenv "COMPOSER_BIN_DIR")
-          (f-join (composer--get-global-bin-dir) "vendor/bin"))
+          (f-join (composer--get-global-dir) "vendor/bin"))
     (let ((path (composer--find-composer-root default-directory)))
       (if path
         (f-join path (composer-get-config "bin-dir"))))))
