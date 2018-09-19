@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20180913.921
+;; Package-Version: 20180919.858
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.9.0"))
 ;; Keywords: convenience, matching, tools
@@ -2172,7 +2172,11 @@ string - the full shell command to run."
                                          (cl-case system-type
                                            (darwin "open")
                                            (cygwin "cygstart")
-                                           (t "xdg-open"))
+                                           (t (if (string-match-p
+                                                   "Ubuntu"
+                                                   (shell-command-to-string "lsb_release -d"))
+                                                  "setsid -w xdg-open"
+                                                "xdg-open")))
                                          (shell-quote-argument x)))))
 
 (defalias 'counsel-find-file-extern #'counsel-locate-action-extern)
@@ -4645,7 +4649,7 @@ This function always returns its elements in a stable order."
         (let ((dir (file-name-as-directory dir)))
           (dolist (file (directory-files-recursively dir ".*\\.desktop$"))
             (let ((id (subst-char-in-string ?/ ?- (file-relative-name file dir))))
-              (unless (gethash id hash)
+              (when (and (not (gethash id hash)) (file-readable-p file))
                 (push (cons id file) result)
                 (puthash id file hash)))))))
     result))
