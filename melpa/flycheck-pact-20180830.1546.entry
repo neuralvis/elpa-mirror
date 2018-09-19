@@ -1,0 +1,2 @@
+
+(flycheck-pact . [(20180830 1546) ((emacs (24 3)) (flycheck (0 25)) (pact-mode (0 0 4))) "Flycheck support for pact-mode" single ((:commit . "45fae1ceeface5ab15fc63a9143440060f8d09c0") (:keywords "pact" "lisp" "languages" "blockchain" "smartcontracts" "tools" "linting") (:authors ("Stuart Popejoy")) (:maintainer "Stuart Popejoy" . "stuart@kadena.io") (:url . "http://github.com/kadena-io/flycheck-pact"))])
