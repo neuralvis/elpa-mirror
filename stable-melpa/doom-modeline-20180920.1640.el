@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.4.0
-;; Package-Version: 20180917.1609
+;; Package-Version: 20180920.1640
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -688,18 +688,6 @@ directory, the file name, and its state (modified, read-only or non-existent)."
 (add-hook 'after-revert-hook #'doom-modeline--update-vcs)
 (add-hook 'after-save-hook #'doom-modeline--update-vcs)
 (add-hook 'find-file-hook #'doom-modeline--update-vcs t)
-
-(defun doom-modeline-magit-post-refresh ()
-  "Update vcs state in mode-line after refreshing in magit."
-  (dolist (buf (buffer-list))
-    (when (and (not (buffer-modified-p buf))
-               (buffer-file-name buf)
-               (file-exists-p (buffer-file-name buf))
-               (file-in-directory-p (buffer-file-name buf) (magit-toplevel)))
-      (with-current-buffer buf
-        (vc-refresh-state)
-        (doom-modeline--update-vcs)))))
-(add-hook 'magit-post-refresh-hook #'doom-modeline-magit-post-refresh)
 
 (doom-modeline-def-segment vcs
   "Displays the current branch, colored based on its state."

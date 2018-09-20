@@ -5,6 +5,16 @@ This package contains extra functions for easy-kill/easy-mark:
 * easy-mark-to-char
 * easy-mark-up-to-char
 
+  These are shorthand commands for easy-marking an aimed string at
+  point.
+
+* easy-kill-er-expand
+* easy-kill-er-unexpand
+
+  These work like `er/expand-region' and `er/contract-region',
+  respectively, using the functionality of the `expand-region'
+  package.
+
 It also provides the following easy-kill/easy-mark targets:
 
 * `buffer'
@@ -48,6 +58,10 @@ Suggested settings are as follows:
   ;; `easy-mark-to-char' or `easy-mark-up-to-char' could be a good
   ;; replacement for `zap-to-char'.
   (global-set-key [remap zap-to-char] 'easy-mark-to-char)
+
+  ;; Integrate `expand-region' functionality with easy-kill
+  (define-key easy-kill-base-map (kbd "o") 'easy-kill-er-expand)
+  (define-key easy-kill-base-map (kbd "i") 'easy-kill-er-unexpand)
 
   ;; Add the following tuples to `easy-kill-alist', preferrably by
   ;; using `customize-variable'.

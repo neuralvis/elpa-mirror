@@ -5,7 +5,7 @@
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-vdiff
-;; Package-Version: 20180719.2027
+;; Package-Version: 20180920.1720
 ;; Version: 0.2.3
 ;; Keywords: diff
 ;; Package-Requires: ((emacs "24.4") (hydra "0.13.0"))
@@ -72,6 +72,10 @@
 (defcustom vdiff-lock-scrolling t
   "Whether to lock scrolling by default when starting
 `vdiff-mode'."
+  :type 'boolean)
+
+(defcustom vdiff-truncate-lines t
+  "If non-nil, use `toggle-truncate-lines' in vdiff buffers."
   :type 'boolean)
 
 (defcustom vdiff-diff-algorithms
@@ -2185,7 +2189,12 @@ See README for entry points into a vdiff session."))
     (add-hook 'after-change-functions #'vdiff--after-change-function nil t)
     (add-hook 'pre-command-hook #'vdiff--flag-new-command nil t)
     (setf (vdiff-session-window-config vdiff--session)
-          (current-window-configuration))))
+          (current-window-configuration))
+    (when vdiff-lock-scrolling
+      (add-hook 'window-scroll-functions #'vdiff--scroll-function nil t))
+    (when vdiff-truncate-lines
+      (let (message-log-max)
+        (toggle-truncate-lines 1)))))
 
 (defun vdiff--buffer-cleanup ()
   (vdiff--remove-all-overlays)
@@ -2203,13 +2212,9 @@ hooks to refresh diff on changes. This will be enabled
 automatically after calling commands like `vdiff-files' or
 `vdiff-buffers'."
   nil " vdiff" 'vdiff-mode-map
-  (cond (vdiff-mode
-         (vdiff--buffer-init)
-         (when (and (not vdiff--testing-mode)
-                    vdiff-lock-scrolling)
-          (add-hook 'window-scroll-functions #'vdiff--scroll-function nil t)))
-        (t
-         (vdiff--buffer-cleanup))))
+  (if vdiff-mode
+      (vdiff--buffer-init)
+    (vdiff--buffer-cleanup)))
 
 (define-minor-mode vdiff-3way-mode
   "Minor mode active in a vdiff session involving three
@@ -2218,13 +2223,9 @@ adds hooks to refresh diff on changes. This will be enabled
 automatically after calling commands like `vdiff-files3' or
 `vdiff-buffers3'."
   nil " vdiff3" 'vdiff-3way-mode-map
-  (cond (vdiff-3way-mode
-         (vdiff--buffer-init)
-         (when (and (not vdiff--testing-mode)
-                    vdiff-lock-scrolling)
-           (add-hook 'window-scroll-functions #'vdiff--scroll-function nil t)))
-        (t
-         (vdiff--buffer-cleanup))))
+  (if vdiff-3way-mode
+      (vdiff--buffer-init)
+    (vdiff--buffer-cleanup)))
 
 (define-minor-mode vdiff-scroll-lock-mode
   "Lock scrolling between vdiff buffers. This minor mode will be
