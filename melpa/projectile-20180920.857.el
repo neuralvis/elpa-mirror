@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20180920.718
+;; Package-Version: 20180920.857
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -168,7 +168,7 @@ Otherwise consider the current directory the project root."
   :group 'projectile
   :type 'string)
 
-(defcustom projectile-tags-command "ctags -Re -f \"%s\" %s"
+(defcustom projectile-tags-command "ctags -Re -f \"%s\" %s \"%s\""
   "The command Projectile's going to use to generate a TAGS file."
   :group 'projectile
   :type 'string)
@@ -962,51 +962,51 @@ buffer. This is used to detect a change in `buffer-file-name',
 which triggers a reset of `projectile-cached-project-root' and
 `projectile-cached-project-name'.")
 
-(defun projectile-project-root ()
+(defun projectile-project-root (&optional dir)
   "Retrieves the root directory of a project if available.
-The current directory is assumed to be the project's root otherwise.
+If DIR is not supplied its set to the current directory by default.
 
 When not in project the behaviour of the function is controlled by
 `projectile-require-project-root'.  If it's set to nil the function
-will return the current directory, otherwise it'd raise an error."
+will return DIR or the current directory, otherwise it'd raise an error."
   ;; the cached value will be 'none in the case of no project root (this is to
   ;; ensure it is not reevaluated each time when not inside a project) so use
   ;; cl-subst to replace this 'none value with nil so a nil value is used
   ;; instead
-  (or (cl-subst nil 'none
-                (or (and projectile-cached-buffer-file-name
-                         (equal projectile-cached-buffer-file-name (or buffer-file-name 'none))
-                         projectile-cached-project-root)
-                    (progn
-                      (setq projectile-cached-buffer-file-name (or buffer-file-name 'none))
-                      (setq projectile-cached-project-root
-                            ;; The `is-local' and `is-connected' variables are
-                            ;; used to fix the behavior where Emacs hangs
-                            ;; because of Projectile when you open a file over
-                            ;; TRAMP. It basically prevents Projectile from
-                            ;; trying to find information about files for which
-                            ;; it's not possible to get that information right
-                            ;; now.
-                            (or (let* ((dir default-directory)
-                                       (is-local (not (file-remote-p dir)))      ;; `true' if the file is local
-                                       (is-connected (file-remote-p dir nil t))) ;; `true' if the file is remote AND we are connected to the remote
-                                  (when (or is-local is-connected)
-                                    (cl-some
-                                     (lambda (func)
-                                       (let* ((cache-key (format "%s-%s" func dir))
-                                              (cache-value (gethash cache-key projectile-project-root-cache)))
-                                         (if (and cache-value (file-exists-p cache-value))
-                                             cache-value
-                                           (let ((value (funcall func (file-truename dir))))
-                                             (puthash cache-key value projectile-project-root-cache)
-                                             value))))
-                                     projectile-project-root-files-functions)))
-                                ;; set cached to none so is non-nil so we don't try
-                                ;; and look it up again
-                                'none)))))
-      (if projectile-require-project-root
-          (error "You're not in a project")
-        default-directory)))
+  (let ((dir (or dir default-directory)))
+    (or (cl-subst nil 'none
+                  (or (and projectile-cached-buffer-file-name
+                           (equal projectile-cached-buffer-file-name (or buffer-file-name 'none))
+                           projectile-cached-project-root)
+                      (progn
+                        (setq projectile-cached-buffer-file-name (or buffer-file-name 'none))
+                        (setq projectile-cached-project-root
+                              ;; The `is-local' and `is-connected' variables are
+                              ;; used to fix the behavior where Emacs hangs
+                              ;; because of Projectile when you open a file over
+                              ;; TRAMP. It basically prevents Projectile from
+                              ;; trying to find information about files for which
+                              ;; it's not possible to get that information right
+                              ;; now.
+                              (or (let ((is-local (not (file-remote-p dir)))      ;; `true' if the file is local
+                                        (is-connected (file-remote-p dir nil t))) ;; `true' if the file is remote AND we are connected to the remote
+                                    (when (or is-local is-connected)
+                                      (cl-some
+                                       (lambda (func)
+                                         (let* ((cache-key (format "%s-%s" func dir))
+                                                (cache-value (gethash cache-key projectile-project-root-cache)))
+                                           (if (and cache-value (file-exists-p cache-value))
+                                               cache-value
+                                             (let ((value (funcall func (file-truename dir))))
+                                               (puthash cache-key value projectile-project-root-cache)
+                                               value))))
+                                       projectile-project-root-files-functions)))
+                                  ;; set cached to none so is non-nil so we don't try
+                                  ;; and look it up again
+                                  'none)))))
+        (if projectile-require-project-root
+            (error "You're not in a project")
+          dir))))
 
 (defun projectile-file-truename (file-name)
   "Return the truename of FILE-NAME.
@@ -2117,6 +2117,8 @@ With a prefix arg INVALIDATE-CACHE invalidates the cache first."
   (interactive "P")
   (projectile--find-file invalidate-cache #'find-file-other-frame))
 
+
+;;;; Sorting project files
 (defun projectile-sort-files (files)
   "Sort FILES according to `projectile-sort-order'."
   (cl-case projectile-sort-order
@@ -2158,6 +2160,8 @@ With a prefix arg INVALIDATE-CACHE invalidates the cache first."
              (file2-atime (nth 4 (file-attributes file2))))
          (not (time-less-p file1-atime file2-atime)))))))
 
+
+;;;; Find directory in project functionality
 (defun projectile--find-dir (invalidate-cache &optional dired-variant)
   "Jump to a project's directory using completion.
 
@@ -2854,7 +2858,7 @@ SEARCH-TERM is a regexp."
            (tags-exclude (projectile-tags-exclude-patterns))
            (default-directory project-root)
            (tags-file (expand-file-name projectile-tags-file-name))
-           (command (format projectile-tags-command tags-file tags-exclude))
+           (command (format projectile-tags-command tags-file tags-exclude default-directory))
            shell-output exit-code)
       (with-temp-buffer
         (setq exit-code

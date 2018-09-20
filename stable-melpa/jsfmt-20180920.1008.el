@@ -4,7 +4,7 @@
 
 ;; Author: Brett Langdon <brett@blangdon.com>
 ;; URL: https://github.com/brettlangdon/jsfmt.el
-;; Package-Version: 20150727.2225
+;; Package-Version: 20180920.1008
 ;; Version: 0.2.0
 
 ;; License that can be found in the LICENSE section in README.
@@ -89,7 +89,7 @@ buffer."
              (t
               (error "invalid rcs patch or internal error in jsfmt--apply-rcs-patch")))))))))
 
-(defun run-jsfmt (&optional save &optional ast)
+(defun run-jsfmt (&optional save ast)
   "Formats the current buffer according to the jsfmt tool."
   (interactive)
   (let ((tmpfile (make-temp-file "jsfmt" nil (if ast

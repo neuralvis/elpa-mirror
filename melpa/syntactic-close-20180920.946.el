@@ -4,7 +4,7 @@
 ;; Maintainer: Emacs User Group Berlin <emacs-berlin@emacs-berlin.org>
 
 ;; Version: 0.1
-;; Package-Version: 20180909.841
+;; Package-Version: 20180920.946
 
 ;; URL: https://github.com/emacs-berlin/syntactic-close
 
@@ -541,16 +541,6 @@ Optional argument PPS is result of a call to function ‘parse-partial-sexp’"
 		(lambda ()(beginning-of-line)(back-to-indentation)))))
 	 (syntactic-close-beginning-of-block-re (or b-of-bl "[ 	]*\\_<\\(class\\|def\\|async def\\|async for\\|for\\|if\\|try\\|while\\|with\\|async with\\)\\_>[:( \n	]*")))
     (cond
-     ((and (not (bolp)) (not (nth 3 pps)) (not (char-equal ?\) (char-before)))(not (char-equal ?: (char-before)))
-	   (save-excursion
-	     (funcall syntactic-close-beginning-of-statement)
-	     (looking-at syntactic-close-beginning-of-block-re)))
-      "():")
-     ((and (not (bolp)) (not (nth 3 pps)) (not (char-equal ?: (char-before)))
-	   (save-excursion
-	     (funcall syntactic-close-beginning-of-statement)
-	     (looking-at syntactic-close-beginning-of-block-re)))
-      ":")
      ((nth 8 pps)
       (syntactic-close-generic-forms pps))
      ((nth 1 pps)
@@ -605,7 +595,7 @@ Argument PPS, the result of ‘parse-partial-sexp’."
       (setq closer ";"))
      (t closer))))
 
-(defun syntactic-close--modes (pps)
+(defun syntactic-close--return-closer (pps)
   "Argument PPS, the result of ‘parse-partial-sexp’."
   (pcase major-mode
     (`php-mode (syntactic-close--semicolon-modes pps))
@@ -743,7 +733,7 @@ Argument IACT signals an interactive call."
     ;; (save-excursion
     (cond
      ((member major-mode syntactic-close-modes)
-      (setq closer (syntactic-close--modes pps)))
+      (setq closer (syntactic-close--return-closer pps)))
      ((setq closer (syntactic-close--generic))))
     ;; insert might be hardcoded like in ‘nxml-finish-element-1’
     (when (and closer (stringp closer))
