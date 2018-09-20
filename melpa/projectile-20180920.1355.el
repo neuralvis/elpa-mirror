@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20180920.857
+;; Package-Version: 20180920.1355
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -1014,10 +1014,12 @@ A thin wrapper around `file-truename' that handles nil."
   (when file-name
     (file-truename file-name)))
 
-(defun projectile-project-p ()
-  "Check if we're in a project."
+(defun projectile-project-p (&optional dir)
+  "Check if DIR is a project.
+Defaults to the current direction if not provided
+explicitly."
   (condition-case nil
-      (projectile-project-root)
+      (projectile-project-root (or dir default-directory))
     (error nil)))
 
 (defun projectile-default-project-name (project-root)
@@ -2384,19 +2386,28 @@ TEST-DIR which specifies the path to the tests relative to the project root."
 (projectile-register-project-type 'django '("manage.py")
                                   :compile "python manage.py runserver"
                                   :test "python manage.py test"
-                                  :test-prefix "test_")
+                                  :test-prefix "test_"
+                                  :test-suffix"_test")
 (projectile-register-project-type 'python-pip '("requirements.txt")
                                   :compile "python setup.by build"
                                   :test "python -m unittest discover"
-                                  :test-prefix "test_")
+                                  :test-prefix "test_"
+                                  :test-suffix"_test")
 (projectile-register-project-type 'python-pkg '("setup.py")
                                   :compile "python setup.py build"
                                   :test "python -m unittest discover"
-                                  :test-prefix "test_")
+                                  :test-prefix "test_"
+                                  :test-suffix"_test")
 (projectile-register-project-type 'python-tox '("tox.ini")
                                   :compile "tox -r --notest"
                                   :test "tox"
-                                  :test-prefix "test_")
+                                  :test-prefix "test_"
+                                  :test-suffix"_test")
+(projectile-register-project-type 'python-pipenv '("Pipfile")
+                                  :compile "pipenv run build"
+                                  :test "pipenv run test"
+                                  :test-prefix "test_"
+                                  :test-suffix "_test")
 ;; Java & friends
 (projectile-register-project-type 'maven '("pom.xml")
                                   :compile "mvn clean install"

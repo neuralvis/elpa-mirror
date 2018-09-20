@@ -4,7 +4,7 @@
 ;; Maintainer: Vitalie Spinu
 ;; Copyright (C) 2018
 ;; Version: 0.1
-;; Package-Version: 20180912.1853
+;; Package-Version: 20180920.1345
 ;; Package-Requires: ((emacs "25") (polymode "0.1") (markdown-mode "2.3"))
 ;; URL: https://github.com/polymode/poly-markdown
 ;; Keywords: emacs
@@ -80,10 +80,25 @@
   :group 'poly-innermodes
   :type 'object)
 
+(defun poly-markdown-displayed-math-head-matcher (count)
+  (when (re-search-forward "\\\\\\[\\|^[ \t]*\\(\\$\\$\\)." nil t count)
+    (if (match-beginning 1)
+        (cons (match-beginning 1) (match-end 1))
+      (cons (match-beginning 0) (match-end 0)))))
+
+(defun poly-markdown-displayed-math-tail-matcher (_count)
+  (if (match-beginning 1)
+      ;; head matched an $$..$$ block
+      (when (re-search-forward "[^$]\\(\\$\\$\\)[^$[:alnum:]]" nil t)
+        (cons (match-beginning 1) (match-end 1)))
+    ;; head matched an \[..\] block
+    (when (re-search-forward "\\\\\\]" nil t)
+      (cons (match-beginning 0) (match-end 0)))))
+
 (defcustom pm-inner/markdown-displayed-math
   (pm-inner-chunkmode :name "markdown-displayed-math"
-                      :head-matcher (cons "^[ \t]*\\(\\$\\$\\)." 1)
-                      :tail-matcher (cons "[^$]\\(\\$\\$\\)[^$[:alnum:]]" 1)
+                      :head-matcher #'poly-markdown-displayed-math-head-matcher
+                      :tail-matcher #'poly-markdown-displayed-math-tail-matcher
                       :head-mode 'host
                       :tail-mode 'host
                       :mode 'latex-mode)
@@ -93,16 +108,33 @@ character would do)."
   :group 'poly-innermodes
   :type 'object)
 
+(defun poly-markdown-inline-math-head-matcher (count)
+  (when (re-search-forward "\\\\(\\|[ \t\n]\\(\\$\\)[^ $\t[:digit:]]" nil t count)
+    (if (match-beginning 1)
+        (cons (match-beginning 1) (match-end 1))
+      (cons (match-beginning 0) (match-end 0)))))
+
+(defun poly-markdown-inline-math-tail-matcher (_count)
+  (if (match-beginning 1)
+      ;; head matched an $..$ block
+      (when (re-search-forward "[^ $\\\t]\\(\\$\\)[^$[:alnum:]]" nil t)
+        (cons (match-beginning 1) (match-end 1)))
+    ;; head matched an \(..\) block
+    (when (re-search-forward "\\\\)" nil t)
+      (cons (match-beginning 0) (match-end 0)))))
+
 (defcustom pm-inner/markdown-inline-math
   (pm-inner-chunkmode :name "markdown-inline-math"
-                      :head-matcher (cons "[ \t\n]\\(\\$\\)[^ $\t[:digit:]]" 1)
-                      :tail-matcher (cons "[^ $\\\t]\\(\\$\\)[^$[:alnum:]]" 1)
+                      :head-matcher #'poly-markdown-inline-math-head-matcher
+                      :tail-matcher #'poly-markdown-inline-math-tail-matcher
                       :head-mode 'host
                       :tail-mode 'host
                       :mode 'latex-mode)
-  "Displayed math $$..$$ block.
-Tail must be flowed by new line but head not (a space or comment
-character would do)."
+  "Inline math $..$ block.
+First $ must be preceded by a white-space character and followed
+by a non-whitespace/digit character. The closing $ must be
+preceded by a non-whitespace and not followed by an alphanumeric
+character."
   :group 'poly-innermodes
   :type 'object)
 

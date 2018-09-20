@@ -4,7 +4,7 @@
 
 ;; Author: Austin Bingham <austin.bingham@gmail.com>
 ;; Version: 1.0.0
-;; Package-Version: 20180913.1241
+;; Package-Version: 20180920.1203
 ;; Keywords: tools
 ;; URL: https://github.com/abingham/emacs-counsel-codesearch
 ;; Package-Requires: ((codesearch "1") (counsel "0.10.0") (emacs "24") (ivy "0.10.0"))
@@ -69,14 +69,15 @@
 
 (defun counsel-codesearch--function (str)
   "Execute codesearch to find match for STR."
+  (unless (< (length str) 1)
     (let ((index-file (codesearch--csearchindex default-directory))
           (process-environment (copy-alist process-environment)))
       (setenv "CSEARCHINDEX" (expand-file-name index-file))
       (counsel--async-command
        (format "%s -n %s"
                codesearch-csearch
-               str)))
-    '("" "working..."))
+               str))))
+  '())
 
 (defun counsel-codesearch--handle-selection (selection)
   "Jump to the file/line indicated by SELECTION."
@@ -100,7 +101,6 @@
 INITIAL-INPUT can be given as the initial minibuffer input."
   (interactive)
   (ivy-read "Locate: " #'counsel-codesearch--function
-            :initial-input (thing-at-point 'symbol)
             :dynamic-collection t
             :history #'counsel-locate-history
             :action #'counsel-codesearch--handle-selection
