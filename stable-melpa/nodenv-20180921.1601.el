@@ -4,7 +4,7 @@
 
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; URL: https://github.com/twlz0ne/nodenv.el
-;; Package-Version: 20180830.1217
+;; Package-Version: 20180921.1601
 ;; Created: 2018/06/30
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.4"))
@@ -45,10 +45,14 @@
 
 ;;; Code:
 
+(require 'subr-x)
+
 (defgroup nodenv nil
   "Nodenv virtualenv integration."
   :group 'nodenv)
 
+(defvar nodenv-node-version nil "Local variable to specify node version.")
+(make-local-variable 'nodenv-node-version)
 
 (defcustom nodenv-mode-line-format
   '(:eval
@@ -92,13 +96,16 @@
 
 ;;;###autoload
 (defun nodenv-auto-set ()
-  (let* ((ver-file (nodenv-node-version-file))
-         (ver (if ver-file
-                  (string-trim
-                   (shell-command-to-string
-                    (format "head -n 1 %s" ver-file)) "\n")
-                (car (reverse (nodenv-versions))))))
-    (nodenv-set ver)))
+  "Auto detect node version."
+  (if nodenv-node-version
+      (nodenv-set nodenv-node-version)
+    (let* ((ver-file (nodenv-node-version-file))
+           (ver (if ver-file
+                    (string-trim
+                     (shell-command-to-string
+                      (format "head -n 1 %s" ver-file)) "\n")
+                  (car (reverse (nodenv-versions))))))
+      (nodenv-set ver))))
 
 ;;;###autoload
 (defun nodenv-unset ()
