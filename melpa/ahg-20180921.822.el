@@ -4,7 +4,7 @@
 
 ;; Author: Alberto Griggio <agriggio@users.sourceforge.net>
 ;; URL: https://bitbucket.org/agriggio/ahg
-;; Package-Version: 20180809.653
+;; Package-Version: 20180921.822
 ;; Version: 1.0.0
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -1561,7 +1561,7 @@ do nothing."
                      (limit (string-to-number
                              (read-string
                               (if is-revset
-                                  (format "hg log, limit (default %s: "
+                                  (format "hg log, limit (default %s): "
                                           deflimit)
                                 (concat
                                  "hg log"

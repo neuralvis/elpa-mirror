@@ -1,1 +1,13 @@
 This package is a fork of rust-mode.
+
+Differences with rust-mode:
+
+- multiline error parsing
+- translation of ANSI control sequences through xterm-color
+- async org babel
+- custom compilation process
+- rustfmt errors in a rust compilation mode
+- automatic RLS configuration with eglot or lsp-mode
+- cask for testing
+- requires emacs 26
+- etc.
