@@ -1,2 +1,0 @@
-
-(nu-mode . [(20180919 2052) ((undo-tree (0 6 5)) (ace-window (0)) (avy (0)) (which-key (0)) (transpose-frame (0))) "Modern Emacs Prompts Based Keybinding." tar ((:commit . "0fcc4e7caac24bfdd2d5149ff8ccd28d93c9f0df"))])

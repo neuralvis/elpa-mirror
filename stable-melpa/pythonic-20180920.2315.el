@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/pythonic
-;; Package-Version: 20180808.420
+;; Package-Version: 20180920.2315
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "25") (s "1.9") (f "0.17.2"))
 
@@ -42,7 +42,8 @@
 
 (defun pythonic-remote-p ()
   "Determine remote virtual environment."
-  (tramp-tramp-file-p (pythonic-aliased-path default-directory)))
+  (and (tramp-tramp-file-p (pythonic-aliased-path default-directory))
+       t))
 
 (defun pythonic-remote-docker-p ()
   "Determine docker remote virtual environment."
