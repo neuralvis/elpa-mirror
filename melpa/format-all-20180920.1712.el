@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20180902.1158
+;; Package-Version: 20180920.1712
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -29,7 +29,7 @@
 ;; - Emacs Lisp (native)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
-;; - Haskell (hindent)
+;; - Haskell (brittany)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX/TypeScript/Vue (prettier)
@@ -285,6 +285,12 @@ Consult the existing formatters for examples of BODY."
   (:modes python-mode)
   (:format (format-all-buffer-easy executable "-q" "-")))
 
+(define-format-all-formatter brittany
+  (:executable "brittany")
+  (:install "stack install brittany")
+  (:modes haskell-mode)
+  (:format (format-all-buffer-easy executable)))
+
 (define-format-all-formatter clang-format
   (:executable "clang-format")
   (:install (macos "brew install clang-format"))
@@ -339,12 +345,6 @@ Consult the existing formatters for examples of BODY."
   (:executable "gofmt")
   (:install (macos "brew install go"))
   (:modes go-mode)
-  (:format (format-all-buffer-easy executable)))
-
-(define-format-all-formatter hindent
-  (:executable "hindent")
-  (:install "stack install hindent")
-  (:modes haskell-mode)
   (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter html-tidy
