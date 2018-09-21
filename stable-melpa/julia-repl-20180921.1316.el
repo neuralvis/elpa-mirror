@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016  Tamas K. Papp
 ;; Author: Tamas Papp <tkpapp@gmail.com>
 ;; Keywords: languages
-;; Package-Version: 20180910.841
+;; Package-Version: 20180921.1316
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25"))
 ;; URL: https://github.com/tpapp/julia-repl
@@ -554,9 +554,8 @@ this with a prefix argument ARG."
     (,(kbd "C-c C-v")    . julia-repl-prompt-set-executable-key)
     (,(kbd "C-c C-p")    . julia-repl-cd)
     (,(kbd "C-c C-a")    . julia-repl-activate-parent))
-  (setq-local default-directory
-              (when-let ((filename (buffer-file-name)))
-                (setq-local default-directory (file-name-directory filename)))))
+  (when-let ((filename (buffer-file-name)))
+    (setq-local default-directory (file-name-directory filename))))
 
 (provide 'julia-repl)
 ;;; julia-repl.el ends here

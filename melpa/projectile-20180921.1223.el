@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20180921.442
+;; Package-Version: 20180921.1223
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -2442,13 +2442,16 @@ Fallsback to a generic project type when the type can't be determined."
     (puthash (projectile-project-root) project-type projectile-project-type-cache)
     project-type))
 
-(defun projectile-project-type ()
-  "Determine the project's type based on its structure.
+(defun projectile-project-type (&optional dir)
+  "Determine a project's type based on its structure.
+When DIR is specified it checks it, otherwise it acts
+on the current project.
 
 The project type is cached for improved performance."
   (if projectile-project-type
       projectile-project-type
-    (let ((project-root (ignore-errors (projectile-project-root))))
+    (let* ((dir (or dir default-directory))
+           (project-root (ignore-errors (projectile-project-root dir))))
       (if project-root
           (or (gethash project-root projectile-project-type-cache)
               (projectile-detect-project-type))
@@ -3776,10 +3779,7 @@ is chosen."
   (projectile-commander))
 
 (defun projectile-commander-bindings ()
-  (def-projectile-commander-method ?A
-    "Find ag on project."
-    (call-interactively 'projectile-ag))
-
+  "Setup the keybindings for the Projectile Commander."
   (def-projectile-commander-method ?f
     "Find file in project."
     (projectile-find-file))
@@ -3819,6 +3819,10 @@ is chosen."
   (def-projectile-commander-method ?g
     "Run grep on project."
     (projectile-grep))
+
+  (def-projectile-commander-method ?a
+    "Run ag on project."
+    (call-interactively 'projectile-ag))
 
   (def-projectile-commander-method ?s
     "Switch project."
@@ -3890,7 +3894,11 @@ is chosen."
 (defun projectile-update-mode-line ()
   "Report project in mode-line."
   (let* ((project-name (projectile-project-name))
-         (message (format " %s[%s]" projectile-mode-line project-name)))
+         (project-type (projectile-project-type))
+         (message (format " %s[%s:%s]"
+                          projectile-mode-line
+                          project-name
+                          project-type)))
     (setq projectile-mode-line message))
   (force-mode-line-update))
 
