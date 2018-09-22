@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180921.23
+;; Package-Version: 20180921.2300
 ;; Keywords: help, lisp
 ;; Version: 0.14
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -420,6 +420,14 @@ or disable if already enabled."
   'follow-link t
   'help-echo "Navigate to definition")
 
+(defun helpful--goto-char-widen (pos)
+  "Move point to POS in the current buffer.
+If narrowing is in effect, widen if POS isn't in the narrowed area."
+  (when (or (< pos (point-min))
+            (> pos (point-max)))
+    (widen))
+  (goto-char pos))
+
 (defun helpful--navigate (button)
   "Navigate to the path this BUTTON represents."
   (find-file (substring-no-properties (button-get button 'path)))
@@ -427,7 +435,7 @@ or disable if already enabled."
   ;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=f7c4bad17d83297ee9a1b57552b1944020f23aea
   (-when-let (pos (get-text-property button 'position
                                      (marker-buffer button)))
-    (goto-char pos)))
+    (helpful--goto-char-widen pos)))
 
 (defun helpful--navigate-button (text path &optional pos)
   "Return a button that opens PATH and puts point at POS."
@@ -450,7 +458,7 @@ or disable if already enabled."
         (pos (button-get button 'position)))
     (switch-to-buffer buf)
     (when pos
-      (goto-char pos))))
+      (helpful--goto-char-widen pos))))
 
 (defun helpful--buffer-button (buffer &optional pos)
   "Return a button that switches to BUFFER and puts point at POS."
@@ -2334,10 +2342,7 @@ imenu."
             (setq pos (+ pos offset)))))
 
       (find-file path)
-      (when (or (< pos (point-min))
-                (> pos (point-max)))
-        (widen))
-      (goto-char pos)
+      (helpful--goto-char-widen pos)
       (recenter 0)
       (save-excursion
         (let ((defun-end (scan-sexps (point) 1)))

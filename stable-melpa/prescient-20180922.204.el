@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20180824.138
+;; Package-Version: 20180922.204
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 2.2
@@ -178,7 +178,9 @@ Usually this variable is dynamically bound to another value while
                 (when (equal (plist-get args :version)
                              prescient--cache-version)
                   (setq saved-serial-number
-                        (plist-get args :serial-number))))))
+                        (plist-get args :serial-number)))))
+             (print-length nil)
+             (print-level nil))
     (prescient--load-save-file)
     (when (or (not (numberp saved-serial-number))
               (>= prescient--serial-number saved-serial-number))
