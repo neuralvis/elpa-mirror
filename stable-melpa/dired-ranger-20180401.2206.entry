@@ -1,2 +1,2 @@
 
-(dired-ranger . [(20180401 2206) ((dash (2 7 0)) (dired-hacks-utils (0 0 1))) "Implementation of useful ranger features for dired" single ((:commit . "b6f3b7addefa046f22a15e72a25e4368e8a33d5e") (:keywords "files") (:authors ("Matúš Goljer" . "matus.goljer@gmail.com")) (:maintainer "Matúš Goljer" . "matus.goljer@gmail.com"))])
+(dired-ranger . [(20180401 2206) ((dash (2 7 0)) (dired-hacks-utils (0 0 1))) "Implementation of useful ranger features for dired" single ((:commit . "a45737d3a5aaac6928ebd7af041e5603dffaca64") (:keywords "files") (:authors ("Matúš Goljer" . "matus.goljer@gmail.com")) (:maintainer "Matúš Goljer" . "matus.goljer@gmail.com"))])

@@ -5,7 +5,7 @@
 ;; Author: Matúš Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Keywords: files
-;; Package-Version: 20160205.2013
+;; Package-Version: 20180922.1113
 ;; Version: 0.0.1
 ;; Created: 14th February 2014
 ;; Package-requires: ((dash "2.5.0") (dired-hacks-utils "0.0.1"))
@@ -220,12 +220,14 @@ For example, if the point is on line
 
 the directory /home/user is opened in new buffer."
   (interactive)
-  (when (dired-get-subdir)
-    (-when-let (end (save-excursion (re-search-forward "[/:]" (line-end-position) t)))
-      (let ((path (buffer-substring-no-properties
-                   (+ 2 (line-beginning-position))
-                   (1- end))))
-        (find-file path)))))
+  (-when-let (subdir (dired-get-subdir))
+    (if (or (bolp) (eolp))
+        (find-file subdir)
+      (-when-let (end (save-excursion (re-search-forward "[/:]" (line-end-position) t)))
+        (let ((path (buffer-substring-no-properties
+                     (+ 2 (line-beginning-position))
+                     (1- end))))
+          (find-file path))))))
 
 
 ;;; main
