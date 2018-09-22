@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180912.2343
+;; Package-Version: 20180921.23
 ;; Keywords: help, lisp
 ;; Version: 0.14
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -545,7 +545,10 @@ overrides that to include previously opened buffers."
             (read-from-minibuffer
              "Eval: "
              (format
-              (if (or (symbolp sym-value) (consp sym-value))
+              (if (or (consp sym-value)
+                      (and (symbolp sym-value)
+                           (not (null sym-value))
+                           (not (keywordp sym-value))))
                   "(setq %s '%S)"
                 "(setq %s %S)")
               sym sym-value)

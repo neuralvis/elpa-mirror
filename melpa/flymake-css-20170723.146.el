@@ -4,8 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Homepage: https://github.com/purcell/flymake-css
-;; Package-Version: 20170723.146
-;; Package-X-Original-Version: 0
+;; Package-Version: 0
 ;; Package-Requires: ((flymake-easy "0.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -76,4 +75,6 @@
 
 
 (provide 'flymake-css)
+;;; flymake-css.el ends here
+ 'flymake-css)
 ;;; flymake-css.el ends here
