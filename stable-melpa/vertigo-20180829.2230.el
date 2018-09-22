@@ -2,6 +2,7 @@
 
 ;; Author: Fox Kiester <noct@posteo.net>
 ;; URL: https://github.com/noctuid/vertigo.el
+;; Package-Version: 20180829.2230
 ;; Created: September 18, 2015
 ;; Keywords: vim, vertigo
 ;; Package-Requires: ((dash "2.11.0"))
@@ -194,6 +195,4 @@ If ARG is non-nil, set a positive count."
   (vertigo-set-digit-argument (not arg)))
 
 (provide 'vertigo)
-;;; vertigo.el ends here
-vertigo)
 ;;; vertigo.el ends here
