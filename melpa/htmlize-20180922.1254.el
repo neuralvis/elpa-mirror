@@ -4,7 +4,7 @@
 
 ;; Author: Hrvoje Niksic <hniksic@gmail.com>
 ;; Keywords: hypermedia, extensions
-;; Package-Version: 20180918.1948
+;; Package-Version: 20180922.1254
 ;; Version: 1.55
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -829,10 +829,11 @@ This is used to protect mailto links without modifying their meaning."
       (while (re-search-forward "\n\^L" nil t)
         (let* ((beg (match-beginning 0))
                (end (match-end 0))
+               (form-feed-pos (1+ beg))
                ;; don't process ^L if invisible or covered by `display'
                (show (and (htmlize-decode-invisibility-spec
-                           (get-char-property beg 'invisible))
-                          (not (get-char-property beg 'display)))))
+                           (get-char-property form-feed-pos 'invisible))
+                          (not (get-char-property form-feed-pos 'display)))))
           (when show
             (htmlize-make-tmp-overlay beg end disp)))))))
 

@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20180922.740
+;; Package-Version: 20180922.1019
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -3923,7 +3923,7 @@ is chosen."
   :type 'string
   :package-version '(projectile . "0.12.0"))
 
-(defvar-local projectile-mode-line projectile-mode-line-lighter)
+(defvar-local projectile--mode-line projectile-mode-line-lighter)
 
 (defun projectile-default-mode-line ()
   "Report project name and type in the modeline."
@@ -3937,7 +3937,7 @@ is chosen."
 (defun projectile-update-mode-line ()
   "Update the Projectile mode-line."
   (let ((mode-line (funcall projectile-mode-line-fn)))
-    (setq projectile-mode-line mode-line))
+    (setq projectile--mode-line mode-line))
   (force-mode-line-update))
 
 (defvar projectile-command-map
@@ -4078,7 +4078,7 @@ nil or positive.  If ARG is `toggle', toggle `projectile-mode'.
 Otherwise behave as if called interactively.
 
 \\{projectile-mode-map}"
-  :lighter projectile-mode-line
+  :lighter projectile--mode-line
   :keymap projectile-mode-map
   :group 'projectile
   :require 'projectile
