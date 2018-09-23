@@ -3,8 +3,8 @@
 ;; Copyright © 2012-2018 by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 3.4.20180830164555
-;; Package-Version: 20180830.2358
+;; Version: 3.4.20180922212219
+;; Package-Version: 20180923.425
 ;; Created: 02 April 2012
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: convenience, extensions, files, tools, unix
@@ -112,13 +112,9 @@
 ;;; CONTRIBUTOR
 ;; 2015-12-09 Peter Buckley (dx-pbuckley). defcustom for result highlight color.
 
-;;; TODO:
-;; 2015-05-20 the feeble find-lisp-find-files is becoming a efficiency pain. It uses one regex to list all files, then you have to filter dir. There doesn't seem to be alternative except roll one's own or use third-party package
-
 
 ;;; Code:
 
-(require 'find-lisp) ; in emacs
 (require 'ido)       ; in emacs
 (ido-common-initialization) ; 2015-07-26 else, when ido-read-directory-name is called, Return key insert line return instead of submit. For some reason i dunno.
 
@@ -221,16 +217,17 @@
 
 (defun xah-find--filter-list (@predicate @sequence)
   "Return a new list such that @PREDICATE is true on all members of @SEQUENCE.
-
+ nil elements are also removed.
+ @SEQUENCE is destroyed.
 URL `http://ergoemacs.org/emacs/elisp_filter_list.html'
-Version 2015-05-23"
-  (delete
-   "e3824ad41f2ec1ed"
+Version 2018-09-22"
+  (delq
+   nil
    (mapcar
-    (lambda ($x)
-      (if (funcall @predicate $x)
-          $x
-        "e3824ad41f2ec1ed" ))
+    (lambda (x)
+      (if (funcall @predicate x)
+          x
+        nil ))
     @sequence)))
 
 (defun xah-find--ignore-dir-p (@path )
@@ -362,7 +359,7 @@ Version 2016-12-18"
   "Return current date-time string in this format 「2012-04-05T21:08:24-07:00」"
   (concat
    (format-time-string "%Y-%m-%dT%T")
-   (funcall (lambda ($x) (format "%s:%s" (substring $x 0 3) (substring $x 3 5))) (format-time-string "%z"))))
+   (funcall (lambda (x) (format "%s:%s" (substring x 0 3) (substring x 3 5))) (format-time-string "%z"))))
 
 (defun xah-find--print-header (@bufferObj @cmd @input-dir @path-regex @search-str &optional @replace-str @write-file-p @backup-p)
   "Print things"
@@ -519,7 +516,8 @@ Case sensitivity is determined by `case-fold-search'. Call `toggle-case-fold-sea
            (while (search-forward @search-str nil "NOERROR") (setq $count (1+ $count)))
            (when (funcall $countOperator $count $countNumber)
              (xah-find--print-file-count $f $count $outBuffer)))))
-     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x))) (find-lisp-find-files @input-dir @path-regex)))
+     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
+                            (directory-files-recursively @input-dir @path-regex)))
     (xah-find--switch-to-output $outBuffer)))
 
 (defun xah-find--get-default-file-extension-regex (&optional @default-ext)
@@ -579,7 +577,8 @@ Result is shown in buffer *xah-find output*.
            (setq $count (1+ $count))
            (when @printContext-p (xah-find--occur-output (match-beginning 0) (match-end 0) $path $outBuffer)))
          (when (> $count 0) (xah-find--print-file-count $path $count $outBuffer))))
-     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x))) (find-lisp-find-files @input-dir @path-regex)))
+     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
+                            (directory-files-recursively @input-dir @path-regex)))
     (xah-find--switch-to-output $outBuffer)))
 
 ;;;###autoload
@@ -624,9 +623,10 @@ Result is shown in buffer *xah-find output*.
            (when (> $count 0)
              (when @write-to-file-p
                (when @backup-p (copy-file $f (concat $f $backupSuffix) t))
-               (write-region 1 (point-max) $f nil 3) )
+               (write-region 1 (point-max) $f nil 3))
              (xah-find--print-file-count $f $count $outBuffer )))))
-     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x))) (find-lisp-find-files @input-dir @path-regex)))
+     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
+                            (directory-files-recursively @input-dir @path-regex)))
     (xah-find--switch-to-output $outBuffer)))
 
 ;;;###autoload
@@ -665,7 +665,8 @@ Version 2016-12-21"
             ((equal @print-context-level "with context string")
              (xah-find--occur-output (match-beginning 0) (match-end 0) $fp $outBuffer))))
          (when (> $count 0) (xah-find--print-file-count $fp $count $outBuffer))))
-     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x))) (find-lisp-find-files @input-dir @path-regex)))
+     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
+                            (directory-files-recursively @input-dir @path-regex)))
     (xah-find--switch-to-output $outBuffer)))
 
 ;;;###autoload
@@ -721,7 +722,9 @@ Version 2018-08-20"
                (when @backup-p
                  (copy-file $fp (concat $fp $backupSuffix) t))
                (write-region 1 (point-max) $fp nil 3))))))
-     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x))) (find-lisp-find-files @input-dir @path-regex)))
+     (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
+                            (directory-files-recursively @input-dir @path-regex)))
+
     (xah-find--switch-to-output $outBuffer)))
 
 (provide 'xah-find)
