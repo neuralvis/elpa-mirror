@@ -1,2 +1,0 @@
-
-(htmlize . [(20180922 1254) nil "Convert buffer text and decorations to HTML." single ((:commit . "567d55c2a1c39822e22cea55393d4bcc7338ccd3") (:keywords "hypermedia" "extensions") (:authors ("Hrvoje Niksic" . "hniksic@gmail.com")) (:maintainer "Hrvoje Niksic" . "hniksic@gmail.com"))])
