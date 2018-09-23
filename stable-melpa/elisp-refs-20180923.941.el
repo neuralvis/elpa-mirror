@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Version: 1.4
-;; Package-Version: 20180923.930
+;; Package-Version: 20180923.941
 ;; Keywords: lisp
 ;; Package-Requires: ((dash "2.12.0") (loop "1.2") (s "1.11.0"))
 
@@ -347,6 +347,9 @@ Where the file was a .elc, return the path to the .el file instead."
 Works around the fact that Emacs won't allow multiple buffers
 visiting the same file."
   (let ((fresh-buffer (generate-new-buffer (format " *refs-%s*" path)))
+        ;; Be defensive against users overriding encoding
+        ;; configurations (Helpful bugs #75 and #147).
+        (coding-system-for-read nil)
         (file-name-handler-alist
          '(("\\(?:\\.dz\\|\\.txz\\|\\.xz\\|\\.lzma\\|\\.lz\\|\\.g?z\\|\\.\\(?:tgz\\|svgz\\|sifz\\)\\|\\.tbz2?\\|\\.bz2\\|\\.Z\\)\\(?:~\\|\\.~[-[:alnum:]:#@^._]+\\(?:~[[:digit:]]+\\)?~\\)?\\'" .
             jka-compr-handler)
