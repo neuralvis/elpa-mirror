@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Version: 1.4
-;; Package-Version: 20180715.2302
+;; Package-Version: 20180923.930
 ;; Keywords: lisp
 ;; Package-Requires: ((dash "2.12.0") (loop "1.2") (s "1.11.0"))
 
@@ -750,6 +750,20 @@ search."
                         (elisp-refs--read-and-find-symbol buf symbol))
                       path-prefix))
 
+(defvar elisp-refs-mode-map
+  (let ((map (make-sparse-keymap)))
+    ;; TODO: it would be nice for TAB to navigate to file buttons too,
+    ;; like *Help* does.
+    (set-keymap-parent map special-mode-map)
+    (define-key map (kbd "<tab>") #'elisp-refs-next-match)
+    (define-key map (kbd "<backtab>") #'elisp-refs-prev-match)
+    (define-key map (kbd "n") #'elisp-refs-next-match)
+    (define-key map (kbd "p") #'elisp-refs-prev-match)
+    (define-key map (kbd "q") #'kill-this-buffer)
+    (define-key map (kbd "RET") #'elisp-refs-visit-match)
+    map)
+  "Keymap for `elisp-refs-mode'.")
+
 (define-derived-mode elisp-refs-mode special-mode "Refs"
   "Major mode for refs results buffers.")
 
@@ -827,15 +841,6 @@ If DIRECTION is -1, moves backwards instead."
   "Move to the next search result in the Refs buffer."
   (interactive)
   (elisp-refs--move-to-match 1))
-
-;; TODO: it would be nice for TAB to navigate to file buttons too,
-;; like *Help* does.
-(define-key elisp-refs-mode-map (kbd "<tab>") #'elisp-refs-next-match)
-(define-key elisp-refs-mode-map (kbd "<backtab>") #'elisp-refs-prev-match)
-(define-key elisp-refs-mode-map (kbd "n") #'elisp-refs-next-match)
-(define-key elisp-refs-mode-map (kbd "p") #'elisp-refs-prev-match)
-(define-key elisp-refs-mode-map (kbd "q") #'kill-this-buffer)
-(define-key elisp-refs-mode-map (kbd "RET") #'elisp-refs-visit-match)
 
 (provide 'elisp-refs)
 ;;; elisp-refs.el ends here

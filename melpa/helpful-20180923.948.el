@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180921.2300
+;; Package-Version: 20180923.948
 ;; Keywords: help, lisp
 ;; Version: 0.14
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -2301,14 +2301,6 @@ imenu."
       (forward-line))
     (nreverse headings)))
 
-(define-derived-mode helpful-mode special-mode "Helpful"
-  "Major mode for *Helpful* buffers."
-  (add-hook 'xref-backend-functions #'elisp--xref-backend nil t)
-
-  (setq imenu-create-index-function #'helpful--imenu-index)
-  ;; Prevent imenu converting "Source Code" to "Source.Code".
-  (setq-local imenu-space-replacement " "))
-
 (defun helpful--flash-region (start end)
   "Temporarily highlight region from START to END."
   (let ((overlay (make-overlay start end)))
@@ -2360,14 +2352,26 @@ See also `helpful-max-buffers'."
     (when (eq (buffer-local-value 'major-mode buffer) 'helpful-mode)
       (kill-buffer buffer))))
 
-(define-key helpful-mode-map (kbd "g") #'helpful-update)
-(define-key helpful-mode-map (kbd "RET") #'helpful-visit-reference)
+(defvar helpful-mode-map
+  (let* ((map (make-sparse-keymap)))
+    (define-key map (kbd "g") #'helpful-update)
+    (define-key map (kbd "RET") #'helpful-visit-reference)
 
-(define-key helpful-mode-map (kbd "TAB") #'forward-button)
-(define-key helpful-mode-map (kbd "<backtab>") #'backward-button)
+    (define-key map (kbd "TAB") #'forward-button)
+    (define-key map (kbd "<backtab>") #'backward-button)
 
-(define-key helpful-mode-map (kbd "n") #'forward-button)
-(define-key helpful-mode-map (kbd "p") #'backward-button)
+    (define-key map (kbd "n") #'forward-button)
+    (define-key map (kbd "p") #'backward-button)
+    map)
+  "Keymap for `helpful-mode'.")
+
+(define-derived-mode helpful-mode special-mode "Helpful"
+  "Major mode for *Helpful* buffers."
+  (add-hook 'xref-backend-functions #'elisp--xref-backend nil t)
+
+  (setq imenu-create-index-function #'helpful--imenu-index)
+  ;; Prevent imenu converting "Source Code" to "Source.Code".
+  (setq-local imenu-space-replacement " "))
 
 (provide 'helpful)
 ;;; helpful.el ends here
