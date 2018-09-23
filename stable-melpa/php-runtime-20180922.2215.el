@@ -5,7 +5,7 @@
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 28 Aug 2017
 ;; Version: 0.1.0
-;; Package-Version: 20180110.1734
+;; Package-Version: 20180922.2215
 ;; Keywords: processes php
 ;; URL: https://github.com/emacs-php/php-runtime.el
 ;; Package-Requires: ((emacs "25") (cl-lib "0.5"))
@@ -34,7 +34,6 @@
 ;;
 ;;     (string-to-number (php-runtime-expr "PHP_INT_MAX")) ; short hand
 ;;
-
 
 ;;; Code:
 (require 'cl-lib)
@@ -56,7 +55,6 @@
 (defconst php-runtime-error-buffer-name "*PHP Error Messages*")
 
 (defvar php-runtime--kill-temp-output-buffer t)
-
 
 ;; Utility functions
 (defun php-runtime--temp-buffer ()
@@ -79,6 +77,11 @@ for example, (get-buffer \"foo-buffer\"), '(:file . \"/path/to/file\")."
        (member (car obj) (list :file :string))
        (stringp (cdr obj))))
 
+(defun php-runtime-default-handler (status output)
+  "Return `OUTPUT', and raise error when `STATUS' is not 0."
+  (if (eq 0 status)
+      output
+    (error output)))
 
 ;; PHP Execute class
 
@@ -86,12 +89,13 @@ for example, (get-buffer \"foo-buffer\"), '(:file . \"/path/to/file\")."
 (defclass php-runtime-execute nil
   ((executable :initarg :executable :type string)
    (code   :initarg :code   :type (satisfies php-runtime--code-satisfied-p))
+   (handler :initarg :handler :type function :initform #'php-runtime-default-handler)
    (stdin  :initarg :stdin  :type (satisfies php-runtime--stdin-satisfied-p) :initform nil)
    (stdout :initarg :stdout :type (or null buffer-live list) :initform nil)
    (stderr :initarg :stderr :type (or null buffer-live list) :initform nil)))
 
 (cl-defmethod php-runtime-run ((php php-runtime-execute))
-  "Execute PHP process using `php -r' with code.
+  "Execute PHP process using `php -r' with code and return status code.
 
 This execution method is affected by the number of character limit of OS command arguments.
 You can check the limitation by command, for example \(shell-command-to-string \"getconf ARG_MAX\") ."
@@ -99,6 +103,13 @@ You can check the limitation by command, for example \(shell-command-to-string \
     (if (and (oref php stdin) (not (php-runtime--stdin-by-file-p php)))
         (php-runtime--call-php-process-with-input-buffer php args)
       (php-runtime--call-php-process php args))))
+
+(cl-defmethod php-runtime-process ((php php-runtime-execute))
+  "Execute PHP process using `php -r' with code and return output."
+  (let ((status (php-runtime-run php))
+        (output (with-current-buffer (php-runtime-stdout-buffer php)
+                  (buffer-substring-no-properties (point-min) (point-max)))))
+    (funcall (oref php handler) status output)))
 
 (cl-defmethod php-runtime--call-php-process ((php php-runtime-execute) args)
   "Execute PHP Process by php-execute `PHP' and `ARGS'."
@@ -147,7 +158,6 @@ You can check the limitation by command, for example \(shell-command-to-string \
     (if (and buf (buffer-live-p buf))
         buf
       (oset php stdout (generate-new-buffer "*PHP output*")))))
-
 
 ;; PHP Execute wrapper function
 
@@ -163,13 +173,13 @@ Pass `INPUT-BUFFER' to PHP executable as STDIN."
   "Evalute PHP code `CODE' without open tag, and return buffer.
 
 Pass `INPUT-BUFFER' to PHP executable as STDIN."
-  (let ((execute (php-runtime-execute :code (cons :string code)
+  (let ((executor (php-runtime-execute :code (cons :string code)
                            :executable php-runtime-php-executable
                            :stderr (get-buffer-create php-runtime-error-buffer-name)))
         (temp-input-buffer (when (and input-buffer (not (bufferp input-buffer)))
                              (php-runtime--temp-buffer))))
     (when input-buffer
-      (oset execute stdin
+      (oset executor stdin
             (if (or (bufferp input-buffer)
                     (and (consp input-buffer) (eq :file (car input-buffer))))
                 input-buffer
@@ -178,13 +188,11 @@ Pass `INPUT-BUFFER' to PHP executable as STDIN."
                   (insert input-buffer))))))
 
     (unwind-protect
-        (progn (php-runtime-run execute)
-               (with-current-buffer (php-runtime-stdout-buffer execute)
-                 (buffer-substring-no-properties (point-min) (point-max))))
+        (php-runtime-process executor)
       (when (and temp-input-buffer (buffer-live-p temp-input-buffer))
         (kill-buffer temp-input-buffer))
       (when php-runtime--kill-temp-output-buffer
-        (kill-buffer (php-runtime-stdout-buffer execute))))))
+        (kill-buffer (php-runtime-stdout-buffer executor))))))
 
 (provide 'php-runtime)
 ;;; php-runtime.el ends here
