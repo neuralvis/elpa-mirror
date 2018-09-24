@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20180917.900
+;; Package-Version: 20180924.1224
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -447,6 +447,7 @@ INTERACTIVE is t if called interactively."
 
 (defvar eglot--managed-mode) ; forward decl
 
+;;;###autoload
 (defun eglot-ensure ()
   "Start Eglot session for current buffer if there isn't one."
   (let ((buffer (current-buffer)))
@@ -717,6 +718,17 @@ Doubles as an indicator of snippet support."
     (9 . "Module") (10 . "Property") (11 . "Unit") (12 . "Value")
     (13 . "Enum") (14 . "Keyword") (15 . "Snippet") (16 . "Color")
     (17 . "File") (18 . "Reference")))
+
+(defconst eglot--symbol-kind-names
+  `((1 . "File") (2 . "Module")
+    (3 . "Namespace") (4 . "Package") (5 . "Class")
+    (6 . "Method") (7 . "Property") (8 . "Field")
+    (9 . "Constructor") (10 . "Enum") (11 . "Interface")
+    (12 . "Function") (13 . "Variable") (14 . "Constant")
+    (15 . "String") (16 . "Number") (17 . "Boolean")
+    (18 . "Array") (19 . "Object") (20 . "Key")
+    (21 . "Null") (22 . "EnumMember") (23 . "Struct")
+    (24 . "Event") (25 . "Operator") (26 . "TypeParameter")))
 
 (defun eglot--format-markup (markup)
   "Format MARKUP according to LSP's spec."
@@ -1580,7 +1592,7 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
              (mapcar
               (jsonrpc-lambda
                   (&key name kind location _containerName)
-                (cons (propertize name :kind (cdr (assoc kind eglot--kind-names)))
+                (cons (propertize name :kind (cdr (assoc kind eglot--symbol-kind-names)))
                       (eglot--lsp-position-to-point
                        (plist-get (plist-get location :range) :start))))
               (jsonrpc-request (eglot--current-server-or-lose)
