@@ -1,0 +1,2 @@
+
+(nodenv . [(20180924 941) ((emacs (24 4))) "Integration with nodenv" tar ((:commit . "edb8f53be519e289b5b2f85647a1fa104ebd5358") (:keywords "node" "environment" "tools") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/nodenv.el"))])
