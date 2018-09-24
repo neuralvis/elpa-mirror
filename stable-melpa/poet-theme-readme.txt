@@ -29,5 +29,3 @@ Recommended customizations for using this theme
     (setq org-bullets-bullet-list
         '("◉" "○"))
     (org-bullets 1)
-
-Code

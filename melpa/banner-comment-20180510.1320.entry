@@ -1,2 +1,0 @@
-
-(banner-comment . [(20180510 1320) ((emacs (24 4))) "For producing banner comments." single ((:commit . "7b45f9481951fad78aa5fbbba96dbcaaefb69bdb") (:keywords "convenience") (:authors ("James Ferguson" . "james@faff.org")) (:maintainer "James Ferguson" . "james@faff.org") (:url . "https://github.com/WJCFerguson/banner-comment"))])
