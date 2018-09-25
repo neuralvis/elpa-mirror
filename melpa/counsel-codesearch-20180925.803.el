@@ -4,7 +4,7 @@
 
 ;; Author: Austin Bingham <austin.bingham@gmail.com>
 ;; Version: 1.0.0
-;; Package-Version: 20180920.1203
+;; Package-Version: 20180925.803
 ;; Keywords: tools
 ;; URL: https://github.com/abingham/emacs-counsel-codesearch
 ;; Package-Requires: ((codesearch "1") (counsel "0.10.0") (emacs "24") (ivy "0.10.0"))
@@ -71,12 +71,13 @@
   "Execute codesearch to find match for STR."
   (unless (< (length str) 1)
     (let ((index-file (codesearch--csearchindex default-directory))
-          (process-environment (copy-alist process-environment)))
+          (process-envsronment (copy-alist process-environment)))
       (setenv "CSEARCHINDEX" (expand-file-name index-file))
       (counsel--async-command
        (format "%s -n %s"
                codesearch-csearch
-               str))))
+               str)
+       nil nil "*counsel-codesearch*")))
   '())
 
 (defun counsel-codesearch--handle-selection (selection)
