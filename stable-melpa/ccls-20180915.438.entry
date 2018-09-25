@@ -1,2 +1,0 @@
-
-(ccls . [(20180915 438) ((emacs (25 1)) (lsp-mode (4 2)) (dash (0 14))) "ccls client for lsp-mode" tar ((:commit . "791bde91845852c19ad1b4a4c9df87137d3e5625") (:keywords "languages" "lsp" "c++") (:authors ("Tobias Pisani, Fangrui Song")) (:maintainer "Tobias Pisani, Fangrui Song") (:url . "https://github.com/MaskRay/emacs-ccls"))])

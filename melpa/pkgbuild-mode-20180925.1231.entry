@@ -1,0 +1,2 @@
+
+(pkgbuild-mode . [(20180925 1231) ((emacs (25 1))) "Interface to the ArchLinux package manager" single ((:commit . "1c63a9686c3f2af87fd82db65b68d56f2bebbfcc") (:keywords "languages") (:authors ("Juergen Hoetzel" . "juergen@hoetzel.info")) (:maintainer "Juergen Hoetzel" . "juergen@hoetzel.info") (:url . "https://github.com/juergenhoetzel/pkgbuild-mode"))])
