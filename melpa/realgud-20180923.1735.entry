@@ -1,2 +1,0 @@
-
-(realgud . [(20180923 1735) ((load-relative (1 2)) (loc-changes (1 2)) (test-simple (1 2 0)) (cl-lib (0 5)) (emacs (24))) "A modular front-end for interacting with external debuggers" tar ((:commit . "bab9fb9c91414d7b3de8fc28707b2ea4a8bd3109") (:keywords "gdb" "python" "perl" "go" "bash" "nodejs" "zsh" "bashdb" "zshdb" "remake" "make" "trepan" "perldb" "pdb") (:authors ("Rocky Bernstein" . "rocky@gnu.org")) (:maintainer "Rocky Bernstein" . "rocky@gnu.org") (:url . "http://github.com/realgud/realgud/"))])

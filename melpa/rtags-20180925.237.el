@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20180909.1749
+;; Package-Version: 20180925.237
 ;; Version: 2.10
 
 ;; This file is not part of GNU Emacs.
@@ -36,13 +36,13 @@
   :group 'tools
   :link '(url-link :tag "Website" "http://rtags.net"))
 
-(if (version< emacs-version "24.3")
+(if (version< emacs-version "25")
     (eval-when-compile
       (require 'cl))
   (require 'cl-lib)
+  (require 'clseq)
+  (require 'cl-extra)
   (defalias 'defun* 'cl-defun))
-(require 'cl-seq)
-(require 'cl-extra)
 (require 'bookmark)
 (require 'cc-mode)
 (require 'tramp)
