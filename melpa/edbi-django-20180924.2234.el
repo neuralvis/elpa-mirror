@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/edbi-django
-;; Package-Version: 20180627.1000
+;; Package-Version: 20180924.2234
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25") (pythonic "0.1.0") (edbi "0.1.3"))
 
@@ -42,6 +42,7 @@ print(dumps(settings.DATABASES))
 
 (defvar edbi-django-engines
   '(("django.db.backends.postgresql_psycopg2" . "Pg")
+    ("django.db.backends.postgresql" . "Pg")
     ("django.db.backends.sqlite3" . "SQLite")
     ("django.db.backends.oracle" . "Oracle")
     ("django.db.backends.mysql" . "mysql"))

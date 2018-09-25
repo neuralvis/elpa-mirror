@@ -5,7 +5,7 @@
 ;; Author:     Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Maintainer: Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Version:    0.11.2
-;; Package-Version: 20180913.1737
+;; Package-Version: 20180924.2133
 ;; Keywords:   files, tools
 ;; Homepage:   https://github.com/doublep/logview
 ;; Package-Requires: ((emacs "24.4") (datetime "0.3") (extmap "1.0"))
@@ -391,6 +391,14 @@ You can also pulse the current entry unconditionally with `\\<logview-mode-map>\
 
 (defcustom logview-views-file (locate-user-emacs-file "logview.views")
   "Simple text file in which defined views are stored."
+  :group 'logview
+  :type  'file)
+
+(defcustom logview-cache-filename (locate-user-emacs-file "logview-cache.extmap")
+  "Internal non-human-readable cache.
+Customizable in case you want to put it somewhere else.  This
+file can be safely deleted, but will be recreated by Logview next
+time you use the mode.  Used to make startup faster."
   :group 'logview
   :type  'file)
 
@@ -2170,15 +2178,14 @@ returns non-nil."
     ;; not only in memory, but also on disk.  We use `extmap' to create and read the cache
     ;; file.  If `datetime' reports a different locale database version, cache is
     ;; discarded.
-    (let* ((cache-filename          (locate-user-emacs-file "logview-cache.extmap"))
-           (cache-file              (ignore-errors (extmap-init cache-filename)))
-           (locale-database-version (if (fboundp #'datetime-locale-database-version) (with-no-warnings (datetime-locale-database-version)) 0)))
+    (let ((cache-file              (ignore-errors (extmap-init logview-cache-filename)))
+          (locale-database-version (if (fboundp #'datetime-locale-database-version) (with-no-warnings (datetime-locale-database-version)) 0)))
       (when cache-file
         (let ((cached-externally (extmap-get cache-file 'timestamp-formats t)))
           (when (and cached-externally (equal (extmap-get cache-file 'locale-database-version t) locale-database-version))
             (setq logview--all-timestamp-formats-cache (extmap-get cache-file 'timestamp-formats t)))))
       (if logview--all-timestamp-formats-cache
-          (logview--internal-log "Logview: loaded locale timestamp formats from `%s'" cache-filename)
+          (logview--internal-log "Logview: loaded locale timestamp formats from `%s'" logview-cache-filename)
         (let ((start-time (float-time))
               (patterns (make-hash-table :test 'equal :size 1000))
               (uniques  (make-hash-table :test 'equal :size 1000)))
@@ -2218,8 +2225,8 @@ returns non-nil."
                    uniques)
           (logview--internal-log "Logview/datetime: built list of %d timestamp regexps in %.3f s" (hash-table-count uniques) (- (float-time) start-time))
           (ignore-errors
-            (extmap-from-alist cache-filename `((locale-database-version . ,locale-database-version)
-                                                (timestamp-formats       . ,logview--all-timestamp-formats-cache))
+            (extmap-from-alist logview-cache-filename `((locale-database-version . ,locale-database-version)
+                                                        (timestamp-formats       . ,logview--all-timestamp-formats-cache))
                                :overwrite t))))))
   logview--all-timestamp-formats-cache)
 
