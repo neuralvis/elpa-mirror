@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20180925.237
+;; Package-Version: 20180925.641
 ;; Version: 2.10
 
 ;; This file is not part of GNU Emacs.
@@ -40,7 +40,7 @@
     (eval-when-compile
       (require 'cl))
   (require 'cl-lib)
-  (require 'clseq)
+  (require 'cl-seq)
   (require 'cl-extra)
   (defalias 'defun* 'cl-defun))
 (require 'bookmark)
@@ -74,7 +74,7 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst rtags-protocol-version 127)
-(defconst rtags-package-version "2.19")
+(defconst rtags-package-version "2.20")
 (defconst rtags-popup-available (require 'popup nil t))
 (defconst rtags-supported-major-modes '(c-mode c++-mode objc-mode) "Major modes RTags supports.")
 (defconst rtags-verbose-results-delimiter "------------------------------------------")
