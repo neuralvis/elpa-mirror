@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20180922.2024
+;; Package-Version: 20180925.2253
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.3.0
 
@@ -1687,7 +1687,7 @@ defines if the text should be inserted inside the note."
                        (goto-char (org-element-property :end (cdr reference-element-cons)))))
 
                      ;; NOTE(nox): This is here to make the automatic "should insert blank" work better.
-                     (when (= 32 (char-syntax (char-before))) (backward-char))
+                     (when (org-at-heading-p) (backward-char))
 
                      (setq level (org-element-property :level (cdr reference-element-cons))))
 
