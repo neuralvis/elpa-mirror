@@ -8,10 +8,17 @@ official repository is temporarily down. Maintained using [[https://github.com/d
 Just setup =package-archives= in your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
-(setq package-archives
-      '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
-        ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
-        ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
+  ;; remote
+  (setq package-archives
+        '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
+          ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
+          ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
+
+  ;; local
+  (setq package-archives
+        `(("melpa" . "/path/to/elpa-mirror/melpa/")
+          ("org"   . "/path/to/elpa-mirror/org/")
+          ("gnu"   . "/path/to/elpa-mirror/gnu/")))
 #+END_SRC
 
 For more grained control over =package-archives= (e. g. if you wish to use
