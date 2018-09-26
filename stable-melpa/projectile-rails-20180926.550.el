@@ -4,7 +4,7 @@
 
 ;; Author:            Adam Sokolnicki <adam.sokolnicki@gmail.com>
 ;; URL:               https://github.com/asok/projectile-rails
-;; Package-Version: 20180803.1701
+;; Package-Version: 20180926.550
 ;; Version:           0.15.0
 ;; Keywords:          rails, projectile
 ;; Package-Requires:  ((emacs "24.3") (projectile "0.12.0") (inflections "1.1") (inf-ruby "2.2.6") (f "0.13.0") (rake "0.3.2"))
@@ -376,7 +376,7 @@ Argument DIR is the directory to which the search should be narrowed."
   "Like `projectile-dir-files' but take `projectile-rails-root'."
   (--map
    (substring it (length (projectile-rails-root-relative-to-project-root)))
-   (projectile-dir-files directory)))
+   (projectile-dir-files (projectile-rails-root) directory)))
 
 (defun projectile-rails-choices (dirs)
   "Uses `projectile-rails-dir-files' function to find files in directories.
@@ -1138,7 +1138,7 @@ DIRS are directories where to look for assets."
     (projectile-rails-ff
      (loop for dir in dirs
            for re = (s-lex-format "${dir}${name}\\(\\..+\\)*$")
-           for files = (projectile-dir-files (projectile-rails-expand-root dir))
+           for files = (projectile-dir-files (projectile-rails-root) (projectile-rails-expand-root dir))
            for file = (--first (string-match-p re it) files)
            until file
            finally return (and file (projectile-rails-expand-root file))))))

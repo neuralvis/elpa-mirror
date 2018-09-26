@@ -3,6 +3,7 @@
 ;; Copyright (C) 2016 David Thompson
 ;; Author: David Thompson
 ;; Version: 0.2
+;; Package-Version: 20180607.1841
 ;; Keywords: dired, launch
 ;; URL: https://github.com/thomp/dired-launch
 
