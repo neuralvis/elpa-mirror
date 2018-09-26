@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20180925.2253
+;; Package-Version: 20180926.1129
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.3.0
 
@@ -878,10 +878,12 @@ document property) will be opened."
       (notes-cons
        (dolist (note-cons notes-cons) (org-noter--show-note-entry (car note-cons)))
 
-       (setq target-region (or (catch 'result (dolist (region regions) (when (and (>= point-before (car region))
-                                                                                  (<  point-before (cdr region)))
-                                                                         (setq point-inside-target-region t)
-                                                                         (throw 'result region))))
+       (setq target-region (or (catch 'result (dolist (region regions)
+                                                (when (and (>= point-before (car region))
+                                                           (or (save-restriction (goto-char (cdr region)) (eobp))
+                                                               (< point-before (cdr region))))
+                                                  (setq point-inside-target-region t)
+                                                  (throw 'result region))))
                                (car regions)))
 
        (let ((begin (car target-region)) (end (cdr target-region)) num-lines
