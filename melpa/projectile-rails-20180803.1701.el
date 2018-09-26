@@ -4,7 +4,7 @@
 
 ;; Author:            Adam Sokolnicki <adam.sokolnicki@gmail.com>
 ;; URL:               https://github.com/asok/projectile-rails
-;; Package-Version: 20180718.755
+;; Package-Version: 20180803.1701
 ;; Version:           0.15.0
 ;; Keywords:          rails, projectile
 ;; Package-Requires:  ((emacs "24.3") (projectile "0.12.0") (inflections "1.1") (inf-ruby "2.2.6") (f "0.13.0") (rake "0.3.2"))
@@ -1328,9 +1328,7 @@ If file does not exist and ASK in not nil it will ask user to proceed."
   (projectile-rails-sanitize-name (thing-at-point 'filename)))
 
 (defun projectile-rails-apply-ansi-color ()
-  (read-only-mode)
-  (ansi-color-apply-on-region compilation-filter-start (point))
-  (read-only-mode))
+  (ansi-color-apply-on-region compilation-filter-start (point)))
 
 (defun projectile-rails--log-buffer-find-template (button)
   (projectile-rails-sanitize-and-goto-file "app/views/" (button-label button)))
@@ -1590,18 +1588,22 @@ If file does not exist and ASK in not nil it will ask user to proceed."
   "Disable `projectile-rails-mode' minor mode."
   (projectile-rails-mode -1))
 
+(defun projectile-rails-server-compilation-filter ()
+  (projectile-rails-server-make-buttons)
+  (when projectile-rails-server-mode-ansi-colors
+    (projectile-rails-apply-ansi-color)))
+
 (define-derived-mode projectile-rails-server-mode compilation-mode "Projectile Rails Server"
   "Compilation mode for running rails server used by `projectile-rails'.
 
 Killing the buffer will terminate to server's process."
   (set (make-local-variable 'compilation-error-regexp-alist) (list 'ruby-Test::Unit))
-  (add-hook 'compilation-filter-hook 'projectile-rails-server-make-buttons nil t)
-  (when projectile-rails-server-mode-ansi-colors
-    (add-hook 'compilation-filter-hook 'projectile-rails-apply-ansi-color nil t))
+  (add-hook 'compilation-filter-hook 'projectile-rails-server-compilation-filter)
   (add-hook 'kill-buffer-hook 'projectile-rails-server-terminate t t)
   (add-hook 'kill-emacs-hook 'projectile-rails-server-terminate t t)
   (setq-local compilation-scroll-output t)
-  (projectile-rails-mode +1))
+  (projectile-rails-mode +1)
+  (read-only-mode -1))
 
 (define-derived-mode projectile-rails-compilation-mode compilation-mode "Projectile Rails Compilation"
   "Compilation mode used by `projectile-rails'."
