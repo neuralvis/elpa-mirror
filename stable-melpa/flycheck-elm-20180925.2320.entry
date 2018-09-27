@@ -1,2 +1,0 @@
-
-(flycheck-elm . [(20180925 2320) ((flycheck (0 29 -4)) (emacs (24 4)) (let-alist (1 0 5)) (seq (2 20))) "Flycheck support for the elm language" single ((:commit . "6b51a54dc0d668a6303d12ad6a98cf44912f790c") (:authors ("Brian Sermons")) (:maintainer "Brian Sermons") (:url . "https://github.com/bsermons/flycheck-elm"))])
