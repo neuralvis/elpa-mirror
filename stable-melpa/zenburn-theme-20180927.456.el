@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/bbatsov/zenburn-emacs
-;; Package-Version: 20180926.511
+;; Package-Version: 20180927.456
 ;; Version: 2.5
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -1173,6 +1173,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(cperl-nonoverridable-face ((t (:foreground ,zenburn-magenta))))
    `(cperl-array-face ((t (:foreground ,zenburn-yellow, :backgorund ,zenburn-bg))))
    `(cperl-hash-face ((t (:foreground ,zenburn-yellow-1, :background ,zenburn-bg))))
+;;;;; paren-face
+   `(parenthesis ((t (:foreground ,zenburn-fg-1))))
 ;;;;; perspective
    `(persp-selected-face ((t (:foreground ,zenburn-yellow-2 :inherit mode-line))))
 ;;;;; powerline
@@ -1268,7 +1270,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(sh-quoted-exec ((t (:foreground ,zenburn-red))))
 ;;;;; show-paren
    `(show-paren-mismatch ((t (:foreground ,zenburn-red+1 :background ,zenburn-bg+3 :weight bold))))
-   `(show-paren-match ((t (:background ,zenburn-bg+3 :weight bold))))
+   `(show-paren-match ((t (:foreground ,zenburn-fg :background ,zenburn-bg+3 :weight bold))))
 ;;;;; smart-mode-line
    ;; use (setq sml/theme nil) to enable Zenburn for sml
    `(sml/global ((,class (:foreground ,zenburn-fg :weight bold))))
