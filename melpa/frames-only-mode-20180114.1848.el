@@ -4,7 +4,6 @@
 
 ;; Author: David Shepherd <davidshepherd7@gmail.com>
 ;; Version: 1.0.0
-;; Package-Version: 20180114.1848
 ;; Package-Requires: ((emacs "24.4") (dash "2.13.0") (s "1.11.0"))
 ;; Keywords: frames, windows
 ;; URL: https://github.com/davidshepherd7/frames-only-mode
@@ -331,4 +330,5 @@ You may want to try installing `wmctrl', or disable this feature by setting `fra
 
 (provide 'frames-only-mode)
 
+;;; frames-only-mode.el ends here
 ;;; frames-only-mode.el ends here
