@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20180926.2028
+;; Package-Version: 20180927.943
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -2096,17 +2096,17 @@ With a prefix arg INVALIDATE-CACHE invalidates the cache first."
 
 ;;;###autoload
 (defun projectile-toggle-project-read-only ()
-  "Toggle project read only"
+  "Toggle project read only."
   (interactive)
   (let ((inhibit-read-only t)
         (val (not buffer-read-only))
-        (default-directory (projectile-project-root)))
+        (default-directory (projectile-ensure-project (projectile-project-root))))
     (add-dir-local-variable nil 'buffer-read-only val)
     (save-buffer)
     (kill-buffer)
     (when buffer-file-name
       (read-only-mode (if val +1 -1))
-      (message "Projectile: project read-only-mode is %s" (if val "on" "off")))))
+      (message "[%s] read-only-mode is %s" (projectile-project-name) (if val "on" "off")))))
 
 
 ;;;; Sorting project files
@@ -3062,16 +3062,16 @@ files in the project."
 With a prefix argument ARG prompts you for a directory on which
 to run the replacement."
   (interactive "P")
-  (let* ((old-text (read-string
+  (let* ((directory (if arg
+                        (file-name-as-directory
+                         (read-directory-name "Replace in directory: "))
+                      (projectile-ensure-project (projectile-project-root))))
+         (old-text (read-string
                     (projectile-prepend-project-name "Replace: ")
                     (projectile-symbol-or-selection-at-point)))
          (new-text (read-string
                     (projectile-prepend-project-name
                      (format "Replace %s with: " old-text))))
-         (directory (if arg
-                        (file-name-as-directory
-                         (read-directory-name "Replace in directory: "))
-                      (projectile-project-root)))
          (files (projectile-files-with-string old-text directory)))
     ;; Adapted from `tags-query-replace' for literal strings (not regexp)
     (setq tags-loop-scan `(let ,(unless (equal old-text (downcase old-text))
@@ -3092,17 +3092,16 @@ to run the replacement."
 With a prefix argument ARG prompts you for a directory on which
 to run the replacement."
   (interactive "P")
-  (let* ((old-text (read-string
+  (let* ((directory (if arg
+                        (file-name-as-directory
+                         (read-directory-name "Replace regexp in directory: "))
+                      (projectile-ensure-project (projectileproject-root))))
+         (old-text (read-string
                     (projectile-prepend-project-name "Replace regexp: ")
                     (projectile-symbol-or-selection-at-point)))
          (new-text (read-string
                     (projectile-prepend-project-name
                      (format "Replace regexp %s with: " old-text))))
-         (project-root (projectile-project-root))
-         (directory (if arg
-                        (file-name-as-directory
-                         (read-directory-name "Replace regexp in directory: "))
-                      project-root))
          (files
           ;; We have to reject directories as a workaround to work with git submodules.
           ;;
@@ -3111,7 +3110,7 @@ to run the replacement."
           ;; don't support Emacs regular expressions.
           (cl-remove-if
            #'file-directory-p
-           (mapcar #'projectile-expand-root (projectile-dir-files project-root directory)))))
+           (mapcar #'projectile-expand-root (projectile-dir-files directory directory)))))
     (tags-query-replace old-text new-text nil (cons 'list files))))
 
 (defun projectile-symbol-or-selection-at-point ()
