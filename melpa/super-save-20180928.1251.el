@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/super-save
-;; Package-Version: 20180928.713
+;; Package-Version: 20180928.1251
 ;; Keywords: convenience
 ;; Version: 0.3.0-snapshot
 ;; Package-Requires: ((emacs "24.4"))
@@ -52,7 +52,7 @@
   :group 'super-save
   :type '(repeat symbol)
   :package-version '(super-save . "0.3.0"))
-n
+
 (defcustom super-save-auto-save-when-idle nil
   "Save current buffer automatically when Emacs is idle."
   :group 'super-save
