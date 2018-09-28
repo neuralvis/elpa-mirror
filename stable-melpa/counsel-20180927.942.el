@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20180920.1253
+;; Package-Version: 20180927.942
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.9.0"))
 ;; Keywords: convenience, matching, tools
@@ -2288,8 +2288,6 @@ FZF-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
               :action #'counsel-fzf-action
               :unwind #'counsel-delete-process
               :caller 'counsel-fzf)))
-
-(ivy-set-prompt 'counsel-fzf #'counsel-prompt-function-default)
 
 (defun counsel-fzf-action (x)
   "Find file X in current fzf directory."

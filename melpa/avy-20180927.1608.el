@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/avy
-;; Package-Version: 20180913.1819
+;; Package-Version: 20180927.1608
 ;; Version: 0.4.0
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5"))
 ;; Keywords: point, location
@@ -244,6 +244,10 @@ When nil, punctuation chars will not be matched.
   "List of modes to ignore when searching for candidates.
 Typically, these modes don't use the text representation."
   :type 'list)
+
+(defcustom avy-single-candidate-jump t
+  "In case there is only one candidate jumps directly to it."
+  :type 'boolean)
 
 (defvar avy-ring (make-ring 20)
   "Hold the window and point history.")
@@ -747,7 +751,7 @@ Set `avy-style' according to COMMMAND as well."
   (let ((len (length candidates)))
     (cond ((= len 0)
            nil)
-          ((= len 1)
+          ((and (= len 1) avy-single-candidate-jump)
            (car candidates))
           (t
            (unwind-protect
