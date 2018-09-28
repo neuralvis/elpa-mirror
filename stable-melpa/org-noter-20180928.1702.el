@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20180926.1129
+;; Package-Version: 20180928.1702
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.3.0
 
@@ -715,7 +715,7 @@ When INCLUDE-ROOT is non-nil, the root heading is also eligible to be returned."
   (org-noter--with-valid-session
    (org-with-wide-buffer
     (unless (org-before-first-heading-p)
-      (org-back-to-heading)
+      (org-back-to-heading t)
       (let (previous)
         (catch 'break
           (while t
