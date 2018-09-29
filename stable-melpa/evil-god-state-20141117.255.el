@@ -3,7 +3,6 @@
 ;; Copyright (C) 2014 by Eric Seidel
 ;; Author: Eric Seidel
 ;; URL: https://github.com/gridaphobe/evil-god-state
-;; Package-Version: 20141117.255
 ;; Filename: evil-god-state.el
 ;; Description: use god-mode keybindings in evil-mode
 ;; Version: 0.1

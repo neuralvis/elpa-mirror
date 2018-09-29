@@ -4,7 +4,7 @@
 
 ;; Author: Jostein Kjønigsen <jostein@gmail.com>
 ;; URL: http://github.com/josteink/bmx-mode
-;; Package-Version: 20180324.1557
+;; Package-Version: 20180929.1132
 ;; Version: 0.1
 ;; Keywords: c convenience tools
 ;; Package-Requires: ((emacs "25.1") (cl-lib "0.5") (company "0.9.4") (dash "2.13.0") (s "1.12.0"))
@@ -81,6 +81,12 @@
   (if (string-equal (substring-no-properties name 0 1) "%")
       (substring-no-properties name 1 (- (length name) 1))
     name))
+
+(defun bmx--read-input (prompt)
+  (if (fboundp 'read-input)
+      (read-input prompt)
+    (read-string prompt)))
+
 ;;;
 ;;; consts
 ;;;
@@ -193,7 +199,7 @@
 
 (defun bmx--label-rename-prompt (label)
   (let* ((old-unnormialized (bmx--label-unnormalize label))
-         (new-name (read-input
+         (new-name (bmx--read-input
                     (concat
                      "Enter new name for label '"
                      old-unnormialized
@@ -362,7 +368,7 @@
 
 (defun bmx--variable-rename-prompt (variable)
   (let* ((old-unnormialized (bmx--variable-unnormalize variable))
-         (new-name (read-input
+         (new-name (bmx--read-input
                     (concat
                      "Enter new name for variable '"
                      old-unnormialized

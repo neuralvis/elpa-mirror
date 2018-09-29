@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.4.0
-;; Package-Version: 20180929.914
+;; Package-Version: 20180929.1458
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -68,10 +68,10 @@
 ;; Variables
 ;;
 
-(defvar doom-modeline-height 23
+(defvar doom-modeline-height 25
   "How tall the mode-line should be (only respected in GUI Emacs).")
 
-(defvar doom-modeline-bar-width 1
+(defvar doom-modeline-bar-width 3
   "How wide the mode-line bar should be (only respected in GUI Emacs).")
 
 (defvar doom-modeline-buffer-file-name-style 'truncate-upto-project
@@ -1068,7 +1068,7 @@ See `mode-line-percent-position'.")
 ;;
 
 (doom-modeline-def-modeline 'main
-                            '(workspace-number window-number bar evil-state matches " " buffer-info buffer-position " " selection-info)
+                            '(bar workspace-number window-number evil-state matches " " buffer-info buffer-position " " selection-info)
                             '(global input-method buffer-encoding major-mode process vcs flycheck))
 
 (doom-modeline-def-modeline 'minimal
@@ -1076,15 +1076,15 @@ See `mode-line-percent-position'.")
                             '(media-info major-mode))
 
 (doom-modeline-def-modeline 'special
-                            '(window-number bar evil-state matches " " buffer-info-simple buffer-position " " selection-info)
+                            '(bar window-number evil-state matches " " buffer-info-simple buffer-position " " selection-info)
                             '(global input-method buffer-encoding major-mode process flycheck))
 
 (doom-modeline-def-modeline 'project
-                            '(window-number bar buffer-default-directory)
+                            '(bar window-number buffer-default-directory)
                             '(global major-mode))
 
 (doom-modeline-def-modeline 'media
-                            '(window-number bar " %b  ")
+                            '(bar window-number " %b  ")
                             '(global media-info major-mode))
 
 ;;
