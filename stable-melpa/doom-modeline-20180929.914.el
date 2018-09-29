@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.4.0
-;; Package-Version: 20180928.831
+;; Package-Version: 20180929.914
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -942,6 +942,10 @@ with `evil-ex-substitute', and/or 4. The number of active `iedit' regions."
      (when (and (eq op 'set) (integerp val))
        (doom-modeline-refresh-bars val doom-modeline-height)))))
 
+(add-hook 'after-setting-font-hook
+          '(lambda ()
+             (doom-modeline-refresh-bars)))
+
 
 ;;
 ;; window number
@@ -1088,15 +1092,17 @@ See `mode-line-percent-position'.")
 ;;
 
 (defun doom-modeline-refresh-bars (&optional width height)
-  "Refreash mode-line bars with `WIDTH' and `HEIGHT'."
+  "Refresh mode-line bars with `WIDTH' and `HEIGHT'."
   (setq doom-modeline--bar-active
         (doom-modeline--make-xpm 'doom-modeline-bar
                                  (or width doom-modeline-bar-width)
-                                 (or height doom-modeline-height))
+                                 (max (or height doom-modeline-height)
+                                      (frame-char-height)))
         doom-modeline--bar-inactive
         (doom-modeline--make-xpm 'doom-modeline-inactive-bar
                                  (or width doom-modeline-bar-width)
-                                 (or height doom-modeline-height))))
+                                 (max (or height doom-modeline-height)
+                                      (frame-char-height)))))
 
 ;;;###autoload
 (defun doom-modeline-init ()

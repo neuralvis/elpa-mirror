@@ -1,2 +1,0 @@
-
-(super-save . [(20180929 658) ((emacs (24 4))) "Auto-save buffers, based on your activity." single ((:commit . "6c949b9de99baec59b940709bd4e5d8a3df62cb7") (:keywords "convenience") (:authors ("Bozhidar Batsov" . "bozhidar@batsov.com")) (:maintainer "Bozhidar Batsov" . "bozhidar@batsov.com") (:url . "https://github.com/bbatsov/super-save"))])
