@@ -1,0 +1,2 @@
+
+(tc . [(20180928 2052) nil "a Japanese input method with T-Code on Emacs" tar ((:commit . "94d0afb91907a7672073d349152241b29036540f") (:authors ("Kaoru Maeda" . "maeda@src.ricoh.co.jp") ("Yasushi Saito" . "yasushi@cs.washington.edu") ("KITAJIMA Akira" . "kitajima@isc.osakac.ac.jp")) (:maintainer "KITAJIMA Akira"))])

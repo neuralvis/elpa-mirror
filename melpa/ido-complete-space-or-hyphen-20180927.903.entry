@@ -1,2 +1,0 @@
-
-(ido-complete-space-or-hyphen . [(20180927 903) nil "Complete SPACE or HYPHEN when type SPACE in ido" single ((:commit . "ce4bec5f2331e75c763ccdf1d85f8f57777309dc") (:keywords "ido" "completion") (:authors ("Ian Yang <me (at) iany.me>")) (:maintainer "Ian Yang <me (at) iany.me>") (:url . "https://github.com/doitian/ido-complete-space-or-hyphen"))])

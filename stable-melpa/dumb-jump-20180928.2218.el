@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2018 jack angers
 ;; Author: jack angers
 ;; Version: 0.5.2
-;; Package-Version: 20180911.1931
+;; Package-Version: 20180928.2218
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
 
@@ -671,6 +671,11 @@ or most optimal searcher."
            :regex "\\b(function|subroutine)\\s+JJJ\\b\\s*\\\("
            :tests ("function test (foo)" "integer function test(foo)" "subroutine test (foo, bar)")
            :not ("end function test" "end subroutine test"))
+
+    (:type "function" :supports ("ag" "grep" "rg" "git-grep") :language "fortran"
+           :regex "^\\s*interface\\s+JJJ\\b"
+           :tests ("interface test")
+           :not ("interface test2" "end interface test"))
 
     (:type "type" :supports ("ag" "grep" "rg" "git-grep") :language "fortran"
            :regex "^\\s*module\\s+JJJ\\s*"
