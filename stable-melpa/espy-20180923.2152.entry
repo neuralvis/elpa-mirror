@@ -1,2 +1,0 @@
-
-(espy . [(20180923 2152) ((emacs (24))) "Emacs Simple Password Yielder" single ((:commit . "8519fc370c08d3e9cdbaf75354e17eb62b39a2c6") (:keywords "convenience") (:authors ("Sebastian Wålinder" . "s.walinder@gmail.com")) (:maintainer "Sebastian Wålinder" . "s.walinder@gmail.com") (:url . "https://github.com/walseb/espy"))])
