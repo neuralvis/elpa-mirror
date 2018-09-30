@@ -4,7 +4,7 @@
 ;; Maintainer: Vitalie Spinu
 ;; Copyright (C) 2013-2018 Vitalie Spinu
 ;; Version: 0.1
-;; Package-Version: 20180927.1843
+;; Package-Version: 20180930.731
 ;; Package-Requires: ((emacs "25") (polymode "0.1"))
 ;; URL: https://github.com/polymode/poly-noweb
 ;; Keywords: languages, multi-modes
@@ -100,7 +100,7 @@ not a function, use `poly-fallback-mode'."
          :name "latex-for-noweb"
          :protect-font-lock t
          :protect-syntax t
-         :protect-indent t)
+         :protect-indent nil)
   "LaTeX host for noweb."
   :group 'pm-innermoes
   :type 'object)

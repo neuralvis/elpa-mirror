@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2018 jack angers
 ;; Author: jack angers
 ;; Version: 0.5.2
-;; Package-Version: 20180928.2218
+;; Package-Version: 20180930.550
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
 
@@ -489,6 +489,22 @@ or most optimal searcher."
            :regex "class\\s*JJJ\\b\\s*\\\(?"
            :tests ("class test(object):" "class test:")
            :not ("class testnot:" "class testnot(object):"))
+
+    ;; nim
+    (:type "variable" :supports ("ag" "grep" "rg" "git-grep") :language "nim"
+           :regex "(const|let|var)\\s*JJJ\\s*(=|:)[^=:\\n]+"
+           :tests ("let test = 1234" "var test = 1234" "var test: Stat" "const test = 1234")
+           :not ("if test == 1234:"))
+
+    (:type "function" :supports ("ag" "grep" "rg" "git-grep") :language "nim"
+           :regex "(proc|func|macro|template)\\s*`?JJJ`?\\b\\s*\\\("
+           :tests ("\tproc test(asdf)" "proc test()" "func test()" "macro test()" "template test()")
+           :not ("\tproc testnot(asdf)" "proc testnot()"))
+
+    (:type "type" :supports ("ag" "grep" "rg" "git-grep") :language "nim"
+           :regex "type\\s*JJJ\\b\\s*(\\{[^}]+\\})?\\s*=\\s*\\w+"
+           :tests ("type test = object" "type test {.pure.} = enum")
+           :not ("type testnot = object"))
 
     ;; ruby
     (:type "variable" :supports ("ag" "rg" "git-grep") :language "ruby"
@@ -1249,6 +1265,7 @@ or most optimal searcher."
     (:language "lisp" :ext "lisp" :agtype "lisp" :rgtype "lisp")
     (:language "lisp" :ext "lsp" :agtype "lisp" :rgtype "lisp")
     (:language "lua" :ext "lua" :agtype "lua" :rgtype "lua")
+    (:language "nim" :ext "nim" :agtype "nim" :rgtype "nim")
     (:language "org" :ext "org" :agtype nil :rgtype "org")
     (:language "perl" :ext "pl" :agtype "perl" :rgtype "perl")
     (:language "perl" :ext "pm" :agtype "perl" :rgtype "perl")
@@ -1885,6 +1902,7 @@ current file."
     (:comment "#" :language "r")
     (:comment "#" :language "ruby")
     (:comment "#" :language "crystal")
+    (:comment "#" :language "nim")
     (:comment "//" :language "scala")
     (:comment ";" :language "scheme")
     (:comment "#" :language "shell")

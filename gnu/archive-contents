@@ -384,7 +384,7 @@
 	 ((emacs
 	   (26 1))
 	  (jsonrpc
-	   (1 0 0)))
+	   (1 0 6)))
 	 "Client for Language Server Protocol (LSP) servers" tar
 	 ((:keywords "convenience" "languages")
 	  (:url . "https://github.com/joaotavora/eglot"))])
