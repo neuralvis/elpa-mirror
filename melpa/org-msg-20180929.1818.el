@@ -6,7 +6,7 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20180915.1827
+;; Package-Version: 20180929.1818
 ;; Package-X-Original-Version: 1.4
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
@@ -42,7 +42,9 @@
 
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
+(require 'cl-macs)
+(require 'cl-seq)
 (require 'gnus-art)
 (require 'gnus-msg)
 (require 'htmlize)
@@ -65,15 +67,15 @@ It is used by function advice.")
 
 (defcustom org-msg-separator "--citation follows this line (read-only)--"
   "String separating the reply area and the original mail."
-  :type 'string)
+  :type '(string))
 
 (defcustom org-msg-options "html-postamble:nil toc:nil"
   "Org Mode #+OPTIONS."
-  :type 'string)
+  :type '(string))
 
 (defcustom org-msg-startup nil
   "Org Mode #+STARTUP."
-  :type 'string)
+  :type '(string))
 
 (defcustom org-msg-greeting-fmt nil
   "Mail greeting format.
@@ -81,13 +83,13 @@ If it contains a '%s' format, '%s' is replaced with the first
 name of the person you are replying to.
 
 Example: \"\nHi %s,\n\n\""
-  :type 'string)
+  :type '(string))
 
 (defcustom org-msg-greeting-fmt-mailto nil
   "Define the format behavior for recipient greeting.
 If t and `org-msg-greeting-fmt' contains a '%s' the first name is
 formatted as a mailto link."
-  :type 'boolean)
+  :type '(boolean))
 
 (defcustom org-msg-signature nil
   "Mail signature string appended if not nil.
@@ -96,7 +98,7 @@ CSS style.
 
 Example:
 \"\n\nRegards,\n\n#+begin_signature\n-- *Your name*\n#+end_signature\""
-  :type 'string)
+  :type '(string))
 
 (defconst org-msg-default-style
   (let* ((font-family '(font-family . "\"Arial\""))
@@ -201,7 +203,7 @@ Example:
 
 (defcustom org-msg-reply-header-class 'reply-header
   "Default CSS class for reply header tags."
-  :type 'symbol)
+  :type '(symbol))
 
 (defun org-msg-save-article-for-reply ()
   "Export the currently visited `gnus-article-buffer' as HTML.
@@ -315,7 +317,7 @@ This string can be used as a HTML style attribute value."
 		       (eq class (cadr css)))
 		  (and (not (cadr css))
 		       (eq tag (car css))))))
-    (let* ((sel (remove-if-not #'css-match-p css))
+    (let* ((sel (cl-remove-if-not #'css-match-p css))
 	   (props (apply 'append (mapcar 'caddr sel))))
       (when props
 	(org-msg-props-to-style props)))))
@@ -370,13 +372,13 @@ is the XML tree and CSS the style."
     (let ((e (cdr div)))
       (while e
 	(if (and (stringp (car e))
-		 (eq (caadr e) 'br)
+		 (eq (cl-caadr e) 'br)
 		 (and (stringp (caddr e))
 		      (string-prefix-p "\n " (caddr e))))
 	    (progn
 	      (setcar e (replace-regexp-in-string "\n +" " "
-						  (concat (car e) (caddr e))))
-	      (setcdr e (cdddr e)))
+						  (concat (car e) (cl-caddr e))))
+	      (setcdr e (cl-cdddr e)))
 	  (setf e (cdr e)))))
     ;; Add a bold property to the prefixes like "From", "Date",
     ;; "Subject", ...

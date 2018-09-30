@@ -1,4 +1,4 @@
-;;; pdfgrep.el --- run `pdfgrep' and display the results
+;;; pdfgrep.el --- run `pdfgrep' and display the results. -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017-2018 Jérémy Compostella
 
@@ -6,8 +6,8 @@
 ;; Created: October 2017
 ;; Keywords: extensions mail pdf grep
 ;; Homepage: https://github.com/jeremy-compostella/pdfgrep
-;; Package-Version: 20180903.1912
-;; Package-X-Original-Version: 1.1
+;; Package-Version: 20180929.1729
+;; Package-X-Original-Version: 1.2
 ;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -39,43 +39,51 @@
 
 (defcustom pdfgrep-buffer-name "*pdfgrep*"
   "Pdfgrep search buffer."
-  :group 'pdfgrep)
+  :type '(string))
 
 (defcustom pdfgrep-context-length 100
-  "Pdfgrep default context length, option `-C'."
-  :group 'pdfgrep)
+  "PDFGrep default context length, option `-C'."
+  :type '(integer))
 
 (defcustom pdfgrep-ignore-case t
-  "Pdfgrep ignore case option."
-  :group 'pdfgrep)
+  "PDFGrep ignore case option."
+  :type '(boolean))
+
+(defcustom pdfgrep-ignore-errors nil
+  "Redirect pdfgrep command errors to /dev/null."
+  :type '(boolean))
 
 (defvar pdfgrep-history '()
-  "History list for pdfgrep.")
+  "Command History list for PDFGrep.")
 
-(defvar pdfgrep-program (purecopy "pdfgrep")
+(defvar pdfgrep-program "pdfgrep"
   "The default pdfgrep program.")
 
 (defun pdfgrep-default-command ()
-  "Compute the default pdfgrep command for \\[pdfgrep]."
-  (concat pdfgrep-program " -n "
-	  (when pdfgrep-ignore-case
-	    "-i ")
-	  (when pdfgrep-context-length
-	    (format "-C %d " pdfgrep-context-length))))
-
-(define-derived-mode pdfgrep-mode grep-mode "PdfGrep"
-  "`pdfgrep-mode' is an equivalent of `grep-mode' for PDF
-document.  It is based on the pdfgrep program.")
+  "Compute the default pdfgrep command for `pdfgrep'."
+  (let ((cmd (concat pdfgrep-program " -n "
+		     (when pdfgrep-ignore-case
+		       "-i ")
+		     (when pdfgrep-context-length
+		       (format "-C %d " pdfgrep-context-length)))))
+    (if pdfgrep-ignore-errors
+	(cons (concat cmd " 2>/dev/null") (1+ (length cmd)))
+      cmd)))
 
 (defun pdfgrep (command-args)
-  "Run Pdfgrep with user-specified COMMAND-ARGS, collect output in a buffer.
-You can use C-x ` (M-x next-error), or RET in the *pdfgrep*
-buffer, to go to the lines where Pdfgrep found matches.  To kill
-the Pdfgrep job before it finishes, type C-c C-k."
+  "Run pdfgrep with user-specified COMMAND-ARGS, collect output in a buffer.
+You can use \\[next-error], or RET in the `pdfgrep-buffer-name'
+buffer, to go to the lines where PDFGrep found matches.  To kill
+the PDFGrep job before it finishes, type \\[kill-compilation]."
   (interactive (list (read-shell-command "Run pdfgrep (like this): "
 					 (pdfgrep-default-command)
 					 'pdfgrep-history)))
-  (compilation-start command-args 'pdfgrep-mode))
+  (unless pdfgrep-mode
+    (error "PDFGrep is not enabled, run `pdfgrep-mode' first."))
+  (unless (executable-find "pdfgrep")
+    (error "The 'pdfgrep' command not available on your system."))
+  (compilation-start command-args 'grep-mode
+		     (lambda (_x) pdfgrep-buffer-name)))
 
 (defun pdfgrep-current-page-and-match ()
   "Return the current match page number and match string."
@@ -87,10 +95,10 @@ the Pdfgrep job before it finishes, type C-c C-k."
 					   'match cur)))
 	    (substring cur start (next-property-change start cur))))))
 
-(defun pdfgrep-goto-locus (msg mk end-mk)
+(defun pdfgrep-goto-locus (_msg _mk _end-mk)
   "Jump to a match corresponding.
-MSG, MK and END-MK arguments are ignored.  This function is used
-to advice `compilation-goto-locus'."
+_MSG, _MK and _END-MK parameters are ignored.  This function is
+used to advice `compilation-goto-locus'."
   (when (and (eq major-mode 'doc-view-mode)
 	     (eq doc-view-doc-type 'pdf))
     (doc-view-goto-page (car (pdfgrep-current-page-and-match))))
@@ -100,7 +108,16 @@ to advice `compilation-goto-locus'."
       (when (cdr meta)
 	(pdf-isearch-hl-matches nil (pdf-isearch-search-page (cdr meta)) t)))))
 
-(advice-add 'compilation-goto-locus :after #'pdfgrep-goto-locus)
+(define-minor-mode pdfgrep-mode
+  "Toggle PDFGrep mode.
+
+With a prefix argument ARG, enable PDFGrep mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil."
+  :global t
+  (if pdfgrep-mode
+      (advice-add 'compilation-goto-locus :after #'pdfgrep-goto-locus)
+    (advice-remove 'compilation-goto-locus #'pdfgrep-goto-locus)))
 
 (provide 'pdfgrep)
 
