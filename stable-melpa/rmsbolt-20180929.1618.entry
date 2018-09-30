@@ -1,2 +1,2 @@
 
-(rmsbolt . [(20180929 1618) ((emacs (25 1))) "A compiler output viewer" tar ((:commit . "526ed37d71c1d5ed28c78e512995c6e611f26f04") (:keywords "compilation" "tools") (:authors ("Jay Kamat" . "jaygkamat@gmail.com")) (:maintainer "Jay Kamat" . "jaygkamat@gmail.com") (:url . "http://gitlab.com/jgkamat/rmsbolt"))])
+(rmsbolt . [(20180929 1618) ((emacs (25 1))) "A compiler output viewer" tar ((:commit . "6c53494f5222acfb3c00c8fa66a4bc778f65846c") (:keywords "compilation" "tools") (:authors ("Jay Kamat" . "jaygkamat@gmail.com")) (:maintainer "Jay Kamat" . "jaygkamat@gmail.com") (:url . "http://gitlab.com/jgkamat/rmsbolt"))])
