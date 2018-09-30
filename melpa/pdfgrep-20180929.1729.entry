@@ -1,2 +1,2 @@
 
-(pdfgrep . [(20180929 1729) ((emacs (24 4))) "run `pdfgrep' and display the results." single ((:commit . "283f35dd020902b609f16239dabf11e03be1df3c") (:keywords "extensions" "mail" "pdf" "grep") (:authors ("Jérémy Compostella" . "jeremy.compostella@gmail.com")) (:maintainer "Jérémy Compostella" . "jeremy.compostella@gmail.com") (:url . "https://github.com/jeremy-compostella/pdfgrep"))])
+(pdfgrep . [(20180929 1729) ((emacs (24 4))) "run `pdfgrep' and display the results." single ((:commit . "22d62f811c106f3162ffad6d41cdce85a9ca8be3") (:keywords "extensions" "mail" "pdf" "grep") (:authors ("Jérémy Compostella" . "jeremy.compostella@gmail.com")) (:maintainer "Jérémy Compostella" . "jeremy.compostella@gmail.com") (:url . "https://github.com/jeremy-compostella/pdfgrep"))])

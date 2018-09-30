@@ -1,7 +1,7 @@
 ;;; lsp-java.el --- Java support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20180906.637
+;; Package-Version: 20180930.753
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.0") (markdown-mode "2.3"))
 ;; Keywords: java
 ;; URL: https://github.com/emacs-lsp/lsp-java
@@ -200,6 +200,10 @@ A package or type name prefix (e.g. 'org.eclipse') is a valid entry. An import i
   "Return a PARAM for setting parsable by json.el for booleans."
   (or param :json-false))
 
+(defun lsp-java--list-or-empty (param)
+  "Return either PARAM or empty vector in case PARAM is nil."
+  (or param (vector)))
+
 (defun lsp-java--settings ()
   "JDT settings."
   `((java
@@ -219,7 +223,7 @@ A package or type name prefix (e.g. 'org.eclipse') is a valid entry. An import i
        (enabled . ,(lsp-java--json-bool lsp-java-import-gradle-enabled)))
       (maven
        (enabled . ,(lsp-java--json-bool lsp-java-import-maven-enabled)))
-      (exclusions . ,lsp-java-import-exclusions))
+      (exclusions . ,(lsp-java--list-or-empty lsp-java-import-exclusions)))
      (referencesCodeLens
       (enabled . t))
      (progressReports
@@ -241,8 +245,8 @@ A package or type name prefix (e.g. 'org.eclipse') is a valid entry. An import i
      (autobuild
       (enabled . ,(lsp-java--json-bool lsp-java-auto-build)))
      (completion
-      (favoriteStaticMembers . ,lsp-java-favorite-static-members)
-      (importOrder . ,lsp-java-import-order)
+      (favoriteStaticMembers . ,(lsp-java--list-or-empty lsp-java-favorite-static-members))
+      (importOrder . ,(lsp-java--list-or-empty lsp-java-import-order))
       (guessMethodArguments . ,lsp-java-completion-guess-arguments)))))
 
 (defun lsp-java--locate-server-jar ()
