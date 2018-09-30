@@ -5,7 +5,6 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/map-progress/
 ;; Keywords: convenience
-;; Package-Version: 20140310.2132
 
 ;; This file is not part of GNU Emacs.
 
