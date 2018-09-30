@@ -1,0 +1,2 @@
+
+(xah-fly-keys . [(20180929 2055) ((emacs (24 1))) "ergonomic modal keybinding minor mode." single ((:commit . "267976aa72dc3a073f8f52adf052d1e748d07937") (:keywords "convenience" "emulations" "vim" "ergoemacs") (:authors ("Xah Lee ( http://xahlee.info/ )")) (:maintainer "Xah Lee ( http://xahlee.info/ )") (:url . "http://ergoemacs.org/misc/ergoemacs_vi_mode.html"))])
