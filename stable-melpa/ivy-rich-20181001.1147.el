@@ -4,8 +4,8 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20180827.656
-;; Version: 0.1.0
+;; Package-Version: 20181001.1147
+;; Version: 0.1.1
 ;; Keywords: ivy
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -181,7 +181,7 @@ using …."
              (concat str (make-string (- len str-len) ? ))))
           ((<= len (- str-len)) "")
           ((> str-len len)
-           (format "%s…" (substring str 0 (- len (string-width "…")))))
+           (truncate-string-to-width str len 0 nil "…"))
           (t str))))
 
 (defun ivy-rich-minibuffer-width (width)

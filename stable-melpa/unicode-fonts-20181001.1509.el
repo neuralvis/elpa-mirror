@@ -5,9 +5,9 @@
 ;; Author: Roland Walker <walker@pobox.com>
 ;; Homepage: http://github.com/rolandwalker/unicode-fonts
 ;; URL: http://raw.githubusercontent.com/rolandwalker/unicode-fonts/master/unicode-fonts.el
-;; Package-Version: 20150826.2232
-;; Version: 0.4.8
-;; Last-Updated: 26 Aug 2015
+;; Package-Version: 20181001.1509
+;; Version: 0.4.10
+;; Last-Updated:  1 Oct 2018
 ;; EmacsWiki: UnicodeFonts
 ;; Keywords: i18n, faces, frames, wp, interface
 ;; Package-Requires: ((font-utils "0.7.8") (ucs-utils "0.8.2") (list-utils "0.4.2") (persistent-soft "0.8.10") (pcache "0.3.1"))
@@ -23,11 +23,11 @@
 ;;
 ;;     Install these fonts
 ;;
-;;         http://users.teilar.gr/~g1951d/Symbola.zip      ; NOTE: site is down as of July 2015
+;;         http://users.teilar.gr/~g1951d/Symbola.zip
 ;;         http://www.quivira-font.com/files/Quivira.ttf   ; or Quivira.otf
-;;         http://sourceforge.net/projects/dejavu/files/dejavu/2.35/dejavu-fonts-ttf-2.35.tar.bz2
-;;         https://github.com/googlei18n/noto-fonts/blob/master/hinted/NotoSans-Regular.ttc?raw=true
-;;         https://github.com/googlei18n/noto-fonts/blob/master/unhinted/NotoSansSymbols-Regular.ttf?raw=true
+;;         http://sourceforge.net/projects/dejavu/files/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2
+;;         https://github.com/googlei18n/noto-fonts/raw/master/hinted/NotoSans-Regular.ttf
+;;         https://github.com/googlei18n/noto-fonts/raw/master/unhinted/NotoSansSymbols-Regular.ttf
 ;;
 ;;     Remove Unifont from your system.
 ;;
@@ -82,7 +82,7 @@
 ;; good multi-lingual fonts, though you would do very well to download
 ;; and install the four items below:
 ;;
-;; From http://dejavu-fonts.org/wiki/Download
+;; From https://dejavu-fonts.github.io/
 ;;
 ;;     DejaVu Sans, DejaVu Sans Mono
 ;;
@@ -90,7 +90,7 @@
 ;;
 ;;     Quivira
 ;;
-;; From http://users.teilar.gr/~g1951d/Symbola.zip  ; NOTE: site is down as of July 2015
+;; From http://users.teilar.gr/~g1951d/Symbola.zip
 ;;
 ;;     Symbola
 ;;
@@ -170,7 +170,7 @@
 ;;
 ;;         Gentium Plus                  ; Greek
 ;;
-;;     From http://users.teilar.gr/~g1951d/    ; NOTE: site is down as of July 2015
+;;     From http://users.teilar.gr/~g1951d/
 ;;
 ;;         Aegean, Aegyptus, Akkadian    ; Ancient languages
 ;;         Analecta                      ; Ancient languages, Deseret
@@ -423,14 +423,14 @@
 ;;
 ;;         Cham OI_Tangin                ; Cham
 ;;
+;;     From https://ctan.org/tex-archive/fonts/Asana-Math?lang=en
+;;
+;;         Asana Math                    ; Mathematical Symbols
+;;
 ;; Compatibility and Requirements
 ;;
-;;     GNU Emacs version 25.1-devel     : not tested
-;;     GNU Emacs version 24.5           : not tested
-;;     GNU Emacs version 24.4           : yes
-;;     GNU Emacs version 24.3           : yes
-;;     GNU Emacs version 23.3           : yes
-;;     GNU Emacs version 22.3 and lower : no
+;;     GNU Emacs version 23.3 and higher : yes
+;;     GNU Emacs version 22.3 and lower  : no
 ;;
 ;;     Requires font-utils.el, ucs-utils.el
 ;;
@@ -936,6 +936,7 @@
     ("Arial Special"                       :licenses (microsoft))
     ("Arial Unicode MS"                    :licenses (apple microsoft) :arabic naskh)
     ("Arial"                               :licenses (apple microsoft))
+    ("Asana Math"                          :licenses (free))
     ("Augsburger Initials"                 :licenses (microsoft))
     ("Avenir Next Condensed"               :licenses (apple))
     ("Avenir Next"                         :licenses (apple))
@@ -1605,7 +1606,7 @@
 ;;;###autoload
 (defgroup unicode-fonts nil
   "Configure Unicode fonts."
-  :version "0.4.8"
+  :version "0.4.10"
   :link '(emacs-commentary-link :tag "Commentary" "unicode-fonts")
   :link '(url-link :tag "GitHub" "http://github.com/rolandwalker/unicode-fonts")
   :link '(url-link :tag "EmacsWiki" "http://emacswiki.org/emacs/UnicodeFonts")
@@ -1948,6 +1949,7 @@ Set to nil to disable."
                                                          "Cambria Math"                 ; 112/112
                                                          "Segoe UI Symbol"              ; 112/112
                                                          "DejaVu Sans:width=condensed"
+                                                         "Asana Math"                   ; 112/112
                                                          "Arial Unicode MS"
                                                          "BabelStone Modern"            ; 102/112
                                                          "Symbola"                      ; 112/112  @8.00 @8
@@ -3238,6 +3240,7 @@ Set to nil to disable."
     ("Mathematical Alphanumeric Symbols"                (
                                                          "Cambria Math"                 ; 994/996
                                                          "Noto Sans Symbols"            ; 996/996
+                                                         "Asana Math"                   ; 996/996
                                                          "Code2001"                     ; 994/996
                                                          "Symbola"                      ; 996/996  @8.00 @8
                                                          "Quivira"                      ; 996/996  @4.1 @3.80000305175781
@@ -3251,6 +3254,7 @@ Set to nil to disable."
                                                          "DejaVu Sans:width=condensed"  ; 256/256
                                                          "Noto Sans Symbols"            ; 256/256
                                                          "Apple Symbols"                ; 256/256
+                                                         "Asana Math"                   ; 256/256
                                                          "Arial Unicode MS"             ; 242/256
                                                          "Code2000"                     ; 256/256
                                                          "Symbola"                      ; 256/256  @8.00 @8
@@ -3283,6 +3287,7 @@ Set to nil to disable."
                                                          "Noto Sans Symbols"            ; 48/48
                                                          "Apple Symbols"                ; 25/48
                                                          "Segoe UI Symbol"              ; 46/48
+                                                         "Asana Math"                   ; 48/48
                                                          "Code2000"
                                                          "Symbola"                      ; 48/48  @8.00 @8
                                                          "Quivira"                      ; 48/48  @4.1 @3.80000305175781
@@ -3294,6 +3299,7 @@ Set to nil to disable."
                                                          "Segoe UI Symbol"              ; 128/128
                                                          "Apple Symbols"                ; 128/128
                                                          "Cambria Math"                 ; 128/128
+                                                         "Asana Math"                   ; 128/128
                                                          "Code2000"                     ; 128/128
                                                          "Symbola"                      ; 128/128  @8.00 @8
                                                          "Quivira"                      ; 128/128  @4.1 @3.80000305175781
@@ -3315,6 +3321,7 @@ Set to nil to disable."
     ("Miscellaneous Symbols and Arrows"                 (
                                                          "Symbola"                      ; 206/206  @8.00 @8
                                                          "Quivira"                      ; 202/206  @4.1 @3.80000305175781
+                                                         "Asana Math"                   ;  53/206
                                                          "Code2000"                     ;  82/206
                                                          "Segoe UI Symbol"              ;  87/206
                                                          "Noto Sans Symbols"            ;  87/206
@@ -3414,6 +3421,7 @@ Set to nil to disable."
                                                          ))
     ("Number Forms"                                     (
                                                          "DejaVu Sans:width=condensed"  ; 55/60
+                                                         "Asana Math"                   ; 45/60
                                                          "Arial Unicode MS"             ; 48/60
                                                          "Junicode"                     ; 58/60
                                                          "Symbola"                      ; 60/60  @8.00 @8
@@ -3729,6 +3737,7 @@ Set to nil to disable."
                                                          "DejaVu Sans Mono"             ; 42/42  @2.35 @2.34999084472656
                                                          "DejaVu Sans:width=condensed"  ; 42/42
                                                          "Segoe UI Symbol"              ; 42/42
+                                                         "Asana Math"                   ; 34/42
                                                          "Charis SIL"                   ; 34/42
                                                          "Doulos SIL"                   ; 34/42
                                                          "Symbola"                      ; 42/42  @8.00 @8
@@ -3740,6 +3749,7 @@ Set to nil to disable."
                                                          "Segoe UI Symbol"              ; 16/16
                                                          "Cambria Math"                 ; 16/16
                                                          "DejaVu Sans:width=condensed"  ; 16/16
+                                                         "Asana Math"                   ; 16/16
                                                          "Quivira"                      ; 16/16  @4.1 @3.80000305175781
                                                          "Symbola"                      ; 16/16  @8.00 @8
                                                          "Apple Symbols"                ; 16/16
@@ -3754,6 +3764,7 @@ Set to nil to disable."
                                                          "Segoe UI Symbol"              ; 128/128
                                                          "Apple Symbols"                ; 128/128
                                                          "Noto Sans Symbols"            ; 128/128
+                                                         "Asana Math"                   ; 128/128
                                                          "Quivira"                      ; 128/128  @4.1 @3.80000305175781
                                                          "Symbola"                      ; 128/128  @8.00 @8
                                                          "Code2000"                     ; 128/128
@@ -3767,6 +3778,7 @@ Set to nil to disable."
                                                          "Segoe UI Symbol"              ; 256/256
                                                          "Noto Sans Symbols"            ; 256/256
                                                          "Apple Symbols"                ; 251/256
+                                                         "Asana Math"                   ; 256/256
                                                          "Code2000"                     ; 256/256
                                                          "Symbola"                      ; 256/256  @8.00 @8
                                                          "Quivira"                      ; 256/256  @4.1 @3.80000305175781
