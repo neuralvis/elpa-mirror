@@ -4,7 +4,7 @@
 
 ;; Author: Constantin Kulikov (Bad_ptr) <zxnotdead@gmail.com>
 ;; Version: 2.9.7
-;; Package-Version: 20180604.1718
+;; Package-Version: 20180930.1720
 ;; Package-Requires: ()
 ;; Keywords: perspectives, session, workspace, persistence, windows, buffers, convenience
 ;; URL: https://github.com/Bad-ptr/persp-mode.el
@@ -1748,7 +1748,7 @@ Here is a keymap of this minor mode:
   :global     t
   :lighter    (:eval persp-lighter)
   (if persp-mode
-      (progn
+      (when (or (eq 'persp-force-restart persp-mode) (null *persp-hash*))
         (setq persp-special-last-buffer nil)
         (add-hook 'find-file-hook #'persp-special-last-buffer-make-current)
         (if (or noninteractive

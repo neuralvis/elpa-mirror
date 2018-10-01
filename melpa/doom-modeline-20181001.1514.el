@@ -4,8 +4,8 @@
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
-;; Version: 0.4.0
-;; Package-Version: 20181001.824
+;; Version: 0.5.0
+;; Package-Version: 20181001.1514
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -402,8 +402,11 @@ active.")
 ;; Show version string for multi-version managers like rvm, rbenv, pyenv, etc.
 (defvar-local doom-modeline-env-version nil)
 (defvar-local doom-modeline-env-command nil)
-(add-hook 'focus-in-hook #'doom-modeline-update-env)
 (add-hook 'find-file-hook #'doom-modeline-update-env)
+(with-no-warnings
+  (if (boundp 'after-focus-change-function)
+      (add-function :after after-focus-change-function #'doom-modeline-update-env)
+    (add-hook 'focus-in-hook #'doom-modeline-update-env)))
 (defun doom-modeline-update-env ()
   "Update environment info on mode-line."
   (when doom-modeline-env-command
@@ -1185,8 +1188,17 @@ See `mode-line-percent-position'.")
   "Unfocus mode-line."
   (setq doom-modeline-remap-face-cookie (face-remap-add-relative 'mode-line 'mode-line-inactive)))
 
-(add-hook 'focus-in-hook #'doom-modeline-focus)
-(add-hook 'focus-out-hook #'doom-modeline-unfocus)
+(with-no-warnings
+  (if (boundp 'after-focus-change-function)
+      (progn
+        (defun doom-modeline-focus-change ()
+          (if (frame-focus-state)
+              (doom-modeline-focus)
+            (doom-modeline-unfocus)))
+        (add-function :after after-focus-change-function #'doom-modeline-focus-change))
+    (progn
+      (add-hook 'focus-in-hook #'doom-modeline-focus)
+      (add-hook 'focus-out-hook #'doom-modeline-unfocus))))
 
 (provide 'doom-modeline)
 
