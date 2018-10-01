@@ -1,2 +1,0 @@
-
-(nim-mode . [(20180930 2243) ((emacs (24 4)) (epc (0 1 1)) (let-alist (1 0 1)) (commenter (0 5 1)) (flycheck-nimsuggest (0 8 1))) "A major mode for the Nim programming language" tar ((:commit . "a23d6fa466f02b9fd29b2aab9c8b6cae3a14e876") (:keywords "nim" "languages") (:authors ("Simon Hafner")) (:maintainer "Simon Hafner" . "hafnersimon@gmail.com"))])
