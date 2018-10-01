@@ -5,8 +5,8 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 20180831.1422
-;; Package-X-Original-Version: 1.0
+;; Package-Version: 20180930.1933
+;; Package-X-Original-Version: 1.1
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -27,6 +27,27 @@
 ;;; Commentary:
 ;;
 ;; This package allows to run django commands
+
+;; Available interactive commands
+;;
+;; `django-commands-shell'
+;; Runs shell command in `django-commands-shell-mode'. It's derived from
+;; `inferior-python-mode' so there are native completions and pdb tracking mode.
+;;
+;; `django-commands-server'
+;; Runs server command in `comint-mode' with pdb tracking mode and `compilation-shell-minor-mode'.
+;;
+;; `django-commands-test'
+;; Asks test name to run and then runs test command in `comint-mode' with pdb
+;; tracking enabled and `compilation-shell-minor-mode'.
+;;
+;; `django-commands-restart'
+;; Being runned in one of django command buffers restarts current django command.
+;;
+;; If command is invoked with prefix argument (for ex. C-u M-x `django-commands-shell' RET)
+;; it allow to edit command arguments.
+;;
+;; See README.md for more info.
 
 ;;; Code:
 
@@ -94,6 +115,22 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
 (defvar-local django-commands--current-args nil
   "Current command arguments")
 
+;; Keymap
+
+(defvar django-commands-shell-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map inferior-python-mode-map)
+    (define-key map (kbd "C-c r") #'django-commands-restart)
+    map)
+  "Keymap for django shell mode.")
+
+(defvar django-commands-command-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map comint-mode-map)
+    (define-key map (kbd "C-c r") #'django-commands-restart)
+    map)
+  "Keymap for django commad modes.")
+
 ;; Modes
 
 (defun django-commands--clear-undo-output-filter (&optional _string)
@@ -101,12 +138,16 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   (setq buffer-undo-list nil))
 
 (define-derived-mode django-commands-shell-mode inferior-python-mode "Django shell"
-  "Major mode for django shell command"
+  "Major mode for django shell command.
+
+\\{django-commands-shell-mode-map}"
   (add-to-list 'comint-output-filter-functions #'comint-truncate-buffer)
   (add-to-list 'comint-output-filter-functions #'django-commands--clear-undo-output-filter t))
 
 (define-derived-mode django-commands-command-mode comint-mode "Django command"
-  "Major mode for django commands"
+  "Major mode for django commands.
+
+\\{django-commands-command-mode-map}"
   (add-to-list 'comint-output-filter-functions #'comint-truncate-buffer)
   (add-to-list 'comint-output-filter-functions #'django-commands--clear-undo-output-filter t)
   (add-to-list 'comint-output-filter-functions #'python-pdbtrack-comint-output-filter-function t)

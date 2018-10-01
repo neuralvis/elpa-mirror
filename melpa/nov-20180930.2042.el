@@ -4,8 +4,8 @@
 
 ;; Author: Vasilij Schneidermann <mail@vasilij.de>
 ;; URL: https://github.com/wasamasa/nov.el
-;; Package-Version: 20180617.2144
-;; Version: 0.2.4
+;; Package-Version: 20180930.2042
+;; Version: 0.2.5
 ;; Package-Requires: ((dash "2.12.0") (esxml "0.3.3") (emacs "24.4"))
 ;; Keywords: hypermedia, multimedia, epub
 
@@ -411,7 +411,7 @@ Each alist item consists of the identifier and full path."
 (defun nov-url-filename-and-target (url)
   "Return a list of URL's filename and target."
   (setq url (url-generic-parse-url url))
-  (list (url-filename url) (url-target url)))
+  (mapcar 'url-unhex-string (list (url-filename url) (url-target url))))
 
 (defun nov-insert-image (path)
   "Insert an image for PATH at point.

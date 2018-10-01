@@ -1,6 +1,9 @@
-rmsbolt is a package to provide assembly or bytecode output for a source code input file.
+RMSBolt is a package to provide assembly or bytecode output for a source
+code input file.
 
-It currently supports: C/C++, OCaml, Haskell, Python, Java, and (limited) Common Lisp.
+It currently supports: C/C++, OCaml, Haskell, Python, Java, and (limited)
+Common Lisp.
+
 Adding support for more languages, if they have an easy manual compilation
 path from source->assembly/bytecode with debug information, should be much
 easier than in other alternatives.
@@ -24,7 +27,8 @@ Notable options:
 `rmsbolt-intel-x86': Toggle between intel and att syntax if supported
 `rmsbolt-demangle': Demangle the output, if supported.
 
-Please see the readme at https://gitlab.com/jgkamat/rmsbolt for more information!
+Please see the readme at https://gitlab.com/jgkamat/rmsbolt for
+more information!
 
 Thanks:
 Inspiration and some assembly parsing logic was adapted from Matt Godbolt's
