@@ -4,7 +4,6 @@
 ;;
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/mrkkrp/ace-popup-menu
-;; Package-Version: 20180101.615
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "24.3") (avy-menu "0.1"))
 ;; Keywords: convenience, popup, menu
@@ -87,5 +86,7 @@ and he/she is done."
               ace-popup-menu-show-pane-header)))
 
 (provide 'ace-popup-menu)
+
+;;; ace-popup-menu.el ends here
 
 ;;; ace-popup-menu.el ends here
