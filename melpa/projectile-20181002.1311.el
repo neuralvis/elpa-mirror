@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20181002.817
+;; Package-Version: 20181002.1311
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -914,11 +914,11 @@ at the top level of DIRECTORY."
      (lambda (dir)
        (when (and (file-directory-p dir)
                   (not (member (file-name-nondirectory dir) '(".." "."))))
-         (let ((default-directory dir))
-           (when (projectile-project-p)
-             (projectile-add-known-project (projectile-project-root))))))
+         (when (projectile-project-p dir)
+           (projectile-add-known-project dir))))
      subdirs)))
 
+;;;###autoload
 (defun projectile-discover-projects-in-search-path ()
   "Discover projects in `projectile-project-search-path'.
 Invoked automatically when `projectile-mode' is enabled."
@@ -1048,12 +1048,6 @@ Controlled by `projectile-require-project-root'."
                                                     "Switch to project: " projectile-known-projects))
      (projectile-require-project-root (error "Projectile can't find a project definition in %s" dir))
      (t default-directory))))
-
-(defun projectile-file-truename (file-name)
-  "Return the truename of FILE-NAME.
-A thin wrapper around `file-truename' that handles nil."
-  (when file-name
-    (file-truename file-name)))
 
 (defun projectile-project-p (&optional dir)
   "Check if DIR is a project.

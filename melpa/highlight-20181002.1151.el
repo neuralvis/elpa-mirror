@@ -7,11 +7,11 @@
 ;; Copyright (C) 1995-2018, Drew Adams, all rights reserved.
 ;; Created: Wed Oct 11 15:07:46 1995
 ;; Version: 0
-;; Package-Version: 20180605.635
+;; Package-Version: 20181002.1151
 ;; Package-Requires: ()
-;; Last-Updated: Mon Jun  4 14:05:45 2018 (-0700)
+;; Last-Updated: Tue Sep 18 13:02:42 2018 (-0700)
 ;;           By: dradams
-;;     Update #: 4134
+;;     Update #: 4137
 ;; URL: https://www.emacswiki.org/emacs/download/highlight.el
 ;; URL (GIT mirror): https://framagit.org/steckerhalter/highlight.el
 ;; Doc URL: https://www.emacswiki.org/emacs/HighlightLibrary
@@ -769,6 +769,8 @@
 ;;
 ;;(@* "Change log")
 ;;
+;; 2018/09/18 dadams
+;;     hlt-hide-default-face: If FACE is nil then set it to hlt-last-face (in body, not just interactive).
 ;; 2017/10/15 dadams
 ;;     Added: hlt-user-error.  Use it for user errors.
 ;;     hlt-highlighter, hlt-eraser: Better error message if drag out of window.
@@ -2840,6 +2842,7 @@ START and END are the limits of the area to act on. They default to
     (unless (and start  end) (let ((start-end  (hlt-region-or-buffer-limits)))
                                (setq start  (car start-end)
                                      end    (cadr start-end))))
+    (unless face (setq face  hlt-last-face))
     (hlt-listify-invisibility-spec)
     ;; Add FACE to `invisible' property throughout START...END,
     ;; whenever it is used as a highlighting face.

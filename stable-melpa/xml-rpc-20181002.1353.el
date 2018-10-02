@@ -9,7 +9,7 @@
 ;; Author: Mark A. Hershberger <mah@everybody.org>
 ;; Original Author: Daniel Lundin <daniel@codefactory.se>
 ;; Version: 1.6.12
-;; Package-Version: 20160430.2158
+;; Package-Version: 20181002.1353
 ;; Created: May 13 2001
 ;; Keywords: xml rpc network
 ;; URL: http://github.com/hexmode/xml-rpc-el
@@ -571,15 +571,16 @@ or nil if called with ASYNC-CALLBACK-FUNCTION."
         (let ((url-request-method "POST")
               (url-package-name "xml-rpc.el")
               (url-package-version xml-rpc-version)
-              (url-request-data (concat "<?xml version=\"1.0\""
-                                        " encoding=\"UTF-8\"?>\n"
-                                        (with-temp-buffer
-                                          (xml-print xml)
-                                          (when xml-rpc-allow-unicode-string
-                                            (encode-coding-region
-                                             (point-min) (point-max) 'utf-8))
-                                          (buffer-string))
-                                        "\n"))
+              (url-request-data
+	       (concat "<?xml version=\"1.0\""
+                       " encoding=\"UTF-8\"?>\n"
+                       (with-temp-buffer
+                         (xml-print xml)
+                         (if xml-rpc-allow-unicode-string
+                             (string-as-unibyte
+			      (encode-coding-string (buffer-string) 'utf-8))
+                           (buffer-string)))
+                       "\n"))
               (url-mime-charset-string "utf-8;q=1, iso-8859-1;q=0.5")
               (url-request-coding-system xml-rpc-use-coding-system)
               (url-http-attempt-keepalives t)
