@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20180923.2219
+;; Package-Version: 20181002.605
 ;; Keywords: help, lisp
 ;; Version: 0.14
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -201,10 +201,17 @@ press \\[keyboard-quit] to gracefully stop the printing."
 Return SYM otherwise."
   (let ((depth 0))
     (if (and (symbolp sym) callable-p)
-        (while (and (symbolp (symbol-function sym))
-                    (< depth 10))
-          (setq sym (symbol-function sym))
-          (setq depth (1+ depth)))
+        (progn
+          ;; Follow the chain of symbols until we find a symbol that
+          ;; isn't pointing to a symbol.
+          (while (and (symbolp (symbol-function sym))
+                      (< depth 10))
+            (setq sym (symbol-function sym))
+            (setq depth (1+ depth)))
+          ;; If this is an alias to a primitive, return the
+          ;; primitive's symbol.
+          (when (subrp (symbol-function sym))
+            (setq sym (intern (subr-name (symbol-function sym))))))
       (setq sym (indirect-variable sym))))
   sym)
 
@@ -641,7 +648,7 @@ overrides that to include previously opened buffers."
     (let ((inhibit-read-only t))
       (erase-buffer)
 
-       ;; TODO: Macros used, special forms used, global vars used.
+      ;; TODO: Macros used, special forms used, global vars used.
       (insert (format "Functions called by %s:\n\n" sym))
       (helpful--display-callee-group compounds)
 
@@ -652,9 +659,7 @@ overrides that to include previously opened buffers."
 
       (goto-char (point-min))
 
-      ;; TODO: define our own mode, so we can move between links
-      ;; conveniently.
-      (special-mode))))
+      (helpful-mode))))
 
 (define-button-type 'helpful-manual-button
   'action #'helpful--manual
@@ -1483,7 +1488,9 @@ POSITION-HEADS takes the form ((123 (defun foo)) (456 (defun bar)))."
     (let ((filename (find-lisp-object-file-name sym 'defvar)))
       (or (eq filename 'C-source)
           (and (stringp filename)
-               (equal (file-name-extension filename) "c")))))))
+               (let ((ext (file-name-extension filename)))
+                 (or (equal ext "c")
+                     (equal ext "rs")))))))))
 
 (defun helpful--sym-value (sym buf)
   "Return the value of SYM in BUF."

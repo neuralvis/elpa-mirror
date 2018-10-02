@@ -4,7 +4,7 @@
 
 ;; Author: Dimitri Fontaine <dim@tapoueh.org>
 ;; Version: 0.1.2
-;; Package-Version: 20180530.733
+;; Package-Version: 20181002.640
 ;; URL: https://github.com/dimitri/mbsync-el
 
 ;; This file is NOT part of GNU Emacs.
@@ -134,6 +134,10 @@ Arguments PROC, STRING as in `set-process-filter'."
                                        (and bol "Maildir error:" (* nonl) eol)
                                        (and bol "Error:" (* nonl) eol)
                                        (and (* nonl) ": unknown keyword " (* nonl) eol)
+                                       (and bol "Cannot connect to " (* nonl) eol)
+                                       (and bol "IMAP error:" (* nonl) eol)
+                                       (and bol "Error from" (* nonl) eol)
+                                       (and bol "No working address found for " (* nonl) eol)
                                        (and bol "gpg: decryption failed: " (* nonl) eol)
                                        (and bol "Skipping account " (* nonl) eol) ))
                                   nil t)

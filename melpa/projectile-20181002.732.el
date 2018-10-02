@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20181001.1630
+;; Package-Version: 20181002.732
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -1755,7 +1755,14 @@ https://github.com/abo-abo/swiper")))
       (when projectile-enable-caching
         (projectile-cache-project project-root files)))
 
-    (projectile-sort-files files)))
+    ;;; Sorting
+    ;;
+    ;; Files can't be cached in sorted order as some sorting schemes
+    ;; require dynamic data.  Sorting is ignored completely when in
+    ;; turbo-alien mode.
+    (if (eq projectile-indexing-method 'turbo-alien)
+        files
+      (projectile-sort-files files))))
 
 (defun projectile-current-project-files ()
   "Return a list of the files in the current project."
