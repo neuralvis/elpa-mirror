@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20180925.330
+;; Package-Version: 20181001.1902
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.10.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
@@ -1489,7 +1489,7 @@ This function also returns nil meaning don't specify the indentation."
             ;; Preserve useful alignment of :require (and friends) in `ns' forms.
             ((and function (string-match "^:" function))
              (clojure--normal-indent last-sexp :always-align))
-            ;; This is should be identical to the :defn above.
+            ;; This should be identical to the :defn above.
             ((and function
                   (string-match "\\`\\(?:\\S +/\\)?\\(def[a-z]*\\|with-\\)"
                                 function)
@@ -1978,8 +1978,7 @@ This will skip over sexps that don't represent objects, so that ^hints and
   "Return truthy if the first form matches FIRST-FORM."
   (condition-case nil
       (save-excursion
-        (end-of-defun)
-        (clojure-backward-logical-sexp 1)
+        (beginning-of-defun)
         (forward-char 1)
         (clojure-forward-logical-sexp 1)
         (clojure-backward-logical-sexp 1)
@@ -2033,10 +2032,11 @@ many times."
         (save-match-data
           (let ((original-position (point))
                 clojure-comment-start clojure-comment-end)
+            (beginning-of-defun)
+            (setq clojure-comment-start (point))
             (end-of-defun)
             (setq clojure-comment-end (point))
-            (clojure-backward-logical-sexp 1) ;; beginning of comment form
-            (setq clojure-comment-start (point))
+            (beginning-of-defun)
             (forward-char 1)              ;; skip paren so we start at comment
             (clojure-forward-logical-sexp) ;; skip past the comment form itself
             (if-let ((sexp-start (clojure-find-first (lambda (beg-pos)
