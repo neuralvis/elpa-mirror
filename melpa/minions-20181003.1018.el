@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/tarsius/minions
 
 ;; Package-Requires: ((emacs "25.3") (dash "2.13.0"))
-;; Package-Version: 20180709.1712
+;; Package-Version: 20181003.1018
 
 ;; This file is not part of GNU Emacs.
 
@@ -92,6 +92,13 @@ global minor-mode, nil otherwise."
   :group 'minions
   :type 'string)
 
+(defcustom minions-mode-line-delimiters '("(" . ")")
+  "Strings placed around mode elements in the mode line."
+  :group 'minions
+  :type '(choice (const :tag "No delimiters")
+                 (cons (string :tag "Before string")
+                       (string :tag "After string"))))
+
 ;;; Mode
 
 ;;;###autoload
@@ -122,7 +129,7 @@ minor-modes that is usually displayed directly in the mode line."
 (defvar minions-mode-line-modes
   (let ((recursive-edit-help-echo "Recursive edit, type C-M-c to get out"))
     (list (propertize "%[" 'help-echo recursive-edit-help-echo)
-          "("
+          '(:eval (car minions-mode-line-delimiters))
           `(:propertize ("" mode-name)
                         help-echo "Major mode
 mouse-1: Display major mode menu
@@ -149,7 +156,7 @@ mouse-3: Toggle minor modes"
                         help-echo "Minions
 mouse-1: Display minor modes menu"
                         local-map ,minions-mode-line-minor-modes-map)
-          ")"
+          '(:eval (cdr minions-mode-line-delimiters))
           (propertize "%]" 'help-echo recursive-edit-help-echo)
           " "))
   "Alternative mode line construct for displaying major and minor modes.

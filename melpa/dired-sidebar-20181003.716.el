@@ -5,7 +5,7 @@
 ;; Author: James Nguyen <james@jojojames.com>
 ;; Maintainer: James Nguyen <james@jojojames.com>
 ;; URL: https://github.com/jojojames/dired-sidebar
-;; Package-Version: 20180930.1642
+;; Package-Version: 20181003.716
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1") (dired-subtree "0.0.1"))
 ;; Keywords: dired, files, tools
@@ -419,6 +419,9 @@ Works around marker pointing to wrong buffer in Emacs 25."
   ;; Since we use both 1 & 2, disable 3 to avoid the issue.
   ;; This needs to be set to nil before `dired-hide-details-mode' is called.
   (setq-local dired-hide-details-hide-symlink-targets nil)
+
+  ;; Use `dired-sidebar-revert' instead that wraps `dired-revert'.
+  (setq-local revert-buffer-function 'dired-sidebar-revert)
 
   ;; We don't want extra details in the sidebar.
   (dired-hide-details-mode)
@@ -1083,13 +1086,16 @@ This function hides the sidebar before executing F and then reshows itself after
       (when dired-sidebar-recenter-cursor-on-tui-update
         (recenter)))))
 
-(defun dired-sidebar-revert ()
+(defun dired-sidebar-revert (&rest _)
   "Wrapper around `dired-revert' but saves window position."
   (dired-sidebar-when-let* ((window (get-buffer-window
-                                     (dired-sidebar-buffer)))
-                            (old-window-start (window-start)))
-    (dired-revert)
-    (set-window-start window old-window-start)))
+                                     (dired-sidebar-buffer))))
+    (with-selected-window window
+      (let ((old-window-start (window-start)))
+        (when (dired-sidebar-using-tui-p)
+          (dired-sidebar-tui-reset-in-sidebar))
+        (dired-revert)
+        (set-window-start window old-window-start)))))
 
 (defun dired-sidebar-tui-reset-in-sidebar (&rest _)
   "Runs `dired-sidebar-tui-dired-reset' in current `dired-sidebar' buffer."
@@ -1105,7 +1111,6 @@ This is used in place of `all-the-icons' to add directory indicators.
 e.g. + and -."
   (add-hook 'dired-after-readin-hook
             'dired-sidebar-tui-dired-display :append :local)
-  (advice-add 'dired-revert :before 'dired-sidebar-tui-reset-in-sidebar)
   (setq-local dired-subtree-line-prefix " ")
   (dired-build-subdir-alist)
   (dired-sidebar-revert))
@@ -1150,7 +1155,7 @@ This is an exact copy of `wdired-change-to-dired-mode' but changes the
   (setq mode-name "Dired-sidebar")
   (dired-advertise)
   (remove-hook 'kill-buffer-hook 'wdired-check-kill-buffer t)
-  (set (make-local-variable 'revert-buffer-function) 'dired-revert))
+  (set (make-local-variable 'revert-buffer-function) 'dired-sidebar-revert))
 
 (defun dired-sidebar-wdired-change-to-wdired-mode-advice (f &rest args)
   "Forward to `wdired-change-to-wdired-mode'.

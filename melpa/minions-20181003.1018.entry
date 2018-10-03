@@ -1,0 +1,2 @@
+
+(minions . [(20181003 1018) ((emacs (25 3)) (dash (2 13 0))) "A minor-mode menu for the mode line" single ((:commit . "33631e98c8b2dee4e2bb8cd67ab52f7130b54b15") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/tarsius/minions"))])
