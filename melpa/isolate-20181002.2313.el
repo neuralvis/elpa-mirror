@@ -2,7 +2,7 @@
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 ;; URL: https://github.com/casouri/isolate
-;; Package-Version: 20180902.1937
+;; Package-Version: 20181002.2313
 ;; Version: 1.0.0
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "25"))
@@ -216,17 +216,17 @@ Return LEFT-SEGMENT itself if not."
 
 ;;;; Fundamental helper
 
-(define-inline isolate--append (seq elt)
+(defsubst isolate--append (seq elt)
   "Append ELT to SEQ destructively."
-  `(if ,seq
-      (nconc ,seq (list ,elt))
-    (setq ,seq (list ,elt))))
+  (if seq
+      (nconc seq (list elt))
+    (setq seq (list elt))))
 
-(define-inline isolate--push (elt seq)
+(defsubst isolate--push (elt seq)
   "Push ELT to SEQ destructively."
-  `(if ,seq
-      (push ,elt ,seq)
-    (setq ,seq (list ,elt))))
+  (if seq
+      (push elt seq)
+    (setq seq (list elt))))
 
 (defun isolate--replace-with (str start end)
   "Replace strings between START and END with STR.
