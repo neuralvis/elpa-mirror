@@ -4,7 +4,7 @@
 
 ;; Author: Marc Ihm <org-index@2484.de>
 ;; URL: https://github.com/marcIhm/org-index
-;; Package-Version: 20180919.555
+;; Package-Version: 20181003.641
 ;; Version: 5.9.3
 ;; Package-Requires: ((emacs "24.4"))
 
@@ -253,7 +253,7 @@ This can be helpful to speed up occur."
   :type 'integer)
 
 (defcustom org-index-key nil
-  "Key to invoke ‘org-index’, which is the central entry function for ‘org-index’. When setting with customize: do not type the key-sequence but its description, e.g. 'C-c i' as five ordinary characters."
+  "Key to invoke ‘org-index’, which is the central entry function for ‘org-index’. When setting with customize: do not type the key-sequence but its description, e.g. `C-c i' as five ordinary characters."
   :group 'org-index
   :initialize 'custom-initialize-set
   :set (lambda (var val)

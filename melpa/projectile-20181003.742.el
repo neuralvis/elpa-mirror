@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20181002.1605
+;; Package-Version: 20181003.742
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -439,12 +439,12 @@ Any function that does not take arguments will do."
 Only file buffers are affected by this, as the update happens via
 `find-file-hook'.
 
-See also `projectile-mode-line-fn' and `projectile-update-mode-line'."
+See also `projectile-mode-line-function' and `projectile-update-mode-line'."
   :group 'projectile
   :type 'boolean
   :package-version '(projectile . "1.1.0"))
 
-(defcustom projectile-mode-line-fn 'projectile-default-mode-line
+(defcustom projectile-mode-line-function 'projectile-default-mode-line
   "The function to use to generate project-specific mode-line.
 The default function adds the project name and type to the mode-line.
 See also `projectile-update-mode-line'."
@@ -1507,7 +1507,7 @@ Regular expressions can be used."
 (defun projectile-ignored-file-p (file)
   "Check if FILE should be ignored.
 
-Regular expressions can be use."
+Regular expressions can be used."
   (cl-some
    (lambda (name)
      (string-match-p name file))
@@ -3959,7 +3959,7 @@ thing shown in the mode line otherwise."
 
 (defun projectile-update-mode-line ()
   "Update the Projectile mode-line."
-  (let ((mode-line (funcall projectile-mode-line-fn)))
+  (let ((mode-line (funcall projectile-mode-line-function)))
     (setq projectile--mode-line mode-line))
   (force-mode-line-update))
 
@@ -4139,9 +4139,5 @@ Otherwise behave as if called interactively.
 (define-obsolete-function-alias 'projectile-global-mode 'projectile-mode "1.0")
 
 (provide 'projectile)
-
-;; Local Variables:
-;; indent-tabs-mode: nil
-;; End:
 
 ;;; projectile.el ends here

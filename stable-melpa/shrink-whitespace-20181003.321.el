@@ -4,13 +4,13 @@
 
 ;; Author   : Jean-Christophe Petkovich <jcpetkovich@gmail.com>
 ;; Created  : 6 June 2015
-;; URL      : https://github.com/jcpetkovich/shrink-whitespace.el
-;; Package-Version: 20150916.1915
-;; Version  : 0.0.1
-;; Keywords : editing
+;; URL      : https://gitlab.com/jcpetkovich/shrink-whitespace.el
+;; Package-Version: 20181003.321
+;; Version  : 0.0.4
+;; Keywords : convenience
 
 ;; Please see README.md for documentation, or read it online at
-;; https://github.com/jcpetkovich/shrink-whitespace.el
+;; https://gitlab.com/jcpetkovich/shrink-whitespace.el
 
 ;;; License:
 
@@ -44,13 +44,14 @@
 ;;; Code:
 
 ;;;###autoload
-(defun shrink-whitespace ()
+(defun shrink-whitespace (arg)
   "Remove whitespace around cursor to just one or none.
 If current line contains non-white space chars, then shrink any
 whitespace char surrounding cursor to just one space.  If current
 line does not contain non-white space chars, then remove blank
-lines to just one."
-  (interactive)
+lines to just one.
+Argument ARG Prevents removal of newlines when no other whitespace exists."
+  (interactive "P")
   (cond ((shrink-whitespace--just-one-space-p)
          (delete-horizontal-space))
         ((not (shrink-whitespace--line-has-meat-p))
@@ -60,12 +61,14 @@ lines to just one."
                (looking-at " \\|\t")
                (looking-back " \\|\t")))
          (just-one-space))
-        ((and (shrink-whitespace--line-has-meat-p)
-              (looking-back "\n"))
-         (delete-char -1))
-        ((and (shrink-whitespace--line-has-meat-p)
-              (looking-at "\n"))
-         (delete-char 1))))
+        ((not arg)
+         (cond
+          ((and (shrink-whitespace--line-has-meat-p)
+                (looking-back "\n"))
+           (delete-char -1))
+          ((and (shrink-whitespace--line-has-meat-p)
+                (looking-at "\n"))
+           (delete-char 1))))))
 
 (defun shrink-whitespace--just-one-space-p ()
   "Return a truthy value if there is only one space at point."
@@ -102,7 +105,7 @@ lines to just one."
 
 ;;;###autoload
 (defun shrink-whitespace-grow-whitespace-around ()
-  "Counterpart to shrink-whitespace, grow whitespace in a smartish way."
+  "Counterpart to 'shrink-whitespace', grow whitespace in a smartish way."
   (interactive)
   (let ((content-above nil)
         (content-below nil))
