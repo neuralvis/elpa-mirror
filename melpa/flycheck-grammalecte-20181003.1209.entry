@@ -1,0 +1,2 @@
+
+(flycheck-grammalecte . [(20181003 1209) ((emacs (24)) (flycheck (26))) "Integrate Grammalecte with Flycheck" tar ((:commit . "afb29a495eead4cb7318294c3206e1be1b16f544") (:keywords "i18n" "text") (:authors ("Guilhem Doulcier" . "guilhem.doulcier@espci.fr") ("Étienne Deparis" . "etienne@depar.is")) (:maintainer "Guilhem Doulcier" . "guilhem.doulcier@espci.fr") (:url . "https://git.deparis.io/flycheck-grammalecte/"))])
