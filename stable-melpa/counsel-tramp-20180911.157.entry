@@ -1,2 +1,2 @@
 
-(counsel-tramp . [(20180911 157) ((emacs (24 3)) (counsel (0 10))) "Tramp ivy interface for ssh, docker, vagrant" single ((:commit . "5e3345f3d11f965e80763a3f68dca8a05f597224") (:authors ("Masashı Mıyaura")) (:maintainer "Masashı Mıyaura") (:url . "https://github.com/masasam/emacs-counsel-tramp"))])
+(counsel-tramp . [(20180911 157) ((emacs (24 3)) (counsel (0 10))) "Tramp ivy interface for ssh, docker, vagrant" single ((:commit . "d44b986135fc09c8feefdba3caa55cc59cefc1e8") (:authors ("Masashı Mıyaura")) (:maintainer "Masashı Mıyaura") (:url . "https://github.com/masasam/emacs-counsel-tramp"))])
