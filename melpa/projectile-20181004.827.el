@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20181003.2029
+;; Package-Version: 20181004.827
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -670,6 +670,19 @@ It assumes the test/ folder is at the same level as src/."
   "Hooks run when right before project is switched."
   :group 'projectile
   :type 'hook)
+
+(defcustom projectile-current-project-on-switch 'remove
+  "Determines whether to display current project when switching projects.
+
+When set to 'remove current project is not included, 'move-to-end
+will display current project and the end of the list of known
+projects, 'keep will leave the current project at the default
+position."
+  :group 'projectile
+  :type '(radio
+          (const :tag "Remove" remove)
+          (const :tag "Move to end" move-to-end)
+          (const :tag "Keep" keep)))
 
 
 ;;; Version information
@@ -3484,13 +3497,28 @@ An open project is a project with any open buffers."
                              (list (abbreviate-file-name (projectile-project-root))))
     projects))
 
+(defun projectile--move-current-project-to-end (projects)
+  "Move current project (if any) to the end of list in the list of PROJECTS."
+  (if (projectile-project-p)
+      (append
+       (projectile--remove-current-project projects)
+       (list (abbreviate-file-name (projectile-project-root))))
+    projects))
+
 (defun projectile-relevant-known-projects ()
-  "Return a list of known projects except the current one (if present)."
-  (projectile--remove-current-project projectile-known-projects))
+  "Return a list of known projects."
+  (pcase projectile-current-project-on-switch
+   ('remove (projectile--remove-current-project projectile-known-projects))
+   ('move-to-end (projectile--move-current-project-to-end projectile-known-projects))
+   ('keep projectile-known-projects)))
 
 (defun projectile-relevant-open-projects ()
-  "Return a list of open projects except the current one (if present)."
-  (projectile--remove-current-project (projectile-open-projects)))
+  "Return a list of open projects."
+  (let ((open-projects (projectile-open-projects)))
+    (pcase projectile-current-project-on-switch
+     ('remove (projectile--remove-current-project open-projects))
+     ('move-to-end (projectile--move-current-project-to-end open-projects))
+     ('keep open-projects))))
 
 ;;;###autoload
 (defun projectile-switch-project (&optional arg)
@@ -3516,9 +3544,10 @@ With a prefix ARG invokes `projectile-commander' instead of
   (interactive "P")
   (let ((projects (projectile-relevant-open-projects)))
     (if projects
-        (projectile-switch-project-by-name
-         (projectile-completing-read "Switch to open project: " projects)
-         arg)
+        (projectile-completing-read
+         "Switch to open project: " projects
+         :action (lambda (project)
+                   (projectile-switch-project-by-name project arg)))
       (user-error "There are no open projects"))))
 
 (defun projectile-switch-project-by-name (project-to-switch &optional arg)
@@ -3960,10 +3989,12 @@ thing shown in the mode line otherwise."
   "Report project name and type in the modeline."
   (let ((project-name (projectile-project-name))
         (project-type (projectile-project-type)))
-    (format "%s[%s:%s]"
+    (format "%s[%s%s]"
             projectile-mode-line-prefix
-            project-name
-            project-type)))
+            (or project-name "-")
+            (if project-type
+                (format ":%s" project-type)
+              ""))))
 
 (defun projectile-update-mode-line ()
   "Update the Projectile mode-line."

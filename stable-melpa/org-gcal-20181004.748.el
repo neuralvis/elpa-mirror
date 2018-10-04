@@ -2,7 +2,7 @@
 
 ;; Author: myuhe <yuhei.maeda_at_gmail.com>
 ;; URL: https://github.com/kidd/org-gcal.el
-;; Package-Version: 20180827.808
+;; Package-Version: 20181004.748
 ;; Version: 0.3
 ;; Maintainer: Raimon Grau <raimonster@gmail.com>
 ;; Copyright (C) :2014 myuhe all rights reserved.
@@ -617,6 +617,7 @@ TO.  Instead an empty string is returned."
                            :date))
          (start (if stime stime sday))
          (end   (if etime etime eday)))
+    (when loc (replace-regexp-in-string "\n" ", " loc))
     (concat
      "* " smry "\n"
      "  :PROPERTIES:\n"
