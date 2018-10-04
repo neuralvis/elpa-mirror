@@ -4,9 +4,9 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Url: https://gitlab.petton.fr/DamienCassou/elcouch
-;; Package-Version: 20180529.757
-;; Package-requires: ((emacs "25.1") (json-mode "1.0.0") (libelcouch "0.7.0"))
-;; Version: 0.2.0
+;; Package-Version: 20180809.936
+;; Package-requires: ((emacs "25.1") (json-mode "1.0.0") (libelcouch "0.8.0"))
+;; Version: 0.3.0
 ;; Keywords: data, tools
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -48,15 +48,6 @@
 
 
 ;;; Helper code
-
-(defun elcouch--choose-instance ()
-  "Ask user for a CouchDB instance among `libelcouch-couchdb-instances'."
-  (let* ((instances (libelcouch-instances))
-         (instance-name (completing-read "CouchDB instance: "
-                                         (mapcar #'libelcouch-entity-name instances)
-                                         nil
-                                         t)))
-    (cl-find instance-name instances :test #'string= :key #'libelcouch-entity-name)))
 
 (cl-defgeneric elcouch--entity-buffer-name (entity)
   "Return a buffer name approapriate for listing the content of ENTITY.")
@@ -100,10 +91,16 @@ is asked for an INSTANCE among `elcouch-couchdb-instances'."
   (interactive (list (let ((entity (tabulated-list-get-id)))
                        (if (and entity (libelcouch-named-entity-p entity))
                            entity
-                         (elcouch--choose-instance)))))
+                         (libelcouch-choose-instance)))))
   (if (libelcouch-document-p entity)
       (elcouch-view-document entity)
     (elcouch-list entity)))
+
+;;;###autoload
+(defun elcouch-open-url (url)
+  "Open entity pointed to by URL, a string."
+  (interactive (list (read-from-minibuffer "URL: ")))
+  (elcouch-open (libelcouch-entity-from-url url)))
 
 (defun elcouch-list (entity)
   "Open a buffer showing children of ENTITY."
@@ -125,6 +122,7 @@ is asked for an INSTANCE among `elcouch-couchdb-instances'."
 (defvar elcouch-document-view-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-c") #'elcouch-document-save)
+    (define-key map (kbd "C-x C-q") #'elcouch-document-read-only-mode)
     map)
   "Keybindings for `elcouch-document-view-mode'.")
 
@@ -158,7 +156,9 @@ mark are changed to those ones."
        (when saved-point
          (goto-char saved-point))
        (when saved-mark
-         (save-mark-and-excursion--restore saved-mark))))))
+         (save-mark-and-excursion--restore saved-mark))
+       (message "Press %s to edit the document."
+                (substitute-command-keys "\\[elcouch-document-read-only-mode]"))))))
 
 (defun elcouch-document-refresh (&optional buffer)
   "Refresh BUFFER with new document content.
@@ -174,10 +174,20 @@ Use current buffer if BUFFER is nil."
   (interactive)
   (libelcouch-document-save elcouch-entity nil #'elcouch-document-refresh))
 
+(defun elcouch-document-read-only-mode ()
+  "Toggle read-only mode in current buffer."
+  (interactive)
+  (call-interactively #'read-only-mode)
+  (if buffer-read-only
+      (message "Press %s to edit the document."
+               (substitute-command-keys "\\[elcouch-document-read-only-mode]"))
+    (message "You can now edit the document. Press %s to send changes to the server."
+             (substitute-command-keys "\\[elcouch-document-save]"))))
+
 (defun elcouch-document-delete (document)
   "Delete the CouchDB DOCUMENT."
   (interactive (list elcouch-entity))
-  (when (yes-or-no-p (format "Do you really want to delete %s? " (libelcouch-entity-full-name document)))
+  (when (yes-or-no-p (format "Really delete %s? " (libelcouch-entity-full-name document)))
     (let* ((json-object (save-excursion
                           (goto-char (point-min))
                           (json-read)))
