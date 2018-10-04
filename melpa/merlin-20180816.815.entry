@@ -1,2 +1,2 @@
 
-(merlin . [(20180816 815) nil "Mode for Merlin, an assistant for OCaml." tar ((:commit . "85b1a6f0b439fd4e8b0dfedcc51bb34ec99c6534") (:keywords "ocaml" "languages") (:authors ("Frédéric Bour <frederic.bour(_)lakaban.net>")) (:maintainer "Frédéric Bour <frederic.bour(_)lakaban.net>") (:url . "https://github.com/ocaml/merlin"))])
+(merlin . [(20180816 815) nil "Mode for Merlin, an assistant for OCaml." tar ((:commit . "9ab86828b066efccfd33d32ddae4545e35708ff1") (:keywords "ocaml" "languages") (:authors ("Frédéric Bour <frederic.bour(_)lakaban.net>")) (:maintainer "Frédéric Bour <frederic.bour(_)lakaban.net>") (:url . "https://github.com/ocaml/merlin"))])
