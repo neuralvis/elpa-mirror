@@ -5,7 +5,7 @@
 ;; Licensed under the same terms as Emacs.
 
 ;; Version: 0.2.1
-;; Package-Version: 20170614.1445
+;; Package-Version: 20181005.1524
 ;; Keywords: pytest python testing
 ;; URL: https://github.com/ionrock/pytest-el
 ;; Package-Requires: ((s "1.9.0"))
@@ -250,14 +250,14 @@ case.  This requires pytest >= 1.2."
   "Find the function name for `pytest-one'."
   (save-excursion
     (re-search-backward
-     "^[ \t]\\{0,4\\}\\(class\\|def\\)[ \t]+\\([a-zA-Z0-9_]+\\)" nil t)
+     "^[ \t]\\{0,4\\}\\(class\\|\\(?:async \\)?def\\)[ \t]+\\([a-zA-Z0-9_]+\\)" nil t)
     (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
 
 (defun pytest-outer-testable ()
   "Find the class for the `pytest-one'."
   (save-excursion
     (re-search-backward
-     "^\\(class\\|def\\)[ \t]+\\([a-zA-Z0-9_]+\\)" nil t)
+     "^\\(class\\|\\(?:async \\)?def\\)[ \t]+\\([a-zA-Z0-9_]+\\)" nil t)
     (let ((result
             (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
       (cons

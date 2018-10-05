@@ -4,7 +4,6 @@
 
 ;; Author: Ido Magal <misc@satans.church>
 ;; Version: 20141215.2119
-;; Package-Version: 20141216.547
 ;; version func: (insert (format-time-string "%Y%m%d.%H%M" (current-time)))
 ;; Keywords: distraction free, writing
 ;; URL: https://github.com/idomagal/Tabula-Rasa/blob/master/tabula-rasa.el
@@ -241,5 +240,8 @@ Add the minor mode and the desired state while in Tabula Rasa mode."
         )))
 
 (provide 'tabula-rasa)
+
+;;; tabula-rasa.el ends here
+
 
 ;;; tabula-rasa.el ends here
