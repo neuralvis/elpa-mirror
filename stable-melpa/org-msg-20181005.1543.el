@@ -6,8 +6,8 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20180930.2006
-;; Package-X-Original-Version: 1.5
+;; Package-Version: 20181005.1543
+;; Package-X-Original-Version: 1.6
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -690,18 +690,18 @@ buffer to extract and return the first name.  It is used to
 automatically greet the right name, see `org-msg-greeting-fmt'."
   (save-excursion
     (message-goto-to)
-    (let* ((to (buffer-substring-no-properties
-		(+ (length "To: ") (line-beginning-position))
-		(line-end-position)))
-	   (split (split-string to "[<,]" t "[ \">]+")))
-      (if (or (not split) (= (length split) 1))
-	  ""
-	(let ((first-name (if (= (length split) 2)
-			      (car (split-string (car split) " "))
-			    (cadr split))))
-	  (if org-msg-greeting-fmt-mailto
-	      (format "[[mailto:%s][%s]]" to first-name)
-	    first-name))))))
+    (cl-multiple-value-bind (name mail)
+	(gnus-extract-address-components
+	 (message-fetch-field "to"))
+      (if name
+	  (let* ((split (split-string name ", " t))
+		 (first-name (if (= (length split) 2)
+				 (cadr split)
+			       (car (split-string name " " t)))))
+	    (if org-msg-greeting-fmt-mailto
+		(format "[[mailto:%s][%s]]" mail first-name)
+	      first-name))
+	""))))
 
 (defun org-msg-header (reply-to)
   "Build the Org OPTIONS and PROPERTIES blocks.
@@ -727,7 +727,9 @@ If the current `message' buffer is a reply, the
 `org-msg-separator' string is inserted at the end of the editing
 area."
   (message-goto-body)
-  (let ((new (= (point) (point-max)))
+  (let ((new (not (and (message-fetch-field "to")
+		       (message-fetch-field "subject"))))
+	(with-original (not (= (point) (point-max))))
 	(reply-to))
     (when (or new (org-msg-article-htmlp))
       (unless new
@@ -735,9 +737,11 @@ area."
       (insert (org-msg-header reply-to))
       (when org-msg-greeting-fmt
 	(insert (format org-msg-greeting-fmt
-			(org-msg-get-to-first-name))))
+			(if new
+			    ""
+			  (org-msg-get-to-first-name)))))
       (save-excursion
-	(unless new
+	(when with-original
 	  (save-excursion
 	    (insert "\n\n" org-msg-separator "\n")
 	    (delete-region (line-beginning-position)
@@ -881,7 +885,9 @@ HTML emails."
 	(advice-add 'mml-expand-html-into-multipart-related
 		    :around #'org-msg-mml-into-multipart-related)
 	(advice-add 'org-html--todo :around #'org-msg-html--todo)
-	(advice-add 'message-mail :after #'org-msg-post-setup))
+	(advice-add 'message-mail :after #'org-msg-post-setup)
+	(when (boundp 'bbdb-mua-mode-alist)
+	  (add-to-list 'bbdb-mua-mode-alist '(message org-msg-edit-mode))))
     (remove-hook 'gnus-message-setup-hook 'org-msg-post-setup)
     (remove-hook 'message-send-hook 'org-msg-prepare-to-send)
     (remove-hook 'org-ctrl-c-ctrl-c-final-hook 'org-msg-ctrl-c-ctrl-c)
@@ -890,7 +896,10 @@ HTML emails."
     (advice-remove 'mml-expand-html-into-multipart-related
 		   #'org-msg-mml-into-multipart-related)
     (advice-remove 'org-html--todo #'org-msg-html--todo)
-    (advice-remove 'message-mail #'org-msg-post-setup)))
+    (advice-remove 'message-mail #'org-msg-post-setup)
+    (when (boundp 'bbdb-mua-mode-alist)
+      (setq bbdb-mua-mode-alist (delete '(message org-msg-edit-mode)
+					bbdb-mua-mode-alist)))))
 
 (defvar org-msg-edit-mode-map
   (let ((map (make-sparse-keymap)))

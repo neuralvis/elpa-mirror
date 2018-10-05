@@ -4,7 +4,7 @@
 
 ;; Author: Marc Ihm <org-index@2484.de>
 ;; URL: https://github.com/marcIhm/org-index
-;; Package-Version: 20181003.641
+;; Package-Version: 20181003.1931
 ;; Version: 5.9.3
 ;; Package-Requires: ((emacs "24.4"))
 
@@ -3339,10 +3339,9 @@ Optional argument ARG, when given does not limit number of lines shown."
             (progn
               (setq key-sequence
                     (let ((echo-keystrokes 0)
-                          (full-prompt (format "%s%s%s"
+                          (full-prompt (format "%s%s"
                                                prompt
-                                               oidx--occur-search-text
-                                               (if (string= oidx--occur-search-text "") "" " "))))
+                                               oidx--occur-search-text)))
                       (read-key-sequence full-prompt nil nil t t)))
               (setq key (key-description key-sequence))
               (setq key-sequence-raw (this-single-command-raw-keys)))
