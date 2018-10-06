@@ -3,10 +3,10 @@
 ;; Authors: Chris Rayner (dchrisrayner @ gmail)
 ;; Created: May 23 2011
 ;; Keywords: frames, processes, tools
-;; Package-Version: 20171004.1824
+;; Package-Version: 20181006.133
 ;; URL: https://github.com/riscy/bifocal-mode
 ;; Package-Requires: ((emacs "24.4"))
-;; Version: 0.0.3
+;; Version: 0.0.4
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -68,7 +68,7 @@
   :prefix "bifocal-"
   :group 'comint
   :link '(url-link
-          :tag "the Github repository"
+          :tag "bifocal on GitHub"
           "https://github.com/riscy/bifocal-mode"))
 
 (defcustom bifocal-minimum-rows-before-splitting 30
@@ -128,7 +128,7 @@ If this scrolls to the last line, remove the split."
     (if (bifocal--last-line-p)
         (bifocal-end)
       (select-window bifocal--tail))
-    (bifocal--recenter-at-point-max)))
+    (bifocal--recenter-on-last-line)))
 
 (defun bifocal-end ()
   "Scroll to the end of the buffer."
@@ -151,7 +151,7 @@ the head window.  If HOME is non-nil, scroll to the top."
            (bifocal--create-split))
          (bifocal--move-point-up home)
          (select-window bifocal--tail)
-         (bifocal--recenter-at-point-max))
+         (bifocal--recenter-on-last-line))
         (t (bifocal--move-point-up home))))
 
 (defun bifocal--create-split ()
@@ -169,7 +169,8 @@ the head window.  If HOME is non-nil, scroll to the top."
   (bifocal--unset-dedicated-windows)
   (bifocal--unset-scroll-options)
   (when (bifocal--find-head)
-    (delete-window bifocal--tail))
+    ;; removing head instead of tail keeps the cursor in place
+    (delete-window bifocal--head))
   (setq-local bifocal--head nil)
   (setq-local bifocal--tail nil))
 
@@ -220,9 +221,9 @@ That is, START-WINDOW is selected, moving in direction DIR (via
   "Whether the point is on the tail window."
   (bifocal--oriented-p bifocal--tail 'up bifocal--head))
 
-(defun bifocal--recenter-at-point-max ()
-  "Move the point to `point-max', and recenter."
-  (goto-char (point-max))
+(defun bifocal--recenter-on-last-line ()
+  "Ensure point is on the last line, and recenter."
+  (when (not (bifocal--last-line-p)) (goto-char (point-max)))
   ;; `recenter'ing errors when this isn't the active buffer:
   (ignore-errors (recenter -1)))
 
@@ -247,7 +248,7 @@ That is, START-WINDOW is selected, moving in direction DIR (via
 (defun bifocal--splittable-p ()
   "Whether the current window is able to be split."
   (and (bifocal--last-line-p)
-       (>= (line-number-at-pos) (window-screen-lines))
+       (not (bifocal--top-p))
        (or (bifocal--find-head)
            (>= (window-height) bifocal-minimum-rows-before-splitting))))
 
@@ -260,7 +261,7 @@ That is, START-WINDOW is selected, moving in direction DIR (via
 (defun bifocal--turn-off ()
   "Remove the head/tail split if it exists."
   (bifocal--destroy-split)
-  (bifocal--recenter-at-point-max))
+  (bifocal--recenter-on-last-line))
 
 (defun bifocal--turn-on ()
   "Call the function `bifocal-mode' if appropriate."
