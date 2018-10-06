@@ -3,7 +3,7 @@
 
 ;; Author: Daniel Berg
 ;; URL: https://github.com/srcery-colors/srcery-emacs
-;; Package-Version: 20180927.1705
+;; Package-Version: 20181006.1331
 
 ;; Version: 0.1.0
 ;; Keywords: faces
@@ -2145,16 +2145,16 @@
       (,srcery-256-class (:background ,srcery-256-bright-black :foreground ,srcery-256-bright-white))))
 
    `(popup-tip-face
-     ((,srcery-class (:background ,srcery-bright-blue :foreground ,srcery-bright-white :bold nil :italic nil :underline nil))
-      (,srcery-256-class (:background ,srcery-256-bright-blue :foreground ,srcery-256-bright-white :bold nil :italic nil :underline nil))))
+     ((,srcery-class (:background ,srcery-bright-blue :foreground ,srcery-black))
+      (,srcery-256-class (:background ,srcery-256-bright-blue :foreground ,srcery-256-black))))
 
    `(popup-menu-face
      ((,srcery-class (:background ,srcery-bright-black :foreground ,srcery-bright-white))
       (,srcery-256-class (:background ,srcery-256-bright-black :foreground ,srcery-256-bright-white))))
 
-   `(popup-enu-selection-face
-     ((,srcery-class (:background ,srcery-bright-blue :foreground ,srcery-bright-white))
-      (,srcery-256-class (:background ,srcery-256-bright-blue :foreground ,srcery-256-bright-white))))
+   `(popup-menu-selection-face
+     ((,srcery-class (:background ,srcery-bright-blue :foreground ,srcery-black))
+      (,srcery-256-class (:background ,srcery-256-bright-blue :foreground ,srcery-256-black))))
 
    `(popup-menu-mouse-face
      ((,srcery-class (:inherit highlight))
@@ -2410,8 +2410,8 @@
       (,srcery-256-class (:background ,srcery-256-orange :foreground ,srcery-256-bright-white))))
 
    `(spacemacs-hybrid-face
-     ((,srcery-class (:background ,srcery-bright-blue :foreground ,srcery-bright-black))
-      (,srcery-256-class (:background ,srcery-256-bright-blue :foreground ,srcery-256-bright-black))))
+     ((,srcery-class (:background ,srcery-bright-orange :foreground ,srcery-black))
+      (,srcery-256-class (:background ,srcery-256-bright-orange :foreground ,srcery-256-black))))
 
    `(spacemacs-lisp-face
      ((,srcery-class (:background ,srcery-green :foreground ,srcery-black))
@@ -2429,21 +2429,17 @@
      ((,srcery-class (:background nil :foreground ,srcery-green :box nil :weight bold))
       (,srcery-256-class (:background nil :foreground ,srcery-256-green :box nil :weight bold))))
 
-   `(spacemacs-transient-state-title-face
-     ((,srcery-class (:background nil :foreground ,srcery-green :box nil :weight bold))
-      (,srcery-256-class (:background nil :foreground ,srcery-256-green :box nil :weight bold))))
-
    `(spacemacs-ido-navigation-ts-face
      ((,srcery-class (:foreground ,srcery-yellow))
       (,srcery-256-class (:foreground ,srcery-256-yellow))))
 
    `(spacemacs-iedit-face
-     ((,srcery-class (:background ,srcery-bright-orange :foreground ,srcery-black))
-      (,srcery-256-class (:background ,srcery-256-bright-orange :foreground ,srcery-256-black))))
+     ((,srcery-class (:background ,srcery-blue :foreground ,srcery-bright-white))
+      (,srcery-256-class (:background ,srcery-256-blue :foreground ,srcery-256-bright-white))))
 
    `(spacemacs-iedit-insert-face
-     ((,srcery-class (:background ,srcery-bright-orange :foreground ,srcery-black))
-      (,srcery-256-class (:background ,srcery-256-bright-orange :foreground ,srcery-256-black))))
+     ((,srcery-class (:background ,srcery-bright-blue :foreground ,srcery-black))
+      (,srcery-256-class (:background ,srcery-256-bright-blue :foreground ,srcery-256-black))))
 
    `(spacemacs-micro-state-binding-face
      ((,srcery-class (:foreground ,srcery-yellow :weight bold))
