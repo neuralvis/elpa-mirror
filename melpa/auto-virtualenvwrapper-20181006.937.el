@@ -4,9 +4,9 @@
 
 ;; Author: Marcwebbie <marcwebbie@gmail.com>
 ;;         Robert Zaremba <robert-zaremba@scale-it.pl>
-;; Version: 1.0
-;; Package-Version: 20180408.1010
-;; Package-X-Original-Version: 20170518
+;; Version: 1.1
+;; Package-Version: 20181006.937
+;; Package-X-Original-Version: 20181006
 ;; Keywords: Python, Virtualenv, Tools
 ;; Package-Requires: ((cl-lib "0.6") (s "1.10.0") (virtualenvwrapper "0"))
 
@@ -104,8 +104,8 @@
   (or auto-virtualenvwrapper--project-root
       (setq auto-virtualenvwrapper--project-root
             (or (auto-virtualenvwrapper--project-root-projectile)
-                (auto-virtualenvwrapper--project-root-vc)
                 (auto-virtualenvwrapper--project-root-traverse)
+                (auto-virtualenvwrapper--project-root-vc)
                 "")))
   (when (eq auto-virtualenvwrapper--project-root "")
       (auto-virtualenvwrapper-message "Can't find project root"))
