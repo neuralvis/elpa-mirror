@@ -1,0 +1,2 @@
+
+(lsp-haskell . [(20181006 920) ((lsp-mode (3 0)) (haskell-mode (1 0))) "Haskell support for lsp-mode" single ((:commit . "67907a7a33998573f155581dd97e861d55f29854") (:keywords "haskell") (:url . "https://github.com/emacs-lsp/lsp-haskell"))])

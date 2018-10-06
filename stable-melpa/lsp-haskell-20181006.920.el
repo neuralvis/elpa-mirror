@@ -1,7 +1,7 @@
 ;;; lsp-haskell.el --- Haskell support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20180828.838
+;; Package-Version: 20181006.920
 ;; Package-Requires: ((lsp-mode "3.0") (haskell-mode "1.0"))
 ;; Keywords: haskell
 ;; URL: https://github.com/emacs-lsp/lsp-haskell
@@ -36,6 +36,10 @@ server. hie-wrapper exists on HIE master from 2018-06-10"
 For a debug log, use `-d -l /tmp/hie.log'."
   :group 'lsp-haskell
   :type '(repeat (string :tag "Argument")))
+
+;; ---------------------------------------------------------------------
+
+(defvar lsp-haskell--config-options (make-hash-table))
 
 ;; ---------------------------------------------------------------------
 ;; HaRe functions
@@ -123,7 +127,8 @@ For a debug log, use `-d -l /tmp/hie.log'."
 
 First searches for root via projectile.  Tries to find cabal file
 if projectile way fails"
-  (if (and (fboundp 'projectile-project-root) (projectile-project-root))
+  ;; (if (and (fboundp 'projectile-project-root) (projectile-project-root))
+  (if nil
       (projectile-project-root)
     (let ((dir (lsp-haskell--session-cabal-dir)))
       (if (string= dir "/")
@@ -296,6 +301,94 @@ These are assembled from the customizable variables
  installed via its Makefile, there will be compiler-specific
  versions with names like 'hie-8.0.2' or 'hie-8.2.2'."
    (append (list lsp-haskell-process-path-hie "--lsp") lsp-haskell-process-args-hie) )
+
+;; ---------------------------------------------------------------------
+
+(defun lsp-haskell--set-configuration ()
+  (lsp--set-configuration `(:languageServerHaskell ,lsp-haskell--config-options)))
+
+(add-hook 'lsp-after-initialize-hook 'lsp-haskell--set-configuration)
+
+(defun lsp-haskell-set-config (name option)
+  "Set config option NAME to value OPTION in the haskell lsp server."
+  (puthash name option lsp-haskell--config-options))
+
+  ;; parseJSON = withObject "Config" $ \v -> do
+  ;;   s <- v .: "languageServerHaskell"
+  ;;   flip (withObject "Config.settings") s $ \o -> Config
+  ;;     <$> o .:? "hlintOn"              .!= True
+  ;;     <*> o .:? "maxNumberOfProblems"  .!= 100
+  ;;     <*> o .:? "liquidOn"             .!= False
+  ;;     <*> o .:? "completionSnippetsOn" .!= True
+
+;; -------------------------------------
+
+(defun lsp-haskell-set-hlint (val)
+  "Enable(t)/Disable(nil) running hlint."
+  (lsp-haskell-set-config "hlintOn" val))
+
+(defun lsp-haskell-set-hlint-on ()
+  "Enable running hlint haskell."
+  (interactive)
+  (lsp-haskell-set-hlint t)
+  (lsp-haskell--set-configuration))
+
+(defun lsp-haskell-set-hlint-off ()
+  "Disable running hlint."
+  (interactive)
+  (lsp-haskell-set-hlint nil)
+  (lsp-haskell--set-configuration))
+
+;; -------------------------------------
+
+(defun lsp-haskell-set-max-problems (val)
+  "Set maximum number of problems reported to VAL."
+  (lsp-haskell-set-config "maxNumberOfProblems" val))
+
+(defun lsp-haskell-set-max-number-of-problems (val)
+  "Set maximum number of problems reported to VAL."
+  (interactive "nMax number of problems to report: ")
+  (lsp-haskell-set-max-problems val)
+  (lsp-haskell--set-configuration))
+
+;; -------------------------------------
+
+(defun lsp-haskell-set-liquid (val)
+  "Enable(t)/Disable(nil) running liquid haskell on save."
+  (lsp-haskell-set-config "liquidOn" val))
+
+(defun lsp-haskell-set-liquid-on ()
+  "Enable running liquid haskell on save."
+  (interactive)
+  (lsp-haskell-set-liquid t)
+  (lsp-haskell--set-configuration))
+
+(defun lsp-haskell-set-liquid-off ()
+  "Disable running liquid haskell on save."
+  (interactive)
+  (lsp-haskell-set-liquid nil)
+  (lsp-haskell--set-configuration))
+
+;; -------------------------------------
+
+(defun lsp-haskell-set-completion-snippets (val)
+  "Enable(t)/Disable(nil) providing completion snippets."
+  (lsp-haskell-set-config "completionSnippetsOn" val))
+
+(defun lsp-haskell-set-completion-snippets-on ()
+  "Enable providing completion snippets."
+  (interactive)
+  (lsp-haskell-set-completionSnippets t)
+  (lsp-haskell--set-configuration))
+
+(defun lsp-haskell-set-completion-snippets-off ()
+  "Disable providing completion snippets."
+  (interactive)
+  (lsp-haskell-set-completion-snippets nil)
+  (lsp-haskell--set-configuration))
+
+
+;; ---------------------------------------------------------------------
 
 (provide 'lsp-haskell)
 ;;; lsp-haskell.el ends here
