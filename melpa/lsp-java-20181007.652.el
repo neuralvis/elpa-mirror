@@ -1,7 +1,7 @@
 ;;; lsp-java.el --- Java support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20180930.753
+;; Package-Version: 20181007.652
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.0") (markdown-mode "2.3"))
 ;; Keywords: java
 ;; URL: https://github.com/emacs-lsp/lsp-java
@@ -70,6 +70,12 @@ Eg. use `-noverify -Xmx1G -XX:+UseG1GC
 -XX:+UseStringDeduplication` to bypass class
 verification,increase the heap size to 1GB and enable String
 deduplication with the G1 Garbage collector"
+  :group 'lsp-java
+  :risky t
+  :type '(repeat string))
+
+(defcustom lsp-java-9-args '("--add-modules=ALL-SYSTEM" "--add-opens java.base/java.util=ALL-UNNAMED" "--add-opens java.base/java.lang=ALL-UNNAMED")
+  "Specifies arguments specific to java 9 and later."
   :group 'lsp-java
   :risky t
   :type '(repeat string))
@@ -309,11 +315,25 @@ FULL specify whether full or incremental build will be performed."
   (unless (file-directory-p path)
     (make-directory path)))
 
+(defun lsp-java--get-java-version ()
+  "Retrieve the java version from shell command."
+  (let* ((java-version-output (shell-command-to-string (concat lsp-java-java-path " -version")))
+         (version-string (nth 2 (split-string java-version-output))))
+    (string-to-number (replace-regexp-in-string "\"" "" version-string))))
+
+(defun lsp-java--java-9-plus-p ()
+  "Check if java version is greater than or equal to 9."
+  (let ((java-version (lsp-java--get-java-version)))
+    (>= java-version 9)))
+
 (defun lsp-java--ls-command ()
   "LS startup command."
   (let ((server-jar (lsp-java--locate-server-jar))
         (server-config (lsp-java--locate-server-config))
-        (root-dir (lsp-java--get-root)))
+        (root-dir (lsp-java--get-root))
+        (java-9-args (if (lsp-java--java-9-plus-p)
+                         lsp-java-9-args
+                       '())))
     (lsp-java--ensure-dir lsp-java-workspace-dir)
     `(,lsp-java-java-path
       "-Declipse.application=org.eclipse.jdt.ls.core.id1"
@@ -327,7 +347,8 @@ FULL specify whether full or incremental build will be performed."
       "-configuration"
       ,server-config
       "-data"
-      ,lsp-java-workspace-dir)))
+      ,lsp-java-workspace-dir
+      ,@java-9-args)))
 
 (defun lsp-java--get-root ()
   "Retrieves the root directory of the java project root if available.
@@ -443,6 +464,8 @@ PARAMS progress report notification data."
   (let* ((default-directory (concat temporary-file-directory "lsp-java-install/")))
     (when (file-directory-p default-directory)
       (delete-directory default-directory t))
+    (when (file-directory-p lsp-java-server-install-dir)
+      (delete-directory lsp-java-server-install-dir t))
     (mkdir default-directory t)
     (url-copy-file (concat lsp-java--download-root "pom.xml") "pom.xml" t)
     (let ((full-command (format

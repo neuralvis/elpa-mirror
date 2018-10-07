@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.5.0
-;; Package-Version: 20181001.1514
+;; Package-Version: 20181007.426
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -702,7 +702,7 @@ mouse-3: Toggle minor modes"
                              (if active (setq face 'doom-modeline-urgent))
                              (doom-modeline-maybe-icon-octicon "alert" :face face))
                             (t
-                             (if active (setq face 'doom-modeline-info))
+                             (if active (setq face 'font-lock-doc-face))
                              (doom-modeline-maybe-icon-octicon
                               "git-branch"
                               :face face
