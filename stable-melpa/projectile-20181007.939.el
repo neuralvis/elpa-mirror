@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20181005.2126
+;; Package-Version: 20181007.939
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -2202,8 +2202,10 @@ With a prefix arg INVALIDATE-CACHE invalidates the cache first."
   "Return a list of test files for the current project."
   (projectile-test-files (projectile-current-project-files)))
 
-(defvar projectile-project-types (make-hash-table)
-  "A hash table holding all project types that are known to Projectile.")
+(defvar projectile-project-types nil
+  "An alist holding all project types that are known to Projectile.
+The project types are symbols and they are linked to plists holding
+the properties of the various project types.")
 
 (cl-defun projectile-register-project-type
     (project-type marker-files &key compilation-dir configure compile test run test-suffix test-prefix src-dir test-dir)
@@ -2240,8 +2242,9 @@ TEST-DIR which specifies the path to the tests relative to the project root."
       (plist-put project-plist 'src-dir src-dir))
     (when test-dir
       (plist-put project-plist 'test-dir test-dir))
-    (puthash project-type project-plist
-             projectile-project-types)))
+    (setq projectile-project-types
+          (cons `(,project-type . ,project-plist)
+                projectile-project-types))))
 
 (defun projectile-cabal-project-p ()
   "Check if a project contains *.cabal files but no stack.yaml file."
@@ -2452,12 +2455,13 @@ Normally you'd set this from .dir-locals.el.")
   "Detect the type of the current project.
 Fallsback to a generic project type when the type can't be determined."
   (let ((project-type (or (cl-find-if
-                           (lambda (project-type)
-                             (let ((marker (plist-get (gethash project-type projectile-project-types) 'marker-files)))
+                           (lambda (project-type-record)
+                             (let ((project-type (car project-type-record))
+                                   (marker (plist-get (cdr project-type-record) 'marker-files)))
                                (if (listp marker)
                                    (and (projectile-verify-files marker) project-type)
                                  (and (funcall marker) project-type))))
-                           (hash-table-keys projectile-project-types))
+                           projectile-project-types)
                           'generic)))
     (puthash (projectile-project-root) project-type projectile-project-type-cache)
     project-type))
@@ -2596,7 +2600,7 @@ test file."
 (defun projectile-project-type-attribute (project-type key &optional default-value)
   "Return the value of some PROJECT-TYPE attribute identified by KEY.
 Fallback to DEFAULT-VALUE for missing attributes."
-  (let ((project (gethash project-type projectile-project-types)))
+  (let ((project (alist-get project-type projectile-project-types)))
     (if (and project (plist-member project key))
         (plist-get project key)
       default-value)))
@@ -3237,7 +3241,7 @@ Should be set via .dir-locals.el.")
 If found, checks if value is symbol or string.  In case of symbol
 resolves to function `funcall's.  Return value of function MUST
 be string to be executed as command."
-  (let ((command (plist-get (gethash project-type projectile-project-types) command-type)))
+  (let ((command (plist-get (alist-get project-type projectile-project-types) command-type)))
     (cond
      ((stringp command) command)
      ((functionp command)

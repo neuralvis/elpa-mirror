@@ -5,7 +5,7 @@
 ;; Author: Paul van Dam <pvandam@m-industries.com>
 ;; Maintainer: Paul van Dam <pvandam@m-industries.com>
 ;; Version: 1.0.0
-;; Package-Version: 20180902.1431
+;; Package-Version: 20181007.827
 ;; Created: 13 October 2017
 ;; URL: https://github.com/M-industries/AlanForEmacs
 ;; Homepage: https://alan-platform.com/
@@ -71,7 +71,7 @@ resolved to an existing directory."
 
 (defcustom alan-compiler-project-root "."
   "The relative path from the current buffer file to the compilation root of the `alan-compiler'.
-This is sets the -C option."
+This sets the -C option."
   :type '(string)
   :safe 'stringp)
 (make-variable-buffer-local 'alan-compiler-project-root)
@@ -152,6 +152,9 @@ BODY can define keyword aguments.
 :language
 	The path to the Alan language definition. Its value is set in
 	`alan-language-definition'.
+:build-dir
+	The relative build directory of the `alan-compiler'. This sets the buffer
+	local variable `alan-compiler-project-root.'
 :pairs
 	A list of cons cells that match open and close parameters.
 :propertize-rules
@@ -177,6 +180,7 @@ Optional argument DOCSTRING for the major mode."
 		 (syntax-table-name (intern (concat (symbol-name name) "-syntax-table")))
 		 (keywords)
 		 (language)
+		 (build-dir)
 		 (pairs '())
 		 (propertize-rules))
 
@@ -187,6 +191,7 @@ Optional argument DOCSTRING for the major mode."
 		(`:keywords (setq keywords (pop body)))
 		(`:language (setq language (pop body)))
 		(`:pairs (setq pairs (pop body)))
+		(`:build-dir (setq build-dir (pop body)))
 		(`:propertize-rules (setq propertize-rules (pop body)))
 		(_ (pop body))))
 
@@ -212,6 +217,9 @@ Optional argument DOCSTRING for the major mode."
 		 ,(when language
 			`(progn
 			   (setq alan-language-definition ,language)))
+		 ,(when build-dir
+			`(progn
+			   (setq alan-compiler-project-root ,build-dir)))
 		 ,(when keywords
 			`(progn
 			   (font-lock-add-keywords nil ',keywords "at end")))
@@ -542,6 +550,7 @@ Return nil if the script can not be found."
 (alan-define-mode alan-schema-mode
 	"Major mode for editing Alan schema files."
   :language "dependencies/dev/internals/alan/language"
+  :build-dir "../.."
   :keywords (("->\\s-+\\(stategroup\\|component\\|group\\|dictionary\\|command\\|densematrix\\|sparsematrix\\|reference\\|number\\|text\\)\\(\\s-+\\|$\\)" 1 font-lock-type-face)
 			 (( "component" "types" "external" "->" "plural" "numerical"
 				"integer" "natural" "root" "]" ":" "*" "?"  "~" "+" "constrain"
@@ -612,6 +621,7 @@ Return nil if the script can not be found."
 (alan-define-mode alan-grammar-mode
 	"Major mode for editing Alan grammar files."
   :language "dependencies/dev/internals/alan/language"
+  :build-dir "../.."
   :pairs (("[" . "]"))
   :keywords ((("rules" "root" "component" "indent" "keywords" "collection" "order"
 			   "predecessors" "successors" "group" "number" "reference" "stategroup"
@@ -729,7 +739,7 @@ Return nil if the script can not be found."
 ;;;###autoload (autoload 'alan-deployment-mode "alan-mode")
 (alan-define-mode alan-deployment-mode
 	"Major mode for editing Alan deployment files."
-  :language "devenv/platform/project-build-environment/language"
+  :language ".alan/devenv/platform/project-build-environment/language"
   :keywords ((("external-systems:" "instance-data:" "system-options:"
 			   "provided-connections:" ":" "."  "from" "local" "remote" "stack"
 			   "system" "migrate" "timezone" "interface" "message" "custom"
