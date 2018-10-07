@@ -6,8 +6,8 @@
 ;; Created: October 2017
 ;; Keywords: extensions mail pdf grep
 ;; Homepage: https://github.com/jeremy-compostella/pdfgrep
-;; Package-Version: 20180929.1729
-;; Package-X-Original-Version: 1.2
+;; Package-Version: 20181007.1728
+;; Package-X-Original-Version: 1.3
 ;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@
 
 (defun pdfgrep-default-command ()
   "Compute the default pdfgrep command for `pdfgrep'."
-  (let ((cmd (concat pdfgrep-program " -n "
+  (let ((cmd (concat pdfgrep-program " -H -n "
 		     (when pdfgrep-ignore-case
 		       "-i ")
 		     (when pdfgrep-context-length
