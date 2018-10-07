@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20181002.1350
+;; Package-Version: 20181006.2209
 ;; Version: 0.1.13
 ;; Package-Requires: ((emacs "25") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
@@ -92,29 +92,29 @@ if not os.path.exists(server_directory):
 
 # Installation check.
 
-def instrument_installation():
-    for path in os.listdir(server_directory):
-        path = os.path.join(server_directory, path)
-        if path.endswith('.egg') and os.path.isdir(path) and path not in sys.path:
-            sys.path.insert(0, path)
+jedi_dep = ('jedi', '0.13.0')
+service_factory_dep = ('service_factory', '0.1.5')
 
 missing_dependencies = []
 
+def instrument_installation():
+    for package in (jedi_dep, service_factory_dep):
+        package_is_installed = False
+        for path in os.listdir(server_directory):
+            path = os.path.join(server_directory, path)
+            if path.endswith('.egg') and os.path.isdir(path):
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+                if package[0] in path:
+                    package_is_installed = True
+        if not package_is_installed:
+            missing_dependencies.append('>='.join(package))
+
 instrument_installation()
-
-try:
-    import jedi
-except ImportError:
-    missing_dependencies.append('jedi>=0.13.0')
-
-try:
-    import service_factory
-except ImportError:
-    missing_dependencies.append('service_factory>=0.1.5')
 
 # Installation.
 
-if missing_dependencies:
+def install_deps():
     import site
     import setuptools.command.easy_install
     site.addsitedir(server_directory)
@@ -125,12 +125,30 @@ if missing_dependencies:
     setuptools.command.easy_install.main(cmd)
     instrument_installation()
 
+if missing_dependencies:
+    install_deps()
+
+missing_dependencies.clear()
+
+try:
+    import jedi
+except ImportError:
+    missing_dependencies.append('>='.join(jedi_dep))
+
+try:
+    import service_factory
+except ImportError:
+    missing_dependencies.append('>='.join(service_factory_dep))
+
+# Try one more time in case if anaconda installation gets broken somehow
+if missing_dependencies:
+    install_deps()
+    import jedi
+    import service_factory
+
 # Setup server.
 
-import jedi
-import service_factory
-
-assert jedi.__version__ >= '0.13.0', 'Jedi version should be >= 0.13.0, current version: %s' % (jedi.__version__,)
+assert jedi.__version__ >= jedi_dep[1], 'Jedi version should be >= %s, current version: %s' % (jedi_dep[1], jedi.__version__,)
 
 if virtual_environment:
     virtual_environment = jedi.create_environment(virtual_environment, safe=False)
