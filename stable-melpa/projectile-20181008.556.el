@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20181007.939
+;; Package-Version: 20181008.556
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -2454,15 +2454,16 @@ Normally you'd set this from .dir-locals.el.")
 (defun projectile-detect-project-type ()
   "Detect the type of the current project.
 Fallsback to a generic project type when the type can't be determined."
-  (let ((project-type (or (cl-find-if
-                           (lambda (project-type-record)
-                             (let ((project-type (car project-type-record))
-                                   (marker (plist-get (cdr project-type-record) 'marker-files)))
-                               (if (listp marker)
-                                   (and (projectile-verify-files marker) project-type)
-                                 (and (funcall marker) project-type))))
-                           projectile-project-types)
-                          'generic)))
+  (let ((project-type
+         (or (car (cl-find-if
+                   (lambda (project-type-record)
+                     (let ((project-type (car project-type-record))
+                           (marker (plist-get (cdr project-type-record) 'marker-files)))
+                       (if (listp marker)
+                           (and (projectile-verify-files marker) project-type)
+                         (and (funcall marker) project-type))))
+                   projectile-project-types))
+             'generic)))
     (puthash (projectile-project-root) project-type projectile-project-type-cache)
     project-type))
 
