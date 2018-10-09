@@ -1,2 +1,0 @@
-
-(lsp-mode . [(20181003 1559) ((emacs (25 1))) "Minor mode for interacting with Language Servers" tar ((:commit . "d1d186adcc039ccd10593c71f26acdb9e8a1cf79") (:authors ("Vibhav Pant" . "vibhavp@gmail.com")) (:maintainer "Vibhav Pant" . "vibhavp@gmail.com") (:url . "https://github.com/emacs-lsp/lsp-mode"))])

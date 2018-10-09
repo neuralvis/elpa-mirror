@@ -1,2 +1,2 @@
 
-(cmake-mode . [(20180709 1426) nil "major-mode for editing CMake sources" single ((:commit . "0ab5db035ed47182fb8551f9872045eeae1f9cec"))])
+(cmake-mode . [(20180709 1426) nil "major-mode for editing CMake sources" single ((:commit . "d96aa163109514608ee7c1113e283f4fef0e85a4"))])
