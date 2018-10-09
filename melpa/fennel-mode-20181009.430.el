@@ -4,7 +4,7 @@
 
 ;; Author: Phil Hagelberg
 ;; URL: https://gitlab.com/technomancy/fennel-mode
-;; Package-Version: 20180801.350
+;; Package-Version: 20181009.430
 ;; Version: 0.0.1
 ;; Created: 2018-02-18
 ;;
@@ -92,7 +92,7 @@
       (,(regexp-opt fennel-keywords 'symbols) . font-lock-keyword-face)
       (,(regexp-opt fennel-builtins 'symbols) . font-lock-builtin-face)
       (,(rx (group ":" (1+ word))) 0 font-lock-builtin-face)
-      (,(rx (group (1+ word) "." (1+ word))) 0 font-lock-type-face))))
+      (,(rx (group letter (0+ word) "." (1+ word))) 0 font-lock-type-face))))
 
 (defun fennel-font-lock-setup ()
   (setq font-lock-defaults
