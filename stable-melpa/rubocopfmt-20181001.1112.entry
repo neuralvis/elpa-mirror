@@ -1,2 +1,0 @@
-
-(rubocopfmt . [(20181001 1112) ((cl-lib (0 5))) "Minor-mode to format Ruby code with RuboCop on save" single ((:commit . "43ffa9d9c3dcc0574038bebd049102642f50b290") (:keywords "convenience" "wp" "edit" "ruby" "rubocop") (:authors ("Jim Myhrberg")) (:maintainer "Jim Myhrberg") (:url . "https://github.com/jimeh/rubocopfmt.el"))])
