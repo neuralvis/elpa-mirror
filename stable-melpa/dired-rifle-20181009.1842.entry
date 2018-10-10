@@ -1,0 +1,2 @@
+
+(dired-rifle . [(20181009 1842) nil "Call rifle(1) from dired" single ((:commit . "99547a330ee46db20da88308ef9a4c36e6ebb0cd") (:keywords "files" "convenience") (:authors ("Wojciech Siewierski <wojciech dot siewierski at onet dot pl>")) (:maintainer "Wojciech Siewierski <wojciech dot siewierski at onet dot pl>") (:url . "https://github.com/vifon/dired-rifle.el"))])
