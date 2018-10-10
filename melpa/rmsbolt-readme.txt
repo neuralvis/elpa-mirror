@@ -21,10 +21,11 @@ RMSBolt is primarily configured with Emacs local variables. This lets you
 change compiler and rmsbolt options simply by editing a local variable block.
 
 Notable options:
-`rmsbolt-command': determines the prefix of the compilation command to use
+`rmsbolt-command': determines the prefix of the compilation command to use.
+`rmsbolt-default-directory': determines the default-drectory to compile from.
 `rmsbolt-disassemble': disassemble from a compiled binary with objdump, if supported.
-`rmsbolt-filter-*': Tweak filtering of binary output
-`rmsbolt-intel-x86': Toggle between intel and att syntax if supported
+`rmsbolt-filter-*': Tweak filtering of binary output.
+`rmsbolt-intel-x86': Toggle between intel and att syntax if supported.
 `rmsbolt-demangle': Demangle the output, if supported.
 
 Please see the readme at https://gitlab.com/jgkamat/rmsbolt for

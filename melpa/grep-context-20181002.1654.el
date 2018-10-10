@@ -3,6 +3,7 @@
 ;;
 ;; Author: Michał Krzywkowski <k.michal@zoho.com>
 ;; URL: https://github.com/mkcms/grep-context
+;; Package-Version: 20181002.1654
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0") (cl-lib "0.5.0"))
 ;; Version: 0.1.0
 ;; Keywords: convenience, search, grep, compile
