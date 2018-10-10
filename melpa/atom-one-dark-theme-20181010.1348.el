@@ -4,7 +4,7 @@
 
 ;; Author: Jonathan Chu <me@jonathanchu.is>
 ;; URL: https://github.com/jonathanchu/atom-one-dark-theme
-;; Package-Version: 20181003.1908
+;; Package-Version: 20181010.1348
 ;; Version: 0.4.0
 
 ;; This file is not part of GNU Emacs.
@@ -407,19 +407,19 @@
    `(powerline-inactive2 ((,class (:background ,atom-one-dark-bg :foreground ,atom-one-dark-fg))))
 
    ;; rainbow-delimiters
-   `(rainbow-delimiters-depth-1-face ((t (:foreground ,atom-one-dark-fg))))
-   `(rainbow-delimiters-depth-2-face ((t (:foreground ,atom-one-dark-purple))))
-   `(rainbow-delimiters-depth-3-face ((t (:foreground ,atom-one-dark-blue))))
+   `(rainbow-delimiters-depth-1-face ((t (:foreground ,atom-one-dark-blue))))
+   `(rainbow-delimiters-depth-2-face ((t (:foreground ,atom-one-dark-green))))
+   `(rainbow-delimiters-depth-3-face ((t (:foreground ,atom-one-dark-orange-1))))
    `(rainbow-delimiters-depth-4-face ((t (:foreground ,atom-one-dark-cyan))))
-   `(rainbow-delimiters-depth-5-face ((t (:foreground ,atom-one-dark-green))))
-   `(rainbow-delimiters-depth-6-face ((t (:foreground ,atom-one-dark-orange-1))))
-   `(rainbow-delimiters-depth-7-face ((t (:foreground ,atom-one-dark-orange-2))))
-   `(rainbow-delimiters-depth-8-face ((t (:foreground ,atom-one-dark-red-1))))
-   `(rainbow-delimiters-depth-9-face ((t (:foreground ,atom-one-dark-red-2))))
-   `(rainbow-delimiters-depth-10-face ((t (:foreground ,atom-one-dark-mono-1))))
-   `(rainbow-delimiters-depth-11-face ((t (:foreground ,atom-one-dark-mono-2))))
-   `(rainbow-delimiters-depth-12-face ((t (:foreground ,atom-one-dark-mono-3))))
-   `(rainbow-delimiters-unmatched-face ((t (:foreground ,atom-one-dark-black))))
+   `(rainbow-delimiters-depth-5-face ((t (:foreground ,atom-one-dark-purple))))
+   `(rainbow-delimiters-depth-6-face ((t (:foreground ,atom-one-dark-orange-2))))
+   `(rainbow-delimiters-depth-7-face ((t (:foreground ,atom-one-dark-blue))))
+   `(rainbow-delimiters-depth-8-face ((t (:foreground ,atom-one-dark-green))))
+   `(rainbow-delimiters-depth-9-face ((t (:foreground ,atom-one-dark-orange-1))))
+   `(rainbow-delimiters-depth-10-face ((t (:foreground ,atom-one-dark-cyan))))
+   `(rainbow-delimiters-depth-11-face ((t (:foreground ,atom-one-dark-purple))))
+   `(rainbow-delimiters-depth-12-face ((t (:foreground ,atom-one-dark-orange-2))))
+   `(rainbow-delimiters-unmatched-face ((t (:foreground ,atom-one-dark-red-1 :weight bold))))
 
    ;; rbenv
    `(rbenv-active-ruby-face ((t (:foreground ,atom-one-dark-green))))
