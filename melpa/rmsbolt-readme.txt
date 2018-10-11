@@ -1,8 +1,8 @@
 RMSBolt is a package to provide assembly or bytecode output for a source
 code input file.
 
-It currently supports: C/C++, OCaml, Haskell, Python, Java, Pony, Emacs Lisp,
-and (limited) Common Lisp.
+It currently supports: C/C++, OCaml, Haskell, Python, Java, PHP, Pony,
+Emacs Lisp, and (limited) Common Lisp.
 
 Adding support for more languages, if they have an easy manual compilation
 path from source->assembly/bytecode with debug information, should be much
@@ -27,6 +27,10 @@ Notable options:
 `rmsbolt-filter-*': Tweak filtering of binary output.
 `rmsbolt-intel-x86': Toggle between intel and att syntax if supported.
 `rmsbolt-demangle': Demangle the output, if supported.
+
+For more advanced configuration (to the point where you can override almost
+all of RMSbolt yourself), you can set `rmsbolt-language-descriptor' with a
+replacement language spec.
 
 Please see the readme at https://gitlab.com/jgkamat/rmsbolt for
 more information!

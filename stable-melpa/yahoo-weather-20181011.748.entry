@@ -1,0 +1,2 @@
+
+(yahoo-weather . [(20181011 748) ((emacs (24))) "Displays weather information in mode-line" single ((:commit . "99d2856c89edf93bd1a7161749bf0f8cc5946874") (:keywords "weather" "mode-line") (:authors ("DarkSun" . "lujun9972@gmail.com")) (:maintainer "DarkSun" . "lujun9972@gmail.com") (:url . "https://github.com/lujun9972/yahoo-weather-mode"))])
