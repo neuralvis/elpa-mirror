@@ -5,7 +5,7 @@
 ;; license that can be found in the LICENSE file.
 
 ;; Version: 0.1
-;; Package-Version: 20180628.1010
+;; Package-Version: 20181012.330
 ;; Package-Requires: ((go-mode "1.3.1") (cl-lib "0.5"))
 ;; Keywords: tools
 
@@ -144,6 +144,8 @@
   (completing-read-multiple "guru-scope (comma-separated): "
                             (go-packages) nil nil nil 'go-guru--scope-history))
 
+(eval-when-compile (require 'subr-x))
+
 ;;;###autoload
 (defun go-guru-set-scope ()
   "Set the scope for the Go guru, prompting the user to edit the previous scope.
@@ -280,7 +282,7 @@ effective name of the current buffer."
 	 (cmd (append (list go-guru-command
 			    "-modified"
 			    "-scope" go-guru-scope
-			    (format "-tags=%s" (mapconcat 'identity go-guru-build-tags ",")))
+			    (format "-tags=%s" (mapconcat 'identity go-guru-build-tags " ")))
 		      flags
 		      (list mode
 			    posn))))
