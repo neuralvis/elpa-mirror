@@ -4,7 +4,7 @@
 
 ;; Author: Ankur Dave <ankurdave@gmail.com>
 ;; Url: https://github.com/ankurdave/color-identifiers-mode
-;; Package-Version: 20180504.1626
+;; Package-Version: 20181011.2114
 ;; Created: 24 Jan 2014
 ;; Version: 1.1
 ;; Keywords: faces, languages
@@ -64,7 +64,8 @@
       (cancel-timer color-identifiers:timer))
     (setq color-identifiers:timer nil)
     (font-lock-remove-keywords nil '((color-identifiers:colorize . default)))
-    (ad-deactivate 'enable-theme))
+    (ad-deactivate 'enable-theme)
+    (run-hooks 'color-identifiers-mode-hook))
   (color-identifiers:refontify))
 
 ;;;###autoload
@@ -86,6 +87,13 @@ across buffers."
   :type '(choice
           (const :tag "Sequential" sequential)
           (const :tag "Hash-based" hash)))
+
+
+(defcustom color-identifiers-avoid-faces nil
+  "Which color faces to avoid: A list of faces whose foreground
+color should be avoided when generating colors, this can be warning colors,
+error colors etc."
+  :type '(repeat face))
 
 (defvar color-identifiers:modes-alist nil
   "Alist of major modes and the ways to distinguish identifiers in those modes.
@@ -128,6 +136,9 @@ candidates matching the constraints in
 
 Modify this variable using
 `color-identifiers:set-declaration-scan-fn'.")
+
+(defvar color-identifiers-mode-hook nil
+  "List of functions to run every time the mode enabled")
 
 (defun color-identifiers:set-declaration-scan-fn (mode scan-fn)
   "Register SCAN-FN as the declaration scanner for MODE.
@@ -583,6 +594,7 @@ Colors are output to `color-identifiers:colors'."
          (min-saturation (float color-identifiers:min-color-saturation))
          (saturation-range (- (float color-identifiers:max-color-saturation) min-saturation))
          (bgcolor (color-identifiers:attribute-lab :background))
+         (avoidlist (mapcar 'color-identifiers:foreground-lab color-identifiers-avoid-faces))
          (candidates '())
          (chosens '())
          (n 8)
@@ -607,7 +619,7 @@ Colors are output to `color-identifiers:colors'."
                                   (cons candidate
                                         (-min (-map (lambda (chosen)
                                                       (color-cie-de2000 candidate chosen))
-                                                    (cons bgcolor chosens)))))
+                                                    (cons bgcolor (append chosens avoidlist))))))
                                 candidates))
                ;; Take the candidate with the highest min distance
                (best (-max-by (lambda (x y) (> (cdr x) (cdr y))) min-dists)))
@@ -642,6 +654,14 @@ mode. This variable memoizes the result of the declaration scan function.")
 (defun color-identifiers:attribute-lab (attribute)
   "Find the LAB color value of the specified ATTRIBUTE on the default face."
   (let ((rgb (color-name-to-rgb (face-attribute 'default attribute))))
+    (if rgb
+        (apply 'color-srgb-to-lab rgb)
+      '(0.0 0.0 0.0))))
+
+(defun color-identifiers:foreground-lab (face)
+  "Find the LAB color value of the foreground attribute on the
+specified face."
+  (let ((rgb (color-name-to-rgb (face-attribute face :foreground))))
     (if rgb
         (apply 'color-srgb-to-lab rgb)
       '(0.0 0.0 0.0))))

@@ -8,7 +8,7 @@
 ;;         Cornelius Mika <cornelius.mika@gmail.com>
 ;; Maintainer: Ryan C. Thompson <rct@thompsonclan.org>
 ;; URL: http://github.com/DarwinAwardWinner/amx/
-;; Package-Version: 20180627.2255
+;; Package-Version: 20181011.2251
 ;; Package-Requires: ((emacs "24.4") (s "0"))
 ;; Version: 3.2
 ;; Keywords: convenience, usability
@@ -68,7 +68,7 @@ This should be set to a function that accepts a symbol
 representing the name of a command.")
 
 (defvar amx-minibuffer-depth -1
-  "Used to determin if amx \"owns\" the current active minibuffer.")
+  "Used to determine if amx \"owns\" the current active minibuffer.")
 
 (defvar amx-command-keybind-hash (make-hash-table :size 0)
   "Hash table for translating between commands and key bindings.
@@ -434,7 +434,7 @@ This must be run from `ido-setup-hook'."
 
 This should work for most completion backends, without having to
 know exactly which functions each one uses to exit the
-minibuffer.."
+minibuffer."
   (execute-kbd-macro (kbd "RET")))
 
 (cl-defun amx-completing-read (choices &key initial-input predicate def backend)

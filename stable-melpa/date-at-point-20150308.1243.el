@@ -5,7 +5,6 @@
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 31 Dec 2014
 ;; Version: 0.1
-;; Package-Version: 20150308.1243
 ;; URL: https://github.com/alezost/date-at-point.el
 ;; Keywords: convenience
 
