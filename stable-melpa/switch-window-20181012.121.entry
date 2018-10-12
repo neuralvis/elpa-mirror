@@ -1,0 +1,2 @@
+
+(switch-window . [(20181012 121) ((emacs (24))) "A *visual* way to switch window" tar ((:commit . "b78f737757bc7aea1ad9a0116a7b54d3897f7543") (:keywords "convenience") (:authors ("Dimitri Fontaine" . "dim@tapoueh.org") ("Feng Shu" . "tumashu@163.com")) (:maintainer "Dimitri Fontaine" . "dim@tapoueh.org") (:url . "https://github.com/dimitri/switch-window"))])

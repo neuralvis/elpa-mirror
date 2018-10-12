@@ -6,7 +6,7 @@
 
 ;; Author: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/org2ctex
-;; Package-Version: 20171017.643
+;; Package-Version: 20181012.151
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4"))
 
@@ -366,9 +366,11 @@ exporting to latex."
      ("\\subsection{%s}" . "\\subsection*{%s}")
      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
     ("beamer"
-     "\\documentclass{beamer}
-               \\usepackage[fontset=none,UTF8,a4paper,zihao=-4]{ctex}"
-     org-beamer-sectioning))
+     "\\documentclass[presentation]{beamer}
+\\usepackage[fontset=none,UTF8,a4paper,zihao=-4]{ctex}"
+     ("\\section{%s}" . "\\section*{%s}")
+	 ("\\subsection{%s}" . "\\subsection*{%s}")
+	 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
   "Override `org-latex-classes'.
 
 Please see the info of `org-latex-classes',
