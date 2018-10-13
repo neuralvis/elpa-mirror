@@ -1,0 +1,2 @@
+
+(syntactic-close . [(20181013 1149) ((emacs (24)) (cl-lib (0 5))) "Insert closing delimiter" single ((:commit . "e8cfcd2d4d0249c6a5dfd59127e8975545e6a7da") (:keywords "languages" "convenience") (:authors ("Emacs User Group Berlin" . "emacs-berlin@emacs-berlin.org")) (:maintainer "Emacs User Group Berlin" . "emacs-berlin@emacs-berlin.org") (:url . "https://github.com/emacs-berlin/syntactic-close"))])
