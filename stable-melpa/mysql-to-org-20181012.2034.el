@@ -5,7 +5,7 @@
 ;; Author: Tijs Mallaerts <tijs.mallaerts@gmail.com>
 
 ;; Package-Requires: ((emacs "24.3") (s "1.11.0"))
-;; Package-Version: 20180123.1514
+;; Package-Version: 20181012.2034
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -84,7 +84,8 @@
 (defun mysql-to-org--eval-process-filter (proc str)
   "The evaluation filter for the mysql to org PROC.
 STR is the output string of the PROC."
-  (let* ((buf (get-buffer-create "mysql-to-org-output")))
+  (let* ((buf (get-buffer-create "mysql-to-org-output"))
+         (inhibit-message t))
     (with-current-buffer buf
       (org-mode)
       (mysql-to-org-output-mode)
@@ -93,6 +94,7 @@ STR is the output string of the PROC."
           (progn (insert (mysql-to-org--remove-control-m-from-string str))
                  (save-excursion
                    (goto-char (point-min))
+                   (replace-string "    -> " "" nil (point-min) (point-max))
                    (when (re-search-forward "+" (point-max) t)
                      (beginning-of-line)
                      (delete-region (line-beginning-position)
@@ -101,7 +103,13 @@ STR is the output string of the PROC."
                      (delete-region (line-beginning-position)
                                     (line-end-position))
                      (insert "|--")
-                     (org-cycle)))
+                     (org-cycle))
+                   (goto-char (point-min))
+                   (search-forward ";")
+                   (let ((query (buffer-substring-no-properties (point-min)
+                                                                (point))))
+                     (delete-region (point-min) (point))
+                     (insert (concat (s-trim (s-collapse-whitespace query))))))
                  (goto-char (point-max))
                  (beginning-of-line)
                  (delete-region (line-beginning-position)
@@ -215,7 +223,7 @@ selected database."
                       (line-end-position)))
            (region (buffer-substring-no-properties reg-beg reg-end))
            (replace (replace-regexp-in-string ";" "" region))
-           (query (concat (s-collapse-whitespace (s-trim replace)) ";\n")))
+           (query (concat (s-trim replace) ";\n")))
       (set-process-filter proc
                           'mysql-to-org--eval-process-filter)
       (with-current-buffer (get-buffer-create "mysql-to-org-output")

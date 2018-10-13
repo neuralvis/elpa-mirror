@@ -4,7 +4,7 @@
 
 ;; Author: nsf <no.smile.face@gmail.com>
 ;; Keywords: languages
-;; Package-Version: 20170825.1643
+;; Package-Version: 20180427.1856
 ;; Package-Requires: ((company "0.8.0") (go-mode "1.0.0"))
 
 ;; No license, this code is under public domain, do whatever you want.

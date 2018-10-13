@@ -4,7 +4,7 @@
 
 ;; Author: Wojciech Siewierski <wojciech dot siewierski at onet dot pl>
 ;; URL: https://github.com/vifon/dired-rifle.el
-;; Package-Version: 20181009.1842
+;; Package-Version: 20181012.2131
 ;; Keywords: files, convenience
 ;; Version: 0.9
 
@@ -79,7 +79,7 @@ output gets discarded."
   "Get the matching rifle rules for PATH as a list of strings."
   (with-temp-buffer
     (apply #'call-process "rifle"
-           nil (current-buffer) nil
+           nil t nil
            (rifle-args "-l"
                        "--" path))
     (split-string (buffer-string) "\n" t)))
