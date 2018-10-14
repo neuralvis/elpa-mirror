@@ -1,10 +1,10 @@
 ;;; sayid.el --- sayid nREPL middleware client
 
-;; Copyright (c) 2016-2017 Bill Piel
+;; Copyright (c) 2016-2018 Bill Piel
 
 ;; Author: Bill Piel <bill@billpiel.com>
 ;; Version: 0.0.17
-;; Package-Version: 20180901.903
+;; Package-Version: 20181013.2253
 ;; URL: https://github.com/clojure-emacs/sayid
 ;; Package-Requires: ((cider "0.14.0"))
 
@@ -27,22 +27,29 @@
 
 ;; To enable, use something like this:
 
-;; (eval-after-load 'clojure-mode
-;;   '(sayid-setup-package))
+;; (with-eval-after-load 'clojure-mode
+;;   (sayid-setup-package))
 
 ;;; Code:
 
 (require 'cider)
+
+(defgroup sayid nil
+  "Sayid is an advanced Clojure debugging tool."
+  :prefix "sayid-"
+  :group 'applications
+  :link '(url-link :tag "GitHub" "https://github.com/clojure-emacs/sayid")
+  :link '(url-link :tag "Online Manual" "http://clojure-emacs.github.io/sayid")
+  :link '(emacs-commentary-link :tag "Commentary" "sayid"))
 
 (defcustom sayid-inject-dependencies-at-jack-in t
   "When nil, do not inject repl dependencies (most likely nREPL middlewares) at `cider-jack-in' time."
   :group 'sayid
   :type 'boolean)
 
-(defvar sayid-version-)
-(setq sayid-version- "0.0.17")
+(defconst sayid-version "0.0.17")
 
-(defvar sayid-trace-ns-dir nil)
+(defvar sayid-trace-ns-dir)
 (defvar sayid-meta)
 
 (defvar sayid-buf-spec '("*sayid*" . sayid-mode))
@@ -51,8 +58,6 @@
 (defvar sayid-selected-buf sayid-buf-spec)
 
 (defvar sayid-ring)
-(setq sayid-ring '())
-
 
 ;;;###autoload
 (defun sayid--inject-jack-in-dependencies ()
@@ -61,22 +66,21 @@ If injecting the dependencies is not preferred set `sayid-inject-dependencies-at
   (when (and sayid-inject-dependencies-at-jack-in
              (boundp 'cider-jack-in-lein-plugins)
              (boundp 'cider-jack-in-nrepl-middlewares))
-    (add-to-list 'cider-jack-in-lein-plugins `("com.billpiel/sayid" ,sayid-version-))
+    (add-to-list 'cider-jack-in-lein-plugins `("com.billpiel/sayid" ,sayid-version))
     (add-to-list 'cider-jack-in-nrepl-middlewares "com.billpiel.sayid.nrepl-middleware/wrap-sayid")))
 
 ;;;###autoload
-(eval-after-load 'cider
-  '(sayid--inject-jack-in-dependencies))
+(with-eval-after-load 'cider
+  (sayid--inject-jack-in-dependencies))
 
 ;;;###autoload
 (defun sayid-version ()
   "Show which version of Sayid and the sayid Emacs package are in use."
   (interactive)
-  (message (concat  "clj="
-                    (sayid-req-get-value
-                     (list "op" "sayid-version"))
-                    " el="
-                    (message sayid-version-))))
+  (message "clj=%s el=%s"
+           (sayid-req-get-value
+            (list "op" "sayid-version"))
+           sayid-version))
 
 (defun sayid-select-default-buf ()
   "Select sayid default buffer."
@@ -87,7 +91,7 @@ If injecting the dependencies is not preferred set `sayid-inject-dependencies-at
   (setq sayid-selected-buf sayid-traced-buf-spec))
 
 (defun sayid-select-pprint-buf ()
-    "Select sayid pretty-prrint buffer."
+  "Select sayid pretty-prrint buffer."
   (setq sayid-selected-buf sayid-pprint-buf-spec))
 
 (defun sayid-buf-point ()
@@ -196,8 +200,8 @@ state.  POS is the position to move cursor to."
 (defun sayid-req-get-value (req)
   "Send REQ to nrepl and return response."
   (sayid-read-if-string (nrepl-dict-get (nrepl-send-sync-request req
-                                                           (cider-current-connection))
-                                  "value")))
+                                                                 (cider-current-connection))
+                                        "value")))
 
 (defun sayid-req-insert-content (req)
   "Send REQ to nrepl and populate buffer with response."
@@ -209,8 +213,8 @@ state.  POS is the position to move cursor to."
   "Query sayid for calls made to function defined at point."
   (interactive)
   (sayid-req-insert-content (list "op" "sayid-query-form-at-point"
-                                    "file" (buffer-file-name)
-                                    "line" (line-number-at-pos))))
+                                  "file" (buffer-file-name)
+                                  "line" (line-number-at-pos))))
 
 ;;;###autoload
 (defun sayid-get-meta-at-point ()
@@ -279,7 +283,7 @@ state.  POS is the position to move cursor to."
                                 "column" (+ (current-column) 1)
                                 "source" (buffer-string))
                           "Nothing found. Make sure cursor is on symbol.")
-    (sayid-show-traced))
+  (sayid-show-traced))
 
 ;;;###autoload
 (defun sayid-load-enable-clear ()
@@ -341,9 +345,9 @@ Disable traces, load buffer, enable traces, clear log."
           (let ((l (car p3)))
             (dolist (p4 (cadr p3))
               (sayid-put-text-prop prop
-                             p4
-                             (+ p4 l)
-                             buf))))))))
+                                   p4
+                                   (+ p4 l)
+                                   buf))))))))
 
 (defun sayid-write-resp-val-to-buf (val buf)
   "Write response value VAL to buffer BUF."

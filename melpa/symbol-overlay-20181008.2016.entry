@@ -1,2 +1,0 @@
-
-(symbol-overlay . [(20181008 2016) ((emacs (24 3))) "Highlight symbols with keymap-enabled overlays" single ((:commit . "a88b79fa6a5c996dc1a17518610b925eca96478b") (:keywords "faces" "matching") (:authors ("wolray" . "wolray@foxmail.com")) (:maintainer "wolray" . "wolray@foxmail.com") (:url . "https://github.com/wolray/symbol-overlay/"))])

@@ -3,5 +3,5 @@ for the sayid nrepl middleware.
 
 To enable, use something like this:
 
-(eval-after-load 'clojure-mode
-  '(sayid-setup-package))
+(with-eval-after-load 'clojure-mode
+  (sayid-setup-package))
