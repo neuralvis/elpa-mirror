@@ -1,0 +1,2 @@
+
+(flycheck-pyre . [(20181014 155) ((emacs (24)) (flycheck (29)) (cl-lib (0 6))) "Support Pyre in flycheck" tar ((:commit . "8b14688df52de9f2d8f8ddcb9bc6f2b44bc8e70c") (:authors ("Vyacheslav Linnik" . "vyacheslav.linnik@gmail.com")) (:maintainer "Vyacheslav Linnik" . "vyacheslav.linnik@gmail.com") (:url . "https://github.com/linnik/flycheck-pyre"))])
