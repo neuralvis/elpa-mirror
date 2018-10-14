@@ -6,7 +6,7 @@
 ;; Created: 31 Dec 2016
 ;; Homepage: https://github.com/raxod502/el-patch
 ;; Keywords: extensions
-;; Package-Version: 20180904.2336
+;; Package-Version: 20181013.1936
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 2.2.1
 
@@ -1011,6 +1011,7 @@ This mode is enabled or disabled automatically when the
 (provide 'el-patch)
 
 ;; Local Variables:
+;; indent-tabs-mode: nil
 ;; outline-regexp: ";;;;* "
 ;; End:
 

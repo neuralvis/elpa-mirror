@@ -6,7 +6,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/c-eldoc
-;; Package-Version: 20170917.2202
+;; Package-Version: 20181013.1532
 ;; Version: 0.7
 
 ;; This file is NOT a part of GNU Emacs
@@ -349,8 +349,6 @@ T1 and T2 are time values (as returned by `current-time' for example)."
               " "
               (c-eldoc-format-arguments-string (caddr ret)
                                                (cdr current-function-cons))))))
-
-(add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
 
 (provide 'c-eldoc)
 ;;; c-eldoc.el ends here
