@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20181002.519
+;; Package-Version: 20181014.1714
 ;; Keywords: tools
 ;; Version: 0.7
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -1018,7 +1018,7 @@ This will either be a button, a filename, or a search result."
                    search-term search-type case
                    deadgrep--context))
          (process
-          (start-process-shell-command
+          (start-file-process-shell-command
            (format "rg %s" search-term)
            (current-buffer)
            command)))
@@ -1196,6 +1196,7 @@ This is intended for use with `next-error-function', which see."
      (format "Platform: %s\n" system-type)
      (format "Emacs version: %s\n" emacs-version)
      (format "Command: %s\n" command)
+     (format "default-directory: %S\n" default-directory)
      (format "\nInitial output from ripgrep:\n%S" output)
      (format "\n\nPlease file bugs at https://github.com/Wilfred/deadgrep/issues/new"))))
 

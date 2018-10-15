@@ -4,9 +4,9 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20181002.605
+;; Package-Version: 20181014.1846
 ;; Keywords: help, lisp
-;; Version: 0.14
+;; Version: 0.16
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -63,7 +63,7 @@
 (defvar-local helpful--associated-buffer nil
   "We store a reference to the buffer we were called from, so we can
 show the value of buffer-local variables.")
-(defvar-local helpful--view-literal t
+(defvar-local helpful--view-literal nil
   "Whether to show a value as a literal, or a pretty interactive
 view.")
 
@@ -1911,8 +1911,7 @@ state of the current symbol."
                 (consp val))
            (helpful--format-hook val))
           (t
-           (error "don't know how to format value of type %s"
-                  (type-of val))))
+           (helpful--pretty-print val)))
          "\n\n")
         (when multiple-views-p
           (insert (helpful--make-toggle-literal-button) " "))

@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/hl-todo
 ;; Keywords: convenience
-;; Package-Version: 20181008.1615
+;; Package-Version: 20181014.1954
 
 ;; This file is not part of GNU Emacs.
 
@@ -123,8 +123,9 @@ including alphanumeric characters, cannot be used here."
   (unless regexp
     (setq regexp hl-todo--regexp))
   (and (let ((case-fold-search nil))
-         (funcall (if backward #'re-search-backward #'re-search-forward)
-                  regexp bound t))
+         (with-syntax-table text-mode-syntax-table
+           (funcall (if backward #'re-search-backward #'re-search-forward)
+                    regexp bound t)))
        (or (nth 8 (syntax-ppss)) ; inside comment or string
            (and (or (not bound)
                     (funcall (if backward #'< #'>) bound (point)))
