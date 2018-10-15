@@ -1,2 +1,0 @@
-
-(cangjie . [(20181007 933) ((emacs (24)) (s (1 12 0)) (dash (2 14 1)) (f (0 2 0))) "retrieve cangjie code for han characters" single ((:commit . "9565d913129b9447697aeb9cbc12d12fac28d4aa") (:keywords "convenience" "writing") (:url . "https://github.com/kisaragi-hiu/cangjie.el"))])

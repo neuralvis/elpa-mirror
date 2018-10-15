@@ -1,1 +1,1 @@
-This package is for quick retrieval of Cangjie codes of Han characters.
+Lookup the Cangjie encoding for a given Han character.

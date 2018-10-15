@@ -2,7 +2,7 @@
 
 ;; Authors: Kisaragi Hiu <mail@kisaragi-hiu.com>
 ;; URL: https://github.com/kisaragi-hiu/cangjie.el
-;; Package-Version: 20181007.933
+;; Package-Version: 20181015.1220
 ;; Version: 0.5.1
 ;; Package-Requires: ((emacs "24") (s "1.12.0") (dash "2.14.1") (f "0.2.0"))
 ;; Keywords: convenience, writing
@@ -25,7 +25,7 @@
 
 ;;; Commentary:
 
-;; This package is for quick retrieval of Cangjie codes of Han characters.
+;; Lookup the Cangjie encoding for a given Han character.
 
 ;;; Code:
 
@@ -51,7 +51,7 @@ Its value can be:
   to download the dictionary from URL `https://github.com/rime/rime-cangjie',
   and save it for future use.
 - `wiktionary-raw',
-  to do a simple `curl wiktionary.org/wiki/char | grep`.
+  to output the line with the Cangjie code on the character's Wiktionary page,
 - `wiktionary', or anything else,
   to grep the Wiktionary page like `wiktionary-raw', then try to remove the
   markup in the result, leaving just the Cangjie code.
