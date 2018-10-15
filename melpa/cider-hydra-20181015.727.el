@@ -4,9 +4,10 @@
 
 ;; Author: Tianxiang Xiong <tianxiang.xiong@gmail.com>
 ;; Keywords: convenience, tools
-;; Package-Version: 20181014.2213
+;; Package-Version: 20181015.727
 ;; Package-Requires: ((cider "0.18.0") (hydra "0.13.0"))
 ;; URL: https://github.com/clojure-emacs/cider-hydra
+;; Version: 0.1.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
