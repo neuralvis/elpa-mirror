@@ -1,0 +1,2 @@
+
+(go-imenu . [(20181015 1112) ((emacs (24 3))) "Imenu for go language" single ((:commit . "3056514b6e29c4e0cf11c4ffe74f0a9a2df959fa") (:keywords "tools") (:authors ("Brantou" . "brantou89@gmail.com")) (:maintainer "Brantou" . "brantou89@gmail.com") (:url . "https://github.com/brantou/go-imenu.el"))])
