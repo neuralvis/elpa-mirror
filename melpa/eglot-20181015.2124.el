@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20181003.1908
+;; Package-Version: 20181015.2124
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -748,7 +748,6 @@ You could add, for instance, the symbol
 under cursor."
   :type '(repeat
           (choice
-           (symbol :tag "Other")
            (const :tag "Documentation on hover" :hoverProvider)
            (const :tag "Code completion" :completionProvider)
            (const :tag "Function signature help" :signatureHelpProvider)
@@ -768,7 +767,8 @@ under cursor."
            (const :tag "Highlight links in document" :documentLinkProvider)
            (const :tag "Decorate color references" :colorProvider)
            (const :tag "Fold regions of buffer" :foldingRangeProvider)
-           (const :tag "Execute custom commands" :executeCommandProvider))))
+           (const :tag "Execute custom commands" :executeCommandProvider)
+           (symbol :tag "Other"))))
 
 (defun eglot--server-capable (&rest feats)
   "Determine if current server is capable of FEATS."
@@ -1081,14 +1081,21 @@ COMMAND is a symbol naming the command."
                        ((`(,beg . ,end) (eglot--range-region range)))
                      ;; Fallback to `flymake-diag-region' if server
                      ;; botched the range
-                     (if (= beg end)
-                         (let* ((st (plist-get range :start))
-                                (diag-region
-                                 (flymake-diag-region
-                                  (current-buffer) (1+ (plist-get st :line))
-                                  (plist-get st :character))))
-                           (setq beg (car diag-region)
-                                 end (cdr diag-region))))
+                     (when (= beg end)
+                       (if-let* ((st (plist-get range :start))
+                                 (diag-region
+                                  (flymake-diag-region
+                                   (current-buffer) (1+ (plist-get st :line))
+                                   (plist-get st :character))))
+                           (setq beg (car diag-region) end (cdr diag-region))
+                         (eglot--widening
+                          (goto-char (point-min))
+                          (setq beg
+                                (point-at-bol
+                                 (1+ (plist-get (plist-get range :start) :line))))
+                          (setq end
+                                (point-at-eol
+                                 (1+ (plist-get (plist-get range :end) :line)))))))
                      (eglot--make-diag (current-buffer) beg end
                                        (cond ((<= sev 1) 'eglot-error)
                                              ((= sev 2)  'eglot-warning)
@@ -1317,6 +1324,12 @@ DUMMY is ignored."
                      ;; F!@(#*&#$)CKING OFF-BY-ONE again
                      (1+ line) character))))
 
+(defun eglot--sort-xrefs (xrefs)
+  (sort xrefs
+        (lambda (a b)
+          (< (xref-location-line (xref-item-location a))
+             (xref-location-line (xref-item-location b))))))
+
 (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql eglot)))
   (when (eglot--server-capable :documentSymbolProvider)
     (let ((server (eglot--current-server-or-lose))
@@ -1357,9 +1370,10 @@ DUMMY is ignored."
                              :textDocument/definition
                              (get-text-property
                               0 :textDocumentPositionParams identifier)))))
-    (mapcar (jsonrpc-lambda (&key uri range)
-              (eglot--xref-make identifier uri (plist-get range :start)))
-            location-or-locations)))
+    (eglot--sort-xrefs
+     (mapcar (jsonrpc-lambda (&key uri range)
+               (eglot--xref-make identifier uri (plist-get range :start)))
+             location-or-locations))))
 
 (cl-defmethod xref-backend-references ((_backend (eql eglot)) identifier)
   (unless (eglot--server-capable :referencesProvider)
@@ -1370,25 +1384,27 @@ DUMMY is ignored."
                (and rich (get-text-property 0 :textDocumentPositionParams rich))))))
     (unless params
       (eglot--error "Don' know where %s is in the workspace!" identifier))
-    (mapcar
-     (jsonrpc-lambda (&key uri range)
-       (eglot--xref-make identifier uri (plist-get range :start)))
-     (jsonrpc-request (eglot--current-server-or-lose)
-                      :textDocument/references
-                      (append
-                       params
-                       (list :context
-                             (list :includeDeclaration t)))))))
+    (eglot--sort-xrefs
+     (mapcar
+      (jsonrpc-lambda (&key uri range)
+        (eglot--xref-make identifier uri (plist-get range :start)))
+      (jsonrpc-request (eglot--current-server-or-lose)
+                       :textDocument/references
+                       (append
+                        params
+                        (list :context
+                              (list :includeDeclaration t))))))))
 
 (cl-defmethod xref-backend-apropos ((_backend (eql eglot)) pattern)
   (when (eglot--server-capable :workspaceSymbolProvider)
-    (mapcar
-     (jsonrpc-lambda (&key name location &allow-other-keys)
-       (cl-destructuring-bind (&key uri range) location
-         (eglot--xref-make name uri (plist-get range :start))))
-     (jsonrpc-request (eglot--current-server-or-lose)
-                      :workspace/symbol
-                      `(:query ,pattern)))))
+    (eglot--sort-xrefs
+     (mapcar
+      (jsonrpc-lambda (&key name location &allow-other-keys)
+        (cl-destructuring-bind (&key uri range) location
+          (eglot--xref-make name uri (plist-get range :start))))
+      (jsonrpc-request (eglot--current-server-or-lose)
+                       :workspace/symbol
+                       `(:query ,pattern))))))
 
 (defun eglot-format-buffer ()
   "Format contents of current buffer."
@@ -1522,23 +1538,41 @@ is not active."
 (defun eglot--sig-info (sigs active-sig active-param)
   (cl-loop
    for (sig . moresigs) on (append sigs nil) for i from 0
-   concat (cl-destructuring-bind (&key label _documentation parameters) sig
-            (let (active-doc)
-              (concat
-               (propertize (replace-regexp-in-string "(.*$" "(" label)
-                           'face 'font-lock-function-name-face)
-               (cl-loop
-                for (param . moreparams) on (append parameters nil) for j from 0
-                concat (cl-destructuring-bind (&key label documentation) param
-                         (when (and (eql j active-param) (eql i active-sig))
-                           (setq label (propertize
-                                        label
-                                        'face 'eldoc-highlight-function-argument))
-                           (when documentation
-                             (setq active-doc (concat label ": " documentation))))
-                         label)
-                if moreparams concat ", " else concat ")")
-               (when active-doc (concat "\n" active-doc)))))
+   concat (cl-destructuring-bind (&key label documentation parameters) sig
+            (with-temp-buffer
+              (save-excursion (insert label))
+              (when (looking-at "\\([^(]+\\)(")
+                (add-face-text-property (match-beginning 1) (match-end 1)
+                                        'font-lock-function-name-face))
+
+              (when (and (stringp documentation) (eql i active-sig)
+                         (string-match "[[:space:]]*\\([^.\r\n]+[.]?\\)"
+                                       documentation))
+                (setq documentation (match-string 1 documentation))
+                (unless (string-prefix-p (string-trim documentation) label)
+                  (goto-char (point-max))
+                  (insert ": " documentation)))
+              (when (and (eql i active-sig) active-param
+                         (< -1 active-param (length parameters)))
+                (cl-destructuring-bind (&key label documentation)
+                    (aref parameters active-param)
+                  (goto-char (point-min))
+                  (let ((case-fold-search nil))
+                    (cl-loop for nmatches from 0
+                             while (and (not (string-empty-p label))
+                                        (search-forward label nil t))
+                             finally do
+                             (when (= 1 nmatches)
+                               (add-face-text-property
+                                (- (point) (length label)) (point)
+                                'eldoc-highlight-function-argument))))
+                  (when documentation
+                    (goto-char (point-max))
+                    (insert "\n"
+                            (propertize
+                             label 'face 'eldoc-highlight-function-argument)
+                            ": " documentation))))
+              (buffer-string)))
    when moresigs concat "\n"))
 
 (defun eglot-help-at-point ()
