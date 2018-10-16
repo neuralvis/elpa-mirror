@@ -1,0 +1,2 @@
+
+(flycheck-haskell . [(20181015 1852) ((emacs (24 3)) (flycheck (0 25)) (haskell-mode (13 7)) (dash (2 4 0)) (seq (1 11)) (let-alist (1 0 1))) "Flycheck: Automatic Haskell configuration" tar ((:commit . "30a09b90cb6d72c1a1d449caa526fb7a4c66e341") (:keywords "tools" "convenience") (:authors ("Sebastian Wiesner" . "swiesner@lunaryorn.com")) (:maintainer "Sebastian Wiesner" . "swiesner@lunaryorn.com") (:url . "https://github.com/flycheck/flycheck-haskell"))])
