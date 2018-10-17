@@ -1,0 +1,2 @@
+
+(typescript-mode . [(20181017 644) nil "Major mode for editing typescript" single ((:commit . "255f670a409eda33dccff823513599846f8fb3d4") (:keywords "typescript" "languages") (:url . "http://github.com/ananthakumaran/typescript.el"))])

@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20181015.1723
+;; Package-Version: 20181017.710
 ;; Keywords: project, convenience
 ;; Version: 1.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -1764,6 +1764,7 @@ https://github.com/abo-abo/swiper")))
               ;; If a project is defined as a list of subfolders
               ;; then we'll have the files returned for each subfolder,
               ;; so they are relative to the project root.
+              ;;
               ;; TODO: That's pretty slow and we need to improve it.
               ;; One options would be to pass explicitly the subdirs
               ;; to commands like `git ls-files` which would return
@@ -3973,6 +3974,38 @@ dirty project list."
     (projectile-completing-read "Select project: " mod-proj
                                 :action 'projectile-vc)))
 
+
+;;; Find next/previous project buffer
+(defun projectile--repeat-until-project-buffer (orig-fun &rest args)
+  "Repeat ORIG-FUN with ARGS until the current buffer is a project buffer."
+  (if (projectile-project-root)
+      (let* ((other-project-buffers (make-hash-table :test 'eq))
+             (projectile-project-buffers (projectile-project-buffers))
+             (max-iterations (length (buffer-list)))
+             (counter 0))
+        (dolist (buffer projectile-project-buffers)
+          (unless (eq buffer (current-buffer))
+            (puthash buffer t other-project-buffers)))
+        (when (cdr-safe projectile-project-buffers)
+          (while (and (< counter max-iterations)
+                      (not (gethash (current-buffer) other-project-buffers)))
+            (apply orig-fun args)
+            (incf counter))))
+    (apply orig-fun args)))
+
+(defun projectile-next-project-buffer ()
+  "In selected window switch to the next project buffer.
+
+If the current buffer does not belong to a project, call `next-buffer'."
+  (interactive)
+  (projectile--repeat-until-project-buffer #'next-buffer))
+
+(defun projectile-previous-project-buffer ()
+  "In selected window switch to the previous project buffer.
+
+If the current buffer does not belong to a project, call `previous-buffer'."
+  (interactive)
+  (projectile--repeat-until-project-buffer #'previous-buffer))
 
 
 ;;; Editing a project's .dir-locals
@@ -4223,38 +4256,6 @@ Otherwise behave as if called interactively.
 
 ;;;###autoload
 (define-obsolete-function-alias 'projectile-global-mode 'projectile-mode "1.0")
-
-(defun projectile--repeat-until-project-buffer (orig-fun &rest args)
-  "Repeat ORIG-FUN with ARGS until the current buffer is a project buffer."
-  (if (projectile-project-root)
-      (let* ((other-project-buffers (make-hash-table :test 'eq))
-             (projectile-project-buffers (projectile-project-buffers))
-             (max-iterations (length (buffer-list)))
-             (counter 0))
-        (dolist (buffer projectile-project-buffers)
-          (unless (eq buffer (current-buffer))
-            (puthash buffer t other-project-buffers)))
-        (when (cdr-safe projectile-project-buffers)
-          (while (and (< counter max-iterations)
-                      (not (gethash (current-buffer) other-project-buffers)))
-            (apply orig-fun args)
-            (incf counter))))
-    (apply orig-fun args)))
-
-(defun projectile-next-project-buffer ()
-  "In selected window switch to the next project buffer.
-
-If the current buffer does not belong to a project, call `next-buffer'."
-  (interactive)
-  (projectile--repeat-until-project-buffer #'next-buffer))
-
-(defun projectile-previous-project-buffer ()
-  "In selected window switch to the previous project buffer.
-
-If the current buffer does not belong to a project, call `previous-buffer'."
-  (interactive)
-  (projectile--repeat-until-project-buffer #'previous-buffer))
-
 
 (provide 'projectile)
 

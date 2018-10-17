@@ -25,7 +25,7 @@ Notable options:
 `rmsbolt-default-directory': determines the default-drectory to compile from.
 `rmsbolt-disassemble': disassemble from a compiled binary with objdump, if supported.
 `rmsbolt-filter-*': Tweak filtering of binary output.
-`rmsbolt-intel-x86': Toggle between intel and att syntax if supported.
+`rmsbolt-asm-format': Choose between intel att, and other syntax if supported.
 `rmsbolt-demangle': Demangle the output, if supported.
 
 For more advanced configuration (to the point where you can override almost
