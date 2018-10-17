@@ -17,7 +17,7 @@
 
 ;; Author: John Allen <jallen@fb.com>
 ;; Version: 1.0.0
-;; Package-Version: 20181015.1038
+;; Package-Version: 20181016.1454
 ;; Package-Requires: ((emacs "25.1") (s "1.11.0"))
 ;; URL: https://github.com/hhvm/hack-mode
 
@@ -190,13 +190,14 @@
         "unset"
         ;; User-defined type.
         (seq
+         (0+ "_")
          (any upper)
          (* (or (syntax word) (syntax symbol)))))
        symbol-end)
      . font-lock-type-face)
     ;; We also highlight _ as a type, but don't highlight ?_.
     (,(regexp-opt '("_") 'symbols)
-     . font-lock-type_face)
+     . font-lock-type-face)
     (,(regexp-opt
        '("null"
          "true"

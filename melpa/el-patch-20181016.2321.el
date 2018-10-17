@@ -6,7 +6,7 @@
 ;; Created: 31 Dec 2016
 ;; Homepage: https://github.com/raxod502/el-patch
 ;; Keywords: extensions
-;; Package-Version: 20181013.1936
+;; Package-Version: 20181016.2321
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 2.2.1
 
@@ -473,9 +473,9 @@ is a sentence to put in brackets at the end of the docstring."
                     classification)))
              ,definition
            ,@(mapcar (lambda (item)
-		       `(setq current-load-list
-			      (remove ',item current-load-list)))
-	             items))))))
+                       `(setq current-load-list
+                              (remove ',item current-load-list)))
+                     items))))))
 
 (defmacro el-patch--definition (patch-definition)
   "Activate a PATCH-DEFINITION and update `el-patch--patches'.
