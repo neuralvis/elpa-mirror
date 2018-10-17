@@ -1,0 +1,2 @@
+
+(pyramid . [(20181016 2057) ((emacs (25 2)) (pythonic (0 1 1)) (tablist (0 70))) "Minor mode for working with pyramid projects" tar ((:commit . "650f319a8595df154f7132d1df6ffff9d9976dc4") (:keywords "python" "pyramid" "pylons" "convenience" "tools" "processes") (:authors ("Daniel Kraus" . "daniel@kraus.my")) (:maintainer "Daniel Kraus" . "daniel@kraus.my") (:url . "https://github.com/dakra/pyramid.el"))])

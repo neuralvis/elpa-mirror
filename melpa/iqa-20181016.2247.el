@@ -2,7 +2,7 @@
 
 ;; Homepage: https://github.com/a13/iqa.el
 ;; Version: 0.0.1
-;; Package-Version: 20180929.1336
+;; Package-Version: 20181016.2247
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -36,25 +36,29 @@
 ;; `iqa-reload-user-init-file' reloads `user-init-file' (not `iqa-user-init-file')
 ;; For a full restart take a look at `restart-emacs' package.
 ;;
+;; `iqa-find-user-custom-file' opens custom-file
+;;
 ;; `iqa-find-user-init-directory' opens init file directory
 ;;
 ;; `iqa-setup-default' defines keybindings:
 ;; "C-x M-f" — `iqa-find-user-init-file'
+;; "C-x M-c" — `iqa-find-user-custom-file'
 ;; "C-x M-r" — `iqa-reload-user-init-file'
 ;; "C-x M-d" — `iqa-find-user-init-directory'
 ;;
 ;;
-;; Installation with `quelpa-use-package':
+;; Installation:
 ;;
 ;; (use-package iqa
-;;   :ensure t
-;;   ;; for generated files only
-;;   ;; :init
-;;   ;; (setq iqa-user-init-file (concat user-emacs-directory "init.org"))
+;;   ;; use this if your config is generated from org file
+;;   ;; :custom
+;;   ;; (iqa-user-init-file (concat user-emacs-directory "README.org") "Edit README.org by default.")
 ;;   :config
 ;;   (iqa-setup-default))
 
 ;;; Code:
+
+(require 'cus-edit)
 
 (defgroup iqa nil
   "Init file quick access."
@@ -84,14 +88,14 @@
 
 ;;;###autoload
 (defun iqa-find-user-custom-file ()
-  "Open user custom file directory using `iqa-find-file-function'."
+  "Open user custom file using `iqa-find-file-function'."
   (interactive)
-  (funcall iqa-find-file-function custom-file))
+  (funcall iqa-find-file-function (custom-file)))
 
 ;;;###autoload
 (defun iqa-reload-user-init-file (save-all)
-  "Load user init file.  Call `save-some-buffers' if prefix SAVE-ALL is set.
-Ask for saving only `user-init-file' otherwise."
+  "Load user init file.  Call `save-some-buffers' if the prefix SAVE-ALL is set.
+Ask for saving only `iqa--init-file' otherwise."
   (interactive "P")
   (if save-all
       (save-some-buffers)
@@ -110,6 +114,7 @@ Ask for saving only `user-init-file' otherwise."
   (interactive)
   (funcall iqa-find-file-function (file-name-directory (iqa--init-file))))
 
+;; TODO: add global minor mode
 ;;;###autoload
 (defun iqa-setup-default ()
   "Setup default shortcuts for iqa."
