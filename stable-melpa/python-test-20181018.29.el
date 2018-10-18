@@ -4,7 +4,7 @@
 
 ;; Author: Mario Rodas <marsam@users.noreply.github.com>
 ;; URL: https://github.com/emacs-pe/python-test.el
-;; Package-Version: 20181017.1425
+;; Package-Version: 20181018.29
 ;; Keywords: convenience, tools, processes
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "25.1"))
@@ -88,6 +88,7 @@
   :type 'string
   :safe #'stringp
   :group 'python-test)
+;;;###autoload(put 'python-test-project-root 'safe-local-variable #'stringp)
 
 (defcustom python-test-project-root-files
   '("setup.py"                          ; Setuptools file
@@ -117,6 +118,7 @@ The topmost match has precedence."
                 (mapcar (lambda (x) (list 'const x)) python-test-backends))
   :safe #'python-test-registered-backend-p
   :group 'python-test)
+;;;###autoload(put 'python-test-backend 'safe-local-variable #'python-test-registered-backend-p)
 
 (defvar python-test-command-history nil)
 
@@ -165,6 +167,7 @@ The topmost match has precedence."
 
 
 ;;; Internal functions
+;;;###autoload
 (defun python-test-registered-backend-p (backend)
   "Determine whether `org-sync' BACKEND is registered."
   (memq backend python-test-backends))
