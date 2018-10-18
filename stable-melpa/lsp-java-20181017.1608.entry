@@ -1,0 +1,2 @@
+
+(lsp-java . [(20181017 1608) ((emacs (25 1)) (lsp-mode (3 0)) (markdown-mode (2 3))) "Java support for lsp-mode" single ((:commit . "9d477d3aed15f1a64a3915eb3bff167252a669f8") (:keywords "java") (:url . "https://github.com/emacs-lsp/lsp-java"))])
