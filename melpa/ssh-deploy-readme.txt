@@ -3,7 +3,7 @@ deleting, downloads, file and directory differences, launching remote terminals 
 detection of remote changes, remote directory browsing, remote SQL database sessions and
 running custom deployment scripts via TRAMP.
 
-For asynchronous operations it uses package `async.el'.
+For asynchronous operations it uses package '`make-thread' or if not available '`async.el'.
 
 By setting the variables (globally, per directory or per file):
 ssh-deploy-root-local,ssh-deploy-root-remote, ssh-deploy-on-explicit-save
@@ -117,7 +117,7 @@ Here is a list of other variables you can set globally or per directory:
 * `ssh-deploy-automatically-detect-remote-changes' - Enables automatic detection of remote changes *(boolean)*
 * `ssh-deploy-on-explicit-save' - Enabled automatic uploads on save *(boolean)*
 * `ssh-deploy-exclude-list' - A list defining what paths to exclude from deployment *(list)*
-* `ssh-deploy-async' - Enables asynchronous transfers (you need to have `async.el` installed as well) *(boolean)*
+* `ssh-deploy-async' - Enables asynchronous transfers (you need to have `(make-thread)` or `async.el` available as well) *(boolean)*
 * `ssh-deploy-remote-sql-database' - Default database when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-sql-password' - Default password when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-sql-port' - Default port when connecting to remote SQL database *(integer)*
