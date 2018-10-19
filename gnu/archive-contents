@@ -121,8 +121,8 @@
 	  ((:url . "https://github.com/Malabarba/beacon")
 	   (:keywords "convenience"))])
  (brief .
-	[(5 85)
-	 nil "Brief Editor Emulator" single
+	[(5 86)
+	 nil "Brief Editor Emulator (Brief Mode)" single
 	 ((:url . "http://elpa.gnu.org/packages/brief.html")
 	  (:keywords "brief" "emulations" "crisp"))])
  (bug-hunter .
