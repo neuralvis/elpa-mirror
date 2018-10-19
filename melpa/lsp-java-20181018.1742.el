@@ -1,7 +1,7 @@
 ;;; lsp-java.el --- Java support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20181017.1608
+;; Package-Version: 20181018.1742
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.0") (markdown-mode "2.3"))
 ;; Keywords: java
 ;; URL: https://github.com/emacs-lsp/lsp-java
@@ -161,11 +161,6 @@ A package or type name prefix (e.g. 'org.eclipse') is a valid entry. An import i
 
 (defcustom  lsp-java-save-action-organize-imports t
   "Organize imports on save."
-  :group 'lsp-java
-  :type 'boolean)
-
-(defcustom lsp-java-organize-imports t
-  "Specifies whether or not organize imports is enabled as a save action."
   :group 'lsp-java
   :type 'boolean)
 

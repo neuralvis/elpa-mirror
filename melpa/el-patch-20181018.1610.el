@@ -6,7 +6,7 @@
 ;; Created: 31 Dec 2016
 ;; Homepage: https://github.com/raxod502/el-patch
 ;; Keywords: extensions
-;; Package-Version: 20181016.2321
+;; Package-Version: 20181018.1610
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 2.2.1
 
@@ -437,14 +437,19 @@ is a sentence to put in brackets at the end of the docstring."
          type))
       (when (and docstring-note docstring-idx)
         (let ((old-docstring (nth docstring-idx definition)))
-          (when (stringp old-docstring)
-            (let ((new-docstring
-                   (concat
-                    old-docstring
-                    (format "\n\n[%s]" docstring-note))))
-              (setq definition (cl-copy-list definition))
-              (setf (nth docstring-idx definition)
-                    new-docstring)))))
+          (if (stringp old-docstring)
+              (let ((new-docstring
+                     (concat
+                      old-docstring
+                      (format "\n\n[%s]" docstring-note))))
+                (setq definition (cl-copy-list definition))
+                (setf (nth docstring-idx definition)
+                      new-docstring))
+            (setq definition (append
+                              (butlast definition
+                                       (- (length definition) docstring-idx))
+                              (cons (format "[%s]" docstring-note)
+                                    (nthcdr docstring-idx definition)))))))
       (let* ((classification
               (funcall classify definition))
              (items
