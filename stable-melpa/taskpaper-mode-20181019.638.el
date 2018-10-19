@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20181017.957
+;; Package-Version: 20181019.638
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -4037,14 +4037,17 @@ If LOCATION is not given, the value of
               (buffer-file-name (buffer-base-buffer)))))))
 
 (defun taskpaper-archive-get-project ()
-  "Get project hierarchy for the item at point."
+  "Get project hierarchy for the item at point.
+Return formatted project hierarchy as string or nil, if there are
+no parent projects."
   (let (project projects)
     (save-excursion
-      (outline-back-to-heading t)
-      (while (taskpaper-outline-up-level-safe)
-        (when (equal (taskpaper-item-get-attribute "type") "project")
-          (setq project (taskpaper-item-get-attribute "text"))
-          (push project projects))))
+      (save-restriction
+        (widen) (outline-back-to-heading t)
+        (while (taskpaper-outline-up-level-safe)
+          (when (equal (taskpaper-item-get-attribute "type") "project")
+            (setq project (taskpaper-item-get-attribute "text"))
+            (push project projects)))))
     (if projects (taskpaper-format-outline-path projects) nil)))
 
 (defun taskpaper-archive-subtree ()

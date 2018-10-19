@@ -5,7 +5,7 @@
 ;; Author: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; Maintainer: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; URL: https://gitlab.com/Ambrevar/mu4e-conversation
-;; Package-Version: 20180827.845
+;; Package-Version: 20181019.903
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: mail, convenience, mu4e
@@ -1398,7 +1398,9 @@ in existing view buffers. "
 
 (defun mu4e-conversation--turn-on ()
   "Turn on `mu4e-conversation-mode'."
-  (mu4e-conversation-mode))
+  (mu4e-conversation-mode)
+  (unless (fboundp 'mu4e-view-mode)
+    (mu4e~view-define-mode)))
 
 (define-globalized-minor-mode global-mu4e-conversation-mode mu4e-conversation-mode mu4e-conversation--turn-on
   :require 'mu4e-conversation)
