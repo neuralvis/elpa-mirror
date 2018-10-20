@@ -2,7 +2,7 @@
 ;; Copyright (C) 2014 - 2016 jim
 ;; Author: xcwenn@qq.com [https://github.com/xcwen]
 ;; URL: https://github.com/xcwen/ac-php
-;; Package-Version: 20180510.2200
+;; Package-Version: 20181020.1026
 ;; Package-X-Original-Version: 20171209.2243
 ;; Keywords: completion, convenience, intellisense
 ;; Package-Requires: ( (cl-lib "0.5") (ac-php-core "1") (company "0.9")  )
@@ -177,7 +177,7 @@ matches IDLE-BEGIN-AFTER-RE, return it wrapped in a cons."
   (interactive (list 'interactive))
   (cl-case command
 	(interactive (company-begin-backend 'company-ac-php-backend))
-	(prefix (company-ac-php--prefix))
+	(prefix (when (derived-mode-p 'php-mode) (company-ac-php--prefix)))
 	(candidates (company-ac-php-candidate arg))
 	(annotation (company-ac-php-annotation arg))
 	(duplicates t)
