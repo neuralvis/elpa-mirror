@@ -51,9 +51,11 @@ Sample .dir-locals.el,
          (eval . (progn
                    (require 'find-file-in-project)
                    ;; ignore directory ".tox/" when searching
-                   (setq ffip-prune-patterns `("*/.tox/*" ,@ffip-prune-patterns))
+                   (setq ffip-prune-patterns `("*/.tox" ,@ffip-prune-patterns))
+                      ;; ignore BMP image file
+                   (setq ffip-ignore-filenames `("*.bmp" ,@ffip-ignore-filenames))
                    ;; Do NOT ignore directory "bin/" when searching
-                   (setq ffip-prune-patterns `(delete "*/bin/*" ,@ffip-prune-patterns))))
+                   (setq ffip-prune-patterns `(delete "*/bin" ,@ffip-prune-patterns))))
          )))
 
 To find in *current directory*, use `find-file-in-current-directory'

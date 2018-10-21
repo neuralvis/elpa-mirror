@@ -1,8 +1,7 @@
  Setup:
   "Ctags" (Universal Ctags is recommended) and "GNU Find" should exist
   so this program works out of box.
-  Or else, use `counsel-etags-update-tags-backend' to customize shell command
-  to generate tags file
+  Or else, use `counsel-etags-update-tags-backend' to generate tags file
 
 Usage:
 
