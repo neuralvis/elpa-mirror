@@ -5,7 +5,7 @@
 ;; Maintainer: Junsong Li
 ;; Created: 11 June 2016
 ;; Keywords: languages, pollen, pollenpub
-;; Package-Version: 20180404.1312
+;; Package-Version: 20181022.130
 ;; License: LGPL
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.3") (cl-lib "0.5"))
@@ -326,9 +326,9 @@ Keybindings for editing pollen file."
 
 (defvar pollen-syntax-table
   (let ((tb (make-syntax-table)))
-    (modify-syntax-entry pollen-command-char-code ". 1")
-    (modify-syntax-entry ?\; ". 2")
-    (modify-syntax-entry ?\n ">")
+    (modify-syntax-entry pollen-command-char-code ". 1" tb)
+    (modify-syntax-entry ?\; ". 2" tb)
+    (modify-syntax-entry ?\n ">" tb)
     tb))
 
 ;;;###autoload

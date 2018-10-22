@@ -1,2 +1,0 @@
-
-(ns-auto-titlebar . [(20181021 433) ((emacs (24 4))) "Set the MacOS transparent titlebar to match theme" single ((:commit . "3f4f6afba8bfc264c9b8840ce24abf278ac21152") (:keywords "frames") (:authors ("Steve Purcell" . "steve@sanityinc.com")) (:maintainer "Steve Purcell" . "steve@sanityinc.com") (:url . "https://github.com/purcell/ns-auto-titlebar"))])
