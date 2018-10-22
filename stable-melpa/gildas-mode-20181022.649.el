@@ -1,13 +1,13 @@
 ;;; gildas-mode.el --- Major mode for Gildas
 
-;; Copyright (C) 2014-2015 Sébastien Maret
+;; Copyright (C) 2014-2018 Sébastien Maret
 
 ;; Author: Sébastien Maret <sebastien.maret@icloud.com>
-;; Package-Requires: ((polymode "0") (emacs "24.3"))
-;; Package-Version: 20150919.2201
+;; Package-Requires: ((polymode "0.1.5") (emacs "25"))
+;; Package-Version: 20181022.649
 ;; Keywords: languages, gildas
 ;; URL: https://github.com/smaret/gildas-mode
-;; Version: 1
+;; Version: 1.1
 
 ;;; Commentary:
 
@@ -113,30 +113,26 @@
 	(indent-line-to 0)))))
 
 (defcustom pm-host/gildas
-  (pm-bchunkmode "gildas"
-		 :mode 'gildas-mode)
-  "Gildas host chunkmode"
+  (pm-host-chunkmode
+   :name "gildas"
+   :mode 'gildas-mode)
+  "Gildas hostmode."
   :group 'hostmodes
   :type 'object)
 
 (defcustom  pm-inner/pygildas
-  (pm-hbtchunkmode "python"
-                   :head-reg "^begin .*\.py"
-                   :tail-reg "^end .*\.py"
-		   :mode 'python-mode)
-  "Python chunk."
+  (pm-inner-chunkmode
+   :name "python"
+   :head-matcher "^begin .*\.py"
+   :tail-matcher "^end .*\.py"
+   :mode 'python-mode)
+  "Python chunkmode for `gildas-mode'."
   :group 'innermodes
   :type 'object)
 
-(defcustom pm-poly/gildas
-  (pm-polymode-one "pygildas"
-                   :hostmode 'pm-host/gildas
-                   :innermode 'pm-inner/pygildas)
-  "Polymode for Gildas."
-  :group 'polymodes
-  :type 'object)
-
-(define-polymode poly-gildas-mode pm-poly/gildas)
+(define-polymode poly-gildas-mode
+  :hostmode 'pm-host/gildas
+  :innermodes '(pm-inner/pygildas))
 
 ;;;###autoload
 (progn
