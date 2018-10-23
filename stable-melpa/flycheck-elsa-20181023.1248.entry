@@ -1,0 +1,2 @@
+
+(flycheck-elsa . [(20181023 1248) ((emacs (25)) (seq (2 0)) (cask (0 8 4))) "Flycheck for Elsa." single ((:commit . "ed59da327062b209a91a43c444cbaface4240af4") (:keywords "convenience") (:authors ("Matúš Goljer" . "matus.goljer@gmail.com")) (:maintainer "Matúš Goljer" . "matus.goljer@gmail.com") (:url . "https://github.com/emacs-elsa/flycheck-elsa"))])

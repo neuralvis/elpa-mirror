@@ -1,2 +1,0 @@
-
-(rmsbolt . [(20181017 505) ((emacs (25 1))) "A compiler output viewer" tar ((:commit . "345dd21d24f0605efada9378c892eeeab53e7625") (:keywords "compilation" "tools") (:authors ("Jay Kamat" . "jaygkamat@gmail.com")) (:maintainer "Jay Kamat" . "jaygkamat@gmail.com") (:url . "http://gitlab.com/jgkamat/rmsbolt"))])

@@ -1,0 +1,2 @@
+
+(magit-tbdiff . [(20181023 1003) ((emacs (24 4)) (magit (2 10 0))) "Magit extension for git-tbdiff" single ((:commit . "20da4b99e3f04d8e72c20706a36b1f5020400326") (:keywords "vc" "tools") (:authors ("Kyle Meyer" . "kyle@kyleam.com")) (:maintainer "Kyle Meyer" . "kyle@kyleam.com") (:url . "https://github.com/magit/magit-tbdiff"))])
