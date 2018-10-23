@@ -6,7 +6,7 @@
 ;; Keywords: extensions, multimedia, tools
 ;; Homepage: https://github.com/vermiculus/ghub-plus
 ;; Package-Requires: ((emacs "25") (ghub "2.0") (apiwrap "0.5"))
-;; Package-Version: 20181021.2327
+;; Package-Version: 20181023.27
 ;; Package-X-Original-Version: 0.3
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -327,6 +327,11 @@ See that documentation for RESOURCE, PARAMS, and DATA."
   (let* ((host (ghub--host))
          (user (ghub--username host)))
     (ghub--token host user package t)))
+
+
+;;; Errors:
+(define-error 'ghubp-error "Ghub+ error" 'ghub-error)
+(define-error 'ghubp-error-review-is-active "This review is active" 'ghubp-error)
 
 
 ;;; Issues:
@@ -653,7 +658,10 @@ This call lists all the repo's collaborators."
 (defapidelete-ghubp "/repos/:owner/:repo/pulls/:number/reviews/:id"
   "Delete a pending review."
   "pulls/reviews/#delete-a-pending-review"
-  (repo pull-request review) "/repos/:repo.owner.login/:repo.name/pulls/:pull-request.number/reviews/:review.id")
+  (repo pull-request review) "/repos/:repo.owner.login/:repo.name/pulls/:pull-request.number/reviews/:review.id"
+  :condition-case
+  (ghubp-catch*
+   (422 (signal 'ghubp-error-review-is-active nil))))
 
 (defapiget-ghubp "/repos/:owner/:repo/pulls/:number/reviews/:id/comments"
   "Get comments for a single review."
