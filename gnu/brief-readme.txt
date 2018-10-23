@@ -1,13 +1,14 @@
-Brief Mode / Brief Emulator                  -*- mode: org; -*-
+Brief Mode / Brief Emulator / Brief Editor             -*- mode: org; -*-
 
 #+STARTUP: showall
 #+STARTUP: hidestars
 
 * Brief
 
-The Brief editor is famous for its easy-to-learn.  Most of the command 'K'eys are
-associated with meaningful 'K'eywords.  Usually, it can be mastered within an
-hour and difficult to forget.
+The Brief editor v3.1 was once very popular among programmers in the MS-DOS days.
+It was famous for its easy-to-learn.  Most of the command 'K'eys are associated
+with meaningful 'K'eywords.  Usually, it can be mastered within an hour and
+difficult to forget.
 
 For example, the first <home> key bring the cursor to home (beginning) of current
 line, a consecutive second <home> key to the home (beginning) of the window and a
@@ -36,24 +37,30 @@ this Brief Mode.
 
   2. Download Brief package using emacs command line:
 
-     $ emacs -Q -eval "(progn (package-initialize) (package-refresh-contents) (package-install 'brief) (save-buffers-kill-emacs))"
+     $ emacs --batch --eval "(progn (package-initialize) (package-refresh-contents) (package-install 'brief))"
 
-  3. Now the Brief package (currently v5.86) should be presented in
-     "~/.emacs.d/elpa/brief-5.86".  You can either add this into PATH, or copy
-     (link) the launcher bash script "~/.emacs.d/elpa/brief-5.86/b" to anywhere
-     within your PATH.
+  3. Now the Brief package should be installed in "~/.emacs.d/elpa/brief-#.##"
+     (where #.## is the version number, by the time this document is written
+     it's 5.87).  You can either add this into PATH, or copy (link) the launcher
+     bash script "~/.emacs.d/elpa/brief-#.##/b" to anywhere within your PATH
+     (notice this launcher exists only after v5.87).
 
      Now you can start Emacs brief emulator, just run the launcher:
 
      $ b
 
      That's it!
-     (If 'b' fail to launch, use 'b -h' and adjust the associated environment
-      variables.)
+     (If 'b' fail to launch, the package might not be properly installed, try
+     step 2 and 3 again, or do it like Emacs users below.)
 
 ** For Emacs users, just install the ELPA brief package with menu -> "Options"
-   -> "Manage Emacs Packages", then add "(require 'brief) (brief-mode 1)" into
-   ~/.emacs to enable it.
+   -> "Manage Emacs Packages", then add
+
+     (require 'brief)
+     (brief-easy-start) ;; will do (brief-mode 1)
+
+   into ~/.emacs to enable it. (For what `brief-easy-start' does please search
+   "brief-easy-start" following.)
 
 * Key Commands:
 
@@ -309,6 +316,34 @@ this Brief Mode.
    |---------------------------------------------------+------------------------|
    | Save buffer and exit Emacs immediately            | <Ctrl>-<Alt>-<Shift>-X |
    |---------------------------------------------------+------------------------|
+
+
+* There are some less favored default Emacs settings which makes the editing
+  experience in Emacs quite unlike other editors, especially for programmers.
+  For example, text wrapping is by default enabled so a program line could easily
+  wrapped to next line if window size changed; text scrolling is jumppy in both
+  horizontal and vertical directions and on <page up>/<page down> the cursor does
+  not stay at the same position.  All these behaviors can be easily adjusted by
+  changing default settings.
+
+  With the quick launcher 'b' all these are fixed.  The <page up>/<page down>
+  are rewritten in Brief while function `brief-easy-start' changed other settings
+  then do `(brief-mode 1)' to enable Brief mode.
+
+  If you launch Emacs without using quick launcher 'b' or `brief-easy-start'
+  function, you may want to include those changes into your ~/.emacs init script:
+
+  ;;--------------------------------------------------------------------------;
+  (setq-default truncate-lines t)  ;; disable line wrapping                   ;
+  ;;(setq-default global-visual-line-mode t)                                  ;
+  (setq scroll-step 1              ;; set vertical scroll not jumppy          ;
+        scroll-conservatively 101)                                            ;
+  (setq hscroll-margin 1           ;; set horizontal scroll not jumppy        ;
+        hscroll-step 1)                                                       ;
+  (scroll-bar-mode -1)             ;; small border without scroll bar         ;
+  ;;--------------------------------------------------------------------------;
+
+  Or you can refer to the source code "brief.el" for function `brief-easy-start'.
 
 * For more details like Cygwin 2.x users note, please check the comments in the
   source code "brief.el".

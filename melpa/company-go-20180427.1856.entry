@@ -1,2 +1,2 @@
 
-(company-go . [(20180427 1856) ((company (0 8 0)) (go-mode (1 0 0))) "company-mode backend for Go (using gocode)" single ((:commit . "32852ac7bd249b541965d923df3d0e696dcb5443") (:keywords "languages") (:authors ("nsf" . "no.smile.face@gmail.com")) (:maintainer "nsf" . "no.smile.face@gmail.com"))])
+(company-go . [(20180427 1856) ((company (0 8 0)) (go-mode (1 0 0))) "company-mode backend for Go (using gocode)" single ((:commit . "c797e02c1ebebfdad6ba94ca8814a4a52270a5fc") (:keywords "languages") (:authors ("nsf" . "no.smile.face@gmail.com")) (:maintainer "nsf" . "no.smile.face@gmail.com"))])

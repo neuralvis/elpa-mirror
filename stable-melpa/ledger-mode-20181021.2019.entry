@@ -1,2 +1,0 @@
-
-(ledger-mode . [(20181021 2019) ((emacs (24 3))) "Helper code for use with the \"ledger\" command-line tool" tar ((:commit . "e0771998e546d8d71709fa0360aa84eb1e0d643e"))])
