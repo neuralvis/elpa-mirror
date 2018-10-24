@@ -1,2 +1,0 @@
-
-(racer . [(20180709 625) ((emacs (24 3)) (rust-mode (0 2 0)) (dash (2 13 0)) (s (1 10 0)) (f (0 18 2)) (pos-tip (0 4 6))) "code completion, goto-definition and docs browsing for Rust via racer" single ((:commit . "8be1a0453efa5e6a0767ca9856f85f044898e41c") (:keywords "abbrev" "convenience" "matching" "rust" "tools") (:authors ("Phil Dawes")) (:maintainer "Phil Dawes") (:url . "https://github.com/racer-rust/emacs-racer"))])

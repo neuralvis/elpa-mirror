@@ -1,2 +1,0 @@
-
-(ghub+ . [(20181023 27) ((emacs (25)) (ghub (2 0)) (apiwrap (0 5))) "a thick GitHub API client built on ghub" single ((:commit . "b3a90d107bc502259b17ea4f01b0bee148a57428") (:keywords "extensions" "multimedia" "tools") (:authors ("Sean Allred" . "code@seanallred.com")) (:maintainer "Sean Allred" . "code@seanallred.com") (:url . "https://github.com/vermiculus/ghub-plus"))])

@@ -4,7 +4,7 @@
 
 ;; Author: Phil Dawes
 ;; URL: https://github.com/racer-rust/emacs-racer
-;; Package-Version: 20180709.625
+;; Package-Version: 20181023.2304
 ;; Version: 1.3
 ;; Package-Requires: ((emacs "24.3") (rust-mode "0.2.0") (dash "2.13.0") (s "1.10.0") (f "0.18.2") (pos-tip "0.4.6"))
 ;; Keywords: abbrev, convenience, matching, rust, tools
@@ -629,7 +629,38 @@ Commands:
               :company-prefix-length (racer-complete--prefix-p beg end)
               :company-docsig #'racer-complete--docsig
               :company-doc-buffer #'racer--describe
-              :company-location #'racer-complete--location)))))
+              :company-location #'racer-complete--location
+	      :exit-function #'racer-complete--insert-args)))))
+
+(defun racer-complete--insert-args (arg &optional _finished)
+  "If a ARG is the name of a completed function, try to find and insert its arguments."
+  (let ((matchtype (get-text-property 0 'matchtype arg)))
+    (if (equal matchtype "Function")
+	(let* ((ctx (get-text-property 0 'ctx arg))
+	       (arguments (racer-complete--extract-args ctx)))
+	  (insert arguments)
+	  (company-template-c-like-templatify arguments)))))
+
+(defun racer-complete--extract-args (str)
+  "Extract function arguments from STR (excluding a possible self argument)."
+  (let* ((index (string-match
+                 (rx
+		  (or (seq "("
+			   (zero-or-more (not (any ",")))
+			   "self)")
+		      (seq "("
+			   (zero-or-more (seq (zero-or-more (not (any "(")))
+					      "self"
+					      (zero-or-more space)
+					      ","))
+			   (zero-or-more space)
+			   (group (zero-or-more (not (any ")"))))
+			   ")")))
+                 str))
+	 (extract (match-string 1 str)))
+    (if extract
+	(format "(%s)" extract)
+      "()")))
 
 (defun racer--file-and-parent (path)
   "Convert /foo/bar/baz/q.txt to baz/q.txt."

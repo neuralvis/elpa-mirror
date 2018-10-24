@@ -5,7 +5,7 @@
 ;; Author: Eric Schulte
 ;; Maintainer: Chen Bin (redguardtoo)
 ;; Keywords: mime, mail, email, html
-;; Package-Version: 20180927.1150
+;; Package-Version: 20181023.2314
 ;; Homepage: http://github.com/org-mime/org-mime
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
@@ -518,7 +518,8 @@ The following file keywords can be used to control the headers:
 The cursor ends in the TO field."
   (interactive)
   (run-hooks 'org-mime-send-buffer-hook)
-  (let* ((region-p (org-region-active-p))
+  (let* ((org-html-klipsify-src nil)
+         (region-p (org-region-active-p))
          (file (buffer-file-name (current-buffer)))
          (keywords (org-mime-extract-keywords))
          (subject (or (cdr (assoc "MAIL_SUBJECT" keywords))

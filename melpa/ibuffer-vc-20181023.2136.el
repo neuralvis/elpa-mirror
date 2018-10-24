@@ -4,7 +4,7 @@
 ;;
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: themes
-;; Package-Version: 20171107.741
+;; Package-Version: 20181023.2136
 ;; Package-Requires: ((cl-lib "0.2"))
 ;; X-URL: http://github.com/purcell/ibuffer-vc
 ;; URL: http://github.com/purcell/ibuffer-vc
@@ -131,6 +131,8 @@ If the file is not under version control, nil is returned instead."
                    ((memq backend '(cvs CVS)) (vc-find-root file-name "CVS"))
                    ((memq backend '(rcs RCS)) (or (vc-find-root file-name "RCS")
                                                   (concat file-name ",v")))
+                   ((memq backend '(src SRC) (or (vc-find-root file-name ".src")
+                                                 (concat file-name ",v"))))
                    (t (error "ibuffer-vc: don't know how to find root for vc backend '%s' - please submit a bug report or patch" backend)))))
             (cons backend root-dir)))))))
 
