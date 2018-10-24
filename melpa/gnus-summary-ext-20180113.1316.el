@@ -7,7 +7,6 @@
 ;; Copyleft (Ↄ) 2013, Joe Bloggs, all rites reversed.
 ;; Created: 2013-12-23 00:06:16
 ;; Version: 1.0
-;; Package-Version: 20180113.1316
 ;; Last-Updated: 2016-05-26 02:40:00
 ;;           By: Joe Bloggs
 ;; URL: https://github.com/vapniks/gnus-summary-ext

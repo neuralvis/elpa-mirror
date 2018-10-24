@@ -1,2 +1,2 @@
 
-(egison-mode . [(20180910 833) nil "Egison editing mode" single ((:commit . "3873c44d99cc003e2a61d200c8e542fac830b691") (:authors ("Satoshi Egi" . "egisatoshi@gmail.com")) (:maintainer "Satoshi Egi" . "egisatoshi@gmail.com") (:url . "https://github.com/egisatoshi/egison3/blob/master/elisp/egison-mode.el"))])
+(egison-mode . [(20180910 833) nil "Egison editing mode" single ((:commit . "156734c625669706cfd17075dc46161bb2b0436b") (:authors ("Satoshi Egi" . "egisatoshi@gmail.com")) (:maintainer "Satoshi Egi" . "egisatoshi@gmail.com") (:url . "https://github.com/egisatoshi/egison3/blob/master/elisp/egison-mode.el"))])

@@ -5,7 +5,6 @@
 ;; Author: Kevin Rodgers <ihs_4664@yahoo.com>
 ;; Created: 17 Jun 2003
 ;; Version: 1.2.1
-;; Package-Version: 20150109.1823
 ;; Keywords: convenience
 ;; Homepage: https://github.com/camdez/goto-last-change.el
 
