@@ -1,2 +1,2 @@
 
-(golint . [(20180221 2015) nil "lint for the Go source code" single ((:commit . "c2de83ec178541a30f8e683a40a6ac778777841a") (:url . "https://github.com/golang/lint"))])
+(golint . [(20180221 2015) nil "lint for the Go source code" single ((:commit . "1baf3a9d7d675b3c7e974b7a00ded54b88a88379") (:url . "https://github.com/golang/lint"))])

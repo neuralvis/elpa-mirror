@@ -6,7 +6,7 @@
 ;;          Noam Postavsky <npostavs@gmail.com>
 ;; Maintainer: Noam Postavsky <npostavs@gmail.com>
 ;; Version: 0.13.0
-;; Package-Version: 20181013.2122
+;; Package-Version: 20181015.1212
 ;; X-URL: http://github.com/joaotavora/yasnippet
 ;; Keywords: convenience, emulation
 ;; URL: http://github.com/joaotavora/yasnippet
@@ -4077,12 +4077,13 @@ Returns the newly created snippet."
       (yas--letenv expand-env
         ;; Put a single undo action for the expanded snippet's
         ;; content.
-        (let ((buffer-undo-list t))
+        (let ((buffer-undo-list t)
+              (inhibit-modification-hooks t))
           ;; Some versions of cc-mode fail when inserting snippet
           ;; content in a narrowed buffer, so make sure to insert
           ;; before narrowing.  Furthermore, call before and after
-          ;; change functions, otherwise cc-mode's cache can get
-          ;; messed up.
+          ;; change functions manually, otherwise cc-mode's cache can
+          ;; get messed up.
           (goto-char begin)
           (run-hook-with-args 'before-change-functions begin begin)
           (insert content)

@@ -4,7 +4,7 @@
 
 ;; Author:  Atila Neves <atila.neves@gmail.com>
 ;; Version: 0.6
-;; Package-Version: 20181020.1653
+;; Package-Version: 20181023.1430
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (seq "1.11") (levenshtein "0") (s "1.11.0"))
 ;; Keywords: languages
 ;; URL: http://github.com/atilaneves/cmake-ide
@@ -143,9 +143,15 @@
 
 (defcustom cmake-ide-cmake-opts
   "-DCMAKE_BUILD_TYPE=Release"
-  "The options passed to cmake invocation."
+  "The options passed to cmake when calling it.  DEPRECATED, use `cmake-ide-cmake-args' instead."
   :group 'cmake-ide
   :safe #'stringp)
+
+(defcustom cmake-ide-cmake-args
+  nil
+  "The options passed to cmake when calling it."
+  :group 'cmake-ide
+  :type '(repeat string))
 
 (defcustom cmake-ide-header-search-other-file
   t
@@ -685,7 +691,7 @@ the object file's name just above."
     (let ((default-directory cmake-dir))
       (cide--message "Running cmake for src path %s in build path %s" project-dir cmake-dir)
       (apply 'start-process (append (list "cmake" "*cmake*" cmake-ide-cmake-command)
-                                    (split-string cmake-ide-cmake-opts)
+                                    (cide--cmake-args)
                                     (list "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" project-dir))))))
 
 
@@ -695,7 +701,11 @@ the object file's name just above."
     (when project-dir
       ;; if no project-dir, then get-project-key is called from a non cmake project dir, simply ignore
       (replace-regexp-in-string "[-/= ]" "_"  (concat (expand-file-name project-dir)
-                                                      cmake-ide-cmake-opts)))))
+                                                      (string-join (cide--cmake-args) " "))))))
+
+(defun cide--cmake-args ()
+  "Return a list of arguments to pass to CMake when calling it."
+  (or cmake-ide-cmake-args cmake-ide-cmake-args (split-string cmake-ide-cmake-opts)))
 
 (defun cide--build-dir ()
   "Return the directory name to run CMake in."
