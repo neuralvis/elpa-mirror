@@ -6,6 +6,8 @@ thread tree.
 
 * Setup
 
+mu4e 1.0 or above is required.
+
 To fully replace `mu4e-view' with `mu4e-conversation' from any other command
 (e.g. `mu4e-headers-next', `helm-mu'), call
 
