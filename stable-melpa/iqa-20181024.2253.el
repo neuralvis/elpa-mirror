@@ -2,7 +2,7 @@
 
 ;; Homepage: https://github.com/a13/iqa.el
 ;; Version: 0.0.1
-;; Package-Version: 20181016.2247
+;; Package-Version: 20181024.2253
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -123,6 +123,15 @@ Ask for saving only `iqa--init-file' otherwise."
   (define-key ctl-x-map "\M-c" #'iqa-find-user-custom-file)
   (define-key ctl-x-map "\M-r" #'iqa-reload-user-init-file)
   (define-key ctl-x-map "\M-d" #'iqa-find-user-init-directory))
+
+;;;###autoload
+(defun iqa-add-bookmarks ()
+  "add bookmarks for user init files and directories."
+  (interactive)
+  (bookmark-store "Emacs custom file" `((filename . ,(custom-file))) nil)
+  (bookmark-store "Emacs init directory" `((filename . ,user-emacs-directory)) nil)
+  (bookmark-store "Emacs init file" `((filename . ,(iqa--init-file))) nil))
+
 
 (provide 'iqa)
 

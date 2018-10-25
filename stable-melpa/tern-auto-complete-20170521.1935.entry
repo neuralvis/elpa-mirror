@@ -1,2 +1,2 @@
 
-(tern-auto-complete . [(20170521 1935) ((tern (0 0 1)) (auto-complete (1 4)) (cl-lib (0 5)) (emacs (24))) "Tern Completion by auto-complete.el" single ((:commit . "32a8a9877f43bbd0743514816ecbd4afb55fd6d6") (:authors ("<m.sakurai at kiwanami.net>")) (:maintainer "<m.sakurai at kiwanami.net>"))])
+(tern-auto-complete . [(20170521 1935) ((tern (0 0 1)) (auto-complete (1 4)) (cl-lib (0 5)) (emacs (24))) "Tern Completion by auto-complete.el" single ((:commit . "4f9b45ab43c65b63c9963050d5a0addfcbcd1cef") (:authors ("<m.sakurai at kiwanami.net>")) (:maintainer "<m.sakurai at kiwanami.net>"))])
