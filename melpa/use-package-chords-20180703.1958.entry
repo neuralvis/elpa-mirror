@@ -1,2 +1,0 @@
-
-(use-package-chords . [(20180703 1958) ((use-package (2 1)) (bind-key (1 0)) (bind-chord (0 2)) (key-chord (0 6))) "key-chord keyword for use-package" single ((:commit . "6c6ecca2aac0b809b9f813e83c897caae01b335d") (:keywords "convenience" "tools" "extensions") (:authors ("Justin Talbott" . "justin@waymondo.com")) (:maintainer "Justin Talbott" . "justin@waymondo.com") (:url . "https://github.com/waymondo/use-package-chords"))])

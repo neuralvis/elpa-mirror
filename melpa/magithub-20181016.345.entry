@@ -1,2 +1,0 @@
-
-(magithub . [(20181016 345) ((emacs (25)) (magit (2 12)) (s (1 12 0)) (ghub+ (0 3)) (git-commit (2 12)) (markdown-mode (2 3))) "Magit interfaces for GitHub" tar ((:commit . "ec84425d7d99ccd9d7e3c51b3cfeba349d064c9c") (:keywords "git" "tools" "vc") (:authors ("Sean Allred" . "code@seanallred.com")) (:maintainer "Sean Allred" . "code@seanallred.com") (:url . "https://github.com/vermiculus/magithub"))])

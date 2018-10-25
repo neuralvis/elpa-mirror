@@ -24,23 +24,26 @@ Set permissions to this file to 600 with your user as the owner.
 - To setup automatic storing of base revisions and detection of remote changes do this:
     (add-hook 'find-file-hook (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) ssh-deploy-automatically-detect-remote-changes) (ssh-deploy-remote-changes-handler)) ))
 
+- To enable mode line to this:
+   (ssh-deploy-line-mode)
+
 - To set key-bindings do something like this:
-    (global-set-key (kbd "C-c C-z f") (lambda() (interactive)(ssh-deploy-upload-handler-forced) ))
-    (global-set-key (kbd "C-c C-z u") (lambda() (interactive)(ssh-deploy-upload-handler) ))
-    (global-set-key (kbd "C-c C-z D") (lambda() (interactive)(ssh-deploy-delete-handler) ))
-    (global-set-key (kbd "C-c C-z d") (lambda() (interactive)(ssh-deploy-download-handler) ))
-    (global-set-key (kbd "C-c C-z x") (lambda() (interactive)(ssh-deploy-diff-handler) ))
-    (global-set-key (kbd "C-c C-z t") (lambda() (interactive)(ssh-deploy-remote-terminal-eshell-base-handler) ))
-    (global-set-key (kbd "C-c C-z T") (lambda() (interactive)(ssh-deploy-remote-terminal-eshell-handler) ))
-    (global-set-key (kbd "C-c C-z h") (lambda() (interactive)(ssh-deploy-remote-terminal-shell-base-handler) ))
-    (global-set-key (kbd "C-c C-z H") (lambda() (interactive)(ssh-deploy-remote-terminal-shell-handler) ))
-    (global-set-key (kbd "C-c C-z R") (lambda() (interactive)(ssh-deploy-rename-handler) ))
-    (global-set-key (kbd "C-c C-z e") (lambda() (interactive)(ssh-deploy-remote-changes-handler) ))
-    (global-set-key (kbd "C-c C-z b") (lambda() (interactive)(ssh-deploy-browse-remote-base-handler) ))
-    (global-set-key (kbd "C-c C-z B") (lambda() (interactive)(ssh-deploy-browse-remote-handler) ))
-    (global-set-key (kbd "C-c C-z o") (lambda() (interactive)(ssh-deploy-open-remote-file-handler) ))
-    (global-set-key (kbd "C-c C-z m") (lambda() (interactive)(ssh-deploy-remote-sql-mysql-handler) ))
-    (global-set-key (kbd "C-c C-z s") (lambda() (interactive)(ssh-deploy-run-deploy-script-handler) ))
+    (global-set-key (kbd "C-c C-z f") 'ssh-deploy-upload-handler-forced)
+    (global-set-key (kbd "C-c C-z u") 'ssh-deploy-upload-handler)
+    (global-set-key (kbd "C-c C-z D") 'ssh-deploy-delete-handler)
+    (global-set-key (kbd "C-c C-z d") 'ssh-deploy-download-handler)
+    (global-set-key (kbd "C-c C-z x") 'ssh-deploy-diff-handler)
+    (global-set-key (kbd "C-c C-z t") 'ssh-deploy-remote-terminal-eshell-base-handler)
+    (global-set-key (kbd "C-c C-z T") 'ssh-deploy-remote-terminal-eshell-handler)
+    (global-set-key (kbd "C-c C-z h") 'ssh-deploy-remote-terminal-shell-base-handler)
+    (global-set-key (kbd "C-c C-z H") 'ssh-deploy-remote-terminal-shell-handler)
+    (global-set-key (kbd "C-c C-z R") 'ssh-deploy-rename-handler)
+    (global-set-key (kbd "C-c C-z e") 'ssh-deploy-remote-changes-handler)
+    (global-set-key (kbd "C-c C-z b") 'ssh-deploy-browse-remote-base-handler)
+    (global-set-key (kbd "C-c C-z B") 'ssh-deploy-browse-remote-handler)
+    (global-set-key (kbd "C-c C-z o") 'ssh-deploy-open-remote-file-handler)
+    (global-set-key (kbd "C-c C-z m") 'ssh-deploy-remote-sql-mysql-handler)
+    (global-set-key (kbd "C-c C-z s") 'ssh-deploy-run-deploy-script-handler)
 
 - To install and set-up using use-package and hydra do this:
   (use-package ssh-deploy
@@ -50,6 +53,7 @@ Set permissions to this file to 600 with your user as the owner.
     :hook ((after-save . (lambda() (if (and (boundp 'ssh-deploy-on-explicit-save) ssh-deploy-on-explicit-save) (ssh-deploy-upload-handler)) ))
            (find-file . (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) ssh-deploy-automatically-detect-remote-changes) (ssh-deploy-remote-changes-handler)) )))
     :config
+    (ssh-deploy-line-mode) ;; If you want mode-line feature
     (defhydra hydra-ssh-deploy (:color red :hint nil)
       "
 _u_: Upload                              _f_: Force Upload
@@ -116,7 +120,7 @@ Here is a list of other variables you can set globally or per directory:
 * `ssh-deploy-revision-folder' - The folder used for storing local revisions *(string)*
 * `ssh-deploy-automatically-detect-remote-changes' - Enables automatic detection of remote changes *(boolean)*
 * `ssh-deploy-on-explicit-save' - Enabled automatic uploads on save *(boolean)*
-* `ssh-deploy-exclude-list' - A list defining what paths to exclude from deployment *(list)*
+* `ssh-deploy-exclude-list' - A list defining what file names to exclude from deployment *(list)*
 * `ssh-deploy-async' - Enables asynchronous transfers (you need to have `(make-thread)` or `async.el` available as well) *(boolean)*
 * `ssh-deploy-remote-sql-database' - Default database when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-sql-password' - Default password when connecting to remote SQL database *(string)*
@@ -126,5 +130,6 @@ Here is a list of other variables you can set globally or per directory:
 * `ssh-deploy-remote-shell-executable' - Default shell executable when launching shell on remote host
 * `ssh-deploy-verbose' - Show messages in message buffer when starting and ending actions, default t *(boolean)*
 * `ssh-deploy-script' - Our custom lambda function that will be called using (funcall) when running deploy script
+* `ssh-deploy-async-with-threads' - Whether to use threads (make threads) instead of processes (async-start) for asynchronous operations, default nil *(boolean)*
 
 Please see README.md from the same repository for extended documentation.

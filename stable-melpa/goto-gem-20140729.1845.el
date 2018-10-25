@@ -4,6 +4,7 @@
 
 ;; Author: Peter Stiernström <peter@stiernstrom.se>
 ;; Keywords: gemfile, convenience
+;; Package-Version: 20140729.1845
 ;; Version: 1.2
 ;; Package-Requires: ((s "1.9.0"))
 
