@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20181005.452
+;; Package-Version: 20181024.2224
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.10.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
@@ -440,7 +440,7 @@ ENDP and DELIM."
               (t)))))
 
 (defconst clojure--collection-tag-regexp "#\\(::[a-zA-Z0-9._-]*\\|:?\\([a-zA-Z0-9._-]+/\\)?[a-zA-Z0-9._-]+\\)"
-    "Collection reader macro tag regexp.
+  "Collection reader macro tag regexp.
 It is intended to check for allowed strings that can come before a
 collection literal (e.g. '[]' or '{}'), as reader macro tags.
 This includes #fully.qualified/my-ns[:kw val] and #::my-ns{:kw
@@ -881,12 +881,12 @@ any number of matches of `clojure--sym-forbidden-rest-chars'."))
        (2 'clojure-keyword-face))
 
       ;; type-hints: #^oneword
-      (,(concat "\\(#^\\)\\(" clojure--sym-regexp "?\\)\\(/\\)\\(" clojure--sym-regexp "\\)")
+      (,(concat "\\(#?\\^\\)\\(" clojure--sym-regexp "?\\)\\(/\\)\\(" clojure--sym-regexp "\\)")
        (1 'default)
        (2 font-lock-type-face)
        (3 'default)
        (4 'default))
-      (,(concat "\\(#^\\)\\(" clojure--sym-regexp "\\)")
+      (,(concat "\\(#?\\^\\)\\(" clojure--sym-regexp "\\)")
        (1 'default)
        (2 font-lock-type-face))
 
@@ -2029,22 +2029,24 @@ many times."
   (let ((beginning-of-defun-function nil))
     (if (and clojure-toplevel-inside-comment-form
              (clojure-top-level-form-p "comment"))
-        (save-match-data
-          (let ((original-position (point))
-                clojure-comment-start clojure-comment-end)
-            (beginning-of-defun)
-            (setq clojure-comment-start (point))
-            (end-of-defun)
-            (setq clojure-comment-end (point))
-            (beginning-of-defun)
-            (forward-char 1)              ;; skip paren so we start at comment
-            (clojure-forward-logical-sexp) ;; skip past the comment form itself
-            (if-let ((sexp-start (clojure-find-first (lambda (beg-pos)
-                                                       (< beg-pos original-position))
-                                                     (clojure-sexp-starts-until-position
-                                                      clojure-comment-end))))
-                (progn (goto-char sexp-start) t)
-              (beginning-of-defun n))))
+        (condition-case nil
+            (save-match-data
+              (let ((original-position (point))
+                    clojure-comment-start clojure-comment-end)
+                (beginning-of-defun)
+                (setq clojure-comment-start (point))
+                (end-of-defun)
+                (setq clojure-comment-end (point))
+                (beginning-of-defun)
+                (forward-char 1)              ;; skip paren so we start at comment
+                (clojure-forward-logical-sexp) ;; skip past the comment form itself
+                (if-let ((sexp-start (clojure-find-first (lambda (beg-pos)
+                                                           (< beg-pos original-position))
+                                                         (clojure-sexp-starts-until-position
+                                                          clojure-comment-end))))
+                    (progn (goto-char sexp-start) t)
+                  (beginning-of-defun n))))
+          (scan-error (beginning-of-defun n)))
       (beginning-of-defun n))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
