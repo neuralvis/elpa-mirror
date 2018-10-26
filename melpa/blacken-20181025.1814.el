@@ -5,7 +5,7 @@
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; Homepage: https://github.com/proofit404/blacken
 ;; Version: 0.0.1
-;; Package-Version: 20180901.528
+;; Package-Version: 20181025.1814
 ;; Package-Requires: ((emacs "25.2"))
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -39,6 +39,8 @@
 ;;
 ;;; Code:
 
+(require 'cl-lib)
+
 
 (defgroup blacken nil
   "Reformat Python code with \"black\"."
@@ -49,9 +51,15 @@
   :type 'string)
 
 (defcustom blacken-line-length nil
-  "Line length to enforce."
-  :type 'number
-  :safe 'numberp)
+  "Line length to enforce.
+
+It must be an integer, nil or `fill'.
+If `fill', the `fill-column' variable value is used."
+  :type '(choice :tag "Line Length Limit"
+           (const :tag "Use default" nil)
+           (const :tag "Use fill-column" fill)
+           (integer :tag "Line Length"))
+  :safe 'integerp)
 
 (defcustom blacken-allow-py36 nil
   "Allow using Python 3.6-only syntax on all input files."
@@ -96,7 +104,10 @@ Return black process the exit code."
   "Build black process call arguments."
   (append
    (when blacken-line-length
-     (list "--line-length" (number-to-string blacken-line-length)))
+     (list "--line-length"
+           (number-to-string (cl-case blacken-line-length
+                               ('fill fill-column)
+                               (t blacken-line-length)))))
    (when blacken-allow-py36
      (list "--py36"))
    (when blacken-fast-unsafe
