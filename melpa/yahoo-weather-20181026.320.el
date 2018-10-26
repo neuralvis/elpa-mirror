@@ -4,7 +4,7 @@
 
 ;; Author: DarkSun <lujun9972@gmail.com>
 ;; URL: https://github.com/lujun9972/yahoo-weather-mode
-;; Package-Version: 20181011.748
+;; Package-Version: 20181026.320
 ;; Package-X-Original-Version: 20160426.529
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: weather, mode-line
@@ -52,7 +52,7 @@
   :type 'function
   :group 'yahoo-weather)
 
-(defcustom yahoo-weather-format "[%(weather) %(temperature)℃]"
+(defcustom yahoo-weather-format "[%(weather) %(temperature)°C]"
   "how to display the weather information.
 
 %(weather) %(temperature) %(wind-chill) %(wind-direction) %(wind-direction) %(wind-speed)
