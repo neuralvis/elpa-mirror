@@ -1,2 +1,0 @@
-
-(xcode-project . [(20181003 2046) ((emacs (25))) "A package for reading Xcode project files." tar ((:commit . "a4a7b107ef546ce5a155248ffc215f6f74ba1273") (:keywords "languages" "tools") (:authors ("John Buckley" . "john@olivetoast.com")) (:maintainer "John Buckley" . "john@olivetoast.com") (:url . "https://github.com/nhojb/xcode-project.git"))])
