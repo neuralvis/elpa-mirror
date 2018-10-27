@@ -6,7 +6,7 @@
 ;; Created: 28 Dec 2017
 ;; Homepage: https://github.com/raxod502/diary-manager
 ;; Keywords: extensions
-;; Package-Version: 20180626.1758
+;; Package-Version: 20181027.222
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 2.0.1
 
@@ -428,7 +428,9 @@ Diary entries can only be visited correctly using
   "Message displayed when entering `diary-manager-edit-mode'.
 This is passed to `substitute-command-keys' before being
 displayed. If nil, no message is displayed."
-  :type 'string)
+  :type '(choice
+          string
+          (const :tag "No message" nil)))
 
 ;;;###autoload
 (define-minor-mode diary-manager-edit-mode

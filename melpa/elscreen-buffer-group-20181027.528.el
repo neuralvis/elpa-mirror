@@ -5,7 +5,7 @@
 ;; Author: Jeff Gran <jeff@jeffgran.com>
 ;;	Author: Ryan C. Thompson
 ;; URL: https://github.com/jeffgran/elscreen-buffer-group
-;; Package-Version: 20170809.125
+;; Package-Version: 20181027.528
 ;; Created: 7 Nov 2012
 ;; Keywords: buffer
 ;; Version: 1.0.1
@@ -220,7 +220,7 @@ from elscreen-buffer-group, so we only want to keep the ones from here."
 
 (defadvice buffer-list (around elscreen-buffer-group-buffer-list activate)
   "Make the built-in function (buffer-list) return MY buffer list instead."
-  (when (not (member this-command 'elscreen-buffer-group-skip-commands))
+  (when (not (member this-command elscreen-buffer-group-skip-commands))
     (setq ad-return-value (elscreen-buffer-group-get-ordered-buffer-list))))
 
 
