@@ -1,2 +1,0 @@
-
-(mu4e-conversation . [(20181025 1357) ((emacs (25 1))) "Show a complete thread in a single buffer" single ((:commit . "6331434cc32f08f75ea912723ef0ab09742f7152") (:keywords "mail" "convenience" "mu4e") (:authors ("Pierre Neidhardt" . "mail@ambrevar.xyz")) (:maintainer "Pierre Neidhardt" . "mail@ambrevar.xyz") (:url . "https://gitlab.com/Ambrevar/mu4e-conversation"))])
