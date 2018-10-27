@@ -1,10 +1,10 @@
 ;;; xah-elisp-mode.el --- Major mode for editing emacs lisp. -*- coding: utf-8; lexical-binding: t; -*-
 
-;; Copyright © 2013-2017, by Xah Lee
+;; Copyright © 2013-2018, by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
 ;; Version: 3.4.20180924170701
-;; Package-Version: 20180929.2047
+;; Package-Version: 20181027.313
 ;; Created: 23 Mar 2013
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: lisp, languages
@@ -3133,11 +3133,11 @@ Version 2017-01-27"
     ("define-key" "(define-key KEYMAPNAME▮ (kbd \"M-b\") 'FUNCNAME)" xah-elisp--ahf)
     ("define-minor-mode" "(define-minor-mode MODE▮ \"DOC\" &optional INIT-VALUE LIGHTER KEYMAP &rest BODY)" xah-elisp--ahf)
     ("defsubst" "(defsubst ▮)" xah-elisp--ahf)
-    ("defun" "(defun ▮ ()\n  \"DOCSTRING\"\n  (interactive)\n  (let (VAR)\n\n  ))" xah-elisp--ahf)
+    ("defun" "(defun f▮ ()\n  \"DOCSTRING\"\n  (interactive)\n  (let ()\n3\n ))" xah-elisp--ahf)
     ("defvar" "(defvar ▮ &optional INITVALUE \"DOCSTRING\")" xah-elisp--ahf)
     ("delete" "(delete OBJECT▮ SEQUENCE)" xah-elisp--ahf)
     ("delete-and-extract-region" "(delete-and-extract-region ▮ pos2)" xah-elisp--ahf)
-    ("delete-char" "(delete-char ▮)" xah-elisp--ahf)
+    ("delete-char" "(delete-char 1▮)" xah-elisp--ahf)
     ("delete-directory" "(delete-directory ▮ &optional RECURSIVE)" xah-elisp--ahf)
     ("delete-dups" "(delete-dups LIST▮)" xah-elisp--ahf)
     ("delete-field" "(delete-field &optional POS▮)" xah-elisp--ahf)
@@ -3336,7 +3336,8 @@ Version 2017-01-27"
     ("set-text-properties" "(set-text-properties START▮ END PROPS &optional OBJECT)" xah-elisp--ahf)
     ("set-visited-file-modtime" "(set-visited-file-modtime &optional TIME▮)" xah-elisp--ahf)
     ("set-visited-file-name" "(set-visited-file-name FILENAME▮ &optional NO-QUERY ALONG-WITH-FILE)" xah-elisp--ahf)
-    ("setq" "(setq xx▮ VAL)" xah-elisp--ahf)
+    ("setq" "(setq x▮ VAL)" xah-elisp--ahf)
+    ("max" "(max ▮)" xah-elisp--ahf)
     ("shell-command" "(shell-command ▮ &optional OUTPUT-BUFFER ERROR-BUFFER)" xah-elisp--ahf)
     ("shell-quote-argument" "(shell-quote-argument ▮)" xah-elisp--ahf)
     ("skip-chars-backward" "(skip-chars-backward \"▮\" &optional LIM)" xah-elisp--ahf)
