@@ -1,6 +1,6 @@
  Setup:
-  "Ctags" (Universal Ctags is recommended) and "GNU Find" should exist
-  so this program works out of box.
+  "Ctags" (Universal Ctags is recommended) should exist.
+  "GNU Find" is used if it's installed but it's optional.
   Or else, use `counsel-etags-update-tags-backend' to generate tags file
 
 Usage:

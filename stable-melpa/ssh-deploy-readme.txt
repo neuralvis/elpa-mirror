@@ -9,20 +9,23 @@ By setting the variables (globally, per directory or per file):
 ssh-deploy-root-local,ssh-deploy-root-remote, ssh-deploy-on-explicit-save
 you can setup a directory for TRAMP deployment.
 
-For asynchronous transfers you need to setup ~/.netrc, ~/.authinfo or ~/.authinfo.gpg or key-based authorization or equivalent for automatic authentication.
+For asynchronous transfers you need to setup ~/.authinfo.gpg or key-based authorization or equivalent for automatic authentication.
 
-Example contents of ~/.netrc, ~/.authinfo or ~/.authinfo.gpg for password-based interaction-free authentication:
+Example contents of ~/.authinfo.gpg for password-based interaction-free authentication:
 machine myserver.com login myuser port ftp password mypassword
 machine myserver2.com login myuser2 port ssh password mypassword2
 machine myserver3.com login myuser3 port sftp password mypassword3
 
 Set permissions to this file to 600 with your user as the owner.
 
+If your not using ~/.netrc for FTP information you need to specify what file your using with:
+(setq ange-ftp-netrc-filename "~/.authinfo.gpg")
+
 - To setup a upload hook on save do this:
-    (add-hook 'after-save-hook (lambda() (if (and (boundp 'ssh-deploy-on-explicit-save) ssh-deploy-on-explicit-save) (ssh-deploy-upload-handler)) ))
+    (add-hook 'after-save-hook (lambda() (if (and (boundp 'ssh-deploy-on-explicit-save) (> ssh-deploy-on-explicit-save 0)) (ssh-deploy-upload-handler)) ))
 
 - To setup automatic storing of base revisions and detection of remote changes do this:
-    (add-hook 'find-file-hook (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) ssh-deploy-automatically-detect-remote-changes) (ssh-deploy-remote-changes-handler)) ))
+    (add-hook 'find-file-hook (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) (> ssh-deploy-automatically-detect-remote-changes 0)) (ssh-deploy-remote-changes-handler)) ))
 
 - To enable mode line to this:
    (ssh-deploy-line-mode)
@@ -50,8 +53,8 @@ Set permissions to this file to 600 with your user as the owner.
     :ensure t
     :demand
     :bind (("C-c C-z" . hydra-ssh-deploy/body))
-    :hook ((after-save . (lambda() (if (and (boundp 'ssh-deploy-on-explicit-save) ssh-deploy-on-explicit-save) (ssh-deploy-upload-handler)) ))
-           (find-file . (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) ssh-deploy-automatically-detect-remote-changes) (ssh-deploy-remote-changes-handler)) )))
+    :hook ((after-save . (lambda() (if (and (boundp 'ssh-deploy-on-explicit-save) (> ssh-deploy-on-explicit-save 0) (ssh-deploy-upload-handler)) )))
+           (find-file . (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) (> ssh-deploy-automatically-detect-remote-changes 0)) (ssh-deploy-remote-changes-handler)) )))
     :config
     (ssh-deploy-line-mode) ;; If you want mode-line feature
     (defhydra hydra-ssh-deploy (:color red :hint nil)
@@ -90,16 +93,16 @@ Here is an example for SSH deployment, /Users/Chris/Web/Site1/.dir-locals.el:
 ((nil . (
   (ssh-deploy-root-local . "/Users/Chris/Web/Site1/")
   (ssh-deploy-root-remote . "/ssh:myuser@myserver.com:/var/www/site1/")
-  (ssh-deploy-on-explicit-save . t)
-  (ssh-deploy-async . t)
+  (ssh-deploy-on-explicit-save . 1)
+  (ssh-deploy-async . 1)
 )))
 
 Here is an example for SFTP deployment, /Users/Chris/Web/Site2/.dir-locals.el:
 ((nil . (
   (ssh-deploy-root-local . "/Users/Chris/Web/Site2/")
   (ssh-deploy-root-remote . "/sftp:myuser@myserver.com:/var/www/site2/")
-  (ssh-deploy-on-explicit-save . nil)
-  (ssh-deploy-async . nil)
+  (ssh-deploy-on-explicit-save . 0)
+  (ssh-deploy-async . 0)
   (ssh-deploy-script . (lambda() (let ((default-directory ssh-deploy-root-remote))(shell-command "bash compile.sh"))))
 )))
 
@@ -116,20 +119,22 @@ Here is a list of other variables you can set globally or per directory:
 
 * `ssh-deploy-root-local' - The local root that should be under deployment *(string)*
 * `ssh-deploy-root-remote' - The remote TRAMP root that is used for deployment *(string)*
-* `ssh-deploy-debug' - Enables debugging messages *(boolean)*
+* `ssh-deploy-debug' - Enables debugging messages *(integer)*
 * `ssh-deploy-revision-folder' - The folder used for storing local revisions *(string)*
-* `ssh-deploy-automatically-detect-remote-changes' - Enables automatic detection of remote changes *(boolean)*
-* `ssh-deploy-on-explicit-save' - Enabled automatic uploads on save *(boolean)*
+* `ssh-deploy-automatically-detect-remote-changes' - Enables automatic detection of remote changes *(integer)*
+* `ssh-deploy-on-explicit-save' - Enabled automatic uploads on save *(integer)*
 * `ssh-deploy-exclude-list' - A list defining what file names to exclude from deployment *(list)*
-* `ssh-deploy-async' - Enables asynchronous transfers (you need to have `(make-thread)` or `async.el` available as well) *(boolean)*
+* `ssh-deploy-async' - Enables asynchronous transfers (you need to have `(make-thread)` or `async.el` available as well) *(integer)*
 * `ssh-deploy-remote-sql-database' - Default database when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-sql-password' - Default password when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-sql-port' - Default port when connecting to remote SQL database *(integer)*
 * `ssh-deploy-remote-sql-server' - Default server when connecting to remote SQL database *(string)*
 * `ssh-deploy-remote-sql-user' - Default user when connecting to remote SQL database *(string)*
-* `ssh-deploy-remote-shell-executable' - Default shell executable when launching shell on remote host
-* `ssh-deploy-verbose' - Show messages in message buffer when starting and ending actions, default t *(boolean)*
-* `ssh-deploy-script' - Our custom lambda function that will be called using (funcall) when running deploy script
-* `ssh-deploy-async-with-threads' - Whether to use threads (make threads) instead of processes (async-start) for asynchronous operations, default nil *(boolean)*
+* `ssh-deploy-remote-shell-executable' - Default shell executable when launching shell on remote host *(string)*
+* `ssh-deploy-verbose' - Show messages in message buffer when starting and ending actions, default t *(integer)*
+* `ssh-deploy-script' - Our custom lambda function that will be called using (funcall) when running deploy script *(function)*
+* `ssh-deploy-async-with-threads' - Whether to use threads (make threads) instead of processes (async-start) for asynchronous operations, default nil *(integer)*
+
+When integers are used as booleans, above zero equals true and otherwise it's false.
 
 Please see README.md from the same repository for extended documentation.
