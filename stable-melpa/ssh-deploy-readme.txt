@@ -113,8 +113,6 @@ Here is an example for FTP deployment, /Users/Chris/Web/Site3/.dir-locals.el:
 )))
 
 
-Now when you are in a directory which is configured for deployment.
-
 Here is a list of other variables you can set globally or per directory:
 
 * `ssh-deploy-root-local' - The local root that should be under deployment *(string)*
@@ -137,4 +135,4 @@ Here is a list of other variables you can set globally or per directory:
 
 When integers are used as booleans, above zero equals true and otherwise it's false.
 
-Please see README.md from the same repository for extended documentation.
+Please see README.md from the same repository for more extended documentation.
