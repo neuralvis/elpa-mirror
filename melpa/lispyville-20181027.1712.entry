@@ -1,2 +1,0 @@
-
-(lispyville . [(20181027 1712) ((lispy (0)) (evil (1 2 12)) (cl-lib (0 5)) (emacs (24 4))) "A minor mode for integrating evil with lispy." single ((:commit . "26eeffeb512f85886c53d5bc2f058d8e2c8df277") (:keywords "vim" "evil" "lispy" "lisp" "parentheses") (:authors ("Fox Kiester" . "noct@openmailbox.org")) (:maintainer "Fox Kiester" . "noct@openmailbox.org") (:url . "https://github.com/noctuid/lispyville"))])
