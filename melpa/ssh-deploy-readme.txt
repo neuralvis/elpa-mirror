@@ -22,10 +22,10 @@ If your not using ~/.netrc for FTP information you need to specify what file you
 (setq ange-ftp-netrc-filename "~/.authinfo.gpg")
 
 - To setup a upload hook on save do this:
-    (add-hook 'after-save-hook (lambda() (if (and (boundp 'ssh-deploy-on-explicit-save) (> ssh-deploy-on-explicit-save 0)) (ssh-deploy-upload-handler)) ))
+Add to init-script: (ssh-deploy-add-after-save-hook)
 
 - To setup automatic storing of base revisions and detection of remote changes do this:
-    (add-hook 'find-file-hook (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) (> ssh-deploy-automatically-detect-remote-changes 0)) (ssh-deploy-remote-changes-handler)) ))
+Add to init-script: (ssh-deploy-add-find-file-hook)
 
 - To enable mode line to this:
    (ssh-deploy-line-mode)
@@ -53,10 +53,11 @@ If your not using ~/.netrc for FTP information you need to specify what file you
     :ensure t
     :demand
     :bind (("C-c C-z" . hydra-ssh-deploy/body))
-    :hook ((after-save . (lambda() (if (and (boundp 'ssh-deploy-on-explicit-save) (> ssh-deploy-on-explicit-save 0) (ssh-deploy-upload-handler)) )))
-           (find-file . (lambda() (if (and (boundp 'ssh-deploy-automatically-detect-remote-changes) (> ssh-deploy-automatically-detect-remote-changes 0)) (ssh-deploy-remote-changes-handler)) )))
+    :hook ((after-save . ssh-deploy-after-save)
+           (find-file . ssh-deploy-find-file))
     :config
     (ssh-deploy-line-mode) ;; If you want mode-line feature
+
     (defhydra hydra-ssh-deploy (:color red :hint nil)
       "
 _u_: Upload                              _f_: Force Upload

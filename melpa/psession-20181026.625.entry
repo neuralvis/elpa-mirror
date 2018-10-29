@@ -1,2 +1,0 @@
-
-(psession . [(20181026 625) ((emacs (24)) (cl-lib (0 5)) (async (1 9 3))) "Persistent save of elisp objects." single ((:commit . "26b6ce35801924e071b0088baa6dac3331e0ce00") (:authors ("Thierry Volpiatto" . "thierry.volpiatto@gmail.com")) (:maintainer "Thierry Volpiatto" . "thierry.volpiatto@gmail.com") (:url . "https://github.com/thierryvolpiatto/psession"))])
