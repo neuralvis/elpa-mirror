@@ -4,7 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: convenience
-;; Package-Version: 20180101.339
+;; Package-Version: 20181029.516
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,12 +27,36 @@
 
 ;;; Code:
 
+(defgroup mode-line-bell nil
+  "Flash the mode line instead of ringing the bell."
+  :group 'frames)
+
+(defcustom mode-line-bell-flash-time 0.05
+  "Length of time to flash the mode line when the bell is rung."
+  :type 'float
+  :safe 'floatp)
+
+(defvar mode-line-bell--flashing nil
+  "If non-nil, the mode line is currently flashing.")
+
+(defun mode-line-bell--begin-flash ()
+  "Begin flashing the mode line."
+  (unless mode-line-bell--flashing
+    (invert-face 'mode-line)
+    (setq mode-line-bell--flashing t)))
+
+(defun mode-line-bell--end-flash ()
+  "Finish flashing the mode line."
+  (when mode-line-bell--flashing
+    (invert-face 'mode-line)
+    (setq mode-line-bell--flashing nil)))
+
 ;;;###autoload
 (defun mode-line-bell-flash ()
   "Flash the mode line momentarily."
-  (invert-face 'mode-line)
-  (run-with-timer 0.05 nil 'invert-face 'mode-line))
-
+  (unless mode-line-bell--flashing
+    (run-with-timer mode-line-bell-flash-time nil 'mode-line-bell--end-flash)
+    (mode-line-bell--begin-flash)))
 
 ;;;###autoload
 (define-minor-mode mode-line-bell-mode
