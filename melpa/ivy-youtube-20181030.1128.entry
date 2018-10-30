@@ -1,0 +1,2 @@
+
+(ivy-youtube . [(20181030 1128) ((request (0 2 0)) (ivy (0 8 0)) (cl-lib (0 5))) "Query YouTube and play videos in your browser" single ((:commit . "5569ff7bfa2fbd2940e26a169e8cce63ab9bfc9e") (:keywords "youtube" "multimedia" "mpv" "vlc") (:authors ("Brunno dos Santos")) (:maintainer "Brunno dos Santos") (:url . "https://github.com/squiter/ivy-youtube"))])

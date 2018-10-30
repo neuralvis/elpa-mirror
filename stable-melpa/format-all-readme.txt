@@ -7,6 +7,7 @@ Supported languages:
 
 - Assembly (asmfmt)
 - C/C++/Objective-C (clang-format)
+- Clojure/ClojureScript (node-cljfmt)
 - Crystal (crystal tool format)
 - CSS/Less/SCSS (prettier)
 - D (dfmt)

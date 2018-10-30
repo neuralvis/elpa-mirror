@@ -30,64 +30,22 @@ Add to init-script: (ssh-deploy-add-find-file-hook)
 - To enable mode line to this:
    (ssh-deploy-line-mode)
 
-- To set key-bindings do something like this:
-    (global-set-key (kbd "C-c C-z f") 'ssh-deploy-upload-handler-forced)
-    (global-set-key (kbd "C-c C-z u") 'ssh-deploy-upload-handler)
-    (global-set-key (kbd "C-c C-z D") 'ssh-deploy-delete-handler)
-    (global-set-key (kbd "C-c C-z d") 'ssh-deploy-download-handler)
-    (global-set-key (kbd "C-c C-z x") 'ssh-deploy-diff-handler)
-    (global-set-key (kbd "C-c C-z t") 'ssh-deploy-remote-terminal-eshell-base-handler)
-    (global-set-key (kbd "C-c C-z T") 'ssh-deploy-remote-terminal-eshell-handler)
-    (global-set-key (kbd "C-c C-z h") 'ssh-deploy-remote-terminal-shell-base-handler)
-    (global-set-key (kbd "C-c C-z H") 'ssh-deploy-remote-terminal-shell-handler)
-    (global-set-key (kbd "C-c C-z R") 'ssh-deploy-rename-handler)
-    (global-set-key (kbd "C-c C-z e") 'ssh-deploy-remote-changes-handler)
-    (global-set-key (kbd "C-c C-z b") 'ssh-deploy-browse-remote-base-handler)
-    (global-set-key (kbd "C-c C-z B") 'ssh-deploy-browse-remote-handler)
-    (global-set-key (kbd "C-c C-z o") 'ssh-deploy-open-remote-file-handler)
-    (global-set-key (kbd "C-c C-z m") 'ssh-deploy-remote-sql-mysql-handler)
-    (global-set-key (kbd "C-c C-z s") 'ssh-deploy-run-deploy-script-handler)
+- To set global key-bindings do something like this:
+    (global-set-key (kbd "C-c C-z") 'ssh-deploy-prefix-map)
+
+- To set global key-bindings for the pre-defined hydra do something like this:
+    (global-set-key (kbd "C-c C-z") 'ssh-deploy-hydra/body)
 
 - To install and set-up using use-package and hydra do this:
   (use-package ssh-deploy
     :ensure t
     :demand
-    :bind (("C-c C-z" . hydra-ssh-deploy/body))
+    :bind (("C-c C-z" . ssh-deploy-hydra/body))
     :hook ((after-save . ssh-deploy-after-save)
            (find-file . ssh-deploy-find-file))
     :config
     (ssh-deploy-line-mode) ;; If you want mode-line feature
-
-    (defhydra hydra-ssh-deploy (:color red :hint nil)
-      "
-_u_: Upload                              _f_: Force Upload
-_d_: Download
-_D_: Delete
-_x_: Difference
-_t_: Eshell Base Terminal                _T_: Eshell Relative Terminal
-_h_: Shell Base Terminal                 _H_: Shell Relative Terminal
-_e_: Detect Remote Changes
-_R_: Rename
-_b_: Browse Base                         _B_: Browse Relative
-_o_: Open current file on remote         _m_: Open sql-mysql on remote
-_s_: Run deploy script
-"
-      ("f" ssh-deploy-upload-handler-forced)
-      ("u" ssh-deploy-upload-handler)
-      ("d" ssh-deploy-download-handler)
-      ("D" ssh-deploy-delete-handler)
-      ("x" ssh-deploy-diff-handler)
-      ("t" ssh-deploy-remote-terminal-eshell-base-handler)
-      ("T" ssh-deploy-remote-terminal-eshell-handler)
-      ("h" ssh-deploy-remote-terminal-shell-base-handler)
-      ("H" ssh-deploy-remote-terminal-shell-handler)
-      ("e" ssh-deploy-remote-changes-handler)
-      ("R" ssh-deploy-rename-handler)
-      ("b" ssh-deploy-browse-remote-base-handler)
-      ("B" ssh-deploy-browse-remote-handler)
-      ("o" ssh-deploy-open-remote-file-handler)
-      ("m" ssh-deploy-remote-sql-mysql-handler)
-      ("s" ssh-deploy-run-deploy-script-handler)))
+   )
 
 
 Here is an example for SSH deployment, /Users/Chris/Web/Site1/.dir-locals.el:
