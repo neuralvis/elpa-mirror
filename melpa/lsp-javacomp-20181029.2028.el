@@ -1,7 +1,7 @@
 ;;; lsp-javacomp.el --- Provide Java IDE features powered by JavaComp.  -*- lexical-binding: t -*-
 
 ;; Version: 1.0
-;; Package-Version: 20181029.1650
+;; Package-Version: 20181029.2028
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.0") (s "1.2.0"))
 ;; Keywords: java tools lsp
 ;; URL: https://github.com/tigersoldier/lsp-javacomp
@@ -193,7 +193,7 @@ See https://developer.github.com/v3/repos/releases/#get-the-latest-release"
       (erase-buffer)
       (insert snapshot-content)
       (java-mode))
-    (display-buffer-use-some-window buffer nil))
+    (display-buffer-use-some-window buffer nil)))
 
 (lsp-define-stdio-client lsp-javacomp "java" #'lsp-javacomp--get-root nil
                          :command-fn #'lsp-javacomp--command

@@ -5,7 +5,7 @@
 ;; Author: Chris Perkins <chrisperkins99@gmail.com>
 ;; Created: 01 July, 2011
 ;; URL: http://github.com/grammati/windsize
-;; Package-Version: 20151121.1340
+;; Package-Version: 20181029.2257
 ;; Version: 0.1
 ;; Keywords: window, resizing, convenience
 
@@ -56,11 +56,15 @@
 
 (require 'windmove)
 
-(defvar windsize-cols 8
-  "How much to resize horizontally.")
+(defcustom windsize-cols 8
+  "How much to resize horizontally."
+  :type 'integer
+  :group 'windsize)
 
-(defvar windsize-rows 4
-  "How much to resize vertically.")
+(defcustom windsize-rows 4
+  "How much to resize vertically."
+  :type 'integer
+  :group 'windsize)
 
 (defun windsize-is-horizontal (dir)
   (or (eq dir 'left) (eq dir 'right)))
