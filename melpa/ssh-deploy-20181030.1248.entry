@@ -1,0 +1,2 @@
+
+(ssh-deploy . [(20181030 1248) ((emacs (24))) "Deployment via TRAMP, global or per directory." tar ((:commit . "afbcc7055077a06ff8c3ac54e308d21b9a3e7c9a") (:keywords "tools" "convenience") (:authors ("Christian Johansson" . "christian@cvj.se")) (:maintainer "Christian Johansson" . "christian@cvj.se") (:url . "https://github.com/cjohansson/emacs-ssh-deploy"))])
