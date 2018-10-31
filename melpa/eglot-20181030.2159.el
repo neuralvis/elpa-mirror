@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20181030.1222
+;; Package-Version: 20181030.2159
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -66,7 +66,8 @@
 (require 'warnings)
 (require 'flymake)
 (require 'xref)
-(require 'subr-x)
+(eval-when-compile
+  (require 'subr-x))
 (require 'jsonrpc)
 (require 'filenotify)
 (require 'ert)

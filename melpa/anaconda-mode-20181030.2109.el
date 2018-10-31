@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20181010.1035
+;; Package-Version: 20181030.2109
 ;; Version: 0.1.13
 ;; Package-Requires: ((emacs "25") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
@@ -536,13 +536,13 @@ number position, column number position and file path."
 
 (defun anaconda-mode-show-doc-callback (result)
   "Process view doc RESULT."
-  (if result
+  (if (> (length result) 0)
       (pop-to-buffer
        (anaconda-mode-documentation-view result))
     (message "No documentation available")))
 
 (defun anaconda-mode-documentation-view (result)
-  "Show documentation view for rpc RESULT."
+  "Show documentation view for rpc RESULT, and return buffer."
   (let ((buf (get-buffer-create "*Anaconda*")))
     (with-current-buffer buf
       (view-mode -1)
