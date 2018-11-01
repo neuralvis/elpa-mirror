@@ -5,7 +5,6 @@
 ;; Author: Roland Walker <walker@pobox.com>
 ;; Homepage: http://github.com/rolandwalker/flyspell-lazy
 ;; URL: http://raw.githubusercontent.com/rolandwalker/flyspell-lazy/master/flyspell-lazy.el
-;; Package-Version: 20180224.2106
 ;; Version: 0.6.10
 ;; Last-Updated: 22 Dec 2014
 ;; EmacsWiki: FlyspellLazy
@@ -901,5 +900,8 @@ would usually be skipped."
 ;; LocalWords: callf setf flylz nils defsubsts defsubst checkable
 ;; LocalWords: inflooping punct devel
 ;;
+
+;;; flyspell-lazy.el ends here
+;
 
 ;;; flyspell-lazy.el ends here
