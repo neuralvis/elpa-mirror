@@ -4,8 +4,8 @@
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/closql
-;; Package-Requires: ((emacs "25.1") (emacsql-sqlite "2.0.3"))
-;; Package-Version: 20180922.1156
+;; Package-Requires: ((emacs "25.1") (emacsql-sqlite "3.0.0"))
+;; Package-Version: 20181031.2158
 ;; Keywords: extensions
 
 ;; This file is not part of GNU Emacs.
@@ -29,11 +29,6 @@
 ;; objects can be stored; it isn't intended to store arbitrary objects.
 ;; All objects have to share a common superclass and subclasses cannot
 ;; add any additional instance slots.
-
-;; This is an alpha release.  Everything might change.  You probably
-;; shouldn't use this in your own packages yet.  I am releasing this
-;; now anyway because it is needed by Epkg, for which it was written.
-;; Documentation will be written once the API has been stabilized.
 
 ;;; Code:
 
