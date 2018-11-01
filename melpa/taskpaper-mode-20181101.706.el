@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20181026.1415
+;; Package-Version: 20181101.706
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -511,10 +511,6 @@ nil. For performance reasons remote files are not checked."
   "Return non-nil if FILE is an image file."
   (string-match-p (image-file-name-regexp) file))
 
-(defconst taskpaper-markup-properties
-  '(face taskpaper-markup taskpaper-syntax markup invisible taskpaper-markup)
-  "Properties to apply to inline markup.")
-
 (defsubst taskpaper-rear-nonsticky-at (pos)
   "Add nonsticky text properties at POS."
   (add-text-properties
@@ -522,13 +518,16 @@ nil. For performance reasons remote files are not checked."
    (list 'rear-nonsticky
          '(face mouse-face keymap help-echo display invisible intangible))))
 
+(defconst taskpaper-markup-properties
+  '(face taskpaper-markup taskpaper-syntax markup invisible taskpaper-markup)
+  "Properties to apply to inline markup.")
+
 (defun taskpaper-range-property-any (begin end prop prop-val)
   "Check property PROP from BEGIN to END.
 Return non-nil if at least one character between BEGIN and END
 has a property PROP whose value is one of the given values
 PROP-VAL."
-  (cl-some (lambda (val) (text-property-any begin end prop val))
-           prop-val))
+  (cl-some (lambda (val) (text-property-any begin end prop val)) prop-val))
 
 (defun taskpaper-remove-markup-chars (s)
   "Remove markup characters from propertized string S."
