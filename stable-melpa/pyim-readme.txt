@@ -330,9 +330,10 @@ pyim 的 tooltip 选词框默认使用 *双行显示* 的样式，在一些特
 
 ** Tips
 
-*** 如何将个人词条导出到一个文件
+*** 如何将个人词条相关信息导入和导出？
 
-使用命令：pyim-dcache-export-personal-dcache
+1. 导入使用命令： pyim-import
+2. 导出使用命令： pyim-export
 
 *** pyim 出现错误时，如何开启 debug 模式
 
