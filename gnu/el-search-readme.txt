@@ -371,13 +371,10 @@ Known Limitations and Bugs
   syntax "##" (a syntax for an interned symbol whose name is the
   empty string) can lead to errors while searching.
 
-- In *El Occur* buffers, when there are adjacent or nested matches,
-  the movement commands (el-search-occur-previous-match,
-  el-search-occur-next-match aka n and p) may skip matches, and the
-  shown match count can be inaccurate.
-
 
 TODO:
+
+- Get rid of the redundant el-search-match overlays in occur buffers
 
 - There should be a way to go back to the starting position, like
   in Isearch, which does this with (push-mark isearch-opoint t) in

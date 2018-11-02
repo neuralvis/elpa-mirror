@@ -24,11 +24,11 @@ restore the environment.
 Users have two options for adding custom configuration to the mock
 session:
 
-- `gnus-mock-gnus-settings' can be set to a filename, the contents
+- `gnus-mock-gnus-file' can be set to a filename, the contents
    of which will be appended to the .gnus.el startup file in the
    mock session.  This code will be executed at Gnus startup.
 
-- `gnus-mock-init-setting' should also be a filename, the contents
+- `gnus-mock-init-file' should also be a filename, the contents
   of which will be appended to the init.el file that is loaded when
   the child Emacs process starts.
 
