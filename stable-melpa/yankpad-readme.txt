@@ -110,3 +110,11 @@ Yankpad example:
 * Global category       :global:
 ** Always available
    Snippets in a category with the :global: tag are always available for expansion.
+* Default                                           :global:
+** Fallback for major-mode categories
+
+If you open a file, but have no category named after its major-mode, a
+category named "Default" will be used instead (if you have it defined in your
+                                                  Yankpad). It is probably a good idea to make this category global. You can
+change the name of the default category by setting the variable
+yankpad-default-category.

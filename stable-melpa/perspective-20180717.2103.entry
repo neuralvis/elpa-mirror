@@ -1,2 +1,0 @@
-
-(perspective . [(20180717 2103) ((cl-lib (0 5))) "switch between named \"perspectives\" of the editor" single ((:commit . "874aa4173b1bea7349df2375396cee146ba8d7c7") (:keywords "workspace" "convenience" "frames") (:authors ("Natalie Weizenbaum" . "nex342@gmail.com")) (:maintainer "Natalie Weizenbaum" . "nex342@gmail.com") (:url . "http://github.com/nex3/perspective-el"))])
