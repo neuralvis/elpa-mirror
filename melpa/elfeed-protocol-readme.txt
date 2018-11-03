@@ -10,7 +10,6 @@ Usage:
   (setq elfeed-curl-extra-arguments '("--insecure")) ;necessary for https without a trust certificate
 
   ;; setup extra protocol feeds
-  (require 'elfeed-protocol)
   (setq elfeed-feeds '(
                        ;; format 1
                        "owncloud+https://user1:pass1@myhost.com"
