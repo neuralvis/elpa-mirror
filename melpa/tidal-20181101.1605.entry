@@ -1,2 +1,0 @@
-
-(tidal . [(20181101 1605) ((haskell-mode (16)) (emacs (24))) "Interact with TidalCycles for live coding patterns" single ((:commit . "6db51307c7adc1514e397a6da7e31e3c3dc7f160") (:keywords "tools") (:authors (nil . "alex@slab.org")) (:maintainer nil . "alex@slab.org") (:url . "https://github.com/tidalcycles/Tidal"))])
