@@ -4,8 +4,8 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>,
 ;;         Nicolas Petton <nicolas@petton.fr>
-;; Version: 4.0.1
-;; Package-Version: 20180529.1357
+;; Version: 4.0.2
+;; Package-Version: 20181103.808
 ;; Package-Requires: ((emacs "25"))
 ;; Url: https://github.com/DamienCassou/auth-password-store
 ;; Created: 07 Jun 2015
@@ -57,7 +57,8 @@ See `auth-source-search' for details on SPEC."
          ;; Do not build a result, as none will match when HOST is nil
          nil)
         (t
-         (list (auth-source-pass--build-result host port user)))))
+         (when-let ((result (auth-source-pass--build-result host port user)))
+           (list result)))))
 
 (defun auth-source-pass--build-result (host port user)
   "Build auth-source-pass entry matching HOST, PORT and USER."

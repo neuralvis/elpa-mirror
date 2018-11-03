@@ -4,8 +4,8 @@
 
 ;; Author: Phil Hagelberg
 ;; URL: https://gitlab.com/technomancy/fennel-mode
-;; Package-Version: 20181102.2008
-;; Version: 0.0.1
+;; Package-Version: 20181103.40
+;; Version: 0.1.0
 ;; Created: 2018-02-18
 ;;
 ;; Keywords: languages, tools
@@ -78,14 +78,15 @@
       (0+ (syntax whitespace)) ;; newline will cause this to not match
       (syntax open-parenthesis) (or "fn" "lambda" "λ")))
 
-(defvar fennel-defn-pattern
-  (rx (syntax open-parenthesis) "defn" (1+ space)
-      (group (1+ (or (syntax word) (syntax symbol) "-" "_")))))
+(defvar fennel-fn-pattern
+  (rx (syntax open-parenthesis) "fn" (1+ space)
+      (group (1+ (seq (syntax word)
+                      (or (syntax word) (syntax symbol) "-" "_"))))))
 
 (defvar fennel-font-lock-keywords
   (eval-when-compile
     `((,fennel-local-fn-pattern 1 font-lock-variable-name-face)
-      (,fennel-defn-pattern 1 font-lock-variable-name-face)
+      (,fennel-fn-pattern 1 font-lock-variable-name-face)
       (,(rx (syntax open-parenthesis)
             (or "fn" "lambda" "λ") (1+ space)
             (group (and (not (any "["))
@@ -124,8 +125,7 @@
 
 \\{fennel-mode-map}"
   ;; TODO: completion using inferior-lisp
-  (add-to-list 'imenu-generic-expression `(nil ,fennel-local-fn-pattern 1))
-  (add-to-list 'imenu-generic-expression `(nil ,fennel-defn-pattern 1))
+  (setq imenu-generic-expression `((nil ,fennel-fn-pattern 1)))
   (make-local-variable 'fennel-module-name)
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set (make-local-variable 'lisp-indent-function) 'fennel-indent-function)
@@ -146,7 +146,9 @@
   "Return a string of the code to reload the `module-keyword' module."
   (format "%s\n" `(let [old (require ,module-keyword)
                             _ (tset package.loaded ,module-keyword nil)
-                            new (require ,module-keyword)]
+                            (ok new) (pcall require ,module-keyword)
+                            ;; keep the old module if reload failed
+                            new (if (not ok) (do (print new) old) new)]
                     ;; if the module isn't a table then we can't make
                     ;; changes which affect already-loaded code, but if
                     ;; it is then we should splice new values into the
