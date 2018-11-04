@@ -5,7 +5,7 @@
 ;; Author: Sibi Prabakaran <sibi@psibi.in>
 ;; Maintainer: Sibi Prabakaran <sibi@psibi.in>
 ;; Keywords: languages
-;; Package-Version: 20181022.2045
+;; Package-Version: 20181104.109
 ;; Version: 0.1.3
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/psibi/dhall-mode
@@ -43,6 +43,15 @@
 ;;; Code:
 
 (require 'ansi-color)
+(require 'comint)
+
+(defvar dhall-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c C-b") 'dhall-repl-show)
+    (define-key map (kbd "C-c C-f") 'dhall-format)
+    (define-key map (kbd "C-c C-t") 'dhall-buffer-type)
+    map)
+  "Keymap for using `dhall-mode'.")
 
 (defgroup dhall nil
   "Major mode for editing dhall files"
@@ -152,7 +161,7 @@ If specified, this should be the complete path to your dhall-format executable,
                                            t
                                            split-string-default-separators))))
 
-              (unless (string-match-p "↳" type)
+              (unless (and type (string-match-p "↳" type))
                 (ansi-color-apply (replace-regexp-in-string "[\n\s]+" " " type)))))
         (delete-file stderr)))))
 
@@ -280,6 +289,7 @@ STRING-TYPE type of string based off of Emacs syntax table types"
   "Dhall"
   "Major mode for editing Dhall files."
   :group 'dhall
+  :keymap dhall-mode-map
   :syntax-table dhall-mode-syntax-table
   (when dhall-use-header-line
     (setq header-line-format
@@ -298,6 +308,33 @@ STRING-TYPE type of string based off of Emacs syntax table types"
 ;; Automatically use dhall-mode for .dhall files.
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.dhall\\'" . dhall-mode))
+
+
+;; REPL
+(defcustom dhall-repl-executable "dhall-repl"
+  "Location of dhall-repl command."
+  :type 'string)
+
+(defconst dhall-prompt-regexp "⊢ ")
+
+(define-derived-mode dhall-repl-mode comint-mode "Dhall-REPL"
+  "Interactive prompt for Dhall."
+  (setq-local comint-prompt-regexp dhall-prompt-regexp)
+  (setq-local comint-prompt-read-only t))
+
+(defun dhall-repl-show ()
+  "Load the Dhall-REPL."
+  (interactive)
+  (pop-to-buffer-same-window
+   (get-buffer-create "*Dhall-REPL*"))
+  (unless (comint-check-proc (current-buffer))
+    (dhall--make-repl-in-buffer (current-buffer))
+    (dhall-repl-mode)))
+
+(defun dhall--make-repl-in-buffer (buffer)
+  "Make Dhall Repl in BUFFER."
+  (make-comint-in-buffer "Dhall-REPL" buffer dhall-repl-executable))
+
 
 ;; Provide ourselves:
 (provide 'dhall-mode)
