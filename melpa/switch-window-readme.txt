@@ -57,9 +57,10 @@ key to resume.
 *** I want to select a window with "a-z" instead of "1-9".
 #+BEGIN_EXAMPLE
 (setq switch-window-shortcut-style 'qwerty)
-(setq switch-window-qwerty-shortcuts
-      '("a" "s" "d" "f" "j" "k" "l" ";" "w" "e" "i" "o"))
 #+END_EXAMPLE
+
+Note: user can arrange qwerty shortcuts by variable
+`switch-window-qwerty-shortcuts'.
 
 *** I want to let window to show bigger label.
 The face of label is switch-window-label, user can change it :height

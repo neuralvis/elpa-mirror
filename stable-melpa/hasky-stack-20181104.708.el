@@ -4,7 +4,7 @@
 ;;
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/hasky-mode/hasky-stack
-;; Package-Version: 20180331.908
+;; Package-Version: 20181104.708
 ;; Version: 0.8.0
 ;; Package-Requires: ((emacs "24.4") (f "0.18.0") (magit-popup "2.10"))
 ;; Keywords: tools, haskell
@@ -120,7 +120,7 @@ being used to compose command line."
   :tag  "Completing Function"
   :type '(radio (function-item completing-read)))
 
-(defcustom hasky-stack-ghc-versions '("8.4.1" "8.2.2" "8.0.2" "7.10.3" "7.8.4")
+(defcustom hasky-stack-ghc-versions '("8.4.4" "8.2.2" "8.0.2" "7.10.3" "7.8.4")
   "GHC versions to pick from (for commands like \"stack setup\")."
   :tag  "GHC versions"
   :type '(repeat (string :tag "Extension name")))
@@ -721,6 +721,24 @@ This uses `compile' internally."
          (concat "exec " app)
        (concat "exec " app " -- " args)))))
 
+(defun hasky-stack-run (cmd)
+  "Execute \"stack run\" command running CMD."
+  (interactive
+   (list (read-string "Command to run: ")))
+  (cl-destructuring-bind (app . args)
+      (progn
+        (string-match
+         "^[[:blank:]]*\\(?1:[^[:blank:]]+\\)[[:blank:]]*\\(?2:.*\\)$"
+         cmd)
+        (cons (match-string 1 cmd)
+              (match-string 2 cmd)))
+    (hasky-stack--exec-command
+     hasky-stack--project-name
+     hasky-stack--last-directory
+     (if (string= args "")
+         (concat "run " app)
+       (concat "run " app " -- " args)))))
+
 (magit-define-popup hasky-stack-clean-popup
   "Show popup for the \"stack clean\" command."
   'hasky-stack
@@ -762,6 +780,7 @@ This uses `compile' internally."
               (?p "Upload"  hasky-stack-upload-popup)
               (?d "SDist"   hasky-stack-sdist-popup)
               (?x "Exec"    hasky-stack-exec)
+              (?r "Run"     hasky-stack-run)
               (?c "Clean"   hasky-stack-clean-popup)
               (?l "Edit Cabal file" hasky-stack-edit-cabal)
               (?y "Edit stack.yaml" hasky-stack-edit-stack-yaml))
