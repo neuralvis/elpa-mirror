@@ -374,8 +374,6 @@ Known Limitations and Bugs
 
 TODO:
 
-- Get rid of the redundant el-search-match overlays in occur buffers
-
 - There should be a way to go back to the starting position, like
   in Isearch, which does this with (push-mark isearch-opoint t) in
   `isearch-done'.
