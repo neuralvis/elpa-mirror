@@ -1,2 +1,2 @@
 
-(easy-jekyll . [(20181104 1256) ((emacs (24 4))) "Major mode managing jekyll blogs" single ((:commit . "2c1b42b6ffbb143d574653a9392d333a3be1651c") (:authors ("Masashı Mıyaura")) (:maintainer "Masashı Mıyaura") (:url . "https://github.com/masasam/emacs-easy-jekyll"))])
+(easy-jekyll . [(20181104 1256) ((emacs (24 4))) "Major mode managing jekyll blogs" single ((:commit . "7b157ef84ead81038ce439ed305cb0b21dfeab97") (:authors ("Masashı Mıyaura")) (:maintainer "Masashı Mıyaura") (:url . "https://github.com/masasam/emacs-easy-jekyll"))])
