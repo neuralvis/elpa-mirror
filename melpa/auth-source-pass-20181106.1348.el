@@ -5,7 +5,7 @@
 ;; Author: Damien Cassou <damien@cassou.me>,
 ;;         Nicolas Petton <nicolas@petton.fr>
 ;; Version: 4.0.2
-;; Package-Version: 20181103.808
+;; Package-Version: 20181106.1348
 ;; Package-Requires: ((emacs "25"))
 ;; Url: https://github.com/DamienCassou/auth-password-store
 ;; Created: 07 Jun 2015
@@ -99,6 +99,7 @@ See `auth-source-search' for details on SPEC."
   (advice-add 'auth-source-backend-parse :before-until #'auth-source-pass-backend-parse))
 
 
+;;;###autoload
 (defun auth-source-pass-get (key entry)
   "Return the value associated to KEY in the password-store entry ENTRY.
 
