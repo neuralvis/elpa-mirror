@@ -222,9 +222,8 @@ match gives you a pop-up window displaying the position of the
 match in that buffer or file.  With S-tab you can (un)collapse all
 file sections like in `org-mode' to see only file names and the
 number of matches, or everything.  Tab folds and unfolds
-expressions (this uses hideshow; initially, all expressions are
-folded to one line) and also sections at the beginning of
-headlines.
+expressions (this uses hideshow) and also sections at the beginning
+of headlines.
 
 
 Multiple multi searches
