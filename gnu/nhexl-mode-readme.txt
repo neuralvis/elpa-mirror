@@ -17,6 +17,9 @@ It also comes with:
   In this minor mode, not only self-inserting keys overwrite existing
   text, but commands like `yank' and `kill-region' as well.
 
+- it overrides C-u to use hexadecimal, so you can do C-u a 4 C-f
+  to advance by #xa4 characters.
+
 Even though the hex addresses displayed by this mode aren't actually
 part of the buffer's text (contrary to hexl-mode, for example), you can
 search them with Isearch.

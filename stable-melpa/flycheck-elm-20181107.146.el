@@ -4,7 +4,7 @@
 
 ;; Author: Brian Sermons
 ;; Package-Requires: ((flycheck "0.29-cvs") (emacs "24.4") (let-alist "1.0.5") (seq "2.20"))
-;; Package-Version: 20181001.242
+;; Package-Version: 20181107.146
 ;; URL: https://github.com/bsermons/flycheck-elm
 
 ;; This file is not part of GNU Emacs.
@@ -62,21 +62,22 @@
      :message (mapconcat 'identity (list (concat "[" .tag "]") .overview .details) "\n")
      :level (flycheck-elm-decode-type error))))
 
+(defun flycheck-elm-0.19-decode-elm-error (checker buffer path error)
+  (let-alist error
+    (flycheck-error-new
+     :checker checker
+     :buffer buffer
+     :filename path
+     :line (or .region.start.line 1)
+     :column (or .region.start.column 0)
+     :message (concat .title ": " (flycheck-elm-flatten-message .message))
+     :level 'error)))
+
 (defun flycheck-elm-decode-compile-problems (checker buffer error)
   "Extract problems as flycheck errors from Elm 0.19 compile-errors item ERROR."
   (let-alist error
-    (let ((path .path))
-      (mapcar (lambda (p)
-                (let-alist p
-                  (flycheck-error-new
-                   :checker checker
-                   :buffer buffer
-                   :filename path
-                   :line .region.start.line
-                   :column .region.start.column
-                   :message (concat .title ": " (flycheck-elm-flatten-message .message))
-                   :level 'error)))
-              .problems))))
+    (mapcar (apply-partially 'flycheck-elm-0.19-decode-elm-error checker buffer .path)
+            .problems)))
 
 (defun flycheck-elm-flatten-message (msg)
   "Convert MSG, which is a list of strings or alists describing styled strings, to a single string."
@@ -105,8 +106,10 @@
     (let-alist (car mapdata)
       (if (string= .type "compile-errors")
           (apply 'append (mapcar (apply-partially 'flycheck-elm-decode-compile-problems checker buffer) .errors))
-        (mapcar (lambda (e) (flycheck-elm-decode-elm-error e checker buffer))
-                (append (car mapdata) (car (cdr mapdata))))))))
+        (if (and (string= .type "error") .path)
+            (list (flycheck-elm-0.19-decode-elm-error checker buffer .path (car mapdata)))
+          (mapcar (lambda (e) (flycheck-elm-decode-elm-error e checker buffer))
+                  (append (car mapdata) (car (cdr mapdata)))))))))
 
 (defun flycheck-elm-parse-errors (output checker buffer)
   "Decode elm json output errors."
