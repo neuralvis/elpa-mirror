@@ -1,2 +1,0 @@
-
-(format-all . [(20181107 1340) ((emacs (24)) (cl-lib (0 5))) "Auto-format C, C++, JS, Python, Ruby and 30 other languages" single ((:commit . "dde05c4f20d0d4e4ae7317e9c25af80fafad6035") (:keywords "languages" "util") (:authors ("Lassi Kortela" . "lassi@lassi.io")) (:maintainer "Lassi Kortela" . "lassi@lassi.io") (:url . "https://github.com/lassik/emacs-format-all-the-code"))])

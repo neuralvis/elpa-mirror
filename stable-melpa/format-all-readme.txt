@@ -9,6 +9,7 @@ for instructions.
 
 Supported languages:
 
+- Angular/Vue (prettier)
 - Assembly (asmfmt)
 - C/C++/Objective-C (clang-format)
 - Clojure/ClojureScript (node-cljfmt)
@@ -23,7 +24,7 @@ Supported languages:
 - Haskell (brittany)
 - HTML/XHTML/XML (tidy)
 - Java (clang-format)
-- JavaScript/JSON/JSX/TypeScript/Vue (prettier)
+- JavaScript/JSON/JSX (prettier)
 - Kotlin (ktlint)
 - Markdown (prettier)
 - OCaml (ocp-indent)
@@ -35,6 +36,7 @@ Supported languages:
 - Shell script (shfmt)
 - SQL (sqlformat)
 - Swift (swiftformat)
+- TypeScript/TSX (prettier)
 - YAML (yq)
 
 You will need to install external programs to do the formatting.
