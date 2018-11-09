@@ -1,0 +1,2 @@
+
+(winum . [(20181107 47) ((cl-lib (0 5)) (dash (2 13 0))) "Navigate windows and frames using numbers." single ((:commit . "8bafa66f800e43a2e5d596e000047a80b0e62cd7") (:keywords "convenience" "frames" "windows" "multi-screen") (:authors ("Thomas de Beauchêne" . "thomas.de.beauchene@gmail.com")) (:maintainer "Thomas de Beauchêne" . "thomas.de.beauchene@gmail.com") (:url . "http://github.com/deb0ch/winum.el"))])
