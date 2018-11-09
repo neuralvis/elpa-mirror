@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.1
-;; Package-Version: 20181107.1310
+;; Package-Version: 20181109.146
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1375,7 +1375,7 @@ DUMMY is ignored."
                                     :position (plist-get
                                                (plist-get location :range)
                                                :start))
-                              :locations (list location)
+                              :locations (vector location)
                               :kind kind
                               :containerName containerName))
                 (jsonrpc-request server

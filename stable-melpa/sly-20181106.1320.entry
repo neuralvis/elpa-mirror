@@ -1,2 +1,0 @@
-
-(sly . [(20181106 1320) ((emacs (24 3))) "Sylvester the Cat's Common Lisp IDE" tar ((:commit . "aba193ec70c88b87bff87e47e920d02e02e402bc") (:keywords "languages" "lisp" "sly") (:url . "https://github.com/joaotavora/sly"))])

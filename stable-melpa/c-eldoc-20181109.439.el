@@ -6,7 +6,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/c-eldoc
-;; Package-Version: 20181013.1532
+;; Package-Version: 20181109.439
 ;; Version: 0.7
 
 ;; This file is NOT a part of GNU Emacs
@@ -125,7 +125,7 @@ to the created hash table."
 ;; variables to fix it
 (defvar c-eldoc-cpp-macro-arguments "-dD -w -P")
 (defvar c-eldoc-cpp-normal-arguments "-w -P")
-(defvar c-eldoc-cpp-command "/usr/bin/cpp ")
+(defvar c-eldoc-cpp-command (concat (executable-find "/usr/bin/cpp") " "))
 (defvar c-eldoc-includes
   "`pkg-config gtk+-2.0 --cflags` -I./ -I../ "
   "List of commonly used packages/include directories - For
