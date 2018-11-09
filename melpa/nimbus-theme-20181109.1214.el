@@ -5,7 +5,7 @@
 ;; Author: Marcin Swieczkowski <scatman@bu.edu>
 ;; Created: Thu Mar  2 22:19:19 CET 2017
 ;; Version: 1.0.0
-;; Package-Version: 20180907.957
+;; Package-Version: 20181109.1214
 ;; Last-Updated: Wed Apr 12 16:11:07 CEST 2017
 ;;           By: Marcin Swieczkowski
 ;;     Update #: 3
@@ -108,7 +108,8 @@
    `(font-lock-builtin-face           ((t (:foreground ,nimbus/blue))))
    `(font-lock-comment-face
      ((t (:foreground ,nimbus/light-gray :slant italic))))
-   `(font-lock-comment-delimiter-face ((t (:foreground ,nimbus/light-gray))))
+   `(font-lock-comment-delimiter-face
+     ((t (:inherit font-lock-comment-face))))
    `(font-lock-function-name-face     ((t (:foreground ,nimbus/dark-green))))
    `(font-lock-keyword-face           ((t (:foreground ,nimbus/blue))))
    `(font-lock-string-face            ((t (:foreground ,nimbus/green))))
@@ -119,7 +120,7 @@
      ((t (:foreground ,nimbus/orange :bold t))))
    `(font-lock-variable-name-face     ((t (:foreground ,nimbus/yellow))))
    `(font-lock-doc-face
-     ((t (:foreground ,nimbus/lightest-green))))
+     ((t (:inherit font-lock-comment-face :foreground ,nimbus/lightest-green))))
 
    ;; highlight-numbers
    `(highlight-numbers-number
