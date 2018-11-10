@@ -1,0 +1,2 @@
+
+(lsp-dart . [(20181021 1708) ((emacs (25 1)) (lsp-mode (3 0))) "Dart support for lsp-mode" single ((:commit . "c52d825aeebcad250890fe8ded1147df8f9499cf") (:keywords "languages" "lsp" "dart") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/lsp-dart"))])

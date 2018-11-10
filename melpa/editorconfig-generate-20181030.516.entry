@@ -1,0 +1,2 @@
+
+(editorconfig-generate . [(20181030 516) ((emacs (24))) "Generate .editorconfig" single ((:commit . "03d00ea5bd370b06af07e9bc142f13fa12feee8d") (:keywords "tools") (:authors ("10sr" . "8.slashes@gmail.com")) (:maintainer "10sr" . "8.slashes@gmail.com") (:url . "https://github.com/10sr/emacs-lisp/blob/master/editorconfig-generate.el"))])
