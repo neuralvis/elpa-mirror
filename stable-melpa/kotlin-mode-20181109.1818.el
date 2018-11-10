@@ -4,7 +4,7 @@
 
 ;; Author: Shodai Yokoyama (quantumcars@gmail.com)
 ;; Keywords: languages
-;; Package-Version: 20181017.1659
+;; Package-Version: 20181109.1818
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -359,7 +359,7 @@
             ((looking-at "^[ \t]*)") ; line starts with )
              (save-excursion
                (kotlin-mode--prev-line)
-               (setq cur-indent (- (current-indentation) (* 2 kotlin-tab-width))))
+               (setq cur-indent (- (current-indentation) kotlin-tab-width)))
              (if (< cur-indent 0)
                  (setq cur-indent 0)))
 
@@ -380,7 +380,7 @@
                         (setq not-indented nil))
 
                        ((looking-at ".*([ \t]*$") ; line ends with (
-                        (setq cur-indent (+ (current-indentation) (* 2 kotlin-tab-width)))
+                        (setq cur-indent (+ (current-indentation) kotlin-tab-width))
                         (setq not-indented nil))
 
                        ((looking-at "^[ \t]*).*$") ; line starts with )

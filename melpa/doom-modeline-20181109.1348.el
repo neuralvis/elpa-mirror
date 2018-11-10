@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.6.1
-;; Package-Version: 20181031.1611
+;; Package-Version: 20181109.1348
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -380,9 +380,10 @@ active.")
 ;;                             anzu--last-isearch-string anzu--overflow-p))
 
 ;; Ensure anzu state is cleared when searches & iedit are done
-(add-hook 'isearch-mode-end-hook #'anzu--reset-status t)
-(add-hook 'iedit-mode-end-hook #'anzu--reset-status)
-(advice-add #'evil-force-normal-state :after #'anzu--reset-status)
+(with-eval-after-load 'anzu
+  (add-hook 'isearch-mode-end-hook #'anzu--reset-status t)
+  (add-hook 'iedit-mode-end-hook #'anzu--reset-status)
+  (advice-add #'evil-force-normal-state :after #'anzu--reset-status))
 
 ;; Keep `doom-modeline-current-window' up-to-date
 (defvar doom-modeline-current-window (frame-selected-window))

@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20181101.706
+;; Package-Version: 20181109.1451
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -5540,8 +5540,7 @@ Return number of items."
     (erase-buffer) (goto-char (point-min))
     (when items
       (setq items (taskpaper-agenda-sort-init items))
-      (save-excursion
-        (dolist (item items) (insert (format "%s\n" item)))))
+      (save-excursion (dolist (item items) (insert item "\n"))))
     (length items)))
 
 (defun taskpaper-agenda-redo ()
