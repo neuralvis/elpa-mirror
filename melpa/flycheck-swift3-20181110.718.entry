@@ -1,0 +1,2 @@
+
+(flycheck-swift3 . [(20181110 718) ((emacs (24 4)) (flycheck (26))) "Flycheck: Swift support for Apple swift-mode" single ((:commit . "594715b0b95c14737bef73651988b1555ca2f9e4") (:keywords "convenience" "languages" "tools") (:authors ("Goichi Hirakawa" . "gooichi@gyazsquare.com")) (:maintainer "Goichi Hirakawa" . "gooichi@gyazsquare.com") (:url . "https://github.com/GyazSquare/flycheck-swift3"))])
