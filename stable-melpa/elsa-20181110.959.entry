@@ -1,0 +1,2 @@
+
+(elsa . [(20181110 959) nil "Emacs Lisp Static Analyser" tar ((:commit . "b43830944fd18f0f9e414e4acf411ad9914f2df3") (:keywords "languages" "lisp") (:authors ("Matúš Goljer" . "matus.goljer@gmail.com")) (:maintainer "Matúš Goljer" . "matus.goljer@gmail.com"))])

@@ -1,2 +1,0 @@
-
-(path-helper . [(20181110 2150) nil "Set PATH environment variables from config files" single ((:commit . "960219907432a144b3ebbf001e012f179c8254ce") (:keywords "tools" "unix") (:authors ("Arnaud Rouanet" . "arnaud@rouanet.org")) (:maintainer "Arnaud Rouanet" . "arnaud@rouanet.org") (:url . "https://github.com/arouanet/path-helper"))])

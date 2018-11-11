@@ -1,0 +1,2 @@
+
+(outline-minor-faces . [(20181111 906) ((emacs (25 1))) "Headings faces for outline-minor-mode" single ((:commit . "3dc548f145f26a1405910d69468728846d575f79") (:keywords "outlines") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/tarsius/bicycle"))])

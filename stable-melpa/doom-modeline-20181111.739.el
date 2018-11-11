@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.6.1
-;; Package-Version: 20181110.1657
+;; Package-Version: 20181111.739
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (projectile "0.10.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -330,8 +330,9 @@ active.")
   `default-directory'."
   (if (local-variable-p 'doom-modeline-project-root)
       doom-modeline-project-root
-    (let (projectile-require-project-root)
-      (setq doom-modeline-project-root (projectile-project-root)))))
+    (let ((projectile-require-project-root))
+      (setq doom-modeline-project-root
+            (projectile-ensure-project (projectile-project-root))))))
 
 ;; Disable projectile mode-line segment
 (setq projectile-dynamic-mode-line nil)

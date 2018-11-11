@@ -1,2 +1,0 @@
-
-(doom-modeline . [(20181110 1657) ((emacs (25 1)) (all-the-icons (1 0 0)) (projectile (0 10 0)) (shrink-path (0 2 0)) (eldoc-eval (0 1)) (dash (2 11 0))) "A minimal and modern modeline" single ((:commit . "404e10708c8719d523953b313dceee1c9b66c834") (:keywords "faces" "mode-line") (:authors ("Vincent Zhang" . "seagle0128@gmail.com")) (:maintainer "Vincent Zhang" . "seagle0128@gmail.com") (:url . "https://github.com/seagle0128/doom-modeline"))])
