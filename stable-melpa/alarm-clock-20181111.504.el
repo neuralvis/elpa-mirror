@@ -4,9 +4,9 @@
 
 ;; Author: Steve Lemuel <wlemuel@hotmail.com>
 ;; Keywords: calendar, tools, convenience
-;; Version: 2018.11.10
-;; Package-Version: 20181110.424
-;; Package-X-Original-Version: 20181110.2
+;; Version: 2018.11.11
+;; Package-Version: 20181111.504
+;; Package-X-Original-Version: 20181111.1
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/wlemuel/alarm-clock
 
@@ -25,7 +25,7 @@
 
 ;;; Commentary:
 
-;; This program is an alarm management tools for Emacs.
+;; This program is an alarm management tool for Emacs.
 ;; To set an alarm clock, call `M-x alarm-clock-set', then enter time as
 ;; the following tips.
 ;; To view alarm clock list, call `M-x alarm-clock-list-view', then use
@@ -132,10 +132,11 @@ and 'mpg123' in linux"
   (let ((title "Alarm Clock")
         (program (cond ((eq system-type 'darwin) "afplay")
                        ((eq system-type 'gnu/linux) "mpg123")
-                       (t ""))))
+                       (t "")))
+        (sound (expand-file-name alarm-clock-sound-file)))
     (when (and (executable-find program)
-               (file-exists-p (expand-file-name alarm-clock-sound-file)))
-        (start-process title nil program alarm-clock-sound-file))))
+               (file-exists-p sound))
+        (start-process title nil program sound))))
 
 (defun alarm-clock--notify (title message)
   "Notify in status bar with formatted TITLE and MESSAGE."
