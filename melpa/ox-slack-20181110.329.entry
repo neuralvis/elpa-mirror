@@ -1,0 +1,2 @@
+
+(ox-slack . [(20181110 329) ((org (9 1 4)) (ox-gfm (1 0))) "Slack Exporter for org-mode -*- lexical-binding: t; -*" single ((:commit . "b2eca83cf6defea99fa270e20b4fc158bc6a42cb") (:keywords "org" "slack" "outlines") (:authors ("Matt Price")) (:maintainer "Matt Price") (:url . "https://github.com/titaniumbones/ox-slack"))])

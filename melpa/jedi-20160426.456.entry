@@ -1,2 +1,2 @@
 
-(jedi . [(20160426 456) ((emacs (24)) (jedi-core (0 2 2)) (auto-complete (1 4))) "a Python auto-completion for Emacs" single ((:commit . "4951e2d0a76920ae778a700c3f4173b5b3b660f6") (:authors ("Takafumi Arakaki <aka.tkf at gmail.com>")) (:maintainer "Takafumi Arakaki <aka.tkf at gmail.com>"))])
+(jedi . [(20160426 456) ((emacs (24)) (jedi-core (0 2 2)) (auto-complete (1 4))) "a Python auto-completion for Emacs" single ((:commit . "d97dbf154ebc39d53dc703b5764a9dccc0128085") (:authors ("Takafumi Arakaki <aka.tkf at gmail.com>")) (:maintainer "Takafumi Arakaki <aka.tkf at gmail.com>"))])
