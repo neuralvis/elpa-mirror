@@ -36,8 +36,8 @@ inspired by Sierra.vim with adding some extra colors.
 
  ;; The following set to t by default
  (setq kaolin-themes-bold t       ; If nil, disable the bold style.
-      kaolin-themes-italic t     ; If nil, disable the italic style.
-      kaolin-themes-underline t) ; If nil, disable the underline style.
+       kaolin-themes-italic t     ; If nil, disable the italic style.
+       kaolin-themes-underline t) ; If nil, disable the underline style.
 
 -------  Some extra theme features, disabled by default  -------
 

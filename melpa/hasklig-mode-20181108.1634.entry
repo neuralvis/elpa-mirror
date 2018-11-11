@@ -1,2 +1,0 @@
-
-(hasklig-mode . [(20181108 1634) ((emacs (25))) "Hasklig ligatures" single ((:commit . "12c63b24cf8fa20aeea477e079670ba8ad8fbff3") (:authors ("Daniel Mendler")) (:maintainer "Daniel Mendler") (:url . "https://github.com/minad/hasklig-mode"))])

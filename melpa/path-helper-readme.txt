@@ -1,7 +1,7 @@
 This file replicates the behavior of the path_helper(8) utility
 shipped with macOS, used to augment the PATH and MANPATH environment
 variables with path elements read respectively from /etc/paths and
-/etc/paths.d/* for PATH, and from /etc/manpaths and /etc/manpaths.d/*
+/etc/paths.d/ for PATH, and from /etc/manpaths and /etc/manpaths.d/
 for MANPATH.
 
 This is needed because macOS GUI applications are launched with
@@ -19,7 +19,7 @@ An obvious downside of this approach is that if the PATH is manually
 set elsewhere, such as in the user .profile file, it will not be
 visible to path-helper.  But properly configured macOS packages such
 as MacTeX, which contribute to the PATH by adding a file in
-/etc/paths.d, will work as expected.
+/etc/paths.d/, will work as expected.
 
 To set all environment variables listed in `path-helper-variables',
 add the following to your init file:
