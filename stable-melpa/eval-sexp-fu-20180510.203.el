@@ -3,7 +3,6 @@
 ;; Copyright (C) 2009-2013 Takeshi Banse <takebi@laafc.net>
 ;; Author: Takeshi Banse <takebi@laafc.net>
 ;; Version: 0.4.2
-;; Package-Version: 20180510.203
 ;; Keywords: lisp, highlight, convenience
 ;; Package-Requires: ((cl-lib "0") (highlight "0"))
 
