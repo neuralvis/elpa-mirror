@@ -1,2 +1,0 @@
-
-(gams-mode . [(20181110 243) ((emacs (24 3))) "Major mode for General Algebraic Modeling System (GAMS)" single ((:commit . "fe06ff6616e5497c902f74cc8415d528a7ea32db") (:keywords "languages" "tools" "gams") (:authors ("Shiro Takeda")) (:maintainer "Shiro Takeda") (:url . "http://shirotakeda.org/en/gams/gams-mode/"))])
