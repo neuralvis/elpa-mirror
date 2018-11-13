@@ -1,2 +1,2 @@
 
-(scad-mode . [(20180109 209) nil "A major mode for editing OpenSCAD code" single ((:commit . "3839d0ee1c66336a8fa05cb81a2f8195f0c2f299") (:keywords "languages") (:authors ("Len Trigg, Łukasz Stelmach")) (:maintainer "Len Trigg" . "lenbok@gmail.com") (:url . "https://raw.github.com/openscad/openscad/master/contrib/scad-mode.el"))])
+(scad-mode . [(20180109 209) nil "A major mode for editing OpenSCAD code" single ((:commit . "20ff27786b643a31f8c5bb5b93a310f0d51ccc36") (:keywords "languages") (:authors ("Len Trigg, Łukasz Stelmach")) (:maintainer "Len Trigg" . "lenbok@gmail.com") (:url . "https://raw.github.com/openscad/openscad/master/contrib/scad-mode.el"))])

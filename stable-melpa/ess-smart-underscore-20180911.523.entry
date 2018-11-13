@@ -1,2 +1,0 @@
-
-(ess-smart-underscore . [(20180911 523) ((ess (0))) "Ess Smart Underscore" tar ((:commit . "863ed5c012acd702d71074c56315e668b61880ea") (:keywords "ess" "underscore") (:authors ("Matthew L. Fidler")) (:maintainer "Matthew Fidler") (:url . "http://github.com/mlf176f2/ess-smart-underscore.el"))])

@@ -1,0 +1,2 @@
+
+(org-web-tools . [(20181112 2231) ((emacs (25 1)) (org (9 0)) (dash (2 12)) (esxml (0 3 4)) (s (1 10 0)) (request (0 3 0))) "Display and capture web content with Org-mode" tar ((:commit . "2ad62d6d69f2b3a8414168993b2bc7dfc46f782e") (:keywords "hypermedia" "outlines" "org" "web") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "http://github.com/alphapapa/org-web-tools"))])
