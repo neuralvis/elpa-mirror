@@ -6,7 +6,9 @@ Because communicating with hg over pipe is much faster than starting hg for each
 
 Also there are some other improvements and differences:
 
-- vc-hgcmd can't show file renames in `vc-dir' and doesn't have short log version yet
+- vc-hgcmd can't show file renames in `vc-dir' yet
+
+- graph log is used for branch or root log
 
 - Unresolved conflict status for a file
 Files with unresolved merge conflicts have appropriate status in `vc-dir'.

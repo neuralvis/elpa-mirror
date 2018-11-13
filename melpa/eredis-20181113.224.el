@@ -4,18 +4,21 @@
  
 ;; Author: Justin Heyes-Jones <justinhj@gmail.com>
 
-;; Version: 0.9.2
-;; Package-Version: 20181105.423
+;; Version: 0.9.3
+;; Package-Version: 20181113.224
 ;; Package-Requires: (dash)
 ;; Keywords: redis, api, tools, org
 ;; URL: http://github.com/justinhj/eredis/
 
 ;; See for info on the protocol http://redis.io/topics/protocol
 
+;;; LICENSE
+
+;; This software is released under the Gnu License v3. See http://www.gnu.org/licenses/gpl.txt
+
 ;;; Commentary:
 
 ;; Eredis provides a programmatic API for accessing Redis (in-memory data structure store/database) using emacs lisp.
-;; This software is released under the Gnu License v3. See http://www.gnu.org/licenses/gpl.txt
 
 ;; Usage:
 
@@ -29,6 +32,17 @@
 
 ;; You can close a connection like so. The process buffer can be closed seperately.
 ;; (eredis-disconnect redis-p1)
+
+;;; 0.9.3 Changes
+
+;; Iteration and reductions over Redis strings
+
+;; eredis-reduce-from-key-value
+;; eredis-each-key-value
+
+;; Bug fixes
+
+
 
 ;;; 0.9.2 Changes
 
@@ -73,6 +87,8 @@
   :group 'eredis)
 
 ;; Util
+
+(defun eredis-version() "0.9.3")
 
 (defun eredis--two-lists-to-map(key-list value-list)
   "take a list of keys LST1 and a list of values LST2 and make a hashmap, not particularly efficient
@@ -269,15 +285,18 @@ as it first constructs a list of key value pairs then uses that to construct the
 	     `(,(reverse things) . ,current-pos)))))
     `(incomplete . 0)))
 
-(defun eredis--util-remove-last(lst) (reverse (cdr (reverse lst))))
-
 (defun eredis-command-returning (command &rest args)
   "Send a command that has the status code return type. If the last argument is a process then that is the process used, otherwise it will use the value of `eredis--current-process'"
   (let* ((last-arg (car (last args)))
 	 (process (if (processp last-arg)
 		      last-arg
 		    eredis--current-process))
-	 (command-args (eredis--util-remove-last args)))
+	 (command-args
+	  (if (or
+	       (null last-arg)
+	       (processp last-arg))
+	      (-butlast args)
+	    args)))
     (if (and process (eq (process-status process) 'open))
 	(progn 
           (process-send-string process (apply #'eredis-build-request command command-args))
@@ -475,13 +494,13 @@ pattern. see the link for the style of patterns"
   "Increment value of KEY by INCREMENT"
   (eredis-command-returning "incrby" key increment process))
 
-(defun eredis-mget(keys)
+(defun eredis-mget(&rest keys)
   "Get values of the specified keys, or nil if not present"
   (apply #'eredis-command-returning "mget" keys))
 
-(defun eredis-mset(m)
+(defun eredis-mset(m &optional process)
   "Set the keys and values of the map M in Redis using mset"
-  (apply #'eredis-command-returning "mset" (eredis-parse-map-or-list-arg m)))
+  (apply #'eredis-command-returning "mset" (-snoc (eredis-parse-map-or-list-arg m) process)))
 
 (defun eredis-msetnx(m)
   "Set the keys and values of the map M in Redis using msetnx (only if all are not existing)"
@@ -959,9 +978,11 @@ done. Other commands will fail with an error until then"
   (interactive)
   (eredis-command-returning "lolwut" process))
 
+;;; Org mode
+
 ;; Helpers 
 
-(defun eredis-mset-region(beg end delimiter) 
+(defun eredis-mset-region(beg end delimiter &optional process) 
   "Parse the current region using DELIMITER to split each line into a key value pair which
 is then sent to redis using mset"
   (interactive "*r\nsDelimiter: ")
@@ -984,7 +1005,7 @@ is then sent to redis using mset"
                   (puthash key value mset-param)
                   (forward-line))))))))
     (if (> (hash-table-count mset-param) 0)
-        (eredis-mset mset-param)
+        (eredis-mset mset-param process)
       nil)))
 
 (defun eredis-org-table-from-keys(keys &optional process)
@@ -1117,6 +1138,35 @@ column to a value, returning the result as a dotted pair"
   (interactive)
   (let ((keyvalue (eredis-org-table-row-to-key-value-pair)))
     (eredis-set (car keyvalue) (cdr keyvalue))))
+
+;;; Iteration helpers
+
+(defun eredis-each-key-value(fn &optional process)
+  "Call FN with all the keys and their values in Redis. FN takes two arguments, a key and a value. If key is not of type string it will return nil as the value. Uses Redis SCAN function and calls it repeatedly. This is safe to do on large DB's unlike KEYS. Returns nil, used for side-effects only."
+  (let ((cursor))
+    (while (not (string-equal "0" cursor))
+      (destructuring-bind (new-cursor keys)
+	  (eredis-scan (if cursor cursor "0") process)
+	(setq cursor new-cursor)
+	(let ((values (apply #'eredis-mget (-snoc keys process))))
+	  (-each (-zip keys values)
+	    (lambda (kv)
+	      (funcall fn (car kv) (cdr kv)))))))))
+
+(defun eredis-reduce-from-key-value(fn initial-value &optional process)
+  "Scans all the keys in Redis and looks up the values. A list of these keys and values is then passed to `--reduce-from', the single value that results from that is passed to the next scan and so on, until the scan is done."
+  (let (cursor
+	(acc initial-value))
+    (while (not (string-equal "0" cursor))
+      (destructuring-bind (new-cursor keys)
+	  (eredis-scan (if cursor cursor "0") process)
+	(setq cursor new-cursor)
+	(let ((values (apply #'eredis-mget (-snoc keys process))))
+	  (setq acc (--reduce-from
+		     (funcall fn acc (car it) (cdr it)) 
+		     acc
+		     (-zip keys values))))))
+    acc))
 
 (provide 'eredis)
 

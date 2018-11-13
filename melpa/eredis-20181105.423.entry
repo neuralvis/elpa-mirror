@@ -1,2 +1,0 @@
-
-(eredis . [(20181105 423) ((dash (0))) "eredis, a Redis client in emacs lisp" single ((:commit . "c53b72a7c065a412f4bdfbcce6ce280c16171f0c") (:keywords "redis" "api" "tools" "org") (:authors ("Justin Heyes-Jones" . "justinhj@gmail.com")) (:maintainer "Justin Heyes-Jones" . "justinhj@gmail.com") (:url . "http://github.com/justinhj/eredis/"))])
