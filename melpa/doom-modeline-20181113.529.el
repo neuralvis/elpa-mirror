@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.7.0
-;; Package-Version: 20181111.1649
+;; Package-Version: 20181113.529
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -332,18 +332,16 @@ active.")
 (defun doom-modeline-project-root ()
   "Get the path to the root of your project.
 
-  If STRICT-P, return nil if no project was found, otherwise return
-  `default-directory'."
+  Return `default-directory' if no project was found."
   (if (local-variable-p 'doom-modeline-project-root)
       doom-modeline-project-root
-    (or
-     (when (featurep 'projectile)
-       (let ((projectile-require-project-root nil))
-         (setq doom-modeline-project-root
-               (projectile-ensure-project (projectile-project-root)))))
-     (when (featurep 'project)
-       (when-let ((project (project-current)))
-         (car (project-roots project)))))))
+    (setq doom-modeline-project-root
+          (or
+           (when (featurep 'projectile) (projectile-project-root))
+           (when (featurep 'project)
+             (when-let ((project (project-current)))
+               (car (project-roots project))))
+           default-directory))))
 
 ;; Disable projectile mode-line segment
 (setq projectile-dynamic-mode-line nil)
@@ -440,7 +438,7 @@ active.")
 (defun doom-modeline-update-env ()
   "Update environment info on mode-line."
   (when doom-modeline-env-command
-    (let ((default-directory (or (doom-modeline-project-root) ""))
+    (let ((default-directory (doom-modeline-project-root))
           (s (shell-command-to-string doom-modeline-env-command)))
       (setq doom-modeline-env-version (if (string-match "[ \t\n\r]+\\'" s)
                                           (replace-match "" t t s)
@@ -495,7 +493,7 @@ active.")
                                           if (= d 0) collect (string-to-char " ")
                                           else collect (string-to-char "."))
                                  (if (eq idx len) "\"};" "\",\n")))))
-        'xpm t :ascent 'center)))))
+  'xpm t :ascent 'center)))))
 
 (defun doom-modeline-buffer-file-name ()
   "Propertized variable `buffer-file-name' based on `doom-modeline-buffer-file-name-style'."
@@ -568,7 +566,7 @@ fish-shell style.
 
 Example:
   ~/Projects/FOSS/emacs/lisp/comint.el => ~/P/F/emacs/lisp/comint.el"
-  (let* ((project-root (or (doom-modeline-project-root) ""))
+  (let* ((project-root (doom-modeline-project-root))
          (file-name-split (shrink-path-file-mixed project-root
                                                   (or (file-name-directory file-path) "./")
                                                   file-path))
