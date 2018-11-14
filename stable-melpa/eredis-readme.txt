@@ -22,7 +22,7 @@ eredis-each-key-value
 
 Bug fixes
 
-
+Bugs around parsing and mget mset are fixed
 
 0.9.2 Changes
 
