@@ -4,7 +4,7 @@
 ;;
 ;; Author: Tommy Xiang <tommyx058@gmail.com>
 ;; Keywords: convenience
-;; Package-Version: 20181112.2024
+;; Package-Version: 20181114.417
 ;; Version: 0.0.1
 ;; URL: https://github.com/TommyX12/company-tabnine/
 ;; Package-Requires: ((emacs "25") (company "0.9.3") (cl-lib "0.5") (unicode-escape "1.1") (s "1.12.0"))
@@ -335,7 +335,8 @@ Resets every time successful completion is returned.")
   (when company-tabnine--process
     (let ((json-null nil)
           (json-encoding-pretty-print nil)
-          (encoded (concat (unicode-escape* (json-encode-plist request)) "\n")))
+          ;; TODO make sure utf-8 encoding works
+          (encoded (concat (json-encode-plist request) "\n")))
       (setq company-tabnine--result nil)
       (process-send-string company-tabnine--process encoded)
       (accept-process-output company-tabnine--process company-tabnine-wait))))
@@ -365,7 +366,8 @@ Resets every time successful completion is returned.")
 
 (defun company-tabnine--decode (msg)
   "Decode TabNine server response MSG, and return the decoded object."
-  (let ((json-array-type 'list))
+  (let ((json-array-type 'list)
+        (json-object-type 'alist))
     (json-read-from-string msg)))
 
 (defun company-tabnine--process-sentinel (process event)
@@ -462,7 +464,7 @@ See documentation of `company-backends' for details."
     (message "Getting current version...")
     (make-directory (file-name-directory version-tempfile) t)
     (url-copy-file "https://update.tabnine.com/version" version-tempfile t)
-    (let ((version (string-trim (with-temp-buffer (insert-file-contents version-tempfile) (buffer-string)))))
+    (let ((version (s-trim (with-temp-buffer (insert-file-contents version-tempfile) (buffer-string)))))
       (when (= (length version) 0)
           (error "TabNine installation failed.  Please try again"))
       (message "Current version is %s" version)
@@ -485,7 +487,7 @@ See documentation of `company-backends' for details."
 (defun company-tabnine-call-other-backends ()
   "Invoke company completion but disable TabNine once, passing query to other backends in `company-backends'."
   (interactive)
-  (with-company-tabnine-disabled
+  (company-tabnine-with-disabled
    (company-abort)
    (company-auto-begin)))
 

@@ -6,7 +6,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/attrap
-;; Package-Version: 20180901.907
+;; Package-Version: 20181114.841
 ;; Created: February 2018
 ;; Keywords: programming, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (s "1.11.0"))
@@ -239,6 +239,7 @@ usage: (attrap-alternatives CLAUSES...)"
 
 (defun attrap-ghc-fixer (msg pos _end)
   "An `attrap' fixer for any GHC error or warning given as MSG and reported between POS and END."
+  (let ((normalized-msg (s-collapse-whitespace msg)))
   (cond
    ((string-match "Redundant constraints?: (?\\([^,)\n]*\\)" msg)
     (attrap-one-option 'delete-reduntant-constraint
@@ -352,16 +353,17 @@ usage: (attrap-alternatives CLAUSES...)"
     (attrap-one-option 'delete-type-variable
       ;; note there can be a kind annotation, not just a variable.
       (delete-region (point) (+ (point) (- (match-end 1) (match-beginning 1))))))
-   ((string-match "The import of ‘\\(.*\\)’ from module ‘[^’]*’ is redundant" msg)
+   ((string-match "The import of ‘\\(.*\\)’ from module ‘[^’]*’ is redundant" normalized-msg)
     (attrap-one-option 'delete-import
-      (let ((redundant (match-string 1 msg)))
+      (let ((redundant (match-string 1 normalized-msg)))
         (dolist (r (s-split ", " redundant t))
           (save-excursion
             ;; todo check for operators
             ;; toto search for full words
             (search-forward r)
-            (replace-match "")))
-        (when (looking-at ",") (delete-char 1)))))
+            (replace-match "")
+            (when (looking-at "(..)") (delete-char 4))
+            (when (looking-at ",") (delete-char 1)))))))
    ((string-match "The import of ‘[^’]*’ is redundant" msg)
     (attrap-one-option 'delete-module-import
       (beginning-of-line)
@@ -377,7 +379,7 @@ usage: (attrap-alternatives CLAUSES...)"
     (--map (attrap-option (list 'use-extension it)
              (goto-char 1)
              (insert (concat "{-# LANGUAGE " it " #-}\n")))
-           (--filter (s-matches? it msg) attrap-haskell-extensions)))))
+           (--filter (s-matches? it msg) attrap-haskell-extensions))))))
 
 (provide 'attrap)
 ;;; attrap.el ends here

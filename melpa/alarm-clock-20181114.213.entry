@@ -1,0 +1,2 @@
+
+(alarm-clock . [(20181114 213) ((emacs (24 4))) "Alarm Clock" tar ((:commit . "50173e440af4f2214135abc82913f89b8d4bcff5") (:keywords "calendar" "tools" "convenience") (:authors ("Steve Lemuel" . "wlemuel@hotmail.com")) (:maintainer "Steve Lemuel" . "wlemuel@hotmail.com") (:url . "https://github.com/wlemuel/alarm-clock"))])
