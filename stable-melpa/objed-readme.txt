@@ -2,6 +2,9 @@ A global minor-mode to navigate and edit text objects. Objed enables modal
 editing and composition of commands, too. It combines ideas of other Editors
 like Vim or Kakoune and tries to align them with regular Emacs conventions.
 
+For more information also check my blog
+https://www.with-emacs.com/categories/objed/.
+
 Text objects are textual patterns like a line, a top level definition, a
 word, a sentence or any other unit of text. When `objed-mode' is enabled,
 certain editing commands (configurable) will activate `objed' and enable its

@@ -13,6 +13,11 @@ Earlier versions of redis (pre 0.9) did not support multiple connections/process
 You can close a connection like so. The process buffer can be closed seperately.
 (eredis-disconnect redis-p1)
 
+0.9.4 Changes
+
+eredis-reduce-from-matching-key-value
+eredis-each-matching-key-value
+
 0.9.3 Changes
 
 Iteration and reductions over Redis strings

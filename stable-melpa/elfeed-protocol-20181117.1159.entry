@@ -1,0 +1,2 @@
+
+(elfeed-protocol . [(20181117 1159) ((emacs (24 4)) (elfeed (2 1 1)) (cl-lib (0 5)) (auth-source (0))) "Provide owncloud/ttrss protocols for elfeed" tar ((:commit . "29895e39400a31750dfd3d9a327840d7a59384df") (:keywords "news") (:authors ("Xu Fasheng" . "fasheng.xu@gmail.com")) (:maintainer "Xu Fasheng" . "fasheng.xu@gmail.com") (:url . "https://github.com/fasheng/elfeed-protocol"))])
