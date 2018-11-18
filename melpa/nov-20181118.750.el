@@ -4,8 +4,8 @@
 
 ;; Author: Vasilij Schneidermann <mail@vasilij.de>
 ;; URL: https://github.com/wasamasa/nov.el
-;; Package-Version: 20181023.855
-;; Version: 0.2.6
+;; Package-Version: 20181118.750
+;; Version: 0.2.7
 ;; Package-Requires: ((dash "2.12.0") (esxml "0.3.3") (emacs "24.4"))
 ;; Keywords: hypermedia, multimedia, epub
 
@@ -709,6 +709,16 @@ Saving is only done if `nov-save-place-file' is set."
             (warn "Couldn't restore last position")
             (nov-render-document)))
       (nov-render-document))))
+
+
+;;; interop
+
+(require 'recentf)
+(defun nov-add-to-recentf ()
+  (when nov-file-name
+    (recentf-add-file nov-file-name)))
+
+(add-hook 'nov-mode-hook 'nov-add-to-recentf)
 
 (provide 'nov)
 ;;; nov.el ends here

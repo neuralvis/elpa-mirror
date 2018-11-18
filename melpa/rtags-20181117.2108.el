@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20181117.1612
+;; Package-Version: 20181117.2108
 ;; Version: 2.10
 
 ;; This file is not part of GNU Emacs.
@@ -1329,7 +1329,7 @@ to only call this when `rtags-socket-file' is defined.
         (setq arguments (mapcar 'rtags-untrampify arguments))
         ;; other way to ignore colors would IMHO be to configure tramp,
         ;; but: do we need colors from rc?
-        (push (format "--verify-version=%d" rtags-protocol-version) arguments)
+        (push (format "-t%d" rtags-protocol-version) arguments)
         (push "-z" arguments)
         (setq path (rtags-untrampify path))
         (when path-filter
@@ -1672,6 +1672,8 @@ instead of file from `current-buffer'.
   (let ((dead-functions-buffer (rtags-get-buffer)))
     (rtags-delete-rtags-windows)
     (rtags-location-stack-push)
+    (unless buffer
+      (setq buffer (current-buffer)))
     (rtags-switch-to-buffer dead-functions-buffer)
     (if prefix
         (rtags-call-rc "--find-dead-functions" (unless rtags-print-filenames-relative "-K"))
