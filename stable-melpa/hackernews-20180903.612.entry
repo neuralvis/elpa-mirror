@@ -1,2 +1,2 @@
 
-(hackernews . [(20180903 612) ((json (1 2))) "Access the Hacker News aggregator from Emacs" tar ((:commit . "d8c450bbc76d6bb65ec5cdb6c3b888a23f3769e9"))])
+(hackernews . [(20180903 612) ((json (1 2))) "Access the Hacker News aggregator from Emacs" tar ((:commit . "ee077c4734ac6a1990dff6043a7deb2f57825c40"))])

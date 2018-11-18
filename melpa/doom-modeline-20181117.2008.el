@@ -4,8 +4,8 @@
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
-;; Version: 0.7.1
-;; Package-Version: 20181115.1828
+;; Version: 0.8.0
+;; Package-Version: 20181117.2008
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -75,11 +75,12 @@
 (defvar doom-modeline-bar-width 3
   "How wide the mode-line bar should be (only respected in GUI Emacs).")
 
-(defvar doom-modeline-buffer-file-name-style 'truncate-upto-project
+(defvar doom-modeline-buffer-file-name-style 'truncate-with-project
   "Determines the style used by `doom-modeline-buffer-file-name'.
 
 Given ~/Projects/FOSS/emacs/lisp/comint.el
   truncate-upto-project => ~/P/F/emacs/lisp/comint.el
+  truncate-with-project => emacs/l/comint.el
   truncate-upto-root => ~/P/F/e/lisp/comint.el
   truncate-all => ~/P/F/e/l/comint.el
   relative-from-project => emacs/lisp/comint.el
@@ -504,6 +505,8 @@ active.")
      (pcase doom-modeline-buffer-file-name-style
        (`truncate-upto-project
         (doom-modeline--buffer-file-name buffer-file-name buffer-file-truename 'shrink))
+       (`truncate-with-project
+        ( doom-modeline--buffer-file-name-truncate-with-project buffer-file-name buffer-file-truename))
        (`truncate-upto-root
         (doom-modeline--buffer-file-name-truncate buffer-file-name buffer-file-truename))
        (`truncate-all
@@ -541,6 +544,29 @@ If TRUNCATE-TAIL is t also truncate the parent directory of the file."
                   (propertize (file-name-nondirectory file-path)
                               'face (if file-faces `(:inherit ,file-faces)))))))))
 
+(defun doom-modeline--buffer-file-name-truncate-with-project (file-path _true-file-path)
+  "Propertized variable `buffer-file-name' based on FILE-PATH.
+
+Show relative path to the project and truncate it.
+Example:
+  ~/Projects/FOSS/emacs/lisp/comint.el => emacs/l/comint.el"
+  (let* ((project-root (doom-modeline-project-root))
+         (relative-path (file-relative-name (or (file-name-directory file-path) "./")
+                                            (file-truename project-root))))
+    (let ((active (doom-modeline--active))
+          (modified-faces (if (buffer-modified-p) 'doom-modeline-buffer-modified)))
+      (let ((project-faces  (or modified-faces (if active 'font-lock-string-face)))
+            (relative-faces (or modified-faces (if active 'doom-modeline-buffer-path)))
+            (file-faces     (or modified-faces (if active 'doom-modeline-buffer-file))))
+        (let ((project-props  `(,@(if project-faces  `(:inherit ,project-faces)) ,@(if active '(:weight bold))))
+              (relative-props `(,@(if relative-faces `(:inherit ,relative-faces))))
+              (file-props     `(,@(if file-faces     `(:inherit ,file-faces)))))
+          (concat (propertize
+                   (concat (file-name-nondirectory (directory-file-name (doom-modeline-project-root))) "/")
+                   'face project-props)
+                  (unless (string-equal relative-path "./")
+                    (propertize (shrink-path--dirs-internal relative-path t) 'face relative-props))
+                  (propertize (file-name-nondirectory file-path) 'face file-props)))))))
 
 (defun doom-modeline--buffer-file-name-relative (_file-path true-file-path &optional include-project)
   "Propertized variable `buffer-file-name' showing directories relative to project's root only."
@@ -631,35 +657,35 @@ buffer where knowing the current project directory is important."
 directory, the file name, and its state (modified, read-only or non-existent)."
   (let ((active (doom-modeline--active)))
     (concat
-     (when active
-       (cond (buffer-read-only
-              (concat (doom-modeline-icon-octicon
-                       "lock"
-                       :face 'doom-modeline-warning
-                       :v-adjust -0.05)
-                      " "))
-             ((buffer-modified-p)
-              (concat (doom-modeline-icon-faicon
-                       "floppy-o"
-                       :face 'doom-modeline-buffer-modified
-                       :v-adjust -0.0575)
-                      " "))
-             ((and buffer-file-name
-                   (not (file-exists-p buffer-file-name)))
-              (concat (doom-modeline-icon-octicon
-                       "circle-slash"
-                       :face 'doom-modeline-urgent
-                       :v-adjust -0.05)
-                      " "))
-             ((buffer-narrowed-p)
-              (concat (doom-modeline-icon-octicon
-                       "fold"
-                       :face 'doom-modeline-warning
-                       :v-adjust -0.05)
-                      " "))))
+     (if active
+         (cond (buffer-read-only
+                (concat (doom-modeline-icon-octicon
+                         "lock"
+                         :face 'doom-modeline-warning
+                         :v-adjust -0.05)
+                        " "))
+               ((buffer-modified-p)
+                (concat (doom-modeline-icon-faicon
+                         "floppy-o"
+                         :face 'doom-modeline-buffer-modified
+                         :v-adjust -0.0575)
+                        " "))
+               ((and buffer-file-name
+                     (not (file-exists-p buffer-file-name)))
+                (concat (doom-modeline-icon-octicon
+                         "circle-slash"
+                         :face 'doom-modeline-urgent
+                         :v-adjust -0.05)
+                        " "))
+               ((buffer-narrowed-p)
+                (concat (doom-modeline-icon-octicon
+                         "fold"
+                         :face 'doom-modeline-warning
+                         :v-adjust -0.05)
+                        " "))))
      (if buffer-file-name
          (doom-modeline-update-buffer-file-name)
-       "%b"))))
+       (propertize "%b" 'face (if active 'doom-modeline-buffer-file))))))
 
 (doom-modeline-def-segment buffer-info-simple
   "Display only the current buffer's name, but with fontification."

@@ -5,9 +5,10 @@
 ;; Author: Xu Chunyang <mail@xuchunyang.me>
 ;; Homepage: https://github.com/xuchunyang/github-stars.el
 ;; Package-Requires: ((emacs "25.1") (ghub "2.0.0"))
-;; Package-Version: 20180328.1133
+;; Package-Version: 20181118.448
 ;; Keywords: tools
 ;; Created: Tue, 27 Mar 2018 20:59:43 +0800
+;; Version: 0.1
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -146,7 +147,7 @@
   (let ((string (alist-get 'starred-at (gethash owner/name (github-stars)))))
     ;; NOTE One can use `parse-iso8601-time-string' to parse the string
     ;; IDEA Use human-readable format, such as "19 days ago"
-    (substring string 0 (length "1999-12-31"))))
+    (substring string 0 (eval-when-compile (length "1999-12-31")))))
 
 (defun github-stars-list-columns-description (owner/name)
   (alist-get 'description (gethash owner/name (github-stars))))
@@ -199,7 +200,6 @@ an alist that supports the keys `:right-align' and `:pad-right'."
 
 (define-derived-mode github-stars-list-mode tabulated-list-mode "Github Stars"
   "Major mode for browsing a list of your github stars."
-  (setq x-stretch-cursor        nil)
   (setq tabulated-list-padding  0)
   (setq tabulated-list-sort-key (cons "Starred" t))
   (setq tabulated-list-format

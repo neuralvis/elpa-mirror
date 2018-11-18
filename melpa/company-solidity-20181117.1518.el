@@ -4,10 +4,10 @@
 
 ;; Author: Samuel Smolkin <sam@future-precedent.org>
 ;; URL: https://github.com/ethereum/emacs-solidity
-;; Package-Version: 20180407.2044
+;; Package-Version: 20181117.1518
 ;; Keywords: solidity, completion, company
 ;; Version: 2.0.0
-;; Package-Requires: ((company "0.9.0") (cl-lib "0.5.0") (solidity-mode "0.1.8"))
+;; Package-Requires: ((company "0.9.0") (cl-lib "0.5.0") (solidity-mode "0.1.9"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,9 +30,8 @@
 
 (require 'cl-lib)
 (require 'company)
-(require 'solidity-mode)
 
-;; Additional completion targets whcih are not part of solidity-mode syntax-highlighting keywords lists:
+;; Additional completion targets whcih are nore part of solidty-mode syntax-highlighting keywords lists:
 
 (defconst company-solidity-additional-math
   '("addmod"
