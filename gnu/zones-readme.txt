@@ -48,12 +48,12 @@
    `zz-add-zone', `zz-add-zone-and-coalesce',
    `zz-add-zone-and-unite', `zz-add-zones-from-highlighting',
    `zz-clone-and-coalesce-zones', `zz-clone-and-unite-zones',
-   `zz-clone-zones', `zz-coalesce-zones', `zz-delete-zone',
-   `zz-narrow', `zz-narrow-repeat', `zz-query-replace-zones' (Emacs
-   25+), `zz-query-replace-regexp-zones' (Emacs 25+),
-   `zz-select-region', `zz-select-region-repeat',
-   `zz-set-izones-var', `zz-set-zones-from-highlighting',
-   `zz-unite-zones'.
+   `zz-clone-zones', `zz-coalesce-zones', `zz-create-face-zones',
+   `zz-delete-zone', `zz-narrow', `zz-narrow-repeat',
+   `zz-query-replace-zones' (Emacs 25+),
+   `zz-query-replace-regexp-zones' (Emacs 25+), `zz-select-region',
+   `zz-select-region-repeat', `zz-set-izones-var',
+   `zz-set-zones-from-highlighting', `zz-unite-zones'.
 
  User options defined here:
 
@@ -66,13 +66,14 @@
  Non-interactive functions defined here:
 
    `zz-buffer-narrowed-p' (Emacs 22-23), `zz-buffer-of-markers',
-   `zz-car-<', `zz-dot-pairs', `zz-every',
-   `zz-izone-has-other-buffer-marker-p', `zz-izone-limits',
-   `zz-izone-limits-in-bufs', `zz-izones',
+   `zz-car-<', `zz-do-izones', `zz-do-zones', `zz-dot-pairs',
+   `zz-every', `zz-izone-has-other-buffer-marker-p',
+   `zz-izone-limits', `zz-izone-limits-in-bufs', `zz-izones',
    `zz-izones-from-noncontiguous-region' (Emacs 25+),
    `zz-izones-from-zones', `zz-izones-p', `zz-izones-renumber',
-   `zz-marker-from-object', `zz-markerize', `zz-max', `zz-min',
-   `zz-narrowing-lighter', `zz-noncontiguous-region-from-izones',
+   `zz-map-izones', `zz-map-zones', `zz-marker-from-object',
+   `zz-markerize', `zz-max', `zz-min', `zz-narrowing-lighter',
+   `zz-noncontiguous-region-from-izones',
    `zz-noncontiguous-region-from-zones', `zz-number-or-marker-p',
    `zz-overlays-to-zones', `zz-overlay-to-zone',
    `zz-overlay-union', `zz-rassoc-delete-all',
