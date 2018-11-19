@@ -6,7 +6,7 @@
 ;; Maintainer: Luke Lee <luke.yx.lee@gmail.com>
 ;; Keywords: emulations brief crisp
 ;; Package-Require: ((cl-lib "0.5"))
-;; Version: 1.3.5
+;; Version: 1.3.6
 
 ;; This file is part of GNU Emacs.
 
@@ -318,7 +318,7 @@ the region."
 The first use moves point to beginning of the line.  Second
 consecutive use moves point to beginning of the screen.  Third
 consecutive use moves point to the beginning of the buffer."
-  (interactive nil)
+  (interactive "^")
   (cond
     ((and (eq last-command 'crisp-home)
 	  (eq crisp-last-last-command 'crisp-home))
@@ -334,7 +334,7 @@ consecutive use moves point to the beginning of the buffer."
 The first use moves point to end of the line.  Second
 consecutive use moves point to the end of the screen.  Third
 consecutive use moves point to the end of the buffer."
-  (interactive nil)
+  (interactive "^")
   (cond
     ((and (eq last-command 'crisp-end)
 	  (eq crisp-last-last-command 'crisp-end))
@@ -386,15 +386,14 @@ if ARG is omitted or nil."
    (t ;; not crisp-mode
     (cl-callf (lambda (binds) (delq crisp-mode-map binds)) (cdr global-map)))))
 
-;; People might use Apropos on `brief'.
-;; Interaction with other packages.
-(put 'crisp-home 'CUA 'move)
-(put 'crisp-end  'CUA 'move)
-
 (run-hooks 'crisp-load-hook)
 
 ;;;; ChangeLog:
 
+;; 2018-11-18  Stefan Monnier  <monnier@iro.umontreal.ca>
+;; 
+;; 	* crisp/crisp.el (crisp-home, crisp-end): Obey shift-select-mode
+;; 
 ;; 2018-10-22  Stefan Monnier  <monnier@iro.umontreal.ca>
 ;; 
 ;; 	* crisp/crisp.el: Fix incompatibility with brief-mode; plus cleanups
