@@ -4,10 +4,10 @@
 
 ;; Author: Ola Nilsson <ola.nilsson@gmail.com>
 ;; Maintainer: Ola Nilsson <ola.nilsson@gmail.com>
-;; Created; Jul 24 2014
+;; Created: Jul 24 2014
 ;; Keywords: tools test unittest ert
-;; Package-Version: 20180809.2111
-;; Version: 0.3.1
+;; Package-Version: 20181118.2256
+;; Version: 0.4.0
 ;; Package-Requires: ((ert "0") (emacs "23.4"))
 ;; URL: http://bitbucket.org/olanilsson/ert-junit
 
@@ -117,14 +117,21 @@ Escape with `xml-escape-string'.  Use code equivalent to
 		(replace-match "" t t escaped)
 	  escaped)))
 
-(defun ert-junit--time-subtract-float (a b)
-  "Return the elapsed seconds between two time values A and B.
-A nil value for either argument stands for the current time.
-See ‘current-time-string’ for the various forms of a time value."
+(defun ert-junit--elapsed (stats &optional index)
+  "Return elapsed time for the test in STATS with INDEX.
+If INDEX is nil, return the entire time for STATS."
   ;; time-subtract did not handle nil parameters until Emacs 25
   (let ((current-time (current-time)))
-	(float-time (time-subtract (or a current-time)
-							   (or b current-time)))))
+    (float-time
+     (time-subtract
+      (or (if index
+              (ert-junit--stats end-times stats index)
+            (ert--stats-end-time stats))
+          current-time)
+      (or (if index
+              (ert-junit--stats start-times stats index)
+            (ert--stats-start-time stats))
+          current-time)))))
 
 (defun ert-junit-testcase (stats test-name test-index)
   "Return a testcase XML element as a string.
@@ -133,10 +140,7 @@ TEST-NAME and TEST-INDEX its index into STATS."
   (concat " "
 		  (format "<testcase name=\"%s\" classname=\"ert\" time=\"%f\">"
 				  test-name ;name
-				  ;; time
-				  (ert-junit--time-subtract-float
-                   (ert-junit--stats end-times stats test-index)
-                   (ert-junit--stats start-times stats test-index)))
+                  (ert-junit--elapsed stats test-index)) ; time
    ;; success, failure or error
    (let ((test-status (ert-junit--stats results stats test-index))
 		 (text ""))
@@ -211,19 +215,19 @@ TEST-NAME and TEST-INDEX its index into STATS."
             total successful failures errors skipped)
   (with-current-buffer buf
 	(insert "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+    (insert "<testsuites>\n")
     (insert (format "<testsuite name=\"ERT\" timestamp=\"%s\" hostname=\"%s\" tests=\"%d\" failures=\"%d\" errors=\"%d\" skipped=\"%d\" time=\"%f\">"
                     ;; timestamp
                     (ert--format-time-iso8601 (ert--stats-start-time stats))
 					(system-name) ;hostname
                     total failures errors skipped
-					(ert-junit--time-subtract-float ; time
-					 (ert--stats-end-time stats)
-                     (ert--stats-start-time stats)))
+                    (ert-junit--elapsed stats)) ; time
 			"\n")
 	(maphash (lambda (key value)
 			   (insert (ert-junit-testcase stats key value)))
 			 (ert--stats-test-map stats))
-    (insert "</testsuite>" "\n"))))
+    (insert "</testsuite>" "\n")
+    (insert "</testsuites>" "\n"))))
 
 (defun ert-junit-run-tests-batch (result-file &optional selector)
   "Run `ert-run-tests-batch' and generate JUnit report.

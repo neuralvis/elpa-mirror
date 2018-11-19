@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20181024.2224
+;; Package-Version: 20181119.1200
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.10.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
@@ -70,6 +70,7 @@
 (require 'newcomment)
 (require 'align)
 (require 'subr-x)
+(require 'lisp-mnt)
 
 (declare-function lisp-fill-paragraph  "lisp-mode" (&optional justify))
 
@@ -80,7 +81,7 @@
   :link '(url-link :tag "GitHub" "https://github.com/clojure-emacs/clojure-mode")
   :link '(emacs-commentary-link :tag "Commentary" "clojure-mode"))
 
-(defconst clojure-mode-version "5.8.2"
+(defconst clojure-mode-version (lm-version)
   "The current version of `clojure-mode'.")
 
 (defface clojure-keyword-face

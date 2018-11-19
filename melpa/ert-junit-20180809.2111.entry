@@ -1,2 +1,0 @@
-
-(ert-junit . [(20180809 2111) ((ert (0)) (emacs (23 4))) "JUnit XML reports from ert results" single ((:commit . "69177610824f20d4c4e16af4b9850fd96bea6491") (:keywords "tools" "test" "unittest" "ert") (:authors ("Ola Nilsson" . "ola.nilsson@gmail.com")) (:maintainer "Ola Nilsson" . "ola.nilsson@gmail.com") (:url . "http://bitbucket.org/olanilsson/ert-junit"))])

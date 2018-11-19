@@ -4,8 +4,8 @@
  
 ;; Author: Justin Heyes-Jones <justinhj@gmail.com>
 
-;; Version: 0.9.5
-;; Package-Version: 20181118.1938
+;; Version: 0.9.6
+;; Package-Version: 20181119.131
 ;; Package-Requires: (dash)
 ;; Keywords: redis, api, tools, org
 ;; URL: http://github.com/justinhj/eredis/
@@ -33,9 +33,13 @@
 ;; You can close a connection like so. The process buffer can be closed seperately.
 ;; (eredis-disconnect redis-p1)
 
+;;; 0.9.6 Changes
+
+;; Fix install 
+
 ;;; 0.9.5 Changes
 
-Bug fixes for org mode and missing keys
+;; Bug fixes for org mode and missing keys
 
 ;;; 0.9.4 Changes
 
@@ -98,7 +102,7 @@ Bug fixes for org mode and missing keys
 
 ;; Util
 
-(defun eredis-version() "0.9.5")
+(defun eredis-version() "0.9.6")
 
 (defun eredis--two-lists-to-map(key-list value-list)
   "take a list of keys LST1 and a list of values LST2 and make a hashmap, not particularly efficient
