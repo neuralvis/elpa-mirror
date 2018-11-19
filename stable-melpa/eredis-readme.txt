@@ -13,38 +13,4 @@ Earlier versions of redis (pre 0.9) did not support multiple connections/process
 You can close a connection like so. The process buffer can be closed seperately.
 (eredis-disconnect redis-p1)
 
-0.9.4 Changes
-
-eredis-reduce-from-matching-key-value
-eredis-each-matching-key-value
-
-0.9.3 Changes
-
-Iteration and reductions over Redis strings
-
-eredis-reduce-from-key-value
-eredis-each-key-value
-
-Bug fixes
-
-Bugs around parsing and mget mset are fixed
-
-0.9.2 Changes
-
-Fixed working with very slow responses, request timeout and retry
-
-0.9 Changes
-
-Multiple connections to multiple redis servers supported
-Buffer is used for all output from the process (Redis)
-Github repo contains an ert test suite
-Fix for multibyte characters
-Support for LOLWUT (version 5.0 of Redis and later)
-
-Github contributors
-
-justinhj
-pidu
-crispy
-darksun
-lujun9972
+0.9.5 Changes
