@@ -1,2 +1,0 @@
-
-(org-super-agenda . [(20180922 2151) ((emacs (25 1)) (s (1 10 0)) (dash (2 13)) (org (9 0)) (ht (2 2))) "Supercharge your agenda" tar ((:commit . "746b51073e5d5c6048320a9aef7e9273b4d154a9") (:keywords "hypermedia" "outlines" "org" "agenda") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "http://github.com/alphapapa/org-super-agenda"))])
