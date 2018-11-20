@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20181118.1537
+;; Package-Version: 20181119.1813
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.9.0"))
 ;; Keywords: convenience, matching, tools
@@ -2567,10 +2567,7 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
     (insert (format "-*- mode:grep; default-directory: %S -*-\n\n\n"
                     default-directory))
     (insert (format "%d candidates:\n" (length cands)))
-    (ivy--occur-insert-lines
-     (mapcar
-      (lambda (cand) (concat "./" cand))
-      cands))))
+    (ivy--occur-insert-lines cands)))
 
 (defun counsel-ag-occur ()
   "Generate a custom occur buffer for `counsel-ag'."
@@ -4563,11 +4560,11 @@ selected color."
       (format "%s - %s - %s" artist album title))))
 
 ;;;###autoload
-(defun counsel-rhythmbox ()
+(defun counsel-rhythmbox (&optional arg)
   "Choose a song from the Rhythmbox library to play or enqueue."
-  (interactive)
+  (interactive "P")
   (require 'dbus)
-  (unless counsel-rhythmbox-songs
+  (when (or arg (null counsel-rhythmbox-songs))
     (let* ((service "org.gnome.Rhythmbox3")
            (path "/org/gnome/UPnP/MediaServer2/Library/all")
            (interface "org.gnome.UPnP.MediaContainer2")
