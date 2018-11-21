@@ -3,9 +3,9 @@
 
 ;; Author: Daniel Berg
 ;; URL: https://github.com/srcery-colors/srcery-emacs
-;; Package-Version: 20181120.1554
+;; Package-Version: 20181121.953
 
-;; Version: 0.1.0
+;; Version: 0.2.0
 ;; Keywords: faces
 ;; Package-Requires: ((emacs "24"))
 
