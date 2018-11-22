@@ -1,2 +1,0 @@
-
-(sqlformat . [(20181019 159) ((emacs (24))) "Reformat SQL using sqlformat or pgformatter" single ((:commit . "c7802edf4adb68d7a7a9db14a6b42c03f0a3da2d") (:keywords "languages") (:authors ("Steve Purcell" . "steve@sanityinc.com")) (:maintainer "Steve Purcell" . "steve@sanityinc.com"))])
