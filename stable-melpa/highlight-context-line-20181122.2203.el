@@ -5,8 +5,8 @@
 ;; Author: Stefan Kamphausen <www.skamphausen.de>
 ;; Homepage: https://github.com/ska2342/highlight-context-line/
 ;; Created: 2002
-;; Version: 2.0beta3
-;; Package-Version: 20170319.2142
+;; Version: 2.0
+;; Package-Version: 20181122.2203
 ;; Keywords: faces, services, user
 
 ;; This file is not part of GNU Emacs.
@@ -132,8 +132,9 @@ scrolling at all."
 
 (defun highlight-context-line-unhighlight ()
   "Delete the overlay again."
-  (when highlight-context-line-overlay
-    (delete-overlay highlight-context-line-overlay)))
+  (ignore-errors
+    (when highlight-context-line-overlay
+      (delete-overlay highlight-context-line-overlay))))
 
 (defun highlight-context-line-highlight ()
   "Highlight the context line after scrolling.

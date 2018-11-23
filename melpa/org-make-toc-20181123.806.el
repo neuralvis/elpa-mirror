@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/org-make-toc
-;; Package-Version: 20181118.500
+;; Package-Version: 20181123.806
 ;; Version: 0.4-pre
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (s "1.10.0") (org "9.0"))
 ;; Keywords: Org, convenience
@@ -335,7 +335,7 @@ created."
       (with-current-buffer buffer
         (buffer-disable-undo)
         (org-mode)
-        (setq org-hide-emphasis-markers t)))
+        (setq-local org-hide-emphasis-markers t)))
     (with-current-buffer buffer
       (insert string)
       ;; FIXME: "Warning: ‘font-lock-fontify-buffer’ is for interactive use only; use
