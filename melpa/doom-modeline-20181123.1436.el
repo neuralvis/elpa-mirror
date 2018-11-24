@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 0.8.1
-;; Package-Version: 20181122.1713
+;; Package-Version: 20181123.1436
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -825,6 +825,7 @@ mouse-3: Toggle minor modes"
 (add-hook 'after-revert-hook #'doom-modeline--update-vcs)
 (add-hook 'after-save-hook #'doom-modeline--update-vcs)
 (add-hook 'find-file-hook #'doom-modeline--update-vcs t)
+(advice-add #'vc-refresh-state :after #'doom-modeline--update-vcs)
 (advice-add #'select-window :after #'doom-modeline--update-vcs)
 
 (doom-modeline-def-segment vcs
