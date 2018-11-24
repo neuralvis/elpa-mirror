@@ -4,7 +4,7 @@
 
 ;; Author: edkolev <evgenysw@gmail.com>
 ;; URL: http://github.com/edkolev/evil-goggles
-;; Package-Version: 20180725.952
+;; Package-Version: 20181123.1946
 ;; Package-Requires: ((emacs "24.4") (evil "1.0.0"))
 ;; Version: 0.0.1
 ;; Keywords: emulations, evil, vim, visual
@@ -137,7 +137,7 @@ background of 'evil-goggles-default-face, then 'region."
        (numberp end)
        ;; don't show overlay if the region is a single char on a single line
        (not (and (<= (- end beg) 1)
-                 (= (line-number-at-pos beg) (line-number-at-pos end))))
+                 (<= (count-lines beg end) 1)))
        (<= (point-min) beg end)
        (>= (point-max) end beg)
        (not (evil-visual-state-p))
@@ -416,7 +416,7 @@ BEG and END are the argumenets to the original functions."
   (when (and (called-interactively-p 'interactive)
              (evil-goggles--show-p beg end)
              ;; don't show goggles for single lines ("J"/"gJ" without count)
-             (< 1 (- (line-number-at-pos end) (line-number-at-pos beg))))
+             (< 1 (count-lines beg end)))
     (evil-goggles--show-blocking-hint beg end)))
 
 ;;; fill
