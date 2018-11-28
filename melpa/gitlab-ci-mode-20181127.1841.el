@@ -5,8 +5,8 @@
 ;; Author: Joe Wreschnig
 ;; Keywords: tools, vc
 ;; Package-Requires: ((emacs "25") (yaml-mode "0.0.12"))
-;; Package-Version: 20180604.2203
-;; Package-X-Original-Version: 20180605.1
+;; Package-Version: 20181127.1841
+;; Package-X-Original-Version: 20181127.2
 ;; URL: https://gitlab.com/joewreschnig/gitlab-ci-mode/
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -83,12 +83,18 @@
 (defconst gitlab-ci-variables
   '("ARTIFACT_DOWNLOAD_ATTEMPTS"
     "CI"
-    "CI_COMMIT_PATH"
+    "CI_COMMIT_BEFORE_SHA"
+    "CI_COMMIT_DESCRIPTION"
+    "CI_COMMIT_MESSAGE"
     "CI_COMMIT_REF_NAME"
     "CI_COMMIT_REF_SLUG"
     "CI_COMMIT_SHA"
     "CI_COMMIT_TAG"
+    "CI_COMMIT_TITLE"
+    "CI_CONFIG_PATH"
     "CI_DEBUG_TRACE"
+    "CI_DEPLOY_PASSWORD"
+    "CI_DEPLOY_USER"
     "CI_DISPOSABLE_ENVIRONMENT"
     "CI_ENVIRONMENT_NAME"
     "CI_ENVIRONMENT_SLUG"
@@ -98,9 +104,14 @@
     "CI_JOB_NAME"
     "CI_JOB_STAGE"
     "CI_JOB_TOKEN"
+    "CI_JOB_URL"
+    "CI_NODE_INDEX"
+    "CI_NODE_TOTAL"
     "CI_PIPELINE_ID"
+    "CI_PIPELINE_IID"
     "CI_PIPELINE_SOURCE"
     "CI_PIPELINE_TRIGGERED"
+    "CI_PIPELINE_URL"
     "CI_PROJECT_DIR"
     "CI_PROJECT_ID"
     "CI_PROJECT_NAME"
@@ -115,12 +126,18 @@
     "CI_REGISTRY_USER"
     "CI_REPOSITORY_URL"
     "CI_RUNNER_DESCRIPTION"
+    "CI_RUNNER_EXECUTABLE_ARCH"
     "CI_RUNNER_ID"
+    "CI_RUNNER_REVISION"
     "CI_RUNNER_TAGS"
+    "CI_RUNNER_VERSION"
     "CI_SERVER"
     "CI_SERVER_NAME"
     "CI_SERVER_REVISION"
     "CI_SERVER_VERSION"
+    "CI_SERVER_VERSION_MAJOR"
+    "CI_SERVER_VERSION_MINOR"
+    "CI_SERVER_VERSION_PATCH"
     "CI_SHARED_ENVIRONMENT"
     "GET_SOURCES_ATTEMPTS"
     "GITLAB_CI"
@@ -135,7 +152,8 @@ See URL ‘https://docs.gitlab.com/ce/ci/variables/’ for more
 information about these variables.")
 
 (defconst gitlab-ci-deprecated-variables
-  '("CI_BUILD_ID"
+  '("CI_BUILD_BEFORE_SHA"
+    "CI_BUILD_ID"
     "CI_BUILD_MANUAL"
     "CI_BUILD_NAME"
     "CI_BUILD_REF"

@@ -1,2 +1,0 @@
-
-(flycheck-vdm . [(20181108 2022) ((emacs (24)) (flycheck (32 -4)) (vdm-mode (0 0 3))) "Syntax checking for vdm-mode" single ((:commit . "aa3fb6d529f71027df0d303f6698890df8b37b1c") (:keywords "languages") (:authors ("Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com")) (:maintainer "Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com") (:url . "https://github.com/peterwvj/vdm-mode"))])

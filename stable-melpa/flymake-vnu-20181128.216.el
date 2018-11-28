@@ -4,8 +4,8 @@
 
 ;; Authors: Stefan Kuznetsov <skuznetsov@posteo.net>
 ;; Maintainer: Stefan Kuznetsov <skuznetsov@posteo.net>
-;; URL: https://github.com/theneosloth
-;; Package-Version: 20181116.13
+;; URL: https://github.com/theneosloth/flymake-vnu
+;; Package-Version: 20181128.216
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: languages
@@ -28,9 +28,6 @@
 ;;; Commentary:
 ;; Flymake extension that adds support for the v.NU HTML validator.
 ;;
-;;
-;; (with-eval-after-load 'flymake
-;;   (flymake-vnu-setup))
 ;;; Code:
 
 (require 'flymake)
