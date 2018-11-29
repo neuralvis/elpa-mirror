@@ -1,0 +1,2 @@
+
+(cl-libify . [(20181129 350) ((emacs (25))) "Update elisp code to use cl-lib instead of cl" single ((:commit . "511349927755c2e8246783d2ec2859f0c7623d0f") (:keywords "lisp") (:authors ("Steve Purcell" . "steve@sanityinc.com")) (:maintainer "Steve Purcell" . "steve@sanityinc.com") (:url . "https://github.com/purcell/cl-libify"))])
