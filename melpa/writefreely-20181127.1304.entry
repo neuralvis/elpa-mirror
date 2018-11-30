@@ -1,0 +1,2 @@
+
+(writefreely . [(20181127 1304) ((emacs (24 3)) (org (9 0)) (ox-gfm (0 0)) (request (0 3))) "Push your Org files as markdown to a writefreely instance" single ((:commit . "2f77db619099a39b8d4594c9a7c02a61d5cb7b6b") (:keywords "convenience") (:authors ("Daniel Gomez <d.gomez at posteo dot org>")) (:maintainer "Daniel Gomez <d.gomez at posteo dot org>") (:url . "https://github.com/dangom/writefreely.el"))])
