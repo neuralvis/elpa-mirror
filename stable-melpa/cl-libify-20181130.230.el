@@ -6,7 +6,7 @@
 ;; Keywords: lisp
 ;; Homepage: https://github.com/purcell/cl-libify
 ;; Package-Requires: ((emacs "25"))
-;; Package-Version: 20181129.350
+;; Package-Version: 20181130.230
 ;; Package-X-Original-Version: 0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -34,6 +34,10 @@
 
 ;; Note that some cl functions do not have exact replacements,
 ;; e.g. `flet', so further code changes might still be necessary.
+
+;; You can also use `cl-libify-mark-cl-symbols-obsolete' to mark old
+;; `cl' names as obsolete, so that the byte compiler will help flag
+;; their use.
 
 ;;; Code:
 
@@ -68,6 +72,18 @@
              collect (cons s sf)))
   "Alist of symbols pairs mapping cl variables to their cl-lib equivalents.")
 
+(defconst cl-libify-other-functions
+  '(
+    lexical-let
+    lexical-let*
+    flet
+    labels
+    define-setf-expander
+    defsetf
+    define-modify-macro)
+  "Functions from `cl' which have no direct `cl-lib' equivalent.")
+
+;;;###autoload
 (defun cl-libify (beg end)
   "Replace cl symbol names between BEG and END with their cl-lib equivalents.
 
@@ -96,7 +112,8 @@ non-nil, ask the user to confirm each replacement."
           (let* ((orig (match-string 1))
                  (replacement (symbol-name (alist-get (intern orig) alist))))
             (when (or (null prompt)
-                      (save-match-data (y-or-n-p (format "Replace `%s' with `%s'?" orig replacement))))
+                      (let ((msg (format "Replace `%s' with `%s'?" orig replacement)))
+                        (save-match-data (y-or-n-p msg))))
               (replace-match replacement t t nil 1))))))))
 
 (defun cl-libify--in-string-or-comment ()
@@ -105,6 +122,15 @@ non-nil, ask the user to confirm each replacement."
     (or (car (setq ppss (nthcdr 3 ppss)))
         (car (setq ppss (cdr ppss)))
         (nth 3 ppss))))
+
+;;;###autoload
+(defun cl-libify-mark-cl-symbols-obsolete ()
+  "Make all the `cl' vars and functions obsolete so that byte compilation will flag their use."
+  (interactive)
+  (pcase-dolist (`(,old . ,new) cl-libify-function-alias-alist)
+    (make-obsolete old new "cl-lib"))
+  (pcase-dolist (`(,old . ,new) cl-libify-var-alias-alist)
+    (make-obsolete-variable old new "cl-lib")))
 
 
 (provide 'cl-libify)
