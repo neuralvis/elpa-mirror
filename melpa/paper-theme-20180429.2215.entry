@@ -1,2 +1,2 @@
 
-(paper-theme . [(20180429 2215) ((emacs (24))) "A minimal Emacs colour theme." single ((:commit . "f96d8802d6b223eba8feb434c4a39c3effbd9bc7") (:keywords "theme" "paper") (:authors ("Göktuğ Kayaalp")) (:maintainer "Göktuğ Kayaalp") (:url . "https://cadadr.github.io/elisp/index.html#paper"))])
+(paper-theme . [(20180429 2215) ((emacs (24))) "A minimal Emacs colour theme." single ((:commit . "a4d4143667053658dc91bc82bcff670f5891a36c") (:keywords "theme" "paper") (:authors ("Göktuğ Kayaalp")) (:maintainer "Göktuğ Kayaalp") (:url . "https://cadadr.github.io/elisp/index.html#paper"))])
