@@ -1,0 +1,2 @@
+
+(ng2-mode . [(20181129 2337) ((typescript-mode (0 1))) "Major modes for editing Angular 2" tar ((:commit . "ac9930d8891d6730cd536f0fd6660359c68b2cde") (:keywords "typescript" "angular" "angular2" "template") (:authors ("Adam Niederer" . "adam.niederer@gmail.com")) (:maintainer "Adam Niederer" . "adam.niederer@gmail.com") (:url . "http://github.com/AdamNiederer/ng2-mode"))])
