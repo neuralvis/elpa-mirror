@@ -1,7 +1,7 @@
 ;;; zig-mode.el --- A major mode for the Zig programming language -*- lexical-binding: t -*-
 
 ;; Version: 0.0.8
-;; Package-Version: 20181114.1346
+;; Package-Version: 20181130.2347
 ;; Author: Andrea Orru <andreaorru1991@gmail.com>, Andrew Kelley <superjoe30@gmail.com>
 ;; Keywords: zig, languages
 ;; Package-Requires: ((emacs "24"))
@@ -65,7 +65,7 @@
   '(
     ;; Storage
     "const" "var" "extern" "packed" "export" "pub" "noalias" "inline"
-    "comptime" "nakedcc" "stdcallcc" "volatile" "align" "section"
+    "comptime" "nakedcc" "stdcallcc" "volatile" "align" "linksection"
 
     ;; Structure
     "struct" "enum" "union"

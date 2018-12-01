@@ -5,7 +5,7 @@
 ;; Author: Daniel Gomez <d.gomez at posteo dot org>
 ;; Created: 2018-16-11
 ;; URL: https://github.com/dangom/writefreely.el
-;; Package-Version: 20181127.1304
+;; Package-Version: 20181130.1222
 ;; Package-Requires: ((emacs "24.3") (org "9.0") (ox-gfm "0.0") (request "0.3"))
 ;; Version: 0.1.0
 ;; Keywords: convenience
@@ -372,6 +372,20 @@ This function will attempt to update the contents of a blog post if it finds
   (if (writefreely--post-exists)
       (browse-url
        (writefreely-publication-link writefreely-post-id))))
+
+(defvar writefreely-mode-map (make-sparse-keymap)
+  "Keymap for writefreely mode")
+
+;;;###autoload
+(define-minor-mode writefreely-mode
+  "Minor mode to support published orgmode documents on a writefreely instance"
+  :lighter " WriteFreely"
+  :keymap writefreely-mode-map
+  (define-key writefreely-mode-map (kbd "C-c C-w s") 'writefreely-publish-or-update)
+  (define-key writefreely-mode-map (kbd "C-c C-w d") 'writefreely-delete-post)
+  (define-key writefreely-mode-map (kbd "C-c C-w v") 'writefreely-visit-post)
+  (define-key writefreely-mode-map (kbd "C-c C-w c") 'writefreely-clear-file-info)
+  )
 
 
 (provide 'writefreely)
