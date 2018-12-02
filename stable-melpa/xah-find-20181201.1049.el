@@ -3,8 +3,8 @@
 ;; Copyright © 2012-2018 by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 4.2.20181124144731
-;; Package-Version: 20181124.2247
+;; Version: 4.2.20181201024903
+;; Package-Version: 20181201.1049
 ;; Created: 02 April 2012
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: convenience, extensions, files, tools, unix
@@ -576,6 +576,7 @@ Case sensitivity is determined by `case-fold-search'. Call `toggle-case-fold-sea
              (xah-find--print-file-count $f $count $outBuffer)))))
      (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
                             (directory-files-recursively @input-dir @path-regex)))
+    (princ "Done." $outBuffer)
     (xah-find--switch-to-output $outBuffer)))
 
 (defun xah-find--get-default-file-extension-regex (&optional @default-ext)
@@ -637,6 +638,7 @@ Result is shown in buffer *xah-find output*.
          (when (> $count 0) (xah-find--print-file-count $path $count $outBuffer))))
      (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
                             (directory-files-recursively @input-dir @path-regex)))
+    (princ "Done." $outBuffer)
     (xah-find--switch-to-output $outBuffer)))
 
 ;;;###autoload
@@ -685,6 +687,7 @@ Result is shown in buffer *xah-find output*.
              (xah-find--print-file-count $f $count $outBuffer )))))
      (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
                             (directory-files-recursively @input-dir @path-regex)))
+    (princ "Done." $outBuffer)
     (xah-find--switch-to-output $outBuffer)))
 
 ;;;###autoload
@@ -725,6 +728,7 @@ Version 2016-12-21"
          (when (> $count 0) (xah-find--print-file-count $fp $count $outBuffer))))
      (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
                             (directory-files-recursively @input-dir @path-regex)))
+    (princ "Done." $outBuffer)
     (xah-find--switch-to-output $outBuffer)))
 
 ;;;###autoload
@@ -782,7 +786,7 @@ Version 2018-08-20"
                (write-region 1 (point-max) $fp nil 3))))))
      (xah-find--filter-list (lambda (x) (not (xah-find--ignore-dir-p x)))
                             (directory-files-recursively @input-dir @path-regex)))
-
+    (princ "Done." $outBuffer)
     (xah-find--switch-to-output $outBuffer)))
 
 (provide 'xah-find)
