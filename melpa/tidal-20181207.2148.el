@@ -6,7 +6,7 @@
 ;; Author: alex@slab.org
 ;; Homepage: https://github.com/tidalcycles/Tidal
 ;; Version: 0
-;; Package-Version: 20181205.1235
+;; Package-Version: 20181207.2148
 ;; Keywords: tools
 ;; Package-Requires: ((haskell-mode "16") (emacs "24"))
 
@@ -94,7 +94,7 @@
       (tidal-send-string ":set prompt2 \"\"")
     (tidal-send-string ":set prompt-cont \"\""))
   (tidal-send-string "import Sound.Tidal.Context
-tidal <- startTidal (superdirtTarget {oLatency = 0.02, oAddress = \"127.0.0.1\", oPort = 57120}) (defaultConfig {cFrameTimespan = 1/20})
+tidal <- startTidal (superdirtTarget {oLatency = 0.1, oAddress = \"127.0.0.1\", oPort = 57120}) (defaultConfig {cFrameTimespan = 1/20})
 let p = streamReplace tidal
     hush = streamHush tidal
     list = streamList tidal
