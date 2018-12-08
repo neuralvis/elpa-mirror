@@ -1,2 +1,0 @@
-
-(noaa . [(20181129 2229) ((request (0 2 0)) (cl-lib (0 5)) (emacs (24)) (dash (2 14 1))) "Get NOAA weather data" single ((:commit . "b3652b05aaf97b01d550118ffd81b8d4d0ff6201") (:authors ("David Thompson")) (:maintainer "David Thompson") (:url . "https://github.com/thomp/noaa"))])

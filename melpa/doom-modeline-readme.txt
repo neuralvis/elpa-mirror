@@ -10,12 +10,15 @@ The doom-modeline was designed for minimalism and fast, and offers:
 - A customizable mode-line height (see doom-modeline-height)
 - An error/warning count segment for flycheck
 - A workspace number segment for eyebrowse
+- A perspective name segment for persp-mode
 - A window number segment for winum and window-numbering
 - An indicator for evil state
 - An indicator for god state
 - An indicator for ryo-modal state
+- An indicator for xah-fly-keys state
 - An indicator for remote host
 - An indicator for current input method
+- An indicator for LSP state
 - Truncated file names, file icon, buffer state and project name in buffer
   information segment, which is compatible with projectile or project
 

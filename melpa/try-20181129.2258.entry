@@ -1,2 +1,0 @@
-
-(try . [(20181129 2258) ((emacs (24))) "Try out Emacs packages." single ((:commit . "2fcfcbd9b0cc9650ce01bab3b055bcedebb25c4d") (:keywords "packages") (:authors ("Lars Tveito" . "larstvei@ifi.uio.no")) (:maintainer "Lars Tveito" . "larstvei@ifi.uio.no") (:url . "http://github.com/larstvei/try"))])

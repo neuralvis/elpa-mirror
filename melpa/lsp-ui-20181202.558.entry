@@ -1,2 +1,0 @@
-
-(lsp-ui . [(20181202 558) ((emacs (25 1)) (dash (2 14)) (dash-functional (1 2 0)) (flycheck (31)) (lsp-mode (5 0)) (markdown-mode (2 3))) "UI modules for lsp-mode" tar ((:commit . "2300e94a9a1d953b2f5c436c5f915da31ca2fb8b") (:keywords "lsp") (:authors ("Sebastien Chapuis <sebastien@chapu.is>, Fangrui Song" . "i@maskray.me")) (:maintainer "Sebastien Chapuis <sebastien@chapu.is>, Fangrui Song" . "i@maskray.me") (:url . "https://github.com/emacs-lsp/lsp-ui"))])

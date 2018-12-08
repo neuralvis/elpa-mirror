@@ -1,2 +1,0 @@
-
-(indium . [(20181128 1420) ((emacs (25)) (seq (2 16)) (js2-mode (20140114)) (js2-refactor (0 9 0)) (company (0 9 0))) "JavaScript Awesome Development Environment" tar ((:commit . "a904caf6a2fb5a7d4c7e62834d542f39dbd4ecd8") (:keywords "tools" "javascript") (:authors ("Nicolas Petton" . "nicolas@petton.fr")) (:maintainer "Nicolas Petton" . "nicolas@petton.fr") (:url . "https://github.com/NicolasPetton/indium"))])

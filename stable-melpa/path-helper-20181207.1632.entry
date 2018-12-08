@@ -1,0 +1,2 @@
+
+(path-helper . [(20181207 1632) ((emacs (24))) "Set PATH environment variables from config files" single ((:commit . "0945e7bbb318d418bb796a3ac45af50f5bf3d9fc") (:keywords "tools" "unix") (:authors ("Arnaud Rouanet" . "arnaud@rouanet.org")) (:maintainer "Arnaud Rouanet" . "arnaud@rouanet.org") (:url . "https://github.com/arouanet/path-helper"))])

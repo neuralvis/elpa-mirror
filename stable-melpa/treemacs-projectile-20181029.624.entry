@@ -1,2 +1,2 @@
 
-(treemacs-projectile . [(20181029 624) ((projectile (0 14 0)) (treemacs (0))) "Projectile integration for treemacs" single ((:commit . "c9d2e340655257afae0f41b8f1ac17a6132fa3b5") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])
+(treemacs-projectile . [(20181029 624) ((projectile (0 14 0)) (treemacs (0))) "Projectile integration for treemacs" single ((:commit . "dfde9c3a19c4098e5d5d193ec2a5373324343ba7") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])
