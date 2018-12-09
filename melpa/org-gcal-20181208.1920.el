@@ -2,7 +2,7 @@
 
 ;; Author: myuhe <yuhei.maeda_at_gmail.com>
 ;; URL: https://github.com/kidd/org-gcal.el
-;; Package-Version: 20181004.748
+;; Package-Version: 20181208.1920
 ;; Version: 0.3
 ;; Maintainer: Raimon Grau <raimonster@gmail.com>
 ;; Copyright (C) :2014 myuhe all rights reserved.
@@ -344,7 +344,7 @@ current calendar."
                                                 "\\`\\(?: *<[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].*?>$\\)\n?\n?"
                                                 ""
                                                 (replace-regexp-in-string
-                                                 " *:PROPERTIES:\n  \\(.*\\(?:\n.*\\)*?\\) :END:\n\n"
+                                                 " *:PROPERTIES:\n *\\(.*\\(?:\n.*\\)*?\\) *:END:\n+"
                                                  ""
                                                  (buffer-substring-no-properties
                                                   (plist-get (cadr elem) :contents-begin)
