@@ -1,2 +1,2 @@
 
-(bpr . [(20180220 1844) ((emacs (24))) "Background Process Runner" tar ((:commit . "af84a83dea09d86e77d87ac30604f2c5b4bf4117") (:keywords "background" "async" "process" "management") (:authors ("Ilya Babanov" . "ilya-babanov@ya.ru")) (:maintainer "Ilya Babanov" . "ilya-babanov@ya.ru") (:url . "https://github.com/ilya-babanov/emacs-bpr"))])
+(bpr . [(20180220 1844) ((emacs (24))) "Background Process Runner" tar ((:commit . "5b2e3e95cdcc9aceb919de2bfd5a8ea0223b4478") (:keywords "background" "async" "process" "management") (:authors ("Ilya Babanov" . "ilya-babanov@ya.ru")) (:maintainer "Ilya Babanov" . "ilya-babanov@ya.ru") (:url . "https://github.com/ilya-babanov/emacs-bpr"))])
