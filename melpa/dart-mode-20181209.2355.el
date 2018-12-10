@@ -2,7 +2,7 @@
 
 ;; Author: Natalie Weizenbaum
 ;; URL: https://github.com/nex3/dart-mode
-;; Package-Version: 20181209.31
+;; Package-Version: 20181209.2355
 ;; Version: 1.0.4
 ;; Package-Requires: ((emacs "24.5") (cl-lib "0.5") (dash "2.10.0") (flycheck "0.23") (s "1.10"))
 ;; Keywords: language
@@ -919,7 +919,10 @@ otherwise.  If no FILE is given, then this will default to the variable
 The analysis roots are directories that contain Dart files. The analysis server
 analyzes all Dart files under the analysis roots and provides information about
 them when requested."
-  (add-to-list 'dart-analysis-roots dir)
+  (add-to-list 'dart-analysis-roots
+               (if (equal system-type 'windows-nt)
+                   (replace-regexp-in-string (rx "/") (rx "\\") dir)
+                 dir))
   (dart--send-analysis-roots))
 
 (defun dart--send-analysis-roots ()
@@ -1728,9 +1731,7 @@ This can be customized by setting `dart-formatter-command-override'."
       (when dart-sdk-path
         (concat dart-sdk-path
                 (file-name-as-directory "bin")
-                (if (memq system-type '(ms-dos windows-nt))
-                    "dartfmt.exe"
-                  "dartfmt")))))
+                "dartfmt"))))
 
 (defvar dart--formatter-compilation-regexp
   '("^line \\([0-9]+\\), column \\([0-9]+\\) of \\([^ \n]+\\):" 3 1 2)

@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 1.0.0
-;; Package-Version: 20181209.1345
+;; Package-Version: 20181209.1825
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -1334,12 +1334,13 @@ Requires `eyebrowse-mode' to be enabled."
 
 (add-hook 'find-file-hook #'doom-modeline-update-persp-name)
 (add-hook 'after-revert-hook #'doom-modeline-update-persp-name)
-(add-hook 'persp-after-load-state-functions #'doom-modeline-update-persp-name)
-(add-hook 'persp-created-functions #'doom-modeline-update-persp-name)
+(add-hook 'persp-activated-functions #'doom-modeline-update-persp-name)
 (add-hook 'persp-renamed-functions #'doom-modeline-update-persp-name)
 (advice-add #'select-window :after #'doom-modeline-update-persp-name)
-(advice-add #'persp-add-buffer :after #'doom-modeline-update-persp-name)
-(advice-add #'persp-remove-buffer :after #'doom-modeline-update-persp-name)
+;; (advice-add #'persp-window-switch :after #'doom-modeline-update-persp-name)
+;; (advice-add #'persp-frame-switch :after #'doom-modeline-update-persp-name)
+;; (advice-add #'persp-add-buffer :after #'doom-modeline-update-persp-name)
+;; (advice-add #'persp-remove-buffer :after #'doom-modeline-update-persp-name)
 
 (doom-modeline-def-segment persp-name
   "The current perspective name."
