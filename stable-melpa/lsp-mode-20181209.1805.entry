@@ -1,2 +1,0 @@
-
-(lsp-mode . [(20181209 1805) ((emacs (25 1)) (dash (2 14 1)) (dash-functional (2 14 1)) (f (0 20 0)) (ht (2 0)) (spinner (1 7 3))) "Minor mode for interacting with Language Servers" tar ((:commit . "c334a95314001b7a0a0a060d23a4e807b40bd835") (:authors ("Vibhav Pant" . "vibhavp@gmail.com")) (:maintainer "Vibhav Pant" . "vibhavp@gmail.com") (:url . "https://github.com/emacs-lsp/lsp-mode"))])
