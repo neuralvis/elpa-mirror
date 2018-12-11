@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Version: 1.4
-;; Package-Version: 20181111.2223
+;; Package-Version: 20181211.55
 ;; Keywords: lisp
 ;; Package-Requires: ((dash "2.12.0") (loop "1.2") (s "1.11.0"))
 
@@ -209,6 +209,9 @@ START-POS and END-POS should be the position of FORM within BUFFER."
    ((or
      (equal (cl-second path) '(let . 1))
      (equal (cl-second path) '(let* . 1)))
+    nil)
+   ;; Ignore (declare-function NAME  (ARGS...))
+   ((equal (car path) '(declare-function . 3))
     nil)
    ;; (SYMBOL ...)
    ((eq (car form) symbol)

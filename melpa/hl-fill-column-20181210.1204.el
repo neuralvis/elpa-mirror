@@ -1,7 +1,7 @@
 ;;; hl-fill-column.el --- Highlight fill column. -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/hl-fill-column
-;; Package-Version: 20181127.835
+;; Package-Version: 20181210.1204
 ;; Created: November 1, 2018
 ;; Keywords: fill column, faces
 ;; Package-Requires: ((names "0.5") (emacs "24"))

@@ -5,8 +5,8 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 20181029.804
-;; Package-X-Original-Version: 1.2
+;; Package-Version: 20181210.2021
+;; Package-X-Original-Version: 1.3
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -108,6 +108,13 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "Function to return name of a test to be run."
   :type 'function)
 
+(defcustom django-commands-projects-dir nil
+  "Directory to read project directory in.
+If specified, project directory selection will start in this directory."
+  :type '(choice
+          (const :tag "No projects dir" nil)
+          (directory)))
+
 
 
 ;; Local vars
@@ -167,7 +174,11 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
 
 (defun django-commands--project-dir ()
   "Get project root directory."
-  (or (cdr (project-current t)) (user-error "No project")))
+  (let ((dir (cdr-safe (project-current))))
+    (if (or (null dir) (> (prefix-numeric-value current-prefix-arg) 4))
+        (abbreviate-file-name
+         (read-directory-name "Choose django project directory: " (or django-commands-projects-dir dir) nil t))
+      dir)))
 
 (defun django-commands--project-name (project-dir)
   "Get project name based on PROJECT-DIR."
@@ -288,7 +299,7 @@ If run with universal argument allow to edit command arguments"
 (defun django-commands-test ()
   "Ask for test name and run test."
   (interactive)
-  (django-commands--command #'django-commands-test-mode (save-match-data (split-string (read-from-minibuffer "Test name: " (funcall django-commands-test-name-function))))))
+  (django-commands--command #'django-commands-test-mode (split-string (read-from-minibuffer "Test name: " (funcall django-commands-test-name-function)))))
 
 ;;;###autoload
 (defun django-commands-restart ()
@@ -297,14 +308,14 @@ If run with universal argument allow to edit command arguments"
   (interactive)
   (unless (derived-mode-p 'django-commands-command-mode 'django-commands-shell-mode)
     (user-error "No django command in this buffer"))
-  (django-commands--run-command (current-buffer) major-mode (django-commands--confirm-args (save-match-data (split-string django-commands--current-args)))))
+  (django-commands--run-command (current-buffer) major-mode (django-commands--confirm-args (split-string django-commands--current-args))))
 
 ;;;###autoload
 (defun django-commands-test-name ()
   "Return name of test case to run."
   (let ((project-dir (cdr (project-current))))
     (when (and project-dir buffer-file-name)
-      (let* ((module-name (save-match-data (split-string (file-relative-name (file-name-sans-extension buffer-file-name) project-dir) "/")))
+      (let* ((module-name (split-string (file-relative-name (file-name-sans-extension buffer-file-name) project-dir) "/"))
              (func-name (which-function))
              (func-name (when func-name (list func-name))))
         (mapconcat 'identity (append module-name func-name) ".")))))

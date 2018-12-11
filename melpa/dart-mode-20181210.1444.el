@@ -2,7 +2,7 @@
 
 ;; Author: Natalie Weizenbaum
 ;; URL: https://github.com/nex3/dart-mode
-;; Package-Version: 20181209.2355
+;; Package-Version: 20181210.1444
 ;; Version: 1.0.4
 ;; Package-Requires: ((emacs "24.5") (cl-lib "0.5") (dash "2.10.0") (flycheck "0.23") (s "1.10"))
 ;; Keywords: language
@@ -1058,7 +1058,10 @@ SUBSCRIPTION is an opaque object provided by
   (dart-info (format "Checking syntax for %s" (current-buffer)))
   (dart--analysis-server-send
    "analysis.getErrors"
-   `((file . ,(buffer-file-name)))
+   `((file . ,(if (equal system-type 'windows-nt)
+                  (replace-regexp-in-string (rx "/") (rx "\\")
+                                            (buffer-file-name))
+                (buffer-file-name))))
    (-let [buffer (current-buffer)]
      (lambda (response)
        (dart--report-errors response buffer callback)))))
