@@ -1,2 +1,0 @@
-
-(tmux-pane . [(20181113 623) ((names (0 5)) (emacs (24)) (s (0))) "Provide integration between emacs window and tmux pane" single ((:commit . "3038acda77c481ed9831868da2ff86cc9d20e80b") (:keywords "convenience" "terminals" "tmux" "window" "pane" "navigation" "integration") (:url . "https://github.com/laishulu/emacs-tmux-pane"))])
