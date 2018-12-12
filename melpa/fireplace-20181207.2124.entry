@@ -1,2 +1,0 @@
-
-(fireplace . [(20181207 2124) nil "A cozy fireplace for emacs" single ((:commit . "0e166d7ac59e606f3197c6b3be4467a5f978201c") (:keywords "games") (:authors ("Johan Sivertsen" . "johanvts@gmail.com")) (:maintainer "Johan Sivertsen" . "johanvts@gmail.com") (:url . "https://github.com/johanvts/emacs-fireplace"))])

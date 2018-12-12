@@ -3,7 +3,7 @@
 ;; Copyright (C) DIKU 2013-2017, University of Copenhagen
 ;;
 ;; URL: https://github.com/diku-dk/futhark
-;; Package-Version: 20181101.1900
+;; Package-Version: 20181211.1933
 ;; Keywords: languages
 ;; Version: 0.1
 ;; Package-Requires: ((cl-lib "0.5"))
@@ -104,9 +104,13 @@
     "A regex describing a Futhark constructor.")
 
   (defconst futhark-operator
-    (concat "["
-            "-+*/%!<>=&|@"
-            "]" "+"))
+    (concat "\\(?:"
+            (concat "["
+                    "-+*/%!<>=&|@"
+                    "]" "+")
+            "\\|"
+            "`[^`]*`"
+            "\\)"))
 
   (defconst futhark-non-tuple-type
     (concat "\\(?:"

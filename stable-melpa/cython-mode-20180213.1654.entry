@@ -1,2 +1,2 @@
 
-(cython-mode . [(20180213 1654) nil "Major mode for editing Cython files" single ((:commit . "28251032f86c266065e4976080230481b1a1bb29"))])
+(cython-mode . [(20180213 1654) nil "Major mode for editing Cython files" single ((:commit . "d79bd67b146c6f440ce0b4f16524e86b419d2d3b"))])
