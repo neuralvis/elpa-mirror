@@ -1,4 +1,4 @@
-;;; whole-line-or-region.el --- operate on current line if region undefined
+;;; whole-line-or-region.el ---  on current line if region undefined
 
 ;; This file is not part of Emacs
 
@@ -7,9 +7,9 @@
 ;; Maintainer:      Steve Purcell <steve@sanityinc.com>
 ;; Created:         July 1, 2001
 ;; Keywords:        convenience wp
-;; Package-Version: 20181116.2249
+;; Package-Version: 20181211.2356
 ;; Package-X-Original-Version: 0
-;; Latest Version:  https://github.com/purcell/whole-line-or-region
+;; Homepage:  https://github.com/purcell/whole-line-or-region
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -456,7 +456,7 @@ is passed into FN before POST-ARGS."
           (add-to-list 'args (mark) t))
 
         (when send-prefix
-          (add-to-list 'args (list prefix) t))
+          (add-to-list 'args (and prefix (list prefix)) t))
 
         (when post-args
           (add-to-list 'args post-args) t)
@@ -489,7 +489,7 @@ is passed into FN before POST-ARGS."
             (add-to-list 'args end t))
 
           (when send-prefix
-            (add-to-list 'args (list prefix) t))
+            (add-to-list 'args (and prefix (list prefix)) t))
 
           (when post-args
             (add-to-list 'args post-args t))
