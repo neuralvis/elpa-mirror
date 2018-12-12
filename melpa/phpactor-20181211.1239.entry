@@ -1,0 +1,2 @@
+
+(phpactor . [(20181211 1239) ((emacs (24 3)) (cl-lib (0 5)) (f (0 17)) (composer (0 1))) "Interface to Phpactor" tar ((:commit . "7e3d97ad2f4b045a9673b544f3d367d32a300dc1") (:keywords "tools" "php") (:authors ("USAMI Kenta" . "tadsan@zonu.me") ("Mikael Kermorgant" . "mikael@kgtech.fi")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-php/phpactor.el"))])

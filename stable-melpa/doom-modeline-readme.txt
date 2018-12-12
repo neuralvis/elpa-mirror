@@ -1,8 +1,9 @@
-This package offers a modern modeline them which is extracted from DOOM Emacs
-(https://github.com/hlissner/doom-emacs/tree/master/modules/ui/doom-modeline).
+This package offers a fancy and fast mode-line which was from DOOM Emacs
+(https://github.com/hlissner/doom-emacs/tree/master/modules/ui/doom-modeline),
+but it's more powerful and much faster.
 It's also integrated into Centaur Emacs (https://github.com/seagle0128/.emacs.d).
 
-The doom-modeline was designed for minimalism and fast, and offers:
+The doom-modeline was designed for minimalism, and offers:
 - A match count panel (for anzu, iedit, multiple-cursors, symbol-overlay,
   evil-search and evil-substitute)
 - An indicator for recording a macro
@@ -19,6 +20,7 @@ The doom-modeline was designed for minimalism and fast, and offers:
 - An indicator for remote host
 - An indicator for current input method
 - An indicator for LSP state
+- An indicator for github notifications
 - Truncated file names, file icon, buffer state and project name in buffer
   information segment, which is compatible with projectile or project
 
