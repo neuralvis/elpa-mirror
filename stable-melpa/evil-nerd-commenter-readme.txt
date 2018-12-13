@@ -45,6 +45,8 @@ insert below setup into your ~/.emacs instead,
   "\\" 'evilnc-comment-operator)
 
 `evilnc-comment-or-uncomment-html-tag' comment/uncomment html tag(s).
+`evilnc-comment-or-uncomment-html-paragraphs' comment/uncomment paragraphs
+containing html tags.
 
 You can setup `evilnc-original-above-comment-when-copy-and-comment'
 to decide which style to use when `evilnc-copy-and-comment-lines'
