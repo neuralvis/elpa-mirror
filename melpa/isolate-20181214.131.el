@@ -2,8 +2,8 @@
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 ;; URL: https://github.com/casouri/isolate
-;; Package-Version: 20181018.2235
-;; Version: 1.0.0
+;; Package-Version: 20181214.131
+;; Version: 1.1.0
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "25"))
 
