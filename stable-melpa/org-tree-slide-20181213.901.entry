@@ -1,0 +1,2 @@
+
+(org-tree-slide . [(20181213 901) nil "A presentation tool for org-mode" single ((:commit . "508157fb2198c449f4a61c967ce02f1aadeb3772") (:keywords "convenience" "org-mode" "presentation" "narrowing") (:authors ("Takaaki ISHIKAWA <takaxp at ieee dot org>")) (:maintainer "Takaaki ISHIKAWA <takaxp at ieee dot org>") (:url . "https://github.com/takaxp/org-tree-slide"))])
