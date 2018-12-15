@@ -6,7 +6,7 @@
 
 ;; Compatibility: GNU Emacs 24.1+
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5") (async "1.9.3"))
-;; Package-Version: 20181211.1404
+;; Package-Version: 20181215.738
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -233,16 +233,17 @@ Arg CONF is an entry in `psession--winconf-alist'."
   (setq psession--save-buffers-alist (psession--save-some-buffers)))
 
 (defun psession--restore-some-buffers ()
-  (let* ((max (length psession--save-buffers-alist))
-         (progress-reporter (make-progress-reporter "Restoring buffers..." 0 max)))
-    (cl-loop for (f . p) in psession--save-buffers-alist
-             for count from 0
-             do
-             (with-current-buffer (find-file-noselect f 'nowarn)
-               (goto-char p)
-               (push-mark p 'nomsg)
-               (progress-reporter-update progress-reporter count)))
-    (progress-reporter-done progress-reporter)))
+  (when psession--save-buffers-alist
+    (let* ((max (length psession--save-buffers-alist))
+           (progress-reporter (make-progress-reporter "Restoring buffers..." 0 max)))
+      (cl-loop for (f . p) in psession--save-buffers-alist
+               for count from 0
+               do
+               (with-current-buffer (find-file-noselect f 'nowarn)
+                 (goto-char p)
+                 (push-mark p 'nomsg)
+                 (progress-reporter-update progress-reporter count)))
+      (progress-reporter-done progress-reporter))))
 
 (defun psession-savehist-hook ()
   (unless (or (eq minibuffer-history-variable t)
