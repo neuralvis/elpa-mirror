@@ -3,7 +3,7 @@
 
 ;; Author: Kenshi Muto <kmuto@debian.org>
 ;; URL: https://github.com/kmuto/review-el
-;; Package-Version: 20180312.1235
+;; Package-Version: 20181214.315
 
 ;;; Commentary:
 
@@ -41,8 +41,10 @@
 ;; C-c C-f C-k キーワードタグ(@<kw>)で囲む
 ;; C-c C-f i イタリックタグ(@<i>)で囲む
 ;; C-c C-f C-i 同上
-;; C-c C-f e 同上
-;; C-c C-f C-e 同上
+;; C-c C-f e 同上 (review-use-em tの場合は@<em>)
+;; C-c C-f C-e 同上 (review-use-em tの場合は@<em>)
+;; C-c C-f s 強調タグ(@<strong>)で囲む
+;; C-c C-f C-s 同上
 ;; C-c C-f t 等幅タグ(@<tt>)で囲む
 ;; C-c C-f C-t 同上
 ;; C-c C-f u 同上
@@ -81,7 +83,7 @@
 
 (declare-function skk-mode "skk-mode")
 
-(defconst review-version "1.8"
+(defconst review-version "1.9"
   "編集モードバージョン")
 
 ;;;; Custom Variables
@@ -105,7 +107,8 @@
     (define-key map "\C-c\C-fb" 'review-bold-region)
     (define-key map "\C-c\C-fa" 'review-underline-italic-region)
     (define-key map "\C-c\C-fi" 'review-italic-region)
-    (define-key map "\C-c\C-fe" 'review-italic-region)
+    (define-key map "\C-c\C-fe" 'review-em-region)
+    (define-key map "\C-c\C-fs" 'review-strong-region)
     (define-key map "\C-c\C-ft" 'review-underline-region)
     (define-key map "\C-c\C-fu" 'review-underline-region)
     (define-key map "\C-c\C-fk" 'review-keyword-region)
@@ -113,8 +116,9 @@
     (define-key map "\C-c\C-fn" 'review-index-region)
     (define-key map "\C-c\C-f\C-b" 'review-bold-region)
     (define-key map "\C-c\C-f\C-i" 'review-italic-region)
-    (define-key map "\C-c\C-f\C-e" 'review-italic-region)
+    (define-key map "\C-c\C-f\C-e" 'review-em-region)
     (define-key map "\C-c\C-f\C-a" 'review-underline-italic-region)
+    (define-key map "\C-c\C-f\C-s" 'review-strong-region)
     (define-key map "\C-c\C-f\C-t" 'review-underline-region)
     (define-key map "\C-c\C-f\C-u" 'review-underline-region)
     (define-key map "\C-c\C-f\C-k" 'review-keyword-region)
@@ -428,6 +432,7 @@
 (defvar review-index-end "}" "索引タグの終了文字")
 (defvar review-use-skk-mode nil "t:SKKモードで開始")
 (defvar review-dtp-name nil "現在のDTP")
+(defvar review-use-em nil "t:C-c C-f C-eでiではなくemにする")
 
 (defvar review-key-mapping
   '(
@@ -520,6 +525,19 @@ Key bindings:
   "選択領域をイタリックフォントタグ(@<i>)で囲みます"
   (interactive "r")
   (review-string-region "@<i>{" "}" start end))
+
+(defun review-em-region (start end)
+  "選択領域をイタリックフォントタグ(@<i>)または強調タグ(@<em>)で囲みます"
+  (interactive "r")
+  (if review-use-em
+      (review-string-region "@<em>{" "}" start end)
+    (review-string-region "@<i>{" "}" start end)
+    ))
+
+(defun review-strong-region (start end)
+  "選択領域を強調タグ(@<strong>)で囲みます"
+  (interactive "r")
+  (review-string-region "@<strong>{" "}" start end))
 
 (defun review-underline-italic-region (start end)
   "選択領域を等幅イタリックフォントタグ(@<tti>)で囲みます"
