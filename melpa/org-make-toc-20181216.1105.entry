@@ -1,0 +1,2 @@
+
+(org-make-toc . [(20181216 1105) ((emacs (25 1)) (dash (2 12)) (s (1 10 0)) (org (9 0))) "Automatic tables of contents for Org files" single ((:commit . "592fdc30f54775c0fc8c2a503305f71f95765b3e") (:keywords "org" "convenience") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "http://github.com/alphapapa/org-make-toc"))])
