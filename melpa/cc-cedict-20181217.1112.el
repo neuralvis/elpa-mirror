@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/xuchunyang/cc-cedict.el
 ;; Created: 2018-12-03
 ;; Version: 0.1
-;; Package-Version: 20181208.108
+;; Package-Version: 20181217.1112
 ;; Package-Requires: ((emacs "25"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -88,6 +88,9 @@
 
 ;;;###autoload
 (defun cc-cedict (chinese)
+  "Search CC-CEDICT by traditional or simplified CHINESE.
+Return the result, a `cc-cedict-entry' object or nil.
+Interactively, display the result in echo area."
   (interactive (list (cc-cedict-completing-read)))
   (unless cc-cedict-cache
     (setq cc-cedict-cache (cc-cedict-parse)))
