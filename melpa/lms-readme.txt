@@ -13,3 +13,4 @@ Major updates:
 2017/07/29 Initial version.
 2018/12/09 Added library browsing features from current track.
 2018/12/10 Added library browsing features.
+2018/12/16 Colorize lists, prev/next in TrackInfo, clean code, bugs fixed.
