@@ -2,7 +2,7 @@
 
 ;; Author: Natalie Weizenbaum
 ;; URL: https://github.com/nex3/dart-mode
-;; Package-Version: 20181217.26
+;; Package-Version: 20181217.630
 ;; Version: 1.0.4
 ;; Package-Requires: ((emacs "24.5") (cl-lib "0.5") (dash "2.10.0") (flycheck "0.23") (s "1.10"))
 ;; Keywords: language
@@ -390,12 +390,16 @@ indentation levels from right to left."
 
 ;;; Additional fontification support
 
+(setq dart--file-directives
+      '("as" "deferred" "export" "hide" "import" "library" "of" "part"
+      "show"))
+
 (setq dart--builtins
       ;; ECMA 408; Section: Identifier Reference
       ;; "Built-in identifiers"
       '("abstract" "as" "deferred" "dynamic" "export" "external"
-        "factory" "get" "implements" "import" "library" "operator"
-        "part" "set" "static" "typedef"))
+        "hide" "factory" "get" "implements" "import" "library" "of"
+        "operator" "part" "set" "show" "static" "typedef"))
 
 (setq dart--keywords
       ;; ECMA 408; Section: Reserved Words
@@ -599,7 +603,8 @@ indentation levels from right to left."
                                    dart-font-lock-keywords-3)))
 
 (setq dart-font-lock-keywords-1
-      '((dart--function-declaration-func       . font-lock-function-name-face)))
+      `((,(regexp-opt dart--file-directives 'words) . font-lock-builtin-face)
+        (dart--function-declaration-func            . font-lock-function-name-face)))
 
 (setq dart-font-lock-keywords-2
       `(,dart--async-keywords-re
@@ -611,17 +616,19 @@ indentation levels from right to left."
         (,dart--metadata-re                   . font-lock-constant-face)
         (,(regexp-opt dart--types 'words)     . font-lock-type-face)
         (,dart--types-re                      . font-lock-type-face)
-        (dart--function-declaration-func      . font-lock-function-name-face)
-        (dart--declared-identifier-func       . font-lock-variable-name-face)
-        (dart--declared-identifier-anchor-func
-         . (dart--declared-identifier-next-func
-            nil
-            nil
-            (0 font-lock-variable-name-face)))
-        (dart--string-interpolation-id-func   (0 font-lock-variable-name-face t))
-        (dart--string-interpolation-exp-func  (0 font-lock-variable-name-face t))))
+        (dart--function-declaration-func      . font-lock-function-name-face)))
 
-(setq dart-font-lock-keywords-3 dart-font-lock-keywords-2)
+(setq dart-font-lock-keywords-3
+      (append
+       dart-font-lock-keywords-2
+       `((dart--declared-identifier-func       . font-lock-variable-name-face)
+         (dart--declared-identifier-anchor-func
+          . (dart--declared-identifier-next-func
+             nil
+             nil
+             (0 font-lock-variable-name-face)))
+         (dart--string-interpolation-id-func   (0 font-lock-variable-name-face t))
+         (dart--string-interpolation-exp-func  (0 font-lock-variable-name-face t)))))
 
 (setq dart-string-delimiter (rx (and
                             ;; Match even number of backslashes.
