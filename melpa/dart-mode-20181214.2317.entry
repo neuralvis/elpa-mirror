@@ -1,2 +1,0 @@
-
-(dart-mode . [(20181214 2317) ((emacs (24 5)) (cl-lib (0 5)) (dash (2 10 0)) (flycheck (0 23)) (s (1 10))) "Major mode for editing Dart files" single ((:commit . "2a9500599ee4234711d09fc58243d919aa483e73") (:keywords "language") (:authors ("Natalie Weizenbaum")) (:maintainer "Natalie Weizenbaum") (:url . "https://github.com/nex3/dart-mode"))])
