@@ -2,7 +2,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/frame-purpose.el
-;; Package-Version: 20181218.707
+;; Package-Version: 20181218.811
 ;; Version: 1.1-pre
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; Keywords: buffers, convenience, frames
@@ -202,6 +202,20 @@ argument, a list of buffers, and return the list sorted as
 desired.  By default, buffers are sorted by modified status and
 name.
 
+`:sidebar-buffers-fn': A function which takes no arguments and
+returns a list of buffers to be displayed in the sidebar.  If
+nil, `buffer-list' is used.  Using a custom function for this
+when possible may substantially improve performance.
+
+`:sidebar-auto-update': Whether to automatically update the
+sidebar buffer whenever `buffer-list-update-hook' is called.  On
+by default, but may degrade Emacs performance.
+
+`:sidebar-update-on-buffer-switch': Whether to automatically
+update the sidebar when the user selects a buffer from the
+sidebar.  Disabled by default.  If `:sidebar-auto-update' is
+non-nil, this should remain nil.
+
 Remaining keywords are transformed to non-keyword symbols and
 passed as frame parameters to `make-frame', which see."
   (unless frame-purpose-mode
@@ -233,6 +247,9 @@ passed as frame parameters to `make-frame', which see."
     (when (and (map-elt parameters 'buffer-predicate)
                (or modes filenames))
       (user-error "When buffer-predicate is set, modes and filenames must be unspecified"))
+    (unless (member 'sidebar-auto-update (map-keys parameters))
+      ;; Enable sidebar-auto-update by default.
+      (map-put parameters 'sidebar-auto-update t))
     ;; Make frame
     (with-selected-frame (make-frame parameters)
       ;; Add predicate. NOTE: It would be easy to put the predicate in `parameters' before calling
@@ -291,10 +308,12 @@ FRAME defaults to the current frame."
 
 (defun frame-purpose--buffer-list-update-hook ()
   "Update frame-purpose sidebars in all frames.
-To be added to `buffer-list-update-hook'."
+If a frame's `sidebar-auto-update' parameter is nil, its sidebar
+is not updated.  To be added to `buffer-list-update-hook'."
   (cl-loop for frame in (frame-list)
            do (with-selected-frame frame
-                (when (frame-purpose--get-sidebar)
+                (when (and (frame-parameter nil 'sidebar-auto-update)
+                           (frame-purpose--get-sidebar))
                   (frame-purpose--update-sidebar)))))
 
 (defun frame-purpose--get-sidebar (&optional create)
@@ -328,7 +347,8 @@ When CREATE is non-nil, create the buffer if necessary."
            (buffer-sort-fns (or (frame-parameter nil 'buffer-sort-fns)
                                 (list (-on #'string< #'buffer-name)
                                       (-on #'< #'buffer-modified-tick))))
-           (buffers (buffer-list))
+           (buffers (funcall (or (frame-parameter nil 'sidebar-buffers-fn)
+                                 #'buffer-list)))
            (buffers (dolist (fn buffer-sort-fns buffers)
                       (setq buffers (-sort fn buffers))))
            (separator (pcase (frame-parameter nil 'sidebar)
@@ -369,7 +389,9 @@ when the user clicked in the sidebar."
   (interactive)
   (when-let ((buffer (get-text-property (point) 'buffer)))
     (select-window (get-mru-window nil nil 'not-selected))
-    (switch-to-buffer buffer)))
+    (switch-to-buffer buffer))
+  (when (frame-parameter nil 'sidebar-update-on-buffer-switch)
+    (frame-purpose--update-sidebar)))
 
 ;;;;; Throttle
 
@@ -414,7 +436,10 @@ will be allowed to run again."
 ;; Throttle the update-sidebar function, because sometimes it can be very slow and make Emacs loop
 ;; for a long time.  This is a hacky workaround, but it does help.
 
-(frame-purpose--throttle #'frame-purpose--update-sidebar 1)
+;; NOTE: Disabling for now, because it may not be desirable when using custom sidebar update
+;; functions.
+
+;;  (frame-purpose--throttle #'frame-purpose--update-sidebar 1)
 
 ;;;; Mode
 

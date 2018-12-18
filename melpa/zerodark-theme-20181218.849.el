@@ -4,7 +4,7 @@
 
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: themes
-;; Package-Version: 20180911.1451
+;; Package-Version: 20181218.849
 ;; URL: https://github.com/NicolasPetton/zerodark-theme
 ;; Version: 4.3
 ;; Package: zerodark-theme
@@ -449,6 +449,12 @@ The result is cached for one second to avoid hiccups."
    `(notmuch-tree-match-author-face ((,class (:foreground ,purple))))
    `(notmuch-tree-match-tag-face ((,class (:foreground ,green :weight bold))))
 
+   ;; mu4e
+   `(mu4e-highlight-face ((,class (:foreground ,purple :background ,background :weight bold))))
+   `(mu4e-header-value-face ((,class (:foreground ,purple))))
+   `(mu4e-contact-face ((,class (:foreground ,purple))))
+   `(mu4e-special-header-value-face ((,class (:foreground ,green :weight bold))))
+
    ;; company
    `(company-preview ((,class (:background ,background-darker :foreground ,default))))
    `(company-preview-common ((,class (:background ,background-darker :foreground ,purple))))
@@ -539,10 +545,10 @@ The result is cached for one second to avoid hiccups."
    `(gnus-group-mail-3 ((,class (:weight bold :foreground "#ccaa8f"))))
    `(gnus-group-mail-3-low ((,class (:foreground "#ccaa8f"))))
    `(gnus-group-mail-low ((,class (:foreground "#99968b"))))
-   `(gnus-header-content ((,class (:foreground "#8ac6f2"))))
+   `(gnus-header-content ((,class (:foreground ,purple))))
    `(gnus-header-from ((,class (:weight bold :foreground "#95e454"))))
-   `(gnus-header-subject ((,class (:foreground "#cae682"))))
-   `(gnus-header-name ((,class (:foreground "#8ac6f2"))))
+   `(gnus-header-subject ((,class (:foreground ,green))))
+   `(gnus-header-name ((,class (:foreground ,blue))))
    `(gnus-header-newsgroups ((,class (:foreground "#cae682"))))
 
    ;; which-function
@@ -657,13 +663,13 @@ The result is cached for one second to avoid hiccups."
    `(avy-lead-face-1 ((,class :foreground ,blue :background ,background-blue)))
    `(avy-lead-face-2 ((,class :foreground ,green :background ,background-green)))
 
-   `(erc-nick-default-face ((,class :foreground ,blue :background ,background-blue :weight bold)))
-   `(erc-current-nick-face ((,class :foreground ,red :weight bold :background ,background-red)))
-   `(erc-my-nick-face ((,class :foreground ,red :weight bold :background ,background-red)))
+   `(erc-nick-default-face ((,class :foreground ,blue :background ,background)))
+   `(erc-current-nick-face ((,class :foreground ,purple :weight bold)))
+   `(erc-my-nick-face ((,class :foreground ,purple :weight bold)))
    `(erc-notice-face ((,class :foreground ,comment)))
-   `(erc-input-face ((,class :foreground ,default :weight bold)))
-   `(erc-prompt-face ((,class :foreground ,purple :background ,background-purple :weight bold :box 1)))
-   `(erc-timestamp-face ((,class :foreground ,purple :weight bold)))
+   `(erc-input-face ((,class :foreground ,purple :slant italic)))
+   `(erc-prompt-face ((,class :foreground ,purple :background ,background :weight bold)))
+   `(erc-timestamp-face ((,class :foreground ,purple)))
 
    ;; slack
    `(slack-message-output-header ((,class :foreground ,blue :background ,background-blue :weight bold)))

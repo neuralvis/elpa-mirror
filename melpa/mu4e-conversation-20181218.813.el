@@ -5,7 +5,7 @@
 ;; Author: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; Maintainer: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; URL: https://gitlab.com/Ambrevar/mu4e-conversation
-;; Package-Version: 20181203.2200
+;; Package-Version: 20181218.813
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: mail, convenience, mu4e
@@ -1500,6 +1500,7 @@ in existing view buffers. "
   (unless (fboundp 'mu4e-view-mode)
     (mu4e~view-define-mode)))
 
+;;;###autoload
 (define-globalized-minor-mode global-mu4e-conversation-mode mu4e-conversation-mode mu4e-conversation--turn-on
   :require 'mu4e-conversation)
 
