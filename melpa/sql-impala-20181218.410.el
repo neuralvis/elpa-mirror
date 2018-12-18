@@ -4,7 +4,7 @@
 
 ;; Author: Jason Terk <jason@goterkyourself.com>
 ;; Version: 1.0
-;; Package-Version: 20160427.2358
+;; Package-Version: 20181218.410
 ;; Keywords: sql, impala
 ;; URL: https://github.com/jterk/sql-impala
 
@@ -70,6 +70,7 @@ The buffer with name BUFFER will be used or created."
 
 (sql-add-product 'impala "Cloudera Impala"
                  :prompt-regexp "^[^>]*> "
+                 :prompt-cont-regexp "^ *> "
                  :sqli-comint-func 'sql-comint-impala
                  :sqli-login sql-impala-login-params
                  :sqli-program 'sql-impala-program

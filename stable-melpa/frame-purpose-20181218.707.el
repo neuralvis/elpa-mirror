@@ -2,8 +2,8 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/frame-purpose.el
-;; Package-Version: 20180624.57
-;; Version: 1.0.0-pre
+;; Package-Version: 20181218.707
+;; Version: 1.1-pre
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; Keywords: buffers, convenience, frames
 
@@ -135,7 +135,7 @@ MODE defaults to the current buffer's major mode."
                             :title (symbol-name mode)))
 
 ;;;###autoload
-(cl-defun frame-purpose-show-sidebar (&optional (side 'right))
+(cl-defun frame-purpose-show-sidebar (&optional (side 'right side-set-p))
   "Show list of purpose-specific buffers on SIDE of this frame.
 When a buffer in the list is selected, the last-used window
 switches to that buffer.  Makes a new buffer if necessary.  SIDE
@@ -150,6 +150,8 @@ is a symbol, one of left, right, top, or bottom."
                                 (string (string-match mode (symbol-name major-mode))))))
     (user-error "The sidebar should generally not be used with buffers in %s.  See option `frame-purpose-sidebar-mode-blacklist'"
                 major-mode))
+  (unless side-set-p
+    (setq side (frame-parameter nil 'sidebar)))
   (frame-purpose--update-sidebar)
   (let* ((side (cl-case side
                  ;; Invert the side for `split-window'
@@ -164,10 +166,15 @@ is a symbol, one of left, right, top, or bottom."
                                    ;; In case the sidebar is opened in a frame without matching buffers
                                    (list 30))))
                  ((or 'nil 'below)
-                  1))))
+                  1)))
+         (horizontal (pcase-exhaustive side
+                       ((or 'above 'below) nil)
+                       ((or 'left 'right) t))))
     (split-window nil size side)
     (switch-to-buffer (frame-purpose--sidebar-name))
-    (set-window-dedicated-p (selected-window) t)))
+    (set-window-dedicated-p (selected-window) t)
+    (window-preserve-size nil horizontal t)
+    (goto-char (point-min))))
 
 ;;;; Functions
 
@@ -190,6 +197,11 @@ buffer, and returns non-nil when the buffer matches the frame's
 purpose.  When set, `:modes' and `:filenames' must not also be
 set.
 
+`:buffer-sort-fns': A list of sorting functions which take one
+argument, a list of buffers, and return the list sorted as
+desired.  By default, buffers are sorted by modified status and
+name.
+
 Remaining keywords are transformed to non-keyword symbols and
 passed as frame parameters to `make-frame', which see."
   (unless frame-purpose-mode
@@ -206,15 +218,15 @@ passed as frame parameters to `make-frame', which see."
                       (cl-typecase filenames
                         (string (list filenames))
                         (list filenames))))
-         (pred (byte-compile (or (map-elt parameters 'buffer-predicate)
-                                 `(lambda (buffer)
-                                    (with-current-buffer buffer
-                                      (or ,(when modes
-                                             `(frame-purpose--check-mode ',modes))
-                                          ,(when filenames
-                                             `(cl-loop for filename in ',filenames
-                                                       when buffer-file-name
-                                                       thereis (string-match filename buffer-file-name))))))))))
+         (pred (byte-compile
+                (or (map-elt parameters 'buffer-predicate)
+                    `(lambda (buffer)
+                       (or ,(when modes
+                              `(frame-purpose--buffer-mode-matches-p buffer ',modes))
+                           ,(when filenames
+                              `(cl-loop for filename in ',filenames
+                                        when (buffer-local-value 'buffer-file-name buffer)
+                                        thereis (string-match filename (buffer-local-value 'buffer-file-name buffer))))))))))
     ;; Validate args
     (unless (or modes filenames (map-elt parameters 'buffer-predicate))
       (user-error "One of `:modes', `:filenames', or `:buffer-predicate' must be set"))
@@ -244,6 +256,16 @@ major mode's name with `string-match'."
            thereis (cl-typecase mode
                      (symbol (eq mode major-mode))
                      (string (string-match mode (symbol-name major-mode))))))
+
+(defsubst frame-purpose--buffer-mode-matches-p (buffer modes)
+  "Return non-nil if any of MODES match `major-mode'.
+MODES is a list of one or more symbols or strings.  Symbols are
+compared with `eq', and strings are regexps compared against the
+major mode's name with `string-match'."
+  (cl-loop for mode in modes
+           thereis (cl-typecase mode
+                     (symbol (eq mode (buffer-local-value 'major-mode buffer)))
+                     (string (string-match mode (symbol-name (buffer-local-value 'major-mode buffer)))))))
 
 (defun frame-purpose--buffer-list (&optional frame)
   "Return list of buffers.  When FRAME has a buffer-predicate, only return frames passing it."
@@ -287,7 +309,8 @@ When CREATE is non-nil, create the buffer if necessary."
             ;; be a nicer way to do this.
             (set-frame-parameter nil 'sidebar frame-purpose-sidebar-default-side))
           (with-current-buffer (get-buffer-create buffer-name)
-            (setq buffer-read-only t
+            (setq buffer-undo-list t
+                  buffer-read-only t
                   cursor-type nil
                   mode-line-format nil)
             (use-local-map (make-sparse-keymap))
@@ -302,20 +325,20 @@ When CREATE is non-nil, create the buffer if necessary."
   (with-current-buffer (frame-purpose--get-sidebar 'create)
     (let* ((saved-point (point))
            (inhibit-read-only t)
-           (grouped-buffers (->> (buffer-list)
-                                 (-sort (-on #'string< #'buffer-name))
-                                 (-group-by #'buffer-modified-p)
-                                 (mapcar #'cdr)))
+           (buffer-sort-fns (or (frame-parameter nil 'buffer-sort-fns)
+                                (list (-on #'string< #'buffer-name)
+                                      (-on #'< #'buffer-modified-tick))))
+           (buffers (buffer-list))
+           (buffers (dolist (fn buffer-sort-fns buffers)
+                      (setq buffers (-sort fn buffers))))
            (separator (pcase (frame-parameter nil 'sidebar)
                         ((or 'left 'right) "\n")
                         ((or 'above 'below) "  "))))
       (erase-buffer)
-      (dolist (group grouped-buffers)
-        (cl-loop for buffer in group
-                 for string = (frame-purpose--format-buffer buffer)
-                 do (insert (propertize string
-                                        'buffer buffer)
-                            separator)))
+      (cl-loop for buffer in buffers
+               for string = (frame-purpose--format-buffer buffer)
+               do (insert (propertize string 'buffer buffer)
+                          separator))
       (goto-char saved-point))))
 
 (defun frame-purpose--sidebar-name (&optional frame)
@@ -347,6 +370,51 @@ when the user clicked in the sidebar."
   (when-let ((buffer (get-text-property (point) 'buffer)))
     (select-window (get-mru-window nil nil 'not-selected))
     (switch-to-buffer buffer)))
+
+;;;;; Throttle
+
+(defun frame-purpose--throttle (func interval)
+  "Throttle FUNC: a closure, lambda, or symbol.
+
+If argument is a symbol then install the throttled function over
+the original function.  INTERVAL, a number of seconds or a
+duration string as used by `timer-duration', determines how much
+time must pass before FUNC will be allowed to run again."
+  (cl-typecase func
+    (symbol
+     (when (get func :frame-purpose-throttle-original-function)
+       (user-error "%s is already throttled" func))
+     (put func :frame-purpose-throttle-original-documentation (documentation func))
+     (put func 'function-documentation
+          (concat (documentation func) " (throttled)"))
+     (put func :frame-purpose-throttle-original-function (symbol-function func))
+     (fset func (frame-purpose--throttle-wrap (symbol-function func) interval))
+     func)
+    (function (frame-purpose--throttle-wrap func interval))))
+
+(defun frame-purpose--throttle-wrap (func interval)
+  "Return the throttled version of FUNC.
+INTERVAL, a number of seconds or a duration string as used by
+`timer-duration', determines how much time must pass before FUNC
+will be allowed to run again."
+  (let ((interval (cl-typecase interval
+                    ;; Convert interval to seconds
+                    (float interval)
+                    (integer interval)
+                    (string (timer-duration interval))
+                    (t (user-error "Invalid interval: %s" interval))))
+        last-run-time)
+    (lambda (&rest args)
+      (when (or (null last-run-time)
+                (>= (float-time (time-subtract (current-time) last-run-time))
+                    interval))
+        (setq last-run-time (current-time))
+        (apply func args)))))
+
+;; Throttle the update-sidebar function, because sometimes it can be very slow and make Emacs loop
+;; for a long time.  This is a hacky workaround, but it does help.
+
+(frame-purpose--throttle #'frame-purpose--update-sidebar 1)
 
 ;;;; Mode
 
