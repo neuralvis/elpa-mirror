@@ -1,2 +1,2 @@
 
-(format-table . [(20181210 1813) ((emacs (25)) (dash (2 14 1))) "Parse and reformat tabular data." single ((:commit . "a019a2931e1303e6584e426ce1a6a2cc46b3425d") (:keywords "data") (:authors ("Jason Duncan" . "jasond496@msn.com")) (:maintainer "Jason Duncan" . "jasond496@msn.com") (:url . "https://github.com/functionreturnfurnction/format-table"))])
+(format-table . [(20181210 1813) ((emacs (25)) (dash (2 14 1))) "Parse and reformat tabular data." single ((:commit . "e3b3801ca58694d577a75e7e24e157b14634f8ae") (:keywords "data") (:authors ("Jason Duncan" . "jasond496@msn.com")) (:maintainer "Jason Duncan" . "jasond496@msn.com") (:url . "https://github.com/functionreturnfurnction/format-table"))])
