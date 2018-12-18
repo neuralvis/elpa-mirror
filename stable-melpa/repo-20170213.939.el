@@ -2,7 +2,6 @@
 
 ;; Author: Damien Merenne
 ;; URL: https://github.com/canatella/repo-el
-;; Package-Version: 20170213.939
 ;; Created: 2016-01-11
 ;; Keywords: convenience
 ;; Version: 0.1
