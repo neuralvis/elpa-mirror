@@ -1,10 +1,10 @@
-;;; lsp-typescript.el --- Javascript/Typescript support for lsp-mode  -*- lexical-binding: t; -*-
+;;; lsp-javascript-typescript.el --- Javascript/Typescript support for lsp-mode  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017 George Pittarelli <g@gjp.cc>
 
 ;; Author: George Pittarelli <g@gjp.cc>
 ;; Version: 1.0
-;; Package-Version: 20180906.524
+;; Package-Version: 20181219.442
 ;; Package-Requires: ((lsp-mode "3.0") (typescript-mode "0.1") (emacs "25.1"))
 ;; Keywords: languages tools
 ;; URL: https://github.com/emacs-lsp/lsp-javascript
@@ -24,8 +24,8 @@
 
 ;;; Commentary:
 
-;; Javascript and Typescript support for lsp-mode using Theia's
-;; typescript-language-server server.
+;; Javascript and Typescript support for lsp-mode using Sourcegraph's
+;; javascript-typescript-langserver server.
 
 ;;; Code:
 
@@ -33,34 +33,30 @@
 (require 'typescript-mode)
 
 ;;;###autoload
-(defcustom lsp-typescript-server
-  "typescript-language-server"
-  "The typescript-language-server executable to use.
+(defcustom lsp-javascript-typescript-server
+  "javascript-typescript-stdio"
+  "The javascript-typescript-stdio executable to use.
 Leave as just the executable name to use the default behavior of
 finding the executable with `exec-path'."
-  :group 'lsp-typescript
+  :group 'lsp-javascript-typescript
   :risky t
   :type 'file)
 
 ;;;###autoload
-(defcustom lsp-typescript-server-args
+(defcustom lsp-javascript-typescript-server-args
   '()
-  "Extra arguments for the typescript-language-server language server"
-  :group 'lsp-typescript
+  "Extra arguments for the javascript-typescript-stdio language server"
+  :group 'lsp-javascript-typescript
   :risky t
   :type '(repeat string))
 
-(defconst lsp-typescript--get-root
-  (lsp-make-traverser #'(lambda (dir)
-                          (directory-files dir nil "package.json"))))
 
-(defun lsp-typescript--ls-command ()
+(defun lsp-javascript-typescript--ls-command ()
   "Generate the language server startup command."
-  `(,lsp-typescript-server
-    "--stdio"
-    ,@lsp-typescript-server-args))
+  `(,lsp-javascript-typescript-server
+    ,@lsp-javascript-typescript-server-args))
 
-(defun lsp-typescript--render-string (str)
+(defun lsp-javascript-typescript--render-string (str)
   (condition-case nil
       (with-temp-buffer
 	      (delay-mode-hooks (typescript-mode))
@@ -69,23 +65,19 @@ finding the executable with `exec-path'."
 	      (buffer-string))
     (error str)))
 
-(defun lsp-typescript--initialize-client (client)
+(defun lsp-javascript-typescript--initialize-client (client)
   (lsp-provide-marked-string-renderer
-   client "typescript" 'lsp-typescript--render-string)
+   client "typescript" 'lsp-javascript-typescript--render-string)
   (lsp-provide-marked-string-renderer
-   client "javascript" 'lsp-typescript--render-string))
-
-(defun lsp-typescript--language-id (buffer)
-  (if (equal "ts" (file-name-extension (buffer-file-name buffer)))
-      "typescript" "javascript"))
+   client "javascript" 'lsp-javascript-typescript--render-string))
 
 (lsp-define-stdio-client
- lsp-typescript "javascript"
- lsp-typescript--get-root
+ lsp-javascript-typescript "javascript"
  nil
- :language-id-fn 'lsp-typescript--language-id
- :initialize 'lsp-typescript--initialize-client
- :command-fn 'lsp-typescript--ls-command)
+ nil
+ :ignore-messages '("readFile .*? requested by TypeScript but content not available")
+ :initialize 'lsp-javascript-typescript--initialize-client
+ :command-fn 'lsp-javascript-typescript--ls-command)
 
-(provide 'lsp-typescript)
-;;; lsp-typescript.el ends here
+(provide 'lsp-javascript-typescript)
+;;; lsp-javascript-typescript.el ends here

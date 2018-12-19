@@ -4,7 +4,7 @@
 
 ;; Author: George Pittarelli <g@gjp.cc>
 ;; Version: 1.0
-;; Package-Version: 20180910.1921
+;; Package-Version: 20181219.507
 ;; Package-Requires: ((lsp-mode "3.0") (emacs "25.1"))
 ;; Keywords: languages tools
 ;; URL: https://github.com/emacs-lsp/lsp-ruby
@@ -32,11 +32,6 @@
 (require 'lsp-mode)
 (require 'ruby-mode)
 
-(defconst lsp-ruby--get-root
-  (lsp-make-traverser
-   #'(lambda (dir)
-       (directory-files dir nil "\\(Rakefile\\|Gemfile\\)"))))
-
 (defun lsp-ruby--render-string (str)
   "Render STR with `ruby-mode' syntax highlighting."
   (ignore-errors
@@ -53,13 +48,13 @@
 
 (lsp-define-stdio-client
  lsp-ruby "ruby"
- lsp-ruby--get-root
+ nil
  '("solargraph" "stdio")
  :initialize 'lsp-ruby--initialize-client)
 
 (lsp-define-tcp-client
  lsp-ruby-solargraph-tcp "ruby"
- lsp-ruby--get-root
+ nil
  '("solargraph" "socket")
  "127.0.0.1"
  7658
@@ -67,7 +62,7 @@
 
 (lsp-define-stdio-client
  lsp-ruby-mtsmfm "ruby"
- lsp-ruby--get-root
+ nil
  '("language_server-ruby" "--experimental-features")
  :initialize 'lsp-ruby--initialize-client)
 

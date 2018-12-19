@@ -5,7 +5,7 @@
 
 ;; Author: Ozan Sener <hi@ozan.email>
 ;; Version: 1.0
-;; Package-Version: 20180613.508
+;; Package-Version: 20181219.442
 ;; Package-Requires: ((lsp-mode "3.0") (emacs "25.1"))
 ;; Keywords: languages tools
 ;; URL: https://github.com/emacs-lsp/lsp-javascript
@@ -56,13 +56,9 @@ finding the executable with `exec-path'."
     "--stdio"
     ,@lsp-javascript-flow-server-args))
 
-(defconst lsp-javascript-flow--get-root
-  (lsp-make-traverser #'(lambda (dir)
-                          (directory-files dir nil "package.json"))))
-
 (lsp-define-stdio-client
  lsp-javascript-flow "javascript"
- lsp-javascript-flow--get-root
+ nil
  nil
  :ignore-messages '("\[INFO].*?nuclide")
  :command-fn 'lsp-javascript-flow--ls-command)
