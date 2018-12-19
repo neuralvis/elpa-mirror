@@ -5,7 +5,7 @@
 ;; Author: Clément Pit-Claudel, Feng Shu
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/company-posframe
-;; Package-Version: 20181206.426
+;; Package-Version: 20181219.1239
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching
 ;; Package-Requires: ((emacs "26.0")(company "0.9.0")(posframe "0.1.0"))
@@ -131,7 +131,6 @@ Using current frame's font if it it nil."
 COMMAND: See `company-frontends'."
   (cl-case command
     (pre-command nil)
-    (show (company-posframe-show))
     (hide (company-posframe-hide))
     (update (company-posframe-show))
     (post-command (company-posframe-show))))

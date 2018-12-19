@@ -3,7 +3,7 @@
 ;; Copyright (C) DIKU 2013-2017, University of Copenhagen
 ;;
 ;; URL: https://github.com/diku-dk/futhark
-;; Package-Version: 20181218.810
+;; Package-Version: 20181219.1335
 ;; Keywords: languages
 ;; Version: 0.1
 ;; Package-Requires: ((cl-lib "0.5"))
@@ -369,9 +369,18 @@ In general, prefer as little indentation as possible."
               (let ((m
                      (futhark-max
                       (save-excursion
-                        (futhark-keyword-backward "let"))
+                        (futhark-backward-part)
+                        (when (looking-at "unsafe")
+                          (point)))
                       (save-excursion
-                        (futhark-keyword-backward "loop")))))
+                        ;; Careful that we are not confused by a nested 'let'.
+                        (let ((m2 (futhark-keyword-backward "let\\|in")))
+                          (when (looking-at "let")
+                            m2)))
+                      (save-excursion
+                        (futhark-backward-part)
+                        (when (looking-at "do")
+                          (futhark-keyword-backward "loop"))))))
                 (and (not (eq nil m))
                      (goto-char m)
                      (current-column)))))
