@@ -1,0 +1,2 @@
+
+(load-bash-alias . [(20181219 905) ((emacs (24 1)) (seq (2 16))) "Convert bash aliases into eshell ones" single ((:commit . "d2dca7e7e546582a5f8aa339b276fe8a89f57771") (:keywords "emacs" "bash" "eshell" "alias") (:authors ("Davide Restivo" . "davide.restivo@yahoo.it")) (:maintainer "Davide Restivo" . "davide.restivo@yahoo.it") (:url . "https://github.com/daviderestivo/load-bash-alias"))])
