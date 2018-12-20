@@ -5,8 +5,8 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: vc
 ;; URL: https://github.com/muffinmad/emacs-vc-hgcmd
-;; Package-Version: 20181205.2101
-;; Package-X-Original-Version: 1.3
+;; Package-Version: 20181220.736
+;; Package-X-Original-Version: 1.3.1
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -471,8 +471,9 @@ Insert 'Running command' and display buffer text if COMMAND"
 
 (defun vc-hgcmd-dir-extra-headers (_dir)
   "Return summary command for DIR output as dir extra headers."
-  (let* ((parents (split-string (vc-hgcmd-command "log" "-r" "p1()+p2()" "--template" "{rev}:{node|short}\\0{branch}\\0{tags}\\0{desc|firstline}\n") "\n"))
-         (result (apply #'concat (mapcar #'vc-hgcmd--parent-info parents))))
+  (let* ((parents (vc-hgcmd-command "log" "-r" "p1()+p2()" "--template" "{rev}:{node|short}\\0{branch}\\0{tags}\\0{desc|firstline}\n"))
+         (result (when parents
+                   (apply #'concat (mapcar #'vc-hgcmd--parent-info (split-string parents "\n"))))))
     (with-temp-buffer
       (vc-hgcmd-command-output-buffer (current-buffer) "summary")
       (concat result

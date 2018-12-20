@@ -1,0 +1,2 @@
+
+(typescript-mode . [(20181220 855) nil "Major mode for editing typescript" tar ((:commit . "6ae2c7ab9e8f5bd5c8f924e9abae76fdd0c295b6") (:keywords "typescript" "languages") (:url . "http://github.com/ananthakumaran/typescript.el"))])
