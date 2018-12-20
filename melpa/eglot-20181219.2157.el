@@ -3,12 +3,12 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.3
-;; Package-Version: 20181216.1903
+;; Package-Version: 20181219.2157
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
 ;; Keywords: convenience, languages
-;; Package-Requires: ((emacs "26.1") (jsonrpc "1.0.6") (flymake "1.0.2"))
+;; Package-Requires: ((emacs "26.1") (jsonrpc "1.0.7") (flymake "1.0.2"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

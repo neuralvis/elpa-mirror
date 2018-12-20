@@ -2,7 +2,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/frame-purpose.el
-;; Package-Version: 20181219.1608
+;; Package-Version: 20181219.2304
 ;; Version: 1.1-pre
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; Keywords: buffers, convenience, frames
@@ -94,8 +94,8 @@
   "Default side of sidebar window."
   :type '(choice (const right :value)
                  (const left)
-                 (const above)
-                 (const below)))
+                 (const top)
+                 (const bottom)))
 
 (defcustom frame-purpose-sidebar-mode-blacklist
   '(
@@ -153,28 +153,29 @@ is a symbol, one of left, right, top, or bottom."
   (unless side-set-p
     (setq side (frame-parameter nil 'sidebar)))
   (frame-purpose--update-sidebar)
-  (let* ((side (cl-case side
-                 ;; Invert the side for `split-window'
-                 ('left 'right)
-                 ('right 'left)
-                 ('above 'below)
-                 ('below nil)))
-         (size (pcase side
-                 ((or 'left 'right)
-                  (apply #'max (or (--map (+ 3 (length (buffer-name it)))
-                                          (buffer-list))
-                                   ;; In case the sidebar is opened in a frame without matching buffers
-                                   (list 30))))
-                 ((or 'nil 'below)
-                  1)))
+  (let* ((target-size (pcase side
+                        ((or 'left 'right)
+                         (apply #'max (or (--map (+ 4 (length (buffer-name it)))
+                                                 (funcall (frame-parameter nil 'sidebar-buffers-fn)))
+                                          ;; In case the sidebar is opened in a frame without matching buffers
+                                          (list 30))))
+                        ((or 'top 'bottom)
+                         1)))
+         (dimension-parameter (pcase side
+                                ((or 'left 'right) 'window-width)
+                                ((or 'top 'bottom) 'window-height)))
          (horizontal (pcase-exhaustive side
-                       ((or 'above 'below) nil)
+                       ((or 'top 'bottom) nil)
                        ((or 'left 'right) t))))
-    (split-window nil size side)
-    (switch-to-buffer (frame-purpose--sidebar-name))
-    (set-window-dedicated-p (selected-window) t)
-    (window-preserve-size nil horizontal t)
-    (goto-char (point-min))))
+    (with-current-buffer (frame-purpose--get-sidebar)
+      (goto-char (point-min))
+      (display-buffer-in-side-window
+       (current-buffer)
+       (list (cons 'side side)
+             (cons 'slot 0)
+             (cons 'preserve-size (cons t t))
+             (cons dimension-parameter target-size)
+             (cons 'window-parameters (list (cons 'no-delete-other-windows t))))))))
 
 ;;;; Functions
 
@@ -202,10 +203,16 @@ argument, a list of buffers, and return the list sorted as
 desired.  By default, buffers are sorted by modified status and
 name.
 
+`:sidebar': When non-nil, display a sidebar on the given side
+showing buffers matching `:sidebar-buffers-fn'.  One of `top',
+`bottom', `left', or `right'.
+
 `:sidebar-buffers-fn': A function which takes no arguments and
 returns a list of buffers to be displayed in the sidebar.  If
 nil, `buffer-list' is used.  Using a custom function for this
 when possible may substantially improve performance.
+
+`:sidebar-header': Value for `header-line-format' in the sidebar.
 
 `:sidebar-auto-update': Whether to automatically update the
 sidebar buffer whenever `buffer-list-update-hook' is called.  On
@@ -322,7 +329,7 @@ major mode's name with `string-match'."
 (defun frame-purpose--initial-buffer (&optional frame)
   "Switch to the first valid buffer in FRAME.
 FRAME defaults to the current frame."
-  (when-let ((buffer (car (buffer-list frame))))
+  (when-let ((buffer (car (funcall (frame-parameter frame 'sidebar-buffers-fn)))))
     (switch-to-buffer buffer)))
 
 
@@ -353,7 +360,8 @@ When CREATE is non-nil, create the buffer if necessary."
             (setq buffer-undo-list t
                   buffer-read-only t
                   cursor-type nil
-                  mode-line-format nil)
+                  mode-line-format nil
+                  header-line-format (frame-parameter nil 'sidebar-header))
             (use-local-map (make-sparse-keymap))
             (mapc (lambda (key)
                     (local-set-key (kbd key) #'frame-purpose--sidebar-switch-to-buffer))
@@ -375,7 +383,7 @@ When CREATE is non-nil, create the buffer if necessary."
                       (setq buffers (-sort fn buffers))))
            (separator (pcase (frame-parameter nil 'sidebar)
                         ((or 'left 'right) "\n")
-                        ((or 'above 'below) "  "))))
+                        ((or 'top 'bottom) "  "))))
       (erase-buffer)
       (cl-loop for buffer in buffers
                for string = (frame-purpose--format-buffer buffer)
