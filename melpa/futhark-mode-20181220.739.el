@@ -3,7 +3,7 @@
 ;; Copyright (C) DIKU 2013-2017, University of Copenhagen
 ;;
 ;; URL: https://github.com/diku-dk/futhark
-;; Package-Version: 20181219.2016
+;; Package-Version: 20181220.739
 ;; Keywords: languages
 ;; Version: 0.1
 ;; Package-Requires: ((cl-lib "0.5"))
@@ -360,8 +360,9 @@ In general, prefer as little indentation as possible."
                (futhark-symbol-backward "=")
                (current-column))))
 
-       ;; If the previous code line ends with "=" or "->", align to the matching "let",
-       ;; "loop", "case", or "\" column plus one indent level.
+       ;; If the previous code line ends with "=" or "->", align to
+       ;; the matching "let", "entry", "loop", "case", or "\" column
+       ;; plus one indent level.
        (save-excursion
          (and (futhark-backward-part)
               (futhark-forward-part)
@@ -370,6 +371,8 @@ In general, prefer as little indentation as possible."
                      (futhark-max
                       (save-excursion
                         (futhark-keyword-backward "let"))
+                      (save-excursion
+                        (futhark-keyword-backward "entry"))
                       (save-excursion
                         (futhark-keyword-backward "loop"))
                       (save-excursion

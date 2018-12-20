@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY  <rocktakey@gmail.com>
 
 ;; Version: 0.0.0
-;; Package-Version: 20180817.1440
+;; Package-Version: 20181220.57
 
 ;; URL: https://github.com/ROCKTAKEY/ido-flex-with-migemo
 
@@ -70,10 +70,11 @@
   "Group of `ido-flex-with-migemo-mode'"
   :group 'ido)
 
-(defcustom ido-flex-with-migemo--excluded-func-list '(ido-describe-bindings
-                                                      describe-variable
-                                                      describe-function
-                                                      smex)
+(defcustom ido-flex-with-migemo-excluded-func-list
+  '(ido-describe-bindings
+    describe-variable
+    describe-function
+    smex)
   "This is list of function you don't want to use ido-flex-with-migemo."
   :group 'ido-flex-with-migemo
   :type '(list))
@@ -83,7 +84,7 @@
   :type '(value))
 
 (defface ido-flex-with-migemo-migemo-face '((((background light)) (:background  "#ded0ff" :italic t))
-                                            (((background dark))  (:background  "#0e905f" :italic t)))
+                                            (((background dark))  (:background  "#0e602f" :italic t)))
   "this face is used when ido is used with migemo.")
 
 
@@ -116,7 +117,7 @@ Choose among the regular `ido-set-matches-1', `ido-flex-with-migemo--match' and 
   (let (ad-return-value)
     
     (if (or (not ido-flex-with-migemo-mode) ;ido-flex-with-migemo-mode が off
-            (memq this-command ido-flex-with-migemo--excluded-func-list) ;command が excluded にある
+            (memq this-command ido-flex-with-migemo-excluded-func-list) ;command が excluded にある
             (>= ido-flex-with-migemo-least-char (length ido-text)))
 
         (if (not flx-ido-mode)          ;flex-ido-mode が off ならば
@@ -143,7 +144,7 @@ Choose among the regular `ido-set-matches-1', `ido-flex-with-migemo--match' and 
 
 ;;;###autoload
 (define-minor-mode ido-flex-with-migemo-mode
-  "Toggle ido flex with migemo mode"
+  "Toggle ido flex with migemo mode."
   :init-value nil
   :lighter ""
   :group 'ido-flex-with-migemo

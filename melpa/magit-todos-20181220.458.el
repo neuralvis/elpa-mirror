@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/magit-todos
-;; Package-Version: 20181212.843
+;; Package-Version: 20181220.458
 ;; Version: 1.2-pre
 ;; Package-Requires: ((emacs "25.2") (async "1.9.2") (dash "2.13.0") (f "0.17.2") (hl-todo "1.9.0") (magit "2.13.0") (pcre2el "1.8") (s "1.12.0"))
 ;; Keywords: magit, vc
@@ -435,9 +435,9 @@ Type \\[magit-diff-show-or-scroll-up] to peek at the item at point."
   "Refresh the current `magit-todos-list-mode' buffer."
   (setq-local magit-todos-max-items (* magit-todos-max-items magit-todos-buffer-item-factor))
   (setq-local magit-todos-auto-group-items (* magit-todos-auto-group-items magit-todos-buffer-item-factor))
-  (magit-insert-section (type magit-root-section)
-    (magit-insert-status-headers)
-    (magit-todos--insert-todos)))
+  (magit-section-show (magit-insert-section (type magit-root-section)
+                        (magit-insert-status-headers)
+                        (magit-todos--insert-todos))))
 
 ;;;; Functions
 
@@ -812,6 +812,7 @@ created."
     (unless buffer
       (setq buffer (get-buffer-create " *magit-todos--fontify-like-in-org-mode*"))
       (with-current-buffer buffer
+        (buffer-disable-undo)
         (org-mode)))
     (with-current-buffer buffer
       (erase-buffer)
