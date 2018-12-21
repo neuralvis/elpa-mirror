@@ -6,7 +6,7 @@
 ;; Author: alex@slab.org
 ;; Homepage: https://github.com/tidalcycles/Tidal
 ;; Version: 0
-;; Package-Version: 20181212.913
+;; Package-Version: 20181219.900
 ;; Keywords: tools
 ;; Package-Requires: ((haskell-mode "16") (emacs "24"))
 
@@ -105,6 +105,8 @@ let p = streamReplace tidal
     once = streamOnce tidal False
     asap = streamOnce tidal True
     nudgeAll = streamNudgeAll tidal
+    all = streamAll tidal
+    resetCycles = streamResetCycles tidal
     setcps = asap . cps
     xfade = transition tidal (Sound.Tidal.Transition.xfadeIn 4)
     xfadeIn t = transition tidal (Sound.Tidal.Transition.xfadeIn t)
