@@ -9,6 +9,7 @@ The doom-modeline was designed for minimalism, and offers:
 - An indicator for recording a macro
 - Local python/ruby version in the major-mode
 - A customizable mode-line height (see doom-modeline-height)
+- A minor modes segment which is compatible with minions
 - An error/warning count segment for flycheck
 - A workspace number segment for eyebrowse
 - A perspective name segment for persp-mode
@@ -19,6 +20,7 @@ The doom-modeline was designed for minimalism, and offers:
 - An indicator for xah-fly-keys state
 - An indicator for remote host
 - An indicator for current input method
+- An indicator for debug state
 - An indicator for LSP state
 - An indicator for github notifications
 - Truncated file names, file icon, buffer state and project name in buffer

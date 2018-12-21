@@ -5,6 +5,7 @@
 ;; Author: Jonne Mickelin <jonne@ljhms.com>
 ;; Created: 06 Jan 2015
 ;; Version: 0.1
+;; Package-Version: 20150111.426
 ;; Keywords: emulations
 ;; URL: https://github.com/jmickelin/vim-empty-lines-mode
 ;; Package-Requires: ((emacs "23"))
