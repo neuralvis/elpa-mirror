@@ -4,8 +4,8 @@
 
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 19 Nov 2016
-;; Version: 0.1.0
-;; Package-Version: 20181211.347
+;; Version: 0.2.0
+;; Package-Version: 20181221.528
 ;; Package-Requires: ()
 ;; Keywords: region convenience
 ;; Homepage: https://github.com/zonuexe/right-click-context

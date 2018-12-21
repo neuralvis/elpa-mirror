@@ -1,2 +1,0 @@
-
-(right-click-context . [(20181217 842) ((emacs (24 3)) (cl-lib (0 5)) (popup (0 5))) "Right Click Context menu" single ((:commit . "33ed67a675543b406a47c3ac4faf33f837d8aa22") (:keywords "mouse" "menu" "rightclick") (:authors ("USAMI Kenta" . "tadsan@zonu.me")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/zonuexe/right-click-context"))])
