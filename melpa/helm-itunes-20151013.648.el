@@ -3,6 +3,7 @@
 ;;
 ;; Author: Adam Schwartz <adam@adamschwartz.io>
 ;; URL: https://github.com/daschwa/helm-itunes
+;; Package-Version: 20151013.648
 ;;
 ;; Created: 2014-06-02
 ;; Version: 0.0.1

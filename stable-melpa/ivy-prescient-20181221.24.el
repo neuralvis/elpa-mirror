@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20181022.2256
+;; Package-Version: 20181221.24
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1") (prescient "2.2.1") (ivy "0.10.0"))
 ;; Version: 2.2.1
@@ -254,6 +254,7 @@ keyword arguments ACTION, CALLER are the same as in `ivy-read'."
 (define-minor-mode ivy-prescient-mode
   "Minor mode to use prescient.el in Ivy menus."
   :global t
+  :group 'prescient
   (if ivy-prescient-mode
       (progn
         (setq ivy-prescient--old-re-builder
