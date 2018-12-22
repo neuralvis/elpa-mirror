@@ -4,7 +4,7 @@
 ;;
 ;; Author: Eivind Fonn <evfonn@gmail.com>
 ;; URL: https://github.com/TheBB/company-reftex
-;; Package-Version: 20180713.841
+;; Package-Version: 20181222.906
 ;; Version: 0.1.0
 ;; Keywords: bib tex company latex reftex references labels citations
 ;; Package-Requires: ((emacs "25.1") (s "1.12") (company "0.8"))
@@ -56,9 +56,10 @@
   :tag "Company RefTeX"
   :group 'company)
 
-(defcustom company-reftex-annotate-citations t
-  "Whether to annotate citations with their titles."
-  :type 'boolean
+(defcustom company-reftex-annotate-citations "%t"
+  "If non-nil, a format string with which to annotate citations.
+See `reftex-format-citation'."
+  :type '(choice string (const nil))
   :group 'company-reftex)
 
 (defcustom company-reftex-annotate-labels t
@@ -72,14 +73,78 @@
   :group 'company-reftex)
 
 (defcustom company-reftex-labels-regexp
-  "\\\\\\(?:eq\\|auto\\)?ref{\\([^}]*\\)\\="
+  (rx "\\"
+      ;; List taken from `reftex-ref-style-alist'
+      (or "autoref"
+          "autopageref"
+          "Cpageref"
+          "cpageref"
+          "Cref"
+          "cref"
+          "eqref"
+          "Fref"
+          "fref"
+          "pageref"
+          "Ref"
+          "ref"
+          "vpageref"
+          "Vref"
+          "vref")
+      "{"
+      (group (* (not (any "}"))))
+      (regexp "\\="))
   "Regular expression to use when lookng for the label prefix.
 Group number 1 should be the prefix itself."
   :type 'string
   :group 'company-reftex)
 
 (defcustom company-reftex-citations-regexp
-  "\\\\\\(?:foot\\)?cite[^[{]*\\(?:\\[[^]]*\\]\\)*{\\(?:[^},]*,\\)*\\([^},]*\\)"
+  (rx "\\"
+      ;; List taken from `reftex-cite-format-builtin'
+      (or "autocite"
+          "autocite*"
+          "bibentry"
+          "cite"
+          "cite*"
+          "citeA"
+          "citeaffixed"
+          "citeasnoun"
+          "citeauthor"
+          "citeauthor*"
+          "citeauthory"
+          "citefield"
+          "citeN"
+          "citename"
+          "cites"
+          "citet"
+          "citet*"
+          "citetitle"
+          "citetitle*"
+          "citep"
+          "citeyear"
+          "citeyear*"
+          "footcite"
+          "footfullcite"
+          "fullcite"
+          "fullocite"
+          "nocite"
+          "ocite"
+          "ocites"
+          "parencite"
+          "parencite*"
+          "possessivecite"
+          "shortciteA"
+          "shortciteN"
+          "smartcite"
+          "textcite"
+          "textcite*"
+          "ycite"
+          "ycites")
+      (* (not (any "[{")))
+      (* (seq "[" (* (not (any "]"))) "]"))
+      "{"
+      (* (seq (* (not (any "},"))) ","))
+      (group (* (not (any "},")))))
   "Regular expression to use when lookng for the citation prefix.
 Group number 1 should be the prefix itself."
   :type 'string
@@ -137,8 +202,7 @@ Obeys the setting of `company-reftex-max-annotation-length'."
          (company-reftex-annotate
           key
           (when company-reftex-annotate-citations
-            (substring-no-properties
-             (or (cdr (assoc "title" (cdr entry))) "??")))))))))
+            (reftex-format-citation entry company-reftex-annotate-citations))))))))
 
 ;;;###autoload
 (defun company-reftex-citations (command &optional arg &rest _)
