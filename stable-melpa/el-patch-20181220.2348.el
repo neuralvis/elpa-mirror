@@ -6,7 +6,7 @@
 ;; Created: 31 Dec 2016
 ;; Homepage: https://github.com/raxod502/el-patch
 ;; Keywords: extensions
-;; Package-Version: 20181215.320
+;; Package-Version: 20181220.2348
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 2.2.2
 
@@ -987,6 +987,7 @@ This mode is enabled or disabled automatically when the
 `el-patch' library is loaded, according to the value of
 `el-patch-enable-use-package-integration'."
   :global t
+  :group 'el-patch
   (if el-patch-use-package-mode
       (with-eval-after-load 'use-package-core
         (dolist (kw '(:init/el-patch :config/el-patch))

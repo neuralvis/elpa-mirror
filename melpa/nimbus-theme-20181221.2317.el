@@ -5,7 +5,7 @@
 ;; Author: Marcin Swieczkowski <scatman@bu.edu>
 ;; Created: Thu Mar  2 22:19:19 CET 2017
 ;; Version: 1.0.0
-;; Package-Version: 20181219.1311
+;; Package-Version: 20181221.2317
 ;; Last-Updated: Wed Apr 12 16:11:07 CEST 2017
 ;;           By: Marcin Swieczkowski
 ;;     Update #: 3
@@ -58,7 +58,7 @@
       (nimbus/light-green    "#9ccc65")
       (nimbus/green          "#6aaf50")
       (nimbus/dark-green     "#058945")
-      (nimbus/green-bg       "#042b11")
+      (nimbus/green-bg       "#0f422c")
       (nimbus/lightest-blue  "#86b5e8")
       (nimbus/light-blue     "#68a5e9")
       (nimbus/blue           "#598bc1")
@@ -73,7 +73,7 @@
       (nimbus/gray           "#757575")
       (nimbus/dark-gray      "#656565")
       (nimbus/darker-gray    "#454545")
-      (nimbus/darkest-gray   "#252525")
+      (nimbus/darkest-gray   "#353535")
       (nimbus/blue-gray      "#608079")
       (nimbus/brown          "#987654")
       (nimbus/red            "#d65946")
@@ -99,7 +99,7 @@
    `(link         ((t (:foreground ,nimbus/lightest-blue :underline t))))
    `(link-visited ((t (:foreground ,nimbus/blue-gray :underline t))))
    `(highlight
-     ((t (:foreground ,nimbus/bg :background ,nimbus/light-green))))
+     ((t (:background ,nimbus/green-bg))))
    `(region
      ((t (:foreground ,nimbus/bg :background ,nimbus/fg))))
    `(shadow       ((t (:foreground ,nimbus/light-gray))))
@@ -135,17 +135,17 @@
 
    ;; mode line & powerline
    `(powerline-active1
-     ((t (:background ,nimbus/darkest-gray :foreground ,nimbus/fg))))
+     ((t (:foreground ,nimbus/fg :background ,nimbus/darkest-gray))))
    `(powerline-active2
-     ((t (:background ,nimbus/dark-green :foreground ,nimbus/black))))
+     ((t (:foreground ,nimbus/black :background ,nimbus/dark-green))))
    `(powerline-inactive1
-     ((t (:background ,nimbus/bg :foreground ,nimbus/dark-gray))))
+     ((t (:foreground ,nimbus/dark-gray :background ,nimbus/bg))))
    `(powerline-inactive2
-     ((t (:background ,nimbus/gray :foreground ,nimbus/black))))
+     ((t (:foreground ,nimbus/black :background ,nimbus/gray))))
    `(mode-line
-     ((t (:background ,nimbus/dark-green :foreground ,nimbus/black))))
+     ((t (:foreground ,nimbus/black :background ,nimbus/dark-green))))
    `(mode-line-inactive
-     ((t (:background ,nimbus/blue-gray :foreground ,nimbus/black))))
+     ((t (:foreground ,nimbus/black :background ,nimbus/blue-gray))))
 
    ;; ace-jump mode
    `(ace-jump-face-background ((t (:inherit font-lock-comment-face))))
@@ -228,9 +228,9 @@
 
    ;; search
    `(isearch
-     ((t (:background ,nimbus/dark-green :foreground ,nimbus/white))))
+     ((t (:foreground ,nimbus/white :background ,nimbus/dark-green))))
    `(lazy-highlight
-     ((t (:background ,nimbus/blue :foreground ,nimbus/white))))
+     ((t (:foreground ,nimbus/white :background ,nimbus/blue))))
 
    ;; evil-search-highlight-persist
    `(evil-search-highlight-persist-highlight-face
@@ -341,6 +341,9 @@
    `(eshell-ls-product    ((t (:foreground ,nimbus/orange))))
    `(eshell-ls-backup     ((t (:foreground ,nimbus/darker-gray))))
    `(eshell-ls-executable ((t (:foreground ,nimbus/green))))
+
+   ;; Eyebrowse
+   `(eyebrowse-mode-line-inactive ((t (:foreground ,nimbus/darkest-gray))))
 
    ;; shell
    `(comint-highlight-prompt ((t (:foreground ,nimbus/green))))
@@ -647,8 +650,10 @@
    ;;`(helm-lisp-show-completion ((t ())))
    `(helm-locate-finish
      ((t (:foreground ,nimbus/green))))
+   `(helm-match-item
+     ((t (:inherit isearch))))
    `(helm-match
-     ((t (:foreground ,nimbus/blue :background ,nimbus/darkest-gray))))
+     ((t (:inherit lazy-highlight))))
    `(helm-moccur-buffer
      ((t (:inherit compilation-info))))
    `(helm-selection
@@ -668,11 +673,11 @@
    `(helm-swoop-line-number-face
      ((t (:inherit linum))))
    `(helm-swoop-target-word-face
-     ((t (:foreground ,nimbus/white :background ,nimbus/dark-green))))
+     ((t (:inherit lazy-highlight))))
    `(helm-swoop-target-line-face
-     ((t (:foreground ,nimbus/bg :background ,nimbus/bright-yellow))))
+     ((t (:inherit highlight))))
    `(helm-swoop-target-line-block-face
-     ((t (:foreground ,nimbus/bg :background ,nimbus/yellow))))
+     ((t (:inherit highlight :foreground ,nimbus/white))))
 
    ;; ivy
    `(ivy-confirm-face ((t (:foreground ,nimbus/green))))
@@ -803,10 +808,10 @@
    ;;((t (:foreground "wheat" :background "blue1"))))
    ;;`(company-template-field
    ;;((t (:foreground "black" :background "orange"))))
-   `(company-scrollbar-bg
-     ((t (:background ,nimbus/darkest-gray))))
    `(company-scrollbar-fg
      ((t (:background ,nimbus/dark-gray))))
+   `(company-scrollbar-bg
+     ((t (:background ,nimbus/darkest-gray))))
    `(company-tooltip
      ((t (:foreground ,nimbus/bg :background ,nimbus/fg))))
    `(company-tooltip-common
