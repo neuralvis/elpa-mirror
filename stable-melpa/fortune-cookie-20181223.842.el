@@ -5,7 +5,7 @@
 ;; Author: Andrew Schwartzmeyer <andrew@schwartzmeyer.com>
 ;; Created: 09 Nov 2015
 ;; Version: 1.0
-;; Package-Version: 20170407.2217
+;; Package-Version: 20181223.842
 ;; Package-Requires: ()
 ;; Keywords: fortune cowsay scratch startup
 ;; Homepage: https://github.com/andschwa/fortune-cookie
@@ -50,7 +50,7 @@ Defaults to the first on your path."
 
 (defcustom fortune-cookie-fortune-args nil
   "Arguments passed to `fortune'."
-  :type 'string
+  :type '(repeat string)
   :group 'fortune-cookie)
 
 (defcustom fortune-cookie-cowsay-enable nil
@@ -67,7 +67,7 @@ Defaults to the first on your path."
 
 (defcustom fortune-cookie-cowsay-args nil
   "Arguments passed to `cowsay'."
-  :type 'string
+  :type '(repeat string)
   :group 'fortune-cookie)
 
 (defcustom fortune-cookie-comment-start ";; "
@@ -77,29 +77,45 @@ The default assumes `emacs-lisp-mode'."
   :type 'string
   :group 'fortune-cookie)
 
+(defcustom fortune-cookie-fortune-string nil
+  "String to use for fortune instead of calling the program."
+  :type 'string
+  :group 'fortune-cookie)
+
 ;;;###autoload
 (defun fortune-cookie ()
   "Get a fortune cookie (maybe with cowsay)."
   (interactive)
-  (unless fortune-cookie-fortune-command
+  (or fortune-cookie-fortune-string
+      fortune-cookie-fortune-command
+      (display-warning 'fortune-cookie "`fortune' program was not found" :error))
+  (when (and fortune-cookie-cowsay-enable
+             (not fortune-cookie-cowsay-command))
     (display-warning
      'fortune-cookie
-     "`fortune' program was not found" :error))
-  (if (and fortune-cookie-cowsay-enable (not fortune-cookie-cowsay-command))
-      (display-warning
-       'fortune-cookie
-       "`cowsay' program was not found; disable this warning by
-setting `fortune-cookie-cowsay-enable' to nil"))
-  (shell-command-to-string
-   (mapconcat
-    'identity
-    (append (list fortune-cookie-fortune-command
-		  fortune-cookie-fortune-args)
-	    (if (and fortune-cookie-cowsay-enable
-		     fortune-cookie-cowsay-command)
-		(list "|"
-		      fortune-cookie-cowsay-command
-		      fortune-cookie-cowsay-args))) " ")))
+     "`cowsay' program was not found; disable this warning by"
+     "setting `fortune-cookie-cowsay-enable' to nil"))
+  (or fortune-cookie-cowsay-enable)
+  (let ((fortune (or fortune-cookie-fortune-string
+                     (shell-command-to-string
+                      (combine-and-quote-strings
+                       (append (list fortune-cookie-fortune-command)
+                               fortune-cookie-fortune-args))))))
+    (if (and fortune-cookie-cowsay-enable
+             fortune-cookie-cowsay-command)
+        (fortune-cowsay fortune t) fortune)))
+
+(defun fortune-cowsay (str &optional skip-kill)
+  "Return STR wrapped in cowsay. If SKIP-KILL, do not add to kill ring."
+  (interactive "MWhat do you want to say? \nP")
+  (unless fortune-cookie-cowsay-command
+    (display-warning 'fortune-cookie "`cowsay' program was not found" :error))
+  (let ((cow (shell-command-to-string
+              (message (combine-and-quote-strings
+                        (append (list "echo" str "|"
+                                      fortune-cookie-cowsay-command)
+                                fortune-cookie-cowsay-args))))))
+    (unless skip-kill (kill-new cow)) (message "Copied cow to kill ring") cow))
 
 ;;;###autoload
 (defun fortune-cookie-comment (arg prefix)
