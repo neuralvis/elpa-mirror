@@ -1,12 +1,12 @@
 ;;; gpastel.el --- Integrates GPaste with the kill-ring  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Damien Cassou
+;; Copyright (C) 2018  Free Software Foundation, Inc.
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Url: https://gitlab.petton.fr/DamienCassou/desktop-environment
-;; Package-Version: 20180420.650
-;; Package-requires: ((emacs "24.3"))
-;; Version: 0.3.0
+;; Package-Version: 20181223.1307
+;; Package-requires: ((emacs "24.4"))
+;; Version: 0.4.0
 ;; Keywords: tools
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -61,6 +61,9 @@
 (defvar gpastel--dbus-object nil
   "D-Bus object remembering the return value of `dbus-register-signal'.
 This can be used to unregister from the signal.")
+
+(defvar gpastel--save-interprogram-paste-before-kill-orig nil
+  "Value of `save-interprogram-paste-before-kill' before starting gpastel.")
 
 (defconst gpastel--dbus-arguments
   '(:session
@@ -126,14 +129,34 @@ all text in the GPaste clipboard."
   (when (gpastel--start-gpaste-daemon)
     ;; No need for `interprogram-paste-function' because GPaste will
     ;; tell us as soon as text is added to clipboard:
-    (setq interprogram-paste-function (lambda ()))
+    (advice-add interprogram-paste-function :override #'ignore)
     ;; No need to save the system clipboard before killing in
     ;; Emacs because Emacs already knows about its content:
+    (setq gpastel--save-interprogram-paste-before-kill-orig save-interprogram-paste-before-kill)
     (setq save-interprogram-paste-before-kill nil)
-    ;; Register an handler for GPaste Update signals so we can
+    ;; Register a handler for GPaste Update signals so we can
     ;; immediately update the `kill-ring':
     (setq gpastel--dbus-object
           (gpastel-dbus-call #'dbus-register-signal "Update" #'gpastel--update-handler))))
+
+(defun gpastel-stop-listening ()
+  "Stop listening for GPaste events."
+  (interactive)
+  (when (dbus-unregister-object gpastel--dbus-object)
+    (setq gpastel--dbus-object nil)
+    (setq save-interprogram-paste-before-kill gpastel--save-interprogram-paste-before-kill-orig)
+    (advice-remove interprogram-paste-function #'ignore)))
+
+;;;###autoload
+(define-minor-mode gpastel-mode
+  "Listen to GPaste events."
+  :group 'gpastel
+  :global t
+  :init-value nil
+  :require 'gpastel
+  (if gpastel-mode
+      (gpastel-start-listening)
+    (gpastel-stop-listening)))
 
 (provide 'gpastel)
 ;;; gpastel.el ends here

@@ -1,7 +1,7 @@
 ;;; lsp-haskell.el --- Haskell support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20181208.823
+;; Package-Version: 20181223.1126
 ;; Package-Requires: ((lsp-mode "3.0") (haskell-mode "1.0"))
 ;; Keywords: haskell
 ;; URL: https://github.com/emacs-lsp/lsp-haskell
@@ -169,11 +169,6 @@ if projectile way fails"
         dir))))
 
 ;; ---------------------------------------------------------------------
-
-(lsp-define-stdio-client lsp-haskell "haskell" #'lsp-haskell--get-root
-			 ;; '("hie" "--lsp" "-d" "-l" "/tmp/hie.log"))
-       ;; '("hie" "--lsp" "-d" "-l" "/tmp/hie.log" "--vomit"))
-       (funcall lsp-haskell-process-wrapper-function (lsp--haskell-hie-command)))
 
 (defun lsp--haskell-hie-command ()
   "Comamnd and arguments for launching the inferior hie process.
