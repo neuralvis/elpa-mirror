@@ -4,7 +4,6 @@
 ;;
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/hasky-mode/hasky-stack
-;; Package-Version: 20181108.1707
 ;; Version: 0.8.0
 ;; Package-Requires: ((emacs "24.4") (f "0.18.0") (magit-popup "2.10"))
 ;; Keywords: tools, haskell
