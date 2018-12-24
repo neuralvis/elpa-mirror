@@ -1,2 +1,0 @@
-
-(evil-expat . [(20181224 826) ((emacs (24 3)) (evil (1 0 0))) "Evil ex commands" single ((:commit . "d0aefdb48b36aa46e76a2cbef5e1ba50bf49bdf1") (:keywords "emulations" "evil" "vim") (:authors ("edkolev" . "evgenysw@gmail.com")) (:maintainer "edkolev" . "evgenysw@gmail.com") (:url . "http://github.com/edkolev/evil-expat"))])

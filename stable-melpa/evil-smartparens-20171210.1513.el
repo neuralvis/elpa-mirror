@@ -4,7 +4,6 @@
 
 ;; Author: Lars Andersen <expez@expez.com>
 ;; URL: https://www.github.com/expez/evil-smartparens
-;; Package-Version: 20171210.1513
 ;; Keywords: evil smartparens
 ;; Version: 0.4.0
 ;; Package-Requires: ((evil "1.0") (emacs "24.4") (smartparens "1.10.1"))
