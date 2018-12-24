@@ -4,7 +4,7 @@
 
 ;; Author: edkolev <evgenysw@gmail.com>
 ;; URL: http://github.com/edkolev/evil-expat
-;; Package-Version: 20180719.816
+;; Package-Version: 20181224.826
 ;; Package-Requires: ((emacs "24.3") (evil "1.0.0"))
 ;; Version: 0.0.1
 ;; Keywords: emulations, evil, vim
@@ -160,7 +160,7 @@ If NEW-NAME is a directory, the file is moved there."
       (user-error "File %s exists, use :rename! to overwrite it" new-name))
 
     (condition-case err
-        (rename-file filename new-name bang)
+        (dired-rename-file filename new-name bang)
       (error
        (if (and (string-match-p "File already exists" (error-message-string err)) (not bang))
            (user-error "File %s exists, use :rename! to overwrite it" new-name)

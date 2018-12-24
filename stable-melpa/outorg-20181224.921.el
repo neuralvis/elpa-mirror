@@ -2,7 +2,7 @@
 
 ;; Maintainer: Adam Porter
 ;; Version: 2.1-pre
-;; Package-Version: 20170414.1915
+;; Package-Version: 20181224.921
 ;; URL: https://github.com/alphapapa/outorg
 ;; Package-Requires: ((emacs "24.4"))
 
@@ -561,7 +561,7 @@ If MODE-NAME is nil, check if Org-Babel identifier of major-mode of current buff
                  (buffer-name
                   (marker-buffer outorg-code-buffer-point-marker))
                  " ] "
-                 "Exit with M-# (Meta-Key and #)")))
+                 (substitute-command-keys "Exit with \\[outorg-copy-edits-and-exit]"))))
 
     ;; Only run the kill-buffer-hooks when the outorg edit buffer is
     ;; being killed. This is because temporary buffers may be created
