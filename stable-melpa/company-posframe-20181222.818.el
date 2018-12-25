@@ -5,7 +5,6 @@
 ;; Author: Clément Pit-Claudel, Feng Shu
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/company-posframe
-;; Package-Version: 20181222.818
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching
 ;; Package-Requires: ((emacs "26.0")(company "0.9.0")(posframe "0.1.0"))
