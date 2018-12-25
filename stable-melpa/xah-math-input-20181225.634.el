@@ -3,8 +3,8 @@
 ;; Copyright © 2010-2018 by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 2.7.20180906100437
-;; Package-Version: 20180906.1712
+;; Version: 2.7.20181224223239
+;; Package-Version: 20181225.634
 ;; Created: 08 Dec 2010
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: abbrev, convenience, unicode, math, LaTex
@@ -17,8 +17,8 @@
 
 ;; A minor mode for inputing math symbols and Unicode symbols.
 
-;; Call `global-xah-math-input-mode' to toggle on/off for all buffers.
-;; Call `xah-math-input-mode' to toggle on/off for current buffer.
+;; M-x `global-xah-math-input-mode' to toggle on/off for all buffers.
+;; M-x `xah-math-input-mode' to toggle on/off for current buffer.
 
 ;; In lisp code:
 ;; (global-xah-math-input-mode 1) ; turn on globally
@@ -28,16 +28,17 @@
 
 ;; Type “inf”, then press 【Shift+Space】 `xah-math-input-change-to-symbol', then it becomes “∞”.
 ;; Other examples:
-;; “a” ⇒ “α”.
-;; “p” ⇒ “π”.
-;; “/=” ⇒ “≠”.
-;; “>=” ⇒ “≥”.
-;; “=>” ⇒ “⇒”.
-;; “->” ⇒ “→”.
-;; “and” ⇒ “∧”.
+
+;; Other examples:
+;;  a → α
+;;  p → π
+;;  /= → ≠ or ne
+;;  >= → ≥ or ge
+;;  -> → → or rarr
+;;  and → ∧
 ;; etc.
 
-;; Call `xah-math-input-list-math-symbols' to see all abbrevs.
+;; M-x `xah-math-input-list-math-symbols' to see all abbrevs.
 
 ;; Home page: http://ergoemacs.org/emacs/xmsi-math-symbols-input.html
 
@@ -839,7 +840,7 @@ Version 2018-07-09"
     (when (not $resultChar)
       (when print-message-when-no-match
         (xah-math-input-list-math-symbols)
-        (user-error "「%s」 no match found for that abbrev/input. Call `xah-math-input-list-math-symbols' for a list. Or use a decimal e.g. 「945」 or hexadecimal e.g. 「x3b1」, or full Unicode name e.g. 「greek small letter alpha」."  $inputStr)))))
+        (user-error "「%s」 no match found for that abbrev/input. M-x `xah-math-input-list-math-symbols' for a list. Or use a decimal e.g. 「945」 or hexadecimal e.g. 「x3b1」, or full Unicode name e.g. 「greek small letter alpha」."  $inputStr)))))
 
 ;;;###autoload
 (define-globalized-minor-mode global-xah-math-input-mode xah-math-input-mode xah-math-input-mode-on)
@@ -862,19 +863,18 @@ Version 2018-07-09"
 
 A mode for inputting a math and Unicode symbols.
 
-Type “inf”, then press \\[xah-math-input-change-to-symbol], then it becomes “∞”.
+Type “inf”, then press \\[xah-math-input-change-to-symbol] (or M-x `xah-math-input-change-to-symbol'), then it becomes “∞”.
 
 Other examples:
- a ⇒ α
- p ⇒ π
- /= ⇒ ≠
- >= ⇒ ≥
- => ⇒ ⇒
- -> ⇒ →
- and ⇒ ∧
+ a → α
+ p → π
+ /= → ≠ or ne
+ >= → ≥ or ge
+ -> → → or rarr
+ and → ∧
 etc.
 
-If you have a text selection, then selected word will be taken as input. For example, type 「extraterrestrial alien」, select the phrase, then press 【Shift+Space】, then it becomse 「👽」.
+If you have a text selection, then selected word will be taken as input. For example, type 「extraterrestrial alien」, select the phrase, then press \\[xah-math-input-change-to-symbol], then it becomse 👽.
 
 For the complete list of abbrevs, call `xah-math-input-list-math-symbols'.
 
@@ -890,12 +890,7 @@ Decimal and hexadecimal can also be used. Example:
 
 Full Unicode name can also be used, e.g. 「greek small letter alpha」.
 
-If you wish to enter a symbor by full unicode name but do not
-know the full name, call `ucs-insert'. Asterisk “*” can be used
-as a wildcard to find the char. For example, call
-“ucs-insert”, then type 「*arrow」 then Tab, then emacs will list
-all unicode char names that has “arrow” in it. (this feature is
-part of Emacs 23)
+If you wish to enter a symbor by full unicode name but do not know the full name, M-x `insert'. Asterisk “*” can be used as a wildcard to find the char. For example, M-x `insert' , then type 「*arrow」 then Tab, then emacs will list all unicode char names that has “arrow” in it. (this feature is part of Emacs 23)
 
 Home page at: URL `http://ergoemacs.org/emacs/xah-math-input-math-symbols-input.html'"
   nil

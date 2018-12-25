@@ -16,6 +16,12 @@ The motivation of this package is I can't connect HTTPS url behind proxy
 [msg00756]: https://lists.gnu.org/archive/html/help-gnu-emacs/2015-08/msg00756.html
 [#10]: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=10
 
+Notice:
+
+As the URL package has supported HTTPS over proxies supporting CONNECT since
+Emacs 26, this package is no longer recommended.  But it can still be used
+in Emacs < 26.
+
 Installation:
 
 `mb-url' is available on [MELPA] and [el-get].
@@ -64,9 +70,13 @@ E.g.,
 
 cURL backend for `url-http'.
 
-##### `mb-url-http-curl-command'
+##### `mb-url-http-curl-program'
 
-Executable for cURL command.
+cURL program.
+
+##### `mb-url-http-curl-switches'
+
+cURL switches.
 
 #### [HTTPie][]
 
@@ -76,9 +86,13 @@ Executable for cURL command.
 
 HTTPie backend for `url-http'.
 
-##### `mb-url-http-httpie-command'
+##### `mb-url-http-httpie-program'
 
-Executable for HTTPie command.
+HTTPie program.
+
+##### `mb-url-http-httpie-switches'
+
+HTTPie switches.
 
 License:
 
