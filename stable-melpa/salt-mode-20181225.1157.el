@@ -5,7 +5,7 @@
 ;; Author: Ben Hayden <hayden767@gmail.com>
 ;; Maintainer: Glynn Forrest <me@glynnforrest.com>
 ;; URL: https://github.com/glynnforrest/salt-mode
-;; Package-Version: 20181015.1025
+;; Package-Version: 20181225.1157
 ;; Keywords: languages
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.4") (yaml-mode "0.0.12") (mmm-mode "0.5.4") (mmm-jinja2 "0.1"))
@@ -560,15 +560,32 @@ https://docs.saltstack.com/en/latest/topics/orchestrate/orchestrate_runner.html"
     ;; (define-key map (kbd "C-M-p") 'salt-mode-backward-state-id)
     map) "Keymap for `salt-mode'.")
 
+(defvar-local salt-mode--file-type 'salt
+  "The type of SLS file the buffer is currently visiting, either 'salt or 'top.")
+
+(defun salt-mode--detect-file-type ()
+  "Suggest the value of salt-mode--file-type according to the current file."
+  (if (null buffer-file-name) 'salt
+    (if (equal (file-name-nondirectory buffer-file-name) "top.sls")
+        'top 'salt)))
+
+(defun salt-mode-set-file-type (type)
+  "Set the file type of the current file and refresh font locking."
+  (interactive (list (intern (completing-read "Set file type: " '("salt" "top")))))
+  (if (not (member type '(salt top)))
+      (error (format "File type must be 'salt or 'top, %s given." type)))
+  (setq salt-mode--file-type type)
+  (salt-mode--set-keywords))
+
 (defun salt-mode--set-keywords ()
-  "Set keywords appropriate for the current SLS file type."
+  "Set keywords appropriate for the value of salt-mode--file-type."
   (font-lock-remove-keywords nil salt-mode-top-file-keywords)
   (font-lock-remove-keywords nil salt-mode-keywords)
   (font-lock-add-keywords
    nil
-   (cond ((null buffer-file-name)
+   (cond ((equal salt-mode--file-type 'salt)
           salt-mode-keywords)
-         ((equal (file-name-nondirectory buffer-file-name) "top.sls")
+         ((equal salt-mode--file-type 'top)
           salt-mode-top-file-keywords)
          (t salt-mode-keywords)))
   (if (fboundp 'font-lock-flush)
@@ -594,8 +611,7 @@ required.)"
 
   (setq-local yaml-indent-offset salt-mode-indent-level)
   (setq-local eldoc-documentation-function #'salt-mode--eldoc)
-  (salt-mode--set-keywords)
-  (add-hook 'buffer-list-update-hook #'salt-mode--set-keywords nil t)
+  (salt-mode-set-file-type (salt-mode--detect-file-type))
   (unless mmm-in-temp-buffer
     (salt-mode-refresh-data t)))
 
