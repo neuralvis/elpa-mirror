@@ -1,7 +1,7 @@
 ;;; company-lsp.el --- Company completion backend for lsp-mode.  -*- lexical-binding: t -*-
 
 ;; Version: 2.0.2
-;; Package-Version: 20181213.2344
+;; Package-Version: 20181226.709
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.4") (company "0.9.0") (s "1.2.0") (dash "2.11.0"))
 ;; URL: https://github.com/tigersoldier/company-lsp
 
@@ -76,7 +76,7 @@ item with the snippet and use yas-snippet to expand it."
   :type 'boolean
   :group 'company-lsp)
 
-(defcustom company-lsp-enable-recompletion nil
+(defcustom company-lsp-enable-recompletion t
   "Whether or not to re-trigger completion for trigger characters.
 
 If set to non-nil, when company-lsp finishes completion, it checks if
