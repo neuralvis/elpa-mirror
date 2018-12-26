@@ -1,13 +1,14 @@
 ;;; nimbus-theme.el --- An awesome dark theme
 ;;
-;; Filename: nimbus-theme.el
+;; Filename:    nimbus-theme.el
 ;; Description: An awesome dark theme
-;; Author: Marcin Swieczkowski <scatman@bu.edu>
-;; Created: Thu Mar 2 22:19:19 CET 2017
-;; Version: 1.0.0
-;; Package-Version: 20181225.1112
-;; URL: https://github.com/m-cat/nimbus-theme
-;; Keywords: faces
+;; Author:      Marcin Swieczkowski <marcin.swieczkowski@gmail.com>
+;;              See README.md for full list of contributors.
+;; Created:     Thu Mar 2 22:19:19 CET 2017
+;; Version:     1.0.0
+;; Package-Version: 20181225.1901
+;; URL:         https://github.com/m-cat/nimbus-theme
+;; Keywords:    faces
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
@@ -16,12 +17,7 @@
 ;;
 ;; The best dark theme for Emacs.
 ;;
-;; This theme was originally a fork of Ample theme, but has seen
-;; enough tweaks and changes that it's essentially a new (and better)
-;; theme.
-;;
-;; Nimbus theme is constantly being worked on, and I am actively
-;; adding faces and support for more third-party packages.
+;; See README.md for more info.
 ;;
 ;; Installing:
 ;;
@@ -47,9 +43,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
+
 (deftheme nimbus "An awesome dark theme.")
 
-;; Define the palette
+;; Define the palette.
 (let (
       (lightest-green "#8fbc8f")
       (light-green    "#9ccc65")
@@ -87,7 +84,7 @@
       (fg             "#bdbdb3")
       )
 
-  ;; Set faces
+  ;; Set faces.
   (custom-theme-set-faces
    `nimbus ;; You must use the same theme name here...
    `(default
