@@ -4,7 +4,7 @@
 
 ;; Author: nishimaki10
 ;; URL: https://github.com/nishimaki10/emacs-phpcbf
-;; Package-Version: 20180519.838
+;; Package-Version: 20181228.423
 ;; Version: 0.9.2
 ;; Package-Requires: ((s "1.9.0"))
 ;; Keywords: tools, php
@@ -55,6 +55,11 @@ falling back to PEAR if none is found."
   :group 'phpcbf
   :type '(choice string (const nil)))
 
+(defcustom phpcbf-exclude nil
+  "Exclude rule(s). Comma separate if multiple."
+  :group 'phpcbf
+  :type '(choice string (const nil)))
+
 (defun phpcbf-executable ()
   "Find the “phpcbf” executable or signal an error."
   (or (executable-find phpcbf-executable)
@@ -64,6 +69,8 @@ falling back to PEAR if none is found."
   "Generate the options list for running “phpcbf”."
   (append (when phpcbf-standard
             (list (format "--standard=%s" phpcbf-standard)))
+          (if phpcbf-exclude
+            (list (format "--exclude=%s" phpcbf-exclude)))
           (list (s-chop-suffixes
                  '("-unix" "-dos" "-mac")
                  (format "--encoding=%s" buffer-file-coding-system))

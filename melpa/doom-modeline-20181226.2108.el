@@ -1,11 +1,11 @@
-;;; doom-modeline.el --- A minimal and modern modeline -*- lexical-binding: t; -*-
+;;; doom-modeline.el --- A minimal and modern mode-line -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
-;; Version: 1.1.0
-;; Package-Version: 20181220.1741
+;; Version: 1.3.0
+;; Package-Version: 20181226.2108
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -55,8 +55,8 @@
 ;; - An indicator for debug state
 ;; - An indicator for LSP state
 ;; - An indicator for github notifications
-;; - Truncated file names, file icon, buffer state and project name in buffer
-;;   information segment, which is compatible with projectile or project
+;; - Truncated file name, file icon, buffer state and project name in buffer
+;;   information segment, which is compatible with projectile and project
 ;;
 ;; Installation:
 ;; From melpa, `M-x package-install RET doom-modeline RET`.
@@ -84,10 +84,12 @@
 ;;
 
 (defvar doom-modeline-height (let ((font (face-font 'mode-line)))
-                               (if font (* 2 (aref (font-info font) 2)) 25))
+                               (if (and font (fboundp 'font-info))
+                                   (* 2 (aref (font-info font) 2))
+                                 25))
   "How tall the mode-line should be (only respected in GUI Emacs).")
 
-(defvar doom-modeline-bar-width 3
+(defvar doom-modeline-bar-width (if (eq system-type 'darwin) 3 6)
   "How wide the mode-line bar should be (only respected in GUI Emacs).")
 
 (defvar doom-modeline-buffer-file-name-style 'truncate-upto-project
@@ -115,7 +117,10 @@ Non-nil to show the icons in mode-line.
 The icons may not be showed correctly in terminal and on Windows.")
 
 (defvar doom-modeline-major-mode-icon t
-  "Whether show the icon for major mode. It should respect `doom-modeline-icon'.")
+  "Whether show the icon for major mode. It respects `doom-modeline-icon'.")
+
+(defvar doom-modeline-major-mode-color-icon nil
+  "Display color icons for `major-mode'. It respects `all-the-icons-color-icons'.")
 
 (defvar doom-modeline-minor-modes nil
   "Whether display minor modes or not. Non-nil to display in mode-line.")
@@ -127,7 +132,7 @@ The icons may not be showed correctly in terminal and on Windows.")
   "Whether display `lsp' state or not. Non-nil to display in mode-line.")
 
 (defvar doom-modeline-github t
-  "Whether display github notifications or not.")
+  "Whether display github notifications or not. Requires `ghub' package.")
 
 (defvar doom-modeline-github-interval (* 30 60)
   "The interval of checking github.")
@@ -174,7 +179,6 @@ It returns a file name which can be used directly as argument of
 (defvar mc/mode-line)
 (defvar minions-mode)
 (defvar minions-mode-line-lighter)
-(defvar persp-nil-name)
 (defvar symbol-overlay-keywords-alist)
 (defvar symbol-overlay-temp-symbol)
 (defvar text-scale-mode-amount)
@@ -187,7 +191,6 @@ It returns a file name which can be used directly as argument of
 (declare-function avy-tree 'avy)
 (declare-function aw-update 'ace-window)
 (declare-function aw-window-list 'ace-window)
-(declare-function eldoc-in-minibuffer-mode 'eldoc-eval)
 (declare-function evil-delimited-arguments 'evil-common)
 (declare-function evil-emacs-state-p 'evil-states)
 (declare-function evil-force-normal-state 'evil-commands)
@@ -202,8 +205,6 @@ It returns a file name which can be used directly as argument of
 (declare-function face-remap-remove-relative 'face-remap)
 (declare-function flycheck-count-errors 'flycheck)
 (declare-function flycheck-list-errors 'flycheck)
-(declare-function get-current-persp 'persp-mode)
-(declare-function ghubp-get-notifications 'ghub+)
 (declare-function iedit-find-current-occurrence-overlay 'iedit-lib)
 (declare-function iedit-prev-occurrence 'iedit-lib)
 (declare-function image-get-display-property 'image-mode)
@@ -217,7 +218,6 @@ It returns a file name which can be used directly as argument of
 (declare-function project-current 'project)
 (declare-function project-roots 'project)
 (declare-function projectile-project-root 'projectile)
-(declare-function safe-persp-name 'persp-mode)
 (declare-function symbol-overlay-assoc 'symbol-overlay)
 (declare-function symbol-overlay-get-list 'symbol-overlay)
 (declare-function symbol-overlay-get-symbol 'symbol-overlay)
@@ -269,8 +269,8 @@ It returns a file name which can be used directly as argument of
 
 (defface doom-modeline-panel
   '((t (:inherit mode-line-highlight)))
-  "Face for 'X out of Y' segments, such as `doom-modeline--anzu', `doom-modeline--evil-substitute' and
-`iedit'")
+  "Face for 'X out of Y' segments, such as `doom-modeline--anzu',
+`doom-modeline--evil-substitute' and`iedit'")
 
 (defface doom-modeline-info
   `((t (:inherit (success bold))))
@@ -288,14 +288,10 @@ It returns a file name which can be used directly as argument of
 (defface doom-modeline-bar '((t (:inherit highlight)))
   "The face used for the left-most bar on the mode-line of an active window.")
 
-(defface doom-modeline-eldoc-bar '((t (:inherit shadow)))
-  "The face used for the left-most bar on the mode-line when eldoc-eval is
-active.")
+(defface doom-modeline-eldoc-bar `((t (:background ,(face-foreground 'success))))
+  "The face used for the left-most bar on the mode-line when eldoc-eval is active.")
 
-(defface doom-modeline-inactive-bar `((t (:background
-                                          ,(face-foreground 'mode-line-inactive)
-                                          :foreground
-                                          ,(face-background 'mode-line-inactive))))
+(defface doom-modeline-inactive-bar `((t (:background ,(face-foreground 'mode-line-inactive))))
   "The face used for the left-most bar on the mode-line of an inactive window.")
 
 (defface doom-modeline-evil-emacs-state '((t (:inherit doom-modeline-warning)))
@@ -438,10 +434,10 @@ If DEFAULT is non-nil, set the default mode-line for all buffers."
 
 (defun doom-modeline-eldoc (text)
   "Get eldoc TEXT for mode-line."
-  (concat (when (display-graphic-p)
-            (doom-modeline--make-xpm 'doom-modeline-eldoc-bar
-                                     doom-modeline-height
-                                     doom-modeline-bar-width))
+  (concat (doom-modeline--make-xpm 'doom-modeline-eldoc-bar
+                                   doom-modeline-bar-width
+                                   doom-modeline-height)
+          " "
           text))
 
 ;; Show eldoc in the mode-line with `eval-expression'
@@ -558,6 +554,11 @@ If DEFAULT is non-nil, set the default mode-line for all buffers."
   "Display icon for major mode via ARGS."
   (when doom-modeline-icon
     (apply 'all-the-icons-icon-for-mode args)))
+
+(defun doom-modeline-icon-for-file (&rest args)
+  "Display icon for major mode via ARGS."
+  (when doom-modeline-icon
+    (apply 'all-the-icons-icon-for-file args)))
 
 (defun doom-modeline--active ()
   "Whether is an active window."
@@ -747,14 +748,13 @@ buffer where knowing the current project directory is important."
 (defun doom-modeline-update-buffer-file-icon (&rest _)
   "Update file icon in mode-line."
   (setq doom-modeline--buffer-file-icon
-        (let ((icon (doom-modeline-icon-for-mode major-mode)))
+        (let ((icon (doom-modeline-icon-for-mode major-mode :height 0.92)))
+          (if (symbolp icon)
+              (setq icon (doom-modeline-icon-for-file (buffer-name) :height 0.92)))
           (unless (symbolp icon)
-            (concat
-             (propertize icon
-                         'help-echo (format "Major-mode: `%s'" major-mode)
-                         'display '(raise -0.125)
-                         'face `(:height 1.1 :family ,(all-the-icons-icon-family-for-mode major-mode) :inherit))
-             doom-modeline-vspc)))))
+            (propertize icon
+                        'help-echo (format "Major-mode: `%s'" major-mode)
+                        'display '(raise -0.125))))))
 (add-hook 'find-file-hook 'doom-modeline-update-buffer-file-icon)
 (add-hook 'after-revert-hook 'doom-modeline-update-buffer-file-icon)
 (add-hook 'after-change-major-mode-hook 'doom-modeline-update-buffer-file-icon)
@@ -767,35 +767,34 @@ Uses `all-the-icons-material' to fetch the icon."
     (doom-modeline-icon-material
      icon
      :face (if (doom-modeline--active) face)
-     :height (or height (if (eq system-type 'darwin) 1.0 0.96))
-     :v-adjust (or voffset (if (eq system-type 'darwin) -0.225 -0.205)))))
+     :height (or height 1.0)
+     :v-adjust (or voffset -0.215))))
 
 (defvar-local doom-modeline--buffer-file-state-icon nil)
 (defun doom-modeline-update-buffer-file-state-icon (&rest _)
   "Update the buffer or file state in mode-line."
   (setq doom-modeline--buffer-file-state-icon
         (cond (buffer-read-only
-               (concat (doom-modeline-buffer-file-state-icon
-                        "lock"
-                        'doom-modeline-warning)
-                       doom-modeline-vspc))
+               (doom-modeline-buffer-file-state-icon
+                "lock"
+                'doom-modeline-warning))
               ((buffer-modified-p)
-               (concat (doom-modeline-buffer-file-state-icon
-                        "save"
-                        'doom-modeline-buffer-modified)
-                       doom-modeline-vspc))
+               (doom-modeline-buffer-file-state-icon
+                "save"
+                'doom-modeline-buffer-modified
+                1.05
+                -0.22))
               ((and buffer-file-name
                     (not (file-exists-p buffer-file-name)))
-               (concat (doom-modeline-buffer-file-state-icon
-                        "do_not_disturb_alt"
-                        'doom-modeline-urgent)
-                       doom-modeline-vspc))
+               (doom-modeline-buffer-file-state-icon
+                "do_not_disturb_alt"
+                'doom-modeline-urgent))
               ((buffer-narrowed-p)
-               (concat (doom-modeline-buffer-file-state-icon
-                        "unfold_less"
-                        'doom-modeline-warning
-                        1.1)
-                       doom-modeline-vspc)))))
+               (doom-modeline-buffer-file-state-icon
+                "unfold_less"
+                'doom-modeline-warning
+                1.1
+                -0.225)))))
 (add-hook 'find-file-hook 'doom-modeline-update-buffer-file-state-icon)
 (add-hook 'after-save-hook 'doom-modeline-update-buffer-file-state-icon)
 (add-hook 'after-revert-hook 'doom-modeline-update-buffer-file-state-icon)
@@ -841,19 +840,36 @@ mouse-1: Previous buffer\nmouse-3: Next buffer"
 (doom-modeline-def-segment buffer-info
   "Combined information about the current buffer, including the current working
 directory, the file name, and its state (modified, read-only or non-existent)."
-  (concat
-   ;; major mode icon
-   (if (and doom-modeline-icon doom-modeline-major-mode-icon)
-       (or doom-modeline--buffer-file-icon (doom-modeline-update-buffer-file-icon)))
+  (let ((active (doom-modeline--active)))
+    (concat
+     ;; major mode icon
+     (when (and doom-modeline-icon doom-modeline-major-mode-icon)
+       (when-let ((icon (or doom-modeline--buffer-file-icon
+                            (doom-modeline-update-buffer-file-icon))))
+         (concat
+          (if (and active doom-modeline-major-mode-color-icon)
+              icon
+            (propertize icon
+                        'face `(:height 1.1 :family ,(all-the-icons-icon-family icon) :inherit)))
+          doom-modeline-vspc)))
 
-   ;; state icon
-   (if (doom-modeline--active)
-       (or doom-modeline--buffer-file-state-icon (doom-modeline-update-buffer-file-state-icon)))
+     ;; state icon
+     (when doom-modeline-icon
+       (when-let ((icon (or doom-modeline--buffer-file-state-icon
+                            (doom-modeline-update-buffer-file-state-icon))))
+         (concat
+          (if active
+              icon
+            (propertize icon
+                        'face `(:height 1.2 :family ,(all-the-icons-icon-family icon) :inherit)))
+          doom-modeline-vspc)))
 
-   ;; buffer file name
-   (if (doom-modeline--active)
-       (or doom-modeline--buffer-file-name (doom-modeline-update-buffer-file-name))
-     "%b")))
+     ;; buffer file name
+     (let ((name (or doom-modeline--buffer-file-name
+                     (doom-modeline-update-buffer-file-name))))
+       (if active
+           name
+         (propertize name 'face 'mode-line-inactive))))))
 
 (doom-modeline-def-segment buffer-info-simple
   "Display only the current buffer's name, but with fontification."
@@ -934,20 +950,21 @@ mouse-3: Toggle minor modes"
 
 (doom-modeline-def-segment minor-modes
   (when doom-modeline-minor-modes
-    (if (bound-and-true-p minions-mode)
-        (concat
-         " "
-         (propertize minions-mode-line-lighter
-                     'face (if (doom-modeline--active) 'doom-modeline-buffer-minor-mode)
-                     'help-echo "Minions
+    (let ((active (doom-modeline--active)))
+      (if (bound-and-true-p minions-mode)
+          (concat
+           " "
+           (propertize minions-mode-line-lighter
+                       'face (if active 'doom-modeline-buffer-minor-mode)
+                       'help-echo "Minions
 mouse-1: Display minor modes menu"
-                     'mouse-face 'mode-line-highlight
-                     'local-map (make-mode-line-mouse-map
-                                 'mouse-1 #'minions-minor-modes-menu))
-         " ")
-      (propertize
-       (concat (format-mode-line `(:propertize ("" minor-mode-alist))) " ")
-       'face (if (doom-modeline--active) 'doom-modeline-buffer-minor-mode)))))
+                       'mouse-face 'mode-line-highlight
+                       'local-map (make-mode-line-mouse-map
+                                   'mouse-1 #'minions-minor-modes-menu))
+           " ")
+        (propertize
+         (concat (format-mode-line `(:propertize ("" minor-mode-alist))) " ")
+         'face (if active 'doom-modeline-buffer-minor-mode))))))
 
 
 ;;
@@ -1012,11 +1029,7 @@ Uses `all-the-icons-material' to fetch the icon."
   (concat " "
           (when icon
             (concat
-             (doom-modeline-icon-material
-              icon
-              :face face
-              :height (if (eq system-type 'darwin) 1.0 0.96)
-              :v-adjust (or voffset (if (eq system-type 'darwin) -0.225 -0.205)))
+             (doom-modeline-icon-material icon :face face :height 1.1 :v-adjust (or voffset -0.2))
              (if text doom-modeline-vspc)))
           (if text (propertize text 'face face))
           "  "))
@@ -1032,9 +1045,10 @@ Uses `all-the-icons-material' to fetch the icon."
                             (let ((sum (+ (or .error 0) (or .warning 0))))
                               (doom-modeline-flycheck-icon "do_not_disturb_alt"
                                                            (number-to-string sum)
-                                                           (if .error 'doom-modeline-urgent 'doom-modeline-warning))))
+                                                           (if .error 'doom-modeline-urgent 'doom-modeline-warning)
+                                                           -0.225)))
                         (doom-modeline-flycheck-icon "check" nil 'doom-modeline-info)))
-           (`running     (doom-modeline-flycheck-icon "access_time" nil 'font-lock-doc-face -0.25))
+           (`running     (doom-modeline-flycheck-icon "access_time" nil 'font-lock-doc-face -0.225))
            (`no-checker  (doom-modeline-flycheck-icon "sim_card_alert" "-" 'font-lock-doc-face))
            (`errored     (doom-modeline-flycheck-icon "sim_card_alert" "Error" 'doom-modeline-urgent))
            (`interrupted (doom-modeline-flycheck-icon "pause" "Interrupted" 'font-lock-doc-face))
@@ -1340,6 +1354,7 @@ Requires `eyebrowse-mode' to be enabled."
              (str (if (and tag (< 0 (length tag)))
                       tag
                     (when num (int-to-string num)))))
+        (assq-delete-all 'eyebrowse-mode mode-line-misc-info)
         (propertize (format " %s " str) 'face
                     (if (doom-modeline--active) 'doom-modeline-buffer-major-mode)))
     ""))
@@ -1550,18 +1565,28 @@ mouse-3: Describe current input method")
 (defun doom-modeline-github-fetch-notifications ()
   "Fetch github notifications."
   (if (and doom-modeline-github
-           (fboundp 'ghubp-get-notifications))
-      (setq doom-modeline--github-notifications-number
-            (length (ignore-errors
-                      (ghubp-get-notifications :participating "true"))))))
+           (fboundp 'async-start))
+      (async-start
+       (lambda ()
+         (package-initialize)
+         (require 'ghub nil t)
+         (when (fboundp 'ghub-get)
+           (ghub-get "/notifications"
+                     nil
+                     :query '((notifications . "true"))
+                     :noerror t)))
+       (lambda (result)
+         (setq doom-modeline--github-notifications-number
+               (length result))))))
+
 (run-with-timer 30
                 doom-modeline-github-interval
                 'doom-modeline-github-fetch-notifications)
 
-(defun github-open-notifications-participating ()
-  "Open GitHub Notifications/Participating page."
+(defun doom-modeline--github-open-notifications ()
+  "Open GitHub Notifications page."
   (interactive)
-  (browse-url "https://github.com/notifications/participating"))
+  (browse-url "https://github.com/notifications"))
 
 (doom-modeline-def-segment github
   "The github notifications."
@@ -1579,7 +1604,7 @@ mouse-3: Describe current input method")
        'mouse-face '(:box 1)
        'local-map (make-mode-line-mouse-map
                    'mouse-1
-                   #'github-open-notifications-participating))))
+                   #'doom-modeline--github-open-notifications))))
 
 ;;
 ;; debug state
@@ -1589,10 +1614,11 @@ mouse-3: Describe current input method")
   "The current debug state."
   (when (doom-modeline--active)
     (concat
+     (and (or debug-on-error debug-on-quit) " ")
      (when debug-on-error
        (propertize
         (if doom-modeline-icon
-            (doom-modeline-icon-faicon "bug" :v-adjust -0.125 :face 'doom-modeline-urgent)
+            (doom-modeline-icon-faicon "bug" :v-adjust -0.0575 :face 'doom-modeline-urgent)
           (propertize "!" 'face 'doom-modeline-urgent))
         'help-echo "Debug on Error
 mouse-1: Toggle Debug on Error"
@@ -1601,7 +1627,7 @@ mouse-1: Toggle Debug on Error"
      (when debug-on-quit
        (propertize
         (if doom-modeline-icon
-            (doom-modeline-icon-faicon "bug" :v-adjust -0.125 :face 'doom-modeline-warning)
+            (doom-modeline-icon-faicon "bug" :v-adjust -0.0575 :face 'doom-modeline-warning)
           (propertize "!" 'face 'doom-modeline-warning))
         'help-echo "Debug on Quit
 mouse-1: Toggle Debug on Quit"
