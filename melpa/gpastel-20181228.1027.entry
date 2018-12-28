@@ -1,0 +1,2 @@
+
+(gpastel . [(20181228 1027) ((emacs (24 4))) "Integrates GPaste with the kill-ring" single ((:commit . "184539c5345135d2c3c23b0db3f78175bf163b4b") (:keywords "tools") (:authors ("Damien Cassou" . "damien@cassou.me")) (:maintainer "Damien Cassou" . "damien@cassou.me") (:url . "https://gitlab.petton.fr/DamienCassou/desktop-environment"))])
