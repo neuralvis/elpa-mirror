@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20181221.1450
+;; Package-Version: 20181228.4
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9"))
 ;; Version: 0.5
@@ -58,6 +58,11 @@ will be considered org-brain entries."
   "`org-link-types' which shouldn't be shown as resources in `org-brain-visualize'."
   :group 'org-brain
   :type '(repeat string))
+
+(defcustom org-brain-suggest-stored-link-as-resource t
+  "If `org-brain-add-resource' should suggest the last link saved with `org-store-link'."
+  :group 'org-brain
+  :type '(boolean))
 
 (defcustom org-brain-data-file (expand-file-name ".org-brain-data.el" org-brain-path)
   "Where org-brain data is saved."
@@ -1544,7 +1549,12 @@ cancelled manually with `org-brain-stop-wandering'."
   "Insert LINK with DESCRIPTION in an entry.
 If PROMPT is non nil, use `org-insert-link' even if not being run interactively.
 If ENTRY is omitted, try to get it from context or prompt for it."
-  (interactive "i")
+  (interactive (or (and org-brain-suggest-stored-link-as-resource
+                        (when-let ((last-stored-link (car org-stored-links)))
+                          (list (substring-no-properties (car last-stored-link))
+                                (cadr last-stored-link)
+                                t)))
+                   '(nil)))
   (unless entry
     (setq entry (or (ignore-errors (org-brain-entry-at-pt))
                     (org-brain-choose-entry "Entry: " (append (org-brain-files t)
