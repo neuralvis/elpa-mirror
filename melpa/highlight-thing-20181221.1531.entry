@@ -1,2 +1,0 @@
-
-(highlight-thing . [(20181221 1531) nil "Minimalistic minor mode to highlight current thing under point." single ((:commit . "a9840921c01de06260fd73ceccca306338775c55") (:keywords "highlight" "thing" "symbol") (:authors ("Felix Geller" . "fgeller@gmail.com")) (:maintainer "Felix Geller" . "fgeller@gmail.com") (:url . "https://github.com/fgeller/highlight-thing.el"))])
