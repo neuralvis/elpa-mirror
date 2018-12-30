@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 1.3.2
-;; Package-Version: 20181229.1630
+;; Package-Version: 20181230.1357
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -187,6 +187,7 @@ It returns a file name which can be used directly as argument of
 
 (declare-function anzu--reset-status 'anzu)
 (declare-function anzu--where-is-here 'anzu)
+(declare-function async-inject-variables 'async)
 (declare-function avy-traverse 'avy)
 (declare-function avy-tree 'avy)
 (declare-function aw-update 'ace-window)
@@ -1521,27 +1522,26 @@ mouse-1: Display Line and Column Mode Menu"
 
 (doom-modeline-def-segment input-method
   "The current input method."
-  (when (doom-modeline--active)
-    (propertize
-     (cond
-      (current-input-method
-       (concat " " current-input-method-title " "))
-      ((and (bound-and-true-p evil-local-mode)
-            (bound-and-true-p evil-input-method))
-       (concat
-        " "
-        (nth 3 (assoc default-input-method input-method-alist))
-        " "))
-      (t ""))
-     'face 'doom-modeline-buffer-major-mode
-     'help-echo (concat
-                 "Current input method: "
-                 current-input-method
-                 "\n\
+  (propertize
+   (cond
+    (current-input-method
+     (concat " " current-input-method-title " "))
+    ((and (bound-and-true-p evil-local-mode)
+          (bound-and-true-p evil-input-method))
+     (concat
+      " "
+      (nth 3 (assoc default-input-method input-method-alist))
+      " "))
+    (t ""))
+   'face (if (doom-modeline--active) 'doom-modeline-buffer-major-mode)
+   'help-echo (concat
+               "Current input method: "
+               current-input-method
+               "\n\
 mouse-2: Disable input method\n\
 mouse-3: Describe current input method")
-     'mouse-face 'mode-line-highlight
-     'local-map mode-line-input-method-map)))
+   'mouse-face 'mode-line-highlight
+   'local-map mode-line-input-method-map))
 
 
 ;;
@@ -1551,7 +1551,6 @@ mouse-3: Describe current input method")
 (doom-modeline-def-segment lsp
   "The LSP server state."
   (if (and doom-modeline-lsp
-           (doom-modeline--active)
            (bound-and-true-p lsp-mode))
       (concat (lsp-mode-line) " ")))
 
@@ -1566,14 +1565,15 @@ mouse-3: Describe current input method")
   (if (and doom-modeline-github
            (fboundp 'async-start))
       (async-start
-       (lambda ()
-         (package-initialize)
-         (require 'ghub nil t)
-         (when (fboundp 'ghub-get)
-           (ghub-get "/notifications"
-                     nil
-                     :query '((notifications . "true"))
-                     :noerror t)))
+       `(lambda ()
+          ,(async-inject-variables "\\`load-path\\'")
+          (require 'ghub nil t)
+          (when (fboundp 'ghub-get)
+            (with-timeout (10)
+              (ghub-get "/notifications"
+                        nil
+                        :query '((notifications . "true"))
+                        :noerror t))))
        (lambda (result)
          (setq doom-modeline--github-notifications-number
                (length result))))))

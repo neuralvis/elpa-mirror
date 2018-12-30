@@ -4,7 +4,6 @@
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
 ;; Version: 1.1.20170820
-;; Package-Version: 20170821.1111
 ;; Created: 13 Dec 2016
 ;; Keywords: convenience
 ;; License: GPL v3
