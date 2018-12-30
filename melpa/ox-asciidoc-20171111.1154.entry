@@ -1,2 +1,0 @@
-
-(ox-asciidoc . [(20171111 1154) ((org (8 1))) "AsciiDoc Back-End for Org Export Engine" single ((:commit . "dac77edf3748d2f445dc5f55e7946ed880b2abbc") (:keywords "org" "asciidoc") (:authors ("Yasushi SHOJI" . "yasushi.shoji@gmail.com")) (:maintainer "Yasushi SHOJI" . "yasushi.shoji@gmail.com") (:url . "https://github.com/yashi/org-asciidoc"))])
