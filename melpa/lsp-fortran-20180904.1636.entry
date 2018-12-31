@@ -1,2 +1,2 @@
 
-(lsp-fortran . [(20180904 1636) ((lsp-mode (3 0))) "Fortran support for lsp-mode" single ((:commit . "dd990e5b1e8177c807dd935b6ffa76b495a54b4f") (:keywords "fortran" "fortran" "language server") (:authors ("Magnus Badel")) (:maintainer "Magnus Badel") (:url . "https://github.com/MagB93/lsp-fortran"))])
+(lsp-fortran . [(20180904 1636) ((lsp-mode (3 0))) "Fortran support for lsp-mode" single ((:commit . "669f5bc7480bd0b931d9b58f35299b2b17a2a860") (:keywords "fortran" "fortran" "language server") (:authors ("Magnus Badel")) (:maintainer "Magnus Badel") (:url . "https://github.com/MagB93/lsp-fortran"))])
