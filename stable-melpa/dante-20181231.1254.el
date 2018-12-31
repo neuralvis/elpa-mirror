@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20181220.911
+;; Package-Version: 20181231.1254
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -92,11 +92,16 @@ will be in different GHCi sessions."
 (defun dante-project-root ()
   "Get the root directory for the project.
 If `dante-project-root' is set as a variable, return that,
-otherwise look for a .cabal file, or use the current dir."
+otherwise look for cabal files. cabal.project gets first
+precedence, followed by the .cabal. As a fallback just use the
+current directory."
   (file-name-as-directory
    (or dante-project-root
        (set (make-local-variable 'dante-project-root)
-            (file-name-directory (or (dante-cabal-find-file) (dante-buffer-file-name)))))))
+            (file-name-directory (or
+                                  (dante-cabal-find-project)
+                                  (dante-cabal-find-file)
+                                  (dante-buffer-file-name)))))))
 
 (defun dante-repl-by-file (root files cmdline)
   "Return if ROOT / file exists for any file in FILES, return CMDLINE."
@@ -356,6 +361,7 @@ CHECKER and BUFFER are added if the error is in TEMP-FILE."
 (defun dante-company (command &optional arg &rest _ignored)
   "Company backend for dante.
 See ``company-backends'' for the meaning of COMMAND and _ARGS."
+  (interactive (list 'interactive))
   (let ((prefix )) ;; todo: pref len
     (cl-case command
       (interactive (company-begin-backend 'dante-company))
@@ -691,6 +697,17 @@ CABAL-FILE rather than trying to locate one."
                    ".cabal$" ""
                    (file-name-nondirectory cabal-file))
                 "")))))
+
+(defun dante-cabal-find-project (&optional dir)
+  "Search for cabal.project file."
+  (let ((use-dir (or dir default-directory))
+        result)
+    (while (and use-dir (not (file-directory-p use-dir)))
+      (setq use-dir (file-name-directory (directory-file-name use-dir))))
+    (when use-dir
+      (setq result (locate-dominating-file use-dir "cabal.project"))
+      (when result
+        (setq result (expand-file-name "cabal.project" result))))))
 
 (defun dante-cabal-find-file (&optional dir)
   "Search for package description file upwards starting from DIR.

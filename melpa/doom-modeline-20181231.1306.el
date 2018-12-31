@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 1.3.3
-;; Package-Version: 20181231.1040
+;; Package-Version: 20181231.1306
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -775,8 +775,8 @@ Uses `all-the-icons-material' to fetch the icon."
     (doom-modeline-icon-material
      icon
      :face (if (doom-modeline--active) face)
-     :height (or height 1.0)
-     :v-adjust (or voffset -0.215))))
+     :height (or height 1.1)
+     :v-adjust (or voffset -0.225))))
 
 (defvar-local doom-modeline--buffer-file-state-icon nil)
 (defun doom-modeline-update-buffer-file-state-icon (&rest _)
@@ -865,7 +865,7 @@ directory, the file name, and its state (modified, read-only or non-existent)."
           (if active
               icon
             (propertize icon
-                        'face `(:height 1.2 :family ,(all-the-icons-icon-family icon) :inherit)))
+                        'face `(:height 1.3 :family ,(all-the-icons-icon-family icon) :inherit)))
           doom-modeline-vspc)))
 
      ;; buffer file name
