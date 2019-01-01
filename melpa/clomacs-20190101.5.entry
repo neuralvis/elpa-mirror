@@ -1,0 +1,2 @@
+
+(clomacs . [(20190101 5) ((emacs (24 3)) (cider (0 18 0)) (s (1 12 0)) (simple-httpd (1 4 6))) "Simplifies Emacs Lisp interaction with Clojure." single ((:commit . "13018d513df31a9281843291345f90cbaa9e0a01") (:keywords "clojure" "interaction") (:authors ("Kostafey" . "kostafey@gmail.com")) (:maintainer "Kostafey" . "kostafey@gmail.com") (:url . "https://github.com/clojure-emacs/clomacs"))])
