@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 1.3.3
-;; Package-Version: 20181231.1306
+;; Package-Version: 20181231.1645
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -137,6 +137,9 @@ The icons may not be showed correctly in terminal and on Windows.")
 
 (defvar doom-modeline-github-interval (* 30 60)
   "The interval of checking github.")
+
+(defvar doom-modeline-version t
+  "Whether display environment version or not.")
 
 
 ;;
@@ -527,7 +530,7 @@ If DEFAULT is non-nil, set the default mode-line for all buffers."
     (add-hook 'focus-in-hook #'doom-modeline-update-env)))
 (defun doom-modeline-update-env ()
   "Update environment info on mode-line."
-  (when doom-modeline-env-command
+  (when (and doom-modeline-version doom-modeline-env-command)
     (let ((default-directory (doom-modeline-project-root))
           (s (shell-command-to-string doom-modeline-env-command)))
       (setq doom-modeline-env-version (if (string-match "[ \t\n\r]+\\'" s)
@@ -927,7 +930,7 @@ mouse-2: Show help for major mode\n\
 mouse-3: Toggle minor modes"
                           mouse-face mode-line-highlight
                           local-map ,mode-line-major-mode-keymap))
-           (when doom-modeline-env-version
+           (when (and doom-modeline-version doom-modeline-env-version)
              (format " %s" doom-modeline-env-version))
            (and (boundp 'text-scale-mode-amount)
                 (/= text-scale-mode-amount 0)
@@ -1204,18 +1207,21 @@ Requires `anzu', also `evil-anzu' if using `evil-mode' for compatibility with
 
 (defsubst doom-modeline--symbol-overlay ()
   "Show the number of matches for symbol overlay."
-  (let* ((keyword (symbol-overlay-assoc
-                   (ignore-errors (symbol-overlay-get-symbol))))
-         (symbol (car keyword))
-         (before (symbol-overlay-get-list symbol 'car))
-         (after (symbol-overlay-get-list symbol 'cdr))
-         (count (length before)))
-    (if (symbol-overlay-assoc symbol)
-        (propertize
-         (format (concat  " %d/%d " (and (cadr keyword) "in scope "))
-                 (+ count 1)
-                 (+ count (length after)))
-         'face (if (doom-modeline--active) 'doom-modeline-panel)))))
+  (when (and (bound-and-true-p symbol-overlay-keywords-alist)
+             (not (bound-and-true-p symbol-overlay-temp-symbol))
+             (not (bound-and-true-p iedit-mode)))
+    (let* ((keyword (symbol-overlay-assoc
+                     (ignore-errors (symbol-overlay-get-symbol))))
+           (symbol (car keyword))
+           (before (symbol-overlay-get-list symbol 'car))
+           (after (symbol-overlay-get-list symbol 'cdr))
+           (count (length before)))
+      (if (symbol-overlay-assoc symbol)
+          (propertize
+           (format (concat  " %d/%d " (and (cadr keyword) "in scope "))
+                   (+ count 1)
+                   (+ count (length after)))
+           'face (if (doom-modeline--active) 'doom-modeline-panel))))))
 
 (defsubst doom-modeline--multiple-cursors ()
   "Show the number of multiple cursors."
