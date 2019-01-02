@@ -1,11 +1,11 @@
 ;;; doom-modeline.el --- A minimal and modern mode-line -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Vincent Zhang
+;; Copyright (C) 2018-2019 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 1.3.3
-;; Package-Version: 20190101.1052
+;; Package-Version: 20190102.1027
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -1574,21 +1574,24 @@ mouse-3: Describe current input method")
 (defvar doom-modeline--github-notifications-number 0)
 (defun doom-modeline--github-fetch-notifications ()
   "Fetch github notifications."
-  (if (and doom-modeline-github
-           (fboundp 'async-start))
-      (async-start
-       `(lambda ()
-          ,(async-inject-variables "\\`load-path\\'")
-          (require 'ghub nil t)
-          (when (fboundp 'ghub-get)
-            (with-timeout (10)
-              (ghub-get "/notifications"
-                        nil
-                        :query '((notifications . "true"))
-                        :noerror t))))
-       (lambda (result)
-         (setq doom-modeline--github-notifications-number
-               (length result))))))
+  (when (and doom-modeline-github
+             (fboundp 'async-start))
+    ;; load `async' if it's not loaded
+    (unless (fboundp 'async-inject-variables)
+      (require 'async nil t))
+    (async-start
+     `(lambda ()
+        ,(async-inject-variables "\\`load-path\\'")
+        (require 'ghub nil t)
+        (when (fboundp 'ghub-get)
+          (with-timeout (10)
+            (ghub-get "/notifications"
+                      nil
+                      :query '((notifications . "true"))
+                      :noerror t))))
+     (lambda (result)
+       (setq doom-modeline--github-notifications-number
+             (length result))))))
 
 (run-with-timer 30
                 doom-modeline-github-interval
