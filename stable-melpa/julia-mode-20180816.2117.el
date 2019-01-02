@@ -2,6 +2,7 @@
 
 ;; Copyright (C) 2009-2014 Julia contributors
 ;; URL: https://github.com/JuliaLang/julia
+;; Package-Version: 20180816.2117
 ;; Version: 0.3
 ;; Keywords: languages
 
