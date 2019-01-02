@@ -6,7 +6,6 @@
 ;; Author: Zhang Weize (zwz)
 ;; Maintainer: Carlo Sciolla (skuro)
 ;; Keywords: uml plantuml ascii
-;; Package-Version: 20180816.1012
 ;; Version: 1.2.7
 ;; Package-Requires: ((emacs "25.0"))
 
