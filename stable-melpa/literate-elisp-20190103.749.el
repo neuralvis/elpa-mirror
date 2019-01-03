@@ -5,7 +5,7 @@
 ;; Author: Jingtao Xu <jingtaozf@gmail.com>
 ;; Created: 6 Dec 2018
 ;; Version: 0.1
-;; Package-Version: 20181230.1300
+;; Package-Version: 20190103.749
 ;; Keywords: lisp docs extensions tools
 ;; URL: https://github.com/jingtaozf/literate-elisp
 ;; Package-Requires: ((cl-lib "0.6") (emacs "24"))
@@ -25,7 +25,7 @@
 
 ;;; Commentary:
 
-;; Literate-elisp is an Emacs Lisp library to provide an easy way to use literal programming in Emacs Lisp.
+;; Literate-elisp is an Emacs Lisp library to provide an easy way to use literate programming in Emacs Lisp.
 ;; It extends the Emacs load mechanism so Emacs can load Org files as Lisp source files directly.
 
 ;;; Code:
