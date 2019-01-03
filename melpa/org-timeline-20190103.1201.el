@@ -5,7 +5,7 @@
 ;; Author: Matúš Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Version: 0.1.2
-;; Package-Version: 20190102.2053
+;; Package-Version: 20190103.1201
 ;; Created: 16th April 2017
 ;; Package-requires: ((dash "2.13.0") (emacs "24.3"))
 ;; Keywords: calendar
@@ -115,9 +115,9 @@ Return new copy of STRING."
 (defun org-timeline--generate-timeline ()
   "Generate the timeline string that will represent current agenda view."
   (let* ((start-offset 300)
-         (current-offset (/ (- (+ (* 60 (string-to-number (format-time-string "%H")))
-                                  (string-to-number (format-time-string "%M")))
-                               start-offset) 10))
+         (current-time (+ (* 60 (string-to-number (format-time-string "%H")))
+                          (string-to-number (format-time-string "%M"))))
+         (current-offset (/ (- current-time start-offset) 10))
          (slotline (org-timeline--add-elapsed-face
                     "|     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |"
                     current-offset))
@@ -128,16 +128,20 @@ Return new copy of STRING."
          (tasks nil))
     (org-timeline-with-each-line
       (-when-let* ((time-of-day (org-get-at-bol 'time-of-day))
-                   (duration (org-get-at-bol 'duration)))
-        (when (< duration 0)
-          (cl-incf duration 1440))
-        (let* ((hour (/ time-of-day 100))
-               (minute (mod time-of-day 100))
-               (beg (+ (* hour 60) minute))
-               (end (round (+ beg duration)))
-               (face (org-timeline--get-face)))
-          (when (>= beg start-offset)
-            (push (list beg end face) tasks)))))
+                   (marker (org-get-at-bol 'org-marker)))
+        (let ((duration (org-get-at-bol 'duration)))
+          (when (and (numberp duration)
+                     (< duration 0))
+            (cl-incf duration 1440))
+          (let* ((hour (/ time-of-day 100))
+                 (minute (mod time-of-day 100))
+                 (beg (+ (* hour 60) minute))
+                 (end (if duration
+                          (round (+ beg duration))
+                        current-time))
+                 (face (org-timeline--get-face)))
+            (when (>= beg start-offset)
+              (push (list beg end face) tasks))))))
     (setq tasks (nreverse tasks))
     (cl-labels ((get-start-pos (current-line beg) (+ 1 (* current-line (1+ (length slotline))) (/ (- beg start-offset) 10)))
                 (get-end-pos (current-line end) (+ 1 (* current-line (1+ (length slotline))) (/ (- end start-offset) 10))))
@@ -146,7 +150,7 @@ Return new copy of STRING."
           (insert timeline)
           (-each tasks
             (-lambda ((beg end face))
-              (while (get-text-property (get-start-pos current-line beg) 'occupied)
+              (while (get-text-property (get-start-pos current-line beg) 'org-timeline-occupied)
                 (cl-incf current-line)
                 (when (> (get-start-pos current-line beg) (point-max))
                   (save-excursion
@@ -155,7 +159,7 @@ Return new copy of STRING."
               (let ((start-pos (get-start-pos current-line beg))
                     (end-pos (get-end-pos current-line end)))
                 (put-text-property start-pos end-pos 'font-lock-face face)
-                (put-text-property start-pos end-pos 'occupied t))
+                (put-text-property start-pos end-pos 'org-timeline-occupied t))
               (setq current-line 1)))
           (buffer-string))))))
 

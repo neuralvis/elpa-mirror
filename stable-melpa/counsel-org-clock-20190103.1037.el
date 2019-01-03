@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2.1
-;; Package-Version: 20180623.1317
+;; Package-Version: 20190103.1037
 ;; Package-Requires: ((emacs "24.3") (ivy "0.10.0") (dash "2.0"))
 ;; URL: https://github.com/akirak/counsel-org-clock
 
@@ -202,6 +202,7 @@ If INCLUDE-ARCHIVES is non-nil, archives are included in the scanning."
 
 (defun counsel-org-clock-rebuild-history ()
   "Rebuild `org-clock-history' from `org-agenda-files'."
+  (interactive)
   (message "Rebuilding org-clock-history...")
   (setq org-clock-history (counsel-org-clock--get-history-entries
                            counsel-org-clock-history-limit
