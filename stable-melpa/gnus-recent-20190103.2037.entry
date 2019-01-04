@@ -1,0 +1,2 @@
+
+(gnus-recent . [(20190103 2037) ((emacs (25 3 2))) "article breadcrumbs for Gnus" single ((:commit . "e9b389be9be830e85632091c2360cb77b317d259") (:keywords "convenience" "mail") (:authors ("Kevin Brubeck Unhammer" . "unhammer@fsfe.org")) (:maintainer "Kevin Brubeck Unhammer" . "unhammer@fsfe.org") (:url . "https://github.com/unhammer/gnus-recent"))])
