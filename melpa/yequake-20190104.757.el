@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/yequake
-;; Package-Version: 20190101.2146
+;; Package-Version: 20190104.757
 ;; Version: 0.1-pre
 ;; Package-Requires: ((emacs "25.2") (dash "2.14.1"))
 ;; Keywords: convenience, window-system, frames
@@ -165,9 +165,7 @@ See Info node `(elisp)Frame Parameters'."
 (defvar yequake-recent-frame-name nil
   "Name of most recently toggled frame.")
 
-;;;; Functions
-
-;;;;; Commands
+;;;; Commands
 
 ;;;###autoload
 (defun yequake-toggle (name)
@@ -179,9 +177,11 @@ See Info node `(elisp)Frame Parameters'."
 
 (defun yequake-retoggle ()
   "Toggle most recently toggled frame."
+  ;; Not autoloaded, because `-toggle' must be used first.
+  (interactive)
   (yequake-toggle yequake-recent-frame-name))
 
-;;;;; Support
+;;;; Functions
 
 (defun yequake--toggle-frame (name frame)
   "If frame named NAME exists but is unfocused, raise and focus it; if focused, delete it; otherwise, display FRAME anew."

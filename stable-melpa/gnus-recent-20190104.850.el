@@ -4,7 +4,7 @@
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
 ;; Version: 0.2.0
-;; Package-Version: 20190103.2037
+;; Package-Version: 20190104.850
 ;; URL: https://github.com/unhammer/gnus-recent
 ;; Package-Requires: ((emacs "25.3.2"))
 ;; Keywords: convenience, mail
@@ -113,6 +113,17 @@ moved article was already tracked.  For use by
                       :test 'equal :count 1))))
 
 (add-hook 'gnus-summary-article-move-hook 'gnus-recent--track-move-article)
+
+(defun gnus-recent--track-delete-article (action ghead group &rest rest)
+  "Track interactive user deletion of articles and remove the
+article data in `gnus-recent--articles-list'. This function is
+applied by the abnormal hook `gnus-summary-article-delete-hook'."
+  (when (eq action 'delete)
+    (cl-delete (gnus-recent--get-article-data)
+               gnus-recent--articles-list
+               :test 'equal :count 1)))
+
+(add-hook 'gnus-summary-article-delete-hook 'gnus-recent--track-delete-article)
 
 (defmacro gnus-recent--shift (lst)
   "Put the first element of LST last, then return that element."
