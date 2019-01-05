@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20181119.1200
+;; Package-Version: 20190105.858
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.10.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
@@ -71,6 +71,7 @@
 (require 'align)
 (require 'subr-x)
 (require 'lisp-mnt)
+(require 'project)
 
 (declare-function lisp-fill-paragraph  "lisp-mode" (&optional justify))
 
@@ -181,11 +182,12 @@ For example, \[ is allowed in :db/id[:db.part/user]."
                (cl-every 'characterp value))))
 
 (defcustom clojure-build-tool-files
-  '("project.clj"     ; Leiningen
-    "build.boot"      ; Boot
-    "build.gradle"    ; Gradle
-    "deps.edn"        ; Clojure CLI (a.k.a. tools.deps)
-    "shadow-cljs.edn" ; shadow-cljs
+  '("project.clj"      ; Leiningen
+    "build.boot"       ; Boot
+    "build.gradle"     ; Gradle
+    "build.gradle.kts" ; Gradle
+    "deps.edn"         ; Clojure CLI (a.k.a. tools.deps)
+    "shadow-cljs.edn"  ; shadow-cljs
     )
   "A list of files, which identify a Clojure project's root.
 Out-of-the box `clojure-mode' understands lein, boot, gradle,
@@ -1306,7 +1308,10 @@ symbol properties."
                  'clojure-indent-function)
             (get (intern-soft (match-string 1 function-name))
                  'clojure-backtracking-indent)))
-      (when (string-match (rx (or "let" "when" "while") (syntax symbol))
+      ;; indent symbols starting with if, when, ...
+      ;; such as if-let, when-let, ...
+      ;; like if, when, ...
+      (when (string-match (rx string-start (or "if" "when" "let" "while") (syntax symbol))
                           function-name)
         (clojure--get-indent-method (substring (match-string 0 function-name) 0 -1)))))
 
@@ -1718,6 +1723,10 @@ Return nil if not inside a project."
                                 clojure-build-tool-files))))
     (when (> (length choices) 0)
       (car (sort choices #'file-in-directory-p)))))
+
+;; project.el integration
+(cl-defmethod project-roots ((project (head clojure)))
+  (list (cdr project)))
 
 (defun clojure-project-relative-path (path)
   "Denormalize PATH by making it relative to the project root."
