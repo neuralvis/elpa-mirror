@@ -4,7 +4,6 @@
 
 ;; Author: Preston Moore (prestonkmoore@gmail.com)
 ;; Version: 0.0.2
-;; Package-Version: 20171116.2039
 ;; Keywords: languages
 
 ;; This file is not part of GNU Emacs.

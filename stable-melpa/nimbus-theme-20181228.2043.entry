@@ -1,2 +1,0 @@
-
-(nimbus-theme . [(20181228 2043) nil "An awesome dark theme" single ((:commit . "49fd0442de38b3fc31ecabd88d455ecb9bb59f04") (:keywords "faces") (:authors ("Marcin Swieczkowski" . "marcin.swieczkowski@gmail.com") ("See README.md for full list of contributors.")) (:maintainer "Marcin Swieczkowski" . "marcin.swieczkowski@gmail.com") (:url . "https://github.com/m-cat/nimbus-theme"))])

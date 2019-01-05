@@ -1,2 +1,0 @@
-
-(abs-mode . [(20181220 1521) ((emacs (25)) (erlang (0)) (maude-mode (0))) "Major mode for the modeling language Abs" single ((:commit . "286b3ad14818ba782d40e8fe1e548ac4a628bd16") (:keywords "languages") (:authors ("Rudi Schlatte" . "rudi@constantly.at")) (:maintainer "Rudi Schlatte" . "rudi@constantly.at") (:url . "https://github.com/abstools/abs-mode"))])
