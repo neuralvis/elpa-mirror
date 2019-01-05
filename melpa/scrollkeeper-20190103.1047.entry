@@ -1,2 +1,0 @@
-
-(scrollkeeper . [(20190103 1047) ((emacs (25 1))) "Custom scrolling commands with visual guidelines" single ((:commit . "954c56b7aaf016ad9759c07a4fa1a93ebb1d49ce") (:keywords "convenience") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/scrollkeeper.el"))])

@@ -1,0 +1,2 @@
+
+(elm-test-runner . [(20190105 245) ((emacs (24 4))) "Enhanced support for running elm-test" single ((:commit . "0184a2291782fed9035bacc17c7c5c9b02594366") (:authors ("Juan Edi")) (:maintainer "Juan Edi") (:url . "https://github.com/juanedi/elm-test-runner"))])
