@@ -1,0 +1,2 @@
+
+(default-text-scale . [(20190105 35) nil "Easily adjust the font size in all frames" single ((:commit . "efb5ce1fa1a79c0f516d9ddc7d7984c0059354f7") (:keywords "frames" "faces") (:authors ("Steve Purcell" . "steve@sanityinc.com")) (:maintainer "Steve Purcell" . "steve@sanityinc.com") (:url . "https://github.com/purcell/default-text-scale"))])
