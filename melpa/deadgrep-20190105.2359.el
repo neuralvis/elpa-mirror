@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20190105.2302
+;; Package-Version: 20190105.2359
 ;; Keywords: tools
 ;; Version: 0.7
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -70,10 +70,6 @@ search from the parent.
 This affects the behaviour of `deadgrep--project-root', so this
 variable has no effect if you change
 `deadgrep-project-root-function'.")
-
-(defvar-local deadgrep--root-overriden nil
-  "A boolean tracking whether `deadgrep-project-root-overrides'
-was used.")
 
 (defvar deadgrep-history
   nil
@@ -482,9 +478,15 @@ with Emacs text properties."
          (-sort (-lambda ((type1 _) (type2 _))
                   (< (length type1) (length type2))))
          ;; Prefer types with more extensions, as they tend to be more
-         ;; common languages.
+         ;; common languages (e.g. 'ocaml' over 'ml').
          (-sort (-lambda ((_ globs1) (_ globs2))
                   (< (length globs1) (length globs2))))
+         ;; But prefer elisp over lisp for .el files.
+         (-sort (-lambda ((type1 _) (type2 _))
+                  ;; Return t if we're comparing elisp with lisp, nil
+                  ;; otherwise.
+                  (and (equal type1 "lisp")
+                       (equal type2 "elisp"))))
          ;; Take the highest scoring matching.
          (-last-item))))
 
@@ -551,7 +553,6 @@ with Emacs text properties."
   (setq default-directory
         (expand-file-name
          (read-directory-name "Search files in: ")))
-  (setq deadgrep--root-overriden nil)
   (rename-buffer
    (deadgrep--buffer-name deadgrep--search-term default-directory))
   (deadgrep-restart))
@@ -677,7 +678,7 @@ search settings."
             (deadgrep--button
              (abbreviate-file-name default-directory)
              'deadgrep-directory)
-            (if deadgrep--root-overriden
+            (if (get-text-property 0 'deadgrep-overridden default-directory)
                 (propertize " (from override)" 'face 'deadgrep-meta-face)
               "")
             "\n"
@@ -892,6 +893,17 @@ buffer."
 
     (nreverse positions)))
 
+(defun deadgrep--buffer-position (line-number column-offset)
+  "Return the position equivalent to LINE-NUMBER at COLUMN-OFFSET
+in the current buffer."
+  (save-restriction
+    (widen)
+    (goto-char (point-min))
+    (forward-line (1- line-number))
+    (forward-char column-offset)
+
+    (point)))
+
 (defun deadgrep--visit-result (open-fn)
   "Goto the search result at point."
   (interactive)
@@ -910,12 +922,22 @@ buffer."
 
       (funcall open-fn file-name)
       (goto-char (point-min))
+
       (when line-number
-        (forward-line (1- line-number))
-        (forward-char column-offset)
-        (-each match-positions
-          (-lambda ((start end))
-            (deadgrep--flash-column-offsets start end)))))))
+        (-let [destination-pos (deadgrep--buffer-position
+                                line-number column-offset)]
+          ;; Put point on the position of the match, widening the
+          ;; buffer if necessary.
+          (when (or (< destination-pos (point-min))
+                    (> destination-pos (point-max)))
+            (widen))
+          (goto-char destination-pos)
+
+          ;; Temporarily highlight the parts of the line that matched
+          ;; the search term.
+          (-each match-positions
+            (-lambda ((start end))
+              (deadgrep--flash-column-offsets start end))))))))
 
 (defun deadgrep-visit-result-other-window ()
   "Goto the search result at point, opening in another window."
@@ -1146,11 +1168,12 @@ return the overridden value."
           (-lambda ((original . _))
             (equal (deadgrep--normalise-dirname original) path))
           deadgrep-project-root-overrides)))
-    (if override
-        (progn
-          (setq deadgrep--root-overriden t)
-          (cdr override))
-      path)))
+    (when override
+      (setq path (cdr override))
+      (unless (stringp path)
+        (user-error "Bad override: expected a path string, but got: %S" path))
+      (setq path (propertize path 'deadgrep-overridden t)))
+    path))
 
 (defun deadgrep--project-root ()
   "Guess the project root of the given FILE-PATH."
