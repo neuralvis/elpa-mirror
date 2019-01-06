@@ -2,7 +2,7 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20181115.714
+;; Package-Version: 20190106.1424
 ;; Version: 1.15.0
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -60,6 +60,8 @@
 ;;                               C-c C-f to view next entry
 
 ;;; Code:
+(when (version< org-version "9.2")
+  (defalias 'org-set-tags-to 'org-set-tags))
 
 (defvar org-journal-file-pattern
   (expand-file-name "~/Documents/journal/\\(?1:[0-9]\\{4\\}\\)\\(?2:[0-9][0-9]\\)\\(?3:[0-9][0-9]\\)\\'")
@@ -873,6 +875,8 @@ org-journal-time-prefix."
     (dolist (fname (reverse files))
       (with-temp-buffer
         (insert-file-contents fname)
+        (when org-journal-enable-encryption
+          (org-decrypt-entry))
         (while (search-forward str nil t)
           (let* ((fullstr (buffer-substring-no-properties
                            (line-beginning-position)
@@ -948,9 +952,9 @@ org-journal-time-prefix."
 ;; Setup encryption by default
 ;;;###autoload
 (add-hook 'org-journal-mode-hook
-          (lambda () (org-add-hook org-journal-encrypt-on
-                                   'org-journal-encryption-hook
-                                   nil t)))
+          (lambda () (add-hook org-journal-encrypt-on
+                               'org-journal-encryption-hook
+                               nil t)))
 
 (provide 'org-journal)
 

@@ -11,7 +11,7 @@
 ;; Author: Chris Done <chrisdone@fpcomplete.com>
 ;; Maintainer: Chris Done <chrisdone@fpcomplete.com>
 ;; URL: https://github.com/commercialhaskell/intero
-;; Package-Version: 20181224.1911
+;; Package-Version: 20190106.1246
 ;; Created: 3rd June 2016
 ;; Version: 0.1.13
 ;; Keywords: haskell, tools
@@ -73,9 +73,9 @@
 (defcustom intero-package-version
   (cl-case system-type
     ;; Until <https://github.com/haskell/network/issues/313> is fixed:
-    (windows-nt "0.1.35")
-    (cygwin "0.1.35")
-    (t "0.1.35"))
+    (windows-nt "0.1.36")
+    (cygwin "0.1.36")
+    (t "0.1.36"))
   "Package version to auto-install.
 
 This version does not necessarily have to be the latest version
@@ -2244,6 +2244,8 @@ Installing intero-%s for GHC %s ...
 We don't know why it failed. Please read the above output and try
 installing manually. If that doesn't work, report this as a
 problem.
+
+Guess: You might need the \"tinfo\" package, e.g. libtinfo-dev.
 
 WHAT TO DO NEXT
 
