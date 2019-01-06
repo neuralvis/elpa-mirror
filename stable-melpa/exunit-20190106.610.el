@@ -4,7 +4,7 @@
 
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
 ;; URL: http://github.com/ananthakumaran/exunit.el
-;; Package-Version: 20181231.818
+;; Package-Version: 20190106.610
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
 ;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3") (f "0.20.0"))
@@ -49,6 +49,12 @@
 Each element should be a string of the form ENVVARNAME=VALUE."
   :type '(repeat (string :tag "ENVVARNAME=VALUE"))
   :group 'exunit)
+
+(defvar exunit-last-directory nil
+  "Directory the last mix test command ran in.")
+
+(defvar exunit-last-arguments nil
+  "Arguments passed to `exunit-do-compile' at the last invocation.")
 
 (defvar-local exunit-project-root nil)
 (make-variable-buffer-local 'exunit-project-root)
@@ -124,15 +130,30 @@ and filename relative to the dependency."
   (setq compilation-parse-errors-filename-function #'exunit-parse-error-filename)
   (add-hook 'compilation-filter-hook 'exunit-colorize-compilation-buffer nil t))
 
+(defun exunit-do-compile (args)
+  "Run compile and save the ARGS for future invocation."
+  (setq exunit-last-directory default-directory
+        exunit-last-arguments args)
+
+  (compile args 'exunit-compilation-mode))
+
 (defun exunit-compile (args)
   "Run mix test with the given ARGS."
   (let ((default-directory (exunit-project-root))
         (compilation-environment exunit-environment))
-    (compile
-     (s-join " " (-concat '("mix" "test") exunit-mix-test-default-options args))
-     'exunit-compilation-mode)))
+    (exunit-do-compile
+     (s-join " " (-concat '("mix" "test") exunit-mix-test-default-options args)))))
 
 ;;; Public
+
+;;;###autoload
+(defun exunit-rerun ()
+  "Re-run the last test invocation."
+  (interactive)
+  (if (not exunit-last-directory)
+      (error "No previous verification")
+    (let ((default-directory exunit-last-directory))
+      (exunit-do-compile exunit-last-arguments))))
 
 ;;;###autoload
 (defun exunit-verify-all ()

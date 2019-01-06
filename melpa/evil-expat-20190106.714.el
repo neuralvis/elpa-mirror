@@ -4,7 +4,7 @@
 
 ;; Author: edkolev <evgenysw@gmail.com>
 ;; URL: http://github.com/edkolev/evil-expat
-;; Package-Version: 20181227.1248
+;; Package-Version: 20190106.714
 ;; Package-Requires: ((emacs "24.3") (evil "1.0.0"))
 ;; Version: 0.0.1
 ;; Keywords: emulations, evil, vim
@@ -165,9 +165,40 @@ If NEW-NAME is a directory, the file is moved there."
       (error
        (if (and (string-match-p "File already exists" (error-message-string err)) (not bang))
            (user-error "File %s exists, use :rename! to overwrite it" new-name)
-         (user-error (error-message-string err)))))
-    (set-visited-file-name new-name t)
-    (set-buffer-modified-p nil)))
+         (user-error (error-message-string err)))))))
+
+;;; :grename
+
+(eval-after-load 'evil '(progn (evil-ex-define-cmd "grename" 'evil-expat-grename) (autoload 'evil-expat-grename "evil-expat" nil t)))
+
+(declare-function magit-file-rename "ext:magit")
+(declare-function magit-file-tracked-p "ext:magit")
+(declare-function magit-convert-filename-for-git "ext:magit")
+
+(evil-define-command evil-expat-grename (new-name)
+  "`git mv' the current file to NEW-NAME.
+
+If NEW-NAME is a directory, the file is moved there."
+  (interactive "<f>")
+
+  (unless (require 'magit nil 'noerror)
+    (user-error "Package magit isn't installed"))
+
+  (let* ((name (buffer-name))
+         (filename (buffer-file-name))
+         (new-name (if (file-directory-p new-name)
+                       (concat (file-name-as-directory new-name) (file-name-nondirectory filename))
+                     new-name)))
+    (unless filename
+      (user-error "Buffer %s is not visiting a file" name))
+    (when (string-equal (expand-file-name filename) (expand-file-name new-name))
+      (user-error "%s and %s are the same file" buffer-file-name new-name))
+    (when (and (file-exists-p new-name))
+      (user-error "File %s already exists" new-name))
+    (unless (magit-file-tracked-p (magit-convert-filename-for-git name))
+      (user-error "File is not tracked by git"))
+
+    (magit-file-rename filename new-name)))
 
 ;;; :gblame
 
