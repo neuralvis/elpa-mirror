@@ -4,7 +4,7 @@
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
 ;; Version: 0.2.0
-;; Package-Version: 20190104.850
+;; Package-Version: 20190106.839
 ;; URL: https://github.com/unhammer/gnus-recent
 ;; Package-Requires: ((emacs "25.3.2"))
 ;; Keywords: convenience, mail
@@ -47,7 +47,6 @@
 ;;; Code:
 
 (require 'gnus-sum)
-(require 'dash)
 
 (defvar gnus-recent--articles-list nil
   "The list of articles read in this Emacs session.")
@@ -107,7 +106,7 @@ moved article was already tracked.  For use by
 `gnus-summary-article-move-hook'."
   (when (eq action 'move)
     (let ((article-data (gnus-recent--get-article-data)))
-      (cl-nsubstitute (-replace-at 2 to-group article-data)
+      (cl-nsubstitute (list (first article-data) (second article-data) to-group) 
                       article-data
                       gnus-recent--articles-list
                       :test 'equal :count 1))))
@@ -186,7 +185,8 @@ Warn if RECENT can't be deconstructed as expected."
 
 (defun gnus-recent-kill-new-org-link (recent)
   "Add to the `kill-ring' an `org-mode' link to RECENT Gnus article."
-  (kill-new (gnus-recent--create-org-link recent)))
+  (kill-new (gnus-recent--create-org-link recent))
+  (message "Added org-link to kill-ring"))
 
 (defun gnus-recent-insert-org-link (recent)
   "Insert an `org-mode' link to RECENT Gnus article."
@@ -194,9 +194,8 @@ Warn if RECENT can't be deconstructed as expected."
 
 (defun gnus-recent-forget (recent)
   "Remove RECENT Gnus article from `gnus-recent--articles-list'."
-  (setq gnus-recent--articles-list
-        (delete recent gnus-recent--articles-list))
-  (message "Removed %s from `gnus-recent--articles-list'" (car recent)))
+  (cl-delete recent gnus-recent--articles-list :test 'equal :count 1)
+    (message "Removed %s from gnus-recent articles" (car recent)))
 
 
 (provide 'gnus-recent)
