@@ -1,10 +1,10 @@
 ;;; transmission.el --- Interface to a Transmission session -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014-2018  Mark Oteiza <mvoteiza@udel.edu>
+;; Copyright (C) 2014-2019  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 0.12.1
-;; Package-Version: 20180728.1717
+;; Package-Version: 20190107.408
 ;; Package-Requires: ((emacs "24.4") (let-alist "1.0.5"))
 ;; Keywords: comm, tools
 
@@ -2024,10 +2024,14 @@ is constructed from TEST, BODY and the `tabulated-list-id' tagged as `<>'."
 (define-transmission-predicate download>? > (cdr (assq 'rateToClient <>)))
 (define-transmission-predicate upload>? > (cdr (assq 'rateToPeer <>)))
 (define-transmission-predicate size>? > (cdr (assq 'length <>)))
-(define-transmission-predicate eta>? > (cdr (assq 'eta <>)))
 (define-transmission-predicate size-when-done>? > (cdr (assq 'sizeWhenDone <>)))
 (define-transmission-predicate percent-done>? > (cdr (assq 'percentDone <>)))
 (define-transmission-predicate ratio>? > (cdr (assq 'uploadRatio <>)))
+
+(define-transmission-predicate eta>=? >=
+  (let-alist <>
+    (if (>= .eta 0) .eta
+      (- 1.0 .percentDone))))
 
 (defvar transmission-peers-mode-map
   (let ((map (make-sparse-keymap)))
@@ -2302,7 +2306,7 @@ Transmission."
   :group 'transmission
   (setq-local line-move-visual nil)
   (setq tabulated-list-format
-        [("ETA" 4 transmission-eta>? :right-align t)
+        [("ETA" 4 transmission-eta>=? :right-align t)
          ("Size" 9 transmission-size-when-done>?
           :right-align t :transmission-size t)
          ("Have" 4 transmission-percent-done>? :right-align t)
