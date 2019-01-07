@@ -1,2 +1,2 @@
 
-(idle-org-agenda . [(20190106 1844) nil "Shows your agenda when editor is idle." single ((:commit . "bfdf1b4f4096acdd081b3549d6b838f4ca4f7d0d") (:keywords "org" "org-mode" "org-agenda" "calendar") (:authors ("John Wiegley" . "jwiegley@gmail.com")) (:maintainer "Enis Özgen" . "mail@enisozgen.com") (:url . "https://github.com/enisozgen/idle-org-agenda"))])
+(idle-org-agenda . [(20190106 1844) nil "Shows your agenda when editor is idle." single ((:commit . "4972b30ac38a82e950d7dcba20a1d522cb1d23df") (:keywords "org" "org-mode" "org-agenda" "calendar") (:authors ("John Wiegley" . "jwiegley@gmail.com")) (:maintainer "Enis Özgen" . "mail@enisozgen.com") (:url . "https://github.com/enisozgen/idle-org-agenda"))])
