@@ -2,7 +2,7 @@
 
 ;; Author: Damien Merenne
 ;; URL: https://github.com/canatella/bitbake-el
-;; Package-Version: 20180326.758
+;; Package-Version: 20190107.1155
 ;; Created: 2014-02-11
 ;; Keywords: convenience
 ;; Version: 0.1
@@ -49,6 +49,7 @@
 (require 'mmm-mode)
 (require 's)
 (require 'dash)
+(eval-when-compile (require 'cl-lib))
 
 ;;; User customizable variables
 (defgroup bitbake nil
