@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20181214.1253
+;; Package-Version: 20190108.516
 ;; Version: 0.4.2
 ;; Keywords: tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -199,6 +199,7 @@ This posframe's buffer is POSFRAME-BUFFER."
                     face-remap)))
     (with-current-buffer posframe-buffer
       ;; Many variables take effect after call `set-window-buffer'
+      (setq-local display-line-numbers nil)
       (setq-local frame-title-format "")
       (setq-local left-fringe-width nil)
       (setq-local right-fringe-width nil)
