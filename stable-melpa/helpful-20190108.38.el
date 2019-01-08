@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20181229.1323
+;; Package-Version: 20190108.38
 ;; Keywords: help, lisp
 ;; Version: 0.16
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -1381,22 +1381,21 @@ alist with the lists concatenated."
                 l1)))
     (append l1-with-values l2-extra-values)))
 
-(defun helpful--keymaps-containing-aliases (command-sym)
+(defun helpful--keymaps-containing-aliases (command-sym aliases)
   "Return a list of pairs mapping keymap symbols to the
 keybindings for COMMAND-SYM in each keymap.
 
 Includes keybindings for aliases, unlike
 `helpful--keymaps-containing'."
-  (let* ((aliases (helpful--aliases command-sym t))
-         (syms (cons command-sym aliases))
+  (let* ((syms (cons command-sym aliases))
          (syms-keymaps (-map #'helpful--keymaps-containing syms)))
     (-reduce #'helpful--merge-alists syms-keymaps)))
 
-(defun helpful--format-keys (command-sym)
+(defun helpful--format-keys (command-sym aliases)
   "Describe all the keys that call COMMAND-SYM."
   (let (mode-lines
         global-lines)
-    (--each (helpful--keymaps-containing-aliases command-sym)
+    (--each (helpful--keymaps-containing-aliases command-sym aliases)
       (-let [(map . keys) it]
         (dolist (key keys)
           (push
@@ -1863,7 +1862,8 @@ state of the current symbol."
                          (buffer-file-name buf)))
           (references (helpful--calculate-references
                        helpful--sym helpful--callable-p
-                       source-path)))
+                       source-path))
+          (aliases (helpful--aliases helpful--sym helpful--callable-p)))
 
     (erase-buffer)
 
@@ -1964,7 +1964,7 @@ state of the current symbol."
       (helpful--insert-section-break)
       (insert
        (helpful--heading "Key Bindings")
-       (helpful--format-keys helpful--sym)))
+       (helpful--format-keys helpful--sym aliases)))
 
     (helpful--insert-section-break)
 
@@ -2048,13 +2048,12 @@ state of the current symbol."
           (insert " "))
         (insert (helpful--make-forget-button helpful--sym helpful--callable-p))))
 
-    (let ((aliases (helpful--aliases helpful--sym helpful--callable-p)))
-      (when aliases
-        (helpful--insert-section-break)
-        (insert
-         (helpful--heading "Aliases")
-         (s-join "\n" (--map (helpful--format-alias it helpful--callable-p)
-                             aliases)))))
+    (when aliases
+      (helpful--insert-section-break)
+      (insert
+       (helpful--heading "Aliases")
+       (s-join "\n" (--map (helpful--format-alias it helpful--callable-p)
+                           aliases))))
 
     (helpful--insert-section-break)
 

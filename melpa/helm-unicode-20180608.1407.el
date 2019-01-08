@@ -3,6 +3,7 @@
 ;; Copyright © 2015 Emanuel Evans
 
 ;; Version: 0.0.4
+;; Package-Version: 20180608.1407
 ;; Package-Requires: ((helm "1.9.8") (emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
