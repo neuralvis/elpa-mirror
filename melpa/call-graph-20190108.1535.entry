@@ -1,0 +1,2 @@
+
+(call-graph . [(20190108 1535) ((emacs (25 1)) (cl-lib (0 6 1)) (hierarchy (0 7 0)) (tree-mode (1 0 0)) (ivy (0 10 0))) "Library to generate call graph for c/c++ functions" tar ((:commit . "d07b4c533511f27dce5c0abd52d28f6e99bf2580") (:keywords "programming" "convenience") (:authors ("Huming Chen" . "chenhuming@gmail.com")) (:maintainer "Huming Chen" . "chenhuming@gmail.com") (:url . "https://github.com/beacoder/call-graph"))])
