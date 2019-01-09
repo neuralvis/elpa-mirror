@@ -5,7 +5,8 @@
 
 ;; Author: Kenji.I (Kenji Imakado) <ken.imakaado@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 0.0.1
+;; Package-Version: 20151230.924
+;; Package-X-Original-Version: 0.0.1
 ;; Package-Requires: ((helm "20120811")(color-moccur "2.71"))
 ;; Keywords: convenience, emulation
 
