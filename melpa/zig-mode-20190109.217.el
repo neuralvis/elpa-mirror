@@ -1,7 +1,7 @@
 ;;; zig-mode.el --- A major mode for the Zig programming language -*- lexical-binding: t -*-
 
 ;; Version: 0.0.8
-;; Package-Version: 20181130.2347
+;; Package-Version: 20190109.217
 ;; Author: Andrea Orru <andreaorru1991@gmail.com>, Andrew Kelley <superjoe30@gmail.com>
 ;; Keywords: zig, languages
 ;; Package-Requires: ((emacs "24"))
@@ -284,6 +284,20 @@
           'font-lock-doc-face
         'font-lock-comment-face))))
 
+;;; Imenu support
+(defun zig-re-structure-def-imenu (stype)
+  "Construct a regular expression for strucutres definitions of type STYPE."
+  (concat (zig-re-word "const") "[[:space:]]+"
+		  (zig-re-grab zig-re-identifier)
+		  ".*"
+		  (zig-re-word stype)))
+
+(defvar zig-imenu-generic-expression
+  (append (mapcar #'(lambda (x)
+					  (list (capitalize x) (zig-re-structure-def-imenu x) 1))
+				  '("enum" "struct" "union"))
+		  `(("Fn" ,(zig-re-definition "fn") 1))))
+
 ;;;###autoload
 (define-derived-mode zig-mode prog-mode "Zig"
   "A major mode for the Zig programming language."
@@ -296,6 +310,7 @@
   (setq-local indent-line-function 'zig-mode-indent-line)
   (setq-local indent-tabs-mode nil)  ; Zig forbids tab characters.
   (setq-local syntax-propertize-function 'zig-syntax-propertize)
+  (setq-local imenu-generic-expression zig-imenu-generic-expression)
   (setq font-lock-defaults '(zig-font-lock-keywords
                              nil nil nil nil
                              (font-lock-syntactic-face-function

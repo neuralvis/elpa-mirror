@@ -4,7 +4,7 @@
 
 ;; Author:  Hayato KAJIYAMA <kaji1216@gmail.com>
 ;; URL: https://github.com/hyakt/emacs-dashboard-hackernews
-;; Package-Version: 20181210.502
+;; Package-Version: 20190109.205
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24") (dashboard "1.2.5") (request "0.3.0"))
 
@@ -82,7 +82,7 @@
                            :button-prefix ""
                            :button-suffix ""
                            :format "%[%t%]"
-                           (format "[%3d] %s" (cdr (assoc 'score el)) (cdr (assoc 'title el)))))
+                           (format "[%3d] %s" (cdr (assoc 'score el)) (decode-coding-string (cdr (assoc 'title el)) 'utf-8))))
           list)))
 
 (defun dashboard-hackernews-insert (list-size)

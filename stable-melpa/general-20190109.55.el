@@ -2,7 +2,7 @@
 
 ;; Author: Fox Kiester <noct@openmailbox.org>
 ;; URL: https://github.com/noctuid/general.el
-;; Package-Version: 20181229.1542
+;; Package-Version: 20190109.55
 ;; Created: February 17, 2016
 ;; Keywords: vim, evil, leader, keybindings, keys
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
@@ -345,7 +345,8 @@ Also turn on `general-override-local-mode' and update `general-maps-alist'."
   "Like `with-eval-after-load' but don't always add to `after-load-alist'.
 When FILE has already been loaded, execute BODY immediately without adding it to
 `after-load-alist'."
-  (declare (indent 1))
+  (declare (indent 1)
+           (debug t))
   `(if (if (stringp ,file)
            (load-history-filename-element
             (purecopy (load-history-regexp ,file)))
@@ -906,12 +907,12 @@ potentially altered extended definition plist."
   (cl-flet ((run-edef-functions
              (keywords &optional alter-def)
              (dolist (keyword keywords)
-               (when (or (plist-get edef keyword)
+               (when (or (plist-member edef keyword)
                          (and (not
                                (memq
                                 keyword
                                 general-extended-def-global-ignore-keywords))
-                              (plist-get kargs keyword)))
+                              (plist-member kargs keyword)))
                  (let ((ret (funcall
                              (intern (format "general-extended-def-%s" keyword))
                              state keymap key edef kargs)))
