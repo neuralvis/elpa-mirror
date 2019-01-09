@@ -5,7 +5,7 @@
 ;; Author: Sibi Prabakaran <sibi@psibi.in>
 ;; Maintainer: Sibi Prabakaran <sibi@psibi.in>
 ;; Keywords: languages
-;; Package-Version: 20181128.143
+;; Package-Version: 20190109.332
 ;; Version: 0.1.3
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/psibi/dhall-mode
@@ -144,19 +144,27 @@ If specified, this should be the complete path to your dhall-format executable,
 (defun dhall-buffer-type ()
   "Return the type of the expression in the current buffer."
   (interactive)
-  (when (executable-find dhall-command)
-    (let ((errbuf (get-buffer-create "*dhall-buffer-type-errors*"))
-          (source (buffer-string)))
-      (with-temp-buffer
-        (with-current-buffer errbuf
-          (erase-buffer))
-        (insert source)
-        (when (zerop (shell-command-on-region (point-min)
+  ;; We resolve dhall-command in the current buffer, in case
+  ;; dhall-command, exec-path or process-environment is local
+  ;; there, so that we can propagate it to the temp buffer.
+  (let ((cmd (executable-find dhall-command)))
+    (when cmd
+      (let ((errbuf (get-buffer-create "*dhall-buffer-type-errors*"))
+            (source (buffer-string)))
+        (with-temp-buffer
+          (with-current-buffer errbuf
+            (erase-buffer))
+          (insert source)
+          (if (zerop (shell-command-on-region (point-min)
                                               (point-max)
-                                              (concat dhall-command " resolve|" dhall-command " type")
+                                              (concat cmd " resolve|" cmd " type")
                                               nil t errbuf t))
-          (replace-regexp-in-string "\\(?:\\` \\| \\'\\)" ""
-                                    (replace-regexp-in-string "[[:space:]]+" " " (buffer-string))))))))
+              (replace-regexp-in-string "\\(?:\\` \\| \\'\\)" ""
+                                        (replace-regexp-in-string "[[:space:]]+" " " (buffer-string)))
+            (prog1
+                nil
+              (with-current-buffer errbuf
+                (ansi-color-apply-on-region (point-min) (point-max))))))))))
 
 (defun dhall-format (&optional is-interactive)
   "Formats the current buffer using dhall-format.

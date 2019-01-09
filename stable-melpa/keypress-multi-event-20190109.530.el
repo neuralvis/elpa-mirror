@@ -6,7 +6,7 @@
 
 ;; Author:           Boruch Baum <boruch_baum@gmx.com>
 ;; Name:             keypress-multi-event
-;; Package-Version: 20180817.853
+;; Package-Version: 20190109.530
 ;; Package-X-Original-Version:  1.0
 ;; Package-requires: ((emacs "24.3"))
 ;; Keywords:         abbrev, convenience, wp, keyboard
@@ -59,7 +59,6 @@ The optional arg FORCE-THIS-ONE is an integer index into REACTIONS.
 This function was originally written to support functions
 `home-end-home' and `home-end-end' in package `home-end.el'. See
 there for a usage example."
-  (interactive)
   (if (or executing-kbd-macro defining-kbd-macro)
     (funcall (nth 0 reactions))
    (setq keypress-multi-event--state
