@@ -4,7 +4,7 @@
 
 ;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 20190101.938
+;; Package-Version: 20190110.627
 ;; Package-X-Original-Version: 2.1.0
 ;; Version: 2.1.0
 ;; Keywords: convenience, comm, paste
@@ -133,7 +133,9 @@ This uses `browse-url-generic' to open URLs."
      :uri "https://api.github.com/gists"
      :post-field nil
      :post-field-lambda (lambda () (cl-function (lambda (&key text &allow-other-keys)
-                                                  (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
+                                                  (let ((filename (if (buffer-file-name) 
+                                                                      (file-name-nondirectory (buffer-file-name)) 
+                                                                    "file.txt")))
                                                     (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
                                                                    ("public" . "false")
                                                                    ("files" .

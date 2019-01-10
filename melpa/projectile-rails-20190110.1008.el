@@ -4,8 +4,8 @@
 
 ;; Author:            Adam Sokolnicki <adam.sokolnicki@gmail.com>
 ;; URL:               https://github.com/asok/projectile-rails
-;; Package-Version: 20181009.1317
-;; Version:           0.15.0
+;; Package-Version: 20190110.1008
+;; Version:           0.17.0
 ;; Keywords:          rails, projectile
 ;; Package-Requires:  ((emacs "24.3") (projectile "0.12.0") (inflections "1.1") (inf-ruby "2.2.6") (f "0.13.0") (rake "0.3.2"))
 
@@ -414,6 +414,7 @@ The bound variable is \"filename\"."
                      (projectile-completing-read ,prompt (projectile-rails-hash-keys choices))
                      (user-error "The completion system you're using does not allow inputting arbitrary value.")))
           (filepath (gethash filename choices)))
+
      (if filepath
          (projectile-rails-goto-file filepath)
        (when ,newfile-template
@@ -529,8 +530,7 @@ The bound variable is \"filename\"."
   (interactive)
   (projectile-rails-find-resource
    "component: "
-   `((,projectile-rails-component-dir
-      ,(concat projectile-rails-component-dir "\\(.+\\.[^.]+\\)$")))))
+   `((,projectile-rails-component-dir "\\(.+\\.[^.]+\\)$"))))
 
 (defun projectile-rails-find-stylesheet ()
   "Find a stylesheet file."
@@ -661,7 +661,7 @@ The bound variable is \"filename\"."
   (interactive)
   (projectile-rails-find-current-resource
    (first projectile-rails-fixture-dirs)
-   "\\(?:test\\|spec\\)/\\(?:fixtures\\|factories\\|fabricators\\)/\\(?:${singular}\\(?:_fabricator\\)?\\|${plural}\\)\\.\\(?:yml\\|rb\\)"
+   "\\(?:${singular}\\(?:_fabricator\\)?\\|${plural}\\)\\.\\(?:yml\\|rb\\)"
    'projectile-rails-find-fixture))
 
 (defun projectile-rails-find-current-migration ()

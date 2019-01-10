@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 1.4.5
-;; Package-Version: 20190109.1929
+;; Package-Version: 20190110.840
 ;; Package-Requires: ((emacs "25.1") (all-the-icons "1.0.0") (shrink-path "0.2.0") (eldoc-eval "0.1") (dash "2.11.0"))
 ;; Keywords: faces mode-line
 
@@ -545,7 +545,10 @@ If DEFAULT is non-nil, set the default mode-line for all buffers."
 (add-hook 'find-file-hook #'doom-modeline-update-env)
 (with-no-warnings
   (if (boundp 'after-focus-change-function)
-      (add-function :after after-focus-change-function #'doom-modeline-update-env)
+      (add-function :after after-focus-change-function
+                    (lambda ()
+                      (if (frame-focus-state)
+                          (doom-modeline-update-env))))
     (add-hook 'focus-in-hook #'doom-modeline-update-env)))
 (defun doom-modeline-update-env ()
   "Update environment info on mode-line."
