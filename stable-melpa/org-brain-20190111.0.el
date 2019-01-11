@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20181228.4
+;; Package-Version: 20190111.0
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9"))
 ;; Version: 0.5
@@ -875,7 +875,7 @@ Several children can be created, by using `org-brain-entry-separator'."
           (if (org-goto-first-child)
               (open-line 1)
             (org-end-of-subtree t))
-          (org-insert-heading)
+          (org-insert-heading nil t)
           (org-do-demote)
           (insert child-name)
           (org-id-get-create)
@@ -1359,7 +1359,12 @@ If interactive, also prompt for ENTRY."
       (dolist (child children)
         (org-brain-add-relationship new-entry child))
       (dolist (friend friends)
-        (org-brain--internal-add-friendship new-entry friend)))))
+        (org-brain--internal-add-friendship new-entry friend))
+      (when (equal entry org-brain--vis-entry)
+        (setq org-brain--vis-entry new-entry))
+      (when (member entry org-brain-pins)
+        (org-brain-pin entry -1)
+        (org-brain-pin new-entry 1)))))
 
 ;;;###autoload
 (defun org-brain-agenda ()
