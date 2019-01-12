@@ -5,7 +5,7 @@
 ;; Author: Sibi Prabakaran <sibi@psibi.in>
 ;; Maintainer: Sibi Prabakaran <sibi@psibi.in>
 ;; Keywords: languages
-;; Package-Version: 20190109.332
+;; Package-Version: 20190112.851
 ;; Version: 0.1.3
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/psibi/dhall-mode
@@ -34,7 +34,7 @@
 ;;
 ;;  - syntax highlighting (font lock),
 ;;
-;;  - Basic indendation, multi line string support
+;;  - Basic indentation, multi line string support
 ;;
 ;;  - Automatic formatting on save (configuratle via variable)
 ;;
@@ -113,7 +113,7 @@ Should be dhall or the complete path to your dhall executable,
   :safe 'stringp)
 
 (defcustom dhall-use-header-line t
-  "If non-nil, the Dhall buffers will have the Type of the file displayed at the top of the window."
+  "If non-nil, display the type of the file in the window's header line."
   :type 'boolean
   :group 'dhall
   :safe 'booleanp)
@@ -121,7 +121,7 @@ Should be dhall or the complete path to your dhall executable,
 (defcustom dhall-format-command nil
   "Command used to format Dhall files.
 If your dhall command is old and does not support the \"format\" sub-command,
-then set this to \"dhall-format\".  This will become the default later.
+then set this to \"dhall-format\".
 
 If specified, this should be the complete path to your dhall-format executable,
   e.g.: /home/sibi/.local/bin/dhall-format"
@@ -136,7 +136,10 @@ If specified, this should be the complete path to your dhall-format executable,
   :safe 'booleanp)
 
 (defcustom dhall-type-check-inactivity-timeout 1
-  "How long to wait in seconds between inactivity in the buffer before evaluating the buffer type.  You can try increasing this if type checking is slowing things down.  You can also disable type-checking entirely by setting dhall-use-header-line to nil."
+  "Wait for this period of inactivity before refreshing the buffer type.
+You can try increasing this if type checking is slowing things
+down.  You can also disable type-checking entirely by setting
+`dhall-use-header-line' to nil."
   :type 'number
   :group 'dhall
   :safe 'numberp)
