@@ -5,7 +5,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;;         Fanael Linithien <fanael4@gmail.com>
 ;; URL: https://github.com/purcell/package-lint
-;; Package-Version: 20181228.2310
+;; Package-Version: 20190112.510
 ;; Keywords: lisp
 ;; Version: 0
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
@@ -682,11 +682,11 @@ DESC is a struct as returned by `package-buffer-info'."
        1 1
        'warning
        "Package should have a non-empty summary."))
-     ((> (length summary) 50)
+     ((> (length summary) 60)
       (package-lint--error
        1 1
        'warning
-       "The package summary is too long. It should be at most 50 characters.")))
+       "The package summary is too long. It should be at most 60 characters.")))
     (when (save-match-data
             (let ((case-fold-search t))
               (and (string-match "[^.]\\<emacs\\>" summary)
