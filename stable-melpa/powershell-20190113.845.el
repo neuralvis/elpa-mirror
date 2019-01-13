@@ -6,7 +6,7 @@
 
 ;; Author: Frédéric Perrin <frederic (dot) perrin (arobas) resel (dot) fr>
 ;; URL: http://github.com/jschaf/powershell.el
-;; Package-Version: 20181011.1951
+;; Package-Version: 20190113.845
 ;; Version: 0.3
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: powershell, languages
@@ -314,10 +314,12 @@ The text is assumed to be `regexp-opt' output."
 (defvar powershell-keywords
   (concat "\\_<"
           (regexp-opt
-           '("begin" "break" "catch" "class" "continue" "data" "do" "default"
+           '("begin" "break" "catch" "class" "continue" "data" "define" "do" "default"
              "dynamicparam" "else" "elseif" "end" "enum" "exit" "filter" "finally"
-             "for" "foreach" "from" "function" "if" "in" "param" "process"
-             "return" "switch" "throw" "trap" "try" "until" "where" "while")
+             "for" "foreach" "from" "function" "hidden" "if" "in" "param" "process"
+             "return" "static" "switch" "throw" "trap" "try" "until" "using" "var" "where" "while"
+             ;; Questionable, specific to workflow sessions
+             "inlinescript")
            t)
           "\\_>")
   "PowerShell keywords.")
@@ -331,14 +333,18 @@ The text is assumed to be `regexp-opt' output."
              "-ceq" "-cne" "-cgt" "-cge" "-clt" "-cle"
              ;; explicitly case insensitive
              "-ieq" "-ine" "-igt" "-ige" "-ilt" "-ile"
-             "-band" "-bor" "-bxor"
-             "-and" "-or" "-xor"
+             "-band" "-bor" "-bxor" "-bnot"
+             "-and" "-or" "-xor" "-not" "!"
              "-like" "-notlike" "-clike" "-cnotlike" "-ilike" "-inotlike"
              "-match" "-notmatch" "-cmatch" "-cnotmatch" "-imatch" "-inotmatch"
              "-contains" "-notcontains" "-ccontains" "-cnotcontains"
              "-icontains" "-inotcontains"
              "-replace" "-creplace" "-ireplace"
-             "-is" "-as" "-f"
+             "-is" "-isnot" "-as" "-f"
+             "-in" "-cin" "-iin" "-notin" "-cnotin" "-inotin"
+             "-split" "-csplit" "-isplit"
+             "-join"
+             "-shl" "-shr"
              ;; Questionable --> specific to certain contexts
              "-casesensitive" "-wildcard" "-regex" "-exact" ;specific to case
              "-begin" "-process" "-end" ;specific to scriptblock
@@ -351,7 +357,7 @@ The text is assumed to be `regexp-opt' output."
   "Names of scopes in PowerShell mode.")
 
 (defvar powershell-variable-drive-names
-  (append '("env" "function" "variable" "alias") powershell-scope-names)
+  (append '("env" "function" "variable" "alias" "hklm" "hkcu" "wsman") powershell-scope-names)
   "Names of scopes in PowerShell mode.")
 
 (defconst powershell-variables-regexp
@@ -395,16 +401,21 @@ The text is assumed to be `regexp-opt' output."
      "^"                              "_"
      "args"                           "ConsoleFileName"
      "Error"                          "Event"
+     "EventArgs"
      "EventSubscriber"                "ExecutionContext"
      "false"                          "Foreach"
      "HOME"                           "Host"
-     "input"                          "LASTEXITCODE"
+     "input"                          "lsCoreCLR"
+     "lsLinux"                        "lsMacOS"
+     "lsWindows"                      "LASTEXITCODE"
      "Matches"                        "MyInvocation"
      "NestedPromptLevel"              "null"
      "PID"                            "PROFILE"
      "PSBoundParameters"              "PSCmdlet"
+     "PSCommandPath"
      "PSCulture"                      "PSDebugContext"
-     "PSHOME"                         "PSScriptRoot"
+     "PSHOME"                         "PSITEM"
+     "PSScriptRoot"                   "PSSenderInfo"
      "PSUICulture"                    "PSVersionTable"
      "PWD"                            "ReportErrorShowExceptionClass"
      "ReportErrorShowInnerException"  "ReportErrorShowSource"
@@ -419,7 +430,8 @@ They are highlighted differently from the other variables.")
   (regexp-opt
    '("ConfirmPreference"           "DebugPreference"
      "ErrorActionPreference"       "ErrorView"
-     "FormatEnumerationLimit"      "LogCommandHealthEvent"
+     "FormatEnumerationLimit"      "InformationPreference"
+     "LogCommandHealthEvent"
      "LogCommandLifecycleEvent"    "LogEngineHealthEvent"
      "LogEngineLifecycleEvent"     "LogProviderHealthEvent"
      "LogProviderLifecycleEvent"   "MaximumAliasCount"
@@ -427,7 +439,8 @@ They are highlighted differently from the other variables.")
      "MaximumFunctionCount"        "MaximumHistoryCount"
      "MaximumVariableCount"        "OFS"
      "OutputEncoding"              "ProgressPreference"
-     "PSEmailServer"               "PSSessionApplicationName"
+     "PSDefaultParameterValues"    "PSEmailServer"
+     "PSModuleAutoLoadingPreference" "PSSessionApplicationName"
      "PSSessionConfigurationName"  "PSSessionOption"
      "VerbosePreference"           "WarningPreference"
      "WhatIfPreference"            ) t)
