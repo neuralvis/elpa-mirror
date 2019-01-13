@@ -6,7 +6,7 @@
 ;; Keywords: convenience, tools
 ;; Homepage: https://github.com/purcell/reformatter.el
 ;; Package-Requires: ((emacs "24.3"))
-;; Package-Version: 20190113.28
+;; Package-Version: 20190113.436
 ;; Package-X-Original-Version: 0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,10 +24,10 @@
 
 ;;; Commentary:
 
-;; This library allows elisp authors to easily provide an idiomatic
-;; command to reformat the current buffer using a command-line
-;; program, together with an optional minor mode which can apply this
-;; command automatically on save.
+;; This library lets elisp authors easily define an idiomatic command
+;; to reformat the current buffer using a command-line program,
+;; together with an optional minor mode which can apply this command
+;; automatically on save.
 
 ;; In its initial release it supports only reformatters which read
 ;; from stdin and write to stdout, but a more versatile interface will
@@ -136,8 +136,16 @@ The macro accepts the following keyword arguments:
                   :group ,group
                   :type 'string)
                 (define-minor-mode ,on-save-mode-name
-                  ,(format "When enabled, call `%s' when this buffer is saved." name)
-                  nil
+                  ,(format "When enabled, call `%s' when this buffer is saved.
+
+To enable this unconditionally in a major mode, add this mode
+to the major mode's hook.  To enable it in specific files or directories,
+use the local variables \"mode\" mechanism, e.g. in \".dir-locals.el\" you
+might use
+
+     ((some-major-mode
+        (mode . %s-on-save)))
+ " name name) nil
                   :global nil
                   :lighter ,lighter-name
                   :keymap ,keymap
