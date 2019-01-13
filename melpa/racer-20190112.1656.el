@@ -4,7 +4,7 @@
 
 ;; Author: Phil Dawes
 ;; URL: https://github.com/racer-rust/emacs-racer
-;; Package-Version: 20181213.225
+;; Package-Version: 20190112.1656
 ;; Version: 1.3
 ;; Package-Requires: ((emacs "24.3") (rust-mode "0.2.0") (dash "2.13.0") (s "1.10.0") (f "0.18.2") (pos-tip "0.4.6"))
 ;; Keywords: abbrev, convenience, matching, rust, tools
@@ -275,15 +275,19 @@ Return a list of all the lines returned by the command."
 (defun racer--read-rust-string (string)
   "Convert STRING, a rust string literal, to an elisp string."
   (when string
-    (->> string
-         ;; Remove outer double quotes.
-         (s-chop-prefix "\"")
-         (s-chop-suffix "\"")
-         ;; Replace escaped characters.
-         (s-replace "\\n" "\n")
-         (s-replace "\\\"" "\"")
-         (s-replace "\\'" "'")
-         (s-replace "\\;" ";"))))
+    ;; Remove outer double quotes.
+    (setq string (s-chop-prefix "\"" string))
+    (setq string (s-chop-suffix "\"" string))
+    ;; Translate escape sequences.
+    (replace-regexp-in-string
+     (rx "\\" (group anything))
+     (lambda (whole-match)
+       (let ((escaped-char (match-string 1 whole-match)))
+         (if (equal escaped-char "n")
+             "\n"
+           escaped-char)))
+     string
+     t t)))
 
 (defun racer--split-parts (raw-output)
   "Given RAW-OUTPUT from racer, split on semicolons and doublequotes.
@@ -381,7 +385,8 @@ the user to choose."
            (racer--url-button link-text link-target)
          ;; Otherwise, just discard the target.
          link-text)))
-   markdown))
+   markdown
+   t t))
 
 (defun racer--propertize-all-inline-code (markdown)
   "Given a single line MARKDOWN, replace all instances of `foo` or
@@ -389,13 +394,18 @@ the user to choose."
   (let ((highlight-group
          (lambda (whole-match)
            (racer--syntax-highlight (match-string 1 whole-match)))))
-    (->> markdown
-         (replace-regexp-in-string
-          (rx "[`" (group (+? anything)) "`]")
-          highlight-group)
-         (replace-regexp-in-string
-          (rx "`" (group (+? anything)) "`")
-          highlight-group))))
+    (setq markdown
+          (replace-regexp-in-string
+           (rx "[`" (group (+? anything)) "`]")
+           highlight-group
+           markdown
+           t t))
+    (setq markdown
+          (replace-regexp-in-string
+           (rx "`" (group (+? anything)) "`")
+           highlight-group
+           markdown
+           t t))))
 
 (defun racer--indent-block (str)
   "Indent every line in STR."
@@ -780,13 +790,20 @@ Note that this feature is only available when `company-mode' is installed."
         (with-no-warnings
           (font-lock-fontify-buffer)))
       (setq result (buffer-string)))
-    (when (and
-           ;; If we haven't applied any properties yet,
-           (null (text-properties-at 0 result))
-           ;; and if it's a standalone symbol, then assume it's a
-           ;; variable.
-           (string-match-p (rx bos (+ (any lower "_")) eos) str))
-      (setq result (propertize str 'face 'font-lock-variable-name-face)))
+
+    ;; If we haven't applied any text properties yet, apply some
+    ;; heuristics to try to find an appropriate colour.
+    (when (null (text-properties-at 0 result))
+      (cond
+       ;; If it's a standalone symbol, then assume it's a
+       ;; variable.
+       ((string-match-p (rx bos (+ (any lower "_")) eos) str)
+        (setq result (propertize str 'face 'font-lock-variable-name-face)))
+       ;; If it starts with a backslash, treat it as a string. See
+       ;; .lines() on strings.
+       ((string-match-p (rx bos "\\") str)
+        (setq result (propertize str 'face 'font-lock-string-face)))))
+
     result))
 
 (defun racer--goto-func-name ()

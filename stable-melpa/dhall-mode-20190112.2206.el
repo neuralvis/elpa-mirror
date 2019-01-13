@@ -5,9 +5,9 @@
 ;; Author: Sibi Prabakaran <sibi@psibi.in>
 ;; Maintainer: Sibi Prabakaran <sibi@psibi.in>
 ;; Keywords: languages
-;; Package-Version: 20190112.851
+;; Package-Version: 20190112.2206
 ;; Version: 0.1.3
-;; Package-Requires: ((emacs "24.4"))
+;; Package-Requires: ((emacs "24.4") (reformatter "0.1"))
 ;; URL: https://github.com/psibi/dhall-mode
 
 ;; This file is not part of GNU Emacs.
@@ -36,7 +36,7 @@
 ;;
 ;;  - Basic indentation, multi line string support
 ;;
-;;  - Automatic formatting on save (configuratle via variable)
+;;  - Automatic formatting on save (configurable)
 ;;
 ;;  - Error highlighting
 ;;
@@ -44,6 +44,7 @@
 
 (require 'ansi-color)
 (require 'comint)
+(require 'reformatter)
 
 (defvar dhall-mode-map
   (let ((map (make-sparse-keymap)))
@@ -169,43 +170,20 @@ down.  You can also disable type-checking entirely by setting
               (with-current-buffer errbuf
                 (ansi-color-apply-on-region (point-min) (point-max))))))))))
 
-(defun dhall-format (&optional is-interactive)
-  "Formats the current buffer using dhall-format.
-When called interactively, or with prefix argument
-IS-INTERACTIVE, show a buffer if the formatting fails."
-  (interactive "p")
-  (message "Formatting Dhall file")
-  (let* ((err-file (make-temp-file "dhall-format"))
-         (out-file (make-temp-file "dhall-format"))
-         (coding-system-for-read 'utf-8)
-         (coding-system-for-write 'utf-8))
-    (unwind-protect
-        (let* ((command (or dhall-format-command dhall-command))
-               (error-buffer (get-buffer-create "*dhall-format errors*"))
-               (retcode
-                (apply 'call-process-region (point-min) (point-max) command
-                       nil (list (list :file out-file) err-file)
-                       nil
-                       (unless dhall-format-command '("format")))))
-          (with-current-buffer error-buffer
-            (read-only-mode 0)
-            (insert-file-contents err-file nil nil nil t)
-            (ansi-color-apply-on-region (point-min) (point-max))
-            (special-mode))
-          (if (eq retcode 0)
-              (progn
-                (insert-file-contents out-file nil nil nil t)
-                (whitespace-cleanup))
-            (if is-interactive
-                (display-buffer error-buffer)
-              (message "dhall-format failed: see %s" (buffer-name error-buffer)))))
-      (delete-file err-file)
-      (delete-file out-file))))
+(reformatter-define dhall-format
+  :program (or dhall-format-command dhall-command)
+  :args (unless dhall-format-command '("format"))
+  :lighter " DhFmt")
 
-(defun dhall-format-maybe ()
-  "Run `dhall-format' if `dhall-format-at-save' is non-nil."
-  (if dhall-format-at-save
-      (dhall-format)))
+(reformatter-define dhall-freeze
+  :program dhall-command
+  :args '("freeze")
+  :lighter " DhFreeze")
+
+(reformatter-define dhall-lint
+  :program dhall-command
+  :args '("lint")
+  :lighter " DhLint")
 
 (defun dhall--get-parse-state (pos)
   "Get the result of `syntax-ppss' at POS."
@@ -299,7 +277,8 @@ STRING-TYPE type of string based off of Emacs syntax table types"
   ;; Special syntax properties for Dhall
   (setq-local syntax-propertize-function 'dhall-syntax-propertize)
   (add-hook 'after-change-functions 'dhall-after-change nil t)
-  (add-hook 'before-save-hook 'dhall-format-maybe nil t))
+  (when dhall-format-at-save
+    (dhall-format-on-save-mode)))
 
 ;; Automatically use dhall-mode for .dhall files.
 ;;;###autoload
