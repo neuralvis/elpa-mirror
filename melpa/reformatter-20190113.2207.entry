@@ -1,0 +1,2 @@
+
+(reformatter . [(20190113 2207) ((emacs (24 3))) "Define commands which run reformatters on the current buffer" single ((:commit . "947411170d5da2de8ff248a27e20c875e7fd9644") (:keywords "convenience" "tools") (:authors ("Steve Purcell" . "steve@sanityinc.com")) (:maintainer "Steve Purcell" . "steve@sanityinc.com") (:url . "https://github.com/purcell/reformatter.el"))])

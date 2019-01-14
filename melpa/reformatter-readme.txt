@@ -16,13 +16,14 @@ dhall executable:
       :program dhall-command
       :args '("format"))
 
-The `reformatter-define' macro expands to code which generates both
-a `dhall-format' interactive command and a local minor mode
-called `dhall-format-on-save-mode'.  The :args" and :program
-expressions will be evaluated at runtime, so they can refer to
-variables that may (later) have a buffer-local value.  A custom
-variable will be generated for the mode lighter, with the supplied
-value becoming the default.
+The `reformatter-define' macro expands to code which generates
+`dhall-format-buffer' and `dhall-format-region' interactive
+commands, and a local minor mode called
+`dhall-format-on-save-mode'.  The :args" and :program expressions
+will be evaluated at runtime, so they can refer to variables that
+may (later) have a buffer-local value.  A custom variable will be
+generated for the mode lighter, with the supplied value becoming
+the default.
 
 The generated minor mode allows idiomatic per-directory or per-file
 customisation, via the "modes" support baked into Emacs' file-local
@@ -39,5 +40,6 @@ number of options for customising the generated code.
 Library authors might like to provide autoloads for the generated
 code, e.g.:
 
-    ;;;###autoload (autoload 'dhall-format "current-file" nil t)
+    ;;;###autoload (autoload 'dhall-format-buffer "current-file" nil t)
+    ;;;###autoload (autoload 'dhall-format-region "current-file" nil t)
     ;;;###autoload (autoload 'dhall-format-on-save-mode "current-file" nil t)
