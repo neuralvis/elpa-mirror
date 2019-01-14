@@ -6,7 +6,7 @@
 ;; Keywords: convenience, tools
 ;; Homepage: https://github.com/purcell/reformatter.el
 ;; Package-Requires: ((emacs "24.3"))
-;; Package-Version: 20190113.2207
+;; Package-Version: 20190114.143
 ;; Package-X-Original-Version: 0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -145,11 +145,11 @@ The macro accepts the following keyword arguments:
 To enable this unconditionally in a major mode, add this mode
 to the major mode's hook.  To enable it in specific files or directories,
 use the local variables \"mode\" mechanism, e.g. in \".dir-locals.el\" you
-might use
+might use:
 
      ((some-major-mode
         (mode . %s-on-save)))
- " name name) nil
+ " buffer-fn-name name) nil
                    :global nil
                    :lighter ,lighter-name
                    :keymap ,keymap
@@ -181,10 +181,15 @@ DISPLAY-ERRORS, shows a buffer if the formatting fails."
                    (special-mode))
                  (if (eq retcode 0)
                      (progn
-                       (insert-file-contents out-file nil nil nil t)
-                       ;; In future this might be made optional, or a user-provided
-                       ;; ":after" form could be inserted for execution
-                       (whitespace-cleanup))
+                       (save-restriction
+                         ;; This replacement method minimises
+                         ;; disruption to marker positions and the
+                         ;; undo list
+                         (narrow-to-region beg end)
+                         (insert-file-contents out-file nil nil nil t)
+                         ;; In future this might be made optional, or a user-provided
+                         ;; ":after" form could be inserted for execution
+                         (whitespace-cleanup)))
                    (if display-errors
                        (display-buffer error-buffer)
                      (message ,(concat (symbol-name name) " failed: see %s") (buffer-name error-buffer)))))
