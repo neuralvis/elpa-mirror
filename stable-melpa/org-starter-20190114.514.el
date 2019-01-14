@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1.1
-;; Package-Version: 20190106.52
+;; Package-Version: 20190114.514
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; URL: https://github.com/akirak/org-starter
 
@@ -112,18 +112,18 @@ This option does not affect the behavior of directory definitions."
 (defcustom org-starter-enable-local-variables nil
   "Override `enable-local-variables' when files are loaded.
 
-When this variable is set to a value other than `nil',
-`enable-local-variables' are set to the value when
-org-starter loads an Org file using functions like
-`org-starter-load-all-known-files'. For example, if the variable is
-set to `:all', all local variables defined in the file are applied
-when it is loaded without confirmation. As variables defined in
-your own files are supposed to be trustworthy, this is usually safe.
-However, when this option is set to a value `:all', please don't
-add a file that can be edited by someone else, as local variables
-can bring a security risk.
+When this variable is set to a value other than nil,
+`enable-local-variables' are set to the value when org-starter
+loads an Org file using functions like
+`org-starter-load-all-known-files'.  For example, if the variable
+is set to `:all', all local variables defined in the file are
+applied when it is loaded without confirmation.  As variables
+defined in your own files are supposed to be trustworthy, this is
+usually safe.  However, when this option is set to a value `:all',
+please don't add a file that can be edited by someone else, as
+local variables can bring a security risk.
 
-When the variable is set to `nil', an existing value of
+When the variable is set to nil, an existing value of
 `enable-local-variables` is used."
   :group 'org-starter
   :type 'symbol)
