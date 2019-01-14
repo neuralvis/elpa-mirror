@@ -4,7 +4,6 @@
 ;;
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: gnome calendar
-;; Package-Version: 20161110.1256
 ;; Package: gnome-calendar
 
 ;; Version: 0.3

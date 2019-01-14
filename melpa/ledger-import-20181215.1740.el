@@ -4,7 +4,7 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Url: https://gitlab.petton.fr/mpdel/libmpdel
-;; Package-Version: 20181212.439
+;; Package-Version: 20181215.1740
 ;; Package-requires: ((emacs "25.1") (ledger-mode "3.1.1"))
 ;; Version: 0.2.0
 
@@ -145,7 +145,7 @@ The `ledger-import-buffer' is made current before the hook is run."
 (defun ledger-import--finish-import (&optional buffer)
   "Cleanup BUFFER and run `ledger-import-finished-hook'.
 If BUFFER is nil, use `ledger-import-buffer' instead."
-  (with-current-buffer (or buffer (current-buffer))
+  (with-current-buffer (or buffer (ledger-import-buffer))
     (ledger-mode)
     (ledger-mode-clean-buffer)
     (run-hooks 'ledger-import-finished-hook)))
