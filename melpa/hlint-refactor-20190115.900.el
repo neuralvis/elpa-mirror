@@ -4,7 +4,7 @@
 
 ;; Author Matthew Pickering
 ;; Keywords: haskell, refactor
-;; Package-Version: 20170818.448
+;; Package-Version: 20190115.900
 ;; Version: 0.0.1
 ;; URL: https://github.com/mpickering/hlint-refactor-mode
 
@@ -57,10 +57,12 @@ exit code."
   "Send text from START to END to PROGRAM with ARGS preserving the point.
 This uses `call-process-region-checked' internally."
   (let ((line (line-number-at-pos))
-        (column (current-column)))
+        (column (current-column))
+        (ws (window-start)))
     (hlint-refactor-call-process-region-checked start end program args)
     (goto-line line)
-    (move-to-column column)))
+    (move-to-column column)
+    (set-window-start (selected-window) ws)))
 
 ;;;###autoload
 (defun hlint-refactor-refactor-buffer (&optional args)
