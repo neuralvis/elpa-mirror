@@ -1,0 +1,2 @@
+
+(cquery . [(20190115 45) ((emacs (25 1)) (lsp-mode (3 4)) (dash (0 13))) "cquery client for lsp-mode" tar ((:commit . "09df33240c831c6ee4fb590fadcf22685c52a4ad") (:keywords "languages" "lsp" "c++") (:authors ("Tobias Pisani")) (:maintainer "Tobias Pisani") (:url . "https://github.com/jacobdufault/cquery"))])
