@@ -1,0 +1,2 @@
+
+(aggressive-indent . [(20190116 1025) ((emacs (24 1)) (cl-lib (0 5))) "Minor mode to aggressively keep your code always indented" single ((:commit . "f920dd59c895875c23dd67e7a3e80763de4e913a") (:keywords "indent" "lisp" "maint" "tools") (:authors ("Artur Malabarba" . "emacs@endlessparentheses.com")) (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com") (:url . "https://github.com/Malabarba/aggressive-indent-mode"))])
