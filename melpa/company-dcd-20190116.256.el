@@ -2,7 +2,7 @@
 
 ;; Author: tsukimizake <shomasd_at_gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20190105.1939
+;; Package-Version: 20190116.256
 ;; Package-Requires: ((company "0.9") (flycheck-dmd-dub "0.7") (yasnippet "0.8") (popwin "0.7") (cl-lib "0.5") (ivy "20160804.326"))
 ;; Keywords: languages
 ;; URL: http://github.com/tsukimizake/company-dcd
@@ -80,10 +80,22 @@ You can't put port number flag here.  Set `company-dcd--server-port' instead."
   :group 'company-dcd
   :type 'file)
 
-(defcustom company-dcd--server-port 9166
-  "Port number of dcd-server.  The default is 9166."
+(defcustom company-dcd-server-address nil
+  "Port number / UNIX socket path of dcd-server.
+
+Possible values:
+- nil - use DCD's default connection method
+- a number - use this TCP port (DCD's default is 9166)
+- a string - use this UNIX socket path
+
+The default is nil."
   :group 'company-dcd
-  :type 'integer)
+  :type '(choice
+	  (const :tag "Use platform default" nil)
+	  (integer :tag "Use this TCP port number")
+	  (file :tag "Use this UNIX socket path")))
+
+(define-obsolete-variable-alias 'company-dcd--server-port 'company-dcd-server-address)
 
 (defvar company-dcd--delay-after-kill-process 200
   "Duration to wait after killing the server process, in milliseconds.
@@ -110,6 +122,17 @@ If you need to restart the server, use `company-dcd-restart-server' instead."
   (interactive)
   (interrupt-process "dcd-server"))
 
+(defun company-dcd--server-address-flags ()
+  "Return the client/server command line flags indicating the server address."
+  (cond
+   ((null company-dcd-server-address) '())
+   ((numberp company-dcd-server-address)
+    (list "--tcp=true" "--port" (number-to-string company-dcd-server-address)))
+   ((stringp company-dcd-server-address)
+    (list "--tcp=false" "--socketFile" company-dcd-server-address))
+   (t
+    (error "Invalid value of company-dcd-server-address (%S)" company-dcd-server-address))))
+
 (defun company-dcd--start-server ()
   "Start dcd-server."
 
@@ -118,9 +141,8 @@ If you need to restart the server, use `company-dcd-restart-server' instead."
   
   (let (buf args proc)
     (setq buf (get-buffer-create company-dcd--server-buffer-name))
-    (setq args (nconc (list company-dcd-server-executable
-			    "-p"
-			    (format "%s" company-dcd--server-port))
+    (setq args (nconc (list company-dcd-server-executable)
+		      (company-dcd--server-address-flags)
 		      company-dcd--flags))
     (setq proc
 	  (with-current-buffer buf (apply 'start-process "dcd-server" (current-buffer) args)))
@@ -260,9 +282,7 @@ operate on complete symbols, such as --symbolLocation and --doc."
 
 Optionally, pass POS as the --cursorPos argument if non-nil."
   (nconc
-   (list
-    "--port"
-    (format "%s" company-dcd--server-port))
+   (company-dcd--server-address-flags)
    (when pos
      (list
       (concat "-I" default-directory)

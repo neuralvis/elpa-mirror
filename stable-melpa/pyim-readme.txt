@@ -121,8 +121,8 @@ pyim 当前的默认的拼音词库是 pyim-basedict, 这个词库的词条量
 *** 常用快捷键
 | 输入法快捷键          | 功能                       |
 |-----------------------+----------------------------|
-| C-n 或 M-n 或 + 或 .      | 向下翻页                   |
-| C-p 或 M-p 或 - 或 ,      | 向上翻页                   |
+| C-n 或 M-n 或 + 或 .  | 向下翻页                   |
+| C-p 或 M-p 或 - 或 ,  | 向上翻页                   |
 | C-f                   | 选择下一个备选词           |
 | C-b                   | 选择上一个备选词           |
 | SPC                   | 确定输入                   |
@@ -146,11 +146,21 @@ pyim 支持双拼输入模式，用户可以通过变量 `pyim-default-scheme' �
 2. 用户可以使用变量 `pyim-schemes' 添加自定义双拼方案。
 3. 用户可能需要重新设置 `pyim-translate-trigger-char'。
 
-*** 让 pyim 使用 liberime (实验特性)
-pyim 可以使用 [[https://gitlab.com/liberime/liberime][liberime]]
-包来提高整句输入能力，用户只要激活 liberime, pyim 就会自动使用它。
+*** 通过 pyim 来支持 rime 所有输入法
 
-liberime 激活方式请参考：[[https://gitlab.com/liberime/liberime/blob/master/README.org]] 。
+pyim 使用 emacs 动态模块：[[https://gitlab.com/liberime/liberime][liberime]]
+来支持 rime, 设置方式：
+
+1. 安裝 liberime, 见：[[https://gitlab.com/liberime/liberime/blob/master/README.org]] 。
+2. 參考设置：
+   #+BEGIN_EXAMPLE
+   (use-package liberime
+     :load-path "/path/to/liberime.[so|dll]"
+     :config
+     (liberime-start "/usr/share/rime-data" "~/.emacs.d/rime/")
+     (liberime-select-schema "luna_pinyin_simp")
+     (setq pyim-default-scheme 'rime))
+   #+END_EXAMPLE
 
 *** 使用五笔输入
 pyim 支持五笔输入模式，用户可以通过变量 `pyim-default-scheme' 来设定：
