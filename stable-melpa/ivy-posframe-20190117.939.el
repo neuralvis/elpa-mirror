@@ -6,7 +6,7 @@
 ;; Author: Feng Shu
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Package-Version: 20190116.1259
+;; Package-Version: 20190117.939
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.10.0"))
@@ -179,7 +179,7 @@ This variable is useful for `ivy-posframe-read-action' .")
   "Show STR in ivy's posframe."
   (if (not (ivy-posframe-workable-p))
       (ivy-display-function-fallback str)
-    (with-ivy-window
+    (with-selected-window (ivy--get-window ivy-last)
       (posframe-show
        ivy-posframe-buffer
        :font ivy-posframe-font
@@ -288,6 +288,13 @@ selection, non-nil otherwise."
                (setcar actions (1+ action-idx))
                (ivy-set-action actions)))))))
 
+(defun ivy-posframe--avy-action (pt)
+  "Finish ivy session with the candidate at PT."
+  (with-current-buffer ivy-posframe-buffer
+    (ivy--done
+     (substring-no-properties
+      (nth (- (line-number-at-pos pt) 2) ivy--old-cands)))))
+
 (defun ivy-posframe--window ()
   "Return the posframe window displaying `ivy-posframe-buffer'."
   (frame-selected-window
@@ -296,14 +303,46 @@ selection, non-nil otherwise."
 
 (defvar avy-all-windows)
 (defvar avy-keys)
+(defvar avy-keys-alist)
 (defvar avy-style)
-
+(defvar avy-styles-alist)
+(defvar avy-action)
+(declare-function avy--process "avy")
+(declare-function avy--style-fn "avy")
 (defun ivy-posframe-avy ()
   "Jump to one of the current ivy candidates."
   (interactive)
-  (let ((avy-pre-action #'ignore))
-    (with-selected-window (ivy-posframe--window)
-      (ivy-avy))))
+  (unless (require 'avy nil 'noerror)
+    (error "Package avy isn't installed"))
+  (unless (boundp 'avy-pre-action)
+    (error "A newer version of avy is required for this command"))
+  (let* ((avy-all-windows nil)
+         (avy-keys (or (cdr (assq 'ivy-avy avy-keys-alist))
+                       avy-keys))
+         (avy-style (or (cdr (assq 'ivy-avy
+                                   avy-styles-alist))
+                        avy-style))
+         ;; prevent default pre action, which calls
+         ;; `select-frame-set-input-focus', deselecting the minibuffer and
+         ;; causing `ivy-posframe-cleanup' to run prematurely
+         (avy-pre-action #'ignore)
+         (window (ivy-posframe--window))
+         candidates)
+    (with-current-buffer ivy-posframe-buffer
+      (save-excursion
+        (save-restriction
+          (narrow-to-region
+           (window-start window)
+           (window-end window))
+          (goto-char (point-min))
+          (forward-line)
+          (while (< (point) (point-max))
+            (push (cons (point) window) candidates)
+            (forward-line)))))
+    (setq avy-action #'ivy-posframe--avy-action)
+    (avy--process
+     (nreverse candidates)
+     (avy--style-fn avy-style))))
 
 (declare-function avy--make-backgrounds "avy")
 (declare-function avy-window-list "avy")
