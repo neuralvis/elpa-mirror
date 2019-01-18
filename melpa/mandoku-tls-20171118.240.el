@@ -6,7 +6,6 @@
 ;;
 ;; Author: Christian Wittern <cwittern@gmail.com>
 ;; URL: https://github.com/mandoku/mandoku-tls
-;; Package-Version: 20171118.240
 ;; Version: 0.1
 ;; License: GPL v3, or any later version
 ;; Keywords: convenience

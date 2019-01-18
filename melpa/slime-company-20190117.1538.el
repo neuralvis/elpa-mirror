@@ -4,7 +4,7 @@
 ;;
 ;; Author: Ole Arndt <anwyn@sugarshark.com>
 ;; Keywords: convenience, lisp, abbrev
-;; Package-Version: 20190115.1601
+;; Package-Version: 20190117.1538
 ;; Version: 1.2
 ;; Package-Requires: ((emacs "24.4") (slime "2.13") (company "0.9.0"))
 ;;
@@ -135,6 +135,27 @@ be active in derived modes as well."
   "Test if the slime-company backend should be active in the current buffer."
   (apply #'derived-mode-p slime-company-major-modes))
 
+(define-derived-mode slime-company-doc-mode help-mode "Doc"
+  "Documentation mode for slime-company."
+  (setq font-lock-defaults
+        '((("^\\([^ ]\\{4,\\}\\)\\b" . (1 font-lock-function-name-face t))
+           ("^[ 	]*\\b\\([A-Z][A-Za-z0-9_ 	%\\*\\-]+:\\)\\([ 	]\\|$\\)"
+            . (1 font-lock-doc-face))
+           ("^\\([A-Z][A-Za-z ]+:\\)\\([ 	]\\|$\\)"
+            . (1 font-lock-doc-face t))
+           ("(\\(FUNCTION\\|VALUES\\|OR\\|EQL\\|LAMBDA\\)\\b"
+            . (1 font-lock-keyword-face))
+           ("[	 (]+\\(&[A-Z0-9\\-]+\\)\\b" . (1 font-lock-type-face))
+           ("[	 (]+\\(:[A-Z0-9\\-]+\\)\\b" . (1 font-lock-builtin-face))
+           ("\\b\\(T\\|t\\|NIL\\|nil\\|NULL\\|null\\)\\b" . (1 font-lock-constant-face))
+           ("\\b[+-]?[0-9/\\.]+[sdeSDE]?\\+?[0-9]*\\b" . font-lock-constant-face)
+           ("#[xX][+-]?[0-9A-F/]+\\b" . font-lock-constant-face)
+           ("#[oO][+-]?[0-7/]+\\b" . font-lock-constant-face)
+           ("#[bB][+-]?[01/]+\\b" . font-lock-constant-face)
+           ("#[0-9]+[rR][+-]?[0-9A-Z/]+\\b" . font-lock-constant-face)
+           ("\\b\\([A-Z0-9:+%<>#*\\.\\-]\\{2,\\}\\)\\b"
+            . (1 font-lock-variable-name-face))))))
+
 ;;; ----------------------------------------------------------------------------
 ;;; * Activation
 
@@ -237,9 +258,11 @@ be active in derived modes as well."
                                  (cl:symbol-name (cl:read-from-string ,pkg-name)))))
                 (slime-eval `(swank:describe-symbol ,candidate)))))
     (with-current-buffer (company-doc-buffer)
-      (insert doc)
-      (goto-char (point-min))
-      (current-buffer))))
+       (slime-company-doc-mode)
+       (setq buffer-read-only nil)
+       (insert doc)
+       (goto-char (point-min))
+       (current-buffer))))
 
 (defun slime-company--location (candidate)
   (let ((source-buffer (current-buffer)))
