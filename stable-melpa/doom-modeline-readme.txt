@@ -33,9 +33,8 @@ Installation:
 From melpa, `M-x package-install RET doom-modeline RET`.
 In `init.el`,
 (require 'doom-modeline)
-(doom-modeline-init)
+(doom-modeline-mode 1)
 or
 (use-package doom-modeline
   :ensure t
-  :defer t
-  :hook (after-init . doom-modeline-init))
+  :hook (after-init . doom-modeline-mode))
