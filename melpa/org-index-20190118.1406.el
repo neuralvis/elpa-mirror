@@ -4,7 +4,7 @@
 
 ;; Author: Marc Ihm <org-index@2484.de>
 ;; URL: https://github.com/marcIhm/org-index
-;; Package-Version: 20190106.1512
+;; Package-Version: 20190118.1406
 ;; Version: 5.10.0
 ;; Package-Requires: ((emacs "24.4"))
 
@@ -3322,12 +3322,14 @@ Optional argument ID gives the node to delete."
 (defun oidx--ws-ids-up-to-top ()
   "Get list of all ids from current node up to top level."
   (when (string= major-mode "org-mode")
-    (let (ids id)
+    (let (ids id pt)
       (save-excursion
         (ignore-errors
           (while (progn (and (setq id (org-id-get))
                              (setq ids (cons id ids)))
-                        (outline-up-heading 1)))))
+                        (setq pt (point))
+                        (outline-up-heading 1)
+                        (/= pt (point))))))
       ids)))
 
 
