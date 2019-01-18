@@ -1,0 +1,2 @@
+
+(elisp-demos . [(20190118 610) ((emacs (24 4))) "Elisp API Demos" tar ((:commit . "d2ca95b7c05ec37d5e7292507de1972e6675b057") (:keywords "lisp" "docs") (:authors ("Xu Chunyang" . "mail@xuchunyang.me")) (:maintainer "Xu Chunyang" . "mail@xuchunyang.me") (:url . "https://github.com/xuchunyang/elisp-demos"))])
