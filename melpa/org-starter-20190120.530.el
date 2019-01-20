@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2
-;; Package-Version: 20190119.1507
+;; Package-Version: 20190120.530
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; URL: https://github.com/akirak/org-starter
 
@@ -133,6 +133,7 @@ When the variable is set to nil, an existing value of
 (defvar org-starter-found-errors nil
   "Non-nil if an error is found while configuring org-starter.")
 
+;;;###autoload
 (define-minor-mode org-starter-mode
   "Turn on/off features of org-starter.
 
