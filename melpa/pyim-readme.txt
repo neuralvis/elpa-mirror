@@ -161,6 +161,11 @@ pyim 使用 emacs 动态模块：[[https://gitlab.com/liberime/liberime][liberim
      (liberime-select-schema "luna_pinyin_simp")
      (setq pyim-default-scheme 'rime))
    #+END_EXAMPLE
+3. 使用 rime 全拼输入法的用户，也可以使用 rime-quanpin scheme,
+   这个 scheme 是专门针对 rime 全拼输入法定制的，支持全拼v快捷键。
+   #+BEGIN_EXAMPLE
+   (setq pyim-default-scheme 'rime-quanpin)
+   #+END_EXAMPLE
 
 *** 使用五笔输入
 pyim 支持五笔输入模式，用户可以通过变量 `pyim-default-scheme' 来设定：
