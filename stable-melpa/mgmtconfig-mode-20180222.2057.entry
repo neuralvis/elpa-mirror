@@ -1,2 +1,2 @@
 
-(mgmtconfig-mode . [(20180222 2057) ((emacs (24 3))) "mgmt configuration management language" single ((:commit . "db1dbe7a27047def8651066054594908a3b184fa") (:keywords "languages") (:authors ("Peter Oliver" . "mgmtconfig@mavit.org.uk")) (:maintainer "Mgmt contributors <https://github.com/purpleidea/mgmt>") (:url . "https://github.com/purpleidea/mgmt/misc/emacs"))])
+(mgmtconfig-mode . [(20180222 2057) ((emacs (24 3))) "mgmt configuration management language" single ((:commit . "dc2e7de9e5462be9638cf07ecd621bf24166f849") (:keywords "languages") (:authors ("Peter Oliver" . "mgmtconfig@mavit.org.uk")) (:maintainer "Mgmt contributors <https://github.com/purpleidea/mgmt>") (:url . "https://github.com/purpleidea/mgmt/misc/emacs"))])
