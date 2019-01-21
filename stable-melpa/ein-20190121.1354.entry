@@ -1,0 +1,2 @@
+
+(ein . [(20190121 1354) ((websocket (1 7)) (auto-complete (1 4 0)) (request (0 3)) (deferred (0 5)) (cl-generic (0 3)) (dash (2 13 0)) (s (1 11 0)) (skewer-mode (1 6 2))) "Emacs IPython Notebook" tar ((:commit . "bcbefbe0b9a10cf9c36117b7bab794cb2a346b82"))])
