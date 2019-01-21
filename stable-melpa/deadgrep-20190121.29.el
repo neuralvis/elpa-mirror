@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20190105.2359
+;; Package-Version: 20190121.29
 ;; Keywords: tools
 ;; Version: 0.7
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -1155,19 +1155,23 @@ for a string, offering the current word as a default."
     search-term))
 
 (defun deadgrep--normalise-dirname (path)
-  "Expand PATH and ensure that it doesn't end with a slash."
-  (let (file-name-handler-alist)
-    (directory-file-name (expand-file-name path))))
+  "Expand PATH and ensure that it doesn't end with a slash.
+If PATH is remote path, it is not expanded."
+  (directory-file-name (if (file-remote-p path)
+                           path
+                         (let (file-name-handler-alist)
+                           (expand-file-name path)))))
 
 (defun deadgrep--lookup-override (path)
   "If PATH is present in `deadgrep-project-root-overrides',
-return the overridden value."
-  (setq path (deadgrep--normalise-dirname path))
-  (let ((override
-         (-first
-          (-lambda ((original . _))
-            (equal (deadgrep--normalise-dirname original) path))
-          deadgrep-project-root-overrides)))
+return the overridden value.
+Otherwise, return PATH as is."
+  (let* ((normalised-path (deadgrep--normalise-dirname path))
+         (override
+          (-first
+           (-lambda ((original . _))
+             (equal (deadgrep--normalise-dirname original) normalised-path))
+           deadgrep-project-root-overrides)))
     (when override
       (setq path (cdr override))
       (unless (stringp path)
