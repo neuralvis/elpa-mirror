@@ -1,0 +1,2 @@
+
+(latex-math-preview . [(20190122 734) nil "preview LaTeX mathematical expressions." single ((:commit . "3107662dd82b9e1494a17f3c9cc6a731d0e0d740") (:keywords "latex" "tex") (:authors ("Takayuki YAMAGUCHI" . "d@ytak.info")) (:maintainer "Takayuki YAMAGUCHI" . "d@ytak.info") (:url . "https://gitlab.com/latex-math-preview/latex-math-preview"))])
