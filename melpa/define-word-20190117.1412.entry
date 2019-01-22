@@ -1,2 +1,2 @@
 
-(define-word . [(20190117 1412) ((emacs (24 3))) "display the definition of word at point." single ((:commit . "9e215b38c0c3b36fcd2d926c9cbc13bf88cdec88") (:keywords "dictionary" "convenience") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/define-word"))])
+(define-word . [(20190117 1412) ((emacs (24 3))) "display the definition of word at point." single ((:commit . "aae727d3385fe4077b9c3a8c8ce80303d10e5ca0") (:keywords "dictionary" "convenience") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/define-word"))])
