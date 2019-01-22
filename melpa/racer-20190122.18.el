@@ -4,7 +4,7 @@
 
 ;; Author: Phil Dawes
 ;; URL: https://github.com/racer-rust/emacs-racer
-;; Package-Version: 20190112.1656
+;; Package-Version: 20190122.18
 ;; Version: 1.3
 ;; Package-Requires: ((emacs "24.3") (rust-mode "0.2.0") (dash "2.13.0") (s "1.10.0") (f "0.18.2") (pos-tip "0.4.6"))
 ;; Keywords: abbrev, convenience, matching, rust, tools
@@ -656,7 +656,10 @@ Note that this feature is only available when `company-mode' is installed."
   (when (and racer-complete-insert-argument-placeholders
              (require 'company-template nil t)
              (equal "Function"
-                    (get-text-property 0 'matchtype arg)))
+                    (get-text-property 0 'matchtype arg))
+             ;; Don't add arguments if the user has already added
+             ;; some.
+             (not (eq (char-after) ?\()))
     (let* ((ctx (get-text-property 0 'ctx arg))
 	   (arguments (racer-complete--extract-args ctx)))
       (insert arguments)
