@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20190113.1044
+;; Package-Version: 20190122.2309
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -126,19 +126,16 @@
      ((t (:inherit font-lock-comment-face :foreground ,lightest-green))))
 
    ;; highlight-numbers
-   `(highlight-numbers-number
-     ((t (:foreground ,orange))))
+   `(highlight-numbers-number ((t (:foreground ,orange))))
 
    ;; highlight-quoted
-   `(highlight-quoted-symbol
-     ((t (:foreground ,green))))
+   `(highlight-quoted-symbol  ((t (:inherit font-lock-constant-face))))
 
    ;; highlight-operators
-   `(highlight-operators-face
-     ((t (:foreground ,darker-green))))
+   `(highlight-operators-face ((t (:foreground ,darker-green))))
 
    ;; hl-todo
-   `(hl-todo ((t (:foreground "#cc9393", :bold nil))))
+   `(hl-todo ((t (:foreground "#cc9393", :bold nil :slant italic))))
 
    ;; search
    `(isearch
