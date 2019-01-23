@@ -4,6 +4,7 @@
 ;; Author: Javier Aguirre <hello@javaguirre.net>
 ;; Maintainer: Javier Aguirre <hello@javaguirre.net>
 ;; Version: 0.1
+;; Package-Version: 20171023.742
 ;; Package-Requires: ((markdown-mode "1.0"))
 ;; Created: 10 Feb 2016
 ;; Keywords: ghost, blog

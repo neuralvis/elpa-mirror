@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190122.1547
+;; Package-Version: 20190123.1239
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.9.0"))
 ;; Keywords: matching
@@ -223,7 +223,9 @@
                              (buffer-substring-no-properties
                               (line-beginning-position)
                               (line-end-position)))))
-            (ivy-set-index (cl-position cand-text ivy--old-cands :test #'string=))
+            (ivy-set-index (cl-position-if
+                            (lambda (x) (cl-search x cand-text))
+                            ivy--old-cands))
             (ivy--exhibit)
             (ivy-done)
             (ivy-call))

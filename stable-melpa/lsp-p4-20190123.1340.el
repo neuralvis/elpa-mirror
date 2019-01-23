@@ -4,7 +4,7 @@
 
 ;; Author: Dmitri Makarov
 ;; Version: 1.0
-;; Package-Version: 20180728.1915
+;; Package-Version: 20190123.1340
 ;; Package-Requires: ((lsp-mode "3.0"))
 ;; Keywords: lsp, p4
 ;; URL: https://github.com/dmakarov/p4ls
@@ -23,7 +23,6 @@
 ;;; Code:
 
 (require 'lsp-mode)
-(require 'lsp-common)
 
 (defgroup lsp-p4 nil
   "Customization variables for lsp-p4."
