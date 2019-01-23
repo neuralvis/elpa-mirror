@@ -1,7 +1,7 @@
 ;;; latex-math-preview.el --- preview LaTeX mathematical expressions.
 
 ;; Copyright 2006, 2007, 2008, 2009 Kevin Ryde
-;; Copyright 2009-2016 Takayuki YAMAGUCHI
+;; Copyright 2009-2019 Takayuki YAMAGUCHI
 
 ;; latex-math-preview.el is a modified version which is based on
 ;; tex-math-preview.el and has been created at July 2009.
@@ -14,9 +14,9 @@
 
 ;; Author: Takayuki YAMAGUCHI <d@ytak.info>
 ;; Keywords: LaTeX TeX
-;; Package-Version: 20190122.734
-;; Version: 0.7.2
-;; Created: Tue Jan  5 09:57:39 2016
+;; Package-Version: 20190123.802
+;; Version: 0.7.3
+;; Created: Wed Jan 23 17:02:18 2019
 ;; URL: https://gitlab.com/latex-math-preview/latex-math-preview
 
 ;; This program is free software; you can redistribute it and/or modify it under
@@ -325,6 +325,8 @@
 ;; If you change the cache directory, please customize this variable.
 
 ;;; Change Log:
+;; 2019/01/23 version 0.7.3 yamaguchi
+;;     New variables `latex-math-preview-select-preview-window' and some bug fixes.
 ;; 2016/01/05 version 0.7.2 yamaguchi
 ;;     Support lualatex
 ;; 2015/12/24 version 0.7.1 yamaguchi
@@ -558,7 +560,7 @@ The integer is the number to access needed string from regular-expressin.")
 (defun latex-math-preview-symbol-insert-candidate (sym format-str col line)
   (let ((image-file (latex-math-preview-symbol-image sym)))
     (when (file-exists-p image-file)
-      (insert-image-file image-file)
+      (insert-image (create-image image-file))
       (goto-char (line-end-position))))
   (insert "\t")
   (let ((start-pt (point)))
@@ -1551,7 +1553,9 @@ If you use YaTeX, then you should use YaTeX-in-math-mode-p alternatively."
 ;;-----------------------------------------------------------------------------
 ;; view png in a buffer
 
-(defvar latex-math-preview-display-whole-image nil)
+(defvar latex-math-preview-display-whole-image
+  "Change preview window to full size when whole image is not displayed if true"
+  nil)
 
 (defun latex-math-preview-get-expression-buffer ()
   (or (get-buffer latex-math-preview-expression-buffer-name)
@@ -1575,10 +1579,11 @@ If you use YaTeX, then you should use YaTeX-in-math-mode-p alternatively."
       (goto-char (point-min))
       (setq buffer-read-only t)))
   (if latex-math-preview-select-preview-window
-    (pop-to-buffer latex-math-preview-expression-buffer-name)
+      (pop-to-buffer latex-math-preview-expression-buffer-name)
     (display-buffer latex-math-preview-expression-buffer-name))
-  (when (and latex-math-preview-display-whole-image (not (pos-visible-in-window-p (point-max))))
-    (with-current-buffer latex-math-preview-expression-buffer-name (delete-other-windows))))
+  (with-selected-window (get-buffer-window latex-math-preview-expression-buffer-name)
+    (when (and latex-math-preview-display-whole-image (not (pos-visible-in-window-p (point-max))))
+      (with-current-buffer latex-math-preview-expression-buffer-name (delete-other-windows)))))
 
 (defun latex-math-preview-get-dvipng-color-option ()
   "Get string for dvipng options '-bg' and '-fg'."

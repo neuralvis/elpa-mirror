@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190122.1614
+;; Package-Version: 20190123.1048
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.9.0"))
 ;; Keywords: convenience, matching, tools
@@ -1980,6 +1980,11 @@ further, make the remote prefix editable"
       (ivy--cd up-dir)
       (setf (ivy-state-preselect ivy-last)
             (file-name-as-directory (file-name-nondirectory cur-dir))))))
+
+(defun counsel-down-directory ()
+  "Descend into the current directory."
+  (interactive)
+  (ivy--directory-enter))
 
 (defun counsel-at-git-issue-p ()
   "When point is at an issue in a Git-versioned file, return the issue string."
