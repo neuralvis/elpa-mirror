@@ -4,7 +4,7 @@
 
 ;; Author: Marc Ihm <org-index@2484.de>
 ;; URL: https://github.com/marcIhm/org-index
-;; Package-Version: 20190118.1406
+;; Package-Version: 20190124.1351
 ;; Version: 5.10.0
 ;; Package-Requires: ((emacs "24.4"))
 
@@ -2894,12 +2894,13 @@ This command is available as a subcommand of ‘org-index’,
 but may also be bound to its own key-sequence.
 Optional argument SILENT does not issue final message."
   (interactive)
-  (let ((char-choices (list ?s ?a ?d ?u ?w ?m ?c ?g ? ))
+  (let ((char-choices (list ?s ?a ?d ?u ?w ?m ?c ?g ? ??))
         id text more-text char prompt ids-up-to-top)
 
     (oidx--verify-id)
     (setq prompt (format "Please specify action on working-set of %d nodes (s,a,d,u,m,w,c,space,g or ? for short help) - " (length oidx--ws-ids)))
-    (while (not (memq char char-choices))
+    (while (or (not (memq char char-choices))
+               (= char ??))
       (setq char (read-char-choice prompt char-choices))
       (setq prompt (format "Actions on working-set of %d nodes:  s)et working-set to this node alone,  a)ppend this node to set,  d)elete this node from list,  u)ndo last modification of working set, m)enu to edit working set (same as 'w'), c) enter working set circle (same as space),  g)o to bottom position in current node.  Please choose - " (length oidx--ws-ids))))
     (setq text
@@ -3200,7 +3201,7 @@ Argument KEY has been pressed to trigger this function."
 (defun oidx--ws-menu-rebuild (&optional resize)
   "Rebuild content of working-set menu-buffer.
 Optional argument RESIZE adjusts window size."
-  (let (cursor-here)
+  (let (cursor-here lb)
     (with-current-buffer (get-buffer-create oidx--ws-menu-buffer-name)
       (setq buffer-read-only nil)
       (erase-buffer)
@@ -3222,8 +3223,9 @@ Optional argument RESIZE adjusts window size."
                              (setq star "*")
                              (setq cursor-here (point)))
                            (insert (format "%s %s" star head)))
-                         (put-text-property (line-beginning-position) (line-end-position) 'org-index-id id)
-                         (insert "\n")))
+                         (setq lb (line-beginning-position))
+                         (insert "\n")
+                         (put-text-property lb (point) 'org-index-id id)))
                      oidx--ws-ids
                      "\n")
         (insert "  No nodes in working-set.\n"))
