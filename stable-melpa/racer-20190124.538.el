@@ -4,7 +4,7 @@
 
 ;; Author: Phil Dawes
 ;; URL: https://github.com/racer-rust/emacs-racer
-;; Package-Version: 20190122.18
+;; Package-Version: 20190124.538
 ;; Version: 1.3
 ;; Package-Requires: ((emacs "24.3") (rust-mode "0.2.0") (dash "2.13.0") (s "1.10.0") (f "0.18.2") (pos-tip "0.4.6"))
 ;; Keywords: abbrev, convenience, matching, rust, tools
@@ -768,17 +768,20 @@ Note that this feature is only available when `company-mode' is installed."
 ;;;###autoload
 (defun racer-find-definition ()
   "Run the racer find-definition command and process the results."
-  (interactive (racer--find-definition #'find-file)))
+  (interactive)
+  (racer--find-definition #'find-file))
 
 ;;;###autoload
 (defun racer-find-definition-other-window ()
   "Run the racer find-definition command and process the results."
-  (interactive (racer--find-definition #'find-file-other-window)))
+  (interactive)
+  (racer--find-definition #'find-file-other-window))
 
 ;;;###autoload
 (defun racer-find-definition-other-frame ()
   "Run the racer find-definition command and process the results."
-  (interactive (racer--find-definition #'find-file-other-frame)))
+  (interactive)
+  (racer--find-definition #'find-file-other-frame))
 
 (defun racer--syntax-highlight (str)
   "Apply font-lock properties to a string STR of Rust code."

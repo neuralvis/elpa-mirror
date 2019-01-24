@@ -1,7 +1,7 @@
 ;;; company-lsp.el --- Company completion backend for lsp-mode.  -*- lexical-binding: t -*-
 
 ;; Version: 2.0.2
-;; Package-Version: 20181226.709
+;; Package-Version: 20190124.209
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "3.4") (company "0.9.0") (s "1.2.0") (dash "2.11.0"))
 ;; URL: https://github.com/tigersoldier/company-lsp
 
@@ -310,8 +310,8 @@ Return a list of strings as the completion candidates."
                                (company-lsp--make-candidate item prefix))
                              (lsp--sort-completions items))))
     (when (null company-lsp--completion-cache)
-      (add-hook 'company-completion-cancelled-hook #'company-lsp--cleanup-cache)
-      (add-hook 'company-completion-finished-hook #'company-lsp--cleanup-cache))
+      (add-hook 'company-completion-cancelled-hook #'company-lsp--cleanup-cache nil t)
+      (add-hook 'company-completion-finished-hook #'company-lsp--cleanup-cache nil t))
     (when (eq company-lsp-cache-candidates 'auto)
       ;; Only cache candidates on auto mode. If it's t company caches the
       ;; candidates for us.
@@ -321,8 +321,8 @@ Return a list of strings as the completion candidates."
 (defun company-lsp--cleanup-cache (_)
   "Clean up completion cache and company hooks."
   (setq company-lsp--completion-cache nil)
-  (remove-hook 'company-completion-finished-hook #'company-lsp--cleanup-cache)
-  (remove-hook 'company-completion-cancelled-hook #'company-lsp--cleanup-cache))
+  (remove-hook 'company-completion-finished-hook #'company-lsp--cleanup-cache t)
+  (remove-hook 'company-completion-cancelled-hook #'company-lsp--cleanup-cache t))
 
 (defun company-lsp--cache-put (prefix candidates)
   "Set cache for PREFIX to be CANDIDATES.
