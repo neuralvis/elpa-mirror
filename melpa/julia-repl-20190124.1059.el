@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016  Tamas K. Papp
 ;; Author: Tamas Papp <tkpapp@gmail.com>
 ;; Keywords: languages
-;; Package-Version: 20180923.1124
+;; Package-Version: 20190124.1059
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25"))
 ;; URL: https://github.com/tpapp/julia-repl
@@ -84,7 +84,7 @@ Note that this affects all buffers using the ‘ansi-term’ map."
     ;; matches "around /tmp/Foo.jl:2", also starting with "at" or "Revise"
     (julia-loc . ("\\(around\\|at\\|Revise\\) \\([^ ><()\t\n,'\";:]+\\):\\([0-9]+\\)" 2 3))
     ;; matches "omitting file /tmp/Foo.jl due to parsing error near line 2", from Revise.parse_source!
-    (julia-warn-revise . ("omitting file ([^ ><()\t\n,'\";:]+\\) due to parsing error near line \\([0-9]+\\)" 1 2))
+    (julia-warn-revise . ("omitting file \\([^ ><()\t\n,'\";:]+\\) due to parsing error near line \\([0-9]+\\)" 1 2))
     )
   "Specifications for highlighting error locations.
 
@@ -544,6 +544,16 @@ When called with a prefix argument, activate the home project."
              (concat "import Pkg; Pkg.activate(\""
                      (expand-file-name (file-name-directory projectfile)) "\")")))
         (message "could not find project file")))))
+
+(defun julia-repl-set-julia-editor (editor)
+  "Set the JULIA_EDITOR environment variable."
+  (interactive)
+  (julia-repl--send-string (format "ENV[\"JULIA_EDITOR\"] = \"%s\";" editor)))
+
+(defun julia-repl-use-emacsclient ()
+  "Use emacsclient as the JULIA_EDITOR."
+  (interactive)
+  (julia-repl--send-string "ENV[\"JULIA_EDITOR\"] = \"emacsclient\";"))
 
 ;;;###autoload
 (define-minor-mode julia-repl-mode

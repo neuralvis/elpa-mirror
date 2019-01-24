@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/define-word
-;; Package-Version: 20190117.1412
+;; Package-Version: 20190124.1031
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: dictionary, convenience
@@ -119,6 +119,7 @@ lets the user choose service."
             "0 definitions found")
            ((define-word--expand "Plural form of \\(.*\\)\\.$" results service))
            ((define-word--expand "past participle of \\(.*\\)\\.$" results service))
+           ((define-word--expand "Present participle of \\(.*\\)\\.$" results service))
            (t
             results)))))
 
