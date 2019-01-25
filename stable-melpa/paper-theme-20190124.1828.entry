@@ -1,0 +1,2 @@
+
+(paper-theme . [(20190124 1828) ((emacs (24))) "A minimal Emacs colour theme." single ((:commit . "ac2da41ca4854e7e5ea10697ec9f989f0f74d17e") (:keywords "theme" "paper") (:authors ("Göktuğ Kayaalp")) (:maintainer "Göktuğ Kayaalp") (:url . "https://dev.gkayaalp.com/elisp/index.html#paper"))])
