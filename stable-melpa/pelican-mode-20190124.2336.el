@@ -3,7 +3,7 @@
 ;; Copyright 2013-2018 Joe Wreschnig
 ;;
 ;; Author: Joe Wreschnig <joe.wreschnig@gmail.com>
-;; Package-Version: 20180604.2207
+;; Package-Version: 20190124.2336
 ;; Package-X-Original-Version: 20180605.1
 ;; Package-Requires: ((emacs "25"))
 ;; URL: https://git.korewanetadesu.com/pelican-mode.git
@@ -121,6 +121,7 @@ arguments, field and value strings."
     (define-key map (kbd "n") #'pelican-mode-insert-header)
     (define-key map (kbd "p") #'pelican-mode-publish)
     (define-key map (kbd "u") #'pelican-make-rsync-upload)
+    (define-key map (kbd "g") #'pelican-make-github)
     map)
   "Keymap for Pelican commands after ‘pelican-mode-keymap-prefix’.")
 (fset 'pelican-mode-command-map pelican-mode-command-map)
@@ -285,6 +286,11 @@ has no status."
   "Upload with rsync via a Makefile at the root of the site."
   (interactive)
   (pelican-make "rsync_upload"))
+
+(defun pelican-make-github ()
+  "Upload to GitHub Pages via a Makefile at the root of the site."
+  (interactive)
+  (pelican-make "github"))
 
 
 

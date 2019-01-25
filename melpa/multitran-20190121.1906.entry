@@ -1,2 +1,0 @@
-
-(multitran . [(20190121 1906) ((emacs (24)) (cl-lib (0 5))) "Interface to multitran" single ((:commit . "34e5b1f05b4e426ba887129653adcbafa4076a6a") (:keywords "dictionary" "hypermedia") (:authors ("Zajcev Evgeny" . "zevlg@yandex.ru")) (:maintainer "Zajcev Evgeny" . "zevlg@yandex.ru"))])
