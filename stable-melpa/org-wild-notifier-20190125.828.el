@@ -5,7 +5,7 @@
 ;; Author: Artem Khramov <futu.fata@gmail.com>
 ;; Created: 6 Jan 2017
 ;; Version: 0.2.4
-;; Package-Version: 20190122.834
+;; Package-Version: 20190125.828
 ;; Package-Requires: ((alert "1.2") (dash "2.13.0") (emacs "24.4"))
 ;; Keywords: notification alert org org-agenda agenda
 ;; URL: https://github.com/akhramov/org-wild-notifier.el
@@ -266,7 +266,7 @@ smoother experience this function also runs a check without timer."
               (org-agenda-buffer-tmp-name org-wild-notifier--agenda-buffer-name)
               (already-opened org-agenda-new-buffers))
 
-          (org-agenda-list 2)
+          (org-agenda-list 2 (org-read-date nil nil "today"))
 
           (-each
             (->> (org-wild-notifier--retrieve-events)

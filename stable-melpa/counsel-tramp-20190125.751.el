@@ -1,11 +1,11 @@
 ;;; counsel-tramp.el --- Tramp ivy interface for ssh, docker, vagrant -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2018 by Masashı Mıyaura
+;; Copyright (C) 2017-2019 by Masashı Mıyaura
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-counsel-tramp
-;; Package-Version: 20180911.157
-;; Version: 0.5.2
+;; Package-Version: 20190125.751
+;; Version: 0.6.2
 ;; Package-Requires: ((emacs "24.3") (counsel "0.10"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -75,14 +75,14 @@ Kill all remote buffers."
   (run-hooks 'counsel-tramp-quit-hook)
   (tramp-cleanup-all-buffers))
 
-(defun counsel-tramp--candidates ()
-  "Collect candidates for counsel-tramp."
+(defun counsel-tramp--candidates (&optional file)
+  "Collect candidates for counsel-tramp from FILE."
   (let ((source (split-string
                  (with-temp-buffer
-                   (insert-file-contents "~/.ssh/config")
+                   (insert-file-contents (or file "~/.ssh/config"))
                    (buffer-string))
                  "\n"))
-        (hosts counsel-tramp-custom-connections))
+        (hosts (if file '() counsel-tramp-custom-connections)))
     (dolist (host source)
       (when (string-match "[H\\|h]ost +\\(.+?\\)$" host)
 	(setq host (match-string 1 host))
@@ -106,7 +106,13 @@ Kill all remote buffers."
 	     hosts)
 	    (push
 	     (concat "/ssh:" host "|sudo:root@" host ":/")
-	     hosts)))))
+	     hosts))))
+      (when (string-match "Include +\\(.+\\)$" host)
+        (setq include-file (match-string 1 host))
+        (when (not (file-name-absolute-p include-file))
+          (setq include-file (concat (file-name-as-directory "~/.ssh") include-file)))
+        (when (file-exists-p include-file)
+          (setq hosts (append hosts (counsel-tramp--candidates include-file))))))
     (when (require 'docker-tramp nil t)
       (cl-loop for line in (cdr (ignore-errors (apply #'process-lines "docker" (list "ps"))))
 	       for info = (reverse (split-string line "[[:space:]]+" t))
