@@ -1,11 +1,11 @@
 ;;; helm-tramp.el --- Tramp helm interface for ssh, docker, vagrant -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2018 by Masashı Mıyaura
+;; Copyright (C) 2017-2019 by Masashı Mıyaura
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-helm-tramp
-;; Package-Version: 20180829.709
-;; Version: 1.1.6
+;; Package-Version: 20190125.447
+;; Version: 1.2.6
 ;; Package-Requires: ((emacs "24.3") (helm "2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -75,14 +75,14 @@ Kill all remote buffers."
   (run-hooks 'helm-tramp-quit-hook)
   (tramp-cleanup-all-buffers))
 
-(defun helm-tramp--candidates ()
-  "Collect candidates for helm-tramp."
+(defun helm-tramp--candidates (&optional file)
+  "Collect candidates for helm-tramp from FILE."
   (let ((source (split-string
                  (with-temp-buffer
-                   (insert-file-contents "~/.ssh/config")
+                   (insert-file-contents (or file "~/.ssh/config"))
                    (buffer-string))
                  "\n"))
-        (hosts helm-tramp-custom-connections))
+        (hosts (if file '() helm-tramp-custom-connections)))
     (dolist (host source)
       (when (string-match "[H\\|h]ost +\\(.+?\\)$" host)
 	(setq host (match-string 1 host))
@@ -106,7 +106,13 @@ Kill all remote buffers."
 	     hosts)
 	    (push
 	     (concat "/ssh:" host "|sudo:" host ":/")
-	     hosts)))))
+	     hosts))))
+      (when (string-match "Include +\\(.+\\)$" host)
+        (setq include-file (match-string 1 host))
+        (when (not (file-name-absolute-p include-file))
+          (setq include-file (concat (file-name-as-directory "~/.ssh") include-file)))
+        (when (file-exists-p include-file)
+          (setq hosts (append hosts (helm-tramp--candidates include-file))))))
     (when (require 'docker-tramp nil t)
       (cl-loop for line in (cdr (ignore-errors (apply #'process-lines "docker" (list "ps"))))
 	       for info = (reverse (split-string line "[[:space:]]+" t))

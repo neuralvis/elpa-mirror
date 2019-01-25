@@ -240,7 +240,7 @@ pyim 的 tooltip 选词框默认使用 *双行显示* 的样式，在一些特
 (setq pyim-page-style 'one-line)
 #+END_EXAMPLE
 
-注：用户可以添加函数 pyim-page-style-STYLENAME-style 来定义自己的选词框格式。
+注：用户可以添加函数 pyim-page-style:STYLENAME 来定义自己的选词框格式。
 
 *** 设置模糊音
 可以通过设置 `pyim-fuzzy-pinyin-alist' 变量来自定义模糊音。
