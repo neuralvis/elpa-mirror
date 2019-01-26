@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/bbatsov/zenburn-emacs
-;; Package-Version: 20181014.1555
+;; Package-Version: 20190126.1204
 ;; Version: 2.7-snapshot
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -36,6 +36,7 @@
 
 (defgroup zenburn-theme nil
   "Zenburn theme."
+  :group 'faces
   :prefix "zenburn-theme-"
   :link '(url-link :tag "GitHub" "http://github.com/bbatsov/zenburn-emacs")
   :tag "Zenburn theme")

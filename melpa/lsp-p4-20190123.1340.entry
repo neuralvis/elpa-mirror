@@ -1,2 +1,2 @@
 
-(lsp-p4 . [(20190123 1340) ((lsp-mode (3 0))) "P4 support for lsp-mode" single ((:commit . "ca3bcf55b9e4158098c2b189b5d0ef1aa0fdc816") (:keywords "lsp" "p4") (:authors ("Dmitri Makarov")) (:maintainer "Dmitri Makarov") (:url . "https://github.com/dmakarov/p4ls"))])
+(lsp-p4 . [(20190123 1340) ((lsp-mode (3 0))) "P4 support for lsp-mode" single ((:commit . "55ce03d54fe9b523c2f81177409c0d22c00e3819") (:keywords "lsp" "p4") (:authors ("Dmitri Makarov")) (:maintainer "Dmitri Makarov") (:url . "https://github.com/dmakarov/p4ls"))])
