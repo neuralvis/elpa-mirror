@@ -8,7 +8,6 @@
 ;;;         Matthieu Moy
 ;;;         Akinori MUSHA <knu@iDaemons.org>
 ;;; URL: https://github.com/knu/shell-toggle.el
-;; Package-Version: 20150226.1411
 ;;; Version: 1.3.1
 ;;; Keywords: processes
 ;;;
