@@ -1,2 +1,2 @@
 
-(ghc . [(20180121 1218) ((haskell-mode (13 0))) "Sub mode for Haskell mode" tar ((:commit . "e1759484606122c43944ba8e441015ac0a018b35"))])
+(ghc . [(20180121 1218) ((haskell-mode (13 0))) "Sub mode for Haskell mode" tar ((:commit . "da1a992da423478639057abd4b4bd9d3e980238c"))])

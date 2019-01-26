@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.4.0
-;; Package-Version: 20181218.1108
+;; Package-Version: 20190125.2135
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -128,6 +128,13 @@ Like `looking-back' but for fixed strings rather than regexps (so that it's not 
 (defcustom rust-indent-where-clause nil
   "Indent lines starting with the `where' keyword following a function or trait.
 When nil, `where' will be aligned with `fn' or `trait'."
+  :type 'boolean
+  :group 'rust-mode
+  :safe #'booleanp)
+
+(defcustom rust-indent-return-type-to-arguments t
+  "Indent a line starting with the `->' (RArrow) following a function, aligning
+to the function arguments.  When nil, `->' will be indented one level."
   :type 'boolean
   :group 'rust-mode
   :safe #'booleanp)
@@ -400,8 +407,10 @@ buffer."
                        (back-to-indentation)
                        (current-column))))))
 
-              ;; A function return type is indented to the corresponding function arguments
-              ((looking-at "->")
+              ;; A function return type is indented to the corresponding
+	      ;; function arguments, if -to-arguments is selected.
+              ((and rust-indent-return-type-to-arguments
+		    (looking-at "->"))
                (save-excursion
                  (backward-list)
                  (or (rust-align-to-expr-after-brace)
