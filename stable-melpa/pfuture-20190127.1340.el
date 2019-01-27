@@ -5,8 +5,8 @@
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Homepage: https://github.com/Alexander-Miller/pfuture
 ;; Package-Requires: ((emacs "25.2"))
-;; Package-Version: 20180922.1315
-;; Version: 1.2.2
+;; Package-Version: 20190127.1340
+;; Version: 1.3
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -121,9 +121,14 @@ custom filter output needs to be gathered another way. Note that the process'
 buffer is stored in its `buffer' property and is therefore accessible via
 \(process-get process 'buffer\)."
   (declare (indent 1))
-  (let* ((command (if (vectorp command)
-                      (cl-map 'list #'identity command)
-                    command))
+  (let* ((command (cond
+                   ((vectorp command)
+                    `(quote ,(cl-map 'list #'identity command)))
+                   ((eq '\` (car command))
+                    (prog1 command
+                      ;; a backquoted command's name is just about impossible to handle otherwise
+                      (setf name (or name (concat "Pfuture Callback: []")))))
+                   (t `(quote ,command))))
          (name (or name (concat "Pfuture Callback: [" (mapconcat #'identity command " ") "]")))
          (connection-type (or connection-type (quote 'pipe)))
          (directory (or directory default-directory)))
@@ -134,7 +139,7 @@ buffer is stored in its `buffer' property and is therefore accessible via
             (process
              (make-process
               :name ,name
-              :command ',command
+              :command ,command
               :connection-type ,connection-type
               :filter ,(or filter '(function pfuture--append-output-to-buffer))
               :sentinel (lambda (process status)
