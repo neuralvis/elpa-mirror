@@ -2,7 +2,7 @@
 
 ;; Author: Danny McClanahan
 ;; Version: 0.1
-;; Package-Version: 20180629.920
+;; Package-Version: 20190128.846
 ;; URL: https://github.com/cosmicexplorer/helm-rg
 ;; Package-Requires: ((emacs "25") (cl-lib "0.5") (dash "2.13.0") (helm "2.8.8"))
 ;; Keywords: find, file, files, helm, fast, rg, ripgrep, grep, search, match
@@ -178,11 +178,15 @@
   t)
 
 (defun helm-rg--gen-defcustom-form-from-alist (name alist doc args)
-  `(defcustom ,name ',(car (helm-rg--alist-keys (symbol-value alist)))
-     ,doc
-     :type `(radio ,@(--map `(const ,it) (helm-rg--alist-keys ,alist)))
-     :group 'helm-rg
-     ,@args))
+  ;; TODO: get all the pcase macros at the very top of the file!
+  (let ((alist-resolved (pcase-exhaustive alist
+                          ((and (pred symbolp) x) (symbol-value x))
+                          ((and (pred listp) x) x))))
+    `(defcustom ,name ',(car (helm-rg--alist-keys alist-resolved))
+       ,doc
+       :type `(radio ,@(--map `(const ,it) (helm-rg--alist-keys ',alist-resolved)))
+       :group 'helm-rg
+       ,@args)))
 
 (defmacro helm-rg--defcustom-from-alist (name alist doc &rest args)
   "Create a `defcustom' named NAME which can take the keys of ALIST as values.
@@ -1071,7 +1075,12 @@ any results."
              expanded
              helm-rg--current-dir
              paths)
-   collect (file-relative-name expanded helm-rg--current-dir)))
+   ;; TODO: a `pcase-defmacro' or `pcase' wrapper which checks that all possible cases of a
+   ;; `helm-rg--defcustom-from-alist' are enumerated at compile time!
+   ;; TODO: `helm-resume' currently fails on resume in the 'relative case.
+   collect (pcase-exhaustive helm-rg-file-paths-in-matches-behavior
+             (`relative (file-relative-name expanded helm-rg--current-dir))
+             (`absolute expanded))))
 
 (defun helm-rg--empty-glob-p (glob-str)
   (or (null glob-str)
@@ -2337,6 +2346,12 @@ This is the default value for `helm-rg--case-sensitivity', which can be modified
 `helm-rg--set-case-sensitivity' during a `helm-rg' session.
 
 This must be an element of `helm-rg--case-sensitive-argument-alist'.")
+
+(helm-rg--defcustom-from-alist helm-rg-file-paths-in-matches-behavior
+    ((relative) (absolute))
+  "Whether to print each file's absolute path in matches on every line of `helm-rg' output.
+
+This is currently necessary to be compatible with `helm-resume'.")
 
 
 ;; Autoloaded functions

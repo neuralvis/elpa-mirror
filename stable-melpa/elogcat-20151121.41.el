@@ -4,6 +4,7 @@
 
 ;; Author: Youngjoo Lee <youngker@gmail.com>
 ;; Version: 0.1.0
+;; Package-Version: 20151121.41
 ;; Keywords: tools
 ;; Package-Requires: ((s "1.9.0") (dash "2.10.0"))
 
