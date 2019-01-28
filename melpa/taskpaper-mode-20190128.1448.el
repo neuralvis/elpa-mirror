@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20181113.931
+;; Package-Version: 20190128.1448
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -50,7 +50,7 @@
 
 ;;;; Variables
 
-(defconst taskpaper-mode-version "0.8"
+(defconst taskpaper-mode-version "1.0"
   "TaskPaper mode version number.")
 
 (defvar taskpaper-mode-map (make-keymap)
