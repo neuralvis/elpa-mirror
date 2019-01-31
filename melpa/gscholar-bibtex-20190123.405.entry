@@ -1,2 +1,0 @@
-
-(gscholar-bibtex . [(20190123 405) nil "Retrieve BibTeX from Google Scholar and other online sources(ACM, IEEE, DBLP)" single ((:commit . "bc4b80aeff4657b11b44d5721618b22305bce53c") (:keywords "extensions") (:authors ("Junpeng Qiu" . "qjpchmail@gmail.com")) (:maintainer "Junpeng Qiu" . "qjpchmail@gmail.com"))])
