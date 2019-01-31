@@ -5,7 +5,6 @@
 ;; Author: Zajcev Evgeny <zevlg@yandex.ru>
 ;; Created: Thu Oct 29 21:55:35 2009
 ;; Keywords: games
-;; Package-Version: 20161111.706
 ;; Package-Requires: ((emacs "24.4"))
 ;; Version: 1.4
 
