@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-language-id
-;; Package-Version: 20190125.1334
+;; Package-Version: 20190201.842
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -161,8 +161,8 @@
 (defun language-id-mode-match-p (mode)
   "Interal helper to match current buffer against MODE."
   (let ((mode (if (listp mode) mode (list mode))))
-    (cl-destructuring-bind (majmode . variables) mode
-      (and (equal major-mode majmode)
+    (cl-destructuring-bind (wanted-major-mode . variables) mode
+      (and (derived-mode-p wanted-major-mode)
            (cl-every (lambda (variable)
                        (cl-destructuring-bind (symbol wanted-value) variable
                          (let ((value (if (boundp symbol)
@@ -192,10 +192,11 @@ If the language is not unambiguously recognized, the function
 returns nil."
   (let ((language-id-file-name-extension
          (downcase (file-name-extension (or (buffer-file-name) "") t))))
-    (cl-dolist (definition language-id-definitions)
-      (cl-destructuring-bind (language-id . modes) definition
-        (when (cl-some #'language-id-mode-match-p modes)
-          (cl-return language-id))))))
+    (cl-some (lambda (definition)
+               (cl-destructuring-bind (language-id . modes) definition
+                 (when (cl-some #'language-id-mode-match-p modes)
+                   language-id)))
+             language-id-definitions)))
 
 (provide 'language-id)
 

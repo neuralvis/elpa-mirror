@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012 François Févotte
 ;; Author:  François Févotte <fevotte@gmail.com>
 ;; URL:     https://github.com/ffevotte/isend-mode.el
-;; Package-Version: 20190131.938
+;; Package-Version: 20190201.832
 ;; Version: 0.2
 
 ;; This file is NOT part of Emacs.
@@ -62,6 +62,9 @@
 
 ;; Get rid of warning about `term-send-input' not being defined.
 (require 'term)
+
+;; if-let
+(require 'subr-x)
 
 
 

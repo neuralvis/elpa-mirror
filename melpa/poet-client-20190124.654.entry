@@ -1,2 +1,2 @@
 
-(poet-client . [(20190124 654) ((emacs (24 4)) (request (0 3 0))) "Client for po.et network api" single ((:commit . "52521316cabd62cfc8ba2035c057f4f38508d0e5") (:authors ("W.Yahia")) (:maintainer "W.Yahia") (:url . "https://github.com/wailo/emacs-poet"))])
+(poet-client . [(20190124 654) ((emacs (24 4)) (request (0 3 0))) "Client for po.et network api" single ((:commit . "b2d06c06ec1b9402ee1de8131f040efe634cb231") (:authors ("W.Yahia")) (:maintainer "W.Yahia") (:url . "https://github.com/wailo/emacs-poet"))])
