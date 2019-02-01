@@ -1,2 +1,0 @@
-
-(kubernetes-helm . [(20190110 2011) ((yaml-mode (0 0 13)) (emacs (26 1))) "extension for helm, the package manager for kubernetes" single ((:commit . "bc2e1ad6c87e2b0b29d548b02742ccefa4fcd8bc") (:keywords "kubernetes" "helm" "k8s" "tools" "processes") (:authors ("Adrien Brochard")) (:maintainer "Adrien Brochard") (:url . "https://github.com/abrochard/kubernetes-helm"))])

@@ -20,12 +20,12 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20190110.1839
+;; Package-Version: 20190201.319
 ;; Author: Adrien Brochard
 ;; Keywords: kubernetes k8s tools processes
 ;; URL: https://github.com/abrochard/kubel
 ;; License: GNU General Public License >= 3
-;; Package-Requires: ((magit-popup "2.4.0") (emacs "26.1"))
+;; Package-Requires: ((magit-popup "2.4.0") (emacs "25.3"))
 
 ;;; Commentary:
 

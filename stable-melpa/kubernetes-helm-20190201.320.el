@@ -20,12 +20,12 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20190110.2011
+;; Package-Version: 20190201.320
 ;; Author: Adrien Brochard
 ;; Keywords: kubernetes helm k8s tools processes
 ;; URL: https://github.com/abrochard/kubernetes-helm
 ;; License: GNU General Public License >= 3
-;; Package-Requires: ((yaml-mode "0.0.13") (emacs "26.1"))
+;; Package-Requires: ((yaml-mode "0.0.13") (emacs "25.3"))
 
 ;;; Commentary:
 
