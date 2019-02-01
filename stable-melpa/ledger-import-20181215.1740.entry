@@ -1,2 +1,0 @@
-
-(ledger-import . [(20181215 1740) ((emacs (25 1)) (ledger-mode (3 1 1))) "Fetch OFX files from bank and push them to Ledger" single ((:commit . "683ad7c37f97ba843cb8154293b71ce025550418") (:authors ("Damien Cassou" . "damien@cassou.me")) (:maintainer "Damien Cassou" . "damien@cassou.me") (:url . "https://gitlab.petton.fr/mpdel/libmpdel"))])
