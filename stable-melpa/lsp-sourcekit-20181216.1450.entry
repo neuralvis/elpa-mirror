@@ -1,0 +1,2 @@
+
+(lsp-sourcekit . [(20181216 1450) ((emacs (25 1)) (lsp-mode (5))) "sourcekit-lsp client for lsp-mode" single ((:commit . "99cac71aba68b2ae85c9295d71dda8bc513a85e2") (:keywords "languages" "lsp" "swift" "objective-c" "c++") (:authors ("Daniel Martín")) (:maintainer "Daniel Martín") (:url . "https://github.com/emacs-lsp/lsp-sourcekit"))])

@@ -1,0 +1,2 @@
+
+(scalariform . [(20190114 215) ((s (1 12 0)) (f (0 20 0))) "Format Scala code with scalariform." single ((:commit . "5dce756df7c15e0b421bc00f97f7d42a965a659b") (:keywords "processes" "scala" "scalariform") (:authors ("zwild" . "judezhao@outlook.com")) (:maintainer "zwild" . "judezhao@outlook.com") (:url . "https://github.com/zwild/scalariform"))])
