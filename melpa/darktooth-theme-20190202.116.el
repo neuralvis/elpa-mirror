@@ -4,7 +4,7 @@
 
 ;; Authors: Jason Milkins <jasonm23@gmail.com>
 ;; URL: http://github.com/emacsfodder/emacs-theme-darktooth
-;; Package-Version: 20181013.906
+;; Package-Version: 20190202.116
 ;; Version: 0.3.10
 
 ;; Package-Requires: ((autothemer "0.2"))
@@ -591,12 +591,13 @@
   (ivy-remote                                (:foreground darktooth-neutral_blue))
 
   ;; MODE SUPPORT: smerge
-  ;; TODO: smerge-base smerge-refined-changed
-  (smerge-mine                               (:background darktooth-mid_purple))
-  (smerge-other                              (:background darktooth-mid_blue))
+  (smerge-upper                              (:background darktooth-mid_purple))
+  (smerge-lower                              (:background darktooth-mid_blue))
+  (smerge-base                               (:background darktooth-dark_yellow))
   (smerge-markers                            (:background darktooth-dark0_soft))
   (smerge-refined-added                      (:background darktooth-dark_green))
   (smerge-refined-removed                    (:background darktooth-dark_red))
+  (smerge-refine-changed                     (:background nil :foreground nil))
 
   ;; MODE SUPPORT: git-gutter
   (git-gutter:added                         (:foreground darktooth-faded_green :background darktooth-muted_green ))
