@@ -4,6 +4,7 @@
 
 ;; Author: David Leatherman <leathekd@gmail.com>
 ;; URL: http://www.github.com/leathekd/cloud-to-butt-erc
+;; Package-Version: 20130627.2308
 ;; Version: 1.0.0
 
 ;; This file is not part of GNU Emacs.

@@ -1,0 +1,2 @@
+
+(dashboard-project-status . [(20190201 2118) ((emacs (24)) (git (0 1 1)) (dashboard (1 2 5))) "Display a git project status in a dashboard widget." single ((:commit . "d3ac9f4992cc9ddad12f98e6ace26c8673ce473d") (:authors ("Jason Duncan" . "jasond496@msn.com")) (:maintainer "Jason Duncan" . "jasond496@msn.com") (:url . "https://github.com/functionreturnfurnction/dashboard-project-status"))])

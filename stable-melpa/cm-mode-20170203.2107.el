@@ -6,6 +6,7 @@
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 14 Feb 2013
 ;; Version: 1.6
+;; Package-Version: 20170203.2107
 ;; Keywords: text, markdown
 ;; Package-Requires: ((cl-lib "0.5"))
 
