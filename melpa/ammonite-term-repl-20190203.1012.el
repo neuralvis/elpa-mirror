@@ -5,7 +5,7 @@
 ;; Author: zwild <judezhao@outlook.com>
 ;; Created: 2018-12-26T22:41:19+08:00
 ;; URL: https://github.com/zwild/ammonite-term-repl
-;; Package-Version: 20190115.358
+;; Package-Version: 20190203.1012
 ;; Package-Requires: ((emacs "24.3") (s "1.12.0") (scala-mode "0.23"))
 ;; Version: 0.1
 ;; Keywords: processes, ammnite, term, scala
@@ -65,11 +65,6 @@
 (defcustom ammonite-term-repl-prompt-regex "^@ "
   "Regex for ammonite prompt."
   :type 'string
-  :group 'ammonite-term-repl)
-
-(defcustom ammonite-term-repl-minor-mode-hook nil
-  "Hook to run after function `ammonite-term-repl-minor-mode' is active."
-  :type 'hook
   :group 'ammonite-term-repl)
 
 (defcustom ammonite-term-repl-run-hook nil
@@ -172,8 +167,7 @@ Argument FILE-NAME the file name."
 ;;;###autoload
 (define-minor-mode ammonite-term-repl-minor-mode
   "Minor mode for interacting with an Ammonite REPL."
-  :keymap ammonite-term-repl-minor-mode-map
-  (run-hooks 'ammonite-term-repl-minor-mode-hook))
+  :keymap ammonite-term-repl-minor-mode-map)
 
 (provide 'ammonite-term-repl)
 

@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20190113.1852
+;; Package-Version: 20190203.912
 ;; Keywords: help, lisp
 ;; Version: 0.16
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2") (shut-up "0.3"))
@@ -658,10 +658,10 @@ overrides that to include previously opened buffers."
       (insert (format "Functions called by %s:\n\n" sym))
       (helpful--display-callee-group compounds)
 
-      (insert "\n")
-
-      (insert (format "Primitives called by %s:\n\n" sym))
-      (helpful--display-callee-group primitives)
+      (when primitives
+        (insert "\n")
+        (insert (format "Primitives called by %s:\n\n" sym))
+        (helpful--display-callee-group primitives))
 
       (goto-char (point-min))
 
