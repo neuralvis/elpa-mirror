@@ -1,2 +1,2 @@
 
-(ammonite-term-repl . [(20190115 358) ((emacs (24 3)) (s (1 12 0)) (scala-mode (0 23))) "Scala Ammonite REPL in term mode." single ((:commit . "777296e039a3547ab769265a5e2f95f4be0e8ad6") (:keywords "processes" "ammnite" "term" "scala") (:authors ("zwild" . "judezhao@outlook.com")) (:maintainer "zwild" . "judezhao@outlook.com") (:url . "https://github.com/zwild/ammonite-term-repl"))])
+(ammonite-term-repl . [(20190115 358) ((emacs (24 3)) (s (1 12 0)) (scala-mode (0 23))) "Scala Ammonite REPL in term mode." single ((:commit . "606816940659dfb9956e5d64ed95d4beadd2664e") (:keywords "processes" "ammnite" "term" "scala") (:authors ("zwild" . "judezhao@outlook.com")) (:maintainer "zwild" . "judezhao@outlook.com") (:url . "https://github.com/zwild/ammonite-term-repl"))])
