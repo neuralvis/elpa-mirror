@@ -4,6 +4,7 @@
 
 ;; Author: Philip Woods <elzairthesorcerer@gmail.com>
 ;; Version: 0.2.6
+;; Package-Version: 20150915.1730
 ;; Keywords: sexp
 ;; URL: https://gitlab.com/elzair/sexp-move
 
