@@ -192,9 +192,9 @@ pyim 支持五笔输入模式，用户可以通过变量 `pyim-default-scheme' �
 最简单的方式是从 melpa 中安装 pyim-wbdict 包，然后根据它的
 [[https://github.com/tumashu/pyim-wbdict][README]] 来配置。
 
-如果用户在使用五笔输入法的过程中，想临时切换到拼音输入法，在显示选
-词框的时候，按 TAB 键，就可以切换到临时拼音输入模式，选词之后，自动
-切换回五笔。
+如果用户在使用五笔输入法的过程中，忘记了某个字的五笔码，可以按 TAB
+键临时切换到辅助输入法来输入，选词完成之后自动退出。辅助输入法可以
+通过 `pyim-assistant-scheme' 来设置。
 
 *** 使用仓颉输入法
 pyim 支持仓颉输入法，用户可以通过变量 `pyim-default-scheme' 来设定：
