@@ -1,2 +1,0 @@
-
-(ess-smart-equals . [(20190203 2037) ((emacs (25 1)) (ess (18 10))) "flexible, context-sensitive assignment key for R/S" single ((:commit . "f1f5414cbcef3f56c26c5b98d50d73bed2938110") (:keywords "r" "s" "ess" "convenience") (:authors ("Christopher R. Genovese" . "genovese@cmu.edu")) (:maintainer "Christopher R. Genovese" . "genovese@cmu.edu") (:url . "https://github.com/genovese/ess-smart-equals"))])

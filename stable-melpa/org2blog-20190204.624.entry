@@ -1,0 +1,2 @@
+
+(org2blog . [(20190204 624) ((org (8 3)) (xml-rpc (1 6 12)) (metaweblog (1 0 1)) (htmlize (1 51)) (hydra (0 13 0))) "Blog from Org mode to wordpress" tar ((:commit . "ebb01f543fb596983dd71f4c4f8f4e368b8c8c75"))])
