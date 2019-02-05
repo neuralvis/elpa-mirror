@@ -2,8 +2,7 @@
 
 ;; Authors: stardiviner <numbchild@gmail.com>
 ;; Package-Requires: ((emacs "25") (cl-lib "0.5") (seq "2.20"))
-;; Package-Version: 20181016.800
-;; Package-X-Original-Version: 0.1
+;; Package-Version: 0.1
 ;; Keywords: org link ebook kindle epub mobi
 ;; homepage: https://github.com/stardiviner/org-send-ebook
 
