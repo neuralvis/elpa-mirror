@@ -1,11 +1,11 @@
 ;;; fish-completion.el --- Add fish completion to pcomplete (shell and Eshell)  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2017 Pierre Neidhardt
+;; Copyright (C) 2017-2019 Pierre Neidhardt
 
 ;; Author: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; Homepage: https://gitlab.com/Ambrevar/emacs-fish-completion
 ;; Version: 0.1
-;; Package-Version: 20180827.829
+;; Package-Version: 20190205.753
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
@@ -45,16 +45,22 @@
 
 (require 'em-cmpl)
 
+(defgroup fish-completion nil
+  "Settings for fish completion in Eshell and Shell."
+  :group 'shell)
+
 (defvar fish-completion-command "fish"
   "The `fish' executable.")
 
 (defvar fish-completion--old-completion-function nil)
 (make-variable-buffer-local 'fish-completion--old-completion-function)
 
-(defvar fish-completion-fallback-on-bash-p nil
+(defcustom fish-completion-fallback-on-bash-p nil
   "Fall back on bash completion if possible.
-
-This requires the bash-completion package.")
+If non-nil, Fish file completion is ignored.
+This requires the bash-completion package."
+  :type 'boolean
+  :group 'fish-completion)
 
 ;;;###autoload
 (define-minor-mode fish-completion-mode
@@ -79,12 +85,18 @@ In `eshell', fish completion is only used when `pcomplete' fails."
       (add-hook 'eshell-mode-hook (lambda () (fish-completion-mode 1)) nil t))
   (fish-completion-mode 1))
 
-(define-globalized-minor-mode global-fish-completion-mode fish-completion-mode turn-on-fish-completion-mode)
+(define-globalized-minor-mode global-fish-completion-mode
+  fish-completion-mode
+  turn-on-fish-completion-mode)
 
 (defun fish-completion-shell-complete ()
   "Complete `shell' or `eshell' prompt with `fish-completion-complete'."
   (fish-completion-complete (buffer-substring-no-properties
-                             (save-excursion (if (eq major-mode 'shell-mode) (comint-bol) (eshell-bol)) (point)) (point))))
+                             (save-excursion (if (eq major-mode 'shell-mode)
+                                                 (comint-bol)
+                                               (eshell-bol))
+                                             (point))
+                             (point))))
 
 (defun fish-completion-complete (raw-prompt)
   "Complete RAW-PROMPT (any string) using the fish shell.
@@ -122,15 +134,25 @@ no completion was found with fish."
                            (split-string
                             (with-output-to-string
                               (with-current-buffer standard-output
-                                (call-process fish-completion-command nil t nil "-c" (format "complete -C%s" (shell-quote-argument prompt)))))
+                                (call-process fish-completion-command nil t nil
+                                              "-c"
+                                              (format "complete -C%s"
+                                                      (shell-quote-argument prompt)))))
                             "\n" t)))))
-            (if (and (not comp-list)
-                     fish-completion-fallback-on-bash-p
+            (if (and fish-completion-fallback-on-bash-p
+                     (or (not comp-list)
+                         (file-exists-p (car comp-list)))
                      (require 'bash-completion nil t))
-                (nth 2 (bash-completion-dynamic-complete-nocomint (save-excursion (eshell-bol) (point)) (point)))
+                ;; Remove trailing spaces of bash completion entries. (Does this only
+                ;; occurs when there is 1 completion item?)
+                ;; TODO: Maybe this should be fixed in bash-completion instead.
+                (mapcar 'string-trim-right
+                        (nth 2 (bash-completion-dynamic-complete-nocomint
+                                (save-excursion (eshell-bol) (point)) (point))))
               (if (and comp-list (file-exists-p (car comp-list)))
                   (pcomplete-dirs-or-entries)
-                comp-list))))))
+                ;; Remove trailing spaces to avoid it being converted into "\ ".
+                (mapcar 'string-trim-right comp-list)))))))
 
 (provide 'fish-completion)
 ;;; fish-completion.el ends here

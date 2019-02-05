@@ -6,6 +6,7 @@
 ;; Homepage: https://github.com/ifree/org-onenote
 ;; Created: 15th Aug 2017
 ;; Version: 0.1.0
+;; Package-Version: 20171008.500
 ;; Keywords: tools, docs, org-mode, onenote
 ;; Package-Requires: ((oauth2 "0.11") (request "0.2.0") (org "8.2.10"))
 
