@@ -96,7 +96,7 @@ pyim 的目标是： *尽最大的努力成为一个好用的 Emacs 中文输入
   (setq pyim-page-length 5)
 
   :bind
-  (("M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
+  (("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
    ("C-;" . pyim-delete-word-from-personal-buffer)))
 #+END_EXAMPLE
 
@@ -313,7 +313,7 @@ pyim 的 tooltip 选词框默认使用 *双行显示* 的样式，在一些特
 |-----------------------------------+-----------------------------------------------------------------------------------|
 |                                   | 1. 当前字符为中文字符时，输入下一个字符时默认开启中文输入                         |
 | pyim-probe-dynamic-english        | 2. 当前字符为其他字符时，输入下一个字符时默认开启英文输入                         |
-|                                   | 3. 使用命令 pyim-convert-code-at-point 可以将光标前的拼音字符串强制转换为中文。   |
+|                                   | 3. 使用命令 pyim-convert-string-at-point 可以将光标前的拼音字符串强制转换为中文。   |
 |-----------------------------------+-----------------------------------------------------------------------------------|
 
 激活方式：
@@ -373,7 +373,7 @@ pyim 的文档隐藏在 comment 中，如果用户喜欢阅读 html 格式的文
 
 *** 将光标处的拼音或者五笔字符串转换为中文 (与 vimim 的 “点石成金” 功能类似)
 #+BEGIN_EXAMPLE
-(global-set-key (kbd "M-i") 'pyim-convert-code-at-point)
+(global-set-key (kbd "M-i") 'pyim-convert-string-at-point)
 #+END_EXAMPLE
 
 *** 如何添加自定义拼音词库
