@@ -1,0 +1,2 @@
+
+(kubel . [(20190204 2036) ((magit-popup (2 4 0)) (emacs (25 3))) "extension for controlling Kubernetes with limited permissions" single ((:commit . "ae609bc28f83da2885a6be8579a666d367b16f01") (:keywords "kubernetes" "k8s" "tools" "processes") (:authors ("Adrien Brochard")) (:maintainer "Adrien Brochard") (:url . "https://github.com/abrochard/kubel"))])
