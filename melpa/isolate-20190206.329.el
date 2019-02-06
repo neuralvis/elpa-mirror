@@ -2,7 +2,7 @@
 
 ;; Author: Yuan Fu <casouri@gmail.com>
 ;; URL: https://github.com/casouri/isolate
-;; Package-Version: 20181216.847
+;; Package-Version: 20190206.329
 ;; Version: 1.2
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "25"))
@@ -483,7 +483,9 @@ Return t if match, nil if no match."
 
 ;;;;; Long delete
 
-(defvar isolate--delete-minibuffer-map (let ((map minibuffer-local-map))
+(defvar isolate--delete-minibuffer-map (let ((map (make-composed-keymap
+                                                   (make-sparse-keymap)
+                                                   minibuffer-local-map)))
                                          (define-key map (kbd "C-p") #'isolate-search-up)
                                          (define-key map (kbd "C-n") #'isolate-search-down)
                                          map)
