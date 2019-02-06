@@ -2,7 +2,7 @@
 
 ;; Author: ncaq <ncaq@ncaq.net>
 ;; Version: 0.1.0
-;; Package-Version: 20190118.545
+;; Package-Version: 20190206.535
 ;; Package-Requires: ((emacs "26")(ensime "2.0.0")(flycheck "31"))
 ;; URL: https://github.com/ncaq/flycheck-ensime
 
@@ -59,14 +59,14 @@ Argument CONT callback."
             (ensime-all-notes))))
 
 ;;;###autoload
-(flycheck-define-generic-checker 'ensime
-  "A Scala (Java) checker using ENSIME."
-  :start 'flycheck-ensime-start
-  :modes '(scala-mode java-mode)
-  :predicate 'ensime-connection-or-nil)
-
-;;;###autoload
-(add-to-list 'flycheck-checkers 'ensime)
+(with-eval-after-load 'flycheck
+  (flycheck-define-generic-checker 'ensime
+    "A Scala (Java) checker using ENSIME."
+    :start 'flycheck-ensime-start
+    :modes '(scala-mode java-mode)
+    :predicate 'ensime-connection-or-nil)
+  (add-to-list 'flycheck-checkers 'ensime)
+  )
 
 (provide 'flycheck-ensime)
 
