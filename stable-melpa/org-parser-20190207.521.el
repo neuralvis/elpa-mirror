@@ -1,7 +1,7 @@
 ;;; org-parser.el --- parse org files into structured datatypes.  -*- lexical-binding: t; -*-
 
 ;; Version: 0.4
-;; Package-Version: 20171003.436
+;; Package-Version: 20190207.521
 ;; This file is not part of GNU Emacs.
 
 ;; Copyright (C) 2016-2017 Zachary Kanfer
@@ -86,7 +86,7 @@ no headlines or plain lists in it."
 (defun org-parser--drop-single-empty-string-at-beginning-and-end (string-list)
   "Drop a maximum of one empty string from each of the beginning and end of STRING-LIST."
   (when string-list
-    (subseq string-list
+    (seq-subseq string-list
             (if (equal (cl-first string-list)
                        "")
                 1

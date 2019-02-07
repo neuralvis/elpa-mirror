@@ -1,0 +1,2 @@
+
+(flycheck-ensime . [(20190207 608) ((emacs (26)) (ensime (2 0 0)) (flycheck (31))) "ensime for flycheck" single ((:commit . "63729153f3d648c4d676b044455d2e37bd111f65") (:authors ("ncaq" . "ncaq@ncaq.net")) (:maintainer "ncaq" . "ncaq@ncaq.net") (:url . "https://github.com/ncaq/flycheck-ensime"))])
