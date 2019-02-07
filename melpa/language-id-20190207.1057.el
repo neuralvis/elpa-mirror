@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-language-id
-;; Package-Version: 20190201.842
+;; Package-Version: 20190207.1057
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -165,10 +165,8 @@
       (and (derived-mode-p wanted-major-mode)
            (cl-every (lambda (variable)
                        (cl-destructuring-bind (symbol wanted-value) variable
-                         (let ((value (if (boundp symbol)
-                                          (symbol-value symbol)
-                                        nil)))
-                           (equal wanted-value value))))
+                         (equal wanted-value
+                                (when (boundp symbol) (symbol-value symbol)))))
                      variables)))))
 
 (defun language-id-buffer ()

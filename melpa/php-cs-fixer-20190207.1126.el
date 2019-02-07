@@ -8,7 +8,7 @@
 ;;; Author: Philippe Ivaldi for OVYA
 ;; Source: Some pieces of code are copied from go-mode.el https://github.com/dominikh/go-mode.el
 ;; Version: 1.0Beta1
-;; Package-Version: 20170506.1833
+;; Package-Version: 20190207.1126
 ;; Keywords: languages php
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; URL: https://github.com/OVYA/php-cs-fixer
@@ -19,7 +19,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl-lib))
+(require 'cl-lib)
 
 ;;;###autoload
 (defgroup php-cs-fixer nil
