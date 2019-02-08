@@ -4,7 +4,7 @@
 
 ;; Author:  Atila Neves <atila.neves@gmail.com>
 ;; Version: 0.6
-;; Package-Version: 20181023.1430
+;; Package-Version: 20190208.904
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (seq "1.11") (levenshtein "0") (s "1.11.0"))
 ;; Keywords: languages
 ;; URL: http://github.com/atilaneves/cmake-ide
@@ -1151,8 +1151,8 @@ The IDB is hash mapping files to all JSON objects (usually only one) in the CDB.
 (defun cide--get-compile-command (dir)
   "Return the compile command to use for DIR."
   (cond (cmake-ide-compile-command cmake-ide-compile-command)
-        ((file-exists-p (expand-file-name "build.ninja" dir)) (concat cmake-ide-ninja-command " -C " dir))
-        ((file-exists-p (expand-file-name "Makefile" dir)) (concat cmake-ide-make-command " -C " dir))
+        ((file-exists-p (expand-file-name "build.ninja" dir)) (concat cmake-ide-ninja-command " -C " (shell-quote-argument dir)))
+        ((file-exists-p (expand-file-name "Makefile" dir)) (concat cmake-ide-make-command " -C " (shell-quote-argument dir)))
         (t nil)))
 
 
