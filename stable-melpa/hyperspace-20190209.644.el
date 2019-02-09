@@ -4,8 +4,8 @@
 
 ;; Author: Ian Eure <ian@retrospec.tv>
 ;; URL: https://github.com/ieure/hyperspace-el
-;; Package-Version: 20190207.300
-;; Version: 0.8.3
+;; Package-Version: 20190209.644
+;; Version: 0.8.4
 ;; Package-Requires: ((emacs "25") (s "1.12.0"))
 ;; Keywords: tools, convenience
 
@@ -165,7 +165,7 @@
   (let ((kw-text (s-split-up-to "\\s-+" text 1)))
     (if (assoc (car kw-text) hyperspace-actions)
         kw-text
-      (cons hyperspace-default-action kw-text))))
+      (list hyperspace-default-action text))))
 
 (defun hyperspace--query ()
   "Ask the user for the Hyperspace action and query.
