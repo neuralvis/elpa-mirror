@@ -1,2 +1,0 @@
-
-(quick-peek . [(20190207 2213) ((emacs (24 3))) "Inline quick-peek windows" single ((:commit . "21d6f70115e26c2641fdb146551f82210b1e2671") (:keywords "tools" "help" "doc" "convenience") (:authors ("Clément Pit-Claudel" . "clement.pitclaudel@live.com")) (:maintainer "Clément Pit-Claudel" . "clement.pitclaudel@live.com"))])
