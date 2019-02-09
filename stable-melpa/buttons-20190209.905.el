@@ -5,7 +5,7 @@
 ;; Author: Ernesto Alfonso
 ;; Maintainer: (concat "erjoalgo" "@" "gmail" ".com")
 ;; Keywords: keymap, template, snippet
-;; Package-Version: 20181220.1715
+;; Package-Version: 20190209.905
 ;; Created: 16 Sep 2018
 ;; Package-Requires: ((cl-lib "0.3"))
 ;; URL: http://github.com/erjoalgo/emacs-buttons
@@ -98,6 +98,7 @@ It should be bound at compile-time via ‘let-when'")
    onto which to define KMAP-SYM via BUTTONS-AFTER-SYMBOL-LOADED-FUNCTION-ALIST.
 
    KEYMAP is the keymap, for example, one defined via BUTTONS-MAKE."
+  (declare (indent 3))
   (let* ((sym-name (symbol-name kmap-sym)))
     `(progn
        (defvar ,kmap-sym nil ,(format "%s buttons map" sym-name))
@@ -243,14 +244,21 @@ It should be bound at compile-time via ‘let-when'")
                                               (print-command binding)
                                               (princ "\n")))
                                           keymap))
-                (find-keymap-symbol (keymap)
-                                    (cl-block nil
-                                      (mapatoms (lambda (sym)
-                                                  (when (and
-                                                         (not (eq sym 'keymap))
-                                                         (boundp sym)
-                                                         (eq (symbol-value sym) keymap))
-                                                    (cl-return sym))))))
+                (find-keymap-descriptor (keymap)
+                                        (or
+                                         (cl-block nil
+                                           (mapatoms (lambda (sym)
+                                                       (when (and
+                                                              (not (eq sym 'keymap))
+                                                              (boundp sym)
+                                                              (eq (symbol-value sym) keymap))
+                                                         (cl-return sym)))))
+                                         (cl-loop for (minor-mode-sym . kmap)
+                                                  in minor-mode-map-alist
+                                                  thereis
+                                                  (when (equal kmap keymap)
+                                                    (format "%s (minor-mode-map-alist)"
+                                                            minor-mode-sym)))))
                 (max-event-length (keymap)
                                   (let ((max 0))
                                     (map-keymap
@@ -265,7 +273,7 @@ It should be bound at compile-time via ‘let-when'")
           (cond
            ((null keymap) (list "(current-active-maps)" (current-active-maps)))
            ((symbolp keymap) (list (symbol-name keymap) (list (symbol-value keymap))))
-           (t (list (find-keymap-symbol keymap) (list keymap))))
+           (t (list (find-keymap-descriptor keymap) (list keymap))))
         (let ((max-event-length (cl-loop for kmap in kmaps
                                          maximize (max-event-length kmap)))
               (buffer-name (format "*%s help*" (or name "keymap")))
@@ -274,7 +282,7 @@ It should be bound at compile-time via ‘let-when'")
             (with-current-buffer
                 buffer-name
               (dolist (kmap kmaps)
-                (princ (or (find-keymap-symbol kmap) "(anonymous keymap)"))
+                (princ (or (find-keymap-descriptor kmap) "(anonymous keymap)"))
                 (add-text-properties (line-beginning-position)
                                      (line-end-position)
                                      '(face bold))
