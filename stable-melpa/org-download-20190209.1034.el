@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
-;; Package-Version: 20190114.1600
+;; Package-Version: 20190209.1034
 ;; Version: 0.1.0
 ;; Package-Requires: ((async "1.2"))
 ;; Keywords: images, screenshots, download
@@ -311,7 +311,7 @@ The screenshot tool is determined by `org-download-screenshot-method'."
 It's inserted before the image link and is used to annotate it.")
 
 (defvar org-download-link-format
-  "[[file:%s]]"
+  "[[file:%s]]\n"
   "Format of the file link to insert.")
 
 (defun org-download-image (link)

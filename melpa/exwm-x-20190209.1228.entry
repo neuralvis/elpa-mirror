@@ -1,0 +1,2 @@
+
+(exwm-x . [(20190209 1228) ((cl-lib (0 5)) (exwm (0 19)) (switch-window (0 10)) (swiper (0 9 0)) (bind-key (1 0)) (counsel (0 9 0)) (ivy (0 9 0))) "A derivative wm based on EXWM (emacs x window manager)" tar ((:commit . "2d1a4a8e365f3969c0eb05fe39108a7b75e293bb") (:keywords "window-manager" "exwm") (:authors ("Feng Shu" . "tumashu@163.com")) (:maintainer "Feng Shu" . "tumashu@163.com") (:url . "https://github.com/tumashu/exwm-x"))])
