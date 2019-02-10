@@ -2,7 +2,8 @@ This package extends `org-re-reveal' with support for a
 bibliography slide based on package `org-ref'.  Thus, `cite'
 commands of `org-ref' are translated into hyperlinks to the
 bibliography slide upon export by `org-re-reveal'.  Also, export to
-PDF via LaTeX with Org's usual export functionality works.
+PDF via LaTeX and export to HTML with Org's usual export
+functionality work.
 
 * Install
 0. Install reveal.js: https://revealjs.com/
@@ -32,4 +33,4 @@ this package:
 - `org-ref-bib-html' is set to the empty string
 - `org-ref-printbibliography-cmd' is configured not to produce a
   heading (as the bibliography slide has a heading already)
-- `org-ref-ref-html' is configured to link to the bibliography slide
+- `org-ref-ref-html' is configured to link to the bibliography

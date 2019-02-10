@@ -1,2 +1,0 @@
-
-(org-re-reveal-ref . [(20190204 1735) ((emacs (24 4)) (org-ref (1 1 1)) (org-re-reveal (0 9 3))) "Citations and bibliography for org-re-reveal" tar ((:commit . "c6de0b38eaf9f8d3916e594bef81941b7ad5bcfa") (:keywords "hypermedia" "tools" "slideshow" "presentation" "bibliography") (:authors ("Jens Lechtenbörger")) (:maintainer "Jens Lechtenbörger") (:url . "https://gitlab.com/oer/org-re-reveal-ref"))])
