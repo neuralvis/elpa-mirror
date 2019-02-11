@@ -4,7 +4,7 @@
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 0.12.1
-;; Package-Version: 20190107.408
+;; Package-Version: 20190211.246
 ;; Package-Requires: ((emacs "24.4") (let-alist "1.0.5"))
 ;; Keywords: comm, tools
 
@@ -51,7 +51,7 @@
 ;; line utility transmission-remote(1), the ncurses interface
 ;; transmission-remote-cli(1), and the rtorrent(1) client.  These can
 ;; be found respectively at the following:
-;; <https://github.com/transmission/transmission/blob/master/daemon/remote.c>
+;; <https://github.com/transmission/transmission/blob/master/utils/remote.c>
 ;; <https://github.com/fagga/transmission-remote-cli>
 ;; <https://rakshasa.github.io/rtorrent/>
 
