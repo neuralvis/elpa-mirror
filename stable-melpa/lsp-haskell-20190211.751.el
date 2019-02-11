@@ -1,7 +1,7 @@
 ;;; lsp-haskell.el --- Haskell support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20181223.1126
+;; Package-Version: 20190211.751
 ;; Package-Requires: ((lsp-mode "3.0") (haskell-mode "1.0"))
 ;; Keywords: haskell
 ;; URL: https://github.com/emacs-lsp/lsp-haskell
@@ -278,7 +278,7 @@ These are assembled from the customizable variables
 (defun lsp-haskell-set-completion-snippets-on ()
   "Enable providing completion snippets."
   (interactive)
-  (lsp-haskell-set-completionSnippets t)
+  (lsp-haskell-set-completion-snippets t)
   (lsp-haskell--set-configuration))
 
 (defun lsp-haskell-set-completion-snippets-off ()
