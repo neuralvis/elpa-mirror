@@ -5,6 +5,7 @@
 ;; Author: Roland Walker <walker@pobox.com>
 ;; Homepage: http://github.com/rolandwalker/osx-browse
 ;; URL: http://raw.githubusercontent.com/rolandwalker/osx-browse/master/osx-browse.el
+;; Package-Version: 20140508.2041
 ;; Version: 0.8.8
 ;; Last-Updated: 26 Oct 2013
 ;; EmacsWiki: OSXBrowse

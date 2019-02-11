@@ -4,7 +4,6 @@
 
 ;; Author: Morten Slot Kristensen <msk AT nullpointer DOT dk>
 ;; Keywords: convenience
-;; Package-Version: 20160520.2040
 ;; URL: https://github.com/netromdk/annotate-depth
 ;; Version: 0.1.0
 
