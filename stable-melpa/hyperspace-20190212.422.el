@@ -4,7 +4,7 @@
 
 ;; Author: Ian Eure <ian@retrospec.tv>
 ;; URL: https://github.com/ieure/hyperspace-el
-;; Package-Version: 20190209.644
+;; Package-Version: 20190212.422
 ;; Version: 0.8.4
 ;; Package-Requires: ((emacs "25") (s "1.12.0"))
 ;; Keywords: tools, convenience
@@ -44,8 +44,8 @@
 ;;
 ;; | *If you enter*   | *then Hyperspace*                                        |
 ;; |------------------+----------------------------------------------------------|
-;; | "lf"             | opens elfeed                                             |
-;; | "lf blah"        | opens elfeed, searches for "blah"                        |
+;; | "el"             | opens info node "(elisp)Top"                             |
+;; | "el eval-region" | searches for "eval-region" in the elisp Info index       |
 ;; | "bb"             | shows all BBDB entries                                   |
 ;; | "bb kenneth"     | shows all BBDB entries with a name matching "kenneth"    |
 ;; | "ddg foo"        | searches DuckDuckGo for "foo" using browse-url           |
@@ -91,6 +91,7 @@
     ("yt" . "https://www.youtube.com/results?search_query=%s")
     ("clp" . "https://portland.craigslist.org/search/sss?query=%s")
     ("eb" .  "https://www.ebay.com/sch/i.html?_nkw=%s")
+    ("dp" . "https://packages.debian.org/%s")
     ("bb" . bbdb-search-name)
     ("el" . (apply-partially #'hyperspace-action->info "(elisp)Top"))
     ("av" . apropos-variable)
@@ -99,10 +100,10 @@
 
   "Where Hyperspace should send you.
 
-   Hyperspace actions a cons of (KEYWORD . DISPATCHER).  When
-   Hyperspace is invoked, the keyword is extracted and looked up
-   in this alist; the remainder of the string is passed to the
-   dispatcher as a QUERY argument.
+   Hyperspace actions are a cons of (KEYWORD . DISPATCHER).  When
+   Hyperspace is invoked, the keyword is extracted from the user
+   input and looked up in this alist.  The remainder of the
+   string is passed to the dispatcher as its QUERY argument.
 
    DISPATCHER can be a function which performs the action.
 
@@ -129,12 +130,11 @@
 (defcustom hyperspace-max-region-size 256
   "Maximum size of a region to consider for a Hyperspace query.
 
-   If the region is active when Hyperspace is entered, it's used
+   If the region is active when Hyperspace is invoked, it's used
    as the default query, unless it's more than this number of
    characters."
   :group 'hyperspace
   :type 'integer)
-
 
 
 
@@ -154,7 +154,7 @@
            (size (- end start)))
       (when (<= size hyperspace-max-region-size)
         (hyperspace--cleanup
-         (buffer-substring-no-properties (region-beginning) (region-end)))))))
+         (buffer-substring-no-properties start end))))))
 
 (defun hyperspace--initial (initial-text)
   "Turn INITIAL-TEXT into INITIAL-CONTENTS for reading."
@@ -172,7 +172,8 @@
 
    Returns (KEYWORD . QUERY).
 
-   If the region isn't active, the user is prompted for the action and query.
+   If the region isn't active, the user is prompted for the
+   action and query.
 
    If the region is active, its text is used as the initial value
    for the query, and the user enters the action.
