@@ -1,0 +1,2 @@
+
+(gitlab-ci-mode . [(20190212 2317) ((emacs (25)) (yaml-mode (0 0 12))) "mode for editing GitLab CI files" single ((:commit . "8896a10181ec563493076d6138d781efc4ed7892") (:keywords "tools" "vc") (:authors ("Joe Wreschnig")) (:maintainer "Joe Wreschnig") (:url . "https://gitlab.com/joewreschnig/gitlab-ci-mode/"))])
