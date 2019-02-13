@@ -1,2 +1,0 @@
-
-(dumb-jump . [(20190212 1710) ((emacs (24 3)) (f (0 20 0)) (s (1 11 0)) (dash (2 9 0)) (popup (0 5 3))) "jump to definition for multiple languages without configuration." single ((:commit . "190b16488cb3afe67c198990a52b8befe12aba29") (:keywords "programming") (:authors ("jack angers")) (:maintainer "jack angers"))])

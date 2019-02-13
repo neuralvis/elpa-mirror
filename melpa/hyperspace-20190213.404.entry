@@ -1,0 +1,2 @@
+
+(hyperspace . [(20190213 404) ((emacs (25)) (s (1 12 0))) "Get there from here" single ((:commit . "5a6cb3837116f10fa565654b2f3bd9d867b1f940") (:keywords "tools" "convenience") (:authors ("Ian Eure" . "ian@retrospec.tv")) (:maintainer "Ian Eure" . "ian@retrospec.tv") (:url . "https://github.com/ieure/hyperspace-el"))])
