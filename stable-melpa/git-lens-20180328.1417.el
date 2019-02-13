@@ -4,7 +4,6 @@
 
 ;; Author: Peter Stiernström <peter@stiernstrom.se>
 ;; Keywords: vc, convenience
-;; Package-Version: 20180328.1417
 ;; Version: 0.7.0
 ;; Package-Requires: ((emacs "24.4"))
 ;; Homepage: https://github.com/pidu/git-lens
