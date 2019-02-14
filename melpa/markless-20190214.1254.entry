@@ -1,0 +1,2 @@
+
+(markless . [(20190214 1254) ((emacs (24 4))) "Major mode for Markless documents" single ((:commit . "af8e085befe32cea29295a03b5647509f786a5a1") (:keywords "languages" "wp") (:authors ("Nicolas Hafner" . "shinmera@tymoon.eu")) (:maintainer "Nicolas Hafner" . "shinmera@tymoon.eu") (:url . "http://github.com/shirakumo/markless.el/"))])
