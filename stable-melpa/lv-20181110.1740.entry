@@ -1,2 +1,2 @@
 
-(lv . [(20181110 1740) nil "Other echo area" single ((:commit . "1e423933a9834509b21ab2e766e6f01886b44d20") (:authors ("Oleh Krehel")) (:maintainer "Oleh Krehel"))])
+(lv . [(20181110 1740) nil "Other echo area" single ((:commit . "9c4a4711bc78364e114acbbcf484a60669d02d78") (:authors ("Oleh Krehel")) (:maintainer "Oleh Krehel"))])
