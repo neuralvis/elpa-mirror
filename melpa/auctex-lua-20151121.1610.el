@@ -4,6 +4,7 @@
 ;;
 ;; Author: Sean Allred (seallred@smcm.edu)
 ;; Version: 1.0
+;; Package-Version: 20151121.1610
 ;; Package-Requires: ((auctex "11.86") (lua-mode "20130419"))
 ;; URL: http://github.com/vermiculus/auctex-lua
 ;;
