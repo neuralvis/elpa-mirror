@@ -1,2 +1,0 @@
-
-(biblio-core . [(20160901 1815) ((emacs (24 3)) (let-alist (1 0 4)) (seq (1 11)) (dash (2 12 1))) "A framework for looking up and displaying bibliographic entries" single ((:commit . "c7532c31b6a1293aefec2044a6f6b0d8d500f6a5") (:keywords "bib" "tex" "convenience" "hypermedia") (:authors ("Clément Pit-Claudel" . "clement.pitclaudel@live.com")) (:maintainer "Clément Pit-Claudel" . "clement.pitclaudel@live.com") (:url . "http://github.com/cpitclaudel/biblio.el"))])
