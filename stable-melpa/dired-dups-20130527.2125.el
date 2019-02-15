@@ -7,6 +7,7 @@
 ;; Copyleft (Ↄ) 2013, Joe Bloggs, all rites reversed.
 ;; Created: 2013-05-12 01:30:22
 ;; Version: 0.3
+;; Package-Version: 20130527.2125
 ;; Last-Updated: 2013-05-12 01:30:22
 ;;           By: Joe Bloggs
 ;; URL: https://github.com/vapniks/dired-dups

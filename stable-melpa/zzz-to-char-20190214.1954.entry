@@ -1,0 +1,2 @@
+
+(zzz-to-char . [(20190214 1954) ((emacs (24 4)) (cl-lib (0 5)) (avy (0 3 0))) "Fancy version of `zap-to-char' command" single ((:commit . "1ed6d26bcd481d88c6440984c93c248abdea2804") (:keywords "convenience") (:authors ("Mark Karpov" . "markkarpov92@gmail.com")) (:maintainer "Mark Karpov" . "markkarpov92@gmail.com") (:url . "https://github.com/mrkkrp/zzz-to-char"))])
