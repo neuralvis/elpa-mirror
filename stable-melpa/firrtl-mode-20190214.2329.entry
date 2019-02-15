@@ -1,0 +1,2 @@
+
+(firrtl-mode . [(20190214 2329) ((emacs (24 3))) "mode for working with FIRRTL files" single ((:commit . "aa08a3eb436b4a8d84e239242f378238f81740e3") (:keywords "languages" "firrtl") (:authors ("Schuyler Eldridge" . "schuyler.eldridge@ibm.com")) (:maintainer "Schuyler Eldridge" . "schuyler.eldridge@ibm.com") (:url . "https://github.com/ibm/firrtl-mode"))])
