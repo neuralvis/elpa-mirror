@@ -7,7 +7,7 @@
 ;; Created: Jun 03, 2017
 ;; Modified: Dec 23, 2018
 ;; Version: 1.0.7
-;; Package-Version: 20190214.636
+;; Package-Version: 20190216.103
 ;; Keywords: dim bright window buffer faces
 ;; Homepage: https://github.com/hlissner/emacs-solaire-mode
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
@@ -147,7 +147,8 @@ line number faces will be remapped to `solaire-line-number-face'."
         (set-face-background 'fringe (face-background 'default)))
     (set-face-background 'fringe (face-background 'solaire-default-face))
     (setq face-remapping-alist
-          (append (cl-loop for (map . pred) in (copy-seq solaire-mode-remap-alist)
+          (append (cl-loop for (map . pred)
+                           in (copy-sequence solaire-mode-remap-alist)
                            if (eval pred)
                            collect map)
                   face-remapping-alist))))
