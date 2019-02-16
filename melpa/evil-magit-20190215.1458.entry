@@ -1,2 +1,0 @@
-
-(evil-magit . [(20190215 1458) ((evil (1 2 3)) (magit (2 6 0)) (magit-popup (2 12 5))) "evil-based key bindings for magit" single ((:commit . "8cdda5ccd7cbf9ac2da0e01c4ed62bd27c570e54") (:authors ("Justin Burkett" . "justin@burkett.cc")) (:maintainer "Justin Burkett" . "justin@burkett.cc") (:url . "https://github.com/justbur/evil-magit"))])
