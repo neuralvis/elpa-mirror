@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017-2018 Sebastien Chapuis, 2018 Yuan Fu
 
 ;; Version: 1.4
-;; Package-Version: 20190210.1803
+;; Package-Version: 20190210.1806
 
 ;; Author: Sebastien Chapuis <sebastien@chapu.is>
 ;; Maintainer: Yuan Fu <casouri@gmail.com>
@@ -146,17 +146,19 @@ It will be passes with two arguments: WIDTH and HEIGHT of the childframe.")
   "A convenient minor mode to display doc at point.
 You can use C-g to hide the doc."
   :lighter ""
-  (if eldoc-box-hover-at-point-mode
-      (progn (setq-local
-              eldoc-box-position-function
-              #'eldoc-box--default-at-point-position-function)
-             (setq-local eldoc-box-clear-with-C-g t)
-             (remove-hook 'pre-command-hook #'eldoc-pre-command-refresh-echo-area t)
-             (add-hook 'pre-command-hook #'eldoc-box-quit-frame t t))
-    (add-hook 'pre-command-hook #'eldoc-pre-command-refresh-echo-area t)
-    (remove-hook 'pre-command-hook #'eldoc-box-quit-frame t)
-    (kill-local-variable 'eldoc-box-position-function)
-    (kill-local-variable 'eldoc-box-clear-with-C-g)))
+  (if eldoc-box-hover-mode
+      (if eldoc-box-hover-at-point-mode
+          (progn (setq-local
+                  eldoc-box-position-function
+                  #'eldoc-box--default-at-point-position-function)
+                 (setq-local eldoc-box-clear-with-C-g t)
+                 (remove-hook 'pre-command-hook #'eldoc-pre-command-refresh-echo-area t)
+                 (add-hook 'pre-command-hook #'eldoc-box-quit-frame t t))
+        (add-hook 'pre-command-hook #'eldoc-pre-command-refresh-echo-area t)
+        (remove-hook 'pre-command-hook #'eldoc-box-quit-frame t)
+        (kill-local-variable 'eldoc-box-position-function)
+        (kill-local-variable 'eldoc-box-clear-with-C-g))
+    (message "Enable eldoc-box-hover-mode first")))
 
 ;;;; Backstage
 ;;;;; Variable
