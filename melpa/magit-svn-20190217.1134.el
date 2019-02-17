@@ -4,7 +4,7 @@
 
 ;; Author: Phil Jackson <phil@shellarchive.co.uk>
 ;; Keywords: vc tools
-;; Package-Version: 20190216.1838
+;; Package-Version: 20190217.1134
 ;; Package: magit-svn
 ;; Package-Requires: ((emacs "24.4") (magit "2.1.0"))
 
@@ -56,6 +56,9 @@
 
 (require 'cl-lib)
 (require 'dash)
+
+(eval-when-compile
+  (require 'subr-x))
 
 (require 'magit)
 
