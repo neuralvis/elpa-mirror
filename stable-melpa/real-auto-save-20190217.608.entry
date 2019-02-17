@@ -1,0 +1,2 @@
+
+(real-auto-save . [(20190217 608) nil "Automatically save your all your buffers/files at regular intervals." single ((:commit . "65cd2ae3d03365d413bba89cace339dc3efd4e89") (:authors ("Chaoji Li <lichaoji AT gmail DOT com>") ("Anand Reddy Pandikunta <anand21nanda AT gmail DOT com>")) (:maintainer "Chaoji Li <lichaoji AT gmail DOT com>"))])

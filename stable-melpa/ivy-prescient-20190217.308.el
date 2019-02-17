@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20190217.125
+;; Package-Version: 20190217.308
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1") (prescient "2.2.2") (ivy "0.11.0"))
 ;; Version: 2.2.2
@@ -102,7 +102,7 @@ out-of-order matching."
   :type 'boolean)
 
 (defcustom ivy-prescient-enable-filtering t
-  "Whether to enable filtering of ivy colections with `prescient-filter-method'.
+  "Whether to enable filtering by `ivy-prescient'.
 If nil, then `ivy-prescient-mode' does not change the filtering
 behavior of Ivy from the default. See Ivy documentation for how to
 configure filtering yourself. Changing this variable will not
@@ -111,7 +111,7 @@ take effect until `ivy-prescient-mode' has been reloaded."
   :type 'boolean)
 
 (defcustom ivy-prescient-enable-sorting t
-  "Whether to use adaptive sorting in ivy collections.
+  "Whether to enable sorting by `ivy-prescient'.
 If nil, then `ivy-prescient-mode' does not change the sorting
 behavior of Ivy from the default. See Ivy documentation for how
 to configure sorting yourself. Changing this variable will not
@@ -280,7 +280,8 @@ keyword arguments ACTION, CALLER are the same as in `ivy-read'."
                 (alist-get t ivy-re-builders-alist))
           (setf (alist-get t ivy-re-builders-alist)
                 #'ivy-prescient-re-builder)
-          (setq ivy-prescient--old-initial-inputs-alist ivy-initial-inputs-alist)
+          (setq ivy-prescient--old-initial-inputs-alist
+                ivy-initial-inputs-alist)
           (setq ivy-initial-inputs-alist nil))
         (when ivy-prescient-enable-sorting
           (setq ivy-prescient--old-ivy-sort-function

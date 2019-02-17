@@ -4,7 +4,7 @@
 
 ;; Author: Ian Eure <ian@retrospec.tv>
 ;; URL: https://github.com/ieure/hyperspace-el
-;; Package-Version: 20190213.404
+;; Package-Version: 20190217.636
 ;; Version: 0.8.4
 ;; Package-Requires: ((emacs "25") (s "1.12.0"))
 ;; Keywords: tools, convenience
@@ -94,6 +94,7 @@
     ("nf" . "https://www.netflix.com/search?q=%s")
     ("bc" . "https://bandcamp.com/search?q=%s")
     ("dp" . "https://packages.debian.org/%s")
+    ("imdb" . "https://www.imdb.com/find?q=peter+jackson&s=all")
     ("bb" . bbdb-search-name)
     ("el" . (apply-partially #'hyperspace-action->info "(elisp)Top"))
     ("av" . apropos-variable)

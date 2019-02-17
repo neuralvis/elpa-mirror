@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20190217.117
+;; Package-Version: 20190217.308
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 2.2.2
@@ -323,7 +323,9 @@ enclose literal substrings with capture groups."
                with-groups))
             subquery ".*"))))
       (pcase prescient-filter-method
-        (`literal+initialism '(literal initialism)) ;; For backwards compatibility
+        ;; We support `literal+initialism' for backwards
+        ;; compatibility.
+        (`literal+initialism '(literal initialism))
         ((and (pred listp) x) x)
         (x (list x)))
       "\\|"))
