@@ -1,0 +1,2 @@
+
+(magit-svn . [(20190216 1838) ((emacs (24 4)) (magit (2 1 0))) "Git-Svn extension for Magit" single ((:commit . "9e33ceee32f665db59909e1c00a667ccdd04178f") (:keywords "vc" "tools") (:authors ("Phil Jackson" . "phil@shellarchive.co.uk")) (:maintainer "Phil Jackson" . "phil@shellarchive.co.uk"))])

@@ -1,0 +1,2 @@
+
+(nimbus-theme . [(20190216 1712) ((emacs (24))) "An awesome dark theme." single ((:commit . "a6c4019cfcb68fd29a79d76717d63a26894c7089") (:keywords "faces") (:authors ("Marcin Swieczkowski" . "marcin.swieczkowski@gmail.com") ("See README.md for full list of contributors.")) (:maintainer "Marcin Swieczkowski" . "marcin.swieczkowski@gmail.com") (:url . "https://github.com/m-cat/nimbus-theme"))])
