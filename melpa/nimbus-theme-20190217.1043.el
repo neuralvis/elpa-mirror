@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20190216.1712
+;; Package-Version: 20190217.1043
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -284,12 +284,14 @@
    `(dired-flagged ((t (:foreground ,dark-red))))
 
    ;; diredfl
-   `(diredfl-compressed-file-suffix ((t (:foreground ,light-blue))))
+   `(diredfl-compressed-file-name ((t (:foreground ,light-blue))))
+   `(diredfl-compressed-file-suffix ((t (:inherit diredfl-compressed-file-name))))
    `(diredfl-date-time ((t (:inherit font-lock-keyword-face))))
    `(diredfl-deletion-file-name ((t (:inherit dired-flagged))))
    `(diredfl-deletion ((t (:inherit dired-mark))))
    `(diredfl-dir-heading ((t (:inherit dired-header))))
    `(diredfl-dir-name ((t (:inherit dired-directory))))
+   `(diredfl-executable-tag ((t (:foreground ,red))))
    `(diredfl-flag-mark ((t (:inherit dired-flagged))))
    `(diredfl-flag-mark-line ((t (:background ,purple-bg))))
    `(diredfl-file-name ((t (:foreground ,fg))))
@@ -298,10 +300,11 @@
    `(diredfl-number ((t (:inherit highlight-numbers-number))))
    `(diredfl-symlink ((t (:inherit dired-symlink))))
 
-   `(diredfl-no-priv ((t (:foreground ,blue-gray))))
    `(diredfl-dir-priv ((t (:foreground ,purple))))
-   `(diredfl-rare-priv ((t (:foreground ,lightest-green))))
    `(diredfl-exec-priv ((t (:foreground ,red))))
+   `(diredfl-link-priv ((t (:foreground ,blue))))
+   `(diredfl-no-priv ((t (:foreground ,blue-gray))))
+   `(diredfl-rare-priv ((t (:foreground ,lightest-green))))
    `(diredfl-read-priv ((t (:foreground ,green))))
    `(diredfl-write-priv ((t (:foreground ,light-blue))))
 
