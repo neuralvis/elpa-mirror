@@ -4,6 +4,7 @@
 
 ;; Author: Calvin Young
 ;; Keywords: lists, checklists, org-mode
+;; Package-Version: 20170924.1901
 ;; Homepage: https://github.com/calvinwyoung/org-autolist
 ;; Version: 0.14
 
