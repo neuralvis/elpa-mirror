@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20190215.1548
+;; Package-Version: 20190218.847
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -717,7 +717,7 @@ Group 3 matches the task name.")
 
 (defconst taskpaper-project-regexp
   (format
-   "^[ \t]*\\(\\([^\t\n][^\n]*\\)\\(:\\)\\(%s\\)?\\)$"
+   "^[ \t]*\\(\\([^\n]*\\)\\(:\\)\\(%s\\)?\\)$"
    taskpaper-consec-tags-regexp)
   "Regular expression for project.
 Group 1 matches the whole project expression.
@@ -1850,7 +1850,8 @@ end.")
   "Remove type formatting from ITEM."
   (let ((ind-re "^\\([ \t]+\\)")
         (tag-re (format "\\(%s\\)$" taskpaper-consec-tags-regexp))
-        indent tags)
+        (indent "") (tags ""))
+    ;; Remove trailing whitespaces
     (setq item (replace-regexp-in-string "[ \t]+$" "" item))
     (save-match-data
       ;; Strip indent and trailing tags and save them
@@ -1870,19 +1871,20 @@ end.")
     (setq item (taskpaper-trim-string item)
           tags (taskpaper-trim-string tags))
     ;; Add separator space, if nessessary
-    (and tags (not (equal item "")) (setq tags (concat " " tags)))
+    (when (and (not (equal item "")) (not (equal tags "")))
+      (setq tags (concat " " tags)))
     ;; Add indent and trailing tags
     (concat indent item tags)))
 
 (defun taskpaper-item-format (type)
   "Format item at point as TYPE.
-Valid symbol names for type are 'project', 'task', or 'note'."
+Valid symbol names for type are 'project, 'task, or 'note."
   (let* ((begin (line-beginning-position))
          (end (line-end-position))
          (item (buffer-substring-no-properties begin end))
          (ind-re "^\\([ \t]+\\)")
          (tag-re (format "\\(%s\\)$" taskpaper-consec-tags-regexp))
-         indent tags)
+         (indent "") (tags ""))
     ;; Remove existing type formatting
     (setq item (taskpaper-remove-type-formatting item))
     (save-match-data
@@ -1902,9 +1904,10 @@ Valid symbol names for type are 'project', 'task', or 'note'."
           ((eq type 'note) item)
           (t (error "Invalid item type: %s" type)))
     ;; Add separator space, if nessessary
-    (and tags (not (equal item "")) (setq tags (concat " " tags)))
+    (when (and (not (equal item "")) (not (equal tags "")))
+      (setq tags (concat " " tags)))
     ;; Add indent and trailing tags and replace item
-    (delete-region begin end) (insert (concat indent item tags))))
+    (delete-region begin end) (insert indent item tags)))
 
 (defun taskpaper-item-format-as-project ()
   "Format item at point as project."
