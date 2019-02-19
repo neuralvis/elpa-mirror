@@ -4,7 +4,7 @@
 
 ;; Author: Rudi Schlatte <rudi@constantly.at>
 ;; URL: https://github.com/abstools/abs-mode
-;; Package-Version: 20190212.1803
+;; Package-Version: 20190219.1606
 ;; Version: 1.1
 ;; Package-Requires: ((emacs "25") (erlang "0") (maude-mode "0"))
 ;; Keywords: languages
@@ -250,6 +250,7 @@ NIL."
 ;;; Abs syntax table
 (defvar abs-mode-syntax-table (copy-syntax-table)
   "Syntax table for `abs-mode'.")
+(modify-syntax-entry ?`   "\""    abs-mode-syntax-table)
 (modify-syntax-entry ?+   "."     abs-mode-syntax-table)
 (modify-syntax-entry ?-   "."     abs-mode-syntax-table)
 (modify-syntax-entry ?=   "."     abs-mode-syntax-table)
@@ -593,9 +594,16 @@ can edit it before compilation starts."
                     (erl-command (concat script args)))
                (when (get-buffer "*erlang*")
                  (kill-buffer (get-buffer "*erlang*")))
-               (save-excursion
-                 ;; don't propagate
-                 ;; interactive args, if any
+               (if (eq window-system 'w32)
+                   ;; `inferior-erlang' tries calling `/bin/sh' when
+                   ;; given a parameter, even on windows; dodge the
+                   ;; issue by calling our own `run.bat' script
+                   ;; instead
+                   (let ((buffer (get-buffer-create "*erlang*")))
+                     (pop-to-buffer buffer)
+                     ;; this works since we don't support `absc -d',
+                     ;; so we always have `gen/erl/run.bat'
+                     (shell-command (concat "gen\\erl\\run.bat " args) buffer))
                  (inferior-erlang erl-command))))
     (`java (let* ((module (abs--guess-module))
                   (java-buffer (get-buffer-create (concat "*abs java " module "*")))

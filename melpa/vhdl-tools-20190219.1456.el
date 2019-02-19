@@ -8,7 +8,7 @@
 ;; Original author:  wandad guscheh <wandad.guscheh@fh-hagenberg.at>
 ;; Author:           Cayetano Santos
 ;; Keywords: languages, convenience
-;; Package-Version: 20190219.1040
+;; Package-Version: 20190219.1456
 ;; Filename: vhdl-tools.el
 ;; Description: Utilities for navigating vhdl sources.
 ;; URL: https://github.com/csantosb/vhdl-tools/wiki
@@ -476,6 +476,7 @@ Declare a key-bind to get back to the original point."
 			   (search-forward-regexp
 			    (format "^ *%s " vhdl-tools--jump-into-module-name)
 			    nil t))
+		     (vhdl-tools--fold)
 		     (vhdl-tools--post-jump-function)
 		     ;; erase modified hook
 		     (setq vhdl-tools--jump-into-module-name nil)

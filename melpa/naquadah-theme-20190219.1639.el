@@ -1,5 +1,5 @@
 ;;; naquadah-theme.el --- A theme based on Tango color set
-;; Package-Version: 20190219.1549
+;; Package-Version: 20190219.1639
 
 ;; Copyright (C) 2011-2012 Free Software Foundation, Inc
 
@@ -29,7 +29,7 @@
 (put 'naquadah 'theme-immediate t)
 
 ;; These colors are stolen from Tango.
-(setq naquadah-colors
+(defvar naquadah-colors
   '((((class color) (min-colors 65535))
      (aluminium-1 . "#eeeeec")
      (aluminium-2 . "#d3d7cf")
@@ -59,7 +59,6 @@
      (scarlet-red-2 . "#dc1010")
      (scarlet-red-3 . "#b40000")
      (background . "#262B2C")
-     (background-indentation . "#2F2F2F")
      (black . "#0c191C")
      (gradient-1 . "#729fcf")  ;; sky-blue-1
      (gradient-2 . "#8ae234")  ;; chameleon-1
@@ -198,7 +197,7 @@
      (gradient-9 . "red")    ;; orange-2
      (gradient-10 . "yellow")    ;; plum-2
      (gradient-11 . "yellow")   ;; chocolate-2
-     )))
+     ))
   "The color values for each color name for a given
       condition.  The format is: ((condition) (key . value) (key
       . value) ...)")
@@ -271,7 +270,6 @@
  '(escape-glyph (:foreground chameleon-1))
 
  '(highlight (:background scarlet-red-2))
- '(highlight-indentation-face (:background background-indentation))
  '(fringe (:background black))
  '(mode-line (:foreground aluminium-1 :background black
                           :box (:line-width 1 :color aluminium-6)))

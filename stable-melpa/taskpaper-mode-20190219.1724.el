@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20190219.1258
+;; Package-Version: 20190219.1724
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -1405,7 +1405,12 @@ If ARG is non-nil, move backward to the previous link."
     (when (taskpaper-in-regexp re)
       (goto-char (if arg (match-beginning 0) (match-end 0))))
     (if (funcall func re nil t)
-        (goto-char (if arg (match-end 0) (match-beginning 0)))
+        (if (not (taskpaper-range-property-any
+                  (match-beginning 0) (match-end 0)
+                  'taskpaper-syntax '(markdown-link plain-link)))
+            ;; Skip false links
+            (funcall 'taskpaper-next-link arg)
+          (goto-char (if arg (match-end 0) (match-beginning 0))))
       (goto-char pos) (setq taskpaper-link-search-failed t)
       (message "No further link found"))))
 
@@ -5380,7 +5385,8 @@ TaskPaper mode runs the normal hook `text-mode-hook', and then
       :active (region-active-p)])
     ("Tags"
      ["Complete Tag" taskpaper-complete-tag-at-point
-      :active (taskpaper-in-regexp (format "@%s*" taskpaper-tag-name-char-regexp))]
+      :active (taskpaper-in-regexp (format "@%s*" taskpaper-tag-name-char-regexp))
+      :keys "<M-tab>"]
      ["Select Tag..." taskpaper-item-set-tag-fast-select]
      ["Remove Tag" taskpaper-remove-tag-at-point
       :active (taskpaper-in-regexp taskpaper-tag-regexp)]
@@ -5395,20 +5401,26 @@ TaskPaper mode runs the normal hook `text-mode-hook', and then
       :active (get-buffer "*Calendar*")]
      ["Insert Time Stamp..." taskpaper-read-date-insert-timestamp])
     ("Links & Images"
+     ["Next Link" taskpaper-next-link]
+     ["Previous Link" taskpaper-previous-link]
+     "--"
      ["Insert File Link..." taskpaper-insert-file-link-at-point]
+     "--"
      ["Show Inline Images" taskpaper-toggle-inline-images
       :style toggle
-      :selected taskpaper-inline-image-overlays]
-     "--"
-     ["Next Link" taskpaper-next-link]
-     ["Previous Link" taskpaper-previous-link])
+      :selected taskpaper-inline-image-overlays])
     ("Search"
-     ["Start Incremental Search..." taskpaper-iquery]
+     ["Start Incremental Search..." taskpaper-iquery
+      :keys "C-c C-i"]
      ["Start Non-incremental Search..." taskpaper-query]
      ["Select Search Query..." taskpaper-query-read-select]
      ["Select Custom Search Query..." taskpaper-query-fast-select]
      "--"
      ["Filter by Regexp..." taskpaper-occur]
+     ["Next Match" next-error
+      :active taskpaper-occur-highlights]
+     ["Previous Match" previous-error
+      :active taskpaper-occur-highlights]
      ["Remove Highlights" taskpaper-occur-remove-highlights
       :active taskpaper-occur-highlights])
     ("Agenda View"
