@@ -1,0 +1,2 @@
+
+(all-the-icons . [(20190218 1708) ((emacs (24 3)) (memoize (1 0 1))) "A library for inserting Developer icons" tar ((:commit . "a33c864d4bd37c086beff5bb8bc27ce4ea7f5dac") (:keywords "convenient" "lisp") (:authors ("Dominic Charlesworth" . "dgc336@gmail.com")) (:maintainer "Dominic Charlesworth" . "dgc336@gmail.com") (:url . "https://github.com/domtronn/all-the-icons.el"))])
