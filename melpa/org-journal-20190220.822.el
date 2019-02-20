@@ -2,8 +2,8 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20190121.909
-;; Version: 1.15.0
+;; Package-Version: 20190220.822
+;; Version: 1.15.1
 ;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
@@ -60,6 +60,8 @@
 ;;                               C-c C-f to view next entry
 
 ;;; Code:
+(require 'org)
+
 (when (version< org-version "9.2")
   (defalias 'org-set-tags-to 'org-set-tags))
 
@@ -99,7 +101,7 @@ org-journal. Use org-journal-file-format instead.")
 ; Customizable variables
 (defgroup org-journal nil
   "Settings for the personal journal"
-  :version "1.15.0"
+  :version "1.15.1"
   :group 'applications)
 
 (defface org-journal-highlight
