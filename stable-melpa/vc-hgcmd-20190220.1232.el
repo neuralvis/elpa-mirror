@@ -1,12 +1,12 @@
 ;;; vc-hgcmd.el --- VC mercurial backend that uses hg command server -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Andrii Kolomoiets
+;; Copyright (C) 2018-2019 Andrii Kolomoiets
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: vc
 ;; URL: https://github.com/muffinmad/emacs-vc-hgcmd
-;; Package-Version: 20181228.857
-;; Package-X-Original-Version: 1.3.1
+;; Package-Version: 20190220.1232
+;; Package-X-Original-Version: 1.3.2
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -506,7 +506,7 @@ Insert 'Running command' and display buffer text if COMMAND"
 
 (defun vc-hgcmd-working-revision (file)
   "Working revision. Return repository working revision if FILE is committed."
-  (if (and file (eq 'added (vc-state (vc-hgcmd--file-relative-name file))))
+  (if (and file (eq 'added (vc-state file)))
       "0"
     (or (vc-hgcmd-command "log" "-l" "1" "-f" "-T" "{rev}") "0")))
 
@@ -516,7 +516,7 @@ Insert 'Running command' and display buffer text if COMMAND"
 
 (defun vc-hgcmd-mode-line-string (file)
   "Return a string for `vc-mode-line' to put in the mode line for FILE."
-  (let* ((state (vc-state (vc-hgcmd--file-relative-name file)))
+  (let* ((state (vc-state file))
 	     (state-echo nil)
 	     (face nil)
          ;; TODO allow to customize it.

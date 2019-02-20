@@ -1,0 +1,2 @@
+
+(jack-connect . [(20190220 1352) nil "Manage jack connections within Emacs" single ((:commit . "257621b370910e11f5daf9566c63c19d5f07b00a") (:authors ("Stefano Barbi" . "stefanobarbi@gmail.com")) (:maintainer "Stefano Barbi" . "stefanobarbi@gmail.com"))])

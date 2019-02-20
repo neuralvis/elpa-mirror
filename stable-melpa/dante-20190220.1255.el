@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20190129.2109
+;; Package-Version: 20190220.1255
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (company "0.9") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -126,16 +126,16 @@ Consider setting this variable as a directory variable."
 
 (defun dante-initialize-method ()
   "Initialize `dante-project-root' and `dante-repl-command-line'.
-Do it according to `dante-methods'."
+Do it according to `dante-methods' and previous values of the above variables."
   (or (--first (let ((root (locate-dominating-file default-directory (nth 0 it))))
                  (when root
-                   (setq-local dante-project-root root)
-                   (setq-local dante-repl-command-line (nth 1 it))))
+                   (setq-local dante-project-root (or dante-project-root root))
+                   (setq-local dante-repl-command-line (or dante-repl-command-line (nth 1 it)))))
                (-non-nil (--map (alist-get it dante-methods-alist)
                                 dante-methods)))
       (error "No GHCi loading method applies.  Customize
       `dante-methods' or
-      `dante-repl-command-line' and `dante-project-root'")))
+      (`dante-repl-command-line' and `dante-project-root')")))
 
 (defun dante-repl-command-line ()
   "Return the command line for running GHCi.
