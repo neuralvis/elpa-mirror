@@ -1,2 +1,0 @@
-
-(vdm-mode . [(20190213 2026) ((emacs (25))) "Major mode for the Vienna Development Method" tar ((:commit . "2d2a782f1872546a85cdcf8c53e791620cae7ac3") (:keywords "languages") (:authors ("Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com")) (:maintainer "Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com") (:url . "https://github.com/peterwvj/vdm-mode"))])
