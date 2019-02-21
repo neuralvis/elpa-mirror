@@ -3,8 +3,8 @@
 ;; Copyright (C) 2017  Jack Kamm
 
 ;; Author: Jack Kamm <jackkamm@gmail.com>
-;; Version: 1.0.2
-;; Package-Version: 20180910.446
+;; Version: 1.1.1
+;; Package-Version: 20190220.2246
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: tools, processes
 ;; URL: https://github.com/jackkamm/ipython-shell-send-el
@@ -24,20 +24,22 @@
 
 ;;; Commentary:
 
-;; This package adds extra IPython functionality for Emacs' python.el.
-;; It adds the following two features:
-;; 1. Connect to and run existing jupyter consoles, e.g. on a remote server.
-;; 2. Allow IPython magic in code blocks sent to the inferior Python buffer.
+;; This is a package for sending code to the IPython interpreter.
+;; It provides functionality similar to the `python-shell-send-*'
+;; functions in python.el, but is able to send code regions
+;; containing IPython magic (such as `!ls' or `%timeit'),
+;; whereas python.el only has limited support for this.
+;; In addition, the final result of executed ipython regions
+;; are printed, as in Jupyter cell evaluation.
 ;;
-;; The first feature is provided by the function
-;; `ipython-shell-send/run-jupyter-existing', which is analogous
-;; to python.el's `run-python', except it connects to an existing Jupyter
-;; console instead of starting a new Python subprocess.
+;; The functions provided by ipython-shell-send are
+;; `ipython-shell-send-region', `ipython-shell-send-buffer',
+;; and `ipython-shell-send-defun'. They are essentially equivalent
+;; to their `python-shell-send-*' equivalents in `python.el',
+;; except better able to handle IPython magic.
 ;;
-;; The second feature is provided by the functions
-;; `ipython-shell-send-buffer', `ipython-shell-send-region', and
-;; `ipython-shell-send-defun', which are analogous to `python-shell-send-*'
-;; in python.el, except that they can handle IPython magic commands.
+;; Note to use the ipython-shell-send, you must make sure
+;; to start an IPython shell when calling `run-python'.
 
 ;;; Code:
 
@@ -163,64 +165,15 @@ t when called interactively."
      (format
       (concat
        "import IPython, os;"
-       "IPython.get_ipython().magic('''run -i %s''');"
+       "__pyfile = open('''%s''');"
+       "__code = __pyfile.read();"
+       "__pyfile.close();"
        (when (and delete temp-file-name)
-         (format "os.remove('''%s''');" temp-file-name)))
+         (format "os.remove('''%s''');" temp-file-name))
+       ;; assign & omit final semicolon, to print the result exactly once
+       "__code=IPython.get_ipython().run_cell(__code)")
       (or temp-file-name file-name))
      process)))
 
-(defun ipython-shell-send/run-jupyter-existing--command (kernel)
-  "Return string for the command to connect to an existing jupyter KERNEL."
-  (concat "jupyter console --simple-prompt --existing " kernel))
-
-;;;###autoload
-(defun ipython-shell-send/run-jupyter-existing (dedicated show)
-  "Run existing Jupyter kernel within inferior Python buffer.
-
-Prompts for an existing kernel, then opens it in the standard
-inferior Python buffer from python.el.  For example, the kernel
-may correspond to a running Jupyter notebook, or may have been
-started manually with the 'jupyter console' command.  Leaving
-the prompt blank will select the most recent kernel.
-
-To connect to a remote kernel, call this function from within
-a Tramp buffer on the remote machine.
-
-When called interactively with `prefix-arg', it allows the
-user to edit such choose whether the interpreter
-should be DEDICATED for the current buffer.  When numeric
-prefix arg is other than 0 or 4 do not SHOW."
-  (interactive
-   (if current-prefix-arg
-       (list
-        (y-or-n-p "Make dedicated process? ")
-        (= (prefix-numeric-value current-prefix-arg) 4))
-     (list nil t)))
-  (run-python
-   (read-shell-command
-    "Run Python: "
-    (ipython-shell-send/run-jupyter-existing--command
-     (condition-case err
-	 (completing-read
-	  "Kernel file (blank for most recent): "
-	  (cdr
-	   (cdr
-	    (directory-files
-	     (concat
-	      (file-remote-p default-directory)
-	      (string-trim
-	       (let ((shell-file-name "/bin/sh"))
-		 (shell-command-to-string
-		  (concat "python3 -c 'import jupyter_core.paths as jsp; "
-			  "print(jsp.jupyter_runtime_dir())'"))))))))
-	  nil nil "")
-       (file-error
-	(warn (error-message-string err))
-	nil))))
-   dedicated show))
-
 (provide 'ipython-shell-send)
 ;;; ipython-shell-send.el ends here
-
-
-
