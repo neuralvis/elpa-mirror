@@ -5,7 +5,7 @@
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-vdiff
-;; Package-Version: 20190218.244
+;; Package-Version: 20190221.322
 ;; Version: 0.2.3
 ;; Keywords: diff
 ;; Package-Requires: ((emacs "24.4") (hydra "0.13.0"))
@@ -232,6 +232,7 @@ because those are handled differently.")
 (defvar vdiff--inhibit-window-switch nil)
 (defvar vdiff--inhibit-diff-update nil)
 (defvar vdiff--in-scroll-hook nil)
+(defvar vdiff--cleanup-hook nil)
 ;; (defvar vdiff--in-post-command-hook nil)
 (defvar vdiff--setting-vscroll nil)
 (defvar vdiff--after-change-timer nil)
@@ -2219,8 +2220,10 @@ See README for entry points into a vdiff session."))
           (current-window-configuration))
     (when vdiff-lock-scrolling
       (add-hook 'window-scroll-functions #'vdiff--scroll-function nil t))
-    (when vdiff-truncate-lines
+    (when (and vdiff-truncate-lines (null truncate-lines))
       (let (message-log-max)
+        (add-hook 'vdiff--cleanup-hook
+                  (lambda () (toggle-truncate-lines 0)) nil t)
         (toggle-truncate-lines 1)))))
 
 (defun vdiff--buffer-cleanup ()
@@ -2230,7 +2233,8 @@ See README for entry points into a vdiff session."))
     (remove-hook 'after-save-hook #'vdiff-refresh t)
     (remove-hook 'after-change-functions #'vdiff--after-change-function t)
     (remove-hook 'pre-command-hook #'vdiff--flag-new-command t))
-  (remove-hook 'window-scroll-functions #'vdiff--scroll-function t))
+  (remove-hook 'window-scroll-functions #'vdiff--scroll-function t)
+  (run-hooks 'vdiff--cleanup-hook))
 
 (define-minor-mode vdiff-mode
   "Minor mode active in a vdiff session involving two
