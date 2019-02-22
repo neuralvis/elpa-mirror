@@ -1,5 +1,5 @@
 ;;; naquadah-theme.el --- A theme based on Tango color set
-;; Package-Version: 20190219.1639
+;; Package-Version: 20190222.947
 
 ;; Copyright (C) 2011-2012 Free Software Foundation, Inc
 
@@ -627,12 +627,12 @@
  '(flyspell-duplicate (:underline (:style wave :color orange-2)))
 
  ;; company
- '(company-tooltip (:background butter-1))
- '(company-tooltip-selection (:background orange-1))
- '(company-tooltip-common (:foreground scarlet-red-1))
+ '(company-tooltip (:background aluminium-4))
+ '(company-tooltip-selection (:background orange-2))
+ '(company-tooltip-common (:foreground scarlet-red-3))
  '(company-tooltip-annotation (:background scarlet-red-3))
  '(company-scrollbar-fg (:background scarlet-red-3))
- '(company-scrollbar-bg (:background butter-1))
+ '(company-scrollbar-bg (:background black))
  '(company-preview (:background sky-blue-1))
  '(company-preview-common (:inherit company-preview :foreground scarlet-red-3))
  '(company-preview-search (:inherit company-preview :background sky-blue-1))

@@ -5,7 +5,7 @@
 ;; Author: Clément Pit-Claudel, Feng Shu
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/company-posframe
-;; Package-Version: 20181222.818
+;; Package-Version: 20190222.805
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching
 ;; Package-Requires: ((emacs "26.0")(company "0.9.0")(posframe "0.1.0"))
@@ -149,6 +149,12 @@ COMMAND: See `company-frontends'."
                 emacs-basic-display
                 (not (display-graphic-p))))))
 
+(defun company-posframe-window-change ()
+  "Hide posframe on window change."
+  ;; Do not hide if the buffer whose frame has changed is the posframe itself
+  (unless (string= (buffer-name) company-posframe-buffer)
+    (company-posframe-hide)))
+
 ;;;###autoload
 (define-minor-mode company-posframe-mode
   "company-posframe minor mode."
@@ -165,7 +171,7 @@ COMMAND: See `company-frontends'."
           (advice-add #'company-pseudo-tooltip-unless-just-one-frontend
                       :override #'company-posframe-unless-just-one-frontend)
           ;; When user switches window, child-frame should be hidden.
-          (add-hook 'window-configuration-change-hook #'company-posframe-hide)
+          (add-hook 'window-configuration-change-hook #'company-posframe-window-change)
           (message company-posframe-notification))
       (posframe-delete company-posframe-buffer)
       (advice-remove #'company-pseudo-tooltip-frontend
