@@ -1,2 +1,0 @@
-
-(org-journal-list . [(20190113 759) ((emacs (25))) "Org mode Journal List" single ((:commit . "a84fe9a52d8c653ace9274094f9ea371719ed642") (:authors ("Huy Tran" . "huytd189@gmail.com")) (:maintainer "Huy Tran" . "huytd189@gmail.com") (:url . "https://github.com/huytd/org-journal-list"))])
