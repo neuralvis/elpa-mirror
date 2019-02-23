@@ -4,7 +4,7 @@
 
 ;; Author: Paul Onions
 ;; Keywords: Axiom, OpenAxiom, FriCAS
-;; Package-Version: 20171103.2248
+;; Package-Version: 20190223.1231
 
 ;; This file is free software, see the LICENCE file in this directory
 ;; for copying terms.
@@ -33,8 +33,8 @@
 ;; There are two extra header options (non-standard org-babel options)
 ;; for org-babel ``#+BEGIN_SRC axiom'' source code blocks:-
 ;;
-;;   :block-read <yes/no>      (defaults to no)
-;;   :show-prompt <yes/no>     (defaults to yes)
+;;   :block-read <yes/no/auto>  (defaults to auto)
+;;   :show-prompt <yes/no>      (defaults to yes)
 ;;
 ;; The block-read option forces ob-axiom to send the entire code block
 ;; to the running axiom process via a temporary file.  This allows
@@ -57,12 +57,12 @@
 
 ;; Header arguments
 (defconst org-babel-header-args:axiom
-  '((block-read (no yes))
+  '((block-read (no yes auto))
     (show-prompt (no yes))))
 
 (defvar org-babel-default-header-args:axiom
   '((:session . "Axiom Org-Babel Session")
-    (:block-read . "no")
+    (:block-read . "auto")
     (:show-prompt . "yes")))
 
 ;; File extension for Axiom Input files
@@ -132,9 +132,14 @@ This function is called by `org-babel-execute-src-block'."
   (let ((session (org-babel-axiom-initiate-session
                   (cdr (assoc :session params)) params))
         (block-read (cdr (assoc :block-read params))))
-    (if (equal block-read "yes")
+    (if (or (equal block-read "yes")
+            (and (equal block-read "auto")
+                 (org-babel-axiom--body-needs-block-read body)))
         (org-babel-axiom--execute-by-block-read session body params)
       (org-babel-axiom--execute-line-by-line session body params))))
+
+(defun org-babel-axiom--body-needs-block-read (body)
+  (string-match "^[[:space:]]+[[:graph:]]" body))
 
 (defun org-babel-axiom--execute-by-block-read (session body params)
   (let ((show-prompt (cdr (assoc :show-prompt params)))
