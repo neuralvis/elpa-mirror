@@ -1,2 +1,2 @@
 
-(vdm-comint . [(20181127 2023) ((emacs (25)) (vdm-mode (0 0 4))) "REPL support for vdm-mode" single ((:commit . "27442957a87a5f43d5c101dfc1a4f4aef78144bb") (:keywords "languages") (:authors ("Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com")) (:maintainer "Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com") (:url . "https://github.com/peterwvj/vdm-mode"))])
+(vdm-comint . [(20181127 2023) ((emacs (25)) (vdm-mode (0 0 4))) "REPL support for vdm-mode" single ((:commit . "3ebd1a1f4c8db172d41fb25f191539af274e0c07") (:keywords "languages") (:authors ("Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com")) (:maintainer "Peter W. V. Tran-Jørgensen" . "peter.w.v.jorgensen@gmail.com") (:url . "https://github.com/peterwvj/vdm-mode"))])
