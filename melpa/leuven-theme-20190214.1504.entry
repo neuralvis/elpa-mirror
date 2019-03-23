@@ -1,2 +1,0 @@
-
-(leuven-theme . [(20190214 1504) nil "Awesome Emacs color theme on white background" tar ((:commit . "24cad6f573833c987f5b4ef48c4230e37023e8e9") (:keywords "color" "theme") (:authors ("Fabrice Niessen <(concat \"fniessen\" at-sign \"pirilampo.org\")>")) (:maintainer "Fabrice Niessen <(concat \"fniessen\" at-sign \"pirilampo.org\")>") (:url . "https://github.com/fniessen/emacs-leuven-theme"))])

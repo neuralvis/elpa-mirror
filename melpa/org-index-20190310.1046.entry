@@ -1,0 +1,2 @@
+
+(org-index . [(20190310 1046) ((emacs (24 4))) "A personal adaptive index for org" single ((:commit . "ee76f3327276b7775db3c66564c4a4c9e0e8fdb3") (:authors ("Marc Ihm" . "org-index@2484.de")) (:maintainer "Marc Ihm" . "org-index@2484.de") (:url . "https://github.com/marcIhm/org-index"))])

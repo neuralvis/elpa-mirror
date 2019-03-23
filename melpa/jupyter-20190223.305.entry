@@ -1,2 +1,0 @@
-
-(jupyter . [(20190223 305) ((emacs (26)) (zmq (0 9 0)) (cl-lib (0 5)) (simple-httpd (1 5 0)) (websocket (1 9))) "Jupyter" tar ((:commit . "75fa0eea2970b61df2c03f04294347cfa1e88fb8") (:authors ("Nathaniel Nicandro" . "nathanielnicandro@gmail.com")) (:maintainer "Nathaniel Nicandro" . "nathanielnicandro@gmail.com") (:url . "https://github.com/dzop/emacs-jupyter"))])

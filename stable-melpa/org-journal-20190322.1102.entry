@@ -1,0 +1,2 @@
+
+(org-journal . [(20190322 1102) ((emacs (25 1))) "a simple org-mode based journaling mode" single ((:commit . "690e3bbfb680f4ab07443ad8d24cf2f2dd85de03") (:authors ("Bastian Bechtold")) (:maintainer "Bastian Bechtold") (:url . "http://github.com/bastibe/org-journal"))])

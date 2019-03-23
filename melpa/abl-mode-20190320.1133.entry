@@ -1,0 +1,2 @@
+
+(abl-mode . [(20190320 1133) nil "Python TDD minor mode" single ((:commit . "1ce79d67f71b59a13eb520012b890fc97975094f") (:authors ("Ulas Tuerkmen <ulas.tuerkmen at gmail dot com>")) (:maintainer "Ulas Tuerkmen <ulas.tuerkmen at gmail dot com>") (:url . "http://github.com/afroisalreadyinu/abl-mode"))])

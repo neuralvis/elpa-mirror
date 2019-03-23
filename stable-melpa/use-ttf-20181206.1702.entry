@@ -1,2 +1,2 @@
 
-(use-ttf . [(20181206 1702) ((emacs (24 4)) (s (1 12 0))) "Use the same font cross OS." single ((:commit . "81a2dc338e8766446a57ccf1813c5c6c5d7370a2") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs090218/use-ttf"))])
+(use-ttf . [(20181206 1702) ((emacs (24 4)) (s (1 12 0))) "Use the same font cross OS." single ((:commit . "1303844ae9e1d3dd4269f0b29bd5672b450a573d") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs090218/use-ttf"))])
