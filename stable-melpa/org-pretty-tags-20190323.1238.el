@@ -9,8 +9,8 @@
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
-;; Version: 0.1.5
-;; Package-Version: 20190313.1202
+;; Version: 0.2.0
+;; Package-Version: 20190323.1238
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
@@ -37,12 +37,13 @@
 ;; - Activate the mode with {C-u M-x org-pretty-tags-mode RET}.
 ;; - Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
 ;; 
-;; The same commands in an Org agenda buffer perform in the same way as
-;; stated above for _every_ Org mode buffer.
 ;;
-;; - Toggle the mode in every buffer with {M-x org-pretty-tags-mode-global RET}.
-;; - Activate the mode in every buffer with {C-u M-x org-pretty-tags-mode-global RET}.
-;; - Deactivate the mode in every buffer with {C-u -1 M-x org-pretty-tags-mode-global RET}.
+;; - Toggle the global-mode with {M-x org-pretty-tags-global-mode RET}.
+;; - Activate the global-mode in every buffer with {C-u M-x org-pretty-tags-global-mode RET}.
+;; - Deactivate the global-mode in every buffer with {C-u -1 M-x org-pretty-tags-global-mode RET}.
+;; 
+;; Refresh agenda buffers (key =g= or =r=) to follow the latest setting
+;; of pretty tags in the buffers.
 ;;
 ;; Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
 ;; define surrogate strings for tags.  E.g. add the pair "money", "$$$".
@@ -216,12 +217,8 @@ This mode is local to Org mode buffers.
 Special: when invoked from an Org agenda buffer the mode gets
 applied to every Org mode buffer."
   :lighter org-pretty-tags-mode-lighter
-  (if (derived-mode-p 'org-agenda-mode)
-      (progn
-        (call-interactively #'org-pretty-tags-mode-global)
-        (org-agenda-redo))
-    (unless (derived-mode-p 'org-mode)
-      (user-error "org-pretty-tags-mode performs for Org mode or Org agenda buffers only"))
+  (unless (derived-mode-p 'org-mode)
+      (user-error "org-pretty-tags-mode performs for Org mode only.  Consider org-pretty-tags-mode-global"))
     (org-pretty-tags-delete-overlays)
     (cond
      (org-pretty-tags-mode
@@ -233,19 +230,14 @@ applied to every Org mode buffer."
       (remove-hook 'org-after-tags-change-hook #'org-pretty-tags-refresh-overlays-org-mode)
       (remove-hook 'org-ctrl-c-ctrl-c-hook #'org-pretty-tags-refresh-overlays-org-mode)
       (if (org-pretty-tags-mode-off-in-every-buffer-p)
-          (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines))))))
+          (remove-hook 'org-agenda-finalize-hook #'org-pretty-tags-refresh-agenda-lines)))))
 
 ;;;###autoload
-(defun org-pretty-tags-mode-global (&optional arg)
-  "Set `org-pretty-tags-mode' in every buffer with argument ARG."
-  (declare (interactive-only t))
-  (interactive "P")
-  (ignore arg) ;; keep byte compiler quiet.
-  (save-excursion
-    (dolist (buf (buffer-list))
-      (set-buffer buf)
-      (when (derived-mode-p 'org-mode)
-        (call-interactively #'org-pretty-tags-mode)))))
+(define-global-minor-mode org-pretty-tags-global-mode
+  org-pretty-tags-mode
+  (lambda ()
+    (when (derived-mode-p 'org-mode)
+      (org-pretty-tags-mode 1))))
 
 
 (provide 'org-pretty-tags)

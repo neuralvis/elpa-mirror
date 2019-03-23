@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Version: 1.4
-;; Package-Version: 20181211.55
+;; Package-Version: 20190323.1331
 ;; Keywords: lisp
 ;; Package-Requires: ((dash "2.12.0") (loop "1.2") (s "1.11.0"))
 
@@ -785,7 +785,6 @@ search."
          (pos (get-text-property (point) 'elisp-refs-start-pos))
          (unindent (get-text-property (point) 'elisp-refs-unindented))
          (column-offset (current-column))
-         (target-offset (+ column-offset unindent))
          (line-offset -1))
     (when (null path)
       (user-error "No match here"))
@@ -803,7 +802,8 @@ search."
     ;; on in the results buffer.
     (forward-line line-offset)
     (beginning-of-line)
-    (let ((i 0))
+    (let ((target-offset (+ column-offset unindent))
+          (i 0))
       (while (< i target-offset)
         (if (looking-at "\t")
             (cl-incf i tab-width)

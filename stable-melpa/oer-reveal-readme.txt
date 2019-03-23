@@ -13,13 +13,14 @@ documented in file "org/config.org".
 * Usage
 Variable `oer-reveal-dir' points to the directory of oer-reveal and
 its embedded resources.  You may want to use that variable in your
-own publication code, for which some pointers are provided in file
-"oer-reveal-publish.el".  Note that subdirectory "title-slide"
-contains some variants for title slides of presentations, and
-subdirectory "css" contains sample CSS.  Subdirectory "org"
-contains Org files to embed in presentations.  Please be warned
-that included resources, in particular CSS files, may change in
-incompatible ways.  You may want to work with your own copies.
+own publication code, for which some pointers are provided in
+function `oer-reveal-publish-all' of file "oer-reveal-publish.el".
+Note that subdirectory "title-slide" contains some variants for
+title slides of presentations, and subdirectory "css" contains
+sample CSS.  Subdirectory "org" contains Org files to embed in
+presentations.  Please be warned that included resources, in
+particular CSS files, may change in incompatible ways.  You may
+want to work with your own copies.
 
 Function `oer-reveal-setup-submodules' downloads and installs
 reveal.js and some of its plugins into the directory
@@ -30,10 +31,20 @@ reveal.js and some of its plugins into the directory
 changing directories upon updates) you can include those generated
 files at stable locations in your own Org files.
 
+Function `oer-reveal-publish-setq-defaults' changes variables from
+other packages, which may offer some suggestions what to adapt in
+your own configuration.
+
+Note that the file "emacs-reveal.el", hosted at
+https://gitlab.com/oer/emacs-reveal
+provides sample initialization code for oer-reveal.
+
 * Customizable options
 Variable `oer-reveal-script-files' lists JavaScript files to load
 when initializing reveal.js.  If you use the version of reveal.js
-coming with oer-reveal, changes should not be necessary.
+coming with oer-reveal, you may want to assign the value of
+`oer-reveal-script-files' to `org-re-reveal-script-files'.  This
+also happens in `oer-reveal-publish-setq-defaults'.
 
 Variable `oer-reveal-plugins' lists reveal.js plugins to be
 activated.  Remove those that you do not need.  Function

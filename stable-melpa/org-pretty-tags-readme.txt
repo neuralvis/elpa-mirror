@@ -4,12 +4,13 @@ In an Org mode buffer:
 - Activate the mode with {C-u M-x org-pretty-tags-mode RET}.
 - Deactivate the mode with {C-u -1 M-x org-pretty-tags-mode RET}.
 
-The same commands in an Org agenda buffer perform in the same way as
-stated above for _every_ Org mode buffer.
 
-- Toggle the mode in every buffer with {M-x org-pretty-tags-mode-global RET}.
-- Activate the mode in every buffer with {C-u M-x org-pretty-tags-mode-global RET}.
-- Deactivate the mode in every buffer with {C-u -1 M-x org-pretty-tags-mode-global RET}.
+- Toggle the global-mode with {M-x org-pretty-tags-global-mode RET}.
+- Activate the global-mode in every buffer with {C-u M-x org-pretty-tags-global-mode RET}.
+- Deactivate the global-mode in every buffer with {C-u -1 M-x org-pretty-tags-global-mode RET}.
+
+Refresh agenda buffers (key =g= or =r=) to follow the latest setting
+of pretty tags in the buffers.
 
 Use {M-x customize-variable RET org-pretty-tags-surrogate-strings RET} to
 define surrogate strings for tags.  E.g. add the pair "money", "$$$".

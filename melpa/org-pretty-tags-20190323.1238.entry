@@ -1,0 +1,2 @@
+
+(org-pretty-tags . [(20190323 1238) ((emacs (25))) "Surrogates for tags" single ((:commit . "152276ab6cf4247ace6864a9981d8a83c46df250") (:keywords "reading" "outlines") (:authors ("Marco Wahl" . "marcowahlsoft@gmail.com")) (:maintainer "Marco Wahl" . "marcowahlsoft@gmail.com") (:url . "https://gitlab.com/marcowahl/org-pretty-tags"))])
