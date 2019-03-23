@@ -1,0 +1,2 @@
+
+(org-reverse-datetree . [(20190323 730) ((emacs (26 1)) (dash (2 12))) "Create reverse date trees in org-mode" single ((:commit . "72a5c212e3958dee0d4f62ad4af3431b39750585") (:keywords "outlines") (:authors ("Akira Komamura" . "akira.komamura@gmail.com")) (:maintainer "Akira Komamura" . "akira.komamura@gmail.com") (:url . "https://github.com/akirak/org-reverse-datetree"))])
