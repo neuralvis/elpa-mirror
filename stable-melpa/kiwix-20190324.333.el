@@ -4,7 +4,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: kiwix wikipedia
-;; Package-Version: 20190227.1344
+;; Package-Version: 20190324.333
 ;; URL: https://github.com/stardiviner/kiwix.el
 ;; Created: 23th July 2016
 ;; Version: 0.1.0
@@ -23,32 +23,45 @@
 ;; (use-package kiwix
 ;;   :ensure t
 ;;   :after org
-;;   :bind (:map document-prefix
-;;               ("w" . kiwix-at-point)
-;;               ("W" . kiwix-at-point-interactive)
-;;               ("M-w" . kiwix-launch-server))
-;;   :init (setq kiwix-your-language-library "zh"))
+;;   :commands (kiwix-launch-server kiwix-at-point-interactive)
+;;   :bind (:map document-prefix ("w" . kiwix-at-point-interactive))
+;;   :init (setq kiwix-server-use-docker t
+;;               kiwix-server-port 8080
+;;               kiwix-default-library "wikipedia_zh_all_2015-11.zim"))
 
 ;;; Usage:
 ;;
-;; [M-x kiwix-launch-server] to launch Kiwix server.
-;; [M-x kiwix-at-point] to search the word under point or the region selected string.
+;; 1. [M-x kiwix-launch-server] to launch Kiwix server.
+;; 2. [M-x kiwix-at-point] to search the word under point or the region selected string.
 
 ;;; Code:
 
 
 (require 'cl-lib)
-;; load for `org-link-set-parameters'
-;;;###autoload
-(require 'org)
+
 ;;;###autoload
 (declare-function 'org-link-set-parameters "org")
+(autoload 'org-link-set-parameters "org")
+(declare-function 'org-store-link-props "org")
+(autoload 'org-store-link-props "org")
 
 (defgroup kiwix-mode nil
   "Kiwix customization options."
   :group 'kiwix-mode)
 
-(defcustom kiwix-server-url "http://127.0.0.1:8000/"
+(defcustom kiwix-server-use-docker t
+  "Using Docker container for kiwix-serve or not?"
+  :type 'boolean
+  :safe #'booleanp
+  :group 'kiwix-mode)
+
+(defcustom kiwix-server-port 8000
+  "Specify default kiwix-serve server port."
+  :type 'number
+  :safe #'numberp
+  :group 'kiwix-mode)
+
+(defcustom kiwix-server-url (format "http://127.0.0.1:%s/" kiwix-server-port)
   "Specify Kiwix server URL."
   :type 'string
   :group 'kiwix-mode)
@@ -69,46 +82,35 @@
 (defun kiwix-dir-detect ()
   "Detect Kiwix profile directory exist."
   (let ((kiwix-dir (concat (getenv "HOME") "/.www.kiwix.org/kiwix")))
-    (unless (not (file-accessible-directory-p kiwix-dir))
+    (if (file-accessible-directory-p kiwix-dir)
+        kiwix-dir
       (warn "ERROR: Kiwix profile directory \".www.kiwix.org/kiwix\" is not accessible."))))
 
 (defcustom kiwix-default-data-profile-name
   (when (kiwix-dir-detect)
     (car (directory-files
-          (concat
-           (getenv "HOME") "/.www.kiwix.org/kiwix")
-          nil
-          ".*\\.default")))
+          (concat (getenv "HOME") "/.www.kiwix.org/kiwix") nil ".*\\.default")))
   "Specify the default Kiwix data profile path."
   :type 'string
   :group 'kiwix-mode)
 
 (defcustom kiwix-default-data-path
   (when (kiwix-dir-detect)
-    (concat
-     (getenv "HOME") "/.www.kiwix.org/kiwix/" kiwix-default-data-profile-name))
+    (concat (getenv "HOME") "/.www.kiwix.org/kiwix/" kiwix-default-data-profile-name))
   "Specify the default Kiwix data path."
   :type 'string
   :group 'kiwix-mode)
 
-(defcustom kiwix-server-port "8000"
-  "Specify the default Kiwix server port."
-  :type 'string
-  :group 'kiwix-mode)
-
-;;;###autoload
-(defcustom kiwix-support-org-mode-link t
-  "Add support for Org-mode Kiwix link."
-  :type 'boolean
-  :group 'kiwix-mode)
-
 (defvar kiwix-libraries
   (when (kiwix-dir-detect)
-    (mapcar #'(lambda (var)
-                (replace-regexp-in-string "\.zim" "" var))
+    (mapcar #'kiwix--get-library-name
             (directory-files
-             (concat kiwix-default-data-path "/data/content/") nil ".*\.zim")))
+             (concat kiwix-default-data-path "/data/library/") nil ".*\.zim")))
   "A list of Kiwix libraries.")
+
+(defun kiwix--get-library-name (file)
+  "Extract library name from library file."
+  (replace-regexp-in-string "\.zim" "" file))
 
 ;; - examples:
 ;; - "wikipedia_en_all" - "wikipedia_en_all_2016-02"
@@ -117,57 +119,20 @@
 ;; - "wiktionary_zh_all" - "wiktionary_zh_all_2015-17"
 ;; - "wikipedia_en_medicine" - "wikipedia_en_medicine_2015-17"
 
-(defun kiwix-construct-libraries-abbrev-alist (alist)
-  "Construct libraries abbrev alist from `ALIST'."
-  (let* ((libraries-name
-          (mapcar #'(lambda (library)
-                      (string-match "\\(.*\\)_[0-9]\\{4\\}-[0-9]\\{2\\}"  library)
-                      (let* ((library-name (match-string 1 library)))
-                        library-name))
-                  alist))
-         (libraries-full-name alist))
-    (cl-pairlis libraries-name libraries-full-name)))
+(defun kiwix-select-library (&optional filter)
+  "Select Kiwix library name."
+  (completing-read "Kiwix library: " kiwix-libraries nil nil filter))
 
-(defvar kiwix-libraries-abbrev-alist
-  (kiwix-construct-libraries-abbrev-alist kiwix-libraries)
-  "Alist of Kiwix libraries with name and full name.")
-
-(defun kiwix-select-library-name ()
-  "Select Wikipedia library name abbrev."
-  (completing-read "Wikipedia library abbrev: "
-                   (map-keys kiwix-libraries-abbrev-alist)))
-
-(defun kiwix-get-library-fullname (abbr)
-  "Get Kiwix library full name which is associated with `ABBR'."
-  (cdr (assoc abbr kiwix-libraries-abbrev-alist)))
-
-(defcustom kiwix-default-library "wikipedia_en_all"
+(defcustom kiwix-default-library "wikipedia_en_all.zim"
   "The default kiwix library when library fragment in link not specified."
   :type 'string
+  :safe #'stringp
   :group 'kiwix-mode)
-
-;; add default key-value pair to libraries alist.
-(dolist
-    (cons (list
-           (cons "default" (kiwix-get-library-fullname kiwix-default-library))
-           (cons "en" (kiwix-get-library-fullname kiwix-default-library))
-           (cons "zh" (kiwix-get-library-fullname "wikipedia_zh_all"))))
-  (push cons kiwix-libraries-abbrev-alist))
-
-(defcustom kiwix-your-language-library "zh"
-  "Specify the library for your navtive language."
-  :type 'string
-  :group 'kiwix-mode)
-
-;; test
-;; (kiwix-get-library-fullname "wikipedia_en")
-;; (kiwix-get-library-fullname "default")
-;; (kiwix-get-library-fullname "en")
-;; (kiwix-get-library-fullname "zh")
 
 (defcustom kiwix-search-interactively t
   "`kiwix-at-point' search interactively."
   :type 'boolean
+  :safe #'booleanp
   :group 'kiwix-mode)
 
 (defcustom kiwix-mode-prefix nil
@@ -180,25 +145,28 @@
 (defun kiwix-launch-server ()
   "Launch Kiwix server."
   (interactive)
-  (let ((library "--library ")
+  (let ((library-option "--library ")
         (port (concat "--port=" kiwix-server-port " "))
         (daemon "--daemon ")
-        (library-path (concat kiwix-default-data-path "/data/library/library.xml"))
-        )
-    (async-shell-command
-     (concat kiwix-server-command library port daemon (shell-quote-argument library-path)))))
+        (library-path (concat kiwix-default-data-path "/data/library/library.xml")))
+    (if kiwix-server-use-docker
+        (async-shell-command
+         (concat "docker run -d "
+                 "--name kiwix-serve "
+                 "-v " (file-name-directory library-path) ":" "/data "
+                 "kiwix/kiwix-serve"
+                 (kiwix-select-library)))
+      (async-shell-command
+       (concat kiwix-server-command
+               library-option port daemon (shell-quote-argument library-path))))))
 
 (defun kiwix-capitalize-first (string)
   "Only capitalize the first word of STRING."
-  (concat
-   (string (upcase (aref string 0)))
-   (substring string 1)))
+  (concat (string (upcase (aref string 0))) (substring string 1)))
 
 (defun kiwix-query (query &optional library)
   "Search `QUERY' in `LIBRARY' with Kiwix."
-  (let* ((kiwix-library (if library
-                            library
-                          (kiwix-get-library-fullname "default")))
+  (let* ((kiwix-library (if library library (kiwix--get-library-name kiwix-default-library)))
          (url (concat
                kiwix-server-url kiwix-library "/A/"
                ;; query need to be convert to URL encoding: "禅宗" https://zh.wikipedia.org/wiki/%E7%A6%85%E5%AE%97
@@ -219,21 +187,17 @@
 Or When prefix argument `INTERACTIVELY' specified, then prompt
 for query string and library interactively."
   (interactive "P")
-  (let* ((library (if (or kiwix-search-interactively
-                          interactively)
-                      (kiwix-get-library-fullname (kiwix-select-library-name))
-                    (kiwix-get-library-fullname "default")))
+  (let* ((library (if (or kiwix-search-interactively interactively)
+                      (kiwix-select-library)
+                    (kiwix--get-library-name kiwix-default-library)))
          (query (if interactively
                     (read-string "Kiwix Search: "
                                  (if mark-active
-                                     (buffer-substring
-                                      (region-beginning) (region-end))
+                                     (buffer-substring (region-beginning) (region-end))
                                    (thing-at-point 'symbol)))
-                  (progn
-                    (if mark-active
-                        (buffer-substring
-                         (region-beginning) (region-end))
-                      (thing-at-point 'symbol))))))
+                  (progn (if mark-active
+                             (buffer-substring (region-beginning) (region-end))
+                           (thing-at-point 'symbol))))))
     (message (format "library: %s, query: %s" library query))
     (if (or (null library)
             (string-empty-p library)
@@ -241,7 +205,6 @@ for query string and library interactively."
             (string-empty-p query))
         (error "Your query is invalid")
       (kiwix-query query library))))
-
 
 ;;;###autoload
 (defun kiwix-at-point-interactive ()
@@ -272,10 +235,9 @@ for query string and library interactively."
   "Get library from Org-mode `LINK'."
   (if (string-match-p "[a-zA-Z\ ]+" (match-string 2 link)) ; validate query is English
       ;; convert between libraries full name and abbrev.
-      (kiwix-get-library-fullname (or (match-string 1 link)
-                                      "default"))
+      (or (match-string 1 link) (kiwix-select-library))
     ;; validate query is non-English
-    (kiwix-get-library-fullname kiwix-your-language-library)))
+    (kiwix-select-library "zh")))
 
 ;;;###autoload
 (defun org-wikipedia-link-open (link)
@@ -324,31 +286,34 @@ for query string and library interactively."
   ;; remove those interactive functions. use normal function instead.
   (when (eq major-mode 'wiki-mode)
     (let* ((query (read-string "Wikipedia Query with Kiwix: "))
-           (library (kiwix-select-library-name))
+           (library (kiwix-select-library))
            (link (concat "wikipedia:" "(" library "):" query)))
-      (org-store-link-props
-       :type "wikipedia"
-       :link link
-       :description query)
+      (org-store-link-props :type "wikipedia"
+                            :link link
+                            :description query)
       link)))
+
+;;;###autoload
+(org-link-set-parameters "wikipedia" ; NOTE: use `wikipedia' for future backend changing.
+                         :follow #'org-wikipedia-link-open
+                         :store #'org-wikipedia-store-link
+                         :export #'org-wikipedia-link-export)
+
+;;;###autoload
+(add-hook 'org-store-link-functions 'org-wikipedia-store-link t)
+
+(defun kiwix-mode-enable ()
+  "Enable kiwix-mode."
+  )
+
+(defun kiwix-mode-disable ()
+  "Disable kiwix-mode."
+  )
 
 (defvar kiwix-mode-map
   (let ((map (make-sparse-keymap)))
     map)
   "kiwix-mode map.")
-
-(defun kiwix-mode-enable ()
-  "Enable kiwix-mode."
-  (when kiwix-support-org-mode-link
-    (org-link-set-parameters "wikipedia" ; NOTE: use `wikipedia' for future backend changing.
-                             :follow #'org-wikipedia-link-open
-                             :store #'org-wikipedia-store-link
-                             :export #'org-wikipedia-link-export)
-    (add-hook 'org-store-link-functions 'org-wikipedia-store-link t)))
-
-(defun kiwix-mode-disable ()
-  "Disable kiwix-mode."
-  )
 
 ;;;###autoload
 (define-minor-mode kiwix-mode
