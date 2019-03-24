@@ -8,7 +8,7 @@ When developing this mode, the following documents were taken into account:
   (see URL `https://www.ietf.org/rfc/rfc822.txt')
 - RFC5234: Augmented BNF for Syntax Specifications: ABNF
   (see URL `https://www.ietf.org/rfc/rfc5234.txt')
-- FRC7405: Case-Sensitive String Support in ABNF [3]
+- FRC7405: Case-Sensitive String Support in ABNF
   (see URL `https://www.ietf.org/rfc/rfc7405.txt')
 - Revised Report on the Algorithmic Language Algol 60
   (see URL `https://www.masswerk.at/algol60/report.htm')
