@@ -26,3 +26,5 @@ To enable the mode for all repositories use:
 To enable the mode globally without dropping to a shell:
 
   (add-hook 'magit-mode-hook 'magit-svn-mode)
+
+This package is unmaintained see the README for more information.
