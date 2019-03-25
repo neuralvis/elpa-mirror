@@ -1,2 +1,0 @@
-
-(kiwix . [(20190324 333) ((emacs (24 4)) (cl-lib (0 5))) "Kiwix interface and support." single ((:commit . "aea0901c72873a221260857fc4eba78397bbfb55") (:keywords "kiwix" "wikipedia") (:authors ("stardiviner" . "numbchild@gmail.com")) (:maintainer "stardiviner" . "numbchild@gmail.com") (:url . "https://github.com/stardiviner/kiwix.el"))])
