@@ -1,2 +1,2 @@
 
-(stgit . [(20171130 1559) nil "major mode for StGit interaction" single ((:commit . "b4744f15b94fbad2965db2c2e38cf14b0259c950") (:authors ("David Kågedal" . "davidk@lysator.liu.se")) (:maintainer "David Kågedal" . "davidk@lysator.liu.se") (:url . "http://www.procode.org/stgit"))])
+(stgit . [(20171130 1559) nil "major mode for StGit interaction" single ((:commit . "935543e0e2369dfd5cbaf79f66ef658b0a85136f") (:authors ("David Kågedal" . "davidk@lysator.liu.se")) (:maintainer "David Kågedal" . "davidk@lysator.liu.se") (:url . "http://www.procode.org/stgit"))])
