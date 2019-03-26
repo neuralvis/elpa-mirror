@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov
 ;; URL: https://github.com/bbatsov/rubocop-emacs
-;; Package-Version: 20170312.611
+;; Package-Version: 20190326.1424
 ;; Version: 0.5.0
 ;; Keywords: project, convenience
 ;; Package-Requires: ((emacs "24"))
@@ -69,6 +69,16 @@
   :group 'rubocop
   :type 'string)
 
+(defcustom rubocop-autocorrect-on-save nil
+  "Runs `rubocop-autocorrect-current-file' automatically on save."
+  :group 'rubocop
+  :type 'boolean)
+
+(defcustom rubocop-prefer-system-executable nil
+  "Runs rubocop with the system executable even if inside a bundled project."
+  :group 'rubocop
+  :type 'boolean)
+
 (defun rubocop-local-file-name (file-name)
   "Retrieve local filename if FILE-NAME is opened via TRAMP."
   (cond ((tramp-tramp-file-p file-name)
@@ -112,7 +122,7 @@ When NO-ERROR is non-nil returns nil instead of raise an error."
   "Build the full command to be run based on COMMAND and PATH.
 The command will be prefixed with `bundle exec` if RuboCop is bundled."
   (concat
-   (if (rubocop-bundled-p) "bundle exec " "")
+   (if (and (not rubocop-prefer-system-executable) (rubocop-bundled-p)) "bundle exec " "")
    command
    (rubocop-build-requires)
    " "
@@ -183,6 +193,10 @@ Alternatively prompt user for directory."
   (interactive)
   (rubocop--file-command rubocop-autocorrect-command))
 
+(defun rubocop-autocorrect-current-file-silent ()
+  (if rubocop-autocorrect-on-save
+      (save-window-excursion (rubocop-autocorrect-current-file))))
+
 (defun rubocop-bundled-p ()
   "Check if RuboCop has been bundled."
   (let ((gemfile-lock (expand-file-name "Gemfile.lock" (rubocop-project-root))))
@@ -216,7 +230,10 @@ Alternatively prompt user for directory."
   "Minor mode to interface with RuboCop."
   :lighter " RuboCop"
   :keymap rubocop-mode-map
-  :group 'rubocop)
+  :group 'rubocop
+  (cond
+   (rubocop-mode (add-hook 'before-save-hook 'rubocop-autocorrect-current-file-silent nil t))
+   (t (remove-hook 'before-save-hook 'rubocop-autocorrect-current-file-silent t))))
 
 (provide 'rubocop)
 
