@@ -1,7 +1,7 @@
 ;;; company-lsp.el --- Company completion backend for lsp-mode.  -*- lexical-binding: t -*-
 
 ;; Version: 2.1.0
-;; Package-Version: 20190314.710
+;; Package-Version: 20190326.553
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0") (company "0.9.0") (s "1.2.0") (dash "2.11.0"))
 ;; URL: https://github.com/tigersoldier/company-lsp
 
@@ -481,10 +481,8 @@ which company can handle."
   (let* ((resolved-candidate (company-lsp--resolve-candidate candidate "documentation"))
          (item (company-lsp--candidate-item resolved-candidate))
          (documentation (gethash "documentation" item)))
-    (if
-        (hash-table-p documentation)  ;; If true, then the documentation is a MarkupContent. String otherwise.
-        (gethash "value" documentation)
-      documentation)))
+    (when documentation
+      (lsp--render-element documentation))))
 
 (defun company-lsp--candidates-sync (prefix)
   "Get completion candidates synchronously.
