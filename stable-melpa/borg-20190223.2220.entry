@@ -1,2 +1,0 @@
-
-(borg . [(20190223 2220) ((emacs (26)) (dash (2 14 1)) (epkg (3 1 1)) (magit (2 13 0))) "assimilate Emacs packages as Git submodules" tar ((:commit . "5a46352c430bd9778dd836373f144e7acb206c91") (:keywords "tools") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/emacscollective/borg"))])
