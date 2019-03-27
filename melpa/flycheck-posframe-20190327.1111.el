@@ -5,7 +5,7 @@
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/flycheck-posframe
-;; Package-Version: 20180322.607
+;; Package-Version: 20190327.1111
 ;; Version: 0.5
 ;; Package-Requires: ((flycheck "0.24") (emacs "26") (posframe "0.3.0"))
 
@@ -109,6 +109,11 @@ Only the `background' is used in this face."
   '(pre-command-hook post-command-hook focus-out-hook)
   "The hooks which should trigger automatic removal of the posframe.")
 
+(defcustom flycheck-posframe-inhibit-functions nil
+  "Functions to inhibit display of flycheck posframe."
+  :type 'hook
+  :group 'flycheck-posframe)
+
 (defun flycheck-posframe-hide-posframe ()
   "Hide messages currently being shown if any."
   ;; hide posframe instead of deleting it to avoid flicker or worse crashes etc
@@ -152,7 +157,8 @@ Only the `background' is used in this face."
 (defun flycheck-posframe-show-posframe (errors)
   "Display ERRORS, using posframe.el library."
   (flycheck-posframe-hide-posframe)
-  (when errors
+  (when (and errors
+             (not (run-hook-with-args-until-success 'flycheck-posframe-inhibit-functions)))
     (posframe-show
      flycheck-posframe-buffer
      :string (flycheck-posframe-format-errors errors)
