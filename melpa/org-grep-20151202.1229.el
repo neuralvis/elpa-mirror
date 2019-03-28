@@ -5,6 +5,7 @@
 ;; Author: François Pinard <pinard@iro.umontreal.ca>
 ;; Maintainer: François Pinard <pinard@iro.umontreal.ca>
 ;; URL: https://github.com/pinard/org-grep
+;; Package-Version: 20151202.1229
 ;; Package-Requires: ((cl-lib "0.5"))
 
 ;; This is free software; you can redistribute it and/or modify it
