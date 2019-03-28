@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2
-;; Package-Version: 20190323.730
+;; Package-Version: 20190328.907
 ;; Package-Requires: ((emacs "26.1") (dash "2.12"))
 ;; Keywords: outlines
 ;; URL: https://github.com/akirak/org-reverse-datetree
@@ -141,6 +141,8 @@ values:
 
 \"created\"
   Returns non-nil if and only if a new tree is created."
+  (unless (derived-mode-p 'org-mode)
+    (user-error "Not in org-mode"))
   (let* ((time (or time (current-time))))
     (save-restriction
       (widen)
@@ -283,6 +285,8 @@ When this function is called interactively, it asks for TIME using
 `org-read-date' and go to an entry of the date."
   (interactive (list (org-read-date nil t nil)
                      :return nil))
+  (unless (derived-mode-p 'org-mode)
+    (user-error "Not in org-mode"))
   (org-reverse-datetree--get-file-headers)
   (let* ((use-weektree (org-reverse-datetree--lookup-bool-header
                         "REVERSE_DATETREE_USE_WEEK_TREE"
@@ -321,7 +325,7 @@ but it always asks for a date even if it is called non-interactively."
   (interactive)
   (apply #'org-reverse-datetree-goto-date-in-file
          (org-read-date nil t nil)
-         args))
+         (cdr args)))
 
 (defun org-reverse-datetree--timestamp-to-time (s)
   "Convert timestamp string S into internal time."

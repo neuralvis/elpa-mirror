@@ -1,9 +1,9 @@
 ;;; uptimes.el --- Track and display emacs session uptimes.
-;; Copyright 1999-2018 by Dave Pearson <davep@davep.org>
+;; Copyright 1999-2019 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 3.6
-;; Package-Version: 20190101.2016
+;; Version: 3.7
+;; Package-Version: 20190328.856
 ;; Package-X-Original-Version: 20180416.1323
 ;; Keywords: processes, uptime
 ;; URL: https://github.com/davep/uptimes.el
@@ -250,7 +250,6 @@ The result is returned as the following `list':
 ;; Register our presence and, if `uptimes-auto-save' is true, kick off the
 ;; auto-save process.
 (progn
-  (uptimes-save)
   (when uptimes-auto-save
     (setq uptimes-auto-save-timer
           (run-at-time nil uptimes-auto-save-interval #'uptimes-save)))
