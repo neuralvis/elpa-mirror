@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25.2") (treemacs "0.0") (pfuture "1.3" )(magit "2.90.0"))
-;; Package-Version: 20190324.1231
+;; Package-Version: 20190328.635
 ;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -131,7 +131,7 @@ Will update nodes under MAGIT-ROOT with output in PFUTURE-BUFFER."
                           (file-exists-p path)
                           (>= curr-depth start-depth))
                 (put-text-property (button-start node) (button-end node) 'face
-                                   (treemacs--get-button-face
+                                   (treemacs--get-node-face
                                     path ht
                                     (if (memq (treemacs-button-get node :state)
                                               '(file-node-open file-node-closed))

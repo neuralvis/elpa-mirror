@@ -5,8 +5,8 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: vc
 ;; URL: https://github.com/muffinmad/emacs-vc-hgcmd
-;; Package-Version: 20190327.1722
-;; Package-X-Original-Version: 1.3.11
+;; Package-Version: 20190328.2110
+;; Package-X-Original-Version: 1.3.13
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -86,6 +86,8 @@
 ;;
 ;;     (custom-set-variables
 ;;      '(vc-hgcmd-log-edit-message-function 'my/hg-commit-message))
+;;
+;; - Interactive command `vc-hgcmd-runcommand' that allow to run custom hg commands
 
 
 ;;; Code:
@@ -247,9 +249,11 @@ Insert output to process buffer and check if amount of data is enought to parse 
                            (let ((output-buffer (vc-hgcmd--command-output-buffer current-command))
                                  (callback (vc-hgcmd--command-callback current-command))
                                  (args (vc-hgcmd--command-callback-args current-command)))
-                             (when (and callback (or (stringp output-buffer) (buffer-live-p output-buffer)))
+                             (when (or (stringp output-buffer) (buffer-live-p output-buffer))
                                (with-current-buffer output-buffer
-                                 (if args (funcall callback args) (funcall callback))))))
+                                 (setq mode-line-process nil)
+                                 (when callback
+                                   (if args (funcall callback args) (funcall callback)))))))
                           ;; TODO: cmdserver clients must handle I and L channels
                           (t (error (format "Hgcmd unhandled channel %c" channel)))))
                   t))))))))
@@ -344,9 +348,18 @@ Insert output to process buffer and check if amount of data is enought to parse 
       (when vc-hgcmd--current-command
         (user-error "Hg command \"%s\" is active" (car (vc-hgcmd--command-command vc-hgcmd--current-command))))
       (when (process-live-p process)
-        (let ((tty (process-tty-name process))
-              (command (vc-hgcmd--command-command cmd)))
+        (let* ((tty (process-tty-name process))
+               (command (vc-hgcmd--command-command cmd))
+               (output-buffer (or (vc-hgcmd--command-output-buffer cmd)
+                                  (setf (vc-hgcmd--command-output-buffer cmd) (vc-hgcmd--output-buffer command)))))
           (setq vc-hgcmd--current-command cmd)
+          (when (or (stringp output-buffer) (buffer-live-p output-buffer))
+            (with-current-buffer output-buffer
+              (setq mode-line-process
+                    (propertize (format " [running %s...]" (car (vc-hgcmd--command-command cmd)))
+                                'face 'mode-line-emphasis
+                                'help-echo
+                                "A command is in progress in this buffer"))))
           (process-send-string
            process
            (concat
@@ -404,7 +417,6 @@ Insert output to process buffer and check if amount of data is enought to parse 
   (vc-hgcmd--run-command
    (make-vc-hgcmd--command
     :command command
-    :output-buffer (vc-hgcmd--output-buffer command)
     :callback #'vc-hgcmd--update-callback
     :callback-args (current-buffer))))
 
@@ -469,15 +481,15 @@ Insert output to process buffer and check if amount of data is enought to parse 
 
 (defun vc-hgcmd--dir-status-callback (update-function)
   "Call UPDATE-FUNCTION with result of status command."
-  (let ((result nil)
-        (conflicted (vc-hgcmd-conflicted-files)))
+  (let* ((conflicted (vc-hgcmd-conflicted-files))
+         (result (mapcar (lambda (file)
+                           (list file 'conflict nil))
+                         conflicted)))
     (goto-char (point-min))
     (while (not (eobp))
-      (let* ((file (buffer-substring-no-properties (+ (point) 2) (line-end-position)))
-             (state (if (member file conflicted)
-                        'conflict
-                      (cdr (assoc (char-after) vc-hgcmd--translation-status)))))
-        (push (list file state nil) result))
+      (let ((file (buffer-substring-no-properties (+ (point) 2) (line-end-position))))
+        (unless (member file conflicted)
+          (push (list file (cdr (assoc (char-after) vc-hgcmd--translation-status)) nil) result)))
       (forward-line))
     (funcall update-function result)))
 
@@ -914,6 +926,11 @@ Insert output to process buffer and check if amount of data is enought to parse 
 (defun vc-hgcmd-find-ignore-file (file)
   "Return the ignore file of the repository of FILE."
   (expand-file-name ".hgignore" (vc-hgcmd-root file)))
+
+(defun vc-hgcmd-runcommand (command)
+  "Run custom hg COMMAND."
+  (interactive "sRun hg: ")
+  (vc-hgcmd-command-update-callback (split-string-and-unquote command)))
 
 (provide 'vc-hgcmd)
 

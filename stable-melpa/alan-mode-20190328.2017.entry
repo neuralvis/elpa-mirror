@@ -1,0 +1,2 @@
+
+(alan-mode . [(20190328 2017) ((flycheck (32)) (emacs (25 1)) (s (1 12))) "Major mode for editing Alan files" single ((:commit . "90fe800ea8455c5e6d8b6a4bbb809c68c6d770d9") (:keywords "alan" "languages") (:authors ("Paul van Dam" . "pvandam@kjerner.com")) (:maintainer "Paul van Dam" . "pvandam@kjerner.com") (:url . "https://github.com/Kjerner/AlanForEmacs"))])

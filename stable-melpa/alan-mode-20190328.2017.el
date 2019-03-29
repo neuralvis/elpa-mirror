@@ -5,7 +5,7 @@
 ;; Author: Paul van Dam <pvandam@kjerner.com>
 ;; Maintainer: Paul van Dam <pvandam@kjerner.com>
 ;; Version: 1.0.0
-;; Package-Version: 20190324.619
+;; Package-Version: 20190328.2017
 ;; Created: 13 October 2017
 ;; URL: https://github.com/Kjerner/AlanForEmacs
 ;; Homepage: https://alan-platform.com/
@@ -554,8 +554,10 @@ Return nil if the script can not be found."
   (let ((alan-project-script (or (alan-find-alan-script)
 								 (executable-find alan-script)))
 		(alan-project-compiler (cond ((alan-file-executable (concat (alan-project-root) "dependencies/dev/internals/alan/tools/compiler-project")))
-									   ((alan-file-executable (concat (alan-project-root) "devenv/platform/project-compiler/tools/compiler-project")))))
-		(alan-project-language (concat (alan-project-root) alan-language-definition)))
+									   ((alan-file-executable (concat (alan-project-root) ".alan/devenv/platform/project-build-environment/tools/compiler-project")))))
+		(alan-project-language (when alan-language-definition
+								 (or (when (file-name-absolute-p alan-language-definition) alan-language-definition)
+									 (concat (alan-project-root) alan-language-definition)))))
 	(set (make-local-variable 'compilation-error-screen-columns) nil)
 	(cond
 	 ((and alan-project-compiler alan-language-definition)

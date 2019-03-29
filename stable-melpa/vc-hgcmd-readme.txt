@@ -58,3 +58,5 @@ For example, to include current task in commit message:
 
     (custom-set-variables
      '(vc-hgcmd-log-edit-message-function 'my/hg-commit-message))
+
+- Interactive command `vc-hgcmd-runcommand' that allow to run custom hg commands
