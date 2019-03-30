@@ -1,2 +1,2 @@
 
-(ac-php-core . [(20190329 738) ((emacs (24)) (dash (1)) (php-mode (1)) (xcscope (1)) (s (1)) (f (0 17 0)) (popup (0 5 0))) "Auto Completion source for PHP." tar ((:commit . "a33fa6f7369470283aa67dbaee32503d1f804e95") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])
+(ac-php-core . [(20190329 738) ((emacs (24)) (dash (1)) (php-mode (1)) (xcscope (1)) (s (1)) (f (0 17 0)) (popup (0 5 0))) "Auto Completion source for PHP." tar ((:commit . "959b7537b2192d1f033165b4828cb7d5aff80faf") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])
