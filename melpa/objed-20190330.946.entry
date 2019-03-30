@@ -1,2 +1,0 @@
-
-(objed . [(20190330 946) ((emacs (25)) (cl-lib (0 5))) "Navigate and edit text objects." tar ((:commit . "73b99ed10b34942db635d2f8934df90791fa61b4") (:keywords "convenience") (:authors ("Clemens Radermacher" . "clemera@posteo.net")) (:maintainer "Clemens Radermacher" . "clemera@posteo.net") (:url . "https://github.com/clemera/objed"))])
