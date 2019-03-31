@@ -1,2 +1,0 @@
-
-(company-php . [(20181110 303) ((cl-lib (0 5)) (ac-php-core (1)) (company (0 9))) "company completion source for php" single ((:commit . "362907ca3dac0b5525a6881678e0f07b82f7a77f") (:keywords "completion" "convenience" "intellisense") (:authors (nil . "xcwenn@qq.com [https://github.com/xcwen]")) (:maintainer nil . "xcwenn@qq.com [https://github.com/xcwen]") (:url . "https://github.com/xcwen/ac-php"))])

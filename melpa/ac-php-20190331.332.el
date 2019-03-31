@@ -5,9 +5,9 @@
 ;; Author: jim <xcwenn@qq.com>
 ;; Maintainer: jim
 ;; URL: https://github.com/xcwen/ac-php
-;; Package-Version: 20190329.738
+;; Package-Version: 20190331.332
 ;; Keywords: completion, convenience, intellisense
-;; Package-Requires: ((ac-php-core "1") (auto-complete "1.4.0") (yasnippet "0.8.0"))
+;; Package-Requires: ((emacs "24.4") (ac-php-core "1") (auto-complete "1.4.0") (yasnippet "0.8.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -53,7 +53,7 @@
 ;;
 ;; Many options available under Help:Customize
 ;; Options specific to ac-php are in
-;;   Convenience/Completion/Auto Complete/AC PHP
+;;   Convenience/Completion/Auto Complete
 ;;
 ;; Bugs: Bug tracking is currently handled using the GitHub issue tracker
 ;; (see URL `https://github.com/xcwen/ac-php/issues')

@@ -1,2 +1,0 @@
-
-(ac-php-core . [(20190330 902) ((emacs (24)) (dash (1)) (php-mode (1)) (xcscope (1)) (s (1)) (f (0 17 0)) (popup (0 5 0))) "Auto Completion source for PHP." tar ((:commit . "362907ca3dac0b5525a6881678e0f07b82f7a77f") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])
