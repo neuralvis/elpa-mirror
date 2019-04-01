@@ -1,5 +1,4 @@
-The core library of the `ac-php'.  Known to work on Linux and macOS systems.
-For more info and examples see URL `https://github.com/xcwen/ac-php' .
+The core library of the package `ac-php'.
 
 Thanks to:
 - auto-complete-clang
@@ -9,6 +8,8 @@ Thanks to:
 Many options available under Help:Customize
 Options specific to ac-php-core are in
   Convenience/Completion/Auto Complete
+
+For more info and examples see URL `https://github.com/xcwen/ac-php' .
 
 Bugs: Bug tracking is currently handled using the GitHub issue tracker
 (see URL `https://github.com/xcwen/ac-php/issues')

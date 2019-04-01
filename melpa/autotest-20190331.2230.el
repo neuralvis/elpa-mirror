@@ -5,7 +5,7 @@
 ;; Author: Ryan Davis <ryand-ruby@zenspider.com>
 ;; Version 1.1.0
 ;; Keywords: testing, ruby, convenience
-;; Package-Version: 20180323.2242
+;; Package-Version: 20190331.2230
 ;; Created: 2006-11-17
 ;; Compatibility: Emacs 24, 23, 22, 21?
 ;; URL: https://github.com/zenspider/elisp/blob/master/autotest.el
@@ -72,7 +72,7 @@
          '(ansi-color-process-output comint-truncate-buffer comint-postoutput-scroll-to-bottom))
     (set (make-local-variable 'comint-buffer-maximum-size) 5000)
     (set (make-local-variable 'comint-scroll-show-maximum-output) t)
-    (set (make-local-variable 'comint-move-point-for-output t))
+    (set (make-local-variable 'comint-move-point-for-output) t)
 
     (set (make-local-variable 'compilation-error-regexp-alist)
          '(
