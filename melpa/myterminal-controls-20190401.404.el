@@ -3,8 +3,8 @@
 ;; This file is not part of Emacs
 
 ;; Author: Mohammed Ismail Ansari <team.terminal@gmail.com>
-;; Version: 1.2
-;; Package-Version: 20190318.1554
+;; Version: 1.3
+;; Package-Version: 20190401.404
 ;; Keywords: convenience, shortcuts
 ;; Maintainer: Mohammed Ismail Ansari <team.terminal@gmail.com>
 ;; Created: 2015/04/17
@@ -160,7 +160,7 @@
   "myterminal-controls"
   :abbrev-table nil
   :syntax-table nil
-  nil)
+  (setq cursor-type nil))
 
 (myterminal-controls-set-controls-data
  (list '("1" "Toggle menu-bar"
