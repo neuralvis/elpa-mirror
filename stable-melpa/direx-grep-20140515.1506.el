@@ -4,6 +4,7 @@
 
 ;; Author: Hiroaki Otsu <ootsuhiroaki@gmail.com>
 ;; Keywords: convenience
+;; Package-Version: 20140515.1506
 ;; URL: https://github.com/aki2o/direx-grep
 ;; Version: 0.1.0
 ;; Package-Requires: ((direx "0.1alpha"))
