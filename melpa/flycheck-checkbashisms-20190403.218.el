@@ -5,9 +5,9 @@
 
 ;; Author: Cuong Le <cuong.manhle.vn@gmail.com>
 ;; Keywords: convenience, tools, sh, unix
-;; Package-Version: 20160224.1706
+;; Package-Version: 20190403.218
 ;; Version: 1.4-git
-;; URL: https://github.com/Gnouc/flycheck-checkbashisms
+;; URL: https://github.com/cuonglm/flycheck-checkbashisms
 ;; Package-Requires: ((emacs "24") (flycheck "0.25"))
 
 ;; This file is not part of GNU Emacs.
@@ -52,7 +52,7 @@
   "checkbashisms intergrate with flycheck"
   :prefix "flycheck-checkbashisms"
   :group 'flycheck
-  :link '(url-link :tag "Github" "https://github.com/Gnouc/flycheck-checkbashisms"))
+  :link '(url-link :tag "Github" "https://github.com/cuonglm/flycheck-checkbashisms"))
 
 ;; Variables used in other modes
 (defvar sh-shell)                       ; From sh-script, for shell checker predicate
