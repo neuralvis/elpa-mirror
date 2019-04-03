@@ -6,13 +6,12 @@ Because communicating with hg over pipe is much faster than starting hg for each
 
 Also there are some other improvements and differences:
 
-- vc-hgcmd can't show file renames in `vc-dir' yet
-
 - graph log is used for branch or root log
 
-- Unresolved conflict status for a file
+- Conflict status for a file
 Files with unresolved merge conflicts have appropriate status in `vc-dir'.
 Also you can use `vc-find-conflicted-file' to find next file with unresolved merge conflict.
+Files with resolved merge conflicts have extra file info in `vc-dir'.
 
 - hg summary as `vc-dir' extra headers
 hg summary command gives useful information about commit, update and phase states.
