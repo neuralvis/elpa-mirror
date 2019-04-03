@@ -1,2 +1,0 @@
-
-(org-sql . [(20190213 652) ((emacs (25)) (dash (2 15))) "Org-Mode SQL converter" single ((:commit . "2888ad28ef5a110ec11bd5e31502129c10ed4be4") (:keywords "org-mode" "data") (:authors ("Nathan Dwarshuis" . "natedwarshuis@gmail.com")) (:maintainer "Nathan Dwarshuis" . "natedwarshuis@gmail.com") (:url . "https://github.com/ndwarshuis/org-sql"))])
