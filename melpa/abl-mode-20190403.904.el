@@ -3,7 +3,7 @@
 ;;
 ;; Author: Ulas Tuerkmen <ulas.tuerkmen at gmail dot com>
 ;; URL: http://github.com/afroisalreadyinu/abl-mode
-;; Package-Version: 20190320.1133
+;; Package-Version: 20190403.904
 ;; Version: 0.9.2
 ;;
 ;; Copyright (C) 2011 Ulas Tuerkmen
@@ -689,6 +689,7 @@ import module and print its __file__ attribute."
 
 ;; <<------------  TODOS -------------->>
 ;; - go to next test
+;; - run all tests in project
 ;; - option to add an argument to test run with C-u (e.g. -x for pytest)
 ;; - intelligent filtering of test files; do not complain when file does not fit regexp
 ;; - tdd mode where tests are ran when files change

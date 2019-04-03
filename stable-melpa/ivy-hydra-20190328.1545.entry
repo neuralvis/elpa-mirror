@@ -1,2 +1,2 @@
 
-(ivy-hydra . [(20190328 1545) ((emacs (24 1)) (ivy (0 11 0)) (hydra (0 13 4))) "Additional key bindings for Ivy" single ((:commit . "ea6ef8111a24ac468eae3b68f59108c02d2960aa") (:keywords "convenience") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/swiper"))])
+(ivy-hydra . [(20190328 1545) ((emacs (24 1)) (ivy (0 11 0)) (hydra (0 13 4))) "Additional key bindings for Ivy" single ((:commit . "0465711c0d2b6405b8fd014772965279b9d98a7b") (:keywords "convenience") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/swiper"))])

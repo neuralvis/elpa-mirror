@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190402.1426
+;; Package-Version: 20190403.1040
 ;; Version: 0.11.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.11.0"))
 ;; Keywords: convenience, matching, tools
@@ -1782,7 +1782,7 @@ a dot. The generic way to toggle ignored files is \\[ivy-toggle-ignore],
 but the leading dot is a lot faster."
   :type `(choice
           (const :tag "None" nil)
-          (const :tag "Dotfiles" "\\`\\.")
+          (const :tag "Dotfiles" "\\(?:\\`\\|[/\\]\\)\\.")
           (const :tag "Ignored Extensions"
                  ,(regexp-opt completion-ignored-extensions))
           (regexp :tag "Regex")))
@@ -3073,13 +3073,15 @@ otherwise continue prompting for tags."
 (defun counsel-org-tag-agenda ()
   "Set tags for the current agenda item."
   (interactive)
-  (let ((store (symbol-function 'org-set-tags)))
+  (let* ((cmd-sym (if (version< (org-version) "9.2")
+                      'org-set-tags
+                    'org-set-tags-command))
+         (store (symbol-function cmd-sym)))
     (unwind-protect
          (progn
-           (fset 'org-set-tags
-                 (symbol-function 'counsel-org-tag))
+           (fset cmd-sym (symbol-function 'counsel-org-tag))
            (org-agenda-set-tags nil nil))
-      (fset 'org-set-tags store))))
+      (fset cmd-sym store))))
 
 (define-obsolete-variable-alias 'counsel-org-goto-display-tags
     'counsel-org-headline-display-tags "0.10.0")
