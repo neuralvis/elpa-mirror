@@ -1,2 +1,0 @@
-
-(evil-surround . [(20181218 1957) ((evil (1 2 12))) "emulate surround.vim from Vim" single ((:commit . "83c2e0f3690cae07a2134cd53d4fd159ff5695a0") (:keywords "emulation" "vi" "evil") (:authors ("Tim Harper <timcharper at gmail dot com>") ("Vegard Øye <vegard_oye at hotmail dot com>           ")) (:maintainer "Tim Harper <timcharper at gmail dot com>"))])

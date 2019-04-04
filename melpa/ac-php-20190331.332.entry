@@ -1,2 +1,2 @@
 
-(ac-php . [(20190331 332) ((emacs (24 4)) (ac-php-core (1)) (auto-complete (1 4 0)) (yasnippet (0 8 0))) "auto-completion source for php" single ((:commit . "d9b4e3b4eb2e9c8690f79709b7f32a694d667e2c") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])
+(ac-php . [(20190331 332) ((emacs (24 4)) (ac-php-core (1)) (auto-complete (1 4 0)) (yasnippet (0 8 0))) "auto-completion source for php" single ((:commit . "28ae37e9c015fe9c55f2777cfb62d6f5555ca5a2") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])
