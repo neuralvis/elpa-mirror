@@ -1,2 +1,0 @@
-
-(apropospriate-theme . [(20190327 136) nil "A colorful, low-contrast, light & dark theme set for Emacs with a fun name." tar ((:commit . "94408a569b1cbf2b74ed6fca581d6e37a6c691af") (:keywords "color" "theme") (:url . "https://github.com/waymondo/apropospriate-theme"))])

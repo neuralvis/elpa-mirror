@@ -61,3 +61,5 @@ For example, to include current task in commit message:
 - Interactive command `vc-hgcmd-runcommand' that allow to run custom hg commands
 
 - It is possible to answer to hg questions, e.g. pick action during merge
+
+- Option to display shelves in `vc-dir'
