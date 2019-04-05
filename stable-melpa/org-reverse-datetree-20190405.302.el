@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2
-;; Package-Version: 20190328.907
+;; Package-Version: 20190405.302
 ;; Package-Requires: ((emacs "26.1") (dash "2.12"))
 ;; Keywords: outlines
 ;; URL: https://github.com/akirak/org-reverse-datetree
@@ -190,8 +190,10 @@ If a new tree is created, non-nil is returned."
         created
         found)
     (catch 'search
-      (while (re-search-forward (concat "^" (regexp-quote prefix))
-                                bound t)
+      (while (and bound
+                  (> bound (point))
+                  (re-search-forward (concat "^" (regexp-quote prefix))
+                                     bound t))
         (let ((here (nth 4 (org-heading-components))))
           (cond
            ((string-equal here text) (progn

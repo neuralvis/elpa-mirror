@@ -4,7 +4,7 @@
 
 ;; Author: Youngjoo Lee <youngker@gmail.com>
 ;; Version: 0.5.0
-;; Package-Version: 20190329.643
+;; Package-Version: 20190405.614
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "25.1") (s "1.11.0") (dash "2.12.0") (helm "1.7.7") (cl-lib "0.5"))
 
@@ -85,6 +85,11 @@
   "Actions for helm-codesearch."
   :group 'helm-codesearch
   :type '(alist :key-type string :value-type function))
+
+(defcustom helm-codesearch-overwrite-search-result nil
+  "Overwrite search result buffer without asking confirmation."
+  :type 'boolean
+  :group 'helm-codesearch)
 
 (defvar helm-codesearch-buffer "*helm codesearch*")
 (defvar helm-codesearch-indexing-buffer "*helm codesearch indexing*")
@@ -271,7 +276,8 @@
         new-buf
         (pattern (with-helm-buffer helm-input-local))
         (src-name (assoc-default 'name (helm-get-current-source))))
-    (when (get-buffer buf)
+    (when (and (get-buffer buf)
+               (not helm-codesearch-overwrite-search-result))
       (setq new-buf (helm-read-string "GrepBufferName: " buf))
       (cl-loop for b in (helm-buffer-list)
                when (and (string= new-buf b)
