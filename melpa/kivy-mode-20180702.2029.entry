@@ -1,2 +1,2 @@
 
-(kivy-mode . [(20180702 2029) nil "Emacs major mode for editing Kivy files" single ((:commit . "44a8a6f8f5780ef0733de44da8c9e9e45c4028d1") (:authors ("Dean Serenevy" . "dean@serenevy.net")) (:maintainer "Dean Serenevy" . "dean@serenevy.net"))])
+(kivy-mode . [(20180702 2029) nil "Emacs major mode for editing Kivy files" single ((:commit . "7d6f536c3751d969b055d353fea2d220ddc48aae") (:authors ("Dean Serenevy" . "dean@serenevy.net")) (:maintainer "Dean Serenevy" . "dean@serenevy.net"))])
