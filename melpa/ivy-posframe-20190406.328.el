@@ -6,7 +6,7 @@
 ;; Author: Feng Shu
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Package-Version: 20190402.2143
+;; Package-Version: 20190406.328
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.10.0"))
@@ -218,10 +218,10 @@ This variable is useful for `ivy-posframe-read-action' .")
        :poshandler poshandler
        :background-color (face-attribute 'ivy-posframe :background)
        :foreground-color (face-attribute 'ivy-posframe :foreground)
-       :height (or ivy-posframe-height ivy-height)
-       :width (or ivy-posframe-width (round (* (frame-width) 0.62)))
-       :min-height (or ivy-posframe-min-height 10)
-       :min-width (or ivy-posframe-min-width 50)
+       :height ivy-posframe-height
+       :width ivy-posframe-width
+       :min-height (or ivy-posframe-min-height (+ ivy-height 1))
+       :min-width (or ivy-posframe-min-width (round (* (frame-width) 0.62)))
        :internal-border-width ivy-posframe-border-width
        :internal-border-color (face-attribute 'ivy-posframe-border :background)
        :override-parameters ivy-posframe-parameters))))
