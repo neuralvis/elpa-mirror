@@ -1,8 +1,11 @@
 The core library of the package `ac-php'.
 
 Thanks to:
+
 - auto-complete-clang
-- auto-java-complete (`ac-php-remove-unnecessary-items-4-complete-method')
+- auto-java-complete
+  - `ac-php-remove-unnecessary-items-4-complete-method'
+  - `ac-php-split-string-with-separator'
 - rtags (`ac-php-location-stack-index')
 
 Many options available under Help:Customize
