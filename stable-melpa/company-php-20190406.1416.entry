@@ -1,0 +1,2 @@
+
+(company-php . [(20190406 1416) ((cl-lib (0 5)) (ac-php-core (2 0)) (company (0 9))) "A company back-end for PHP" single ((:commit . "bd5aa196a4ece8fd5f606fdbf0b27a61d5dbd4dd") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])
