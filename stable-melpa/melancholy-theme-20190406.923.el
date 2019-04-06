@@ -4,7 +4,7 @@
 
 ;; Author: Sod Oscarfono <sod@oscarfono.com>
 ;; URL: http://github.com/techquila/melancholy-theme
-;; Package-Version: 20190307.241
+;; Package-Version: 20190406.923
 ;; Version: 2.0
 ;; Package-requires: emacs, powerline
 
@@ -351,15 +351,14 @@
  '(org-headline-done ((t (:foreground "#666666" :strike-through t))))
  ;; org-hide
  ;; org-latex-and-related
- '(org-level-1 ((t  :height 1.802 :weight bold)))
- '(org-level-2 ((t  :foreground "#888888" :height 1.602 )))
- '(org-level-3 ((t  :foreground "#888888" :height 1.424)))
- '(org-level-4 ((t  :foreground "#888888" :height 1.266)))
- '(org-level-5 ((t  :foreground "#888888" :height 1.125)))
- '(org-level-6 ((t  )))
- '(org-level-7 ((t  )))
- '(org-level-8 ((t  )))
- '(org-link ((t (:foreground "#F92672" :underline  ))))
+ '(org-level-1 ((t  :height 1.125 :weight bold)))
+ '(org-level-2 ((t  :foreground "#888888" )))
+ '(org-level-3 ((t  :foreground "#FFB728" )))
+ '(org-level-4 ((t  :foreground "#00BFFF" )))
+ '(org-level-5 ((t  :foreground "#96BF33" )))
+ '(org-level-6 ((t  :foreground "#DBADBB" )))
+ '(org-level-7 ((t  :foreground "#F5F5F5" )))
+ '(Org-link ((t (:foreground "#F92672" :underline  ))))
  ;; org-list-dt
  ;; org-macro
  ;; org-meta-line

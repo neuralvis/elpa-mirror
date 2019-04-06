@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2.1
-;; Package-Version: 20190330.340
+;; Package-Version: 20190406.1014
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; URL: https://github.com/akirak/org-starter
 
@@ -1133,10 +1133,11 @@ Note you have to quote ARGS."
       (user-error "Please enter a character between 0 and 9"))))
 
 (defun org-starter--read-tag (prompt)
+  "Read Org tag with PROMPT."
   (completing-read prompt 'org-tags-completion-function))
 
 (defun org-starter--add-refile-target (filename spec)
-  "Add (FILENAME. SPEC) to `org-refile-targets'."
+  "Add a pair of FILENAME and SPEC to `org-refile-targets'."
   (declare (indent 1))
   (let ((existing (cl-assoc filename org-refile-targets :test #'file-equal-p)))
     (if existing

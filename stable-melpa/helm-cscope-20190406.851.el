@@ -4,7 +4,7 @@
 
 ;; Author: alpha22jp <alpha22jp@gmail.com>
 ;; URL: https://github.com/alpha22jp/helm-cscope.el
-;; Package-Version: 20170326.722
+;; Package-Version: 20190406.851
 ;; Keywords: cscope, helm
 ;; Version: 0.1.1
 ;; Package-Requires: ((xcscope "1.0") (helm "1.6.7") (cl-lib "0.5") (emacs "24.1"))
@@ -21,6 +21,9 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Contributors:
+;; Sanjeev Sivasankaran <kalasalatemp at gmail.com> in 2019 added no-prompt versions.
 
 ;;; Commentary:
 
@@ -186,12 +189,26 @@
   (helm-cscope--find-common "-0" symbol))
 
 ;;;###autoload
+(defun helm-cscope-find-this-symbol-no-prompt()
+  "Locate a symbol in source code [no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+    (helm-cscope--find-common "-0" symbol)))
+
+;;;###autoload
 (defun helm-cscope-find-global-definition (symbol)
   "Find a symbol's global definition."
   (interactive
    (list (cscope-prompt-for-symbol
           "Find this global definition " nil nil t)))
   (helm-cscope--find-common "-1" symbol))
+
+;;;###autoload
+(defun helm-cscope-find-global-definition-no-prompt()
+  "Find a symbol's global definition [no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+    (helm-cscope--find-common "-1" symbol)))
 
 ;;;###autoload
 (defun helm-cscope-find-called-function (symbol)
@@ -202,6 +219,13 @@
   (helm-cscope--find-common "-2" symbol))
 
 ;;;###autoload
+(defun helm-cscope-find-called-function-no-prompt ()
+  "Display functions called by a function [no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+    (helm-cscope--find-common "-2" symbol)))
+
+;;;###autoload
 (defun helm-cscope-find-calling-this-function (symbol)
   "Display functions calling a function."
   (interactive
@@ -210,12 +234,26 @@
   (helm-cscope--find-common "-3" symbol))
 
 ;;;###autoload
+(defun helm-cscope-find-calling-this-function-no-prompt()
+  "Display functions calling a function [no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+    (helm-cscope--find-common "-3" symbol)))
+
+;;;###autoload
 (defun helm-cscope-find-this-text-string (symbol)
   "Locate where a text string occurs."
   (interactive
    (list (cscope-prompt-for-symbol
           "Find this text string " nil t nil)))
   (helm-cscope--find-common "-4" symbol))
+
+;;;###autoload
+(defun helm-cscope-find-this-text-string-no-prompt()
+  "Locate where a text string occurs [no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+    (helm-cscope--find-common "-4" symbol)))
 
 ;;;###autoload
 (defun helm-cscope-find-egrep-pattern (symbol)
