@@ -4,7 +4,7 @@
 ;;   Phil Hagelberg, Doug Alcorn, Will Farrington, Chen Bin
 ;;
 ;; Version: 5.7.4
-;; Package-Version: 20190331.130
+;; Package-Version: 20190408.325
 ;; Author: Phil Hagelberg, Doug Alcorn, and Will Farrington
 ;; Maintainer: Chen Bin <chenbin.sh@gmail.com>
 ;; URL: https://github.com/technomancy/find-file-in-project
@@ -170,6 +170,8 @@
     (5 . 0.61803398875))
   "Dictionary to look up windows split ratio.
 Used by `ffip-split-window-horizontally' and `ffip-split-window-vertically'.")
+
+(defvar ffip-filename-history nil)
 
 (defvar ffip-strip-file-name-regex
   "\\(\\.mock\\|\\.test\\|\\.mockup\\)"
@@ -761,8 +763,13 @@ This function is the API to find files."
   "Read keyword from selected text or user input."
   (let* ((hint (if ffip-use-rust-fd "Enter regex (or press ENTER):"
                  "Enter keyword (or press ENTER):")))
-    (if (region-active-p) (ffip--read-selected)
-      (read-string hint))))
+    (cond
+     ((region-active-p)
+      (setq ffip-filename-history (add-to-list 'ffip-filename-history
+                                               (ffip--read-selected)))
+      (ffip--read-selected))
+     (t
+      (read-from-minibuffer hint nil nil nil 'ffip-filename-history)))))
 
 ;;;###autoload
 (defun ffip-create-project-file ()

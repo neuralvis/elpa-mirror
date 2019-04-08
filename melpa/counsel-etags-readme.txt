@@ -10,7 +10,7 @@ Usage:
 
   `counsel-etags-scan-code' to create tags file
   `counsel-etags-grep' to grep
-  `counsel-etags-grep-symbol-at-point' to grep the symbol at point
+  `counsel-etags-grep-current-directory' to grep in current directory
   `counsel-etags-recent-tag' to open recent tag
   `counsel-etags-find-tag' to two step tag matching use regular expression and filter
   `counsel-etags-list-tag' to list all tags
