@@ -39,6 +39,7 @@ Supported languages:
 - Shell script (shfmt)
 - SQL (sqlformat)
 - Swift (swiftformat)
+- Terraform (terraform fmt)
 - TypeScript/TSX (prettier)
 - YAML (yq)
 

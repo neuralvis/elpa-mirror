@@ -4,7 +4,6 @@
 
 ;; Author: Jonathan Gregory <jgrg at autistici dot org>
 ;; Version: 0.1
-;; Package-Version: 20181010.1114
 ;; URL: https://gitlab.com/jagrg/org-emms
 ;; Keywords: multimedia
 ;; Package-Requires: ((emacs "24"))
