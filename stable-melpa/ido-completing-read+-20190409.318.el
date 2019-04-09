@@ -6,7 +6,7 @@
 ;; Author: Ryan Thompson
 ;; Created: Sat Apr  4 13:41:20 2015 (-0700)
 ;; Version: 4.12
-;; Package-Version: 20190308.1636
+;; Package-Version: 20190409.318
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (s "0.1") (memoize "1.1"))
 ;; URL: https://github.com/DarwinAwardWinner/ido-completing-read-plus
 ;; Keywords: ido, completion, convenience
@@ -1184,7 +1184,7 @@ blacklist was modified."
              (new-entries (cl-set-difference defval curval :test #'equal)))
         (if new-entries
             (if (eq ido-cr+-auto-update-blacklist 'notify)
-                (display-warning 'ido-completing-read+ "There are %s new blacklist entries available. Use `M-x ido-cr+-update-blacklist' to install them. (See `ido-cr+-auto-update-blacklist' for more information.)")
+                (display-warning 'ido-completing-read+ (format "There are %s new blacklist entries available. Use `M-x ido-cr+-update-blacklist' to install them. (See `ido-cr+-auto-update-blacklist' for more information.)" (length new-entries)))
               (ido-cr+--debug-message "Initiating blacklist update.")
               (ido-cr+-update-blacklist t))
           (ido-cr+--debug-message "No blacklist updates available.")))
