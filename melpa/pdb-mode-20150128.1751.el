@@ -7,6 +7,7 @@
 ;; Author: charles.bond@uwa.edu.au
 ;; Maintainer: aix.bing@gmail.com
 ;; URL: http://bondxray.org/software/pdb-mode/
+;; Package-Version: 20150128.1751
 ;; Version: 1.0
 ;; Keywords: data, pdb
 
