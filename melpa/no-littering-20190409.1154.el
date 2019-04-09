@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20190224.2109
+;; Package-Version: 20190409.1154
 
 ;; This file is not part of GNU Emacs.
 
@@ -269,6 +269,7 @@ This variable has to be set before `no-littering' is loaded.")
       `(make-directory ,(var "company/") t))
     (setq company-statistics-file          (var "company/statistics.el"))
     (setq dap--breakpoints-file            (var "dap-breakpoints"))
+    (setq dap-java-test-runner             (var "lsp-java/eclipse.jdt.ls/test-runner/junit-platform-console-standalone.jar"))
     (setq dired-recent-directories-file    (var "dired-recent-directories.el"))
     (setq elbank-data-file                 (var "elbank-data.el"))
     (eval-after-load 'elfeed
@@ -319,6 +320,8 @@ directories."
     (setq logview-views-file               (etc "logview-views"))
     (setq lookup-init-directory            (etc "lookup/"))
     (setq lsp-session-file                 (var "lsp-session.el"))
+    (setq lsp-java-workspace-dir           (var "lsp-java/workspace/"))
+    (setq lsp-java-server-install-dir      (var "lsp-java/eclipse.jdt.ls/server/"))
     (setq magithub-dir                     (var "magithub/"))
     (setq magithub-cache-file              (var "magithub/cache.el"))
     (setq mc/list-file                     (var "mc-list.el"))
