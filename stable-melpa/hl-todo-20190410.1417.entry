@@ -1,0 +1,2 @@
+
+(hl-todo . [(20190410 1417) ((emacs (25))) "highlight TODO and similar keywords" single ((:commit . "a559895cc7cb8a5b58d89a4d76177b5eef4d2abd") (:keywords "convenience") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/tarsius/hl-todo"))])
