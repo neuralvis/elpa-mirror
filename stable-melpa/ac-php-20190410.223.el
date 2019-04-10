@@ -1,11 +1,11 @@
-;;; ac-php.el --- auto-completion source for php
+;;; ac-php.el --- Auto Completion source for PHP.
 
 ;; Copyright (C) 2014-2019 jim <xcwenn@qq.com>
 
 ;; Author: jim <xcwenn@qq.com>
 ;; Maintainer: jim
 ;; URL: https://github.com/xcwen/ac-php
-;; Package-Version: 20190406.1416
+;; Package-Version: 20190410.223
 ;; Keywords: completion, convenience, intellisense
 ;; Package-Requires: ((ac-php-core "2.0") (auto-complete "1.4.0") (yasnippet "0.8.0"))
 ;; Compatibility: GNU Emacs: 24.4, 25.x, 26.x, 27.x
