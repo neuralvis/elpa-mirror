@@ -1,2 +1,0 @@
-
-(lispy . [(20190410 1407) ((emacs (24 1)) (ace-window (0 9 0)) (iedit (0 9 9)) (swiper (0 11 0)) (hydra (0 13 4)) (zoutline (0 1 0))) "vi-like Paredit" tar ((:commit . "18f095668bb266a4b51e50a92de482b42ec854d0"))])
