@@ -17,7 +17,7 @@
 
 ;; Author: John Allen <jallen@fb.com>, Wilfred Hughes <me@wilfred.me.uk>
 ;; Version: 1.0.0
-;; Package-Version: 20190410.2045
+;; Package-Version: 20190410.2307
 ;; Package-Requires: ((emacs "25.1") (s "1.11.0"))
 ;; URL: https://github.com/hhvm/hack-mode
 
@@ -836,7 +836,9 @@ Ignore semicolons in strings and comments."
             (prev-syntax (syntax-after (1- (point)))))
         (unless (or (eq prev-char ?\n)
                     ;; 0 is the syntax code for whitespace.
-                    (eq 0 (car-safe prev-syntax)))
+                    (eq 0 (car-safe prev-syntax))
+                    ;; Ignore whitespace in comments.
+                    (nth 4 (syntax-ppss)))
           (throw 'done nil)))
 
       (backward-char))))

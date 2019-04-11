@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2.1
-;; Package-Version: 20190410.1454
+;; Package-Version: 20190410.2300
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; URL: https://github.com/akirak/org-starter
 
@@ -607,21 +607,26 @@ as the argument."
 
 (defun org-starter--find-file (file)
   "Switch to a buffer visiting FILE."
-  (let ((buffer (or (find-buffer-visiting file)
-                    (find-file-noselect file))))
-    (if-let ((window (and org-starter-find-file-visit-window
-                          (get-buffer-window buffer))))
-        (select-window window)
-      (switch-to-buffer buffer))))
+  (org-starter--select-file-window file
+                                   #'switch-to-buffer))
 
 (defun org-starter--find-file-other-window (file)
   "Switch to a buffer visiting FILE in other window."
+  (org-starter--select-file-window file
+                                   #'switch-to-buffer-other-window))
+
+(defun org-starter--select-file-window (file fallback)
+  "Select a window displaying a file or open the file.
+
+If there is a window displaying the buffer of FILE, select the window.
+Otherwise, switch to the buffer of the file using FALLBACK function.
+"
   (let ((buffer (or (find-buffer-visiting file)
                     (find-file-noselect file))))
     (if-let ((window (and org-starter-find-file-visit-window
                           (get-buffer-window buffer))))
         (select-window window)
-      (switch-to-buffer-other-window buffer))))
+      (funcall fallback buffer))))
 
 ;;;###autoload
 (defun org-starter-alternative-find-file-by-key (&optional arg)
