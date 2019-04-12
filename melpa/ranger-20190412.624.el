@@ -1,9 +1,9 @@
 ;;; ranger.el --- Make dired more like ranger -*- lexical-binding: t -*-
-;; Copyright (C) 2015  Rich Alesi
+;; Copyright (C) 2015-2017  Rich Alesi
 
 ;; Author : Rich Alesi <https://github.com/ralesi>
-;; Version: 0.9.8.5
-;; Package-Version: 20170817.1557
+;; Version: 0.9.8.6
+;; Package-Version: 20190412.624
 ;; Keywords: files, convenience, dired
 ;; Homepage: https://github.com/ralesi/ranger
 ;; Package-Requires: ((emacs "24.4"))
@@ -105,21 +105,42 @@
   :group 'ranger
   :type 'boolean)
 
-(defcustom ranger-show-hidden t
+(defcustom ranger-show-hidden 'hidden
   "When t it will show hidden files in directory."
   :group 'ranger
-  :type 'boolean)
+  :type '(radio (const :tag "Show All Files" :value 'format)
+                (const :tag "Hide Common Files" :value 'prefer)
+                (const :tag "Hide All Dotfiles" :value 'hidden)))
 
-(defcustom ranger-hidden-regexp
-  "^\\."
+(defcustom ranger-format-regexp
+  '("^\\.?#\\|^\\.$\\|^\\.\\.$")
   "Regexp of filenames to hide."
   :group 'ranger
-  :type 'string)
+  :type 'list)
 
-(defcustom ranger-omit-regexp "^\\.?#\\|^\\.$\\|^\\.\\.$"
-  "Regexp of omitted filetypes in ranger."
+(defcustom ranger-hidden-regexp
+  '("^\\.")
+  "Regexp of filenames to hide."
   :group 'ranger
-  :type 'string)
+  :type 'list)
+
+(defcustom ranger-prefer-regexp
+  '(
+    ;; vcs folders
+    "^\\.\\(git\\|hg\\|svn\\)$"
+    ;; compiled files
+    "\\.\\(pyc\\|o\\|elc\\|lock\\|css.map\\)$"
+    ;; generated files, caches or local pkgs
+    "^\\(node_modules\\|vendor\\|.\\(project\\|cask\\|yardoc\\|sass-cache\\)\\)$"
+    ;; org-mode folders
+    "^\\.\\(sync\\|export\\|attach\\)$"
+    ;; backup files
+    "~$"
+    "^#.*#$"
+    )
+  "Regexp of custom filetypes to omit in ranger."
+  :group 'ranger
+  :type 'list)
 
 (defcustom ranger-history-length 30
   "Length of history ranger will track."
@@ -163,7 +184,7 @@
   :group 'ranger
   :type 'boolean)
 
-(defcustom ranger-listing-switches "-alGh"
+(defcustom ranger-listing-switches "-alhF"
   "Default listing switchs for dired buffer."
   :group 'ranger
   :type 'string)
@@ -429,9 +450,11 @@ Selective hiding of specific attributes can be controlled by MASK."
         (setq next (dired-move-to-filename))))))
 
 (defun ranger-mask-show-details ()
+  (interactive)
   (ranger-mask-details ranger-dired-display-mask))
 
 (defun ranger-mask-hide-details ()
+  (interactive)
   (ranger-mask-details ranger-dired-hide-mask))
 
 (defun ranger-truncate ()
@@ -449,120 +472,120 @@ Selective hiding of specific attributes can be controlled by MASK."
 (defvar ranger-normal-mode-map
   (let ((map (make-sparse-keymap)))
     ;; basics
-    (define-key map "?"              'ranger-help)
-    (define-key map "du"             'ranger-show-size)
-    (define-key map "q"              'ranger-close)
-    ;; (define-key map (kbd "<ESC>") 'ranger-close)
-    (define-key map "ZZ"             'ranger-close)
-    (define-key map "Q"              'ranger-disable)
-    (define-key map "ZQ"             'ranger-disable)
-    (define-key map (kbd "C-r")      'ranger-refresh)
+    (define-key map "?"                'ranger-help)
+    (define-key map "du"               'ranger-show-size)
+    (define-key map "q"                'ranger-close)
+    ;; (define-key map (kbd "<ESC>")   'ranger-close)
+    (define-key map "ZZ"               'ranger-close)
+    (define-key map "Q"                'ranger-disable)
+    (define-key map "ZQ"               'ranger-disable)
+    (define-key map (kbd "C-r")        'ranger-refresh)
 
     ;; bookmarks
-    (define-key map (kbd "`")       'ranger-goto-mark)
-    (define-key map (kbd "'")       'ranger-goto-mark)
-    (define-key map "B"             'ranger-show-bookmarks)
-    (define-key map "m"             'ranger-create-mark)
-    (define-key map "um"            'ranger-remove-mark)
+    (define-key map (kbd "`")          'ranger-goto-mark)
+    (define-key map (kbd "'")          'ranger-goto-mark)
+    (define-key map "B"                'ranger-show-bookmarks)
+    (define-key map "m"                'ranger-create-mark)
+    (define-key map "um"               'ranger-remove-mark)
 
     ;; marking
-    (define-key map "v"           'dired-toggle-marks)
-    (define-key map (kbd "C-SPC") 'ranger-mark)
-    (define-key map (kbd "TAB")   'ranger-mark)
-    (define-key map (kbd "\"")    'dired-mark-files-regexp)
-    (define-key map (kbd "uv")    'dired-unmark-all-files)
-    (define-key map "t"           'ranger-toggle-mark)
+    (define-key map "v"                'dired-toggle-marks)
+    (define-key map (kbd "C-SPC")      'ranger-mark)
+    (define-key map (kbd "TAB")        'ranger-mark)
+    (define-key map (kbd "\"")         'dired-mark-files-regexp)
+    (define-key map (kbd "uv")         'dired-unmark-all-marks)
+    (define-key map "t"                'ranger-toggle-mark)
 
     ;; dired commands
-    (define-key map "!"           'dired-do-shell-command)
-    (define-key map "D"           'dired-do-delete)
-    (define-key map "R"           'dired-do-rename)
+    (define-key map "!"                'dired-do-shell-command)
+    (define-key map "D"                'dired-do-delete)
+    (define-key map "R"                'dired-do-rename)
 
     ;; navigation
-    (define-key map "-"             'ranger-up-directory)
-    (define-key map "G"             'ranger-goto-bottom)
-    (define-key map "h"             'ranger-up-directory)
-    (define-key map "j"             'ranger-next-file)
-    (define-key map "k"             'ranger-prev-file)
-    (define-key map "l"             'ranger-find-file)
-    (define-key map (kbd "C-f")     'ranger-page-down)
-    (define-key map (kbd "C-b")     'ranger-page-up)
-    (define-key map "J"             'ranger-half-page-down)
-    (define-key map "K"             'ranger-half-page-up)
-    (define-key map (kbd "C-d")     'ranger-half-page-down)
-    (define-key map (kbd "C-u")     'ranger-half-page-up)
-    (define-key map [left]          'ranger-up-directory)
-    (define-key map [down]          'ranger-next-file)
-    (define-key map [up]            'ranger-prev-file)
-    (define-key map [right]         'ranger-find-file)
-    (define-key map (kbd "RET")     'ranger-find-file)
+    (define-key map "-"                'ranger-up-directory)
+    (define-key map "G"                'ranger-goto-bottom)
+    (define-key map "h"                'ranger-up-directory)
+    (define-key map "j"                'ranger-next-file)
+    (define-key map "k"                'ranger-prev-file)
+    (define-key map "l"                'ranger-find-file)
+    (define-key map (kbd "C-f")        'ranger-page-down)
+    (define-key map (kbd "C-b")        'ranger-page-up)
+    (define-key map "J"                'ranger-half-page-down)
+    (define-key map "K"                'ranger-half-page-up)
+    (define-key map (kbd "C-d")        'ranger-half-page-down)
+    (define-key map (kbd "C-u")        'ranger-half-page-up)
+    (define-key map [left]             'ranger-up-directory)
+    (define-key map [down]             'ranger-next-file)
+    (define-key map [up]               'ranger-prev-file)
+    (define-key map [right]            'ranger-find-file)
+    (define-key map (kbd "RET")        'ranger-find-file)
 
     ;; jumping around
-    (define-key map "["             'ranger-prev-parent)
-    (define-key map "]"             'ranger-next-parent)
-    (define-key map "}"             'ranger-find-file)
-    (define-key map "f"             'ranger-travel)
+    (define-key map "["                'ranger-prev-parent)
+    (define-key map "]"                'ranger-next-parent)
+    (define-key map "}"                'ranger-find-file)
+    (define-key map "f"                'ranger-travel)
 
     ;; going
-    (define-key map "g"             'ranger-go)
+    (define-key map "g"                'ranger-go)
 
     ;; history
-    (define-key map "zz"            'ranger-show-history)
-    (define-key map "H"             'ranger-prev-history)
-    (define-key map "L"             'ranger-next-history)
+    (define-key map "zz"               'ranger-show-history)
+    (define-key map "H"                'ranger-prev-history)
+    (define-key map "L"                'ranger-next-history)
 
     ;; subtrees
-    (define-key map "I"             'ranger-insert-subdir)
+    (define-key map "I"                'ranger-insert-subdir)
 
-    (define-key map ">" 'dired-next-dirline)
-    (define-key map "<" 'dired-prev-dirline)
+    (define-key map ">"                'dired-next-dirline)
+    (define-key map "<"                'dired-prev-dirline)
 
     ;; preview windows
-    (define-key map "i"             'ranger-preview-toggle)
-    (define-key map (kbd "C-j")     'ranger-scroll-page-down)
-    (define-key map (kbd "C-k")     'ranger-scroll-page-up)
-    (define-key map "zp"            'ranger-toggle-details)
+    (define-key map "i"                'ranger-preview-toggle)
+    (define-key map (kbd "C-j")        'ranger-scroll-page-down)
+    (define-key map (kbd "C-k")        'ranger-scroll-page-up)
+    (define-key map "zp"               'ranger-toggle-details)
     ;; TODO map zc    toggle_option collapse_preview
-    (define-key map "zi"            'ranger-toggle-literal)
-    (define-key map "zf"            'ranger-toggle-scale-images)
+    (define-key map "zi"               'ranger-toggle-literal)
+    (define-key map "zf"               'ranger-toggle-scale-images)
 
     ;; copy and paste
-    (define-key map "yy"            'ranger-copy)
+    (define-key map "yy"               'ranger-copy)
     ;; TODO undo copy - uy
-    (define-key map "ya"            'ranger-copy-append)
+    (define-key map "ya"               'ranger-copy-append)
     ;; TODO remove from copy - yr
-    (define-key map "dd"            'ranger-cut)
+    (define-key map "dd"               'ranger-cut)
     ;; TODO undo cut - ud
-    (define-key map "da"            'ranger-cut-append)
+    (define-key map "da"               'ranger-cut-append)
     ;; TODO remove from cut - dr
-    (define-key map "pp"            'ranger-paste)
-    (define-key map "po"            'ranger-paste-over)
+    (define-key map "pp"               'ranger-paste)
+    (define-key map "po"               'ranger-paste-over)
     ;; TODO paste link - pl
-    (define-key map "p?"            'ranger-show-copy-contents)
+    (define-key map "p?"               'ranger-show-copy-contents)
 
     ;; copy names and paths
-    (define-key map "yp"            'ranger-copy-absolute-file-paths)
-    (define-key map "yd"            'ranger-copy-current-dir-path)
-    (define-key map "yn"            'ranger-copy-filename)
+    (define-key map "yp"               'ranger-copy-absolute-file-paths)
+    (define-key map "yd"               'ranger-copy-current-dir-path)
+    (define-key map "yn"               'ranger-copy-filename)
 
     ;; settings
-    (define-key map "o"             'ranger-sort-criteria)
-    (define-key map "z+"            'ranger-more-parents)
-    (define-key map "z-"            'ranger-less-parents)
-    (define-key map "zh"            'ranger-toggle-dotfiles)
-    (define-key map (kbd "C-h")     'ranger-toggle-dotfiles)
-    (define-key map "zP"            'ranger-minimal-toggle)
-    (define-key map "zd"            'ranger-toggle-dir-first)
+    (define-key map "o"                'ranger-sort-criteria)
+    (define-key map "z+"               'ranger-more-parents)
+    (define-key map "z-"               'ranger-less-parents)
+    (define-key map "zh"               'ranger-toggle-dotfiles)
+    (define-key map (kbd "C-h")        'ranger-toggle-dotfiles)
+    (define-key map "zP"               'ranger-minimal-toggle)
+    (define-key map "zd"               'ranger-toggle-dir-first)
     ;; TODO map zf   regexp filter
 
     ;; tabs
-    (define-key map (kbd "C-n")       'ranger-new-tab)
-    (define-key map (kbd "C-w")       'ranger-close-tab)
-    (define-key map (kbd "C-TAB")     'ranger-next-tab)
-    (define-key map (kbd "C-S-TAB")   'ranger-prev-tab)
-    (define-key map (kbd "M-<Right>") 'ranger-next-tab)
-    (define-key map (kbd "M-<Left>")  'ranger-prev-tab)
-    (define-key map "uq"              'ranger-restore-tab)
+    (define-key map (kbd "C-n")        'ranger-new-tab)
+    (define-key map (kbd "C-w")        'ranger-close-tab)
+    (define-key map (kbd "C-TAB")      'ranger-next-tab)
+    (define-key map (kbd "C-S-TAB")    'ranger-prev-tab)
+    (define-key map (kbd "M-<Right>")  'ranger-next-tab)
+    (define-key map (kbd "M-<Left>")   'ranger-prev-tab)
+    (define-key map "uq"               'ranger-restore-tab)
 
     ;; define M + number bindings to access tabs.
     (define-key map "\M-1" '(lambda () (interactive) (ranger-goto-tab 1)))
@@ -579,20 +602,20 @@ Selective hiding of specific attributes can be controlled by MASK."
     ;;          do (eval `(define-key map (concat "\\M-" ,(number-to-string num)) '(lambda() (interactive)(ranger-goto-tab ,num)))))
 
     ;; search
-    (define-key map "/"             'ranger-search)
-    (define-key map "n"             'ranger-search-next)
-    (define-key map "N"             'ranger-search-previous)
+    (define-key map "/"                'ranger-search)
+    (define-key map "n"                'ranger-search-next)
+    (define-key map "N"                'ranger-search-previous)
 
     ;; utilities
-    (define-key map (kbd "C-c C-e") 'wdired-change-to-wdired-mode)
-    (define-key map "S"             'ranger-pop-eshell)
+    (define-key map (kbd "C-c C-e")    'wdired-change-to-wdired-mode)
+    (define-key map "S"                'ranger-pop-eshell)
 
     ;; file opening
-    (define-key map "ws"            'ranger-open-file-vertically)
-    (define-key map "wv"            'ranger-open-file-horizontally)
-    (define-key map "wf"            'ranger-open-file-new-frame)
-    (define-key map "wj"            'ranger-open-file-other-window)
-    (define-key map "we"            'ranger-open-in-external-app)
+    (define-key map "ws"               'ranger-open-file-vertically)
+    (define-key map "wv"               'ranger-open-file-horizontally)
+    (define-key map "wf"               'ranger-open-file-new-frame)
+    (define-key map "wj"               'ranger-open-file-other-window)
+    (define-key map "we"               'ranger-open-in-external-app)
 
     ;; mouse
     (define-key map (kbd  "<mouse-1>") 'ranger-find-file)
@@ -601,14 +624,163 @@ Selective hiding of specific attributes can be controlled by MASK."
     map)
   "Ranger mode map style using ranger style bindings.")
 
+(defvar ranger-emacs-mode-map
+  (let ((map (make-sparse-keymap)))
+    ;; basics
+    (define-key map (kbd "C-h")                'ranger-help)
+    (define-key map (kbd "C-x C-c")                'ranger-close)
+    (define-key map (kbd "C-x k")                'ranger-disable)
+    (define-key map (kbd "C-l")        'ranger-refresh)
+
+    ;; bookmarks
+    (define-key map (kbd "C-x rb")          'ranger-goto-mark)
+    (define-key map (kbd "C-x rB")                'ranger-show-bookmarks)
+    (define-key map (kbd "C-x rm")                'ranger-create-mark)
+    (define-key map (kbd "C-x ru")               'ranger-remove-mark)
+
+    ;; marking
+    (define-key map (kbd "C-SPC")      'ranger-toggle-mark)
+    (define-key map (kbd "TAB")        'ranger-mark)
+    (define-key map (kbd "\"")         'dired-mark-files-regexp)
+    ;; (define-key map (kbd "uv")         'dired-unmark-all-marks)
+
+    ;; dired commands
+    (define-key map (kbd "C-x du")                'ranger-show-size)
+    (define-key map (kbd "M-!")                'dired-do-shell-command)
+    (define-key map "D"                'dired-do-delete)
+    (define-key map "R"                'dired-do-rename)
+
+    ;; navigation
+    (define-key map [home]                'ranger-goto-top)
+    (define-key map [end]                'ranger-goto-bottom)
+    (define-key map (kbd "M-v")        'ranger-page-down)
+    (define-key map (kbd "C-v")        'ranger-page-up)
+    (define-key map [pagedown]                'ranger-half-page-down)
+    (define-key map [pageup]                'ranger-half-page-up)
+    (define-key map (kbd "C-b")             'ranger-up-directory)
+    (define-key map (kbd "C-n")             'ranger-next-file)
+    (define-key map (kbd "C-p")               'ranger-prev-file)
+    (define-key map (kbd "C-f")            'ranger-find-file)
+    (define-key map [left]             'ranger-up-directory)
+    (define-key map [down]             'ranger-next-file)
+    (define-key map [up]               'ranger-prev-file)
+    (define-key map [right]            'ranger-find-file)
+    (define-key map (kbd "RET")        'ranger-find-file)
+
+    ;; jumping around
+    (define-key map (kbd "M-[")                'ranger-prev-parent)
+    (define-key map (kbd "M-]")                'ranger-next-parent)
+    ;; (define-key map "f"                'ranger-travel)
+
+    ;; going
+    (define-key map (kbd "C-x g")                'ranger-go)
+
+    ;; history
+    ;; (define-key map "zz"               'ranger-show-history)
+    (define-key map (kbd "C-u C-SPC")                'ranger-prev-history)
+
+    ;; subtrees
+    ;; (define-key map "I"                'ranger-insert-subdir)
+
+    ;; (define-key map ">"                'dired-next-dirline)
+    ;; (define-key map "<"                'dired-prev-dirline)
+
+    ;; preview windows
+    ;; (define-key map "i"                'ranger-preview-toggle)
+    ;; (define-key map (kbd "C-j")        'ranger-scroll-page-down)
+    ;; (define-key map (kbd "C-k")        'ranger-scroll-page-up)
+    ;; (define-key map "zp"               'ranger-toggle-details)
+    ;; TODO map zc    toggle_option collapse_preview
+    ;; (define-key map "zi"               'ranger-toggle-literal)
+    ;; (define-key map "zf"               'ranger-toggle-scale-images)
+
+    ;; copy and paste
+    ;; (define-key map "yy"               'ranger-copy)
+    ;; TODO undo copy - uy
+    ;; (define-key map "ya"               'ranger-copy-append)
+    ;; ;; TODO remove from copy - yr
+    ;; (define-key map "dd"               'ranger-cut)
+    ;; ;; TODO undo cut - ud
+    ;; (define-key map "da"               'ranger-cut-append)
+    ;; ;; TODO remove from cut - dr
+    ;; (define-key map "pp"               'ranger-paste)
+    ;; (define-key map "po"               'ranger-paste-over)
+    ;; ;; TODO paste link - pl
+    ;; (define-key map "p?"               'ranger-show-copy-contents)
+
+    ;; ;; copy names and paths
+    ;; (define-key map "yp"               'ranger-copy-absolute-file-paths)
+    ;; (define-key map "yd"               'ranger-copy-current-dir-path)
+    ;; (define-key map "yn"               'ranger-copy-filename)
+
+    ;; ;; settings
+    ;; (define-key map (kbd "C-x o")                'ranger-sort-criteria)
+    ;; (define-key map "z+"               'ranger-more-parents)
+    ;; (define-key map "z-"               'ranger-less-parents)
+    ;; (define-key map "zh"               'ranger-toggle-dotfiles)
+    ;; (define-key map (kbd "C-h")        'ranger-toggle-dotfiles)
+    ;; (define-key map "zP"               'ranger-minimal-toggle)
+    ;; (define-key map "zd"               'ranger-toggle-dir-first)
+    ;; TODO map zf   regexp filter
+
+    ;; tabs
+    (define-key map (kbd "C-n")        'ranger-new-tab)
+    (define-key map (kbd "C-w")        'ranger-close-tab)
+    (define-key map (kbd "C-TAB")      'ranger-next-tab)
+    (define-key map (kbd "C-S-TAB")    'ranger-prev-tab)
+    (define-key map (kbd "M-<Right>")  'ranger-next-tab)
+    (define-key map (kbd "M-<Left>")   'ranger-prev-tab)
+    (define-key map "uq"               'ranger-restore-tab)
+
+    ;; define M + number bindings to access tabs.
+    (define-key map "\M-1"             '(lambda () (interactive) (ranger-goto-tab 1)))
+    (define-key map "\M-2"             '(lambda () (interactive) (ranger-goto-tab 2)))
+    (define-key map "\M-3"             '(lambda () (interactive) (ranger-goto-tab 3)))
+    (define-key map "\M-4"             '(lambda () (interactive) (ranger-goto-tab 4)))
+    (define-key map "\M-5"             '(lambda () (interactive) (ranger-goto-tab 5)))
+    (define-key map "\M-6"             '(lambda () (interactive) (ranger-goto-tab 6)))
+    (define-key map "\M-7"             '(lambda () (interactive) (ranger-goto-tab 7)))
+    (define-key map "\M-8"             '(lambda () (interactive) (ranger-goto-tab 8)))
+    (define-key map "\M-9"             '(lambda () (interactive) (ranger-goto-tab 9)))
+    (define-key map "\M-0"             '(lambda () (interactive) (ranger-goto-tab 0)))
+
+    ;; search
+    ;; (define-key map "/"                'ranger-search)
+    ;; (define-key map "n"                'ranger-search-next)
+    ;; (define-key map "N"                'ranger-search-previous)
+
+    ;; utilities
+    (define-key map (kbd "C-c C-e")    'wdired-change-to-wdired-mode)
+    ;; (define-key map "S"                'ranger-pop-eshell)
+
+    ;; file opening
+    (define-key map (kbd "C-x ws")               'ranger-open-file-vertically)
+    (define-key map (kbd "C-x wv")               'ranger-open-file-horizontally)
+    (define-key map (kbd "C-x wf")               'ranger-open-file-new-frame)
+    (define-key map (kbd "C-x wj")               'ranger-open-file-other-window)
+    (define-key map (kbd "C-x we")               'ranger-open-in-external-app)
+
+    ;; mouse
+    (define-key map (kbd  "<mouse-1>") 'ranger-find-file)
+    (define-key map (kbd  "<mouse-3>") 'ranger-up-directory)
+
+    map)
+  "Ranger mode map style using emacs style bindings.")
+
 (defvar ranger-mode-map
   (let ((map (make-sparse-keymap)))
     ;; define bindings based on
     (cl-case ranger-map-style
       ('ranger
        (set-keymap-parent map ranger-normal-mode-map))
+      ('dired
+       (set-keymap-parent map dired-mode-map))
       ('emacs
-       (set-keymap-parent map ranger-normal-mode-map)))
+       (progn
+         ;; allow all emacs modes to overwrite dired mapping
+         (set-keymap-parent ranger-emacs-mode-map dired-mode-map)
+         (set-keymap-parent map ranger-emacs-mode-map)
+         )))
     ;; define a prefix for all dired commands
     (define-prefix-command 'ranger-dired-map nil "Dired-prefix")
     (setq ranger-dired-map (copy-tree dired-mode-map))
@@ -682,7 +854,7 @@ to not replace existing value."
   (tab-index nil)
   (history nil)
   (minimal nil))
-               
+
 (ranger-id
  (make-ranger))
 
@@ -727,13 +899,9 @@ to not replace existing value."
   (when ranger-key
     (define-key ranger-mode-map ranger-key 'ranger-to-dired))
 
-  ;; TODO visual mode bindings don't seem to work
-  ;; normalize keymaps to work with evil mode
   (with-eval-after-load "evil"
     ;; turn off evilified buffers for evilify usage
     (evil-set-initial-state 'ranger-mode 'motion)
-    (evil-make-overriding-map ranger-mode-map 'motion)
-    (evil-normalize-keymaps)
 
     ;; allow cursor to be cleared
     (when ranger-hide-cursor
@@ -744,6 +912,17 @@ to not replace existing value."
 
   ;; make sure isearch is cleared before we delete the buffer on exit
   (add-hook 'ranger-mode-hook '(lambda () (setq isearch--current-buffer nil))))
+
+;; TODO visual mode bindings don't seem to work
+;; normalize keymaps to work with evil mode
+
+(add-hook 'ranger-mode-hook #'ranger--normalize-keymaps)
+
+(defun ranger--normalize-keymaps ()
+  (when (boundp 'evil-mode)
+    ;; turn off evilified buffers for evilify usage
+    (evil-make-overriding-map ranger-mode-map 'motion)
+    (evil-normalize-keymaps)))
 
 ;; wdired integration
 (eval-after-load 'wdired
@@ -1229,7 +1408,10 @@ ranger-`CHAR'."
 (defun ranger-toggle-dotfiles ()
   "Show/hide dot-files."
   (interactive)
-  (setq ranger-show-hidden (not ranger-show-hidden))
+  (setq ranger-show-hidden (cl-case ranger-show-hidden
+                             ('format 'prefer)
+                             ('prefer 'hidden)
+                             ('hidden 'format)))
   (ranger-setup)
   (message (format "Show Dotfiles: %s"  ranger-show-hidden)))
 
@@ -1250,22 +1432,22 @@ ranger-`CHAR'."
 
 (defun ranger-filter-files ()
   "Omit and filter files in ranger."
-  (let ((omit-re (if (not ranger-show-hidden)
-                     (concat ranger-omit-regexp
-                             "\\|"
-                             ranger-hidden-regexp)
-                            ranger-omit-regexp)))
-    (ranger-omit-files omit-re)))
+  (let ((omit-re (append ranger-format-regexp
+                         (cl-case ranger-show-hidden
+                           ('prefer ranger-prefer-regexp)
+                           ('hidden ranger-prefer-regexp ranger-hidden-regexp)))))
+                 (ranger-omit-files omit-re)))
 
-(defun ranger-omit-files (&optional regexp)
-  (interactive "sOmit files (regexp): ")
-  (let ((omit-re (or regexp ranger-omit-regexp))
+(defun ranger-omit-files (regexp)
+  (interactive)
+  (let ((omit-re (mapconcat 'concat regexp "\\|"))
         (old-modified-p (buffer-modified-p))
         count)
     (or (string= omit-re "")
         (let ((dired-marker-char 16))
           (if (dired-mark-unmarked-files omit-re nil nil 'no-dir)
               (progn
+                (ranger--message "deleting hidden files")
                 (setq count (dired-do-kill-lines nil ""))
                 (force-mode-line-update)))))
     ;; Try to preserve modified state of buffer.  So `%*' doesn't appear
@@ -1305,6 +1487,7 @@ ranger-`CHAR'."
 `ranger-persistent-sort' is nil."
   ;; TODO dired-sort-other only does this:
   ;;   (setq dired-actual-switches switches)
+  (setq-local ls-lisp-dirs-first ranger-listing-dir-first)
   (dired-sort-other
    (concat dired-listing-switches
            (when (or force
@@ -1424,8 +1607,10 @@ currently selected file in ranger. `IGNORE-HISTORY' will not update history-ring
           (progn
             (ranger--message "opening directory: %s" find-name)
             (ranger-save-window-settings)
+            (ranger--message "settings saved: %s" find-name)
             (unless ignore-history
               (ranger-update-history find-name))
+            (advice-add 'dired-readin :after #'ranger-setup-dired-buffer)
             (switch-to-buffer
              ;; TODO make separate buffer of directory if more than one already exists.
              (or (car (or (dired-buffers-for-dir find-name) ()))
@@ -1438,7 +1623,9 @@ currently selected file in ranger. `IGNORE-HISTORY' will not update history-ring
                 (r--fset ranger-minimal t)
               (r--fset ranger-minimal nil))
             (ranger-parent-child-select)
+            (ranger--message "setting up ranger windows: %s" find-name)
             (ranger-mode)
+            (ranger--message "DONE")
             ;; (dired-unadvertise find-name)
             )
         (progn
@@ -1761,8 +1948,7 @@ R   : ranger . el location
 (defun ranger-sub-window-setup ()
   "Parent window options."
   ;; allow mouse click to jump to that directory
-  (make-local-variable 'mouse-1-click-follows-link)
-  (setq mouse-1-click-follows-link nil)
+  (setq-local mouse-1-click-follows-link nil)
   (local-set-key (kbd  "<mouse-1>") 'ranger-find-file)
   ;; set header-line
   (when ranger-modify-header
@@ -2040,7 +2226,7 @@ is set, show literally instead of actual buffer."
               )
             (with-current-buffer preview-buffer
               (setq-local cursor-type nil)
-              (setq mouse-1-click-follows-link nil)
+              (setq-local mouse-1-click-follows-link nil)
               (local-set-key (kbd  "<mouse-1>") #'(lambda ()
                                                     (interactive)
                                                     (select-window ranger-window)
@@ -2142,32 +2328,12 @@ fraction of the total frame size"
          new-window
          reuse-window)
 
-    ;; (walk-window-tree
-    ;;  (lambda (window)
-    ;;    (progn
-    ;;      (when (not (eq current-window window))
-    ;;        (when (eq (window-parameter window 'window-slot) slot)
-    ;;          (setq reuse-window window))
-    ;;        (when (eq (window-parameter window 'window-slot) (+ slot 1))
-    ;;          (setq current-window window))
-    ;;        )))
-    ;;  nil nil 'nomini)
-
-    ;; (if reuse-window
-    ;;     (progn
-    ;;       (shrink-window (-  window-size (window-width reuse-window)) t)
-    ;;       ;; (set-window-parameter reuse-window 'window-slot slot)
-    ;;       (window--display-buffer
-    ;;        buffer reuse-window 'reuse alist display-buffer-mark-dedicated)
-    ;;       )
-    ;; (remove-hook 'window-configuration-change-hook 'ranger-window-check)
+    ;; new window
     (setq new-window (split-window current-window window-size side))
-
+    ;; set parameters
     (set-window-parameter new-window 'window-slot slot)
-    (window--display-buffer
-     buffer new-window 'window alist display-buffer-mark-dedicated)
-    ;; (add-hook 'window-configuration-change-hook 'ranger-window-check)
-    ;; )
+    ;; now set up the window
+    (window--display-buffer buffer new-window 'window alist)
     ))
 
 (defun ranger-show-flags ()
@@ -2235,71 +2401,73 @@ fraction of the total frame size"
          (config
           (r--aget ranger-f-alist
                    (window-frame))))
-    (when (or config
-              prev-buffer)
-      (r--aremove ranger-w-alist (selected-window))
+    (if (or config prev-buffer)
+        (progn
+          (r--aremove ranger-w-alist (selected-window))
 
-      (if minimal
-          (when (and prev-buffer
-                     (buffer-live-p prev-buffer))
-            (switch-to-buffer prev-buffer)
-            (goto-char prev-point))
-        (when (and config
-                   (window-configuration-p config))
-          (set-window-configuration config)
-          (r--aremove ranger-f-alist (window-frame))))
+          (if minimal
+              (when (and prev-buffer
+                         (buffer-live-p prev-buffer))
+                (switch-to-buffer prev-buffer)
+                (goto-char prev-point))
+            (when (and config
+                       (window-configuration-p config))
+              (set-window-configuration config)
+              (r--aremove ranger-f-alist (window-frame))))
 
-      ;; TODO make separate tabs for each ranger window
-      ;; (r--aremove ranger-t-alist ranger-current-tab)
+          ;; TODO make separate tabs for each ranger window
+          ;; (r--aremove ranger-t-alist ranger-current-tab)
 
-      ;; revert appearance
-      (advice-remove 'dired-readin #'ranger-setup-dired-buffer)
-      (ranger-revert-appearance (or buffer ranger-buffer))
-      (advice-add 'dired-readin :after #'ranger-setup-dired-buffer)
-      (setq ranger-pre-saved nil)
+          ;; revert appearance
+          (advice-remove 'dired-readin #'ranger-setup-dired-buffer)
+          (ranger-revert-appearance (or buffer ranger-buffer))
+          (advice-add 'dired-readin :after #'ranger-setup-dired-buffer)
+          (setq ranger-pre-saved nil)
 
-      ;; if no more ranger frames or windows
-      (when (not (or (ranger-windows-exists-p)
-                     (ranger-frame-exists-p)))
-        (message "Reverting all buffers")
-        ;; remove all hooks and advices
-        ;; TODO use established dired-after-readin-hook
-        (advice-remove 'dired-readin #'ranger-setup-dired-buffer)
-        (remove-hook 'window-configuration-change-hook 'ranger-window-check)
+          ;; if no more ranger frames or windows
+          (when (not (or (ranger-windows-exists-p)
+                         (ranger-frame-exists-p)))
+            (message "Reverting all buffers")
+            ;; remove all hooks and advices
+            ;; TODO use established dired-after-readin-hook
+            (advice-remove 'dired-readin #'ranger-setup-dired-buffer)
+            (remove-hook 'window-configuration-change-hook 'ranger-window-check)
 
-        ;; revert setting for minimal
-        (r--fset ranger-minimal nil)
+            ;; revert setting for minimal
+            (r--fset ranger-minimal nil)
 
-        ;; delete and cleanup buffers
-        (let ((all-ranger-buffers
-               (cl-remove-duplicates
-                (append
-                 ranger-preview-buffers
-                 ranger-parent-buffers
-                 ranger-visited-buffers
-                 (list ranger-buffer))
-                :test (lambda (x y) (or (null y) (eq x y)))
-                )))
-          (ranger--message "Cleaning all buffers : %s" all-ranger-buffers)
+            ;; delete and cleanup buffers
+            (let ((all-ranger-buffers
+                   (cl-remove-duplicates
+                    (append
+                     ranger-preview-buffers
+                     ranger-parent-buffers
+                     ranger-visited-buffers
+                     (list ranger-buffer))
+                    :test (lambda (x y) (or (null y) (eq x y)))
+                    )))
+              (ranger--message "Cleaning all buffers : %s" all-ranger-buffers)
 
-          (if ranger-cleanup-on-disable
-              (mapc 'ranger-kill-buffer all-ranger-buffers)
-            (mapc 'ranger-revert-appearance all-ranger-buffers)))
+              (if ranger-cleanup-on-disable
+                  (mapc 'ranger-kill-buffer all-ranger-buffers)
+                (mapc 'ranger-revert-appearance all-ranger-buffers)))
 
-        ;; kill preview buffer
-        (when (get-buffer "*ranger-prev*")
-          (kill-buffer (get-buffer "*ranger-prev*")))
+            ;; kill preview buffer
+            (when (get-buffer "*ranger-prev*")
+              (kill-buffer (get-buffer "*ranger-prev*")))
 
-        (setq ranger-f-alist ())
-        (setq ranger-w-alist ())
+            (setq ranger-f-alist ())
+            (setq ranger-w-alist ())
 
-        ;; clear variables
-        (setq ranger-preview-buffers ()
-              ranger-visited-buffers ()
-              ranger-parent-buffers ()))
+            ;; clear variables
+            (setq ranger-preview-buffers ()
+                  ranger-visited-buffers ()
+                  ranger-parent-buffers ()))
 
-      ;; clear ranger-show-file-details information
-      (message "%s" ""))))
+          ;; clear ranger-show-file-details information
+          (message "%s" ""))
+      ;; config is gone, kill buffer
+      )))
 
 (defun ranger-revert-appearance (buffer)
   "Revert the `BUFFER' to pre-ranger defaults without closing ranger session."
@@ -2391,8 +2559,8 @@ fraction of the total frame size"
       ;; when still in ranger's window, make sure ranger's primary window and buffer are still here.
       (when ranger-window-props
         ;; Unless selected window does not have ranger buffer
-        (when (and  (memq (selected-window) ranger-windows)
-                    (not (eq major-mode 'ranger-mode)))
+        (when (and (memq (selected-window) ranger-windows)
+                   (not (eq major-mode 'ranger-mode)))
           (ranger--message
            "Window Check : Ranger window is not the selected window
 ** buffer: %s: %s
@@ -2405,8 +2573,11 @@ fraction of the total frame size"
 
 (defun ranger-windows-exists-p ()
   "Test if any ranger-windows are live."
-  (mapcar 'window-live-p
-          (r--akeys ranger-w-alist)))
+  (member t
+          (mapcar (lambda (l)
+                    (and (window-live-p (car l))
+                         (buffer-live-p (cddr l))))
+                  ranger-w-alist)))
 
 (defun ranger-frame-exists-p ()
   "Test if any ranger-frames are live."
@@ -2499,10 +2670,14 @@ CALLBACK is passed the received mouse event."
 (defun ranger--header-rhs ()
   (concat
    (propertize
-    (format "%s / %s"
-            (if ranger-show-hidden ".." "")
+    (format "[%s]%s"
+
             ;; (if ranger-show-literal "raw" "act")
-            ranger-parent-depth)
+            ranger-parent-depth
+            (cl-case ranger-show-hidden
+              ('format "..")
+              ('prefer "._")
+              ('hidden "__")))
     'face 'font-lock-comment-face)
    (when (> (length ranger-t-alist) 1)
      (format " %s" (ranger--header-tabs)))
@@ -2570,7 +2745,7 @@ CALLBACK is passed the received mouse event."
                (+ lm 1
                   (* num (+
                           ;; account for graphical margin
-                          3
+                          (if window-divider-mode 2 3)
                           ;; account for scroll bar and fringe
                           (if (eq fringe-mode 0) -2 0)
                           (if scroll-bar-mode 3 0)))))))
@@ -2618,11 +2793,14 @@ properly provides the modeline in dired mode. "
                            (progn (forward-line 1) (point)))
           (forward-line 1))
         ;; check sorting mode and sort with directories first
-        (when (and ranger-listing-dir-first
-                   (not (string-match "[XStU]+" switches)))
-          (if (string-match "r" switches)
-                (sort-regexp-fields nil "^.*\n" "^[ ]*." (point) (point-max))
-            (sort-regexp-fields t "^.*\n" "^[ ]*." (point) (point-max))))
+        ;; (when (and ranger-listing-dir-first
+        ;;            (not (string-match "[XStU]+" switches)))
+        ;;   ;; [d]rwxrwxrwx should come before [-]rw-rw-rw-
+        ;;   (sort-regexp-fields (not (string-match "r" switches))
+        ;;                       "^.*\n"
+        ;;                       "^[ ]*."
+        ;;                       (point)
+        ;;                       (point-max)))
         (set-buffer-modified-p nil)))))
 
 ;;;###autoload
@@ -2679,11 +2857,12 @@ properly provides the modeline in dired mode. "
 
 (defun ranger-minimal-toggle ()
   (interactive)
-  (let ((minimal (r--fget ranger-minimal)))
+  (let ((minimal (r--fget ranger-minimal))
+        (dir default-directory))
     (ranger-revert)
     (if minimal
-        (ranger)
-      (deer))))
+        (ranger dir)
+      (deer dir))))
 
 ;;;###autoload
 (defun ranger (&optional path)
@@ -2729,6 +2908,22 @@ properly provides the modeline in dired mode. "
 (defun ranger-setup ()
   "Setup all associated ranger windows."
   (interactive)
+
+  ;; (setq eshell-ls-use-in-dired t)
+  (setq ls-lisp-ignore-case nil)
+  (setq ls-lisp-verbosity nil)
+  (setq ls-lisp-uid-s-fmt "%-8s")
+  (setq ls-lisp-gid-s-fmt "%-8s")
+  ;; don't mix dotfiles with directories
+  (setq ls-lisp-UCA-like-collation nil)
+  ;; (setq ls-lisp-use-insert-directory-program nil)
+
+  (setq ls-lisp-format-time-list
+        '("%Y-%m-%d %H:%M"
+          "%Y-%m-%d %H:%M"))
+
+  (setq ls-lisp-use-insert-directory-program nil)
+  (require 'ls-lisp)
 
   (unless (derived-mode-p 'dired-mode)
     (error "Run it from dired buffer"))
@@ -2781,7 +2976,10 @@ properly provides the modeline in dired mode. "
   (add-to-list 'ranger-visited-buffers ranger-buffer)
 
   (ranger-sort t)
+  (ranger--message "sorting")
   (ranger-show-flags)
+  (ranger--message "setting flags")
+  (ranger--message "starting filter")
   (ranger-filter-files)
 
   ;; omit files after buffer refresh
@@ -2818,9 +3016,12 @@ properly provides the modeline in dired mode. "
 
   ;; hide details line at top - show symlink targets
   (funcall 'add-to-invisibility-spec 'dired-hide-details-information)
+  (funcall 'add-to-invisibility-spec 'dired-hide-details-hide-information-lines)
+
   ;; (setq dired-hide-details-hide-symlink-targets nil)
 
-  (ranger--message "Ranger loaded"))
+  (ranger--message "Ranger loaded")
+  )
 
 (defun ranger-hide-the-cursor ()
   (when (and buffer-read-only ranger-hide-cursor)
@@ -2828,7 +3029,7 @@ properly provides the modeline in dired mode. "
   (hl-line-mode t))
 
 (defvar ranger--debug nil)
-(defvar ranger--debug-period 0.5)
+(defvar ranger--debug-period 1.5)
 
 ;; TODO make a ranger debug pane as the bottom window
 
@@ -2866,8 +3067,9 @@ properly provides the modeline in dired mode. "
 \\{ranger-mode-map}"
   :group 'ranger
   (setq-local cursor-type nil)
+  ;; (setq-local ranger-mode nil)
   (use-local-map ranger-mode-map)
-  (advice-add 'dired-readin :after #'ranger-setup-dired-buffer)
+  ;; (advice-add 'dired-readin :after #'ranger-setup-dired-buffer)
   (ranger-setup)
   (add-hook 'window-configuration-change-hook 'ranger-window-check)
   (setq-local mouse-1-click-follows-link nil)
