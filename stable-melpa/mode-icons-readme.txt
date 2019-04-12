@@ -14,6 +14,7 @@ among others:
 - nXML
 - PHP
 - Python
+- React
 - Ruby
 - Sass/Scss
 - Scheme
