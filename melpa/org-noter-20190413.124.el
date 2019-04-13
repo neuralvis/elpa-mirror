@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20190307.1726
+;; Package-Version: 20190413.124
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.3.0
 
@@ -189,6 +189,11 @@ This makes moving notes out of the root heading easier."
 (defcustom org-noter-insert-note-no-questions nil
   "When non-nil, `org-noter-insert-note' won't ask for a title and will always insert a new note.
 The title used will be the default one."
+  :group 'org-noter
+  :type 'boolean)
+
+(defcustom org-noter-kill-frame-at-session-end t
+  "If non-nil, `org-noter-kill-session' will delete the frame if others exist on the current display.'"
   :group 'org-noter
   :type 'boolean)
 
@@ -1415,7 +1420,7 @@ want to kill."
       (kill-buffer doc-buffer)
 
       (when (frame-live-p frame)
-        (if (= (length (frames-on-display-list)) 1)
+        (if (or (= (length (frames-on-display-list)) 1) (not org-noter-kill-frame-at-session-end))
             (progn
               (delete-other-windows)
               (set-frame-parameter nil 'name nil))

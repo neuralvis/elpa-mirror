@@ -1,0 +1,2 @@
+
+(robe . [(20190413 26) ((inf-ruby (2 5 1)) (emacs (24 4))) "Code navigation, documentation lookup and completion for Ruby" tar ((:commit . "a8f2b463b48c4b09f23d8dfab6e4a72e2364e573") (:keywords "ruby" "convenience" "rails") (:authors ("Dmitry Gutov")) (:maintainer "Dmitry Gutov") (:url . "https://github.com/dgutov/robe"))])
