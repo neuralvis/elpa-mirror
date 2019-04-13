@@ -4,7 +4,6 @@
 
 ;; Author: Abhishek L <abhishekl.2006@gmail.com>
 ;; URL: http://www.github.com/theanalyst/ix.el
-;; Package-Version: 20131027.1629
 ;; Version: 0.7
 ;; Package-Requires: ((grapnel "0.5.3"))
 

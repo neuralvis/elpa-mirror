@@ -1,2 +1,0 @@
-
-(helm . [(20190412 1025) ((emacs (24 4)) (async (1 9 3)) (popup (0 5 3)) (helm-core (3 0))) "Helm is an Emacs incremental and narrowing framework" tar ((:commit . "b92fbc22a0f2485b472fbe1c12925ce14084ef30") (:url . "https://emacs-helm.github.io/helm/"))])
