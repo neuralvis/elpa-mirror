@@ -4,7 +4,7 @@
 ;; Maintainer: Vitalie Spinu
 ;; Copyright (C) 2018
 ;; Version: 0.1.5
-;; Package-Version: 20190317.1352
+;; Package-Version: 20190412.2120
 ;; Package-Requires: ((emacs "25") (polymode "0.1.5") (markdown-mode "2.3"))
 ;; URL: https://github.com/polymode/poly-markdown
 ;; Keywords: emacs
@@ -69,6 +69,7 @@
   :head-matcher (cons "[^`]\\(`{?[[:alpha:]+-]+\\)[ \t]" 1)
   :tail-matcher (cons "[^`]\\(`\\)[^`]" 1)
   :mode-matcher (cons "`[ \t]*{?\\(?:lang *= *\\)?\\([[:alpha:]+-]+\\)" 1)
+  :allow-nested nil
   :head-mode 'host
   :tail-mode 'host)
 
@@ -93,6 +94,7 @@ Tail must be flowed by a new line but head need not (a space or
 comment character would do)."
   :head-matcher #'poly-markdown-displayed-math-head-matcher
   :tail-matcher #'poly-markdown-displayed-math-tail-matcher
+  :allow-nested nil
   :head-mode 'host
   :tail-mode 'host
   :mode 'latex-mode)
@@ -120,6 +122,7 @@ preceded by a non-whitespace and not followed by an alphanumeric
 character."
   :head-matcher #'poly-markdown-inline-math-head-matcher
   :tail-matcher #'poly-markdown-inline-math-tail-matcher
+  :allow-nested nil
   :head-mode 'host
   :tail-mode 'host
   :mode 'latex-mode)

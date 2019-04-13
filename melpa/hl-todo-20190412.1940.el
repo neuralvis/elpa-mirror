@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/hl-todo
 ;; Keywords: convenience
-;; Package-Version: 20190410.1417
+;; Package-Version: 20190412.1940
 
 ;; Package-Requires: ((emacs "25"))
 
@@ -149,7 +149,7 @@ including alphanumeric characters, cannot be used here."
   (setq hl-todo--regexp
         (concat "\\(\\<"
                 "\\(" (mapconcat #'car hl-todo-keyword-faces "\\|") "\\)"
-                "\\(?:\\>\\|\\>?\\)"
+                "\\(?:\\>\\|\\>\\?\\)"
                 (and (not (equal hl-todo-highlight-punctuation ""))
                      (concat "[" hl-todo-highlight-punctuation "]*"))
                 "\\)"))
