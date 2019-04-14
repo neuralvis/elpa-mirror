@@ -3,8 +3,12 @@ major mode name in your mode-line and places like Ibuffer with an
 icon.  Currently the following programming modes are supported,
 among others:
 
+- C
+- C++
+- C#
 - CSS
 - Coffee
+- Dart
 - Emacs-Lisp
 - HTML
 - Haml
