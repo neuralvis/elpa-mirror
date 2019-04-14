@@ -1,2 +1,0 @@
-
-(paradox . [(20190406 2309) ((emacs (24 4)) (seq (1 7)) (let-alist (1 0 3)) (spinner (1 7 3)) (hydra (0 13 2))) "A modern Packages Menu. Colored, with package ratings, and customizable." tar ((:commit . "7ccf2403b5d056bd6cbf75c110420e3f5f0e8c0b") (:keywords "package" "packages") (:authors ("Artur Malabarba" . "emacs@endlessparentheses.com")) (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com") (:url . "https://github.com/Malabarba/paradox"))])

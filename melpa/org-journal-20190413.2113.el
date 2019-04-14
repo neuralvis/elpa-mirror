@@ -2,7 +2,7 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20190413.1503
+;; Package-Version: 20190413.2113
 ;; Version: 1.15.1
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -982,14 +982,12 @@ out past org-journal files."
               (not (string-match org-journal-file-pattern fname)))
             (org-agenda-files)))
           (org-journal-agenda-files
-           (seq-filter
-            ;; skip files that are older than today
-            (lambda (fname)
-              (not (time-less-p
-                    (org-journal-calendar-date->time
-                     (org-journal-file-name->calendar-date fname))
-                    (time-subtract (current-time) (days-to-time 1)))))
-            (org-journal-list-files))))
+           (let ((future (org-journal-read-period 'future)))
+             ;; TODO(cschwarzgruber): Needs to be adopted for weekly, monthly or yearly journal file type.
+             ;; We actually would need to limit the file scope, if we only want TODO's for today, and future.
+             (org-journal-search-build-file-list
+              (org-journal-calendar-date->time (car future))
+              (org-journal-calendar-date->time (cdr future))))))
       (setq org-agenda-files (append not-org-journal-agenda-files
                                      org-journal-agenda-files)))))
 

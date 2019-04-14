@@ -1,0 +1,2 @@
+
+(pdf-tools . [(20190413 1942) ((emacs (24 3)) (tablist (0 70)) (let-alist (1 0 4))) "Support library for PDF documents." tar ((:commit . "2478da0ae42b7cf3051417d89b06fe2f1f4a7330") (:keywords "files" "multimedia") (:authors ("Andreas Politz" . "politza@fh-trier.de")) (:maintainer "Andreas Politz" . "politza@fh-trier.de"))])
