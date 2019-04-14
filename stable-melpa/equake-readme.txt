@@ -15,8 +15,14 @@ Usage:
 Run with:---
 emacsclient -n -e '(equake-invoke)' ,
 after launching an Emacs daemon of course.
-Alternatively, on multi-monitor setup, launch:
+
+For multimonitor use using X11, you can set
+(setq equake-use-xdotool-probe 't) to use xdotool to
+automatically detect which screen the Equake frame should open on.
+
+Alternatively, on a non-X11 multi-monitor setup, launch:
 emacsclient -n -c -e '(equake-invoke)' -F '((title . "*transient*") (alpha . (0 . 0)) (width . (text-pixels . 0)) (height . (text-pixels . 0)))'
+(although this may be noticably slower)
 
 I recommend binding the relevant command to a key like F12 in your DE/WM.
 Executing this command will create a new equake console

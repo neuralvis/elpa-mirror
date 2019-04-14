@@ -5,7 +5,7 @@
 ;; Author: jim <xcwenn@qq.com>
 ;; Maintainer: jim
 ;; URL: https://github.com/xcwen/ac-php
-;; Package-Version: 20190413.1336
+;; Package-Version: 20190414.141
 ;; Keywords: completion, convenience, intellisense
 ;; Package-Requires: ((ac-php-core "2.0") (auto-complete "1.4.0") (yasnippet "0.8.0"))
 ;; Compatibility: GNU Emacs: 24.4, 25.x, 26.x, 27.x
@@ -60,7 +60,6 @@
 ;;; Code:
 
 (require 'ac-php-core)
-
 (require 'auto-complete)
 
 (defface ac-php-candidate-face
