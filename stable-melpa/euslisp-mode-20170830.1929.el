@@ -6,7 +6,6 @@
 ;; Maintainer: iory <ab.ioryz@gmail.com>
 ;; Created: April 13, 2016
 ;; Version: 0.0.9
-;; Package-Version: 20170830.1929
 ;; Keywords: Euslisp, euslisp, GitHub
 ;; URL: https://github.com/iory/euslisp-mode
 ;; Package-Requires: ((emacs "24.3") (s "1.9") (exec-path-from-shell "0") (helm-ag "0.58"))
