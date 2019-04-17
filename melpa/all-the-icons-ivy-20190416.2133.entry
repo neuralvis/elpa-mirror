@@ -1,0 +1,2 @@
+
+(all-the-icons-ivy . [(20190416 2133) ((emacs (24 4)) (all-the-icons (2 4 0)) (ivy (0 8 0))) "Shows icons while using ivy and counsel" single ((:commit . "ff469fe0aa344067e1357ed381a061dc314230ea") (:keywords "faces") (:authors ("asok")) (:maintainer "asok"))])

@@ -5,8 +5,8 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: vc
 ;; URL: https://github.com/muffinmad/emacs-vc-hgcmd
-;; Package-Version: 20190415.2121
-;; Package-X-Original-Version: 1.5.1
+;; Package-Version: 20190416.1938
+;; Package-X-Original-Version: 1.5.2
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -1210,7 +1210,7 @@ Insert output to process buffer and check if amount of data is enought to parse 
 
 (defun vc-hgcmd-rename-file (old new)
   "Rename file from OLD to NEW using `hg mv'."
-  (vc-hgcmd-command "move" old new))
+  (vc-hgcmd-command "move" (vc-hgcmd--file-relative-name old) (vc-hgcmd--file-relative-name new)))
 
 (defun vc-hgcmd--file-unresolved-p (file)
   "Return t if FILE is in conflict state."

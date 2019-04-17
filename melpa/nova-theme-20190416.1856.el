@@ -4,7 +4,7 @@
 ;;
 ;; Author: Muir Manders <muir+emacs@mnd.rs>
 ;; Version: 0.1.0
-;; Package-Version: 20190410.1800
+;; Package-Version: 20190416.1856
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: theme dark nova pastel faces
 ;; URL: https://github.com/muirmanders/emacs-nova-theme
@@ -513,6 +513,12 @@ FACES is a list of faces of the form (name :attr value) such as:
   ;; lsp-mode
   (lsp-face-highlight-read :inherit 'highlight)
   (lsp-face-highlight-write :inherit 'highlight)
+
+  ;; regexp-builder
+  (reb-match-0 :background user-current-state :foreground bg)
+  (reb-match-1 :background emphasis :foreground bg)
+  (reb-match-2 :background orange :foreground bg)
+  (reb-match-3 :background green :foreground bg)
 
   (js2-warning :underline yellow)
   (js2-error :underline user-action-needed)
