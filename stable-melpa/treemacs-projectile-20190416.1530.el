@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((projectile "0.14.0") (treemacs "0.0"))
-;; Package-Version: 20190403.537
+;; Package-Version: 20190416.1530
 ;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -28,30 +28,6 @@
 
 (require 'treemacs)
 (require 'projectile)
-
-;;;###autoload
-(defun treemacs-add-and-display-current-project ()
-  "Open treemacs and add the current projectile project to the workspace.
-If the project is already registered with treemacs just move to its root.
-Display an error if the current buffer is not part of any project."
-  (interactive)
-  (treemacs-block
-   (let ((project (projectile-project-root)))
-     (treemacs-error-return-if (null project)
-       "Not in a project.")
-     (let* ((path (treemacs--canonical-path project))
-            (name (treemacs--filename path)))
-       (unless (treemacs-current-workspace)
-         (treemacs--find-workspace))
-       (if (treemacs-workspace->is-empty?)
-           (progn
-             (treemacs-do-add-project-to-workspace path name)
-             (treemacs-select-window)
-             (treemacs-pulse-on-success))
-         (treemacs-select-window)
-         (if (treemacs-is-path path :in-workspace)
-             (treemacs-goto-file-node path)
-           (treemacs-add-project-to-workspace path name)))))))
 
 ;;;###autoload
 (defun treemacs-projectile (&optional arg)
@@ -93,6 +69,13 @@ the current dir."
                           (condition-case _
                               (projectile-project-root)
                             (error nil))))))
+
+(defun treemacs--projectile-current-user-project-function ()
+  "Get the current projectile project root."
+  (declare (side-effect-free t))
+  (-some-> (projectile-project-root) (file-truename) (treemacs--canonical-path)))
+
+(add-to-list 'treemacs--find-user-project-functions #'treemacs--projectile-current-user-project-function)
 
 (provide 'treemacs-projectile)
 

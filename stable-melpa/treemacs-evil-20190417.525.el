@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((evil "1.2.12") (treemacs "0.0"))
-;; Package-Version: 20190214.2021
+;; Package-Version: 20190417.525
 ;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -43,6 +43,23 @@
   (--when-let (treemacs-get-local-buffer)
     (with-current-buffer it
       (evil-treemacs-state))))
+
+(defun treemacs--evil-window-move-compatibility-advice (orig-fun &rest args)
+  "Close Treemacs while moving windows around.
+Then call ORIG-FUN with its ARGS and reopen treemacs if it was open before."
+  (let* ((treemacs-window (treemacs-get-local-window))
+         (is-active (and treemacs-window (window-live-p treemacs-window))))
+    (when is-active (treemacs))
+    (apply orig-fun args)
+    (when is-active
+      (save-selected-window
+        (treemacs)))))
+
+(dolist (func '(evil-window-move-far-left
+                evil-window-move-far-right
+                evil-window-move-very-top
+                evil-window-move-very-bottom))
+  (advice-add func :around #'treemacs--evil-window-move-compatibility-advice))
 
 (advice-add 'treemacs-leftclick-action   :after #'treemacs--turn-off-visual-state-after-click)
 (advice-add 'treemacs-doubleclick-action :after #'treemacs--turn-off-visual-state-after-click)
