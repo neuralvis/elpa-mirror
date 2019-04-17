@@ -1,2 +1,2 @@
 
-(company-php . [(20190410 223) ((cl-lib (0 5)) (ac-php-core (2 0)) (company (0 9))) "A company back-end for PHP." single ((:commit . "e17e91d44d26962cb9543387c71ae4602665d235") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])
+(company-php . [(20190410 223) ((cl-lib (0 5)) (ac-php-core (2 0)) (company (0 9))) "A company back-end for PHP." single ((:commit . "7e22e6ad2533ee0148d3a47435ad5de7fd64a046") (:keywords "completion" "convenience" "intellisense") (:authors ("jim" . "xcwenn@qq.com")) (:maintainer "jim") (:url . "https://github.com/xcwen/ac-php"))])

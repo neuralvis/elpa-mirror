@@ -5,7 +5,6 @@
 
 ;; Author: Martín Varela (martin@varela.fi)
 ;; URL: http://github.com/mvarela/Sunburn-Theme
-;; Package-Version: 20180602.1929
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24"))
 
