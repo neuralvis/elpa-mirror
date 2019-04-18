@@ -4,7 +4,6 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: languages, tools
-;; Package-Version: 20131115.1150
 ;; Version: DEV
 ;; Package-Requires: ((inf-ruby "2.3.2") (auto-complete "1.4"))
 
