@@ -4,7 +4,7 @@
 
 ;; Author: Sod Oscarfono <sod@oscarfono.com>
 ;; URL: http://github.com/techquila/melancholy-theme
-;; Package-Version: 20190416.531
+;; Package-Version: 20190418.107
 ;; Version: 2.0
 ;; Package-requires: emacs
 
@@ -64,8 +64,9 @@
     
     ;; line numbers
     ;; ========================================
-    `(linum ((t (:foreground ,my-deepcontrast :height 88 :strikethrough nil))))
-
+    `(linum ((t (:foreground ,my-deepcontrast))))
+    `(line-number ((t (:foreground ,my-deepcontrast))))
+    `(line-number-current-line ((t (:foreground ,my-highlight))))
     ;; base settings
     ;; ========================================
     `(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 99 :width normal :foundry "unknown" :family "Monospace Regular" :background ,my-shadow :foreground ,my-hicontrast ))))
@@ -83,7 +84,7 @@
     `(match ((t (:background ,my-pop))))
     `(highlight ((t (:background ,my-active))))
     `(lazy-highlight ((t (:foreground ,my-shadow :background ,my-highlight))))
-    `(secondary-selection ((t (:background ,my-info))))
+    `(secondary-selection ((t (:background ,my-deepcontrast))))
     `(font-lock-builtin-face ((t (:foreground ,my-highlight))))
     `(font-lock-comment-delimiter-face ((t (:foreground ,my-visited))))
     `(font-lock-comment-face ((t (:foreground ,my-visited))))
@@ -108,7 +109,7 @@
     `(show-paren-mismatch ((t (:background ,my-warning :weight bold))))
     `(sp-show-pair-match-face ((t (:background ,my-shadow :weight bold))))
     `(sp-show-pair-mismatch-face ((t (:background ,my-warning :weight bold))))
-
+    `(sp-pair-overlay-face ((t (:background ,my-contrast))))
 
     ;; info/errors
     ;; ========================================
@@ -131,10 +132,11 @@
     ;; helm
     ;; ========================================
     `(helm-buffer-directory ((t (:foreground ,my-shadow :background ,my-hicontrast))))
+    `(helm-grep-match ((t (:foreground ,my-highlight))))
     `(helm-header ((t ( :foreground ,my-white))))
     `(helm-source-header ((t (:foreground ,my-contrast :family "Open-sans" :height 125 :weight bold :underline t) )))
     `(helm-selection ((t (:background ,my-pop :foreground "#161A1F"))))
-    `(helm-separator ((t (:background ,my-info))))
+    `(helm-separator ((t (:background ,my-deepcontrast))))
 
     `(isearch ((t (:background ,my-highlight :foreground ,my-shadow))))
     `(isearch-fail ((t (:background ,my-pop))))

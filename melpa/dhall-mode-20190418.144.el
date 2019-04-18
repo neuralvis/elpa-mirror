@@ -5,7 +5,7 @@
 ;; Author: Sibi Prabakaran <sibi@psibi.in>
 ;; Maintainer: Sibi Prabakaran <sibi@psibi.in>
 ;; Keywords: languages
-;; Package-Version: 20190114.1
+;; Package-Version: 20190418.144
 ;; Version: 0.1.3
 ;; Package-Requires: ((emacs "24.4") (reformatter "0.3"))
 ;; URL: https://github.com/psibi/dhall-mode
@@ -88,14 +88,18 @@
 (defvar dhall-mode-types
   (regexp-opt '("Optional" "Bool" "Natural" "Integer" "Double" "Text" "List" "Type") 'symbols))
 
-(defvar dhall-mode-constants (regexp-opt '("True" "False") 'symbols))
-(defvar dhall-mode-numerals "[+\\-][1-9]+")
-(defvar dhall-mode-doubles "[0-9]\.[0-9]+")
-(defvar dhall-mode-operators (regexp-opt '("->" "\\[" "]" "," "++" "#" ":" "=" "==" "!=" "\\\\\(" "λ" "⫽" ")" "&&" "||" "{" "}" "(")))
-(defvar dhall-mode-variables "\\([a-zA-Z_][a-zA-Z_0-9\\-]*\\)[[:space:]]*=")
+(defconst dhall-mode-constants (regexp-opt '("True" "False") 'symbols))
+(defconst dhall-mode-numerals "\\_<[+\\-][1-9]+\\_>")
+(defconst dhall-mode-doubles "\\_<[+\\-]?[0-9]+\.[0-9]+\\_>")
+(defconst dhall-mode-operators (regexp-opt '("->" "\\[" "]" "," "++" "#" ":" "=" "==" "!=" "\\\\\(" "λ" "⫽" ")" "&&" "||" "{" "}" "(")))
+(defconst dhall-mode-variables "\\([a-zA-Z_][a-zA-Z_0-9\\-]*\\)[[:space:]]*=")
+(defconst dhall-mode-urls "\\_<\\(?:https?\\|file\\):[^[:space:]]+")
+(defconst dhall-mode-shas "\\_<sha256:[a-f0-9]+\\_>")
 
 (defconst dhall-mode-font-lock-keywords
   `( ;; Variables
+    (,dhall-mode-urls . font-lock-function-name-face)
+    (,dhall-mode-shas . font-lock-constant-face)
     (,dhall-mode-types . font-lock-type-face)
     (,dhall-mode-constants . font-lock-constant-face)
     (,dhall-mode-operators . font-lock-builtin-face)
@@ -157,6 +161,7 @@ down.  You can also disable type-checking entirely by setting
             (source (buffer-string)))
         (with-temp-buffer
           (with-current-buffer errbuf
+            (read-only-mode -1)
             (erase-buffer))
           (insert source)
           (if (zerop (shell-command-on-region (point-min)
@@ -168,7 +173,8 @@ down.  You can also disable type-checking entirely by setting
             (prog1
                 nil
               (with-current-buffer errbuf
-                (ansi-color-apply-on-region (point-min) (point-max))))))))))
+                (ansi-color-apply-on-region (point-min) (point-max))
+                (view-mode)))))))))
 
 (reformatter-define dhall-format
   :program (or dhall-format-command dhall-command)
