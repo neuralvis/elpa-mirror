@@ -16,7 +16,7 @@
 ;; Author: Benjamin Slade <slade@jnanam.net>
 ;; Maintainer: Benjamin Slade <slade@jnanam.net>
 ;; URL: https://gitlab.com/emacsomancer/equake
-;; Package-Version: 20190414.435
+;; Package-Version: 20190418.2151
 ;; Package-X-Original-Version: 0.85
 ;; Version: 0.85
 ;; Package-Requires: ((emacs "25") (dash "2.14.1") (tco "20190309.55"))
@@ -385,6 +385,16 @@ raise/lower equake on."
           (alist-get 'workarea (car mlist))
         (equake-find-workarea-of-current-screen monitorid (cdr mlist)))))
 
+(defun equake-record-history (equake-current-frame)
+  "Store the EQUAKE-CURRENT-FRAME for easier recovery of destroyed equake frames."
+  (select-frame equake-current-frame)
+  (when (equal (buffer-name (current-buffer)) " *server*") ; if opened to " *server*" buffer
+    (switch-to-buffer (other-buffer (current-buffer) 1))) ; switch to other buffer
+  (equake-set-last-buffer)
+  (equake-set-winhistory)
+  (when (buffer-local-value equake-mode (current-buffer))
+    (equake-set-last-etab)))
+
 (defun equake-invoke ()
   "Toggle Equake frames.
 Run with \"emacsclient -n -e '(equake-invoke)'\".
@@ -399,19 +409,14 @@ On multi-monitor set-ups, run instead \"emacsclient -n -c -e '(equake-invoke)' -
                              (alist-get 'workarea (frame-monitor-attributes equake-current-frame))))
           ((mon-xpos mon-ypos monwidth monheight) (mapcar #'floor target-workarea))
           (mod-mon-xpos (floor (+ mon-xpos (/ (- monwidth (* monwidth equake-size-width)) 2)))))
-    (if equake-current-frame            ; if frame exists, destroy it.
+    (if equake-current-frame ; if frame exists, hide or destroy it (depending on user options).
         (if equake-use-frame-hide ; if user has make-frame-(in)visible option set
             (if (frame-visible-p equake-current-frame)
-                (progn (make-frame-invisible equake-current-frame) (make-frame-invisible equake-current-frame)) ; double-tap, otherwise frame lands in limbo
-              (make-frame-visible equake-current-frame))
-          (select-frame equake-current-frame)
-          (when (equal (buffer-name (current-buffer)) " *server*") ; if opened to " *server*" buffer
-            (switch-to-buffer (other-buffer (current-buffer) 1))) ; switch to other buffer
-          (equake-set-last-buffer)
-          (equake-set-winhistory)
-          (when (buffer-local-value equake-mode (current-buffer))
-            (equake-set-last-etab))
-          (delete-frame equake-current-frame)) ; destroy frame.
+                (progn (equake-record-history equake-current-frame) ; record history
+                       (make-frame-invisible equake-current-frame) (make-frame-invisible equake-current-frame)) ; double-tap, otherwise frame lands in limbo
+              (make-frame-visible equake-current-frame)) ; make visible visible if invisible.
+          (equake-record-history equake-current-frame)   ; record history
+          (delete-frame equake-current-frame))           ; destroy frame.
       ;; else, make it.
       (-let* ((new-frame (make-frame (list (cons 'name (concat "*EQUAKE*[" monitorid "]"))
                                            (cons 'alpha `(,equake-opacity-active ,equake-opacity-inactive))
@@ -428,7 +433,8 @@ On multi-monitor set-ups, run instead \"emacsclient -n -c -e '(equake-invoke)' -
             (switch-to-buffer (cdr (equake-find-monitor-list monitorid equake-last-buffer-list)))) ; and then restore last buffer used in frame.
           (equake-set-up-equake-frame)) ; set-up frame
         (set-window-prev-buffers nil (equake-filter-history (window-prev-buffers) (window-prev-buffers))))) ; filter out irrelevant buffers.
-    (equake-kill-stray-transient-frames (frame-list)))) ; get rid of any Equake multi-monitor launcher `probes'.
+    (unless (equal equake-use-xdotool-probe 't) ; if not using xdotool-probe
+      (equake-kill-stray-transient-frames (frame-list))))) ; get rid of any Equake multi-monitor launcher `probes'.
 
 (defun-tco equake-filter-history (winhist filtwinhist)
   "Filter window history (WINHIST) into FILTWINHIST."

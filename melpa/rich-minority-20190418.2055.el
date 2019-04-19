@@ -4,9 +4,9 @@
 
 ;; Author: Artur Malabarba <emacs@endlessparentheses.com>
 ;; URL: https://github.com/Malabarba/rich-minority
-;; Package-Version: 20190321.1358
+;; Package-Version: 20190418.2055
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Version: 1.0.1
+;; Version: 1.0.3
 ;; License: GNU General Public License v3 or newer
 ;; Keywords: mode-line faces
 
