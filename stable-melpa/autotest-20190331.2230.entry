@@ -1,2 +1,2 @@
 
-(autotest . [(20190331 2230) nil "ZenTest's autotest integration with emacs." single ((:commit . "fc05a246480abe9c118ad63fcd10c01a1cc981d9") (:keywords "testing" "ruby" "convenience") (:authors ("Ryan Davis" . "ryand-ruby@zenspider.com")) (:maintainer "Ryan Davis" . "ryand-ruby@zenspider.com") (:url . "https://github.com/zenspider/elisp/blob/master/autotest.el"))])
+(autotest . [(20190331 2230) nil "ZenTest's autotest integration with emacs." single ((:commit . "508f8a30fa77e9ca692ccc2f32cac98ba3af6b74") (:keywords "testing" "ruby" "convenience") (:authors ("Ryan Davis" . "ryand-ruby@zenspider.com")) (:maintainer "Ryan Davis" . "ryand-ruby@zenspider.com") (:url . "https://github.com/zenspider/elisp/blob/master/autotest.el"))])
