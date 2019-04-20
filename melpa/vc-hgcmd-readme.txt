@@ -56,8 +56,8 @@ MISCELLANEOUS
 - root (file)                                   OK
 - ignore (file &optional directory)             OK find-ignore-file
 - ignore-completion-table                       OK find-ignore-file
-- previous-revision (file rev)                  OK with no respect to FILE
-- next-revision (file rev)                      OK with no respect to FILE
+- previous-revision (file rev)                  OK
+- next-revision (file rev)                      OK
 - log-edit-mode ()                              OK
 - check-headers ()                              NO
 - delete-file (file)                            OK
@@ -103,9 +103,12 @@ Instead of list of all revisions of file vc-hgcmd provides list of named branche
 It's very useful on `vc-retrieve-tag'.
 You can specify -C to run hg update with -C flag and discard all uncommitted changes.
 
-- Filenames in vc-annotate buffer are hidden
-They are needed to annotate changes across renames but mostly useless in annotate buffer.
-vc-hgcmd removes it from annotate buffer but keep it in text properties.
+- Filenames in vc-annotate buffer is omitted
+They are mostly useless in annotate buffer.
+To find out right filename to annotate vc-hgcmd uses `status --rev <rev> -C file'.
+
+- `previous-revision' and `next-revision' respect files
+Keys `p' and `n' in annotation buffer works correctly.
 
 - Create tag
 vc-hgcmd creates tag on `vc-create-tag'

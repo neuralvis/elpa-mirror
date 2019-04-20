@@ -1,2 +1,0 @@
-
-(flycheck . [(20190411 1707) ((dash (2 12 1)) (pkg-info (0 4)) (let-alist (1 0 4)) (seq (1 11)) (emacs (24 3))) "On-the-fly syntax checking" tar ((:commit . "360454e6fe5e923a2915b64b946e0711b4798c8b") (:keywords "convenience" "languages" "tools") (:authors ("Sebastian Wiesner" . "swiesner@lunaryorn.com")) (:maintainer "Clément Pit-Claudel" . "clement.pitclaudel@live.com") (:url . "http://www.flycheck.org"))])

@@ -1,0 +1,2 @@
+
+(vc-hgcmd . [(20190419 1839) ((emacs (25 1))) "VC mercurial backend that uses hg command server" single ((:commit . "3ee691dee26a1109092a05bf8aa56b55051258ec") (:keywords "vc") (:authors ("Andrii Kolomoiets" . "andreyk.mad@gmail.com")) (:maintainer "Andrii Kolomoiets" . "andreyk.mad@gmail.com") (:url . "https://github.com/muffinmad/emacs-vc-hgcmd"))])
