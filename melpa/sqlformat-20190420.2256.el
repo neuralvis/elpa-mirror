@@ -4,7 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: languages
-;; Package-Version: 20190114.150
+;; Package-Version: 20190420.2256
 ;; URL: https://github.com/purcell/sqlformat
 ;; Package-Requires: ((emacs "24") (reformatter "0.3"))
 ;; Version: 0
@@ -66,6 +66,11 @@ reformatted SQL to STDOUT, returning an appropriate exit code."
   :type '(choice (const :tag "Use \"sqlformat\"" sqlformat)
                  (const :tag "Use \"pgformatter\"" pgformatter)))
 
+(defcustom sqlformat-args '()
+  "List of args for reformatting command.
+For example these options may be useful for sqlformat command: '(\"-k\" \"upper\")"
+  :type '(repeat string))
+
 
 ;; Commands for reformatting
 
@@ -77,8 +82,8 @@ reformatted SQL to STDOUT, returning an appropriate exit code."
              (`sqlformat "sqlformat")
              (`pgformatter "pg_format"))
   :args (pcase sqlformat-command
-          (`sqlformat '("-r" "-"))
-          (`pgformatter '("-")))
+          (`sqlformat  (append sqlformat-args '("-r" "-")))
+          (`pgformatter (append sqlformat-args '("-"))))
   :lighter " SQLFmt"
   :group 'sqlformat)
 

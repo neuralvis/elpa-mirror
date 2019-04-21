@@ -3,6 +3,7 @@
 ;; Copyright © 2018, Rashawn Zhang, all rights reserved.
 
 ;; Version: 0.1.0
+;; Package-Version: 20180903.612
 ;; URL: https://github.com/yqrashawn/evil-ex-fasd
 ;; Package-Requires: ((emacs "24.4") (evil "1.1.0") (fasd "0"))
 ;; Author: Rashawn Zhang <namy.19@gmail.com>
