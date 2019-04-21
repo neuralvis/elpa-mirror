@@ -1,0 +1,2 @@
+
+(gn-mode . [(20190414 425) ((emacs (24)) (cl-lib (0 5))) "major mode for editing GN (generate ninja) files" single ((:commit . "576ad681021689ed7fff228256fddf4c7b89f9a8") (:keywords "data") (:authors ("Emily Backes" . "lucca@accela.net")) (:maintainer "Emily Backes" . "lucca@accela.net") (:url . "http://github.com/lashtear/gn-mode"))])

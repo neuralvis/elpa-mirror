@@ -1,0 +1,2 @@
+
+(sv-kalender-namnsdagar . [(20190403 1300) nil "Swedish celibrated name of the day" single ((:commit . "d91c3c922eba27873f11149043e1647df4621c9c") (:keywords "calendar" "swedish" "localization") (:authors ("Mats Lidell" . "mats.lidell@lidells.se")) (:maintainer "Mats Lidell" . "mats.lidell@lidells.se") (:url . "https://github.com/matsl/sv-kalender-namnsdagar"))])
