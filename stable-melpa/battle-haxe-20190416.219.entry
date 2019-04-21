@@ -1,2 +1,0 @@
-
-(battle-haxe . [(20190416 219) ((emacs (25)) (company (0 9 9)) (helm (3 0)) (yasnippet (0 13 0)) (async (1 9 3)) (cl-lib (0 5)) (dash (2 12 0)) (dash-functional (1 2 0)) (s (1 10 0)) (f (0 19 0))) "A Haxe development system, with code completion and more" single ((:commit . "ca49250000fd9834baffe88e5fb6257043ab7b7d") (:keywords "programming" "languages" "completion") (:authors ("Alon Tzarafi " . "alontzarafi@gmail.com")) (:maintainer "Alon Tzarafi " . "alontzarafi@gmail.com") (:url . "https://github.com/AlonTzarafi/battle-haxe"))])

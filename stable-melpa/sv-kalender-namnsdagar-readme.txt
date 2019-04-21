@@ -1,4 +1,4 @@
-Swedish celibrated name of the day
+Swedish celebrated name of the day
 
 Example usage
 
