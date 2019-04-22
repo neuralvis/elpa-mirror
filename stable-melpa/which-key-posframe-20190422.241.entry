@@ -1,0 +1,2 @@
+
+(which-key-posframe . [(20190422 241) ((emacs (26 0)) (posframe (0 4 3)) (which-key (3 3 2))) "Using posframe to show which-key" single ((:commit . "57f815eb9741a5cd6014f1b11f095f35436a2382") (:keywords "convenience" "bindings" "tooltip") (:authors ("Yanghao Xie")) (:maintainer "Yanghao Xie" . "yhaoxie@gmail.com") (:url . "https://github.com/yanghaoxie/which-key-posframe"))])
