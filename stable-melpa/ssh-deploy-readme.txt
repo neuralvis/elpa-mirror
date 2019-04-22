@@ -42,6 +42,7 @@ Add to init-script: (ssh-deploy-add-find-file-hook)
 - To install and set-up using use-package and hydra do this:
   (use-package ssh-deploy
     :ensure t
+    :after hydra
     :demand
     :hook ((after-save . ssh-deploy-after-save)
            (find-file . ssh-deploy-find-file))
