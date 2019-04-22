@@ -14,10 +14,8 @@ The doom-modeline offers:
 - A workspace number segment for eyebrowse
 - A perspective name segment for persp-mode
 - A window number segment for winum and window-numbering
-- An indicator for evil state
-- An indicator for god state
-- An indicator for ryo-modal state
-- An indicator for xah-fly-keys state
+- An indicator for modal editing state, including evil, god, ryo and
+  xah-fly-keys, etc.
 - An indicator for remote host
 - An indicator for current input method
 - An indicator for debug state
