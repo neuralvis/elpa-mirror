@@ -4,8 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; URL: https://github.com/purcell/disable-mouse
-;; Package-Version: 20181225.2206
-;; Package-X-Original-Version: 0
+;; Package-Version: 0
 ;; Keywords: mouse
 
 ;; This program is free software; you can redistribute it and/or modify
