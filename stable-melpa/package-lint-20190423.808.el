@@ -5,7 +5,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;;         Fanael Linithien <fanael4@gmail.com>
 ;; URL: https://github.com/purcell/package-lint
-;; Package-Version: 20190422.2259
+;; Package-Version: 20190423.808
 ;; Keywords: lisp
 ;; Version: 0
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
@@ -225,7 +225,21 @@ This is bound dynamically while the checks run.")
           window-preserve-size
           window-scroll-bar-height
           with-displayed-buffer-window
-          with-file-modes)))
+          with-file-modes))
+   (cons '(26)
+         (package-lint--match-symbols
+          read-answer
+          list-at-point
+          list-timers
+          replace-buffer-contents
+          apropos-local-variable
+          apropos-local-value
+          dired-mouse-find-file
+          dired-mouse-find-file-other-frame))
+   (cons '(26 2)
+         (package-lint--match-symbols
+          read-answer
+          assoc-delete-all)))
   "An alist of function/macro names and when they were added to Emacs.")
 
 (defconst package-lint--sane-prefixes

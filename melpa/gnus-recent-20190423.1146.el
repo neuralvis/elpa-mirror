@@ -4,7 +4,7 @@
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
 ;; Version: 0.2.0
-;; Package-Version: 20190115.1751
+;; Package-Version: 20190423.1146
 ;; URL: https://github.com/unhammer/gnus-recent
 ;; Package-Requires: ((emacs "25.3.2"))
 ;; Keywords: convenience, mail
@@ -47,7 +47,8 @@
 ;;; Code:
 
 (require 'gnus-sum)
-(require 'org-gnus)
+(unless (require 'org-gnus nil 'noerror)
+  (require 'ol-gnus))
 
 (defvar gnus-recent--articles-list nil
   "The list of articles read in this Emacs session.")
