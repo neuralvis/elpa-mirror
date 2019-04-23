@@ -1,12 +1,12 @@
 ;;; easy-hugo.el --- Write blogs made with hugo by markdown or org-mode -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2018 by Masashı Mıyaura
+;; Copyright (C) 2017-2019 by Masashı Mıyaura
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-easy-hugo
-;; Package-Version: 20190422.308
-;; Version: 3.8.38
-;; Package-Requires: ((emacs "24.4") (popup "0.5.3"))
+;; Package-Version: 20190423.238
+;; Version: 3.8.39
+;; Package-Requires: ((emacs "24.4") (popup "0.5.3") (request "0.3.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'request)
 
 (defgroup easy-hugo nil
   "Writing blogs made with hugo."
@@ -515,6 +516,22 @@ Report an error if hugo is not installed, or if `easy-hugo-basedir' is unset."
 				 (file-name-nondirectory file)))
 			"  title=\"\" >}}")))))))
 
+(defun easy-hugo--request-image (url file)
+  "Resuest image from URL and save file at the location of FILE."
+  (request
+   url
+   :parser 'buffer-string
+   :success
+   (cl-function (lambda (&key data &allow-other-keys)
+		  (when data
+		    (with-current-buffer (get-buffer-create "*request image*")
+		      (erase-buffer)
+		      (insert data)
+		      (write-file file)))))
+   :error
+   (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
+		  (message "Got error: %S" error-thrown)))))
+
 ;;;###autoload
 (defun easy-hugo-pull-image ()
   "Pull image from internet to image directory and generate image link."
@@ -538,7 +555,7 @@ Report an error if hugo is not installed, or if `easy-hugo-basedir' is unset."
 				nil)))
       (when (file-exists-p (file-truename file))
 	(error "%s already exists!" (file-truename file)))
-      (url-copy-file url file t)
+      (easy-hugo--request-image url file)
       (insert (concat (format "<img src=\"%s%s\""
 			      easy-hugo-url
 			      (concat
@@ -571,7 +588,7 @@ Report an error if hugo is not installed, or if `easy-hugo-basedir' is unset."
 				nil)))
       (when (file-exists-p (file-truename file))
 	(error "%s already exists!" (file-truename file)))
-      (url-copy-file url file t)
+      (easy-hugo--request-image url file)
       (insert (concat (format "{{< figure src=\"%s%s\""
                               easy-hugo-url
                               (concat

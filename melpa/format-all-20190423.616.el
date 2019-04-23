@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20190408.1319
+;; Package-Version: 20190423.616
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -42,6 +42,7 @@
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX (prettier)
 ;; - Kotlin (ktlint)
+;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt)
 ;; - Markdown (prettier)
 ;; - OCaml (ocp-indent)
@@ -412,6 +413,18 @@ Consult the existing formatters for examples of BODY."
   (:modes kotlin-mode)
   (:format (format-all-buffer-easy executable "--format" "--stdin")))
 
+(define-format-all-formatter ledger-mode
+  (:executable)
+  (:install)
+  (:modes ledger-mode)
+  (:format
+    (format-all-buffer-thunk
+     (lambda (input)
+       (ledger-mode)
+       (insert input)
+       (ledger-mode-clean-buffer)
+       (list nil "")))))
+
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
   (:install "npm install --global lua-fmt")
@@ -599,7 +612,8 @@ use ordinary undo to get your code back to its previous state.
 You will need to install external programs to do the formatting.
 If the command can't find the program that it needs, it will try
 to tell you how you might be able to install it on your operating
-system.  Only Emacs Lisp is formatted without an external program.
+system. Only Emacs Lisp and Ledger are formatted without an
+external program.
 
 A suitable formatter is selected according to the `major-mode' of
 the buffer.  Many popular programming languages are supported.

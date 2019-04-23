@@ -4,7 +4,7 @@
 ;;
 ;; Author: binjo.cn@gmail.com
 ;; Version: $Id: yara-mode.el,v 0.0 2012/10/16 14:11:51 binjo Exp $
-;; Package-Version: 20170720.651
+;; Package-Version: 20190423.710
 ;; Keywords: yara
 ;; X-URL: not distributed yet
 ;; Package-Requires: ((emacs "24"))
@@ -66,13 +66,15 @@ For detail, see `comment-dwim'."
      . (1 font-lock-constant-face))
     ("\\_<\\(\\$[^\s\t].*?\\)\\_>"
      . (1 font-lock-variable-name-face))
+    ("\\_<\\(/\\(.*?\\)/\\)\\_>"
+     . (1 font-lock-string-face))
     (,(regexp-opt
        '("all" "and" "any" "ascii" "at" "condition" "contains"
          "entrypoint" "false" "filesize" "fullword" "for" "global" "in"
          "import" "include"
          "matches" "meta" "nocase" "not" "or" "of"
          "private" "rule" "strings" "them" "true"
-         "wide")
+         "wide" "xor")
        'symbols)
      . font-lock-keyword-face)
     (,(regexp-opt
