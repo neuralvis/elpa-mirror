@@ -45,7 +45,7 @@ HISTORY FUNCTIONS
 - annotate-time ()                              OK
 - annotate-current-time ()                      NO
 - annotate-extract-revision-at-line ()          OK
-- region-history (FILE BUFFER LFROM LTO)        NO --line-range option is experimental
+- region-history (FILE BUFFER LFROM LTO)        OK experimental option "line-range" added in mercurial 4.4
 - region-history-mode ()                        NO
 - mergebase (rev1 &optional rev2)               TODO
 TAG SYSTEM

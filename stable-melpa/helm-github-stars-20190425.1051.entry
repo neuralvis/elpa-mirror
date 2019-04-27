@@ -1,0 +1,2 @@
+
+(helm-github-stars . [(20190425 1051) ((helm (1 6 8)) (emacs (24 4))) "Helm interface for your github's stars" single ((:commit . "8b80e24dc4e77dcaeb671c93a9ec640be49cb683") (:keywords "helm" "github" "stars") (:authors ("Sliim" . "sliim@mailoo.org") ("xuchunyang" . "xuchunyang56@gmail.com")) (:maintainer "Sliim" . "sliim@mailoo.org") (:url . "https://github.com/Sliim/helm-github-stars"))])
