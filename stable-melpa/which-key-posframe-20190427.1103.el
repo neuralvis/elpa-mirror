@@ -5,7 +5,7 @@
 ;; Author: Yanghao Xie
 ;; Maintainer: Yanghao Xie <yhaoxie@gmail.com>
 ;; URL: https://github.com/yanghaoxie/which-key-posframe
-;; Package-Version: 20190422.634
+;; Package-Version: 20190427.1103
 ;; Version: 0.2.0
 ;; Keywords: convenience, bindings, tooltip
 ;; Package-Requires: ((emacs "26.0")(posframe "0.4.3")(which-key "3.3.2"))
@@ -51,11 +51,6 @@ When nil, Using current frame's font as fallback."
 
 (defcustom which-key-posframe-width nil
   "The width of which-key-posframe."
-  :group 'which-key-posframe
-  :type 'number)
-
-(defcustom which-key-posframe-height nil
-  "The height of which-key-posframe."
   :group 'which-key-posframe
   :type 'number)
 
@@ -127,12 +122,12 @@ of the buffer text to be displayed in the popup"
 		   :font which-key-posframe-font
 		   :position (point)
 		   :poshandler which-key-posframe-poshandler
-		   :background-color (face-attribute 'which-key-posframe :background)
-		   :foreground-color (face-attribute 'which-key-posframe :foreground)
+		   :background-color (face-attribute 'which-key-posframe :background nil t)
+		   :foreground-color (face-attribute 'which-key-posframe :foreground nil t)
 		   :height (car act-popup-dim)
 		   :width (cdr act-popup-dim)
 		   :internal-border-width which-key-posframe-border-width
-		   :internal-border-color (face-attribute 'which-key-posframe-border :background)
+		   :internal-border-color (face-attribute 'which-key-posframe-border :background nil t)
 		   :override-parameters which-key-posframe-parameters)))
 
 (defun which-key-posframe--hide ()
