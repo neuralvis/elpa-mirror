@@ -18,9 +18,9 @@ Usage:
 Tips:
 - Add below code into "~/.emacs" to AUTOMATICALLY update tags file:
 
-  ;; Don't ask before re-reading changed TAGS files
+  ;; Don't ask before reloading updated tags files
   (setq tags-revert-without-query t)
-  ;; NO warning when loading large TAGS files
+  ;; NO warning when loading large tag files
   (setq large-file-warning-threshold nil)
   (add-hook 'prog-mode-hook
     (lambda ()
