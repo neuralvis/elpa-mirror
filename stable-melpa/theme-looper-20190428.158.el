@@ -4,7 +4,7 @@
 
 ;; Author: Mohammed Ismail Ansari <team.terminal@gmail.com>
 ;; Version: 2.4
-;; Package-Version: 20190427.2356
+;; Package-Version: 20190428.158
 ;; Keywords: convenience, color-themes
 ;; Maintainer: Mohammed Ismail Ansari <team.terminal@gmail.com>
 ;; Created: 2014/03/22
@@ -297,6 +297,7 @@
   (if (featurep 'ivy)
       (ivy-read "theme-looper: "
                 themes-collection
+                :preselect (symbol-name (theme-looper--get-current-theme))
                 :update-fn 'theme-looper--preview-theme
                 :action (lambda (th)
                           (theme-looper-enable-theme (intern th)))

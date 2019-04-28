@@ -4,7 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; URL: https://github.com/purcell/page-break-lines
-;; Package-Version: 20181221.2308
+;; Package-Version: 20190428.218
 ;; Package-X-Original-Version: 0
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience, faces
@@ -99,7 +99,7 @@ displayed as a junk character."
   "Toggle Page Break Lines mode.
 
 In Page Break mode, page breaks (^L characters) are displayed as a
-horizontal line of `page-break-string-char' characters."
+horizontal line of `page-break-lines-char' characters."
   :lighter page-break-lines-lighter
   :group 'page-break-lines
   (page-break-lines--update-display-tables))
