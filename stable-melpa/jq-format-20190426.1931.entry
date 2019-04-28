@@ -1,0 +1,2 @@
+
+(jq-format . [(20190426 1931) ((emacs (24)) (reformatter (0 3))) "Reformat JSON and JSONLines using jq" single ((:commit . "52b67d9b550954316d0a47bf307f69ac6dfa821b") (:keywords "languages") (:authors ("wouter bolsterlee" . "wouter@bolsterl.ee")) (:maintainer "wouter bolsterlee" . "wouter@bolsterl.ee") (:url . "https://github.com/wbolster/emacs-jq-format"))])
