@@ -2,7 +2,7 @@
 
 ;; Authors: Juri Linkov <juri@jurta.org> (initial idea), Dmitry K. (packager and maintainer)
 ;; Package-Requires: ((emacs "24.4"))
-;; Package-Version: 20180213.1325
+;; Package-Version: 20190428.1711
 ;; Keywords: input method
 ;; Homepage: https://github.com/a13/reverse-im.el
 
@@ -39,6 +39,9 @@
   nil
   "List of input methods to activate when minor-mode is on."
   :group 'reverse-im
+  :set #'(lambda (symbol value)
+	   (set-default symbol value)
+           (mapc #'reverse-im-activate value))
   :type `(repeat (choice (const nil)
                          mule-input-method-string)))
 
@@ -128,10 +131,7 @@ Example usage: (reverse-im-activate \"russian-computer\")"
   :init-value nil
   :global t
   (if reverse-im-mode
-      (progn
-        (when (null reverse-im-input-methods)
-          (call-interactively #'reverse-im-add-input-method))
-        (mapc #'reverse-im-activate reverse-im-input-methods))
+      (mapc #'reverse-im-activate reverse-im-input-methods)
     (reverse-im-deactivate t)))
 
 
