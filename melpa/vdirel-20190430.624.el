@@ -4,7 +4,7 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Version: 0.1.1
-;; Package-Version: 20181001.1135
+;; Package-Version: 20190430.624
 ;; Url: https://github.com/DamienCassou/vdirel
 ;; Package-Requires: ((emacs "24.4") (org-vcard "0.1.0") (helm "1.7.0") (seq "1.11"))
 ;; Created: 09 Dec 2015
@@ -131,7 +131,7 @@ Let the user choose a repository from `vdirel-repositories` and set
   "Return a list of vCard files in REPOSITORY.
 If REPOSITORY is absent or nil, use the function `vdirel--repository'."
   (let ((repository (or repository (vdirel--repository))))
-    (directory-files repository t "\.vcf$" t)))
+    (directory-files repository t "\\.vcf$" t)))
 
 (defun vdirel--parse-file-to-contact (filename)
   "Return a list representing the vCard in inside FILENAME.

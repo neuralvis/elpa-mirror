@@ -4,8 +4,8 @@
 
 ;; Author: Tom Regner <tom@goochesa.de>
 ;; Maintainer: Tom Regner <tom@goochesa.de>
-;; Version: 0.5.0
-;; Package-Version: 20190426.817
+;; Version: 0.6.1
+;; Package-Version: 20190430.713
 ;; Keywords: repl, buffers, toggle
 ;; Package-Requires: ((fullframe  "0.0.5"))
 
