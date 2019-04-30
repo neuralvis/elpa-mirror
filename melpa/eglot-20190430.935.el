@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.4
-;; Package-Version: 20190213.924
+;; Package-Version: 20190430.935
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -2368,8 +2368,8 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
                                                    (changed 2)
                                                    (deleted 3)))))))
              ((eq action 'renamed)
-              (handle-event desc 'deleted file)
-              (handle-event desc 'created file1))))))
+              (handle-event '(desc 'deleted file))
+              (handle-event '(desc 'created file1)))))))
       (unwind-protect
           (progn (dolist (dir (delete-dups (mapcar #'file-name-directory globs)))
                    (push (file-notify-add-watch dir '(change) #'handle-event)
