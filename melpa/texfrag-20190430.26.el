@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <i@tn-home.de>
 ;; Keywords: tex, languages, wp
-;; Package-Version: 20181001.753
+;; Package-Version: 20190430.26
 ;; URL: https://github.com/TobiasZawada/texfrag
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "25") (auctex "11.90.2"))
@@ -57,7 +57,7 @@
 ;;  1. Derive your major mode from one of the already supported major modes
 ;;     (see doc of variable `texfrag-setup-alist').
 ;;     You do not need to do anything beyond that if your major mode does not
-;;     change the marks for LaTeX equations (e.g., "\f$" for LaTeX equations
+;;     change the marks for LaTeX equations (e.g., "\f$...\f$" for LaTeX equations
 ;;     in doxygen comments for `prog-mode').
 ;;
 ;;  2. Add a setup function to `texfrag-setup-alist' (see the doc for that variable).
@@ -176,6 +176,18 @@ This can be a file name or a sexp that generates the file name."
   :group 'texfrag
   :type '(choice file sexp))
 
+(defconst texfrag-frag-alist-type
+  '(repeat
+    (list :tag "Equation filter"
+	  (regexp :tag "Regexp matching the fragment beginning")
+	  (texfrag-regexp :tag "Regexp matching the fragment end")
+	  (string :tag "Replacement of beginning in LaTeX buffer")
+	  (string :tag "Replacement of end in LaTeX buffer")
+	  (set :tag "Fragment type" :inline t
+	       (list :tag "Show as display equation" :inline t (const :display) (const t))
+	       (list :tag "Generator function" :inline t (const :generator) (function identity)))))
+  "Customization type for `texfrag-frag-alist'.")
+
 (define-widget 'texfrag-regexp 'string
   "A regular expression."
   :match 'texfrag-widget-regexp-match
@@ -212,21 +224,15 @@ If VAL is a widget instead of a string (widget-value val) is tested."
       widget)))
 
 (defcustom texfrag-LaTeX-frag-alist
-  '(("\\$\\$" "\\$\\$" "$$" "$$" display)
-    ("\\$" "\\$" "$" "$" embedded)
-    ("\\\\\\[" "\\\\\\]" "\\\\[" "\\\\]" display)
-    ("\\\\(" "\\\\)" "\\\\(" "\\\\)" embedded)
-    ("\\\\begin{\\([a-z*]+\\)}" "\\\\end{\\1}" "\\\\begin{\\2}" "\\\\end{\\2}" display)
+  '(("\\$\\$" "\\$\\$" "$$" "$$" :display t)
+    ("\\$" "\\$" "$" "$")
+    ("\\\\\\[" "\\\\\\]" "\\\\[" "\\\\]" :display t)
+    ("\\\\(" "\\\\)" "\\\\(" "\\\\)")
+    ("\\\\begin{\\([a-z*]+\\)}" "\\\\end{\\1}" "\\\\begin{\\2}" "\\\\end{\\2}" :display t)
     )
   "`texfrag-frag-alist' for LaTeX."
   :group 'texfrag
-  :type '(repeat
-          (list :tag "Equation filter"
-                (regexp :tag "Regexp matching the equation beginning")
-                (texfrag-regexp :tag "Regexp matching the equation end")
-                (string :tag "Replacement of beginning in LaTeX buffer")
-                (string :tag "Replacement of end in LaTeX buffer")
-                (choice :tag "Equation type" (const display) (const embedded)))))
+  :type texfrag-frag-alist-type)
 
 (defcustom texfrag-org-class-options ""
   "LaTeX class options for texfrag in orgmode.
@@ -247,17 +253,17 @@ Defaults to the empty string.  Should include the enclosing brackets."
 (require 'tex)
 (require 'subr-x)
 
-(defvar texfrag-header-function #'texfrag-header-default
+(defvar-local texfrag-header-function #'texfrag-header-default
   "Function that collects all LaTeX header contents from the current buffer.")
 
-(defvar texfrag-tail-function "\n\\end{document}\n%%Local Variables:\n%%TeX-master: t\n%%End:\n"
+(defvar-local texfrag-tail-function "\n\\end{document}\n%%Local Variables:\n%%TeX-master: t\n%%End:\n"
   "String with the LaTeX tail or Function that collects all preview-LaTeX tail contents from the current buffer.")
 
-(defvar texfrag-next-frag-function #'texfrag-next-frag-default
+(defvar-local texfrag-next-frag-function #'texfrag-next-frag-default
   "Function that searches for the next LaTeX fragment starting at point.
 It is called with:
 
-\(funcall texfrag-next-frag-functionx BOUND)
+\(funcall texfrag-next-frag-function BOUND)
 
 It returns nil if there is no LaTeX fragment within the region.
 Otherwise it returns a list
@@ -270,7 +276,7 @@ eqn: equation text inclusive delimiters, e.g.,
      (it is not necessarily equal to (buffer-substring b e))
 match: entry from `texfrag-frag-alist' associated with the match")
 
-(defvar texfrag-previous-frag-function #'texfrag-previous-frag-default
+(defvar-local texfrag-previous-frag-function #'texfrag-previous-frag-default
   "Function that searches for the previous LaTeX fragment starting at point.
 It is called with:
 
@@ -301,7 +307,7 @@ Override the default in the hook for the major mode.
 The default works for some LaTeX fragments in doxygen.
 
 The value is a list of equation-filters.
-Each equation-filter is a list of two matchers, two replacement strings, and an optional flag.
+Each equation-filter is a list of two matchers, two replacement strings, and further property-value pairs.
 The first matcher can be a regular expression string matching the beginning of a formula
 or a list with the regular expression string as its first element and a function
 as its second element. The function returns non-nil if the match really starts a LaTeX fragment.
@@ -312,11 +318,19 @@ The last two strings are the beginning and the end of the corresponding equation
 They have the format of the NEWTEXT argument of `replace-match'.
 You need to escape the backslash character ?\\\\ and you can refer to groups as explained further below.
 
-If the optional flag equals the symbol display then this equation should be displayed on a separate line. It should be embedded otherwise.
-
 Capturing groups can be used in the first two regular expressions. These groups can be referred to in the last two replacement strings.
 The indexes for the captures are determined as match for the combined regular expression
-\\(beginning regexp\\)\\(end regexp\\).")
+\\(beginning regexp\\)\\(end regexp\\).
+
+Following properties are recognized:
+
+:display (default: nil) if the :display property is non-nil fragments are wrapped
+into newlines by `texfrag-fix-display-math'.
+
+:generator (default: nil)
+May be nil or a generator function to be called with the transformed match as argument.
+The generator should return the image or a file name to the image to be displayed.
+")
 
 (defvar-local texfrag-equation-filter #'identity
   "Filter function transforming the equation text from the original buffer into the equation text in the LaTeX buffer.")
@@ -327,7 +341,15 @@ Thereby use the previous `match-data' DATA with corresponding string STR
 if this was a `string-match'.
 Let N be the number of sub-expressions of the previous match then
 \\n with n=0,...,N are replaced by the quoted matches from the previous match
-and \\n with n=N+1,\ldots are replaced by n-(N+1)."
+and \\n with n=N+1,... are replaced by n-(N+1).
+
+Example:
+With str equal to \"foo bar\" and preceeding match
+\(string-match \"f\\\\(o+\\\\)\" str)
+the form
+\(texfrag-combine-regexps \"\\\\(ba\\\\)zz.*\\\\1G\\\\2\" (match-data) str)
+returns:
+\"\\\\(ba\\\\)zz.*ooG\\\\1\""
   (let ((data-n (/ (length data) 2))
 	new-pos
 	(pos 0)
@@ -354,6 +376,9 @@ and \\n with n=N+1,\ldots are replaced by n-(N+1)."
        (t (setq re (concat re "\\")))))
     (setq re (concat re (substring re-template pos)))
     re))
+;; Test:
+;; (string-equal "\\(ba\\)zz.*ooG\\1" (let ((str "foo bar")) (string-match "f\\(o+\\)" str) (texfrag-combine-regexps "\\(ba\\)zz.*\\1G\\2" (match-data) str)))
+;; 
 
 (defun texfrag-combine-match-data (&rest args)
   "Combines the match data in ARGS of multiple `string-match' commands.
@@ -376,6 +401,8 @@ returns the result of
 	      offset (+ offset str-length)
 	      args (cddr args))))
     (cons 0 (cons offset ret))))
+;; Test:
+;; (equal '(0 15 4 7 5 6 11 14 12 14) (let* ((str1 "foo bar") (data1 (progn (string-match "b\\(a\\)r" str1) (match-data))) (str2 "baz booz") (data2 (progn (string-match "b\\(o+\\)" str2) (match-data)))) (texfrag-combine-match-data str1 data1 str2 data2)))
 
 (defun texfrag-regexp-begin (frag)
   "Extract the beginning regexp from FRAG.
@@ -386,13 +413,13 @@ FRAG is a LaTeX fragment entry in `texfrag-frag-alist'."
 
 (defun texfrag-next-frag-default (bound)
   "Search for the next LaTeX fragment in region from `point' to BOUND.
-See the documentation of `texfrag-next-frag-function'
+See the documentation of variable `texfrag-next-frag-function'
 for further details about the argument and the return value."
   (let ((re-b (concat (mapconcat #'texfrag-regexp-begin
 				 texfrag-frag-alist "\\|")))
 	found)
-    (while (and (re-search-forward re-b bound t)
-		(null found))
+    (while (and (null found)
+		(re-search-forward re-b bound t))
       (let* ((bOuter (match-beginning 0))
              (bInner (point))
              (bStr (match-string 0))
@@ -415,7 +442,8 @@ for further details about the argument and the return value."
 		     (cStr (concat bStr eStr)) ;; combined string
 		     (cMatches (texfrag-combine-match-data bStr bMatches eStr eMatches))
 		     )
-		  (cl-assert eOuter nil "LaTeX fragment beginning at %d with %s not closed." bOuter bStr)
+		  (unless eOuter
+		    (user-error "LaTeX fragment beginning at %s with %s not closed." bOuter bStr)) ;; Changed %d for bOuter to %s to handle case bOuter==nil.
 		  (set-match-data cMatches)
 		  (list bOuter eOuter
 			(concat (replace-match (nth 2 matchList) nil nil cStr)
@@ -442,7 +470,8 @@ for further details about the argument and the return value."
 	     (cMatches (texfrag-combine-match-data bStr bMatches eStr eMatches))
 	     (cStr (concat bStr eStr))
 	     )
-	(cl-assert bOuter nil "LaTeX fragment ending at %d with %s has no start string." bOuter eStr)
+	(unless bOuter
+	  (user-error "LaTeX fragment ending at %d with %s has no start string." bOuter eStr))
 	(set-match-data cMatches)
         (list bOuter eOuter
               (concat (replace-match (nth 2 matchList) nil nil cStr)
@@ -617,7 +646,7 @@ Return the preview directory instead of the LaTeX file name if PRV-DIR is non-ni
 
 (defun texfrag-preview-dir (&optional buf absolute mkdir)
   "Return preview directory for the LaTeX file with texfrags for BUF.
-ABSOLUTE and MKDIR have the same meaning as for `texfrag-LaTeX-file'.
+ABSOLUTE and MKDIR have the same meaning as for function `texfrag-LaTeX-file'.
 BUF defaults to `current-buffer'."
   (with-current-buffer (or buf (current-buffer))
     (texfrag-LaTeX-file absolute mkdir t)))
@@ -633,8 +662,8 @@ This variable is the link back from the LaTeX-buffer to the source buffer.")
   "Run BODY in `texfrag-source-buffer'."
   (declare (debug body))
   `(progn
-     (cl-assert (buffer-live-p texfrag-source-buffer) nil
-                "TeXfrag source buffer %S not ready in LaTeX target buffer %S." texfrag-source-buffer (current-buffer))
+     (unless (buffer-live-p texfrag-source-buffer)
+       (user-error "TeXfrag source buffer %S not ready in LaTeX target buffer %S." texfrag-source-buffer (current-buffer)))
      (with-current-buffer texfrag-source-buffer
        ,@body)))
 
@@ -642,8 +671,8 @@ This variable is the link back from the LaTeX-buffer to the source buffer.")
   "Run BODY in `texfrag-source-buffer'."
   (declare (debug body))
   `(progn
-     (cl-assert (buffer-live-p texfrag-tex-buffer) nil
-                "TeXfrag LaTeX buffer %S not ready in LaTeX target buffer %S." texfrag-tex-buffer (current-buffer))
+     (unless (buffer-live-p texfrag-tex-buffer)
+       (user-error "TeXfrag LaTeX buffer %S not ready in LaTeX target buffer %S." texfrag-tex-buffer (current-buffer)))
      (with-current-buffer texfrag-tex-buffer
        ,@body)))
 
@@ -672,6 +701,35 @@ It is used in LaTeX buffers generated by texfrag."
                  (move-overlay ol b-src e-src buf-src)
                (delete-overlay ol))
              (delete-overlay ol-src))))
+
+(defvar texfrag-cleanup-hook nil
+  "Hook run as last action before `texfrag-tex-buffer' is killed.
+`TeX-output-buffer' has already been closed.")
+
+(defun texfrag-cleanup ()
+  "Delete the buffer registered at `texfrag-tex-buffer'.
+Delete also the corresponding output buffer."
+  ;; org-mode does crazy stuff:
+  ;; It copies local variables of the original org buffer to temp buffers.
+  ;; If we do not double check the tex buffer is killed together with the temp buffer.
+  (when (and
+	 (buffer-live-p texfrag-tex-buffer)
+	 (eq (current-buffer) (texfrag-with-tex-buffer texfrag-source-buffer)))
+    (with-current-buffer texfrag-tex-buffer
+      (let* ((output-buffer (TeX-process-buffer (file-name-sans-extension (buffer-file-name))))
+	     (proc (and (buffer-live-p output-buffer) (get-buffer-process output-buffer)))
+	     kill-buffer-query-functions)
+	(when (buffer-live-p output-buffer)
+	  (when (process-live-p proc)
+	    (kill-process proc))
+	  (set-buffer-modified-p nil)
+	  (kill-buffer output-buffer))
+	(run-hooks 'texfrag-cleanup-hook)
+	(set-buffer-modified-p nil)
+	(kill-buffer (current-buffer))))
+    (cl-assert (null (buffer-live-p texfrag-tex-buffer)) nil
+	       "Texfrag-tex-buffer %s still live." texfrag-tex-buffer)
+    (setq texfrag-tex-buffer nil)))
 
 (defvar texfrag-after-preview-hook nil
   "Buffer-local hook run after the preview images have been created.
@@ -702,10 +760,24 @@ or the string itself."
 	     ((stringp ,fun) ,fun)
 	     ((functionp ,fun) (funcall ,fun))
 	     (t
-	      (error "Unrecognized format of %s: %s" (quote ,fun) ,fun)
+	      (user-error "Unrecognized format of %s: %s" (quote ,fun) ,fun)
 	      )))))
 
-(defun texfrag-region (b e)
+(defun texfrag-generator-place-preview (ov img _box &optional _counters _tempdir &rest _place-opts)
+  "Call me like `preview-gs-place'.
+Return OV after setting 'preview-image to a cons (img . img)
+assuming that img is already an image."
+  (when (stringp img)
+    (setq img (expand-file-name img))
+    (if	(and (file-readable-p img)
+	     (null (file-directory-p img)))
+      (progn
+	(setq img (create-image img))
+	(overlay-put ov 'preview-image (cons img img)))
+      (warn "Cannot find image file %S" img)))
+  ov)
+
+(defun texfrag-region (&optional b e)
   "Collect LaTeX fragments in region from B to E in the LaTeX target file.
 Thereby, the LaTeX target file is that one returned by
 function `texfrag-LaTeX-file'.
@@ -713,16 +785,22 @@ Afterwards start `preview-document' on the target file.
 The function `texfrag-after-tex' is hooked into `texfrag-after-preview-hook'
 which runs after `preview-document'.
 `texfrag-after-tex' transfers the preview images
-from the LaTeX target file buffer to the source buffer."
+from the LaTeX target file buffer to the source buffer.
+B defaults to `point-min' and E defaults to `point-max'."
   (interactive "r")
   (cl-declare (special auto-insert-alist auto-insert))
+  (unless b (setq b (point-min)))
+  (unless e (setq e (point-max)))
   (let ((tex-path (texfrag-LaTeX-file t t))
-	(src-buf (current-buffer))
-        (coding-sys (or coding-system-for-write buffer-file-coding-system))
-	tex-buf
-	found
-	found-str
-	(texfrag-preview-scale preview-scale)) ; only non-nil if there are LaTeX-fragments in the document
+		(src-buf (current-buffer))
+        (coding-sys (intern-soft ;; LaTeX does not accept a byte order mark:
+					 (replace-regexp-in-string
+					  "-with-signature" ""
+					  (symbol-name (or coding-system-for-write buffer-file-coding-system)))))
+		tex-buf
+		found
+		found-str
+		(texfrag-preview-scale preview-scale)) ; only non-nil if there are LaTeX-fragments in the document
     (let (auto-insert-alist auto-insert)
       (setq tex-buf (find-file-noselect tex-path)
             texfrag-tex-buffer tex-buf))
@@ -732,35 +810,47 @@ from the LaTeX target file buffer to the source buffer."
       (while (setq found (texfrag-search-forward-fragment e))
 	(let* ((found-b (nth 0 found))
 	       (found-e (nth 1 found))
-	       (ol (make-overlay found-b found-e)))
-	  (unless found-str ; only modify the buffer there if at least one LaTeX fragment
+	       ol
+	       (generator (plist-get (texfrag-match-plist found) :generator)))
+	  (if generator
+	      (progn
+		(unless (functionp generator)
+		  (user-error "Generator %S used at %s in buffer %s is not a function" generator found-b (current-buffer)))
+		(let ((preview-image-type 'texfrag)
+		      (preview-image-creators '((texfrag (place texfrag-generator-place-preview)))))
+		  (setq ol (preview-place-preview (funcall generator (texfrag-match-transformed-eqn found)) found-b found-e nil nil (cl-copy-list TeX-active-tempdir) nil))
+		  ))
+	    (setq ol (make-overlay found-b found-e))
+	    (unless found-str ; only modify the buffer there if at least one LaTeX fragment
+	      (with-current-buffer tex-buf
+			(set-buffer-file-coding-system coding-sys)
+			(delete-region (point-min) (point-max))))
+	    (setq found-str (buffer-substring-no-properties found-b found-e))
+	    (overlay-put ol 'texfrag-string found-str)
 	    (with-current-buffer tex-buf
-	      (setq buffer-file-coding-system coding-sys)
-	      (delete-region (point-min) (point-max))))
-	  (setq found-str (buffer-substring-no-properties found-b found-e))
-	  (overlay-put ol 'texfrag-string found-str)
-	  (with-current-buffer tex-buf
-	    (insert "\n" (propertize (nth 2 found) 'texfrag-src ol))))))
+	      (insert "\n" (propertize (nth 2 found) 'texfrag-src ol)))))))
     ;;; end of tex-buf:
     (if found-str ;; avoid error messages if no LaTeX fragments were found
-	(with-current-buffer tex-buf
-	  (message "Running texfrag with LaTeX target buffer %S and source buffer %S" tex-buf src-buf)
-	  (setq-local texfrag-source-buffer src-buf)
-	  (put 'texfrag-source-buffer 'permanent-local t)
-	  (texfrag-insert-tex-part texfrag-tail-function)
-	  (goto-char (point-min))
-	  (texfrag-insert-tex-part texfrag-header-function)
-          (texfrag-insert-tex-part "\n\\begin{document}")
-	  (save-buffer)
-	  (let (TeX-mode-hook LaTeX-mode-hook)
-	    (TeX-latex-mode)
-	    (add-hook 'texfrag-after-preview-hook #'texfrag-after-tex t t)
-	    (with-current-buffer src-buf
-	      (setq texfrag-running tex-buf))
-	    (let ((preview-auto-cache-preamble t))
-	      (setq preview-scale texfrag-preview-scale)
-	      (preview-document)
-	      )))
+	(progn
+	  (cl-assert (buffer-live-p tex-buf))
+	  (with-current-buffer tex-buf
+	    (message "Running texfrag with LaTeX target buffer %S and source buffer %S" tex-buf src-buf)
+	    (setq-local texfrag-source-buffer src-buf)
+	    (put 'texfrag-source-buffer 'permanent-local t)
+	    (texfrag-insert-tex-part texfrag-tail-function)
+	    (goto-char (point-min))
+	    (texfrag-insert-tex-part texfrag-header-function)
+            (texfrag-insert-tex-part "\n\\begin{document}")
+	    (save-buffer)
+	    (let (TeX-mode-hook LaTeX-mode-hook)
+	      (TeX-latex-mode)
+	      (add-hook 'texfrag-after-preview-hook #'texfrag-after-tex t t)
+	      (with-current-buffer src-buf
+		(setq texfrag-running tex-buf))
+	      (let ((preview-auto-cache-preamble t))
+		(setq preview-scale texfrag-preview-scale)
+		(preview-document)
+		))))
       (setq texfrag-running nil))))
 
 (defun texfrag-ready-p (b e)
@@ -911,14 +1001,40 @@ Example:
 	(LaTeX-preview-setup)
 	(preview-mode-setup)
 	(when texfrag-preview-buffer-at-start
-	  (preview-buffer)))
+	  (preview-buffer))
+	(add-hook 'kill-buffer-hook #'texfrag-cleanup nil t)
+	(add-hook 'change-major-mode-hook #'texfrag-cleanup nil t))
+    (texfrag-cleanup)
+    (remove-hook 'kill-buffer-hook #'texfrag-cleanup t)
+    (remove-hook 'change-major-mode-hook #'texfrag-cleanup t)
     (preview-clearout-document)))
+
+(defvar texfrag-global-mode-inhibit nil
+  "Inhibit call of function `texfrag-mode' through `texfrag-global-mode-fun'.
+Background:
+See `define-globalized-minor-mode'.
+There MODE stands for symbol `texfrag-global-mode'.
+MODE-cmhh is put into `change-major-mode-hook'.
+That function **adds** the current buffer to variable MODE-buffers.
+If `texfrag-preview-buffer-at-start' is enabled a LaTeX buffer is created
+in the middle of MODE-enable-in-buffers.
+Therefore `change-major-mode-hook' runs again, but the source buffer is still
+in the list MODE-buffers.
+So `texfrag-global-mode-fun' runs kind of recursively for the source buffer.
+
+This variable prevents that function `texfrag-mode' is run twice
+for the source buffer.")
 
 (defun texfrag-global-mode-fun ()
   "Helper function for command `texfrag-global-mode'.
 Switch texfrag mode on if the major mode of the current buffer supports it."
-  (when (texfrag-find-setup-function)
-    (texfrag-mode)))
+  (when (and
+	 (null texfrag-global-mode-inhibit)
+	 (null texfrag-mode)
+	 (null texfrag-source-buffer)
+	 (texfrag-find-setup-function))
+    (let ((texfrag-global-mode-inhibit t))
+      (texfrag-mode))))
 
 ;;;###autoload
 (define-global-minor-mode texfrag-global-mode texfrag-mode
@@ -945,6 +1061,22 @@ B and E are the boundaries of the region to be processed."
   (interactive)
   (TeX-recenter-output-buffer nil))
 
+(defmacro texfrag-match-transformed-eqn (match)
+  "Get the transformed equation entry from return value MATCH of `texfrag-next-frag-function'."
+  `(nth 2 ,match))
+
+(defmacro texfrag-match-frag (match)
+  "Get FRAG entry from return value MATCH of `texfrag-next-frag-function'."
+  `(nth 3 ,match))
+
+(defmacro texfrag-frag-plist (frag)
+  "Get the property list in entry FRAG of `texfrag-frag-alist'."
+  `(nthcdr 4 ,frag))
+
+(defmacro texfrag-match-plist (match)
+  "Get the property list in the FRAG entry of MATCH."
+  `(texfrag-frag-plist (texfrag-match-frag ,match)))
+
 (defun texfrag-fix-display-math (&optional b e)
   "Insert line breaks around displayed math environments in region from B to E."
   (save-excursion
@@ -956,7 +1088,11 @@ B and E are the boundaries of the region to be processed."
             (goto-char (or b (point-min)))
             (let (math)
               (while (setq math (funcall texfrag-next-frag-function end-marker))
-		(when (eq 'display (nth 4 (nth 3 math)))
+		(when (let ((props (texfrag-match-plist math)))
+			(or
+			 (plist-get props :display)
+			 (eq 'display (car props)) ;;< compatibility
+			 ))
 		  (set-marker eq-end-marker (nth 1 math))
 		  (goto-char eq-end-marker)
 		  (unless (looking-at "[[:space:]]*$")
@@ -966,6 +1102,7 @@ B and E are the boundaries of the region to be processed."
 		    (insert "\n"))
 		  (goto-char eq-end-marker)
 		  ))))
+	(set-marker eq-end-marker nil)
 	(set-marker end-marker nil)))))
 
 (defun texfrag-MathJax-filter (str)
@@ -1055,7 +1192,7 @@ Formulas can be LaTeX fragments or LaTeX environments."
 (defcustom texfrag-org-keep-minor-modes 'texfrag
   "Let `org-mode' restore minor modes after restart.
 Possible values:
-'texfrag : preserve `texfrag-mode' only
+'texfrag : preserve option `texfrag-mode' only
 t: preserve as many minor modes as possible
 nil: dont preserve any minor modes"
   :type '(choice (item texfrag) (item t) (item nil))
@@ -1097,6 +1234,13 @@ nil: dont preserve any minor modes"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html-mode
 
+(defcustom texfrag-html-frag-alist
+  (append texfrag-LaTeX-frag-alist
+	  '(("<img[[:space:]]+src=\"" "\"[^>]*>" "" "" :generator identity)))
+  "Regular expression for TeX fragments in HTML pages."
+  :group 'texfrag
+  :type texfrag-frag-alist-type)
+
 (defun texfrag-html-region-function (b e)
   "Special `texfrag-region' for region from B to E in html mode.
 It differs from `texfrag-region' by skipping the text from buffer-beginning up to <body>."
@@ -1113,7 +1257,7 @@ It differs from `texfrag-region' by skipping the text from buffer-beginning up t
   (interactive)
   (setq texfrag-comments-only nil
         texfrag-equation-filter #'texfrag-MathJax-filter
-        texfrag-frag-alist texfrag-LaTeX-frag-alist
+        texfrag-frag-alist texfrag-html-frag-alist
         texfrag-preview-region-function #'texfrag-html-region-function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1140,7 +1284,10 @@ It differs from `texfrag-region' by skipping the text from buffer-beginning up t
 (defun texfrag-eww-set-LaTeX-file ()
   "Render LaTeX fragments in the current eww buffer.
 Set variable `texfrag-LaTeX-file' to the file name of the current eww window."
-  (setq texfrag-LaTeX-file (texfrag-eww-file-name))
+  (unless (and
+	   (stringp texfrag-LaTeX-file)
+	   (file-readable-p texfrag-LaTeX-file))
+    (setq texfrag-LaTeX-file (texfrag-eww-file-name)))
   (when texfrag-LaTeX-file
     (texfrag-region (point-min) (point-max))))
 
@@ -1173,6 +1320,16 @@ or as `sx-question-mode-after-print-hook'."
 	(remove-hook 'sx-question-mode-after-print-hook #'texfrag-sx-after-print t)
       (advice-remove #'sx-question-mode--print-question #'texfrag-sx-after-print))
     ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun texfrag-scale (scale)
+  "Set SCALE factor for `preview-scale'."
+  (interactive "nScale Factor:")
+  (setq-local preview-scale scale)
+  (texfrag-region (point-min) (point-max)))
+
+(easy-menu-add-item texfrag-mode-map '(menu-bar TeX) ["Set Preview Scale" texfrag-scale t])
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
