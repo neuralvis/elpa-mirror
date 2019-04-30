@@ -4,7 +4,7 @@
 ;;
 ;; Author: Sebastian Monia <smonia@outlook.com>
 ;; URL: https://github.com/sebasmonia/panda
-;; Package-Version: 20190429.410
+;; Package-Version: 20190429.2112
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 1.1
 ;; Keywords: maint tool
@@ -865,7 +865,7 @@ The amount of builds to retrieve is controlled by 'panda-latest-max'."
 (defun panda--deploy-results-queue ()
   "Queue a deploy for the environment at point in a `panda--deploy-results-mode` list."
   (interactive)
-  (panda--browse (format panda--browse-deploy-project panda--deploy-project-id)))
+  (panda-queue-deploy panda--project-name (tabulated-list-get-id)))
 
 (defun panda--deploy-results-history ()
   "Show the selected environment's history in `panda--deploy-results-mode`."

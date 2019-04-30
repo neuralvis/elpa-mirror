@@ -1,0 +1,2 @@
+
+(panda . [(20190429 2112) ((emacs (25))) "Client for Bamboo's REST API." single ((:commit . "4b1cb2befa401269fe264b46e0fac59d9a956818") (:keywords "maint" "tool") (:authors ("Sebastian Monia" . "smonia@outlook.com")) (:maintainer "Sebastian Monia" . "smonia@outlook.com") (:url . "https://github.com/sebasmonia/panda"))])
