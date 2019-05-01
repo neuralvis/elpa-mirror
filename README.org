@@ -3,7 +3,18 @@
 Mirrors for some Emacs package archives. These mirrors should be used only when
 official repository is temporarily down. Maintained using [[https://github.com/d12frosted/mirror-elpa][mirror-elpa]].
 
-** Usage (remote)
+** Usage - GitLab
+
+Just setup =package-archives= in your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+  (setq package-archives
+        '(("melpa" . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/melpa/")
+          ("org"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/org/")
+          ("gnu"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/gnu/")))
+#+END_SRC
+
+** Usage - GitHub
 
 Just setup =package-archives= in your =init.el= file.
 
@@ -14,21 +25,21 @@ Just setup =package-archives= in your =init.el= file.
           ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
 #+END_SRC
 
-** Usage (local)
+** Usage - Local
 
 First, you need to clone this repository.
 
 #+BEGIN_SRC bash
-  $ git clone --depth 1 git@github.com:d12frosted/elpa-mirror.git ~/.elpa-mirror
+  $ git clone --depth 1 git@gitlab.com:d12frosted/elpa-mirror.git ~/.elpa-mirror
 #+END_SRC
 
 And then setup =package-archives= in your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
   (setq package-archives
-        `(("melpa" . ,(concat user-home-directory "elpa-mirror/melpa/"))
-          ("org"   . ,(concat user-home-directory "elpa-mirror/org/"))
-          ("gnu"   . ,(concat user-home-directory "elpa-mirror/gnu/"))))
+        `(("melpa" . ,(concat user-home-directory ".elpa-mirror/melpa/"))
+          ("org"   . ,(concat user-home-directory ".elpa-mirror/org/"))
+          ("gnu"   . ,(concat user-home-directory ".elpa-mirror/gnu/"))))
 #+END_SRC
 
 ** Usage with Spacemacs
