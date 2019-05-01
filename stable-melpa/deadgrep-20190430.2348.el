@@ -4,9 +4,9 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20190314.2207
+;; Package-Version: 20190430.2348
 ;; Keywords: tools
-;; Version: 0.7
+;; Version: 0.8
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -240,6 +240,9 @@ It is used to create `imenu' index.")
 
             (setq prev-line-num line-num))))))))
 
+(defvar deadgrep-finished-hook nil
+  "Hook run when `deadgrep' search is finished.")
+
 (defun deadgrep--process-sentinel (process output)
   "Update the deadgrep buffer associated with PROCESS as complete."
   (let ((buffer (process-buffer process))
@@ -263,6 +266,7 @@ It is used to create `imenu' index.")
               (goto-char (point-max))
               (insert output))))
 
+        (run-hooks 'deadgrep-finished-hook)
         (message "Deadgrep finished")))))
 
 (defun deadgrep--process-filter (process output)
@@ -1010,9 +1014,10 @@ in the current buffer."
 
     (point)))
 
-(defun deadgrep--filename ()
-  "Get the filename of the result at point."
-  (get-text-property (line-beginning-position) 'deadgrep-filename))
+(defun deadgrep--filename (&optional pos)
+  "Get the filename of the result at point POS.
+If POS is nil, use the beginning position of the current line."
+  (get-text-property (or pos (line-beginning-position)) 'deadgrep-filename))
 
 (defun deadgrep--line-number ()
   "Get the filename of the result at point."
@@ -1132,7 +1137,7 @@ Keys are interned filenames, so they compare with `eq'.")
 (defun deadgrep--item-p (pos)
   "Is there something at POS that we can interact with?"
   (or (button-at pos)
-      (deadgrep--filename)))
+      (deadgrep--filename pos)))
 
 (defun deadgrep--move (forward-p)
   "Move to the next item.

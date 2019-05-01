@@ -402,6 +402,20 @@ pyim 的文档隐藏在 comment 中，如果用户喜欢阅读 html 格式的文
 (global-set-key (kbd "M-i") 'pyim-convert-string-at-point)
 #+END_EXAMPLE
 
+*** 如何使用其它字符翻页
+#+BEGIN_EXAMPLE
+(define-key map "." 'pyim-page-next-page)
+(define-key map "," 'pyim-page-previous-page)
+#+END_EXAMPLE
+
+*** 如何用 ";" 来选择第二个候选词
+#+BEGIN_EXAMPLE
+(define-key pyim-mode-map ";"
+  (lambda ()
+    (interactive)
+    (pyim-page-select-word-by-number 2)))
+#+END_EXAMPLE
+
 *** 如何添加自定义拼音词库
 pyim 默认没有携带任何拼音词库，用户可以使用下面几种方式，获取
 质量较好的拼音词库：

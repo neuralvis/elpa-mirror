@@ -4,7 +4,7 @@
 
 ;; Author: Mohammed Ismail Ansari <team.terminal@gmail.com>
 ;; Version: 2.4
-;; Package-Version: 20190428.1539
+;; Package-Version: 20190501.127
 ;; Keywords: convenience, color-themes
 ;; Maintainer: Mohammed Ismail Ansari <team.terminal@gmail.com>
 ;; Created: 2014/03/22
@@ -295,13 +295,14 @@
   (setq theme-looper--initial-theme
         (car custom-enabled-themes))
   (if (featurep 'ivy)
-      (ivy-read "theme-looper: "
-                themes-collection
-                :preselect (symbol-name (theme-looper--get-current-theme))
-                :update-fn 'theme-looper--preview-theme
-                :action (lambda (th)
-                          (theme-looper-enable-theme (intern th)))
-                :unwind 'theme-looper--restore-theme)
+      (let ((ivy-wrap t))
+        (ivy-read "theme-looper: "
+                  themes-collection
+                  :preselect (symbol-name (theme-looper--get-current-theme))
+                  :update-fn 'theme-looper--preview-theme
+                  :action (lambda (th)
+                            (theme-looper-enable-theme (intern th)))
+                  :unwind 'theme-looper--restore-theme))
     (message "theme-looper: package 'ivy' is not installed!")))
 
 (defun theme-looper--preview-theme ()
