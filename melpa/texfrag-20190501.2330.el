@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <i@tn-home.de>
 ;; Keywords: tex, languages, wp
-;; Package-Version: 20190430.26
+;; Package-Version: 20190501.2330
 ;; URL: https://github.com/TobiasZawada/texfrag
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "25") (auctex "11.90.2"))
@@ -187,6 +187,14 @@ This can be a file name or a sexp that generates the file name."
 	       (list :tag "Show as display equation" :inline t (const :display) (const t))
 	       (list :tag "Generator function" :inline t (const :generator) (function identity)))))
   "Customization type for `texfrag-frag-alist'.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar-local texfrag-preview-buffer-at-start-done nil
+  "Set to t if `texfrag-region' is run in function `texfrag-mode'.
+Protection against repeated execution of `texfrag-region'
+through function `texfrag-mode' with non-nil `texfrag-preview-buffer-at-start'
+in the case of derived modes.")
 
 (define-widget 'texfrag-regexp 'string
   "A regular expression."
@@ -443,7 +451,7 @@ for further details about the argument and the return value."
 		     (cMatches (texfrag-combine-match-data bStr bMatches eStr eMatches))
 		     )
 		  (unless eOuter
-		    (user-error "LaTeX fragment beginning at %s with %s not closed." bOuter bStr)) ;; Changed %d for bOuter to %s to handle case bOuter==nil.
+		    (user-error "LaTeX fragment beginning at %s with %s in buffer %s not closed" bOuter bStr (current-buffer))) ;; Changed %d for bOuter to %s to handle case bOuter==nil.
 		  (set-match-data cMatches)
 		  (list bOuter eOuter
 			(concat (replace-match (nth 2 matchList) nil nil cStr)
@@ -471,7 +479,7 @@ for further details about the argument and the return value."
 	     (cStr (concat bStr eStr))
 	     )
 	(unless bOuter
-	  (user-error "LaTeX fragment ending at %d with %s has no start string." bOuter eStr))
+	  (user-error "LaTeX fragment ending at %d with %s has no start string" bOuter eStr))
 	(set-match-data cMatches)
         (list bOuter eOuter
               (concat (replace-match (nth 2 matchList) nil nil cStr)
@@ -663,7 +671,7 @@ This variable is the link back from the LaTeX-buffer to the source buffer.")
   (declare (debug body))
   `(progn
      (unless (buffer-live-p texfrag-source-buffer)
-       (user-error "TeXfrag source buffer %S not ready in LaTeX target buffer %S." texfrag-source-buffer (current-buffer)))
+       (user-error "TeXfrag source buffer %S not ready in LaTeX target buffer %S" texfrag-source-buffer (current-buffer)))
      (with-current-buffer texfrag-source-buffer
        ,@body)))
 
@@ -672,7 +680,7 @@ This variable is the link back from the LaTeX-buffer to the source buffer.")
   (declare (debug body))
   `(progn
      (unless (buffer-live-p texfrag-tex-buffer)
-       (user-error "TeXfrag LaTeX buffer %S not ready in LaTeX target buffer %S." texfrag-tex-buffer (current-buffer)))
+       (user-error "TeXfrag LaTeX buffer %S not ready in LaTeX target buffer %S" texfrag-tex-buffer (current-buffer)))
      (with-current-buffer texfrag-tex-buffer
        ,@body)))
 
@@ -765,7 +773,7 @@ or the string itself."
 
 (defun texfrag-generator-place-preview (ov img _box &optional _counters _tempdir &rest _place-opts)
   "Call me like `preview-gs-place'.
-Return OV after setting 'preview-image to a cons (img . img)
+Return OV after setting 'preview-image to a cons (IMG . IMG)
 assuming that img is already an image."
   (when (stringp img)
     (setq img (expand-file-name img))
@@ -1000,11 +1008,15 @@ Example:
 	(define-key texfrag-mode-map texfrag-prefix texfrag-submap)
 	(LaTeX-preview-setup)
 	(preview-mode-setup)
-	(when texfrag-preview-buffer-at-start
-	  (preview-buffer))
+	(when (and texfrag-preview-buffer-at-start
+		   ;; Protect against multiple activation in derived major modes:
+		   (null texfrag-preview-buffer-at-start-done))
+	  (preview-buffer)
+	  (setq texfrag-preview-buffer-at-start-done t))
 	(add-hook 'kill-buffer-hook #'texfrag-cleanup nil t)
 	(add-hook 'change-major-mode-hook #'texfrag-cleanup nil t))
     (texfrag-cleanup)
+    (setq texfrag-preview-buffer-at-start-done nil)
     (remove-hook 'kill-buffer-hook #'texfrag-cleanup t)
     (remove-hook 'change-major-mode-hook #'texfrag-cleanup t)
     (preview-clearout-document)))
