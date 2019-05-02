@@ -4,7 +4,7 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Url: https://gitlab.petton.fr/mpdel/libmpdel
-;; Package-Version: 20190131.2005
+;; Package-Version: 20190502.456
 ;; Package-requires: ((emacs "25.1") (ledger-mode "3.1.1"))
 ;; Version: 1.0.0
 
@@ -108,7 +108,7 @@
   :group 'ledger-import
   :type '(repeat string))
 
-(defcustom ledger-import-boobank-import-from-date "2018-10-01"
+(defcustom ledger-import-boobank-import-from-date "2019-04-01"
   "String representing a date from which to import OFX data with boobank.
 The format is YYYY-MM-DD."
   :group 'ledger-import
