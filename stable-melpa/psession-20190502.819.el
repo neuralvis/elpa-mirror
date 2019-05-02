@@ -6,7 +6,7 @@
 
 ;; Compatibility: GNU Emacs 24.1+
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5") (async "1.9.3"))
-;; Package-Version: 20181215.738
+;; Package-Version: 20190502.819
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -123,18 +123,25 @@ That may not work with Emacs versions <=23.1 for hash tables."
   (let ((file-list (directory-files dir t directory-files-no-dot-files-regexp)))
     (cl-loop for file in file-list do (and file (load file)))))
 
+(defun psession--purecopy (object)
+  (cond ((stringp object)
+         (substring-no-properties object))
+        ((listp object)
+         (cl-loop for elm in object
+                  if (stringp elm)
+                  collect (substring-no-properties elm)
+                  else
+                  if (and (listp elm) (null (cdr (last elm))))
+                  collect (psession--purecopy elm)
+                  else
+                  collect elm))
+        (t object)))
+
 (defun psession--dump-object-no-properties (object file &optional skip-props)
   ;; Force not checking properties with SKIP-PROPS.
   (let ((value (symbol-value object)))
     (unless skip-props
-      (set object (cond ((stringp value)
-                         (substring-no-properties value))
-                        ((listp value)
-                         (cl-loop for elm in value
-                                  if (stringp elm)
-                                  collect (substring-no-properties elm)
-                                  else collect elm))
-                        (t value))))
+      (set object (psession--purecopy value)))
     (psession--dump-object-to-file object file)))
 
 (cl-defun psession--dump-object-save-register-alist (&optional (file "register-alist.el") skip-props)
