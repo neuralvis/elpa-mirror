@@ -1,2 +1,0 @@
-
-(yasnippet . [(20190501 2152) ((cl-lib (0 5))) "Yet another snippet extension for Emacs." single ((:commit . "ffce2362681d0bdaf096ed950e84e5f38a1149b4") (:keywords "convenience" "emulation") (:maintainer "Noam Postavsky" . "npostavs@gmail.com") (:url . "http://github.com/joaotavora/yasnippet"))])
