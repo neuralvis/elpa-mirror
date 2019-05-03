@@ -7,3 +7,5 @@ j - to export to JSON
 h - to export to HTML
 ? - to see the parameters used in the query
 g - to refresh the results buffer
+
+Use the command pepita-queries-running to open a buffer with the items waiting for results
