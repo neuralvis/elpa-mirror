@@ -7,7 +7,7 @@
 ;; Description: Incremental search through the whole project.
 ;; Keyword: convenience, search
 ;; Version: 0.0.1
-;; Package-Version: 20190503.1128
+;; Package-Version: 20190503.1327
 ;; Package-Requires: ((emacs "25") (cl-lib "0.6"))
 ;; URL: https://github.com/jcs090218/isearch-project
 
@@ -277,8 +277,7 @@ SEARCH-STR : Search string."
            (isearch-project-isearch-yank-string search-str)))
         ((memq this-command '(isearch-project-forward-symbol-at-point))
          (when (char-or-string-p isearch-project-thing-at-point)
-           (ignore-errors (forward-line -1))
-           (beginning-of-line)
+           (backward-word 1)
            (isearch-project-isearch-yank-string isearch-project-thing-at-point)))))
 
 (add-hook 'isearch-mode-hook #'isearch-project-isearch-mode-hook)

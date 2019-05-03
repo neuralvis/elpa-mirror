@@ -1,0 +1,2 @@
+
+(mermaid-mode . [(20190503 1726) ((f (0 20 0)) (emacs (25 3))) "major mode for working with mermaid graphs" single ((:commit . "70545a46f114c4d2295ef86c5f5983bb8b2ae177") (:keywords "mermaid" "graphs" "tools" "processes") (:authors ("Adrien Brochard")) (:maintainer "Adrien Brochard") (:url . "https://github.com/abrochard/mermaid-mode"))])
