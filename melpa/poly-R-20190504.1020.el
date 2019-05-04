@@ -4,7 +4,7 @@
 ;; Maintainer: Vitalie Spinu
 ;; Copyright (C) 2013-2018 Vitalie Spinu
 ;; Version: 0.1.5
-;; Package-Version: 20190415.1550
+;; Package-Version: 20190504.1020
 ;; Package-Requires: ((emacs "25") (polymode "0.1.5") (poly-markdown "0.1.5") (poly-noweb "0.1.5"))
 ;; URL: https://github.com/polymode/poly-R
 ;; Keywords: languages, multi-modes
@@ -694,7 +694,7 @@ The Rmd yaml preamble must contain runtime: shiny declaration."
   (advice-add 'ess-eval-buffer :around 'pm-execute-narrowed-to-span)
   (advice-add 'ess-beginning-of-function :around 'pm-execute-narrowed-to-span))
 
-(add-to-list 'polymode-move-these-vars-from-base-buffer 'ess-local-process-name)
+(add-to-list 'polymode-move-these-vars-from-old-buffer 'ess-local-process-name)
 (add-to-list 'polymode-mode-abbrev-aliases '("ess-r" . "R"))
 
 

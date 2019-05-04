@@ -78,3 +78,9 @@ Here we list changes that may have an impact on the user configuration.
 2018-03-05:
 - `texfrag-header-function' is now called with `texfrag-source-buffer' as current buffer.
 - adopted LaTeX header generation from `org-latex-make-preamble'
+
+2019-05-04:
+- `texfrag-region' for `texfrag-preview-buffer-at-start' has been moved to `post-command-hook'
+  That is an important step to make `texfrag-preview-buffer-at-start' really work.
+  (No repeated LaTeX processing on the same document within one command.)
+- This version of texfrag is tagged 1.0.
