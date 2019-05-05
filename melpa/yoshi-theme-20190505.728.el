@@ -4,8 +4,8 @@
 
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Keywords: faces
-;; Package-Version: 20190504.2342
-;; Version: 6.1.0
+;; Package-Version: 20190505.728
+;; Version: 6.2.0
 ;; URL: http://projects.ryuslash.org/yoshi-theme/
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -258,6 +258,9 @@
    `(hl-indent-block-face-5 ((t (:background ,bggreen))))
    `(hl-indent-block-face-6 ((t (:background ,bgturquoise))))
    `(hl-indent-face ((t (:inherit unspecified :background ,bgdim))))
+
+   ;;; Highlight indent guides
+   `(highlight-indent-guides-character-face ((t (:inherit unspecified :foreground ,bgbright))))
 
    ;;; Hydra
    `(hydra-face-amaranth ((t (:foreground ,fgorange :weight bold))))
