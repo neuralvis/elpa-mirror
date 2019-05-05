@@ -5,7 +5,6 @@
 ;; Author: Matúš Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20150418.855
 ;; Created: 10th September 2014
 ;; Keywords: calendar
 
