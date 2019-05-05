@@ -4,7 +4,7 @@
 
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Keywords: faces
-;; Package-Version: 20170330.700
+;; Package-Version: 20190504.2342
 ;; Version: 6.1.0
 ;; URL: http://projects.ryuslash.org/yoshi-theme/
 
@@ -55,7 +55,7 @@
    `(error ((t (:foreground ,fgred :weight bold))))
    `(font-lock-builtin-face ((t (:foreground ,fgcyan))))
    `(font-lock-comment-delimiter-face ((t (:foreground ,fgdim :inherit unspecified))))
-   `(font-lock-comment-face ((t (:foreground ,fgdim))))
+   `(font-lock-comment-face ((t (:foreground ,fgpink))))
    `(font-lock-constant-face ((t (:foreground ,fgred))))
    `(font-lock-doc-face ((t (:foreground ,fggreen :inherit unspecified))))
    `(font-lock-function-name-face ((t (:foreground ,fgblue))))
@@ -173,6 +173,11 @@
    ;;; Flycheck
    `(flycheck-error ((t (:inherit unspecified :underline (:color ,fgred :style wave)))))
    `(flycheck-warning ((t (:inherit unspecified :underline (:color ,fgorange :style wave)))))
+
+   ;;; Flycheck inline
+   `(flycheck-inline-error ((t (:inherit unspecified :foreground ,fgred :height 0.8))))
+   `(flycheck-inline-info ((t (:inherit unspecified :foreground ,fgblue :height 0.8))))
+   `(flycheck-inline-warning ((t (:inherit unspecified :foreground ,fgorange :height 0.8))))
 
    ;;; Flymake
    `(flymake-errline ((t (:background unspecified :underline (:color ,fgred :style wave)))))

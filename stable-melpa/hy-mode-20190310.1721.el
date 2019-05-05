@@ -6,7 +6,6 @@
 ;; Authors: Julien Danjou <julien@danjou.info>
 ;;          Eric Kaschalk <ekaschalk@gmail.com>
 ;; URL: http://github.com/hylang/hy-mode
-;; Package-Version: 20190310.1721
 ;; Version: 1.0
 ;; Keywords: languages, lisp, python
 ;; Package-Requires: ((dash "2.13.0") (dash-functional "1.2.0") (s "1.11.0") (emacs "24"))
