@@ -3,8 +3,7 @@
 ;; Copyright (C) 2016
 
 ;; Author:  <lompik@oriontabArch>
-;; Package-Version: 20180131.434
-;; Package-X-Original-Version: 0.0.1
+;; Package-Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4") (helm "1.9.2") (with-editor "2.5.0"))
 ;; Keywords: convenience
 

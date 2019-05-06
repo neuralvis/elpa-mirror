@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Yonchovski
 ;; Keywords: languages
-;; Package-Version: 20190503.956
+;; Package-Version: 20190506.1756
 ;; Package-Requires: ((emacs "25.1") (dash "2.14.1") (dash-functional "2.14.1") (f "0.20.0") (ht "2.0") (treemacs "2.5") (lsp-mode "6.0"))
 ;; Version: 0.1
 
@@ -262,10 +262,8 @@
   (condition-case _err
       (with-current-buffer (get-buffer-create "*LSP Error List*")
         (save-excursion
-          (treemacs-update-node
-           '(:custom LSP-Errors))))
+          (treemacs-update-node '(:custom LSP-Errors) t)))
     (error)))
-
 
 (defun lsp-treemacs--kill-buffer ()
   "Kill buffer hook."
@@ -298,7 +296,6 @@
 
       (treemacs-LSP-ERROR-LIST-extension)
 
-      (treemacs-expand-lsp-error-list)
       (add-hook 'lsp-after-diagnostics-hook #'lsp-treemacs--after-diagnostics)
       (add-hook 'kill-buffer-hook 'lsp-treemacs--kill-buffer nil t))))
 
