@@ -4,7 +4,7 @@
 ;; Copyright 2011-2019 François-Xavier Bois
 
 ;; Version: 16.0.24
-;; Package-Version: 20190428.901
+;; Package-Version: 20190506.607
 ;; Author: François-Xavier Bois <fxbois AT Google Mail Service>
 ;; Maintainer: François-Xavier Bois
 ;; Package-Requires: ((emacs "23.1"))
@@ -3474,7 +3474,7 @@ another auto-completion with different ac-sources (e.g. ac-php)")
       (forward-char))
     (cond
      ((member (char-after) '(?\{))
-      (search-forward "}"))
+      (search-forward "}" nil t))
      ((looking-at-p "def \\|define ")
       (search-forward ")" (line-end-position) t))
      (t

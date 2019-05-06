@@ -5,7 +5,6 @@
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 12 Apr 2016
 ;; Version: 0.1
-;; Package-Version: 20170301.1459
 ;; URL: https://github.com/alezost/shift-number.el
 ;; Keywords: convenience
 

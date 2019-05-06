@@ -4,7 +4,7 @@
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
 ;; Version: 0.2.0
-;; Package-Version: 20180419.1306
+;; Package-Version: 20190505.2237
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: convenience, calendar
 
@@ -94,7 +94,8 @@ has enough entries."
 
 (defcustom org-mru-clock-completing-read completing-read-function
   "Like `completing-read-function', but only used in `org-mru-clock' functions.
-Popular choices include `ivy-completing-read' and `ido-completing-read'."
+Popular choices include `ivy-completing-read', `ido-completing-read', and
+`helm-comp-read'"
   :group 'org-mru-clock
   :type 'function)
 
@@ -257,19 +258,26 @@ filled first.  Optional argument N as in `org-mru-clock'."
 Support extra actions if we're using ivy.
 PROMPT and COLLECTION as in `completing-read',
 ACTION and CALLER as in `ivy-read'."
-  (if (eq org-mru-clock-completing-read #'ivy-completing-read)
-      (ivy-read prompt
-                collection
-                :action action
-                :require-match t
-                :caller caller)
+  (cond
+   ((eq org-mru-clock-completing-read #'ivy-completing-read)
+    (ivy-read prompt
+              collection
+              :action action
+              :require-match t
+              :caller caller))
+   ((eq org-mru-clock-completing-read #'helm-comp-read)
     (funcall action
              (assoc (funcall org-mru-clock-completing-read
                              prompt
-                             (mapcar #'car collection)
-                             nil
-                             'require-match)
-                    collection))))
+                             (mapcar #'car collection))
+                    collection)))
+   (t (funcall action
+               (assoc (funcall org-mru-clock-completing-read
+                               prompt
+                               (mapcar #'car collection)
+                               nil
+                               'require-match)
+                      collection)))))
 
 (defun org-mru-clock--collect-history (history)
   "Turn HISTORY into a collection usable for `completing-read'.
