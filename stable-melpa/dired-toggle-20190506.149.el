@@ -5,7 +5,7 @@
 ;; Author: Xu FaSheng <fasheng.xu@gmail.com>
 ;; Maintainer: Xu FaSheng
 ;; Version: 0.1
-;; Package-Version: 20190403.602
+;; Package-Version: 20190506.149
 ;; URL: https://github.com/fasheng/dired-toggle
 ;; Keywords: dired, sidebar
 ;; Compatibility: GNU Emacs: 24.x
@@ -171,7 +171,7 @@ and `dired-hide-details-mode' states after opening new direcoty."
 (defun dired-toggle (&optional dir)
   "Toggle current buffer's directory."
   (interactive)
-  (let* ((win (selected-window))
+  (let* ((win (frame-root-window))
          (buf (buffer-name))
          (file (buffer-file-name))
          (dir (or dir (if file (file-name-directory file) default-directory)))

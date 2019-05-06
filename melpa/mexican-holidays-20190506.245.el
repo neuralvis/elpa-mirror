@@ -4,7 +4,7 @@
 
 ;; Author: Saúl Gutiérrez <me@sggc.me>
 ;; URL: https://github.com/shopClerk/mexican-holidays
-;; Package-Version: 20160109.2142
+;; Package-Version: 20190506.245
 ;; Version: 0.0.9
 ;; Keywords: calendar
 
@@ -39,7 +39,7 @@
   '((holiday-fixed 1 1 "Año Nuevo")
     (holiday-fixed 2 5 "Día de la Constitución")
     (holiday-fixed 3 21 "Natalicio de Benito Juárez")
-    (holiday-fixed 4 1 "Día del Trabajo")
+    (holiday-fixed 5 1 "Día del Trabajo")
     (holiday-fixed 9 16 "Día de la Independencia de México")
     (holiday-fixed 11 20 "Día de la Revolución Mexicana")
     (holiday-fixed 12 25 "Navidad")
