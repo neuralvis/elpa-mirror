@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: frames
-;; Package-Version: 20190307.349
+;; Package-Version: 20190507.500
 ;; URL: https://github.com/IvanMalison/frame-mode
 ;; Version: 0.0.0
 ;; Package-Requires: ((s "1.9.0") (emacs "24.4"))
@@ -131,6 +131,7 @@ displayed using frames intead of windows."
  ;; deactivating the effect of `frame-mode-other-window-or-frame-next-command'.
  '(("\\*helm.*" . ((display-buffer-same-window display-buffer-pop-up-window)))
    (".*popup\*" . ((display-buffer-pop-up-window)))
+   (".*\\*transient\\*.*" . ((display-buffer-in-side-window)))
    ("\\*Completions.\\*" . (display-buffer-same-window))
    ("\\*Org todo\\*" . ((display-buffer-same-window)))
    ("\\*[Ff]lycheck error.*" .
@@ -187,7 +188,7 @@ COUNT determines the number of windows to move over."
   "Use a new frame no matter what when the next call to `display-buffer' occurs."
   (interactive)
   (setq frame-mode-flip-other-frame-behavior
-        (not frame-mode-use-other-frame-or-window-next-command))
+        (not frame-mode-flip-other-frame-behavior))
   (message "using other frame: %s"
            frame-mode-flip-other-frame-behavior))
 
