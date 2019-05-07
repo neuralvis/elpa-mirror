@@ -4,7 +4,7 @@
 
 ;; Author: Kyle Meyer <kyle@kyleam.com>
 ;; URL: https://github.com/magit/magit-tbdiff
-;; Package-Version: 20190421.518
+;; Package-Version: 20190507.236
 ;; Keywords: vc, tools
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "24.4") (magit "2.10.0"))
@@ -291,6 +291,20 @@ $ git range-diff [ARGS...] BASE..REV-A BASE..REV-B"
   (magit-tbdiff-ranges (concat base ".." rev-a)
                        (concat base ".." rev-b)
                        args))
+
+(defun magit-tbdiff-save (file)
+  "Write current range-diff to FILE."
+  (interactive "FWrite range-diff to file: ")
+  (unless (derived-mode-p 'magit-tbdiff-mode)
+    (user-error "Current buffer is not a `magit-tbdiff-mode' buffer"))
+  (let ((range-a magit-tbdiff-buffer-range-a)
+        (range-b magit-tbdiff-buffer-range-b)
+        (args magit-buffer-arguments))
+    (with-temp-file file
+      (magit-git-insert magit-tbdiff-subcommand
+                        range-a range-b
+                        (cl-remove "--dual-color" args :test #'equal))))
+  (magit-refresh))
 
 ;;;###autoload (autoload 'magit-tbdiff "magit-tbdiff" nil t)
 (define-transient-command magit-tbdiff ()
