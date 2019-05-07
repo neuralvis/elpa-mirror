@@ -4,7 +4,7 @@
 
 ;; Author: wolray <wolray@foxmail.com>
 ;; Version: 4.1
-;; Package-Version: 20190305.1643
+;; Package-Version: 20190506.2152
 ;; URL: https://github.com/wolray/symbol-overlay/
 ;; Keywords: faces, matching
 ;; Package-Requires: ((emacs "24.3"))
@@ -383,7 +383,9 @@ If SHOW-COLOR is non-nil, display the color used by current overlay."
     (let* ((symbol (car keyword))
            (before (symbol-overlay-get-list -1 symbol))
            (after (symbol-overlay-get-list 1 symbol))
-           (count (length before)))
+           (count (length before))
+           ;; Log to echo area but not *Messages*
+           message-log-max)
       (message (concat (substring symbol 3 -3)
                        ": %d/%d"
                        (and (cadr keyword) " in scope")
