@@ -1,0 +1,2 @@
+
+(math-symbol-lists . [(20190507 856) nil "Lists of Unicode math symbols and latex commands" tar ((:commit . "499986959356f7a905fd4f2a1609c17d7ff067c3") (:keywords "unicode" "symbols" "mathematics") (:authors ("Vitalie Spinu" . "spinuvit@gmail.com")) (:maintainer "Vitalie Spinu" . "spinuvit@gmail.com") (:url . "https://github.com/vspinu/math-symbol-lists"))])
