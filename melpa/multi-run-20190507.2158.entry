@@ -1,0 +1,2 @@
+
+(multi-run . [(20190507 2158) ((emacs (24)) (window-layout (1 4))) "Efficiently manage multiple remote nodes" tar ((:commit . "5f252835af877a75e82a4c42b133df45e64a0cd9") (:keywords "multiple shells" "multi-run" "remote nodes") (:authors ("Sagar Jha")) (:maintainer "Sagar Jha") (:url . "https://www.github.com/sagarjha/multi-run"))])
