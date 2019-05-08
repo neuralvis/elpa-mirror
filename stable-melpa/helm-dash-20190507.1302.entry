@@ -1,2 +1,0 @@
-
-(helm-dash . [(20190507 1302) ((emacs (24 4)) (dash-docs (1 4 0)) (helm (1 9 2)) (cl-lib (0 5))) "Offline documentation browser for +150 APIs using Dash docsets." single ((:commit . "99617916817b04219bb8163069250882cf4955a6") (:keywords "docs") (:authors ("Raimon Grau" . "raimonster@gmail.com") ("Toni Reina " . "areina0@gmail.com")) (:maintainer "Raimon Grau" . "raimonster@gmail.com") (:url . "http://github.com/areina/helm-dash"))])
