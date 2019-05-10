@@ -4,7 +4,7 @@
 ;; Maintainer: Vitalie Spinu
 ;; Copyright (C) 2013-2018 Vitalie Spinu
 ;; Version: 0.1.5
-;; Package-Version: 20190414.2030
+;; Package-Version: 20190510.742
 ;; Package-Requires: ((emacs "25") (polymode "0.1.5"))
 ;; URL: https://github.com/polymode/poly-org
 ;; Keywords: languages, multi-modes
@@ -61,13 +61,16 @@
   :tail-matcher "^[ \t]*#\\+end_src"
   :head-adjust-face nil
   :mode-matcher #'poly-org-mode-matcher
-  :indent-offset org-edit-src-content-indentation)
+  :body-indent-offset 'org-edit-src-content-indentation
+  :indent-offset 'org-edit-src-content-indentation)
 
 ;;;###autoload  (autoload 'poly-org-mode "poly-org")
 (define-polymode poly-org-mode
   :hostmode 'poly-org-hostmode
   :innermodes '(poly-org-innermode)
-  (setq-local org-src-fontify-natively nil))
+  (setq-local org-src-fontify-natively nil)
+  (make-local-variable 'polymode-move-these-minor-modes-from-old-buffer)
+  (push 'org-indent-mode polymode-move-these-minor-modes-from-old-buffer))
 
  ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.org\\'" . poly-org-mode))
