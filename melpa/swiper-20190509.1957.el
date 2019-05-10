@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190508.1235
+;; Package-Version: 20190509.1957
 ;; Version: 0.11.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.11.0"))
 ;; Keywords: matching
@@ -1302,17 +1302,72 @@ When not running `swiper-isearch' already, start it."
     map)
   "Keymap for `swiper-isearch'.")
 
+(defface swiper-isearch-current-match
+  '((((class color) (background light))
+     :background "#65a7e2" :foreground "white")
+    (((class color) (background dark))
+     :background "#1a4b77" :foreground "black"))
+  "Face used by `swiper-isearch' for highlighting the current match.")
+
+(defun swiper-isearch-format-function (_cands)
+  (let* ((half-height (/ ivy-height 2))
+         (current (ivy-state-current ivy-last))
+         (i (1- ivy--index))
+         (j 0)
+         (len 0)
+         res s)
+    (while (and (>= i 0)
+                (string= (nth i ivy--old-cands)
+                         current))
+      (cl-decf i)
+      (cl-incf j))
+    (while (and (>= i 0)
+                (< len half-height))
+      (setq s (nth i ivy--old-cands))
+      (unless (equal s (car res))
+        (push (ivy--format-minibuffer-line s) res)
+        (cl-incf len))
+      (cl-decf i))
+    (setq res (nreverse res))
+    (let ((current-str
+           (ivy--add-face
+            (ivy--format-minibuffer-line current)
+            'ivy-current-match))
+          (start 0))
+      (dotimes (_ (1+ j))
+        (string-match ivy--old-re current-str start)
+        (setq start (match-end 0)))
+      (ivy-add-face-text-property
+       (match-beginning 0) (match-end 0)
+       'swiper-isearch-current-match current-str)
+      (push current-str res))
+    (cl-incf len)
+    (setq i (1+ ivy--index))
+    (while (and (< i ivy--length)
+                (string= (nth i ivy--old-cands) current))
+      (cl-incf i))
+    (while (and (< i ivy--length)
+                (< len ivy-height))
+      (setq s (nth i ivy--old-cands))
+      (unless (equal s (car res))
+        (push (ivy--format-minibuffer-line s) res)
+        (cl-incf len))
+      (cl-incf i))
+    (mapconcat #'identity (nreverse res) "\n")))
+
 ;;;###autoload
 (defun swiper-isearch (&optional initial-input)
   "A `swiper' that's not line-based."
   (interactive)
   (swiper--init)
+  (swiper-font-lock-ensure)
   (setq swiper--isearch-point-history
         (list
          (cons "" (point))))
   (let ((ivy-fixed-height-minibuffer t)
         (cursor-in-non-selected-windows nil)
         (swiper-min-highlight 1)
+        (ivy-format-function #'swiper-isearch-format-function)
         res)
     (unwind-protect
          (and
