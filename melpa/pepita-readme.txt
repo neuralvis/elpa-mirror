@@ -9,3 +9,5 @@ h - to export to HTML
 g - to refresh the results buffer
 
 Use the command pepita-queries-running to open a buffer with the items waiting for results
+
+For more details on usage see https://github.com/sebasmonia/pepita/blob/master/README.md

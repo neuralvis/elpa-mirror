@@ -4,7 +4,7 @@
 
 ;; Author: Paul W. Rankin <hello@paulwrankin.com>
 ;; Keywords: convenience
-;; Package-Version: 20190403.837
+;; Package-Version: 20190510.126
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://github.com/rnkn/side-notes
@@ -40,6 +40,11 @@
 ;; Add something like the following to your init file:
 
 ;; (define-key (current-global-map) (kbd "M-s n") #'side-notes-toggle-notes)
+
+;; Report Issues
+;; -------------
+
+;; Send an email to <~pwr/elisp@todo.sr.ht>.
 
 ;;; Code:
 
