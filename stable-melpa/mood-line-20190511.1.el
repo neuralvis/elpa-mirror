@@ -3,8 +3,8 @@
 ;; Author: Jessie Hildebrandt <jessieh.net>
 ;; Homepage: https://gitlab.com/jessieh/mood-line
 ;; Keywords: mode-line faces
-;; Package-Version: 20190422.2105
-;; Version: 1.0.1
+;; Package-Version: 20190511.1
+;; Version: 1.1.0
 ;; Package-Requires: ((emacs "24.4"))
 
 ;; This file is not part of GNU Emacs.
@@ -22,7 +22,7 @@
 ;; * Lightweight with no dependencies
 ;;
 ;; To enable mood-line:
-;; (mood-line-activate)
+;; (mood-line-mode)
 
 ;;; License:
 ;;
@@ -78,7 +78,7 @@
   "Face used for generic status indicators in the mode-line."
   :group 'mood-line)
 
-(defface mood-line-status-good
+(defface mood-line-status-success
   '((t (:inherit (success))))
   "Face used for success status indicators in the mode-line."
   :group 'mood-line)
@@ -108,7 +108,6 @@
 ;; Helper functions
 ;;
 
-;;;###autoload
 (defun mood-line-format (left right)
   "Return a string of `window-width' length containing LEFT and RIGHT, aligned respectively."
   (let ((reserve (length right)))
@@ -184,7 +183,7 @@
                                          'face (if .error
                                                    'mood-line-status-error
                                                  'mood-line-status-warning))))
-                       (propertize "✔ Good  " 'face 'mood-line-status-good)))
+                       (propertize "✔ Good  " 'face 'mood-line-status-success)))
           ('running (propertize "● Checking  " 'face 'mood-line-status-info))
           ('no-checker "")
           ('errored (propertize "✖ Error  " 'face 'mood-line-status-error))
@@ -194,7 +193,6 @@
 ;; Segments
 ;;
 
-;;;###autoload
 (defun mood-line-segment-modified ()
   "Displays a color-coded buffer modification indicator in the mode-line."
   (propertize
@@ -205,18 +203,15 @@
      "   ")
    'face 'mood-line-modified))
 
-;;;###autoload
 (defun mood-line-segment-buffer-name ()
   "Displays the name of the current buffer in the mode-line."
   (concat (propertize "%b" 'face 'mode-line-buffer-id) "  "))
 
-;;;###autoload
 (defun mood-line-segment-anzu ()
   "Displays color-coded anzu status information in the mode-line (if available)."
   (when anzu--state
     (concat (anzu--update-mode-line) "  ")))
 
-;;;###autoload
 (defun mood-line-segment-multiple-cursors ()
   "Displays the number of active multiple-cursors in the mode-line (if available)."
   (when multiple-cursors-mode
@@ -224,7 +219,6 @@
             (format #("%d" 0 2 (face font-lock-warning-face)) (mc/num-cursors))
             "  ")))
 
-;;;###autoload
 (defun mood-line-segment-position ()
   "Displays the current cursor position in the mode-line."
   (concat "%l:%c "
@@ -233,7 +227,6 @@
                                      'mode-line-inactive))
           "  "))
 
-;;;###autoload
 (defun mood-line-segment-encoding ()
   "Displays the encoding and EOL style of the buffer in the mode-line."
   (concat (pcase (coding-system-eol-type buffer-file-coding-system)
@@ -246,12 +239,10 @@
                   (t (upcase (symbol-name (plist-get sys :name))))))
           "  "))
 
-;;;###autoload
 (defun mood-line-segment-vc ()
   "Displays color-coded version control information in the mode-line."
   mood-line--vc-text)
 
-;;;###autoload
 (defun mood-line-segment-major-mode ()
   "Displays the current major mode in the mode-line."
   (propertize "%m  "
@@ -259,7 +250,6 @@
                         'bold
                       'mood-line-status-grayed-out)))
 
-;;;###autoload
 (defun mood-line-segment-flycheck ()
   "Displays color-coded flycheck information in the mode-line (if available)."
   mood-line--flycheck-text)
@@ -268,44 +258,70 @@
 ;; Activation function
 ;;
 
+;; Store the default mode-line format
+(defvar mood-line--default-mode-line mode-line-format)
+
 ;;;###autoload
-(defun mood-line-activate ()
-  "Replace the current mode-line with mood-line."
-  (interactive)
+(define-minor-mode mood-line-mode
+  "Toggle mood-line on or off."
+  :group 'mood-line
+  :global t
+  :lighter nil
+  (if mood-line-mode
+      (progn
 
-  ;; Setup flycheck hooks (if available)
-  (add-hook 'flycheck-status-changed-functions #'mood-line--update-flycheck-segment)
-  (add-hook 'flycheck-mode-hook #'mood-line--update-flycheck-segment)
+        ;; Setup flycheck hooks
+        (add-hook 'flycheck-status-changed-functions #'mood-line--update-flycheck-segment)
+        (add-hook 'flycheck-mode-hook #'mood-line--update-flycheck-segment)
 
-  ;; Setup VC hooks (if available)
-  (add-hook 'find-file-hook #'mood-line--update-vc-segment)
-  (add-hook 'after-save-hook #'mood-line--update-vc-segment)
-  (advice-add #'vc-refresh-state :after #'mood-line--update-vc-segment)
+        ;; Setup VC hooks
+        (add-hook 'find-file-hook #'mood-line--update-vc-segment)
+        (add-hook 'after-save-hook #'mood-line--update-vc-segment)
+        (advice-add #'vc-refresh-state :after #'mood-line--update-vc-segment)
 
-  ;; Setup window update hooks
-  (add-hook 'window-configuration-change-hook #'mood-line--update-selected-window)
-  (add-hook 'focus-in-hook #'mood-line--update-selected-window)
-  (advice-add #'handle-switch-frame :after #'mood-line--update-selected-window)
-  (advice-add #'select-window :after #'mood-line--update-selected-window)
+        ;; Setup window update hooks
+        (add-hook 'window-configuration-change-hook #'mood-line--update-selected-window)
+        (add-hook 'focus-in-hook #'mood-line--update-selected-window)
+        (advice-add #'handle-switch-frame :after #'mood-line--update-selected-window)
+        (advice-add #'select-window :after #'mood-line--update-selected-window)
 
-  ;; Set the new mode-line-format
-  (setq-default mode-line-format
-                '((:eval
-                   (mood-line-format
-                    ;; Left
-                    (format-mode-line
-                     '((:eval (mood-line-segment-modified))
-                       (:eval (mood-line-segment-buffer-name))
-                       (:eval (mood-line-segment-anzu))
-                       (:eval (mood-line-segment-multiple-cursors))
-                       (:eval (mood-line-segment-position))))
+        ;; Set the new mode-line-format
+        (setq-default mode-line-format
+                      '((:eval
+                         (mood-line-format
+                          ;; Left
+                          (format-mode-line
+                           '((:eval (mood-line-segment-modified))
+                             (:eval (mood-line-segment-buffer-name))
+                             (:eval (mood-line-segment-anzu))
+                             (:eval (mood-line-segment-multiple-cursors))
+                             (:eval (mood-line-segment-position))))
 
-                    ;; Right
-                    (format-mode-line
-                     '((:eval (mood-line-segment-vc))
-                       (:eval (mood-line-segment-major-mode))
-                       (:eval (mood-line-segment-flycheck))
-                       " ")))))))
+                          ;; Right
+                          (format-mode-line
+                           '((:eval (mood-line-segment-vc))
+                             (:eval (mood-line-segment-major-mode))
+                             (:eval (mood-line-segment-flycheck))
+                             " ")))))))
+    (progn
+
+      ;; Remove flycheck hooks
+      (remove-hook 'flycheck-status-changed-functions #'mood-line--update-flycheck-segment)
+      (remove-hook 'flycheck-mode-hook #'mood-line--update-flycheck-segment)
+
+      ;; Remove VC hooks
+      (remove-hook 'file-find-hook #'mood-line--update-vc-segment)
+      (remove-hook 'after-save-hook #'mood-line--update-vc-segment)
+      (advice-remove #'vc-refresh-state #'mood-line--update-vc-segment)
+
+      ;; Remove window update hooks
+      (remove-hook 'window-configuration-change-hook #'mood-line--update-selected-window)
+      (remove-hook 'focus-in-hook #'mood-line--update-selected-window)
+      (advice-remove #'handle-switch-frame #'mood-line--update-selected-window)
+      (advice-remove #'select-window #'mood-line--update-selected-window)
+
+      ;; Restore the original mode-line format
+      (setq-default mode-line-format mood-line--default-mode-line))))
 
 ;;
 ;; Provide mood-line

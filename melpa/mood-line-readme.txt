@@ -9,4 +9,4 @@ Features offered:
 * Lightweight with no dependencies
 
 To enable mood-line:
-(mood-line-activate)
+(mood-line-mode)
