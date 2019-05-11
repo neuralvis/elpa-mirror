@@ -3,8 +3,8 @@
 ;; Author: Jessie Hildebrandt <jessieh.net>
 ;; Homepage: https://gitlab.com/jessieh/mood-line
 ;; Keywords: mode-line faces
-;; Package-Version: 20190511.1
-;; Version: 1.1.0
+;; Package-Version: 20190511.35
+;; Version: 1.1.1
 ;; Package-Requires: ((emacs "24.4"))
 
 ;; This file is not part of GNU Emacs.
@@ -250,6 +250,12 @@
                         'bold
                       'mood-line-status-grayed-out)))
 
+(defun mood-line-segment-global-mode-string ()
+  "Displays the current value of `global-mode-string' in the mode-line."
+  (when (not (string= (mapconcat 'concat (mapcar 'eval global-mode-string) "") ""))
+    (propertize "%M  "
+                'face 'mood-line-status-grayed-out)))
+
 (defun mood-line-segment-flycheck ()
   "Displays color-coded flycheck information in the mode-line (if available)."
   mood-line--flycheck-text)
@@ -301,6 +307,7 @@
                           (format-mode-line
                            '((:eval (mood-line-segment-vc))
                              (:eval (mood-line-segment-major-mode))
+                             (:eval (mood-line-segment-global-mode-string))
                              (:eval (mood-line-segment-flycheck))
                              " ")))))))
     (progn

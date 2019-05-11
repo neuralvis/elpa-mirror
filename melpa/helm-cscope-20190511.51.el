@@ -4,7 +4,7 @@
 
 ;; Author: alpha22jp <alpha22jp@gmail.com>
 ;; URL: https://github.com/alpha22jp/helm-cscope.el
-;; Package-Version: 20190406.851
+;; Package-Version: 20190511.51
 ;; Keywords: cscope, helm
 ;; Version: 0.1.1
 ;; Package-Requires: ((xcscope "1.0") (helm "1.6.7") (cl-lib "0.5") (emacs "24.1"))
@@ -274,6 +274,13 @@
   (helm-cscope--find-common "-7" symbol))
 
 ;;;###autoload
+(defun helm-cscope-find-this-file-no-prompt ()
+  "Locate a file [no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+    (helm-cscope--find-common "-7" symbol)))
+
+;;;###autoload
 (defun helm-cscope-find-files-including-file (symbol)
   "Locate all files #including a file."
   (interactive
@@ -282,6 +289,12 @@
             "Find files #including this file " t nil nil))))
   (helm-cscope--find-common "-8" symbol))
 
+(defun helm-cscope-find-files-including-file-no-prompt ()
+  "Locate all files #including a file [no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+  (helm-cscope--find-common "-8" symbol)))
+
 ;;;###autoload
 (defun helm-cscope-find-assignments-to-this-symbol (symbol)
   "Locate assignments to a symbol in the source code."
@@ -289,6 +302,13 @@
    (list (cscope-prompt-for-symbol
           "Find assignments to this symbol " nil nil t)))
   (helm-cscope--find-common "-9" symbol))
+
+;;;###autoload
+(defun helm-cscope-find-assignments-to-this-symbol-no-prompt ()
+  "Locate assignments to a symbol in the source code[no user prompting]."
+  (interactive)
+  (let ((symbol (cscope-extract-symbol-at-cursor nil nil)))
+  (helm-cscope--find-common "-9" symbol)))
 
 (defvar helm-cscope-mode-name " Helm cscope")
 (defvar helm-cscope-mode-map (make-sparse-keymap))
