@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190508.1342
+;; Package-Version: 20190511.1128
 ;; Version: 0.11.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.11.0"))
 ;; Keywords: convenience, matching, tools
@@ -2505,6 +2505,12 @@ INITIAL-DIRECTORY, if non-nil, is used as the root directory for search."
               :history 'file-name-history
               :keymap counsel-find-file-map
               :caller 'counsel-file-jump)))
+
+(ivy-set-actions
+ 'counsel-file-jump
+ `(("d" ,(lambda (x)
+           (dired (or (file-name-directory x) default-directory)))
+    "open in dired")))
 
 (defcustom counsel-dired-jump-args ". -name '.git' -prune -o -type d -print | cut -c 3-"
   "Arguments for the `find-command' when using `counsel-dired-jump'."
