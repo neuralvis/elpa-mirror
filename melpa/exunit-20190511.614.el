@@ -4,7 +4,7 @@
 
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
 ;; URL: http://github.com/ananthakumaran/exunit.el
-;; Package-Version: 20190216.340
+;; Package-Version: 20190511.614
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
 ;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3") (f "0.20.0"))
@@ -162,6 +162,11 @@ and filename relative to the dependency."
 ;;; Public
 
 ;;;###autoload
+(define-minor-mode exunit-mode
+  "Minor mode for ExUnit test runner"
+  :lighter " ExUnit")
+
+;;;###autoload
 (defun exunit-rerun ()
   "Re-run the last test invocation."
   (interactive)
@@ -176,6 +181,7 @@ and filename relative to the dependency."
   (interactive)
   (exunit-compile '()))
 
+;;;###autoload
 (defun exunit-verify-all-in-umbrella ()
   "Run all the tests in the current umbrella project."
   (interactive)
