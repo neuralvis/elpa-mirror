@@ -4,7 +4,7 @@
 
 ;; Author: Tomasz Kowal <tomekowal@gmail.com>
 ;; Version: 1.0.0
-;; Package-Version: 20170118.1430
+;; Package-Version: 20190511.2157
 ;; Package-Requires: ((flycheck "27") (elixir-mode "1.8.0"))
 ;; Keywords: Elixir flycheck mix
 ;; URL: https://github.com/tomekowal/flycheck-mix
@@ -44,7 +44,8 @@
   There are to conditions that must be true to fulfil the predicate.
   1. The project must be valid mix project with =mix.exs= file
   2. The variable =flycheck-mix-enable-checking= must be set to =t="
- :command ("elixir"
+ :command ("MIX_ENV=test"
+           "elixir"
            "-e"
            (eval (flycheck-mix-cd-option))
            "-S"
