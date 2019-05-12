@@ -1,0 +1,2 @@
+
+(whois . [(20190512 814) ((emacs (24))) "Extra functionality for WHOIS domain name queries" single ((:commit . "3c3c41b12c7a8ea948d268ebc804ad6f4d66b8a1") (:keywords "network" "comm") (:authors ("Lassi Kortela" . "lassi@lassi.io")) (:maintainer "Lassi Kortela" . "lassi@lassi.io") (:url . "https://github.com/lassik/emacs-whois"))])

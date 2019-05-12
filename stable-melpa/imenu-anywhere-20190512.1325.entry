@@ -1,0 +1,2 @@
+
+(imenu-anywhere . [(20190512 1325) ((cl-lib (0 5)) (emacs (25))) "ido/ivy/helm imenu across same mode/project/etc buffers" single ((:commit . "18af0ecf5ad37dc026347ee47ff682beda1e7fab") (:keywords "ido" "imenu" "tags") (:authors ("Vitalie Spinu  <spinuvit.list[ aaattt ]gmail[ dot ]com>")) (:maintainer "Vitalie Spinu  <spinuvit.list[ aaattt ]gmail[ dot ]com>") (:url . "https://github.com/vitoshka/imenu-anywhere"))])

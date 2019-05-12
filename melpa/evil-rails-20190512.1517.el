@@ -4,7 +4,7 @@
 
 ;; Author: Antono Vasiljev <antono.vasiljev@gmail.com>
 ;; URL: https://github.com/antono/evil-rails
-;; Package-Version: 20160621.2258
+;; Package-Version: 20190512.1517
 ;; Contributors:
 ;; - Joshua Mendoza <joshua.mdza@gmail.com>
 ;; - Josh Black <raskchanky@gmail.com>
@@ -35,7 +35,7 @@
 
 ;;; Commentary:
 
-;; evil-rails is Ruby on Rails support fo Evil mode
+;; evil-rails is Ruby on Rails support for Evil mode
 
 ;; Code:
 

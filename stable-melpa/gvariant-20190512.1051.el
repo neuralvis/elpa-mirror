@@ -2,10 +2,10 @@
 
 ;; Author: wouter bolsterlee <wouter@bolsterl.ee>
 ;; Keywords: languages
-;; Package-Version: 20190428.1900
+;; Package-Version: 20190512.1051
 ;; URL: https://github.com/wbolster/emacs-gvariant
 ;; Package-Requires: ((emacs "24") (parsec "0.1.3"))
-;; Version: 0.1.0
+;; Version: 1.0.0
 
 ;; Copyright 2019 wouter bolsterlee. Licensed under the 3-Clause BSD License.
 
@@ -37,7 +37,21 @@
   "Regular expression to detect GVariant format strings.")
 
 (defconst gvariant--type-keywords-regex
-  "\\(boolean\\|byte\\|int16\\|uint16\\|int32\\|uint32\\|handle\\|int64\\|uint64\\|double\\|string\\|objectpath\\|signature\\)"
+  (regexp-opt
+   '("boolean"
+     "byte"
+     "double"
+     "handle"
+     "int16"
+     "int32"
+     "int64"
+     "objectpath"
+     "signature"
+     "string"
+     "uint16"
+     "uint32"
+     "uint64")
+   'words)
   "Regular expression to detect GVariant type keywords.")
 
 (defun gvariant-parse (s)
