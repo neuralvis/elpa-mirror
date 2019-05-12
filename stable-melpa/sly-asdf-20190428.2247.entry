@@ -1,0 +1,2 @@
+
+(sly-asdf . [(20190428 2247) ((emacs (24 3)) (sly (1 0 0 -2 2))) "ASDF system support for SLY" tar ((:commit . "c0153d6017359be411878793b91257d8819c48a4") (:keywords "languages" "lisp" "sly" "asdf") (:maintainer "Matt George" . "mmge93@gmail.com") (:url . "https://github.com/mmgeorge/sly-asdf"))])
