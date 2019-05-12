@@ -3,7 +3,7 @@
 ;; Copyright (C) 2011-2016 Vitalie Spinu
 ;; Author: Vitalie Spinu  <spinuvit.list[ aaattt ]gmail[ dot ]com>
 ;; Version: 1.1.5
-;; Package-Version: 20190512.1325
+;; Package-Version: 20190512.1939
 ;; Keywords: ido, imenu, tags
 ;; URL: https://github.com/vitoshka/imenu-anywhere
 ;; Package-Requires: ((cl-lib "0.5") (emacs "25"))
@@ -271,9 +271,10 @@ entries have higher priority."
         (message "No imenu tags")
       (let ((selection
              (let* ((str-at-pt (thing-at-point 'symbol))
-                    (default (and str-at-pt
-                                  (imenu-anywhere--guess-default index-alist str-at-pt)))
                     (names (mapcar 'car index-alist))
+                    (default (or (and str-at-pt
+                                      (imenu-anywhere--guess-default index-alist str-at-pt))
+                                 (car names)))
                     (name (completing-read "Imenu: " names nil t nil nil default)))
                (assoc name index-alist))))
         (imenu selection)))))
