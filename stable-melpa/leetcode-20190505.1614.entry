@@ -1,2 +1,2 @@
 
-(leetcode . [(20190505 1614) ((emacs (25)) (dash (2 15 0)) (request-deferred (0 2 0)) (graphql (0 1 1)) (spinner (1 7 3))) "An leetcode client." single ((:commit . "25b38e7efc6aba151d341ed80c3b5a25f6b4d698") (:keywords "extensions" "tools") (:authors ("Wang Kai" . "kaiwkx@gmail.com")) (:maintainer "Wang Kai" . "kaiwkx@gmail.com") (:url . "https://github.com/kaiwk/leetcode.el"))])
+(leetcode . [(20190505 1614) ((emacs (25)) (dash (2 15 0)) (request-deferred (0 2 0)) (graphql (0 1 1)) (spinner (1 7 3))) "An leetcode client." single ((:commit . "da1294bc35024e4b885c23e84c3af5877d59b4b8") (:keywords "extensions" "tools") (:authors ("Wang Kai" . "kaiwkx@gmail.com")) (:maintainer "Wang Kai" . "kaiwkx@gmail.com") (:url . "https://github.com/kaiwk/leetcode.el"))])

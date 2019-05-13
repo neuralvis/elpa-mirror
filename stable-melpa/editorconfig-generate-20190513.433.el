@@ -1,8 +1,8 @@
 ;;; editorconfig-generate.el --- Generate .editorconfig  -*- lexical-binding: t; -*-
 
 ;; Author: 10sr <8.slashes@gmail.com>
-;; URL: https://github.com/10sr/emacs-lisp/blob/master/editorconfig-generate.el
-;; Package-Version: 20181116.635
+;; URL: https://github.com/10sr/editorconfig-generate-el
+;; Package-Version: 20190513.433
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: tools
@@ -213,6 +213,8 @@ if BUF is omitted or nil, works for current buffer."
                                                   filename
                                                   ">*"))))
     (with-current-buffer output-buf
+      (when (fboundp 'editorconfig-conf-mode)
+        (editorconfig-conf-mode))
       (insert "["
               filename
               "]\n\n"))
