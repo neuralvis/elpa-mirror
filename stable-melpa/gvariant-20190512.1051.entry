@@ -1,2 +1,0 @@
-
-(gvariant . [(20190512 1051) ((emacs (24)) (parsec (0 1 3))) "GVariant (GLib) helpers" single ((:commit . "df7c6de199284e0e0c3f3569760229c89998b97d") (:keywords "languages") (:authors ("wouter bolsterlee" . "wouter@bolsterl.ee")) (:maintainer "wouter bolsterlee" . "wouter@bolsterl.ee") (:url . "https://github.com/wbolster/emacs-gvariant"))])
