@@ -5,6 +5,7 @@
 ;; Author: DarkSun <lujun9972@gmail.com>
 ;; Created: 2016-05-23
 ;; Version: 0.1
+;; Package-Version: 20180403.109
 ;; Keywords: convenience, pocket
 ;; Package-Requires: ((emacs "24.4") (request "0.2"))
 ;; URL: https://github.com/lujun9972/pocket-api.el

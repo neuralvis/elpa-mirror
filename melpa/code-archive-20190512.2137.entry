@@ -1,0 +1,2 @@
+
+(code-archive . [(20190512 2137) ((emacs (24 3))) "git supported code archive and reference for org-mode" single ((:commit . "b4e7cda87b9cd6548071f784c4883d6019bc3d14") (:authors ("Michael Schuldt" . "mbschuldt@gmail.com")) (:maintainer "Michael Schuldt" . "mbschuldt@gmail.com") (:url . "https://github.com/mschuldt/code-archive"))])

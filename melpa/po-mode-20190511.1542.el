@@ -6,6 +6,7 @@
 ;; Authors: François Pinard <pinard@iro.umontreal.ca>
 ;;          Greg McGary <gkm@magilla.cichlid.com>
 ;; Keywords: i18n gettext
+;; Package-Version: 20190511.1542
 ;; Created: 1995
 
 ;; This file is part of GNU gettext.
