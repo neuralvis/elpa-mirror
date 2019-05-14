@@ -4,7 +4,7 @@
 
 ;; Author: Paul Rankin <hello@paulwrankin.com>
 ;; Keywords: wp, text
-;; Package-Version: 20190426.242
+;; Package-Version: 20190514.705
 ;; Version: 1.7.0
 ;; Package-Requires: ((emacs "24.5"))
 
@@ -115,23 +115,20 @@ best effect.
 
 This option does not affect file contents."
   :type '(choice (integer 70) (float 0.5))
-  :safe 'numberp
-  :group 'olivetti)
+  :safe 'numberp)
 (make-variable-buffer-local 'olivetti-body-width)
 
 (defcustom olivetti-minimum-body-width
   40
   "Minimum width in columns that text body width may be set."
   :type 'integer
-  :safe 'integerp
-  :group 'olivetti)
+  :safe 'integerp)
 
 (defcustom olivetti-lighter
   " Olv"
   "Mode-line indicator for `olivetti-mode'."
   :type '(choice (const :tag "No lighter" "") string)
-  :safe 'stringp
-  :group 'olivetti)
+  :safe 'stringp)
 
 (defcustom olivetti-recall-visual-line-mode-entry-state
   t
@@ -141,28 +138,39 @@ When non-nil, if `visual-line-mode' is inactive upon activating
 `olivetti-mode', then `visual-line-mode' will be deactivated upon
 exiting. The reverse is not true."
   :type 'boolean
-  :safe 'booleanp
-  :group 'olivetti)
+  :safe 'booleanp)
 
 
 ;;; Set Environment
 
-;; FIXME: A change to `window-size-change-functions' in 27.x breaks this
-;; function, which expects either no argument, or a frame (as per 26.1), but now
-;; may receive a window.
-(defun olivetti-set-margins (&optional frame)
-  "Set text body width to `olivetti-body-width' with relative margins.
+(defun olivetti-set-all-margins ()
+  "Balance window margins in all windows displaying current buffer.
 
-Cycle through all windows displaying current buffer and first
-find the `olivetti-safe-width' to which to set
+Cycle through all windows in all frames displaying the current
+buffer, and call `olivetti-set-margins'."
+  (dolist (window (get-buffer-window-list nil nil t))
+    (olivetti-set-margins window)))
+
+(defun olivetti-set-margins (&optional frame-or-window)
+  "Balance window margins displaying current buffer.
+
+If FRAME-OR-WINDOW is a frame, cycle through windows displaying
+current buffer in that frame, otherwise only work on the selected
+window.
+
+First find the `olivetti-safe-width' to which to set
 `olivetti-body-width', then find the appropriate margin size
 relative to each window. Finally set the window margins, taking
 care that the maximum size is 0."
-  (dolist (window (get-buffer-window-list nil nil t))
-    (olivetti-reset-window window)
-    (let ((width (olivetti-safe-width olivetti-body-width window))
-          (window-width (window-total-width window))
-          (fringes (window-fringes window))
+  (if (framep frame-or-window)
+      (dolist (window (get-buffer-window-list nil nil frame-or-window))
+        (olivetti-set-margins window))
+    ;; FRAME-OR-WINDOW passed below *must* be a window
+    (olivetti-reset-window frame-or-window)
+    (let ((width (olivetti-safe-width olivetti-body-width frame-or-window))
+          (frame (window-frame frame-or-window))
+          (window-width (window-total-width frame-or-window))
+          (fringes (window-fringes frame-or-window))
           left-fringe right-fringe margin-total left-margin right-margin)
       (cond ((integerp width)
              (setq width (olivetti-scale-width width)))
@@ -173,8 +181,8 @@ care that the maximum size is 0."
       (setq margin-total (max (/ (- window-width width) 2) 0)
             left-margin (max (round (- margin-total left-fringe)) 0)
             right-margin (max (round (- margin-total right-fringe)) 0))
-      (set-window-parameter window 'split-window 'olivetti-split-window)
-      (set-window-margins window left-margin right-margin))))
+      (set-window-parameter frame-or-window 'split-window 'olivetti-split-window)
+      (set-window-margins frame-or-window left-margin right-margin))))
 
 (defun olivetti-reset-all-windows ()
   "Remove Olivetti's parameters and margins from all windows.
@@ -235,7 +243,9 @@ May return a float with many digits of precision."
           ((floatp width)
            (max (/ min-width window-width) (min width 1.0)))
           ((user-error "`olivetti-body-width' must be an integer or a float")
-           (eval (car (get 'olivetti-body-width 'standard-value)))))))
+           ;; FIXME: This code is unreachable since we signal an error before
+           ;; getting here!?
+           (eval (car (get 'olivetti-body-width 'standard-value)) t)))))
 
 
 ;;; Width Interaction
@@ -291,7 +301,7 @@ If prefixed with ARG, incrementally increase."
   "Mode map for `olivetti-mode'.")
 
 (define-obsolete-function-alias 'turn-on-olivetti-mode
-  'olivetti-mode "1.7.0")
+  #'olivetti-mode "1.7.0")
 
 ;;;###autoload
 (define-minor-mode olivetti-mode
@@ -303,19 +313,21 @@ body width set with `olivetti-body-width'."
   :lighter olivetti-lighter
   (if olivetti-mode
       (progn
-        (dolist (hook '(post-command-hook
-                        window-size-change-functions))
-          (add-hook hook 'olivetti-set-margins t t))
+        (add-hook 'window-size-change-functions
+                  #'olivetti-set-margins t t)
+        (add-hook 'window-configuration-change-hook
+                  'olivetti-set-all-margins t t)
         (add-hook 'change-major-mode-hook
-                  'olivetti-reset-all-windows nil t)
+                  #'olivetti-reset-all-windows nil t)
         (setq-local split-window-preferred-function
-                    'olivetti-split-window-sensibly)
+                    #'olivetti-split-window-sensibly)
         (setq olivetti--visual-line-mode visual-line-mode)
         (unless olivetti--visual-line-mode (visual-line-mode 1))
-        (olivetti-set-margins))
-    (dolist (hook '(post-command-hook
-                    window-size-change-functions))
-      (remove-hook hook 'olivetti-set-margins t))
+        (olivetti-set-all-margins))
+    (remove-hook 'window-configuration-change-hook
+                 #'olivetti-set-all-margins t)
+    (remove-hook 'window-size-change-functions
+                 #'olivetti-set-margins t)
     (olivetti-reset-all-windows)
     (when (and olivetti-recall-visual-line-mode-entry-state
                (not olivetti--visual-line-mode))
