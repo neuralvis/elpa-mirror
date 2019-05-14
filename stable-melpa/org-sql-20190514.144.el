@@ -4,7 +4,7 @@
 
 ;; Author: Nathan Dwarshuis <natedwarshuis@gmail.com>
 ;; Keywords: org-mode, data
-;; Package-Version: 20190513.2248
+;; Package-Version: 20190514.144
 ;; Homepage: https://github.com/ndwarshuis/org-sql
 ;; Package-Requires: ((emacs "25") (dash "2.15"))
 ;; Version: 0.0.1
@@ -206,7 +206,7 @@ ignored."
   "Remove text properties and trim STR and return the result."
   (when str (string-trim (substring-no-properties str))))
   
-(defun org-sql--alist-put (alist prop value &optional front)
+(defun org-sql--alist-put (alist prop value)
   "For given ALIST, append VALUE to the current values in prop.
 Current values (that is the cdr of each key) is assumed to be a list.
 If PROP does not exist, create it. Return the new alist. If FRONT is
@@ -215,9 +215,10 @@ t, add to the front of current values list instead of the back."
          (cur-values (cdr cur-cell)))
       (cond
        (cur-values
-        (let ((new-cdr (if front
-                           `(,value ,@cur-values)
-                         `(,@cur-values ,value))))
+        (let ((new-cdr (cons value cur-values)))
+        ;; (let ((new-cdr (if front
+                           ;; `(,value ,@cur-values)
+                         ;; `(,@cur-values ,value))))
           (setcdr cur-cell new-cdr) alist))
        (cur-cell
         (setcdr cur-cell `(,value)) alist)
@@ -347,6 +348,7 @@ SQL-STR is a list of individual SQL commands to be included in the
 transaction."
   (-some->> sql-str
             (-flatten)
+            (reverse)
             (string-join)
             (format "begin transaction; %s commit;")
             ;; turn on deferred keys for all transactions
