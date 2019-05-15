@@ -1,2 +1,2 @@
 
-(ein . [(20190511 1231) ((emacs (25)) (websocket (1 7)) (auto-complete (1 4 0)) (request (0 3)) (deferred (0 5)) (polymode (20190426 1729)) (markdown-mode (20171116 756)) (dash (2 13 0)) (s (1 11 0)) (skewer-mode (1 6 2))) "Emacs IPython Notebook" tar ((:commit . "7c7691c26d735aab3ebb642f898a9e878d2df212"))])
+(ein . [(20190511 1231) ((emacs (25)) (websocket (1 7)) (auto-complete (1 4 0)) (request (0 3)) (deferred (0 5)) (polymode (20190426 1729)) (markdown-mode (20171116 756)) (dash (2 13 0)) (s (1 11 0)) (skewer-mode (1 6 2))) "Emacs IPython Notebook" tar ((:commit . "f98d49ff94230061263146032fef68e654f1e432"))])
