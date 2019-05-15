@@ -6,10 +6,10 @@
 ;; Author: Feng Shu
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Package-Version: 20190421.1121
+;; Package-Version: 20190515.419
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
-;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.10.0"))
+;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.11.0"))
 
 ;; This file is part of GNU Emacs.
 

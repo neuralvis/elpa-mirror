@@ -1,10 +1,10 @@
-;;; whois.el --- Extra functionality for WHOIS domain name queries
+;;; whois.el --- Syntax highlighted domain name queries using system whois
 ;;
 ;; Copyright 2019 Lassi Kortela
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-whois
-;; Package-Version: 20190512.814
+;; Package-Version: 20190515.844
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: network comm
