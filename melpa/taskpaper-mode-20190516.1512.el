@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20190225.1503
+;; Package-Version: 20190516.1512
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -2092,7 +2092,8 @@ VALUE is the attribute value, as strings."
 
 ;;;; Attribute caching
 
-;; NOTE: Attribute cache should be build and clear atomically as a whole!
+;; NOTE: Due to attribute inheritance mechanism
+;; attribute cache should be build and clear atomically as a whole!
 
 (defvar taskpaper-attribute-cache (make-hash-table :size 10000)
   "Attribute cache.")

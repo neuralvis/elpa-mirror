@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190515.1306
+;; Package-Version: 20190516.1524
 ;; Version: 0.11.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.11.0"))
 ;; Keywords: matching
@@ -1407,7 +1407,8 @@ Intended to be bound in `isearch-mode-map' and `swiper-map'."
                        isearch-string
                      (regexp-quote isearch-string))))
         (isearch-exit)
-        (goto-char (match-beginning 0))
+        (goto-char (or (and isearch-forward isearch-other-end)
+                       (point)))
         (swiper-isearch query))
     (ivy-exit-with-action
      (lambda (_)
