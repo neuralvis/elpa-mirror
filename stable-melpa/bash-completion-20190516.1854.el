@@ -1,5 +1,5 @@
 ;;; bash-completion.el --- BASH completion for the shell buffer -*- lexical-binding: t -*-
-;; Package-Version: 20180519.1620
+;; Package-Version: 20190516.1854
 
 ;; Copyright (C) 2009 Stephane Zermatten
 
@@ -255,7 +255,7 @@ Bash processes")
   open-quote     ; quote open at stub end: nil, ?' or ?\""
   compgen-args   ; compgen arguments for this command (list of strings)
   wordbreaks     ; value of COMP_WORDBREAKS active for this completion
-  compopt        ; options forced with compopt nil or `(nospace . ,bool) 
+  compopt        ; options forced with compopt nil or `(nospace . ,bool)
 )
 
 (defun bash-completion--type (comp)
@@ -432,11 +432,15 @@ Return one string containing WORDS."
 
 If WORD contains characters that aren't known to be harmless, this
 functions adds single quotes around it and return the result."
-  (if (string-match "^[a-zA-Z0-9_./-]*$" word)
-      word
-    (concat "'"
-	    (replace-regexp-in-string "'" "'\\''" word nil t)
-	    "'")))
+  (cond
+    ((string= "" word)
+     "''")
+    ((string-match "^[a-zA-Z0-9_./-]*$" word)
+     word)
+    (t
+     (concat "'"
+             (replace-regexp-in-string "'" "'\\''" word nil t)
+             "'"))))
 
 (defun bash-completion--parse (comp-start comp-pos wordbreaks bash-major-version)
   "Process a command line split into TOKENS that end at POS.
@@ -1082,7 +1086,7 @@ The returned alist is a sligthly parsed version of the output of
                          (line-end-position)))))
             (when (string= "complete" (car words))
               (if (member "-D" (cdr words))
-                  ;; default completion 
+                  ;; default completion
                   (push (cons nil (delete "-D" (cdr words))) alist)
                 ;; normal completion
                 (let* ((reverse-wordsrest (nreverse (cdr words)))

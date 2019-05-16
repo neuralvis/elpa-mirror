@@ -1,7 +1,7 @@
 ;;; flymake-eslint.el --- A Flymake backend for Javascript using eslint -*- lexical-binding: t; -*-
 
-;;; Version: 1.3.0
-;; Package-Version: 20190513.2145
+;;; Version: 1.3.2
+;; Package-Version: 20190516.1829
 
 ;;; Author: Dan Orzechowski
 
@@ -114,7 +114,7 @@ Create linter process for SOURCE-BUFFER which invokes CALLBACK once linter is fi
          :connection-type 'pipe
          :noquery t
          :buffer (generate-new-buffer " *flymake-eslint*")
-         :command (list flymake-eslint-executable-name "--no-color" "--no-ignore" "--stdin-filename" (buffer-name source-buffer) (or flymake-eslint-executable-args ""))
+         :command (list flymake-eslint-executable-name "--no-color" "--no-ignore" "--stdin" "--stdin-filename" (buffer-name source-buffer) (or flymake-eslint-executable-args ""))
          :sentinel (lambda (proc &rest ignored)
                      ;; do stuff upon child process termination
                      (when (and (eq 'exit (process-status proc))
