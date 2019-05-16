@@ -5,7 +5,7 @@
 ;; Author: James Nguyen <james@jojojames.com>
 ;; Maintainer: James Nguyen <james@jojojames.com>
 ;; URL: https://github.com/jojojames/dired-sidebar
-;; Package-Version: 20190514.110
+;; Package-Version: 20190516.159
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1") (dired-subtree "0.0.1"))
 ;; Keywords: dired, files, tools
@@ -527,7 +527,14 @@ Works around marker pointing to wrong buffer in Emacs 25."
            dired-sidebar-follow-file-idle-delay
            t #'dired-sidebar-follow-file)))
 
+  ;; This comment is taken from `dired-readin'.
+  ;; Begin --- Copied comment from dired.el.
+  ;; Must first make alist buffer local and set it to nil because
+  ;; dired-build-subdir-alist will call dired-clear-alist first
+  ;; End --- Copied comment from dired.el.
+  (setq-local dired-subdir-alist nil)
   (dired-build-subdir-alist)
+
   (dired-unadvertise (dired-current-directory))
   (dired-sidebar-update-buffer-name)
   (dired-sidebar-update-state (current-buffer))
@@ -751,9 +758,9 @@ Select alternate window using `dired-sidebar-alternate-select-window-function'."
          (progn
            (switch-to-buffer up-name)
            (dired-sidebar-update-state (current-buffer)))
-         (if dired-sidebar-one-instance-p
-             (find-alternate-file "..")
-           (dired-up-directory))
+       (if dired-sidebar-one-instance-p
+           (find-alternate-file "..")
+         (dired-up-directory))
        (dired-sidebar-mode)
        (dired-sidebar-update-state (current-buffer)))
      (let ((default-directory up))

@@ -5,7 +5,7 @@
 ;; Author: Xu FaSheng <fasheng.xu@gmail.com>
 ;; Maintainer: Xu FaSheng
 ;; Version: 0.1
-;; Package-Version: 20190515.156
+;; Package-Version: 20190516.104
 ;; URL: https://github.com/fasheng/dired-toggle
 ;; Keywords: dired, sidebar
 ;; Compatibility: GNU Emacs: 24.x
@@ -169,11 +169,13 @@ and `dired-hide-details-mode' states after opening new direcoty."
 
 (defun dired-toggle--get-window ()
   "Get the dired-toggle window."
-  (dolist (w (window-list))
-    (when (and (window-live-p w) (buffer-live-p (window-buffer w)))
-      (with-current-buffer (window-buffer w)
-        (when (bound-and-true-p dired-toggle-mode)
-          (return w))))))
+  (let* (target-window)
+    (dolist (w (window-list))
+      (when (and (window-live-p w) (buffer-live-p (window-buffer w)))
+        (with-current-buffer (window-buffer w)
+          (when (bound-and-true-p dired-toggle-mode)
+            (setq target-window w)))))
+    target-window))
 
 (defun dired-toggle--do (&optional dir file)
   "Toggle current buffer's directory.

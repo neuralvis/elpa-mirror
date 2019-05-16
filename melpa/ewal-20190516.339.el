@@ -6,7 +6,7 @@
 
 ;; Author: Uros Perisic
 ;; URL: https://gitlab.com/jjzmajic/ewal.el
-;; Package-Version: 20190506.340
+;; Package-Version: 20190516.339
 ;;
 ;; Version: 0.1
 ;; Keywords: faces
@@ -47,7 +47,7 @@
 (require 'cl-lib)
 (require 'color)
 (require 'json)
-(require 'term/tty-colors)
+;; (require 'term/tty-colors)
 
 (defgroup ewal nil
   "ewal options."
