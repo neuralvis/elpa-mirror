@@ -1,0 +1,2 @@
+
+(irony . [(20190515 2259) ((cl-lib (0 5)) (json (1 2))) "C/C++ minor mode powered by libclang" tar ((:commit . "80c3ce06b6d6eadc759c65958518d651109671d2") (:keywords "c" "convenience" "tools") (:authors ("Guillaume Papin" . "guillaume.papin@epitech.eu")) (:maintainer "Guillaume Papin" . "guillaume.papin@epitech.eu") (:url . "https://github.com/Sarcasm/irony-mode"))])

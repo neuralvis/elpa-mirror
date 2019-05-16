@@ -1,0 +1,2 @@
+
+(transient . [(20190515 2103) ((emacs (25 1)) (dash (2 15 0))) "Transient commands" tar ((:commit . "4ef8229feb8a12c9198de2c61593903099c9611a") (:keywords "bindings") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/transient"))])
