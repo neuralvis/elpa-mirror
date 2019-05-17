@@ -1,0 +1,2 @@
+
+(hack-time-mode . [(20190517 1640) ((emacs (24 4))) "Forge time" single ((:commit . "aa91d8d4d1feca57dce5f521a8648c191fb8797a") (:keywords "time" "convenience") (:authors ("Marco Wahl" . "marcowahlsoft@gmail.com")) (:maintainer "Marco Wahl" . "marcowahlsoft@gmail.com") (:url . "https://gitlab.com/marcowahl/hack-time-mode"))])
