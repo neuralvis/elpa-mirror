@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20190502.2355
+;; Package-Version: 20190516.2159
 ;; Keywords: tools
 ;; Version: 0.8
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -42,8 +42,13 @@
   :group 'tools
   :group 'matching)
 
-(defvar deadgrep-executable
-  (executable-find "rg"))
+(defcustom deadgrep-executable
+  "rg"
+  "The rg executable used by deadgrep.
+This will be looked up on `exec-path' if it isn't an absolute
+path to the binary."
+  :type 'string
+  :group 'deadgrep)
 
 (defvar deadgrep-max-buffers
   4

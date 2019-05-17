@@ -19,6 +19,7 @@
 
 ;; Author:	Ivan Andrus <darthandrus at gmail.com>
 ;; URL: https://bitbucket.org/gvol/nanowrimo-mode
+;; Package-Version: 20151105.228
 
 ;;; Commentary:
 
