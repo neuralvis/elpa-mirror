@@ -1,0 +1,2 @@
+
+(realgud-trepan-ni . [(20190518 1443) ((load-relative (1 2)) (realgud (1 4 5)) (cl-lib (0 5)) (emacs (24))) "realgud front-end to trepan-ni" tar ((:commit . "0d613f1bbeb9903a7d3018bea59e9680b8f0cf40") (:authors ("Rocky Bernstein")) (:maintainer "Rocky Bernstein") (:url . "http://github.com/realgud/realgud-node-inspect"))])
