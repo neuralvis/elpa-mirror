@@ -4,8 +4,8 @@
 
 ;; Author: Anders Lindgren
 ;; Keywords: faces
-;; Package-Version: 20170710.1901
-;; Version: 0.0.3
+;; Package-Version: 20190517.1857
+;; Version: 0.0.4
 ;; Created: 2017-02-24 (Based code from e2ansi created 2014-12-09)
 ;; URL: https://github.com/Lindydancer/face-explorer
 
@@ -1121,6 +1121,19 @@ Face information for the selected frame is used."
 ;; See `face-explorer-match-display-requirements' how to define a
 ;; fictitious display."
 
+;; Notes on Emacs versions.
+;;
+;; Prior to Emacs 27, batch frames didn't specify a background mode or
+;; color class. As of Emacs 27, they specify `dark' background mode
+;; and `mono' color class. The code below ignores this and says that
+;; batch frame are use `light' and `color'.
+
+
+(defun face-explorer-real-frame-p (&optional frame)
+  "Non-nil if FRAME is a non-batch frame."
+  (or (frame-parameter frame 'window-system)
+      (frame-parameter frame 'tty)))
+
 
 (defun face-explorer-display-number-of-colors (&optional display)
   "Number of colors supported by DISPLAY.
@@ -1150,7 +1163,8 @@ succeed.")
 
 (defun face-explorer-frame-background-mode (&optional frame)
   "The background mode of FRAME."
-  (or (frame-parameter frame 'background-mode)
+  (or (and (face-explorer-real-frame-p frame)
+           (frame-parameter frame 'background-mode))
       'light))
 
 
@@ -1164,7 +1178,8 @@ Either `light' or `dark'.")
 
 (defun face-explorer-frame-color-class (&optional frame)
   "The color class of FRAME."
-  (or (frame-parameter frame 'display-type)
+  (or (and (face-explorer-real-frame-p frame)
+           (frame-parameter frame 'display-type))
       'color))
 
 
