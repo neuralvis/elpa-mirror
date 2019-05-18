@@ -1,13 +1,13 @@
-;;; shroud.el --- Interface for Shroud        -*- lexical-binding: t; -*-
+;;; shroud.el --- Interface for Shroud
 
 ;; Copyright (C) 2019  Amar Singh
 
 ;;; Author: Amar Singh <nly@disroot.org>
 ;;; Homepage: http://git.nly.info.tm:9001/shroud.git
-;; Package-Version: 20190509.2319
+;; Package-Version: 20190518.1023
 ;;; Package-X-Original-Version: 1.12
 ;;; Keywords: tools
-;;; Package-Requires: ((emacs "24") (f "0.20") (bui "1.2.0"))
+;;; Package-Requires: ((emacs "24") (f "0.20") (bui "1.2.0") (epg "1.0.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 
 (require 'f)
 (require 'bui)
+(require 'epg)
 
 (defgroup shroud '()
   "Interface for shroud password manager"
@@ -67,7 +68,7 @@ GPG Encrypted."
 (defun shroud--internal-old (shroud-command &rest args)
   "Internal shroud helper function.
 Execute SHROUD-COMMAND with &rest ARGS."
-  (string-trim (shell-command-to-string
+  (s-trim (shell-command-to-string
             (mapconcat 'identity
                        (cons shroud-executable
                              (cons shroud-command
@@ -90,8 +91,8 @@ Nil arguments will be ignored.  Returns the output on success,  or
         (insert-file-contents tempfile))
       (delete-file tempfile)
       (if (zerop exit-code)
-          (string-trim (buffer-string))
-        (error (string-trim (buffer-string)))))))
+          (s-trim (buffer-string))
+        (error (s-trim (buffer-string)))))))
 
 (defalias 'shroud--run 'shroud--run-internal)
 
@@ -180,6 +181,15 @@ Otherwise, you can pass the ARGS as STRING."
 (defun shroud--remove (entry)
   "Shroud remove ENTRY."
   (shroud--run "remove" entry))
+
+(defmacro shroud--query (q)
+  `(lambda (s) (s-matches? ,q s)))
+
+(defun shroud--find (entry)
+  "Shroud find ENTRY.
+
+Returns a list of matches."
+  (-filter (shroud--query entry) (shroud--list)))
 
 ;;; So, we have most of the commands that we will need to use bound to
 ;;; very friendly elisp functions. Notably missing is clipboard clear
@@ -288,10 +298,68 @@ Optionally DB-FILE is the file you want to read."
     (notes nil 8 t))
   :sort-key '(name))
 
-(defun shroud-bui ()
+(defun shroud-bui--deprecated ()
   "Display a list of entries in the shroud db."
-  (interactive)
   (bui-get-display-entries 'shroud-entries 'list))
+
+;; New BUI
+(bui-define-groups shroud
+  :parent-group tools
+  :parent-faces-group faces
+  :group-doc "Settings for '\\[shroud]' command."
+  :faces-group-doc "Faces for '\\[shroud]' command.")
+
+(defun shroud-find-entries (&optional search-type &rest search-values)
+  (let* ((entries (shroud--list)))
+  (or search-type (setq search-type 'all))
+  (cl-case search-type
+    (all entries)
+    (name (-mapcat #'shroud--find search-values))
+    (t (error "Unknown search type: %S" search-type)))))
+
+(defun shroud-entry->entry (a)
+  `((name . ,a)
+    (id . ,a)))
+
+(defun entry->shroud-entry (a)
+  (alist-get 'name a))
+
+(defun shroud-get-entries (&rest args)
+  (mapcar #'shroud-entry->entry
+          (apply #'shroud-find-entries args)))
+
+(bui-define-interface shroud list
+  :buffer-name "*Shroud*"
+  :get-entries-function 'shroud-get-entries
+  :format '((name nil 30 t))
+  :sort-key '(name))
+
+(let ((map shroud-list-mode-map))
+  (define-key map (kbd "c") 'shroud-list-copy-current-entry-pass)
+  (define-key map (kbd "d")   'shroud-list-remove-current-entry)
+  (define-key map (kbd "e")   'shroud-list-edit-current-entry))
+
+(defun shroud-list-copy-current-entry-pass ()
+  (interactive)
+  (and (kill-new (shroud--show-password (bui-list-current-id)))
+       (message "Password copied")))
+
+(defun shroud-list-remove-current-entry ()
+  (interactive)
+  (and (shroud--remove (bui-list-current-id))
+       (message "Entry deleted")))
+
+(defun shroud-list-edit-current-entry ()
+  (interactive)
+  (let ((entry (bui-list-current-id)))
+    (and (shroud--show-entry entry)
+       (message (concat "TODO: Edit " entry)))))
+
+;;;###autoload
+(defun shroud-bui ()
+  "Display a list of buffers."
+  (interactive)
+  (bui-get-display-entries 'shroud 'list))
 
 ;;;###autoload
 (defalias 'shroud 'shroud-bui)
