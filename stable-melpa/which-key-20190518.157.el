@@ -5,7 +5,7 @@
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-which-key
-;; Package-Version: 20190315.1248
+;; Package-Version: 20190518.157
 ;; Version: 3.3.2
 ;; Keywords:
 ;; Package-Requires: ((emacs "24.4"))
@@ -2278,6 +2278,21 @@ current evil state. "
          (apply-partially #'which-key--map-binding-p (symbol-value map-sym))
          "Major-mode bindings")
       (message "which-key: No map named %s" map-sym))))
+
+;;;###autoload
+(defun which-key-dump-bindings (prefix buffer-name)
+  "Dump bindings from PREFIX into buffer named BUFFER-NAME.
+
+PREFIX should be a string suitable for `kbd'."
+  (interactive "sPrefix: \nB")
+  (let* ((buffer (get-buffer-create buffer-name))
+         (keys (which-key--get-bindings (kbd prefix))))
+    (with-current-buffer buffer
+      (point-max)
+      (save-excursion
+        (dolist (key keys)
+          (insert (apply #'format "%s%s%s\n" key)))))
+    (switch-to-buffer-other-window buffer)))
 
 ;;;###autoload
 (defun which-key-undo-key (&optional _)
