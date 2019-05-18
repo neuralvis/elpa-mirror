@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019 Uros Perisic
 
 ;; Author: Uros Perisic
-;; URL: https://gitlab.com/jjzmajic/ewal.el
-;; Package-Version: 20190516.1427
+;; URL: https://gitlab.com/jjzmajic/ewal
+;; Package-Version: 20190518.533
 ;;
 ;; Version: 0.1
 ;; Keywords: faces
