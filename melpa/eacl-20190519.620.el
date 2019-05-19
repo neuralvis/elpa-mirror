@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017, 2018 Chen Bin
 ;;
 ;; Version: 2.0.1
-;; Package-Version: 20190207.125
+;; Package-Version: 20190519.620
 
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/eacl
@@ -76,7 +76,7 @@
 
 
 ;;; Code:
-(require 'ivy)
+(require 'ivy nil t)
 (require 'grep)
 (require 'cl-lib)
 
