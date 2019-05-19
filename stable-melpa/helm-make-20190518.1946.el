@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/helm-make
-;; Package-Version: 20190403.1324
+;; Package-Version: 20190518.1946
 ;; Version: 0.2.0
 ;; Keywords: makefile
 
@@ -31,6 +31,8 @@
 ;;; Code:
 
 (require 'subr-x)
+(eval-when-compile
+  (require 'helm-source nil t))
 
 (declare-function helm "ext:helm")
 (declare-function helm-marked-candidates "ext:helm")
