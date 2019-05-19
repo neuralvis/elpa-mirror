@@ -32,6 +32,7 @@ The doom-modeline offers:
 - New mode-line for Info-mode buffers
 - New package mode-line for paradox
 - New mode-line for helm buffers
+- New mode-line for git-timemachine buffers
 
 Installation:
 From melpa, `M-x package-install RET doom-modeline RET`.

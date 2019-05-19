@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016-2017 Rami Chowdhury
 ;; Author: Rami Chowdhury <rami.chowdhury@gmail.com>
 ;; URL: http://github.com/necaris/conda.el
-;; Package-Version: 20190129.1802
+;; Package-Version: 20190519.1923
 ;; Version: 20160914
 ;; Keywords: python, environment, conda
 ;; Package-Requires: ((emacs "24.4") (pythonic "0.1.0") (dash "2.13.0") (s "1.11.0") (f "0.18.2"))
@@ -147,7 +147,7 @@ environment variable."
   "Pull the `name` property out of the YAML file at FILENAME."
   (when filename
     (let ((env-yml-contents (f-read-text filename)))
-      (if (string-match "name:[ ]*\\([A-z0-9-]+\\)[ ]*$" env-yml-contents)
+      (if (string-match "name:[ ]*\\([A-z0-9-_.]+\\)[ ]*$" env-yml-contents)
           (match-string 1 env-yml-contents)
         nil))))
 
@@ -166,12 +166,13 @@ environment variable."
 (defun conda--get-path-prefix (env-dir)
   "Get a platform-specific path string to utilize the conda env in ENV-DIR.
 It's platform specific in that it uses the platform's native path separator."
-  (s-trim (shell-command-to-string
-                (format "conda ..activate \"%s\" \"%s\""
-                        (if (eq system-type 'windows-nt)
-                            "cmd.exe"
-                          "bash")
-                        env-dir))))
+  (s-trim (with-output-to-string (with-current-buffer standard-output
+			   (process-file shell-file-name nil '(t nil) nil shell-command-switch
+			   (format "conda ..activate \"%s\" \"%s\""
+				   (if (eq system-type 'windows-nt)
+				       "cmd.exe"
+				     "bash")
+				   env-dir))))))
 
 (defun conda-env-clear-history ()
   "Clear the history of conda environments that have been activated."
