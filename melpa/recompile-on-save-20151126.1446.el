@@ -4,6 +4,7 @@
 
 ;; Author: Marian Schubert <marian.schubert@gmail.com>
 ;; URL: https://github.com/maio/recompile-on-save.el
+;; Package-Version: 20151126.1446
 ;; Created: 9 Mar 2014
 ;; Version: 1.1
 ;; Package-Requires: ((dash "1.1.0") (cl-lib "0.5"))
