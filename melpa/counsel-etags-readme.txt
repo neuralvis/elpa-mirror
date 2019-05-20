@@ -27,7 +27,7 @@ Tips:
       (add-hook 'after-save-hook
                 'counsel-etags-virtual-update-tags 'append 'local)))
 
-- You can use ivy's negative pattern to filter candidates.
+- You can use ivy's exclusion patterns to filter candidates.
   For example, input "keyword1 !keyword2 keyword3" means:
   "(keyword1 and (not (or keyword2 keyword3)))"
 
