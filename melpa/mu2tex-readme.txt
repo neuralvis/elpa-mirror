@@ -22,7 +22,8 @@ USAGE
 
 To use this package, just type the name of a molecule or a unit
 expression into the buffer.  The expression must not contain
-spaces.  Then press the key to which mu2tex has been assigned.
+spaces.  Then, with the cursor right after the types expression,
+press the key to which mu2tex has been assigned.
 
 Example              Conversion result
 -----------------    -----------------
