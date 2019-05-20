@@ -1,2 +1,2 @@
 
-(flycheck-ameba . [(20190512 1709) ((emacs (24 4)) (flycheck (30))) "Add support for Ameba to Flycheck" single ((:commit . "b2c115905887ab6f12c08072e370e8ad2194e131") (:keywords "tools" "crystal" "ameba") (:url . "https://github.com/veelenga/ameba.el"))])
+(flycheck-ameba . [(20190512 1709) ((emacs (24 4)) (flycheck (30))) "Add support for Ameba to Flycheck" single ((:commit . "ce32da59c3215ccb90d37eb7d9e2affbdbaac1bb") (:keywords "tools" "crystal" "ameba") (:url . "https://github.com/veelenga/ameba.el"))])
