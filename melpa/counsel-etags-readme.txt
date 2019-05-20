@@ -32,8 +32,9 @@ Tips:
   "(keyword1 and (not (or keyword2 keyword3)))"
 
 - `counsel-etags-extra-tags-files' contains extra tags files to parse.
-  Set it like '(setq counsel-etags-extra-tags-files '("/usr/include/TAGS" "/usr/local/include/TAGS"))'
-  Tags files in `counsel-etags-extra-tags-files' should contain only tag with absolute path.
+  Set it like '(setq counsel-etags-extra-tags-files '("./TAGS" "/usr/include/TAGS" "$PROJ1/include/TAGS"))'
+  Files in `counsel-etags-extra-tags-files' should contain only symbol with absolute path.
+
 - You can setup `counsel-etags-ignore-directories' and `counsel-etags-ignore-filenames',
   (eval-after-load 'counsel-etags
     '(progn
