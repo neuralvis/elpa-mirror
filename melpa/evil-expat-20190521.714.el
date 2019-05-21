@@ -4,7 +4,7 @@
 
 ;; Author: edkolev <evgenysw@gmail.com>
 ;; URL: http://github.com/edkolev/evil-expat
-;; Package-Version: 20190112.540
+;; Package-Version: 20190521.714
 ;; Package-Requires: ((emacs "24.3") (evil "1.0.0"))
 ;; Version: 0.0.1
 ;; Keywords: emulations, evil, vim
@@ -288,7 +288,7 @@ BANG forces removal of files with modifications"
   "The ex :colorscheme command"
   (interactive "<expat-theme>")
   (if (not theme)
-      (message "%s" (string-join (mapcar 'symbol-name (or custom-enabled-themes '(default))) ", "))
+      (message "%s" (mapconcat 'identity (mapcar 'symbol-name (or custom-enabled-themes '(default))) ", "))
     (unless (or (string-equal theme "default") (memq theme (custom-available-themes)))
       (user-error "Cannot find theme `%s'" theme))
     (mapc #'disable-theme custom-enabled-themes)
@@ -301,7 +301,7 @@ BANG forces removal of files with modifications"
   (progn
     (unless (require 'magit nil 'noerror)
       (user-error "Package magit isn't installed"))
-    (magit-list-local-branch-names)))
+    (magit-list-branch-names)))
 
 ;;;###autoload
 (eval-after-load 'evil '(progn (evil-ex-define-cmd "gdiff" 'evil-expat-gdiff) (autoload 'evil-expat-gdiff "evil-expat" nil t)))
@@ -325,6 +325,22 @@ If REVISION is null, show unstaged changes."
         (vdiff-magit-compare (symbol-name revision) nil filename filename)
       (vdiff-magit-stage filename))
     ))
+
+;;; :gread
+
+;;;###autoload
+(eval-after-load 'evil '(progn (evil-ex-define-cmd "gread" 'evil-expat-gread) (autoload 'evil-expat-gread "evil-expat" nil t)))
+
+(declare-function magit-file-checkout "ext:magit")
+(declare-function magit-file-relative-name "ext:magit")
+
+(evil-define-command evil-expat-gread (&optional revision)
+  "Empty the file and replace it with REVISION.
+
+If REVISION is null, use `master'"
+  (interactive "<expat-git-branch>")
+  (let ((rev (if revision (symbol-name revision) "HEAD")))
+    (magit-file-checkout rev (magit-file-relative-name))))
 
 (provide 'evil-expat)
 

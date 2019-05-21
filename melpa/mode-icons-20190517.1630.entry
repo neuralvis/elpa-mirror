@@ -1,2 +1,0 @@
-
-(mode-icons . [(20190517 1630) ((emacs (24)) (cl-lib (0 5))) "Show icons for modes" tar ((:commit . "c1dd5143359ea60f2464bff94ff9c08bc7462de5") (:keywords "multimedia") (:authors ("Tom Willemse" . "tom@ryuslash.org")) (:maintainer "Tom Willemse" . "tom@ryuslash.org") (:url . "http://ryuslash.org/projects/mode-icons.html"))])
