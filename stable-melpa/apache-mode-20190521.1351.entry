@@ -1,0 +1,2 @@
+
+(apache-mode . [(20190521 1351) nil "major mode for editing Apache configuration files" single ((:commit . "08e5e91eba49f1b5a2cbef69f95e5312cf2de851") (:keywords "languages" "faces") (:authors ("Karl Chen" . "quarl@nospam.quarl.org")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-php/apache-mode"))])

@@ -7,7 +7,6 @@
 ;;; Author: Paul Huff <paul.huff@gmail.com>, Stefano Mazzucco <MY FIRST NAME - AT - CURSO - DOT - RE>
 ;;; Created: 28 September 2016
 ;;; Version: 0.0.1
-;; Package-Version: 20181219.719
 ;;; URL: https://github.com/josteink/ts-comint
 ;;; Package-Requires: ()
 ;;; Keywords: typescript, node, inferior-mode, convenience
