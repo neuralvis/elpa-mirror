@@ -1,2 +1,2 @@
 
-(dired-narrow . [(20181114 1723) ((dash (2 7 0)) (dired-hacks-utils (0 0 1))) "Live-narrowing of search results for dired" single ((:commit . "a9dc5eb34fc96da839f5cbd70eb096758f72b3fe") (:keywords "files") (:authors ("Matúš Goljer" . "matus.goljer@gmail.com")) (:maintainer "Matúš Goljer" . "matus.goljer@gmail.com"))])
+(dired-narrow . [(20181114 1723) ((dash (2 7 0)) (dired-hacks-utils (0 0 1))) "Live-narrowing of search results for dired" single ((:commit . "9523083f57c8278e3f52ca63b965249123139cd1") (:keywords "files") (:authors ("Matúš Goljer" . "matus.goljer@gmail.com")) (:maintainer "Matúš Goljer" . "matus.goljer@gmail.com"))])
