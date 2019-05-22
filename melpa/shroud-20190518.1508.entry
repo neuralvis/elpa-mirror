@@ -1,2 +1,0 @@
-
-(shroud . [(20190518 1508) ((emacs (24)) (f (0 20)) (bui (1 2 0)) (epg (1 0 0))) "Interface for Shroud" single ((:commit . "0a280198b8e16e1ca8549b9dc8a617e341c716c2") (:keywords "tools") (:authors ("Amar Singh" . "nly@disroot.org")) (:maintainer "Amar Singh" . "nly@disroot.org") (:url . "http://git.nly.info.tm:9001/shroud.git"))])

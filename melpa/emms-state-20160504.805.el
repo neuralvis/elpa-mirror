@@ -5,7 +5,6 @@
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 22 Jan 2015
 ;; Version: 0.2
-;; Package-Version: 20160504.805
 ;; Package-Requires: ((emms "0"))
 ;; URL: https://github.com/alezost/emms-state.el
 ;; Keywords: emms
