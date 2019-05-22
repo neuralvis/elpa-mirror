@@ -6,7 +6,7 @@
 
 ;; Author: Ethan Glasser-Camp <ethan@betacantrips.com>
 ;; Keywords: whitespace, tab, newline, trailing, clean
-;; Package-Version: 20170507.2030
+;; Package-Version: 20190522.1448
 ;;
 ;;; Commentary:
 ;; For more information on the design of this package, please see the
@@ -512,7 +512,7 @@ With arg, turn highlighting on if arg is positive, off otherwise."
     (save-excursion
       (move-overlay ethan-wspace-highlight-no-nl-eof-overlay (point-max) (point-max))
       (goto-char (point-max))
-      (let* ((str-len (- (frame-width) (current-column)
+      (let* ((str-len (- (window-width) (current-column)
                          1))  ; subtract one so that we don't trigger line-wrap
              (str (concat "eof" (make-string (max 0 (- str-len 3)) ?\ ))))
         (set-text-properties 0 (max 0 str-len) '(face ethan-wspace-face) str)

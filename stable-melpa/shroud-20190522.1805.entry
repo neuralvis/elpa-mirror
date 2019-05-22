@@ -1,0 +1,2 @@
+
+(shroud . [(20190522 1805) ((emacs (25)) (f (0 20)) (bui (1 2 0)) (epg (1 0 0))) "Interface for Shroud" tar ((:commit . "7b4124c50604c615639ee8e36036322055da7af5") (:keywords "tools" "password management") (:authors ("Amar Singh" . "nly@disroot.org")) (:maintainer "Amar Singh" . "nly@disroot.org") (:url . "http://git.nly.info.tm:9001/shroud.git"))])
