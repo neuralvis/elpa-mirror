@@ -1,8 +1,8 @@
-;;; copy-as-format.el --- Copy buffer locations as GitHub/Slack/JIRA/HipChat/... formatted code -*- lexical-binding: t; -*-
+;;; copy-as-format.el --- Copy buffer locations as GitHub/Slack/JIRA etc... formatted code -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016-2017 Skye Shaw
 ;; Author: Skye Shaw <skye.shaw@gmail.com>
-;; Package-Version: 20190119.1611
+;; Package-Version: 20190523.258
 ;; Package-X-Original-Version: 0.0.8
 ;; Keywords: github, slack, jira, hipchat, gitlab, bitbucket, org-mode, pod, rst, asciidoc, tools, convenience
 ;; URL: https://github.com/sshaw/copy-as-format
@@ -73,10 +73,19 @@
 (require 'tabify)
 (require 'xml)
 
-(defvar copy-as-format-default "markdown"
-  "Name of the default formatter, defaults to `markdown'.")
+(defgroup copy-as-format nil
+  "Copy buffer locations as GitHub/Slack/JIRA etc... formatted code"
+  :prefix "copy-as-format-"
+  :link '(url-link :tag "Report a Bug" "https://github.com/sshaw/copy-as-format/issues")
+  :link '(url-link :tag "Homepage" "https://github.com/sshaw/copy-as-format")
+  :group 'convenience)
 
-(defvar copy-as-format-format-alist
+(defcustom copy-as-format-default "markdown"
+  "Name of the default formatter, defaults to `markdown'."
+  :type 'string
+  :group 'copy-as-format)
+
+(defcustom copy-as-format-format-alist
   '(("asciidoc"  copy-as-format--asciidoc)
     ("bitbucket" copy-as-format--github)
     ("disqus"    copy-as-format--disqus)
@@ -91,15 +100,21 @@
     ("pod"       copy-as-format--pod)
     ("rst"       copy-as-format--rst)
     ("slack"     copy-as-format--slack))
-  "Alist of format names and the function to do the formatting.")
+  "Alist of format names and the function to do the formatting."
+  :type '(alist :key-type string :value-type (group function))
+  :group 'copy-as-format)
 
-(defvar copy-as-format-asciidoc-include-file-name nil
-  "If non-nil include the buffer's file name.")
+(defcustom copy-as-format-asciidoc-include-file-name nil
+  "If non-nil include the buffer's file name."
+  :type 'boolean
+  :group 'copy-as-format)
 
-(defvar copy-as-format-asciidoc-language-alist nil
+(defcustom copy-as-format-asciidoc-language-alist nil
   "Alist of file name patterns to language names used for syntax highlighting.
 By default the buffer's file extension is used.  If this does not
-work with your processor add the appropriate mapping here.")
+work with your processor add the appropriate mapping here."
+  :type '(alist :key-type string :value-type string)
+  :group 'copy-as-format)
 
 (defconst copy-as-format--jira-supported-languages
   '(("as"  "actionscript")
