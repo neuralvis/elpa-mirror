@@ -2,7 +2,6 @@
 
 ;; Homepage: https://github.com/a13/iqa.el
 ;; Version: 0.0.1
-;; Package-Version: 20181024.2253
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is free software; you can redistribute it and/or modify
