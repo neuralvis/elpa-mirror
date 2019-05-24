@@ -1,0 +1,2 @@
+
+(seml-mode . [(20190524 715) ((emacs (25)) (simple-httpd (1 5)) (htmlize (1 5))) "major-mode for SEML, S-Expression Markup Language, file" single ((:commit . "ac06b3549858c4ec94d45305d9198a6df5941f02") (:keywords "lisp" "html") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/seml-mode"))])
