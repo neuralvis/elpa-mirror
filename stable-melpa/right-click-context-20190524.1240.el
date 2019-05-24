@@ -5,7 +5,7 @@
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 8 May 2016
 ;; Version: 0.2.0
-;; Package-Version: 20190524.1123
+;; Package-Version: 20190524.1240
 ;; Package-Requires: ((emacs "24.3") (cl-lib "0.5") (popup "0.5"))
 ;; Keywords: mouse menu rightclick
 ;; Homepage: https://github.com/zonuexe/right-click-context
@@ -70,11 +70,18 @@
   :group 'right-click-context
   :type 'string)
 
+(defcustom right-click-context-mouse-set-point-before-open-menu 'not-region
+  "Control the position of the mouse pointer before opening the menu."
+  :group 'right-click-context
+  :type '(choice (const :tag "When not Region activated" 'not-region)
+                 (const :tag "Always set cursor to mouse pointer" 'always)
+                 (const :tag "Not set cursor to mouse pointer" nil)))
+
 (defvar right-click-context-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "<mouse-3>") #'right-click-context-menu)
+    (define-key map (kbd "<mouse-3>") #'right-click-context-click-menu)
     map)
-  "Keymap used in right-click-context-mode.")
+  "Keymap used in `right-click-context-mode'.")
 
 (defcustom right-click-context-global-menu-tree
   '(("Copy" :call (kill-ring-save (region-beginning) (region-end))
@@ -192,10 +199,19 @@ You probably want to just add follows code to your .emacs file (init.el).
   :group 'right-click-context)
 
 ;;;###autoload
+(defun right-click-context-click-menu (event)
+  "Open Right Click Context menu by Mouse Click `EVENT'."
+  (interactive "e")
+  (when (or (eq right-click-context-mouse-set-point-before-open-menu 'always)
+            (and (null mark-active)
+                 (eq right-click-context-mouse-set-point-before-open-menu 'not-region)))
+    (call-interactively #'mouse-set-point))
+  (right-click-context-menu))
+
+;;;###autoload
 (defun right-click-context-menu ()
   "Open Right Click Context menu."
   (interactive)
-  (call-interactively #'mouse-set-point)
   (let ((value (popup-cascade-menu (right-click-context--build-menu-for-popup-el (right-click-context--menu-tree) nil))))
     (when value
       (if (symbolp value)
