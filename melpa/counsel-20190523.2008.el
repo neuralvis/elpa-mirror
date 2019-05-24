@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190522.2133
+;; Package-Version: 20190523.2008
 ;; Version: 0.11.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.11.0"))
 ;; Keywords: convenience, matching, tools
@@ -5419,11 +5419,23 @@ subdirectories that builds may be invoked in."
            counsel-compile-build-directories))
 
 (defun counsel--get-build-subdirs (blddir)
-  "Return all subdirs of BLDDIR sorted by modification time."
-  (mapcar #'car (sort (directory-files-and-attributes
-                       blddir t directory-files-no-dot-files-regexp t)
-                      (lambda (x y)
-                        (time-less-p (nth 6 y) (nth 6 x))))))
+  "Return all subdirs under BLDDIR sorted by modification time.
+If there are non-directory files in BLDDIR we also return BLDDIR in
+  the list as it may also be a build directory."
+  (let* ((files (directory-files-and-attributes
+                 blddir t directory-files-no-dot-files-regexp t))
+         (filtered-files (cl-remove-if
+                          (lambda (f) (not (nth 1 f)))
+                          files)))
+    ;; any non-dir files?
+    (when (< (length filtered-files)
+             (length files))
+      (push (cons blddir (file-attributes blddir))
+            filtered-files))
+    (mapcar #'car
+            (sort filtered-files
+                  (lambda (x y)
+                    (time-less-p (nth 6 y) (nth 6 x)))))))
 
 (defun counsel-compile-get-build-directories (&optional dir)
   "Return a list of potential build directories."
@@ -5453,7 +5465,7 @@ subdirectories that builds may be invoked in."
         (when (or (and srcdir (file-in-directory-p srcdir root))
                   (and blddir (file-in-directory-p blddir root)))
           (push item history))))
-    history))
+    (nreverse history)))
 
 (defun counsel--get-compile-candidates (&optional dir)
   "Return the list of compile commands.
@@ -5487,6 +5499,12 @@ This is determined by `counsel-compile-local-builds', which see."
                          `(srcdir ,srcdir blddir ,blddir bldenv ,bldenv) cmd)
     (add-to-history 'counsel-compile-history cmd)))
 
+(defvar counsel-compile--current-build-dir nil
+  "Tracks the last directory `counsel-compile' was called with.
+
+This state allows us to set it correctly if the user has manually
+edited the command loosing our embedded state.")
+
 (defun counsel-compile--action (cmd)
   "Process CMD to call `compile'.
 
@@ -5500,7 +5518,9 @@ specified by the `blddir' property."
       (when (get-char-property 0 'cmd cmd)
         (setq cmd (substring-no-properties
                    cmd 0 (next-single-property-change 0 'cmd cmd))))
-      (let ((default-directory (or blddir default-directory))
+      (let ((default-directory (or blddir
+                                   counsel-compile--current-build-dir
+                                   default-directory))
             (compilation-environment bldenv))
         ;; No need to specify `:history' because of this hook.
         (add-hook 'compilation-start-hook #'counsel-compile--update-history)
@@ -5512,6 +5532,7 @@ specified by the `blddir' property."
 (defun counsel-compile (&optional dir)
   "Call `compile' completing with smart suggestions, optionally for DIR."
   (interactive)
+  (setq counsel-compile--current-build-dir (or dir default-directory))
   (ivy-read "Compile command: "
             (counsel--get-compile-candidates dir)
             :action #'counsel-compile--action
