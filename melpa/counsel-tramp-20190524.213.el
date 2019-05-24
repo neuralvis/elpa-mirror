@@ -4,7 +4,7 @@
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-counsel-tramp
-;; Package-Version: 20190125.751
+;; Package-Version: 20190524.213
 ;; Version: 0.6.2
 ;; Package-Requires: ((emacs "24.3") (counsel "0.10"))
 
@@ -131,7 +131,7 @@ Kill all remote buffers."
 				   (concat "/docker:" counsel-tramp-docker-user "@" (car info) ":/")
 				   hosts))))))
     (when (require 'vagrant-tramp nil t)
-      (cl-loop for box-name in (map 'list 'cadr (vagrant-tramp--completions))
+      (cl-loop for box-name in (cl-map 'list 'cadr (vagrant-tramp--completions))
 	       do (progn
 		    (push (concat "/vagrant:" box-name ":/") hosts)
 		    (push (concat "/vagrant:" box-name "|sudo:root@" box-name ":/") hosts))))
