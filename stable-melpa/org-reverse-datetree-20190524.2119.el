@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2.1
-;; Package-Version: 20190520.1803
+;; Package-Version: 20190524.2119
 ;; Package-Requires: ((emacs "26.1") (dash "2.12"))
 ;; Keywords: outlines
 ;; URL: https://github.com/akirak/org-reverse-datetree
@@ -52,6 +52,11 @@
 (autoload 'org-agenda-bulk-unmark-all "org-agenda")
 (autoload 'org-agenda-redo "org-agenda")
 (autoload 'org-remove-subtree-entries-from-agenda "org-agenda")
+
+(defgroup org-reverse-datetree nil
+  "Reverse date trees for Org mode."
+  :group 'org
+  :prefix "org-reverse-datetree-")
 
 (defcustom org-reverse-datetree-year-format "%Y"
   "Year format used by org-reverse-datetree."
