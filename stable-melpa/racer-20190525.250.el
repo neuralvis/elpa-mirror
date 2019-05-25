@@ -4,7 +4,7 @@
 
 ;; Author: Phil Dawes
 ;; URL: https://github.com/racer-rust/emacs-racer
-;; Package-Version: 20190320.56
+;; Package-Version: 20190525.250
 ;; Version: 1.3
 ;; Package-Requires: ((emacs "24.3") (rust-mode "0.2.0") (dash "2.13.0") (s "1.10.0") (f "0.18.2") (pos-tip "0.4.6"))
 ;; Keywords: abbrev, convenience, matching, rust, tools
@@ -69,7 +69,7 @@
 (require 'thingatpt)
 (require 'button)
 (require 'help-mode)
-(require 'pos-tip)
+(autoload 'pos-tip-show-no-propertize "pos-tip")
 
 (defgroup racer nil
   "Code completion, goto-definition and docs browsing for Rust via racer."
