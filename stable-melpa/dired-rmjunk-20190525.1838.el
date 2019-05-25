@@ -3,9 +3,9 @@
 ;; Copyright (C) 2019 Jakob L. Kreuze
 
 ;; Author: Jakob L. Kreuze <zerodaysfordays@sdf.lonestar.org>
-;; Version: 1.0
-;; Package-Version: 20190210.33
-;; Package-Requires (dired)
+;; Version: 1.1
+;; Package-Version: 20190525.1838
+;; Package-Requires (cl-lib dired)
 ;; Keywords: files matching
 ;; URL: https://git.sr.ht/~jakob/dired-rmjunk
 
@@ -56,20 +56,65 @@
 (defun dired-rmjunk ()
   "Mark all junk files in the current dired buffer.
 'Junk' is defined to be any file with a name matching one of the
-patterns in `dired-rmjunk-patterns'."
+patterns in `dired-rmjunk-patterns'. A pattern is said to match
+under the following conditions:
+
+  1. If the pattern lacks a directory component, matching means
+  that the regexp specified by the pattern matches the file-name.
+  2. If the pattern lacks a directory component, matching means
+  that that the regexp specified by the file-name component of
+  the pattern matches the file-name, AND the regexp specified by
+  the directory component of the pattern matches the current
+  directory."
   (interactive)
   (when (eq major-mode 'dired-mode)
     (save-excursion
       (let ((files-marked-count 0))
         (dolist (file (directory-files dired-directory))
           (dolist (pattern dired-rmjunk-patterns)
-            (when (string-match pattern file)
+            (when (or (and (not (dired-rmjunk--dir-name pattern))
+                           (string-match pattern file))
+                      (and (dired-rmjunk--dir-name pattern)
+                           (string-match (dired-rmjunk--dir-name pattern)
+                                         (dired-current-directory))
+                           (string-match (dired-rmjunk--file-name pattern) file)))
               (setq files-marked-count (1+ files-marked-count))
               (dired-goto-file (concat (expand-file-name dired-directory) file))
               (dired-flag-file-deletion 1))))
         (message (if (zerop files-marked-count)
                      "No junk files found :)"
                    "Junk files marked."))))))
+
+(defun dired-rmjunk--dir-name (path)
+  "Return the directory portion of PATH, or `nil' if the path
+does not contain a directory component."
+  (let ((split-offset (cl-position ?\/ path :from-end t)))
+    (if split-offset
+        (cl-subseq path 0 (1+ split-offset)))))
+
+(ert-deftest dired-rmjunk-test-dir-name ()
+  (should (equal (dired-rmjunk--dir-name ".FRD/links.txt")
+                 ".FRD/"))
+  (should (equal (dired-rmjunk--dir-name ".local/share/recently-used.xbel")
+                 ".local/share/"))
+  (should (equal (dired-rmjunk--dir-name ".asy")
+                 nil)))
+
+(defun dired-rmjunk--file-name (path)
+  "Return the file-name portion of PATH."
+  (let ((split-offset (cl-position ?\/ path :from-end t)))
+    (if split-offset
+        (cl-subseq path (1+ split-offset))
+      ;; If there's no directory component, `path' IS the file-name!
+      path)))
+
+(ert-deftest dired-rmjunk-test-file-name ()
+  (should (equal (dired-rmjunk--file-name ".FRD/links.txt")
+                 "links.txt"))
+  (should (equal (dired-rmjunk--file-name ".local/share/recently-used.xbel")
+                 "recently-used.xbel"))
+  (should (equal (dired-rmjunk--file-name ".asy")
+                 ".asy")))
 
 (provide 'dired-rmjunk)
 ;;; dired-rmjunk.el ends here
