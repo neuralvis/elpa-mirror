@@ -1,0 +1,2 @@
+
+(simple-paren . [(20190526 1929) ((emacs (24)) (cl-lib (0 5))) "Non-electrical insert paired delimiter, wrap" single ((:commit . "fdb0cee7848df611dc55ea20407ddd4e2ce86f29") (:keywords "convenience") (:authors ("Andreas Röhler, Steve Purcell")) (:maintainer "Andreas Röhler, Steve Purcell") (:url . "https://github.com/andreas-roehler/simple-paren"))])
