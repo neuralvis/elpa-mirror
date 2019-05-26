@@ -5,7 +5,7 @@
 ;; Author: Tim Vaughan <tgvaughan@gmail.com>
 ;; Created: 11 April 2019
 ;; Version: 1.0.0
-;; Package-Version: 20190525.1145
+;; Package-Version: 20190525.2035
 ;; Keywords: comm gopher
 ;; Homepage: https://github.com/tgvaughan/elpher
 ;; Package-Requires: ((emacs "25"))
@@ -91,7 +91,7 @@
          "isearch terms:\tfake\tfake\t1"
          "i\tfake\tfake\t1"
          "7Veronica-2 Gopher Search Engine\t/v2/vs\tgopher.floodgap.com\t70"
-         ".")
+         ".\r\n")
    "\r\n")
   "Source for elpher start page.")
 
