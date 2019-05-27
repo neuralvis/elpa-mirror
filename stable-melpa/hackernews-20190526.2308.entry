@@ -1,0 +1,2 @@
+
+(hackernews . [(20190526 2308) nil "Hacker News Client for Emacs" single ((:commit . "fe8af5bfa23717a365b6b8ccb81ca1c8783436bd") (:keywords "comm" "hypermedia" "news") (:authors ("Lincoln de Sousa" . "lincoln@comum.org")) (:maintainer "Basil L. Contovounesios" . "contovob@tcd.ie") (:url . "https://github.com/clarete/hackernews.el"))])
