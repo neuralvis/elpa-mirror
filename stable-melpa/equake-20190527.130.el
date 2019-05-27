@@ -16,7 +16,7 @@
 ;; Author: Benjamin Slade <slade@jnanam.net>
 ;; Maintainer: Benjamin Slade <slade@jnanam.net>
 ;; URL: https://gitlab.com/emacsomancer/equake
-;; Package-Version: 20190523.337
+;; Package-Version: 20190527.130
 ;; Package-X-Original-Version: 0.86
 ;; Version: 0.86
 ;; Package-Requires: ((emacs "25") (dash "2.14.1") (tco "20190309.55"))
@@ -85,22 +85,42 @@
 ;;
 ;; You'll probably also want to configure your WM/DE to
 ;; ignore the window in the task manager etc and
-;; have no titlebar or frame.
+;; have no titlebar or frame. It's most throughly tested with
+;; KDE Plasma 5 & StumpWM, but should be able to be made to work
+;; well with most DEs/WMs (I welcome notes on other environments).
 ;; 
 ;;; In Stumpwm:
-;; add the following to your .stumpwmrc or ~/.stumpwm.d/init.lisp or
-;; other initialisation file:
-;; ;; BEGIN COMMON LISP HERE;; 
+;; add the following to your .stumpwmrc or ~/.stumpwm.d/init.lisp or other
+;; initialisation file (please adjust your mouse focus policy as below to
+;; get optimal Equake behaviour:
+;; ;; BEGIN COMMON LISP HERE;;
+;; (defun calc-equake-width ()
+;;   (let ((screen-width (caddr (with-input-from-string (s (run-shell-command "emacsclient -n -e '(equake-find-workarea-of-current-screen (equake-calculate-mouse-location (display-monitor-attributes-list)) (display-monitor-attributes-list))'" t)) (read s))))
+;;         (desired-width-perc (read-from-string (run-shell-command "emacsclient -n -e 'equake-size-width'" t))))
+;;     (truncate (* screen-width desired-width-perc))))
+;; 
+;; (defun calc-equake-height ()
+;;   (let ((screen-height (cadddr (with-input-from-string (s (run-shell-command "emacsclient -n -e '(equake-find-workarea-of-current-screen (equake-calculate-mouse-location (display-monitor-attributes-list)) (display-monitor-attributes-list))'" t)) (read s))))
+;;         (desired-height-perc (read-from-string (run-shell-command "emacsclient -n -e 'equake-size-height'" t))))
+;;     (truncate (* screen-height desired-height-perc))))
+;; 
 ;; (defcommand invoke-equake () ()
-;;   "Create Equake window if none; hide Equake if current window; summon Equake to current group and frame otherwise."
 ;;   (if (and (not (equal (current-window) 'nil)) (search "*EQUAKE*[" (window-name (current-window)))) ; If there is a current window and it is Equake,
-;;       (hide-window (current-window)) ;; then hide Equake window via native Stumpwm method.
-;;     (let ((found-equake (find-equake-globally (screen-groups (current-screen))))) ; Otherwise, search all groups of current screen for Equake window:
-;;       (if (not found-equake)            ; If Equake cannot be found,
-;;           (run-shell-command "emacsclient -n -e '(equake-invoke)'") ; then invoke Equake via emacs function.
-;;         (progn (move-window-to-group found-equake (current-group)) ; But if Equake window is found, move it to the current group,
-;;                (pull-window found-equake) ; pull it into the current frame,
-;;                (unhide-window found-equake))))))                    ; and unhide the window (in case it's hidden).
+;;       (progn (unfloat-window (current-window) (current-group))
+;;              (hide-window (current-window))) ;; then hide Equake window via native Stumpwm method.
+;;       (let ((found-equake (find-equake-globally (screen-groups (current-screen))))) ; Otherwise, search all groups of current screen for Equake window:
+;;         (if (not found-equake)          ; If Equake cannot be found,
+;;             (progn
+;;               (run-shell-command "emacsclient -n -e '(equake-invoke)'") ; then invoke Equake via emacs function.
+;;               (setq equake-height (calc-equake-height))                 ; delay calculation of height & width setting until 1st time equake invoked
+;;               (setq equake-width (calc-equake-width))                   ; (otherwise Emacs may not be fully loaded)
+;;               (float-window found-equake (current-group)) ; float window
+;;               (float-window-move-resize (find-equake-globally (screen-groups (current-screen))) :width equake-width :height equake-height))
+;;             (progn (focus-window found-equake)
+;;                    (move-window-to-group found-equake (current-group)) ; But if Equake window is found, move it to the current group,
+;;                    (unhide-window found-equake) ; unhide window, in case hidden
+;;                    (float-window found-equake (current-group)) ; float window
+;;                    (float-window-move-resize (find-equake-globally (screen-groups (current-screen))) :width equake-width :height equake-height)))))) ; set size
 ;; 
 ;; (defun find-equake-in-group (windows-list) 
 ;;   "Search through WINDOWS-LIST, i.e. all windows of a group, for an Equake window. Sub-component of '#find-equake-globally."
@@ -119,6 +139,8 @@
 ;;         (if equake-window
 ;;             equake-window               ; stop if found and return window
 ;;             (find-equake-globally (cdr group-list))))))
+;; Set the mouse focus policy to :ignore
+;; (setf *mouse-focus-policy* :ignore)  ;; otherwise Equake will tend to disappear
 ;; ;; END COMMON LISP HERE;;
 ;; And add an appropriate keybinding to your stumpwm init to toggle, e.g.:
 ;; (define-key *top-map* (kbd "F12") "invoke-equake")
@@ -454,7 +476,9 @@ On multi-monitor set-ups, run instead \"emacsclient -n -c -e '(equake-invoke)' -
           (if (< highest-montab 0) ; if no extant Equake tabs on current monitor,
               (equake-new-tab)     ; then launch new shell.
             (switch-to-buffer (cdr (equake-find-monitor-list monitorid equake-last-etab-list))) ; else, restore last Equake tab
-            (switch-to-buffer (cdr (equake-find-monitor-list monitorid equake-last-buffer-list)))) ; and then restore last buffer used in frame.
+            (switch-to-buffer (cdr (equake-find-monitor-list monitorid equake-last-buffer-list))) ; and then restore last buffer used in frame.
+            (when (not (cl-search (concat "EQUAKE[" monitorid) (buffer-name (current-buffer)))) ; make sure to restore to an Equake buffer
+              (bury-buffer)))
           (equake-set-up-equake-frame)) ; set-up frame
         (set-window-prev-buffers nil (equake-filter-history (window-prev-buffers) (window-prev-buffers))))) ; filter out irrelevant buffers.
     (unless (equal equake-use-xdotool-probe 't) ; if not using xdotool-probe
