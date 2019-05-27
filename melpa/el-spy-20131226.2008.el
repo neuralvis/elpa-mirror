@@ -25,7 +25,6 @@
 
 ;; Author: Yuuki Arisawa <yuuki.ari@gmail.com>
 ;; URL: https://github.com/uk-ar/el-spy
-;; Package-Version: 20131226.2008
 ;; Created: 24 Sep 20
 ;; Version: 0.1
 ;; Keywords: test
