@@ -4,7 +4,7 @@
 
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: themes
-;; Package-Version: 20181218.849
+;; Package-Version: 20190528.923
 ;; URL: https://github.com/NicolasPetton/zerodark-theme
 ;; Version: 4.3
 ;; Package: zerodark-theme
@@ -403,6 +403,8 @@ The result is cached for one second to avoid hiccups."
    `(magit-reflog-commit ((,class (:background ,background-green :foreground ,green :weight bold))))
    `(magit-reflog-checkout ((,class (:background ,background-orange :foreground ,orange :weight bold))))
    `(magit-reflog-cherry-pick ((,class (:background ,background-purple :foreground ,purple :weight bold))))
+
+   `(magit-refname-pullreq ((,class (:background , background-orange :foreground ,orange :weight bold))))
 
    `(magit-bisect-bad ((,class (:background ,background-red :foreground ,red :box 1))))
    `(magit-bisect-good ((,class (:background ,background-blue :foreground ,blue :box 1))))
