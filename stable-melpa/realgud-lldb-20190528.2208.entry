@@ -1,0 +1,2 @@
+
+(realgud-lldb . [(20190528 2208) ((load-relative (1 2)) (realgud (1 5 0)) (emacs (25))) "Realgud front-end to lldb" tar ((:commit . "dd912185595435d781393e21e099931ae3aa0c10") (:authors ("Rocky Bernstein" . "rocky@gnu.org")) (:maintainer "Rocky Bernstein" . "rocky@gnu.org") (:url . "http://github.com/realgud/realgud-lldb"))])
