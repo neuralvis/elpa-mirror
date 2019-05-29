@@ -1,2 +1,0 @@
-
-(whois . [(20190519 1146) ((emacs (24))) "Syntax highlighted domain name queries using system whois" single ((:commit . "ccca32666fb453b27297396d99c8b54b9037cc86") (:keywords "network" "comm") (:authors ("Lassi Kortela" . "lassi@lassi.io")) (:maintainer "Lassi Kortela" . "lassi@lassi.io") (:url . "https://github.com/lassik/emacs-whois"))])

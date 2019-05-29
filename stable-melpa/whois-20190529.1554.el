@@ -4,7 +4,7 @@
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-whois
-;; Package-Version: 20190519.1146
+;; Package-Version: 20190529.1554
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: network comm
@@ -48,8 +48,8 @@
     st))
 
 (defconst whois-mode-font-lock-keywords
-  `(;; Comment starting with one or more # or % characters and space.
-    ("^[#%*]+\\(?: .*\\)?$"
+  `(;; Comment starting with one or more #;%* characters and space.
+    ("^[#;%*]+\\(?: .*\\)?$"
      (0 font-lock-comment-face))
     ;; >>> Last update of whois database: ... <<<
     ("^>>> Last update.*?: \\(.*?\\) <<<$"

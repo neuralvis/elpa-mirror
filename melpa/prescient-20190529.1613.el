@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20190529.549
+;; Package-Version: 20190529.1613
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 3.1
@@ -283,6 +283,30 @@ capture groups matching \"f\" and \"a\"."
              query
              "\\W*"))
 
+(defun prescient--fuzzy-regexp (query &optional with-groups)
+  "Return a regexp for fuzzy-matching QUERY.
+This means that the regexp will only match a given string if
+all characters in QUERY are present anywhere in the string in
+the specified order.
+
+If WITH-GROUPS is non-nil, enclose the parts of the regexp that
+match the QUERY characters in capture groups, so that the match
+data can be used to highlight the matched substrings."
+  (let ((chars (string-to-list query)))
+    (concat
+     (prescient--with-group
+      (regexp-quote
+       (char-to-string (car chars)))
+      with-groups)
+     (mapconcat
+      (lambda (char)
+        (format "[^%c\n]*%s" char
+                (prescient--with-group
+                 (regexp-quote
+                  (char-to-string char))
+                 with-groups)))
+      (cdr chars) ""))))
+
 ;; Remove this and do not document further changes in CHANGELOG after
 ;; six months or two releases, whichever comes later.
 (define-obsolete-function-alias
@@ -320,13 +344,7 @@ enclose literal substrings with capture groups."
                (string-match-p subquery "")
                subquery))
             (`fuzzy
-             (mapconcat
-              (lambda (char)
-                (prescient--with-group
-                 (regexp-quote
-                  (char-to-string char))
-                 with-groups))
-              subquery ".*"))))
+             (prescient--fuzzy-regexp subquery with-groups))))
         (pcase prescient-filter-method
           ;; We support `literal+initialism' for backwards
           ;; compatibility.
