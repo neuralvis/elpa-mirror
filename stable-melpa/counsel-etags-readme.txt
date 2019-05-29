@@ -32,8 +32,11 @@ Tips:
   "(keyword1 and (not (or keyword2 keyword3)))"
 
 - `counsel-etags-extra-tags-files' contains extra tags files to parse.
-  Set it like '(setq counsel-etags-extra-tags-files '("./TAGS" "/usr/include/TAGS" "$PROJ1/include/TAGS"))'
-  Files in `counsel-etags-extra-tags-files' should contain only symbol with absolute path.
+  Set it like,
+    (setq counsel-etags-extra-tags-files
+          '("./TAGS" "/usr/include/TAGS" "$PROJ1/include/TAGS"))
+
+  Files in `counsel-etags-extra-tags-files' have only symbol with absolute path.
 
 - You can setup `counsel-etags-ignore-directories' and `counsel-etags-ignore-filenames',
   (eval-after-load 'counsel-etags
@@ -49,5 +52,15 @@ Tips:
  in root directory. The content of .dir-locals.el" is as below,
   ((nil . ((counsel-etags-update-tags-backend . (lambda (src-dir) (shell-command "rusty-tags emacs")))
            (counsel-etags-tags-file-name . "rusty-tags.emacs"))))
+
+ - User could use `counsel-etags-convert-grep-keyword' to customize grep keyword.
+   Below setup enable `counsel-etags-grep' to search Chinese using pinyinlib,
+
+   (unless (featurep 'pinyinlib) (require 'pinyinlib))
+   (setq counsel-etags-convert-grep-keyword
+     (lambda (keyword)
+       (if (and keyword (> (length keyword) 0))
+           (pinyinlib-build-regexp-string keyword t)
+         keyword)))
 
 See https://github.com/redguardtoo/counsel-etags/ for more tips.

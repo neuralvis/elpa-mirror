@@ -17,6 +17,7 @@ Turn the mode off typing
     {M-x hack-time-mode RET}
 
 again.  The time is back to normal flow.
+
 * Use cases
 
 - Mark Org-todo-items done at another date.
@@ -25,9 +26,6 @@ again.  The time is back to normal flow.
   date.
 
 * Warning
-
-"With great power comes great responsibility." (from the TL;DR for
-Timelords)
 
 Possibly some functionalities behave weird when hack-time-mode is on.
 
