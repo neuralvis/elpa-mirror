@@ -4,7 +4,7 @@
 
 ;; Author: Nathan Dwarshuis <natedwarshuis@gmail.com>
 ;; Keywords: org-mode, data
-;; Package-Version: 20190514.144
+;; Package-Version: 20190530.259
 ;; Homepage: https://github.com/ndwarshuis/org-sql
 ;; Package-Requires: ((emacs "25") (dash "2.15"))
 ;; Version: 0.0.1
@@ -1396,7 +1396,8 @@ database."
    (--map (if (file-directory-p it)
               (directory-files it t "\\`.*\\.org\\(_archive\\)?\\'")
             (list it)))
-   (apply #'append)))
+   (apply #'append)
+   (-filter #'file-exists-p)))
 
 (defun org-sql-files-on-disk ()
   "Return alist for file paths in `org-sql-files'.
