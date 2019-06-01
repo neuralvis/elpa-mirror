@@ -4,7 +4,7 @@
 
 ;; Author:    Austin Seipp <aseipp [@at] pobox [dot] com>
 ;; URL:       http://github.com/thoughtpolice/cryptol-mode
-;; Package-Version: 20190130.2144
+;; Package-Version: 20190531.2051
 ;; Keywords:  cryptol cryptography
 ;; Version:   0.1.0
 ;; Released:  3 March 2013
@@ -125,10 +125,10 @@
 (defvar cryptol-string-regexp "\"\\.\\*\\?")
 
 (defvar cryptol-symbols-regexp
-  (regexp-opt '( "<|" "|>" "[" "]" "," "{" "}" "@" "#" "[_" "_]" "[_]")))
+  (regexp-opt '( "\\" "->" "<-" "=>" "=" "." ":" ".." "..." "|" "<|" "|>" )
+              'symbols))
 
-(defvar cryptol-symbols2-regexp
-  (regexp-opt '( "`" "|" "=" ">" "->" "!" ":" ">>" ">>>" "<<" "<<<" "&")))
+(defvar cryptol-symbols2-regexp "[!#$%&*+./:<=>?@\\^|~-]+")
 
 (defvar cryptol-consts-regexp
   (regexp-opt '( "True" "False" "inf" "fin" ) 'words))
@@ -145,8 +145,21 @@
 
 (defvar cryptol-mode-syntax-table
   (let ((st (make-syntax-table)))
-    (modify-syntax-entry ?/ ". 124" st)
-    (modify-syntax-entry ?* ". 23bn" st)
+    (modify-syntax-entry ?/ "_ 124" st)
+    (modify-syntax-entry ?* "_ 23bn" st)
+    (modify-syntax-entry ?! "_" st)
+    (modify-syntax-entry ?# "_" st)
+    (modify-syntax-entry ?$ "_" st)
+    (modify-syntax-entry ?% "_" st)
+    (modify-syntax-entry ?. "_" st)
+    (modify-syntax-entry ?: "_" st)
+    (modify-syntax-entry ?? "_" st)
+    (modify-syntax-entry ?@ "_" st)
+    (modify-syntax-entry ?\\ "_" st)
+    (modify-syntax-entry ?^ "_" st)
+    (modify-syntax-entry ?~ "_" st)
+    (modify-syntax-entry ?_ "w" st)
+    (modify-syntax-entry ?' "w" st)
     (modify-syntax-entry ?\n ">" st)
     st)
   "Syntax table for `cryptol-mode'.")
