@@ -5,7 +5,7 @@
 ;; Author: Johan Andersson <johan.rejeep@gmail.com>
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
 ;; Version: 0.2.0
-;; Package-Version: 20171217.1636
+;; Package-Version: 20190601.813
 ;; Keywords: node, nvm
 ;; URL: http://github.com/rejeep/nvm.el
 ;; Package-Requires: ((s "1.8.0") (dash "2.4.0") (f "0.14.0") (dash-functional "2.4.0"))
@@ -51,7 +51,7 @@
 (defconst nvm-runtime-re
   "\\(?:versions/node/\\|versions/io.js/\\)?")
 
-(defcustom nvm-dir (f-full "~/.nvm")
+(defcustom nvm-dir (or (getenv "NVM_DIR") (f-full "~/.nvm"))
   "Full path to Nvm installation directory."
   :group 'nvm
   :type 'directory)
