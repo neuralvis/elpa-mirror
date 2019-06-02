@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20190521.756
+;; Package-Version: 20190602.831
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9"))
 ;; Version: 0.5
@@ -1293,7 +1293,7 @@ If run interactively, get ENTRY from context and prompt for TITLE."
 ;;;###autoload
 (defun org-brain-set-tags (entry)
   "Modify the ENTRY tags.
-Use `org-set-tags' on headline ENTRY.
+Use `org-set-tags-command' on headline ENTRY.
 Instead sets #+FILETAGS on file ENTRY.
 If run interactively, get ENTRY from context."
   (interactive (list (org-brain-entry-at-pt)))
@@ -1315,7 +1315,7 @@ If run interactively, get ENTRY from context."
           (org-save-outline-visibility 'use-markers (org-mode-restart)))
         (save-buffer))
     (org-with-point-at (org-brain-entry-marker entry)
-      (org-set-tags)
+      (org-set-tags-command)
       (save-buffer)))
   (org-brain--revert-if-visualizing))
 
