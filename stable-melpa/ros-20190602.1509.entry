@@ -1,0 +1,2 @@
+
+(ros . [(20190602 1509) ((emacs (24 4))) "Package to interact with and write code for ROS systems" tar ((:commit . "b5deea437bf8999907e381d3b16f8b0ec0185045") (:authors ("Max Beutelspacher" . "max.beutelspacher@mailbox.org")) (:maintainer "Max Beutelspacher" . "max.beutelspacher@mailbox.org") (:url . "https://github.com/DerBeutlin/ros.el"))])
