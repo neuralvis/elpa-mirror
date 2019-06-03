@@ -1,2 +1,2 @@
 
-(live-py-mode . [(20190602 57) ((emacs (24 3))) "Live Coding in Python" tar ((:commit . "e2b71a30aabe563950f0c71e93665aed82b2c498") (:keywords "live" "coding") (:authors ("Don Kirkby http://donkirkby.github.io")) (:maintainer "Don Kirkby http://donkirkby.github.io") (:url . "http://donkirkby.github.io/live-py-plugin/"))])
+(live-py-mode . [(20190602 57) ((emacs (24 3))) "Live Coding in Python" tar ((:commit . "ed9f837dd3b45b6d27733e4603173a287023be4c") (:keywords "live" "coding") (:authors ("Don Kirkby http://donkirkby.github.io")) (:maintainer "Don Kirkby http://donkirkby.github.io") (:url . "http://donkirkby.github.io/live-py-plugin/"))])

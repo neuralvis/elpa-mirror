@@ -1,0 +1,2 @@
+
+(countdown . [(20190527 1136) ((emacs (25 1)) (stream (2 2 4))) "Countdown using big LCD-like digits" single ((:commit . "c60b6ff13a2c36e731132ef8775b7d09c5ad963d") (:keywords "tools") (:authors ("Xu Chunyang" . "mail@xuchunyang.me")) (:maintainer "Xu Chunyang" . "mail@xuchunyang.me") (:url . "https://github.com/xuchunyang/countdown.el"))])

@@ -1,0 +1,2 @@
+
+(cfrs . [(20190525 1116) ((emacs (25 2)) (dash (2 11 0)) (s (1 10 0)) (posframe (0 4 3))) "child-frame based read-string" single ((:commit . "767bf6a8244ee4cc56477bb2e99b9ca39c0e12f5") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])
