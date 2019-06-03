@@ -31,7 +31,7 @@ display at `ivy-posframe-style'
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
-(ivy-posframe-mode t)
+(ivy-posframe-mode 1)
 #+END_EXAMPLE
 *** Per-command mode.
 #+BEGIN_EXAMPLE
@@ -42,7 +42,7 @@ Different command can use different display function.
         (complete-symbol . ivy-posframe-display-at-point)
         (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
         (t               . ivy-posframe-display)))
-(ivy-posframe-mode t)
+(ivy-posframe-mode 1)
 #+END_EXAMPLE
 
 You can use ivy original display function on specify function.
@@ -56,7 +56,7 @@ Different command can use different display function.
         (complete-symbol . ivy-posframe-display-at-point)
         (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
         (t               . ivy-posframe-display)))
-(ivy-posframe-mode t)
+(ivy-posframe-mode 1)
 #+END_EXAMPLE
 
 You may want to change the height of ivy by a function only while
@@ -76,7 +76,7 @@ Different command can use different display function.
         (complete-symbol . ivy-posframe-display-at-point)
         (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
         (t               . ivy-posframe-display)))
-(ivy-posframe-mode t)
+(ivy-posframe-mode 1)
 #+END_EXAMPLE
 
 NOTE: Using swiper as example: swiper's display function *only*
@@ -107,6 +107,6 @@ The simplest way is:
 #+BEGIN_EXAMPLE
 (defun ivy-posframe-display-at-XXX (str)
   (ivy-posframe--display str #'your-own-poshandler-function))
-(push 'ivy-posframe-display-at-XXX ivy-posframe-display-function-list) ; This line is needed.
-(ivy-posframe-mode t) ; This line is needed.
+(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-XXX)))
+(ivy-posframe-mode 1) ; This line is needed.
 #+END_EXAMPLE
