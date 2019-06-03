@@ -4,8 +4,8 @@
 
 ;; Author: Tim Vaughan <tgvaughan@gmail.com>
 ;; Created: 11 April 2019
-;; Version: 1.0.0
-;; Package-Version: 20190529.2242
+;; Version: 1.1.0
+;; Package-Version: 20190603.1731
 ;; Keywords: comm gopher
 ;; Homepage: https://github.com/tgvaughan/elpher
 ;; Package-Requires: ((emacs "25"))
