@@ -4,7 +4,6 @@
 
 ;; Author: rubikitch <rubikitch@ruby-lang.org>
 ;; Keywords: view, extensions
-;; Package-Version: 20170107.202
 ;; URL: http://github.com/rubikitch/viewer/
 
 ;; This file is free software; you can redistribute it and/or modify
