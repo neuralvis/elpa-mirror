@@ -4,7 +4,7 @@
 
 ;; Author: Uros Perisic
 ;; URL: https://gitlab.com/jjzmajic/ewal
-;; Package-Version: 20190604.646
+;; Package-Version: 20190604.920
 ;;
 ;; Version: 0.1
 ;; Keywords: faces
@@ -110,7 +110,7 @@ t, use TTY colors."
   (if apply
       (cl-loop for (key . value)
                in ewal-evil-cursors-emacs-colors
-               do (set key value))
+               do (set key (car value)))
     ewal-evil-cursors-emacs-colors))
 
 (provide 'ewal-evil-cursors)
