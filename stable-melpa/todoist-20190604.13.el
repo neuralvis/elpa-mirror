@@ -20,7 +20,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20190603.1434
+;; Package-Version: 20190604.13
 ;; Author: Adrien Brochard
 ;; Keywords: todoist task todo comm
 ;; URL: https://github.com/abrochard/emacs-todoist
@@ -79,7 +79,7 @@ DATA is the request body."
       (goto-char url-http-end-of-headers)
       ;; (message (buffer-string))
       (unless (string-equal (buffer-substring (point) (point-max)) "\n") ;; no body
-        (json-read)))))
+        (json-read-from-string (decode-coding-region (point) (point-max) 'utf-8 t))))))
 
 (defun todoist--task-id (task)
   "Get the task id.

@@ -12,7 +12,7 @@ Usage:
   `counsel-etags-grep' to grep
   `counsel-etags-grep-current-directory' to grep in current directory
   `counsel-etags-recent-tag' to open recent tag
-  `counsel-etags-find-tag' to two step tag matching use regular expression and filter
+  `counsel-etags-find-tag' to two steps tag matching use regular expression and filter
   `counsel-etags-list-tag' to list all tags
 
 Tips:
@@ -38,7 +38,7 @@ Tips:
 
   Files in `counsel-etags-extra-tags-files' have only symbol with absolute path.
 
-- You can setup `counsel-etags-ignore-directories' and `counsel-etags-ignore-filenames',
+- You can set up `counsel-etags-ignore-directories' and `counsel-etags-ignore-filenames',
   (eval-after-load 'counsel-etags
     '(progn
        ;; counsel-etags-ignore-directories does NOT support wildcast
@@ -48,9 +48,10 @@ Tips:
        (add-to-list 'counsel-etags-ignore-filenames "TAGS")
        (add-to-list 'counsel-etags-ignore-filenames "*.json")))
 
- - Rust programming language is supported. The easiest setup is a ".dir-locals.el"
- in root directory. The content of .dir-locals.el" is as below,
-  ((nil . ((counsel-etags-update-tags-backend . (lambda (src-dir) (shell-command "rusty-tags emacs")))
+ - Rust programming language is supported.
+   The easiest setup is to use ".dir-locals.el".
+  in root directory.  The content of .dir-locals.el" is as below,
+  ((nil . ((counsel-etags-update-tags-backend . (lambda (src-dir) (shell-command "rusty-tags Emacs")))
            (counsel-etags-tags-file-name . "rusty-tags.emacs"))))
 
  - User could use `counsel-etags-convert-grep-keyword' to customize grep keyword.
