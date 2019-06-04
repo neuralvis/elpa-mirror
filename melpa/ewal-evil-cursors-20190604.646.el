@@ -4,7 +4,7 @@
 
 ;; Author: Uros Perisic
 ;; URL: https://gitlab.com/jjzmajic/ewal
-;; Package-Version: 20190519.45
+;; Package-Version: 20190604.646
 ;;
 ;; Version: 0.1
 ;; Keywords: faces
@@ -104,8 +104,8 @@ Reload `ewal' environment variables before returning colors even
 if they have already been computed if FORCE-RELOAD is t. TTY
 defaults to return value of `ewal--use-tty-colors-p'. If TTY is
 t, use TTY colors."
-  (ewal-load-ewal-colors force-reload 'ewal-evil-cursors-spacemacs-colors
-                         #'ewal-evil-cursors--generate-spacemacs-colors
+  (ewal-load-ewal-colors force-reload 'ewal-evil-cursors-emacs-colors
+                         #'ewal-evil-cursors--generate-emacs-colors
                          nil)
   (if apply
       (cl-loop for (key . value)
