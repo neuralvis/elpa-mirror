@@ -1,7 +1,7 @@
 ;;; hl-fill-column.el --- Highlight fill column. -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/hl-fill-column
-;; Package-Version: 20181210.1204
+;; Package-Version: 20190605.1421
 ;; Created: November 1, 2018
 ;; Keywords: fill column, faces
 ;; Package-Requires: ((names "0.5") (emacs "24"))
@@ -65,7 +65,7 @@ Look through END when provided."
     (if (and (= fill-column (current-column))
              (<= (point) end)
              (> (point) start))
-        (progn (set-match-data (list (1- (point)) (point)))
+        (progn (set-match-data (list (point) (+ 1 (point))))
                t)                       ; Return t.
       (goto-char start)
       nil)))                            ; Return nil.
