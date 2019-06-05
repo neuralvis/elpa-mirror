@@ -1,0 +1,2 @@
+
+(atom-one-dark-theme . [(20190605 1646) nil "Atom One Dark color theme" single ((:commit . "bbad275cd51dcee14c42be647b15c39ffb26aac0") (:authors ("Jonathan Chu" . "me@jonathanchu.is")) (:maintainer "Jonathan Chu" . "me@jonathanchu.is") (:url . "https://github.com/jonathanchu/atom-one-dark-theme"))])
