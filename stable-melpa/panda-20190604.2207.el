@@ -4,7 +4,7 @@
 ;;
 ;; Author: Sebastian Monia <smonia@outlook.com>
 ;; URL: https://github.com/sebasmonia/panda
-;; Package-Version: 20190515.2123
+;; Package-Version: 20190604.2207
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 1.1
 ;; Keywords: maint tool
@@ -53,7 +53,8 @@
   :type 'string)
 
 (defcustom panda-less-messages nil
-  "Display less messages in the echo area."
+  "Display less messages in the echo area.
+You can always read Panda's messages in the \"*panda-log*\" buffer."
   :type 'boolean)
 
 (defcustom panda-log-responses nil
@@ -78,6 +79,11 @@ Extremely useful for debugging but way too verbose for every day use."
 (defcustom panda-deploy-confirmation-regex ""
    "If an environment name matches the regex, Panda will request confirmation before submitting the deploy."
    :type 'string)
+
+(defcustom panda-prefix-buffers nil
+   "Don't prefix Panda's buffers with \"Panda\".
+The names are long enough on their own! On the other hand, the common prefix makes buffer switching easier."
+  :type 'boolean)
 
 (defcustom panda-open-status-after-build 'ask
   "Open the build status for the corresponding branch after requesting a build.
@@ -108,6 +114,14 @@ If yes, automatically open it.  No to never ask.  Set to 'ask (default) to be pr
 
 (defvar panda--browse-build "/browse/%s" "What to add to 'panda-browser-url to open builds in the browser.")
 (defvar panda--browse-deploy-project "/deploy/viewDeploymentProjectEnvironments.action?id=%s" "What to add to 'panda-browser-url to open deploy projects in the browser.")
+
+(defvar panda--buffer-name-alist
+  '((details . "Build Details %s")
+    (builds . "Builds %s")
+    (deploys . "Environments %s")
+    (env-history . "Env. History %s")
+    (deploy-log . "Deploy log %s"))
+  "Templates for the different Panda buffer names.")
 
 (defvar panda--build-buffer-template "
 Build key: %s
@@ -172,11 +186,16 @@ Artifacts:
       (insert text)
       (insert "\n"))))
 
-
 (defun panda--show-help (help-message)
   "Display the *Panda Help* buffer with the text in HELP-MESSAGE."
   (with-output-to-temp-buffer "*Panda Help*"
     (princ help-message)))
+
+(defun panda--get-buffer-name (key)
+  "Return the buffer name to a KEY, considering the user's customizations."
+  (let ((prefix (if panda-prefix-buffers "Panda - " ""))
+        (name (alist-get key panda--buffer-name-alist)))
+    (format "*%s%s*" prefix name)))
 
 ;;------------------HTTP Stuff----------------------------------------------------
 
@@ -402,7 +421,7 @@ If provided PROJECT and PLAN won't be prompted."
   "Show a buffer with the details of BUILD-KEY.  Invoked from build status list."
   (let* ((data (panda--api-call (concat "/result/" build-key)
                                 "expand=changes,metadata,artifacts,comments,jiraIssues,variable,stages"))
-         (buffer-name (concat "*Panda - Build details " build-key))
+         (buffer-name (format (panda--get-buffer-name 'details) build-key))
          (buffer (get-buffer-create buffer-name))
          (data-to-display nil))
     (let-alist data
@@ -489,7 +508,7 @@ The amount of builds to retrieve is controlled by 'panda-latest-max'."
   ;; the only option is to fetch the list of build keys and retrieve
   ;; the build date individually for each build
   (let* ((build-data (panda--build-results-data branch))
-         (buffer-name (concat "*Panda - Latest builds " branch "*"))
+         (buffer-name (format (panda--get-buffer-name 'builds) branch))
          (buffer (get-buffer-create buffer-name)))
     (with-current-buffer buffer
       ;; setup the tablist
@@ -574,7 +593,7 @@ The amount of builds to retrieve is controlled by 'panda-latest-max'."
   (let ((help-message
         (concat
          "--Panda: Build status mode help--\n\n"
-         "In this list you case see the latest builds for a given branch. You customize the group `panda` to "
+         "In this list you can see the latest builds for a given branch. You customize the group `panda` to "
          "modify the number of \"latest items\" retrieved.\n\n"
          "Bindings:\n\n"
          "* g will refresh the data, as usual in Emacs\n\n"
@@ -699,7 +718,7 @@ The amount of builds to retrieve is controlled by 'panda-latest-max'."
          (data (elt (panda--api-call (format "/deploy/dashboard/%s" did)) 0))
          (envs (alist-get 'environmentStatuses data))
          (data-formatted (mapcar 'panda--format-deploy-status envs))
-         (buffer-name (concat "*Panda - Deploy status " project-name "*"))
+         (buffer-name (format (panda--get-buffer-name 'deploys) project-name))
          (buffer (get-buffer-create buffer-name)))
     (with-current-buffer buffer
       ;; change to tablist mode
@@ -724,7 +743,7 @@ The amount of builds to retrieve is controlled by 'panda-latest-max'."
   (let* ((environment-data (panda--api-call (format "/deploy/environment/%s/results" env-id)))
          (data-formatted (mapcar 'panda--format-env-history (alist-get 'results environment-data)))
          (environment-name (panda--env-name-from-id env-id))
-         (buffer-name (concat "*Panda - Environment history " environment-name "*"))
+         (buffer-name (format (panda--get-buffer-name 'env-history) environment-name))
          (buffer (get-buffer-create buffer-name)))
     (with-current-buffer buffer
       (panda--environment-history-mode)
@@ -743,7 +762,7 @@ The amount of builds to retrieve is controlled by 'panda-latest-max'."
                                        ;; there are bigger problems if we actually get it all...
                                        "includeLogs=true&max-results=1000000"))
          (logs (panda--deploy-log-from-deploy-data deploy-data))
-         (buffer-name (format "*Panda - Deploy log %s*" deploy-id))
+         (buffer-name (format (panda--get-buffer-name 'deploy-log) deploy-id))
          (buffer (get-buffer-create buffer-name)))
     (with-current-buffer buffer
       (setq buffer-read-only nil)
@@ -844,7 +863,7 @@ The amount of builds to retrieve is controlled by 'panda-latest-max'."
   (let ((help-message
         (concat
          "--Panda: Deploy status mode help--\n\n"
-         "In this list you case see one entry per environment for a given deployment project.\n\n"
+         "In this list you have one entry per environment for a given deployment project.\n\n"
          "Bindings:\n\n"
          "* g will refresh the data, as usual in Emacs\n\n"
          "* q opens a list of releases to (q)ueue a deployment for the environment under point\n\n"

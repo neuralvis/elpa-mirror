@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/yankpad
-;; Package-Version: 20190319.1416
+;; Package-Version: 20190604.2027
 ;; Version: 2.20
 ;; Keywords: abbrev convenience
 ;; Package-Requires: ((emacs "24"))
@@ -142,15 +142,23 @@
 (when (version< (org-version) "8.3")
   (require 'ox))
 
-(defvar yankpad-file (expand-file-name "yankpad.org" org-directory)
-  "The path to your yankpad.")
+(defgroup yankpad nil
+  "Paste snippets from an org-mode file."
+  :group 'editing)
+
+(defcustom yankpad-file (expand-file-name "yankpad.org" org-directory)
+  "The path to your yankpad."
+  :type 'string
+  :group 'yankpad)
 
 (defvar yankpad-category nil
   "The current yankpad category.  Change with `yankpad-set-category'.")
 (put 'yankpad-category 'safe-local-variable #'string-or-null-p)
 
-(defvar yankpad-default-category "Default"
-  "Used as fallback if no category is found when running `yankpad-local-category-to-major-mode'.")
+(defcustom yankpad-default-category "Default"
+  "Used as fallback if no category is found when running `yankpad-local-category-to-major-mode'."
+  :type 'string
+  :group 'yankpad)
 
 (defvar yankpad-category-heading-level 1
   "The `org-mode' heading level of categories in the `yankpad-file'.")
@@ -573,12 +581,13 @@ Each snippet is a list (NAME TAGS SRC-BLOCKS TEXT)."
                        (interactive)
                        (yankpad--run-snippet ',snippet)))))))
           (yankpad-active-snippets))
-    (message "yankpad: %s"
-             (if map-help
-                 (apply 'concat (mapcar 'cdr (sort map-help
-                                                   (lambda (x y)
-                                                     (string-lessp (car x) (car y))))))
-               (format "nothing is defined in %s" yankpad-category))))
+    (let ((message-log-max nil))
+      (message "yankpad: %s"
+               (if map-help
+                   (apply 'concat (mapcar 'cdr (sort map-help
+                                                     (lambda (x y)
+                                                       (string-lessp (car x) (car y))))))
+                 (format "nothing is defined in %s" yankpad-category)))))
   (set-transient-map 'yankpad-keymap))
 
 (defmacro yankpad-map-simulate (key)

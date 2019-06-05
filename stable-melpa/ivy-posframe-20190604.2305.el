@@ -7,7 +7,7 @@
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Package-Version: 20190604.1430
+;; Package-Version: 20190604.2305
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.11.0"))
@@ -514,6 +514,7 @@ selection, non-nil otherwise."
   "Display ivy via posframe."
   :init-value nil
   :global t
+  :require 'ivy-posframe
   :lighter ivy-posframe-lighter
   :group 'ivy-posframe
   :keymap '(([remap ivy-avy]              . ivy-posframe-avy)
