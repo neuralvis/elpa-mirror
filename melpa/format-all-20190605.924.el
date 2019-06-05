@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20190603.1923
+;; Package-Version: 20190605.924
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -49,6 +49,7 @@
 ;; - Markdown (prettier)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
+;; - PHP (prettier plugin-php)
 ;; - Protocol Buffers (clang-format)
 ;; - Python (black)
 ;; - Ruby (rufo)
@@ -205,7 +206,26 @@ functions to avoid warnings from the Emacs byte compiler."
      (format-all-fix-trailing-whitespace)
      (list nil ""))))
 
-(defun format-all-buffer-hard (ok-statuses error-regexp executable &rest args)
+(defun format-all-locate-default-directory (root-files)
+  "Internal helper function to find working directory for formatter.
+
+ROOT-FILES is a list of strings which are the filenames to look
+for using `locate-dominating-file'.  Details in documentation for
+`format-all-buffer-hard'."
+  (let ((found-dirs
+         (when (and root-files (buffer-file-name))
+           (mapcan (lambda (root-file)
+                     (let ((found-file (locate-dominating-file
+                                        (buffer-file-name) root-file)))
+                       (when found-file
+                         (list (file-name-directory found-file)))))
+                   root-files))))
+    (or (car (sort found-dirs (lambda (a b) (> (length a) (length b)))))
+        (and (buffer-file-name) (file-name-directory (buffer-file-name)))
+        default-directory)))
+
+(defun format-all-buffer-hard
+    (ok-statuses error-regexp root-files executable &rest args)
   "Internal helper function to implement formatters.
 
 Runs the external program EXECUTABLE.  The program shall read
@@ -221,13 +241,22 @@ OK-STATUSES.  OK-STATUSES and ERROR-REGEXP are hacks to work
 around formatter programs that don't make sensible use of their
 exit status.
 
-If ARGS are given, those are arguments to EXECUTABLE.  They don't
-need to be shell-quoted."
+If ARGS are given, those are arguments to EXECUTABLE. They should
+not be shell-quoted.
+
+If ROOT-FILES are given, the working directory of the formatter
+will be the deepest directory (starting from the file being
+formatted) containing one of these files.  If ROOT-FILES is nil,
+or none of ROOT-FILES are found in any parent directories, the
+working directory will be the one where the formatted file is.
+ROOT-FILES is ignored for buffers that are not visiting a file."
   (let ((ok-statuses (or ok-statuses '(0)))
-        (args (format-all-flatten-list args)))
+        (args (format-all-flatten-list args))
+        (default-directory (format-all-locate-default-directory root-files)))
     (when format-all-debug
       (message "Format-All: Running: %s"
-               (mapconcat #'shell-quote-argument (cons executable args) " ")))
+               (mapconcat #'shell-quote-argument (cons executable args) " "))
+      (message "Format-All: Directory: %s" default-directory))
     (format-all-buffer-thunk
      (lambda (input)
        (let* ((errfile (make-temp-file "format-all-"))
@@ -254,7 +283,7 @@ on success/failure.
 
 If ARGS are given, those are arguments to EXECUTABLE.  They don't
 need to be shell-quoted."
-  (apply 'format-all-buffer-hard nil nil executable args))
+  (apply 'format-all-buffer-hard nil nil nil executable args))
 
 (defvar format-all-executable-table (make-hash-table)
   "Internal table of formatter executable names for format-all.")
@@ -387,7 +416,8 @@ Consult the existing formatters for examples of BODY."
   (:executable "dfmt")
   (:install (macos "brew install dfmt"))
   (:modes d-mode)
-  (:format (format-all-buffer-hard nil (regexp-quote "[error]") executable)))
+  (:format
+   (format-all-buffer-hard nil (regexp-quote "[error]") nil executable)))
 
 (define-format-all-formatter dhall
   (:executable "dhall")
@@ -401,7 +431,8 @@ Consult the existing formatters for examples of BODY."
   (:modes elm-mode)
   (:format
    (cl-destructuring-bind (output errput)
-       (format-all-buffer-easy executable "--yes" "--stdin")
+       (format-all-buffer-hard nil nil '("elm.json" "elm-package.json")
+                               executable "--yes" "--stdin")
      (let ((errput (format-all-remove-ansi-color errput)))
        (list output errput)))))
 
@@ -432,7 +463,7 @@ Consult the existing formatters for examples of BODY."
                       '("xml" "html"))))))
   (:format
    (format-all-buffer-hard
-    '(0 1) nil
+    '(0 1) nil nil
     executable
     "-q"
     "--tidy-mark" "no"
@@ -469,7 +500,8 @@ Consult the existing formatters for examples of BODY."
   (:executable "mix")
   (:install (macos "brew install elixir"))
   (:modes elixir-mode)
-  (:format (format-all-buffer-easy executable "format" "-")))
+  (:format
+   (format-all-buffer-hard nil nil '("mix.exs") executable "format" "-")))
 
 (define-format-all-formatter ocp-indent
   (:executable "ocp-indent")
@@ -485,7 +517,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter prettier
   (:executable "prettier")
-  (:install "npm install --global prettier")
+  (:install "npm install --global prettier @prettier/plugin-php")
   (:modes
    (angular-html-mode "angular")
    ((js-mode js2-mode js3-mode)
@@ -502,6 +534,7 @@ Consult the existing formatters for examples of BODY."
    (less-css-mode "less")
    (graphql-mode "graphql")
    ((gfm-mode markdown-mode) "markdown")
+   (php-mode "php")
    (web-mode
     (let ((ct (symbol-value 'web-mode-content-type))
           (en (symbol-value 'web-mode-engine)))

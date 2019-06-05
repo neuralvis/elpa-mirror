@@ -35,6 +35,7 @@ Supported languages:
 - Markdown (prettier)
 - OCaml (ocp-indent)
 - Perl (perltidy)
+- PHP (prettier plugin-php)
 - Protocol Buffers (clang-format)
 - Python (black)
 - Ruby (rufo)
