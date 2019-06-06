@@ -1,2 +1,0 @@
-
-(poly-noweb . [(20190317 1352) ((emacs (25)) (polymode (0 1 5))) "Polymode for noweb" single ((:commit . "21d492067001a25df8ad9a49f7e3bd45f33dd89a") (:keywords "languages" "multi-modes") (:authors ("Vitalie Spinu")) (:maintainer "Vitalie Spinu") (:url . "https://github.com/polymode/poly-noweb"))])
