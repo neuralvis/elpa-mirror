@@ -1,2 +1,0 @@
-
-(hy-mode . [(20190605 2126) ((dash (2 13 0)) (dash-functional (1 2 0)) (s (1 11 0)) (emacs (24))) "Major mode for Hylang" tar ((:commit . "41b7d36943ead72f9cdaaeef4331dd449eaeaa39") (:keywords "languages" "lisp" "python") (:url . "http://github.com/hylang/hy-mode"))])

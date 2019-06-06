@@ -4,9 +4,9 @@
 ;;
 ;; Author: James Ferguson <james@faff.org>
 ;; URL: https://github.com/WJCFerguson/banner-comment
-;; Package-Version: 20180923.1911
+;; Package-Version: 20190606.1809
 ;; Package-Requires: ((emacs "24.4"))
-;; Version: 2.6.2
+;; Version: 2.8.0
 ;; Keywords: convenience
 
 ;; This file is not part of GNU Emacs.
@@ -51,6 +51,16 @@ If nil, use (or `comment-fill-column' `fill-column')."
   :type '(choice (const :tag "(or comment-fill-column fill-column)" nil)
                  integer))
 
+(defcustom banner-comment-start nil
+  "String to override `comment-start' for the banner, if non-nil."
+  :type '(choice (const :tag "use `comment-start'" nil)
+                 string))
+
+(defcustom banner-comment-end nil
+  "String to override `comment-end' for the banner, if non-nil."
+  :type '(choice (const :tag "use `comment-end'" nil)
+                 string))
+
 (require 'subr-x) ;; for string-trim
 
 ;;;###autoload
@@ -69,7 +79,9 @@ Final column will be (or END-COLUMN comment-fill-column fill-column)."
                                  banner-comment-width
                                  comment-fill-column
                                  fill-column)
-                             (current-column))))
+                             (current-column)))
+            (comment-start (or banner-comment-start comment-start))
+            (comment-end (or banner-comment-end comment-end)))
         (narrow-to-region (point) (line-end-position))
         ;; re search to extract existing into: pre(97), text(98), post(99)
         (if (re-search-forward

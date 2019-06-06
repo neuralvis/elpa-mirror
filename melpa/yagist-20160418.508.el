@@ -7,7 +7,6 @@
 ;;               Phil Hagelberg
 ;;               Dan McKinley
 ;; Version: 0.8.13
-;; Package-Version: 20160418.508
 ;; Created: 21 Jul 2008
 ;; Keywords: tools
 ;; Package-Requires: ((cl-lib "0.3"))

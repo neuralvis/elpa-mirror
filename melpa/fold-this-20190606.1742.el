@@ -4,7 +4,7 @@
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
 ;; Version: 0.4.3
-;; Package-Version: 20190605.1705
+;; Package-Version: 20190606.1742
 ;; Keywords: convenience
 ;; Homepage: https://github.com/magnars/fold-this.el
 
@@ -188,10 +188,10 @@ If narrowing is active, only in it."
   (mapc 'fold-this--delete-my-overlay
         (overlays-at (point))))
 
-(defun fold-this--delete-my-overlay (overlay _after? _beg _end &optional _length)
+(defun fold-this--delete-my-overlay (overlay &optional _after? _beg _end _length)
   "Delete the OVERLAY overlays only if it's an `fold-this'."
-  (when (eq (overlay-get it 'type) 'fold-this)
-    (delete-overlay it)))
+  (when (eq (overlay-get overlay 'type) 'fold-this)
+    (delete-overlay overlay)))
 
 ;;; Fold-this overlay persistence
 ;;

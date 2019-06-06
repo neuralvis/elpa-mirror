@@ -4,7 +4,6 @@
 
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Keywords: faces
-;; Package-Version: 20190505.728
 ;; Version: 6.2.0
 ;; URL: http://projects.ryuslash.org/yoshi-theme/
 
