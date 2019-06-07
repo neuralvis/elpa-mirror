@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <i@tn-home.de>
 ;; Keywords: tex, languages, wp
-;; Package-Version: 20190509.438
+;; Package-Version: 20190606.2049
 ;; Package-X-Original-Version: 1.0.1
 ;; URL: https://github.com/TobiasZawada/texfrag
 ;; Package-Requires: ((emacs "25") (auctex "11.90.2"))
@@ -1212,10 +1212,11 @@ Formulas can be LaTeX fragments or LaTeX environments."
 (defun texfrag-org ()
   "Texfrag setup for `org-mode'."
   (setq texfrag-frag-alist
-	'((("\\$" texfrag-org-latex-p) "\\$" "$" "$")
+	'((("\\$\\$" texfrag-org-latex-p) "\\$\\$" "$$" "$$" :display t)
+	  (("\\$" texfrag-org-latex-p) "\\$" "$" "$")
           (("\\\\(" texfrag-org-latex-p) "\\\\)" "$" "$")
-	  (("\\\\\\[" texfrag-org-latex-p) "\\\\\\]" "\\\\[" "\\\\]")
-          (("\\\\begin{\\([a-z*]+\\)}" texfrag-org-latex-p) "\\\\end{\\1}" "\\\\begin{\\2}" "\\\\end{\\2}"))
+	  (("\\\\\\[" texfrag-org-latex-p) "\\\\\\]" "\\\\[" "\\\\]" :display t)
+          (("\\\\begin{\\([a-z*]+\\)}" texfrag-org-latex-p) "\\\\end{\\1}" "\\\\begin{\\2}" "\\\\end{\\2}" :display t))
 	texfrag-comments-only nil
         texfrag-header-function #'texfrag-org-header
         org-html-with-latex 'dvipng) ;; Export of LaTeX formulas as embedded formulas only works this way.
