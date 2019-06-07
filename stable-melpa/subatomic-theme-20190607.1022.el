@@ -5,7 +5,7 @@
 ;; Author: John Olsson <john@cryon.se>
 ;; Maintainer: John Olsson <john@cryon.se>
 ;; URL: https://github.com/cryon/subatomic
-;; Package-Version: 20160126.1538
+;; Package-Version: 20190607.1022
 ;; Created: 25th December 2012
 ;; Version: 1.8.1
 ;; Keywords: color-theme, blue, low contrast
@@ -124,7 +124,7 @@ The theme has to be reloaded after changing anything in this group."
    `(powerline-active2
      ((t (:background ,midnight-1))))
 
-   `(modeline-inactive
+   `(mode-line-inactive
      ((t (:background ,midnight-2 :foreground ,mystic-blue))))
 
    `(powerline-inactive1
