@@ -1,2 +1,0 @@
-
-(org-chef . [(20190528 1210) ((org (0)) (emacs (24))) "Cookbook and recipe management with org-mode." tar ((:commit . "e1ccda68d146349fae1a2072c932a4ff5078f495") (:keywords "convenience" "abbrev" "outlines" "org" "food" "recipes" "cooking") (:authors ("Calvin Beck" . "hobbes@ualberta.ca")) (:maintainer "Calvin Beck" . "hobbes@ualberta.ca") (:url . "https://github.com/Chobbes/org-chef"))])
