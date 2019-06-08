@@ -1,7 +1,7 @@
 ;;; hl-fill-column.el --- Highlight fill column. -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/hl-fill-column
-;; Package-Version: 20190605.1421
+;; Package-Version: 20190608.203
 ;; Created: November 1, 2018
 ;; Keywords: fill column, faces
 ;; Package-Requires: ((names "0.5") (emacs "24"))
@@ -46,26 +46,27 @@
 (defun -find (end)
   "Function to locate a character in fill column.
 Look through END when provided."
-  (let ((start (point)))
+  (let ((start (point))
+        (after-fill-column (+ 1 fill-column)))
     (when (> end (point-max)) (setq end (point-max)))
 
     ;; Try to keep `move-to-column' from going backward, though it still can.
-    (unless (< (current-column) fill-column) (forward-line 1))
+    (unless (< (current-column) after-fill-column) (forward-line 1))
 
     ;; Again, don't go backward.  Try to move to correct column.
-    (when (< (current-column) fill-column) (move-to-column fill-column))
+    (when (< (current-column) after-fill-column) (move-to-column after-fill-column))
 
     ;; If not at target column, try to move to it.
-    (while (and (< (current-column) fill-column) (< (point) end)
+    (while (and (< (current-column) after-fill-column) (< (point) end)
                 (= 0 (+ (forward-line 1) (current-column)))) ; Should be bol.
-      (move-to-column fill-column))
+      (move-to-column after-fill-column))
 
     ;; If at target column, not past end, and not prior to start, then set match
     ;; data and return t.  Otherwise go to start and return nil.
-    (if (and (= fill-column (current-column))
+    (if (and (= after-fill-column (current-column))
              (<= (point) end)
              (> (point) start))
-        (progn (set-match-data (list (point) (+ 1 (point))))
+        (progn (set-match-data (list (1- (point)) (point)))
                t)                       ; Return t.
       (goto-char start)
       nil)))                            ; Return nil.

@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20190606.306
+;; Package-Version: 20190608.343
 ;; Version: 0.4.3
 ;; Keywords: tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -464,7 +464,10 @@ you can use `posframe-delete-all' to delete all posframes."
          (parent-window-left (window-pixel-left parent-window))
          (parent-window-width (window-pixel-width parent-window))
          (parent-window-height (window-pixel-height parent-window))
-         (position-info (posn-at-point position parent-window))
+         (position-info
+          (if (integerp position)
+              (posn-at-point position parent-window)
+            position))
          (parent-frame (window-frame parent-window))
          (parent-frame-width (frame-pixel-width parent-frame))
          (parent-frame-height (frame-pixel-height parent-frame))

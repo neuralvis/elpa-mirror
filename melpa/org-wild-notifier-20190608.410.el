@@ -4,8 +4,8 @@
 
 ;; Author: Artem Khramov <futu.fata@gmail.com>
 ;; Created: 6 Jan 2017
-;; Version: 0.3.0
-;; Package-Version: 20190312.1713
+;; Version: 0.3.1
+;; Package-Version: 20190608.410
 ;; Package-Requires: ((alert "1.2") (async "1.9.3") (dash "2.13.0") (dash-functional "1.2.0") (emacs "24.4"))
 ;; Keywords: notification alert org org-agenda agenda
 ;; URL: https://github.com/akhramov/org-wild-notifier.el
@@ -209,14 +209,14 @@ Returns a list of notification messages"
 
 (defun org-wild-notifier--apply-whitelist (markers)
   "Apply whitelist to MARKERS."
-  (if-let ((whitelist-predicates (org-wild-notifier--whitelist-predicates)))
+  (-if-let (whitelist-predicates (org-wild-notifier--whitelist-predicates))
       (-> (apply '-orfn whitelist-predicates)
           (-filter markers))
     markers))
 
 (defun org-wild-notifier--apply-blacklist (markers)
   "Apply blacklist to MARKERS."
-  (if-let ((blacklist-predicates (org-wild-notifier--blacklist-predicates)))
+  (-if-let (blacklist-predicates (org-wild-notifier--blacklist-predicates))
       (-> (apply '-orfn blacklist-predicates)
           (-remove markers))
     markers))
@@ -224,14 +224,18 @@ Returns a list of notification messages"
 (defun org-wild-notifier--retrieve-events ()
   "Get events from agenda view."
   (async-sandbox
-   (let ((agenda-files org-agenda-files))
+   (let ((agenda-files (-filter 'file-exists-p org-agenda-files))
+         ;; Some package managers manipulate `load-path` variable.
+         (my-load-path load-path))
      (lambda ()
        (let ((org-agenda-use-time-grid nil)
              (org-agenda-compact-blocks t))
+         (setf org-agenda-files agenda-files)
+         (setf load-path my-load-path)
+
          (package-initialize)
          (require 'org-wild-notifier)
 
-         (setf org-agenda-files agenda-files)
          (org-agenda-list 2
                           (org-read-date nil nil "today"))
 
