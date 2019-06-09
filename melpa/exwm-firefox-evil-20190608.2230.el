@@ -2,9 +2,9 @@
 
 ;; Author: Sebastian Wålinder <s.walinder@gmail.com>
 ;; URL: https://github.com/walseb/exwm-firefox-evil
-;; Package-Version: 20190403.1845
+;; Package-Version: 20190608.2230
 ;; Version: 1.0
-;; Package-Requires: ((emacs "24.4") (exwm "0.16") (evil "1.0.0"))
+;; Package-Requires: ((emacs "24.4") (exwm "0.16") (evil "1.0.0") (exwm-firefox-core "1.0"))
 ;; Keywords: extensions
 
 ;; exwm-firefox-evil.el is free software; you can redistribute it and/or modify it
