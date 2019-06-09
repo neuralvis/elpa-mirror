@@ -4,8 +4,8 @@
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-easy-jekyll
-;; Package-Version: 20190608.1529
-;; Version: 2.1.22
+;; Package-Version: 20190609.146
+;; Version: 2.2.22
 ;; Package-Requires: ((emacs "24.4") (request "0.3.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -1427,6 +1427,20 @@ Optional prefix ARG says how many lines to move; default is one line."
 		    (not (file-directory-p file)))
 	   (unless (file-directory-p (expand-file-name "_drafts" easy-jekyll-basedir))
 	     (make-directory (expand-file-name "_drafts" easy-jekyll-basedir) t))
+	   (setq easy-jekyll--postdir-list
+		 (easy-jekyll--directory-list
+		  (easy-jekyll--directory-files-recursively
+		   (expand-file-name "_posts" easy-jekyll-basedir) "" t)))
+	   (add-to-list 'easy-jekyll--postdir-list
+			(expand-file-name easy-jekyll-basedir))
+	   (add-to-list 'easy-jekyll--postdir-list
+			(expand-file-name "_posts" easy-jekyll-basedir))
+	   (setq easy-jekyll-postdir
+		 (file-relative-name
+		  (completing-read
+		   "Complete easy-jekyll-postdir: "
+		   easy-jekyll--postdir-list
+		   nil t)))
 	   (rename-file file
 			(expand-file-name
 			 (concat (format-time-string "%Y-%m-%d-" (current-time))

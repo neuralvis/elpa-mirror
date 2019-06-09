@@ -2,7 +2,7 @@
 
 ;; Author: Alex Griffin <a@ajgrf.com>
 ;; URL: https://github.com/ajgrf/parchment
-;; Package-Version: 20190603.1912
+;; Package-Version: 20190609.351
 ;; Version: 0.3.0-pre
 ;; Package-Requires: ((emacs "24"))
 
@@ -496,6 +496,7 @@ BACKGROUND are nil then they will be skipped."
     (magit-log-date             blue         nil)
     (magit-log-graph            cyan         nil)
     (magit-mode-line-process-error pale-red  nil          :distant-foreground ,red :weight bold)
+    (magit-popup-argument       blue         nil)
     (magit-popup-key            magenta      nil)
     (magit-process-ng           red          nil          :weight bold)
     (magit-process-ok           green        nil          :weight bold)

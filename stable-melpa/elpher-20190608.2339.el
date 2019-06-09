@@ -5,7 +5,7 @@
 ;; Author: Tim Vaughan <tgvaughan@gmail.com>
 ;; Created: 11 April 2019
 ;; Version: 1.1.0
-;; Package-Version: 20190608.2319
+;; Package-Version: 20190608.2339
 ;; Keywords: comm gopher
 ;; Homepage: https://github.com/tgvaughan/elpher
 ;; Package-Requires: ((emacs "25"))
@@ -631,7 +631,7 @@ host, selector and port."
          (let ((host-or-url (read-string "Gopher host or URL: ")))
            (if (string-match elpher-url-regex host-or-url)
                (if (not (string= (downcase (match-string 1 host-or-url)) "gopher"))
-                   (error "Only gopher URLs acceptable.")
+                   (error "Only gopher URLs acceptable")
                  (let* ((host (match-string 2 host-or-url))
                         (port (if (match-string 3 host-or-url)
                                   (string-to-number (substring (match-string 3 host-or-url) 1))
