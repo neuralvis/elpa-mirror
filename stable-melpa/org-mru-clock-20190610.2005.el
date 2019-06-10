@@ -3,8 +3,8 @@
 ;; Copyright (C) 2016--2019 Kevin Brubeck Unhammer
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
-;; Version: 0.4.0
-;; Package-Version: 20190610.734
+;; Version: 0.4.1
+;; Package-Version: 20190610.2005
 ;; Package-Requires: ((emacs "24.3"))
 ;; URL: https://github.com/unhammer/org-mru-clock
 ;; Keywords: convenience, calendar
@@ -138,8 +138,6 @@ agenda files, or you can use your own file filter."
   "Example function for `org-mru-clock-predicate', excluding DONE and :ARCHIVE:."
   (not (or (org-entry-is-done-p)
            (member org-archive-tag (org-get-tags-at)))))
-
-(setq org-mru-clock-predicate #'org-entry-is-todo-p)
 
 (defun org-mru-clock-take (n l)
   "Take N elements from list L."

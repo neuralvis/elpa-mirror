@@ -7,7 +7,7 @@
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Package-Version: 20190607.333
+;; Package-Version: 20190610.2215
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.11.0"))
@@ -492,8 +492,7 @@ selection, non-nil otherwise."
         (remove-text-properties 0 (length prompt) '(read-only nil) prompt)
         (with-current-buffer ivy-posframe-buffer
           (goto-char (point-min))
-          (delete-region (point)
-                         (save-excursion (line-move 1 'noerror) (beginning-of-line) (point)))
+          (delete-region (point) (line-beginning-position 2))
           (insert prompt "  \n")
           (add-text-properties point (1+ point) '(face ivy-posframe-cursor)))))))
 
