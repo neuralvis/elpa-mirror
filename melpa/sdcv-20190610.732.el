@@ -6,7 +6,7 @@
 ;; Copyright (C) 2009, Andy Stewart, all rights reserved.
 ;; Created: 2009-02-05 22:04:02
 ;; Version: 1.5.2
-;; Package-Version: 20180211.1633
+;; Package-Version: 20190610.732
 ;; Last-Updated: 2009-04-04 09:11:00
 ;;           By: Andy Stewart
 ;; URL: http://www.emacswiki.org/emacs/download/sdcv.el
@@ -423,7 +423,7 @@ Specify dictionaries to search in DICTIONARY-LIST."
   (setq sdcv-current-translate-object word)
   (let ((args `("-n" ,(substring-no-properties word))))
     (dolist (dict dictionary-list)
-      (push (concat "\"" dict "\"") args)
+      (push dict args)
       (push "-u" args))
     args))
 
