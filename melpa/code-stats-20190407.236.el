@@ -5,7 +5,6 @@
 ;; Author: Xu Chunyang <mail@xuchunyang.me>
 ;; Homepage: https://github.com/xuchunyang/code-stats-emacs
 ;; Package-Requires: ((emacs "25") (request "0.3.0"))
-;; Package-Version: 20190407.236
 ;; Created: 2018-07-13T13:29:18+08:00
 ;; Version: 0.1
 
