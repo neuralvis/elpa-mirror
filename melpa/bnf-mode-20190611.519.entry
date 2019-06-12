@@ -1,0 +1,2 @@
+
+(bnf-mode . [(20190611 519) ((cl-lib (0 5)) (emacs (24 3))) "Major mode for editing BNF grammars." tar ((:commit . "a3edaae4c6eab5d7ec44d932f9b0745112d3305f") (:keywords "languages") (:authors ("Serghei Iakovlev" . "sadhooklay@gmail.com")) (:maintainer "Serghei Iakovlev" . "sadhooklay@gmail.com") (:url . "https://github.com/sergeyklay/bnf-mode"))])

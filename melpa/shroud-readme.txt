@@ -1,25 +1,25 @@
  Shroud is a password manager written in Guile which uses GnuPG in
- the backend. See Shroud's website at
- https://dthompson.us/projects/shroud.html. This package is an
+ the backend.  See Shroud's website at
+ https://dthompson.us/projects/shroud.html.  This package is an
  Emacs interface to Shroud using the Buffers User Interface
  library.
 
  Shroud stores secrets as a plain text encrypted using
- GnuPG. Particularly, in Lisp's S-expressions, in a form of
- associaton lists. This provides the dual benefit that, the file is
+ GnuPG.  Particularly, in Lisp's S-expressions, in a form of
+ associaton lists.  This provides the dual benefit that, the file is
  trivial to parse by machine, yet at the same time, is perfectly
  readable/editable by a human.
 
  You can view, copy and edit secrets from Emacs.
 
  Shroud's configuration options can be changed in the $HOME/.shroud
- file. The default database is located in ~/.config/shroud/db.gpg.
+ file.  The default database is located in ~/.config/shroud/db.gpg.
 
  To run M-x Shroud
 
  However, Emacs-shroud also includes an elisp implementation of
- Shroud. So you can begin using shroud without installing any
- external packages. It can be configured to use the same defaults
+ Shroud.  So you can begin using shroud without installing any
+ external packages.  It can be configured to use the same defaults
  as Shroud like so.
 
  #start ~/.emacs
