@@ -1,0 +1,2 @@
+
+(kodi-remote . [(20190613 1035) ((request (0 2 0)) (let-alist (1 0 4)) (json (1 4)) (cl-lib (0 5)) (f (20190109 906))) "Remote Control for Kodi" single ((:commit . "c588c40dbf68cb3964a68829b1a6a696ae4d2ddf") (:keywords "kodi" "tools" "convinience") (:authors ("Stefan Huchler" . "stefan.huchler@mail.de")) (:maintainer "Stefan Huchler" . "stefan.huchler@mail.de") (:url . "http://github.com/spiderbit/kodi-remote.el"))])

@@ -1,0 +1,2 @@
+
+(pandoc-mode . [(20190613 1040) ((hydra (0 10 0)) (dash (2 10 0))) "Minor mode for interacting with Pandoc" tar ((:commit . "d2b4d5068370402aefcdfc204b89525428c53e79") (:keywords "text" "pandoc") (:authors ("Joost Kremers" . "joostkremers@fastmail.fm")) (:maintainer "Joost Kremers" . "joostkremers@fastmail.fm"))])

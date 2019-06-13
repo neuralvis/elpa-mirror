@@ -1,4 +1,5 @@
 A major to remote control kodi instances.
+
 First specify the hostname/ip of your kodi webserver:
 (setq kodi-host-name "my-htpc:8080")
 Then open the Remote with the command:
