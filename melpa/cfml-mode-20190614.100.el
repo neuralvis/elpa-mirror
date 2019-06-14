@@ -4,7 +4,7 @@
 
 ;; Author: Andrew Myers <am2605@gmail.com>
 ;; URL: https://github.com/am2605/cfml-mode
-;; Package-Version: 20170904.249
+;; Package-Version: 20190614.100
 ;; Version: 1.0.1
 ;; Package-Requires: ((emacs "25") (mmm-mode "0.5.4") (cftag-mode "1.0.0"))
 
@@ -34,29 +34,34 @@
 ;; Usage:
 
 ;; (require 'mmm-mode)
-;; (require 'cfml-mode)
-
-;; (add-to-list 'magic-mode-alist
-;;              '("<cfcomponent" . cftag-mode))
-;; (add-to-list 'magic-mode-alist
-;;              '("<!---" . cftag-mode))
-;; (add-to-list 'auto-mode-alist
-;;              '("\\.cfm\\'" . cftag-mode))
-;; (add-to-list 'auto-mode-alist
-;;              '("\\.cfc\\'" . cfml-cfscript-mode))
-
-;; (setq mmm-global-mode 'maybe)
-;; (mmm-add-mode-ext-class nil "\\.cfm\\'" 'cfml-cftag)
-;; (mmm-add-mode-ext-class nil "\\.cfc\\'" 'cfml-cftag)
-;; (mmm-add-mode-ext-class nil "\\.cfm\\'" 'cfml-js)
-
-;; Optional settings:
-
-;; (setq mmm-submode-decoration-level 0)
 
 ;;; Code:
 
-(require 'cftag-mode)
+(with-no-warnings
+  (require 'mmm-mode)
+  (require 'cftag-mode))
+
+;;;###autoload
+(add-to-list 'magic-mode-alist
+             '("<cfcomponent" . cftag-mode))
+;;;###autoload
+(add-to-list 'magic-mode-alist
+             '("<!---" . cftag-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist
+             '("\\.cfm\\'" . cftag-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist
+             '("\\.cfc\\'" . cfml-cfscript-mode))
+
+(setq mmm-global-mode 'maybe)
+;;;###autoload
+(mmm-add-mode-ext-class nil "\\.cfm\\'" 'cfml-cftag)
+;;;###autoload
+(mmm-add-mode-ext-class nil "\\.cfc\\'" 'cfml-cftag)
+;;;###autoload
+(mmm-add-mode-ext-class nil "\\.cfm\\'" 'cfml-js)
+(setq mmm-submode-decoration-level 0)
 
 (mmm-add-classes
  '((cfml-cftag
@@ -85,6 +90,7 @@
   (add-to-list 'mmm-save-local-variables 'js--quick-match-re)
   (add-to-list 'mmm-save-local-variables 'js--quick-match-re-func))
 
+;;;###autoload
 (define-derived-mode cfml-mode cftag-mode "CFML"
   (setq tab-stop-list (number-sequence sgml-basic-offset 120 sgml-basic-offset))
   (local-set-key (kbd "RET") 'cfml-indent-to-previous)

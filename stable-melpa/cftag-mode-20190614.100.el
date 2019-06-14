@@ -4,7 +4,7 @@
 
 ;; Author: Andrew Myers <am2605@gmail.com>
 ;; URL: https://github.com/am2605/cftag-mode
-;; Package-Version: 20170812.540
+;; Package-Version: 20190614.100
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "25"))
 
@@ -601,12 +601,12 @@ To work around that, do:
 	      ;; `sgml-parse-dtd', plus manual addition of "wbr".
 	      '("area" "base" "basefont" "br" "col" "frame" "hr" "img" "input"
 		"isindex" "link" "meta" "param" "wbr"
-                "cfdump" "cfset" "cfinclude" "cfargument" "cfqueryparam" "cfparam" "cfsetting"))
+                "cfif" "cfelseif" "cfelse" "cfdump" "cfset" "cfinclude" "cfargument" "cfqueryparam" "cfparam" "cfsetting"))
   (setq-local sgml-unclosed-tags
 	      ;; From HTML-4.01's loose.dtd, parsed with `sgml-parse-dtd'.
 	      '("body" "colgroup" "dd" "dt" "head" "html" "li" "option"
 		"p" "tbody" "td" "tfoot" "th" "thead" "tr"
-                "cfelse" "cfelseif"))
+                "cfif" "cfelse" "cfelseif"))
   ;; It's for the user to decide if it defeats it or not  -stef
   ;; (make-local-variable 'imenu-sort-function)
   ;; (setq imenu-sort-function nil) ; sorting the menu defeats the purpose
