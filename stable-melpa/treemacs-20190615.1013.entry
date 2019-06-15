@@ -1,0 +1,2 @@
+
+(treemacs . [(20190615 1013) ((emacs (25 2)) (cl-lib (0 5)) (dash (2 11 0)) (s (1 10 0)) (f (0 11 0)) (ace-window (0 9 0)) (pfuture (1 7)) (hydra (0 13 2)) (ht (2 2))) "A tree style file explorer package" tar ((:commit . "0c54cb7a001fc573a7ff0d8b69f2c86f744980ee") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])

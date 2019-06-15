@@ -4,8 +4,8 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25.2") (dash "2.11.0") (s "1.10.0") (posframe "0.4.3"))
-;; Package-Version: 20190603.1731
-;; Package-X-Original-Version: 1.0
+;; Package-Version: 20190615.1014
+;; Package-X-Original-Version: 1.1
 ;; Homepage: https://github.com/Alexander-Miller/cfrs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -32,6 +32,7 @@
 (require 'dash)
 (require 'posframe)
 
+;;;###autoload
 (defun cfrs-read (prompt &optional initial-input)
   "Read a string using a pos-frame with given PROMPT and INITIAL-INPUT."
   (-let [buffer (get-buffer-create " *Pos-Frame-Read*")]
