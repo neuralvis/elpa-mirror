@@ -1,0 +1,2 @@
+
+(org-starter . [(20190615 215) ((emacs (25 1)) (dash (2 12)) (dash-functional (1 2 0))) "A basic configuration framework for org mode" tar ((:commit . "c130f09bf60f74f313766a0748f8150090d88795") (:authors ("Akira Komamura" . "akira.komamura@gmail.com")) (:maintainer "Akira Komamura" . "akira.komamura@gmail.com") (:url . "https://github.com/akirak/org-starter"))])
