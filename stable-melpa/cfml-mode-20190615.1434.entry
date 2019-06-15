@@ -1,0 +1,2 @@
+
+(cfml-mode . [(20190615 1434) ((emacs (25)) (mmm-mode (0 5 4))) "Emacs mode for editing CFML files" single ((:commit . "03c6d8b682621dbed42ac57ca93f5b9bd458c667") (:authors ("Andrew Myers" . "am2605@gmail.com")) (:maintainer "Andrew Myers" . "am2605@gmail.com") (:url . "https://github.com/am2605/cfml-mode"))])
