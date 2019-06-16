@@ -4,8 +4,8 @@
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-counsel-tramp
-;; Package-Version: 20190615.925
-;; Version: 0.7.3
+;; Package-Version: 20190615.2234
+;; Version: 0.7.4
 ;; Package-Requires: ((emacs "24.3") (counsel "0.10"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,11 @@
 (defgroup counsel-tramp nil
   "Tramp with ivy interface for ssh, docker, vagrant"
   :group 'counsel)
+
+(defcustom counsel-tramp-default-method "ssh"
+  "Default method when use tramp multi hop."
+  :group 'counsel-tramp
+  :type 'string)
 
 (defcustom counsel-tramp-docker-user nil
   "If you want to use login user name when `docker-tramp' used, set variable."
@@ -113,14 +118,14 @@ Kill all remote buffers."
 		   (concat "/" tramp-default-method ":" (car result) ":")
 		   hosts)
 		  (push
-		   (concat "/ssh:" (car result) "|sudo:root@" (car result) ":/")
+		   (concat "/" counsel-tramp-default-method ":" (car result) "|sudo:root@" (car result) ":/")
 		   hosts)
 		  (pop result)))
 	    (push
 	     (concat "/" tramp-default-method ":" host ":")
 	     hosts)
 	    (push
-	     (concat "/ssh:" host "|sudo:root@" host ":/")
+	     (concat "/" counsel-tramp-default-method ":" host "|sudo:root@" host ":/")
 	     hosts))))
       (when (string-match "Include +\\(.+\\)$" host)
         (setq include-file (match-string 1 host))
@@ -132,19 +137,23 @@ Kill all remote buffers."
       (let ((files (counsel-tramp--directory-files
 		    (expand-file-name
 		     counsel-tramp-control-master-path)
-		    counsel-tramp-control-master-prefix)))
+		    counsel-tramp-control-master-prefix))
+	    (hostuser nil)
+	    (hostname nil)
+	    (port nil))
 	(dolist (controlmaster files)
 	  (let ((file (file-name-nondirectory controlmaster)))
 	    (when (string-match
-		   (concat counsel-tramp-control-master-prefix "\\(.+?\\)@\\(.+?\\):.+?$")
+		   (concat counsel-tramp-control-master-prefix "\\(.+?\\)@\\(.+?\\):\\(.+?\\)$")
 		   file)
 	      (setq hostuser (match-string 1 file))
 	      (setq hostname (match-string 2 file))
+	      (setq port (match-string 3 file))
 	      (push
-	       (concat "/" tramp-default-method ":" hostuser "@" hostname ":")
+	       (concat "/" tramp-default-method ":" hostuser "@" hostname "#" port ":")
 	       hosts)
 	      (push
-	       (concat "/ssh:" hostuser "@" hostname "|sudo:root@" hostname ":/")
+	       (concat "/" counsel-tramp-default-method ":" hostuser "@" hostname "#" port "|sudo:root@" hostname ":/")
 	       hosts))))))
     (when (require 'docker-tramp nil t)
       (cl-loop for line in (cdr (ignore-errors (apply #'process-lines "docker" (list "ps"))))

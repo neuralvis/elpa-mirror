@@ -4,8 +4,8 @@
 
 ;; Author: Tim Vaughan <tgvaughan@gmail.com>
 ;; Created: 11 April 2019
-;; Version: 1.2.0
-;; Package-Version: 20190614.2336
+;; Version: 1.2.2
+;; Package-Version: 20190615.2334
 ;; Keywords: comm gopher
 ;; Homepage: https://github.com/tgvaughan/elpher
 ;; Package-Requires: ((emacs "25"))
@@ -58,7 +58,7 @@
 ;;; Global constants
 ;;
 
-(defconst elpher-version "1.2.0"
+(defconst elpher-version "1.2.2"
   "Current version of elpher.")
 
 (defconst elpher-margin-width 6
@@ -226,26 +226,34 @@ special address types, such as 'start for the start page."
 
 ;; Node
 
-(defun elpher-make-node (display-string parent address)
+(defun elpher-make-node (display-string address &optional parent)
   "Create a node in the gopher page hierarchy.
 
 DISPLAY-STRING records the display string used for the page.
 
-PARENT specifies the parent of the node, and ADDRESS specifies the
-address of the gopher page."
-  (list display-string parent address))
+ADDRESS specifies the address of the gopher page.
+
+The optional PARENT specifies the parent node in the hierarchy.
+This is set every time the node is visited, so while it forms
+an important part of the node data there is no need to set it
+initially."
+  (list display-string address parent))
 
 (defun elpher-node-display-string (node)
   "Retrieve the display string of NODE."
   (elt node 0))
 
-(defun elpher-node-parent (node)
-  "Retrieve the parent node of NODE."
-  (elt node 1))
-
 (defun elpher-node-address (node)
   "Retrieve the address of NODE."
+  (elt node 1))
+
+(defun elpher-node-parent (node)
+  "Retrieve the parent node of NODE."
   (elt node 2))
+
+(defun elpher-set-node-parent (node parent)
+  "Set the parent node of NODE to be PARENT."
+  (setcar (cdr (cdr node)) parent))
 
 ;; Cache
 
@@ -272,10 +280,18 @@ address of the gopher page."
 
 (defvar elpher-current-node nil)
 
-(defun elpher-visit-node (node &optional getter)
-  "Visit NODE using its own getter or GETTER, if non-nil."
+(defun elpher-visit-node (node &optional getter preserve-parent)
+  "Visit NODE using its own getter or GETTER, if non-nil.
+Additionally, set the parent of NODE to `elpher-current-node',
+unless PRESERVE-PARENT is non-nil."
   (elpher-save-pos)
   (elpher-process-cleanup)
+  (unless preserve-parent
+    (if (and (elpher-node-parent elpher-current-node)
+             (equal (elpher-node-address elpher-current-node)
+                    (elpher-node-address node)))
+        (elpher-set-node-parent node (elpher-node-parent elpher-current-node))
+      (elpher-set-node-parent node elpher-current-node)))
   (setq elpher-current-node node)
   (if getter
       (funcall getter)
@@ -287,7 +303,7 @@ address of the gopher page."
   "Visit the parent of the current node."
   (let ((parent-node (elpher-node-parent elpher-current-node)))
     (when parent-node
-      (elpher-visit-node parent-node))))
+      (elpher-visit-node parent-node nil t))))
       
 (defun elpher-reload-current-node ()
   "Reload the current node, discarding any existing cached content."
@@ -383,7 +399,7 @@ and PORT."
     (if type-map-entry
         (let* ((margin-code (elt type-map-entry 1))
                (face (elt type-map-entry 2))
-               (node (elpher-make-node display-string elpher-current-node address)))
+               (node (elpher-make-node display-string address)))
           (elpher-insert-margin margin-code)
           (insert-text-button display-string
                               'face face
@@ -472,10 +488,8 @@ The result is stored as a string in the variable ‘elpher-selector-string’."
   "\\([a-zA-Z]+\\)://\\([a-zA-Z0-9.\-]+\\)\\(?3::[0-9]+\\)?\\(?4:/[^ \r\n\t(),]*\\)?"
   "Regexp used to locate and buttinofy URLs in text files loaded by elpher.")
 
-(defun elpher-make-node-from-matched-url (parent &optional string)
+(defun elpher-make-node-from-matched-url (&optional string)
   "Convert most recent `elpher-url-regex' match to a node.
-
-PARENT defines the node to set as the parent to the new node.
 
 If STRING is non-nil, this is given as an argument to all `match-string'
 calls, as is necessary if the match is performed by `string-match'."
@@ -494,14 +508,14 @@ calls, as is necessary if the match is performed by `string-match'."
                              (substring type-and-selector 2)
                            ""))
                (address (elpher-make-address type selector host port)))
-          (elpher-make-node url elpher-current-node address))
+          (elpher-make-node url address))
       (let* ((host (match-string 2 string))
              (port (if (> (length (match-string 3 string)) 1)
                        (string-to-number (substring (match-string 3 string) 1))
                      70))
              (selector (concat "URL:" url))
              (address (elpher-make-address ?h selector host port)))
-        (elpher-make-node url elpher-current-node address)))))
+        (elpher-make-node url address)))))
 
 
 (defun elpher-buttonify-urls (string)
@@ -510,7 +524,7 @@ calls, as is necessary if the match is performed by `string-match'."
     (insert string)
     (goto-char (point-min))
     (while (re-search-forward elpher-url-regex nil t)
-        (let ((node (elpher-make-node-from-matched-url elpher-current-node)))
+        (let ((node (elpher-make-node-from-matched-url)))
           (make-text-button (match-beginning 0)
                             (match-end 0)
                             'elpher-node  node
@@ -821,14 +835,12 @@ host, selector and port."
   (let ((node
          (let ((host-or-url (read-string "Gopher host or URL: ")))
            (if (string-match elpher-url-regex host-or-url)
-               (elpher-make-node-from-matched-url elpher-current-node
-                                                  host-or-url)
+               (elpher-make-node-from-matched-url host-or-url)
              (let ((selector (read-string "Selector (default none): " nil nil ""))
                    (port-string (read-string "Port (default 70): " nil nil "70")))
                (elpher-make-node (concat "gopher://" host-or-url
                                          ":" port-string
                                          "/1" selector)
-                                 elpher-current-node
                                  (elpher-make-address ?1 selector host-or-url
                                                       (string-to-number port-string))))))))
     (switch-to-buffer "*elpher*")
@@ -914,7 +926,6 @@ host, selector and port."
                  (elpher-make-node (concat "gopher://" host
                                            ":" (number-to-string port)
                                            "/1/")
-                                   elpher-current-node
                                    root-address)))
             (error "Already at root directory of current server")))
       (error "Command invalid for this page"))))
@@ -975,9 +986,7 @@ host, selector and port."
   (interactive)
   (switch-to-buffer "*elpher*")
   (elpher-visit-node
-   (elpher-make-node "Bookmarks"
-                     elpher-current-node
-                     (elpher-make-address 'bookmarks))))
+   (elpher-make-node "Bookmarks" (elpher-make-address 'bookmarks))))
 
 (defun elpher-info-node (node)
   "Display information on NODE."
@@ -1102,7 +1111,8 @@ host, selector and port."
       (switch-to-buffer "*elpher*")
     (switch-to-buffer "*elpher*")
     (setq elpher-current-node nil)
-    (let ((start-node (elpher-make-node "Elpher Start Page" nil (elpher-make-address 'start))))
+    (let ((start-node (elpher-make-node "Elpher Start Page"
+                                        (elpher-make-address 'start))))
       (elpher-visit-node start-node)))
   "Started Elpher.") ; Otherwise (elpher) evaluates to start page string.
 
