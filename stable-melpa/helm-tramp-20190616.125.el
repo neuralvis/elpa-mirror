@@ -4,8 +4,8 @@
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-helm-tramp
-;; Package-Version: 20190615.2205
-;; Version: 1.3.8
+;; Package-Version: 20190616.125
+;; Version: 1.3.9
 ;; Package-Requires: ((emacs "24.3") (helm "2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,11 @@
 (defgroup helm-tramp nil
   "Tramp with helm interface for ssh, docker, vagrant"
   :group 'helm)
+
+(defcustom helm-tramp-default-method "ssh"
+  "Default method when use tramp multi hop."
+  :group 'helm-tramp
+  :type 'string)
 
 (defcustom helm-tramp-docker-user nil
   "If you want to use login user name when `docker-tramp' used, set variable."
@@ -113,14 +118,14 @@ Kill all remote buffers."
 		   (concat "/" tramp-default-method ":" (car result) ":")
 		   hosts)
 		  (push
-		   (concat "/ssh:" (car result) "|sudo:root@" (car result) ":/")
+		   (concat "/" helm-tramp-default-method ":" (car result) "|sudo:root@" (car result) ":/")
 		   hosts)
 		  (pop result)))
 	    (push
 	     (concat "/" tramp-default-method ":" host ":")
 	     hosts)
 	    (push
-	     (concat "/ssh:" host "|sudo:" host ":/")
+	     (concat "/" helm-tramp-default-method ":" host "|sudo:root@" host ":/")
 	     hosts))))
       (when (string-match "Include +\\(.+\\)$" host)
         (setq include-file (match-string 1 host))
@@ -148,7 +153,7 @@ Kill all remote buffers."
 	       (concat "/" tramp-default-method ":" hostuser "@" hostname "#" port ":")
 	       hosts)
 	      (push
-	       (concat "/ssh:" hostuser "@" hostname "#" port "|sudo:root@" hostname ":/")
+	       (concat "/" helm-tramp-default-method ":" hostuser "@" hostname "#" port "|sudo:root@" hostname ":/")
 	       hosts))))))
     (when (require 'docker-tramp nil t)
       (cl-loop for line in (cdr (ignore-errors (apply #'process-lines "docker" (list "ps"))))

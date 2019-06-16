@@ -1,4 +1,4 @@
-This file contains definitions of CFML submode classes.
+This file provides syntax highlighting for CFML (also known as ColdFusion) source files.
 
 Usage:
 
