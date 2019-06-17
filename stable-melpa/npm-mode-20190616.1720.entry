@@ -1,2 +1,0 @@
-
-(npm-mode . [(20190616 1720) ((emacs (24 1))) "minor mode for working with npm projects" single ((:commit . "a825fb5ca4687678cac825fde618bad7ab461c24") (:keywords "convenience" "project" "javascript" "node" "npm") (:authors ("Allen Gooch" . "allen.gooch@gmail.com")) (:maintainer "Allen Gooch" . "allen.gooch@gmail.com") (:url . "https://github.com/mojochao/npm-mode"))])
