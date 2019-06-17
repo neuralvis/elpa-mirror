@@ -1,0 +1,2 @@
+
+(hydra . [(20190617 859) ((cl-lib (0 5)) (lv (0))) "Make bindings that stick around." tar ((:commit . "82ff12666e08485c6b8f0e346878c4e0b16c992d") (:keywords "bindings") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/hydra"))])
