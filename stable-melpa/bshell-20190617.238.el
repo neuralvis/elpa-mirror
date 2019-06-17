@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2015 - 2017 Paul Landes
 
-;; Version: 0.2
-;; Package-Version: 20170903.1837
+;; Version: 0.4
+;; Package-Version: 20190617.238
 ;; Author: Paul Landes
 ;; Maintainer: Paul Landes
 ;; Keywords: interactive shell management
@@ -76,7 +76,8 @@
 
 
 (defclass bshell-manager (buffer-manager)
-  ())
+  ()
+  :method-invocation-order :c3)
 
 (cl-defmethod config-manager-entry-default-name ((this bshell-manager))
   "bshell")
@@ -132,7 +133,7 @@
   :prefix "bshell-")
 
 (defcustom bshell-manager-singleton
-  (bshell-manager "singleton")
+  (bshell-manager "shell")
   "The singleton bshell manager."
   :group 'bshell
   :type 'object)
