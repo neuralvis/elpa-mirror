@@ -1,2 +1,2 @@
 
-(org-static-blog . [(20190528 457) ((emacs (24 3))) "a simple org-mode based static blog generator" single ((:commit . "bbeb24f2577f2cacf61078687153a0ec3527ffd7") (:authors ("Bastian Bechtold")) (:maintainer "Bastian Bechtold") (:url . "https://github.com/bastibe/org-static-blog"))])
+(org-static-blog . [(20190528 457) ((emacs (24 3))) "a simple org-mode based static blog generator" single ((:commit . "2d12090a645b6b13b9fb5a188b0ae254429d84ab") (:authors ("Bastian Bechtold")) (:maintainer "Bastian Bechtold") (:url . "https://github.com/bastibe/org-static-blog"))])
