@@ -4,7 +4,6 @@
 
 ;; Author: Artur Malabarba <emacs@endlessparentheses.com>
 ;; URL: https://github.com/Malabarba/beacon
-;; Package-Version: 20190104.1931
 ;; Keywords: convenience
 ;; Version: 1.3.3
 ;; Package-Requires: ((seq "2.14"))
