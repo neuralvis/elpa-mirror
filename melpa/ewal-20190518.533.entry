@@ -1,2 +1,0 @@
-
-(ewal . [(20190518 533) ((emacs (25))) "A pywal-based theme generator" single ((:commit . "cf607efad1a6138fefd96734197e5455eec48bd0") (:keywords "faces") (:authors ("Uros Perisic")) (:maintainer "Uros Perisic") (:url . "https://gitlab.com/jjzmajic/ewal"))])

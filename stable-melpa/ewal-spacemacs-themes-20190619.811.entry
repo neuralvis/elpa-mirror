@@ -1,0 +1,2 @@
+
+(ewal-spacemacs-themes . [(20190619 811) ((emacs (25)) (ewal (0 1)) (spacemacs-theme (0 1))) "An `ewal'-based theme" tar ((:commit . "71f1e42ec6f119414806d494cd655e0ae6825dd8") (:keywords "faces") (:authors ("Uros Perisic")) (:maintainer "Uros Perisic") (:url . "https://gitlab.com/jjzmajic/ewal"))])
