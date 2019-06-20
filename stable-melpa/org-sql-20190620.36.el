@@ -4,7 +4,7 @@
 
 ;; Author: Nathan Dwarshuis <natedwarshuis@gmail.com>
 ;; Keywords: org-mode, data
-;; Package-Version: 20190530.259
+;; Package-Version: 20190620.36
 ;; Homepage: https://github.com/ndwarshuis/org-sql
 ;; Package-Requires: ((emacs "25") (dash "2.15"))
 ;; Version: 0.0.1
@@ -659,7 +659,7 @@ constant for further details."
      ;; the data to be inserted via the escape sequences
      (--map (funcall replace-esc it re-match-alist))
      ;; filter out anything that is blank (eg default clock-in)
-     (seq-filter (lambda (s) (not (equal (cdr s) "")))))))
+     (--remove (equal (cdr it) "")))))
 
 (defconst org-sql--log-note-headings-regexp
   (org-sql--log-note-headings-convert)

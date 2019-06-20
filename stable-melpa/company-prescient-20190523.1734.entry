@@ -1,2 +1,0 @@
-
-(company-prescient . [(20190523 1734) ((emacs (25 1)) (prescient (3 1)) (company (0 9 6))) "prescient.el + Company" single ((:commit . "1964f605f1f1e50c64a33aa3910cde7a23b45afc") (:keywords "extensions") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:url . "https://github.com/raxod502/prescient.el"))])

@@ -1,0 +1,2 @@
+
+(websocket . [(20190620 338) ((cl-lib (0 5))) "Emacs WebSocket client and server" single ((:commit . "37ef222d629a1da06a98530827cf0e9b456cd812") (:keywords "communication" "websocket" "server") (:authors ("Andrew Hyatt" . "ahyatt@gmail.com")) (:maintainer "Andrew Hyatt" . "ahyatt@gmail.com"))])
