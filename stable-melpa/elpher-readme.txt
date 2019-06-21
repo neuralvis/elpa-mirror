@@ -7,10 +7,8 @@ It supports:
 - direct visualisation of image files,
 - (m)enu key support, similar to Emacs' info browser,
 - clickable web and gopher links in plain text,
-- a simple bookmark management system.
-
-Visited pages are stored as a hierarchy rather than a linear history,
-meaning that navigation between these pages is quick and easy.
+- a simple bookmark management system,
+- support for TLS gopherholes.
 
 To launch Elpher, simply use 'M-x elpher'.  This will open a start
 page containing information on key bindings and suggested starting

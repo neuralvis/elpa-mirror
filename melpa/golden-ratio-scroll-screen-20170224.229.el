@@ -4,6 +4,7 @@
 ;; Copyright (C) 2011~2015,纪秀峰 , all rights reserved.
 ;; Created: 2011-03-01
 ;; Version: 1.1
+;; Package-Version: 20170224.229
 ;; URL:   https://github.com/jixiuf/golden-ratio-scroll-screen
 ;; Keywords: scroll screen highlight
 ;;
