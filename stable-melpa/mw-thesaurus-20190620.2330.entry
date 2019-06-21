@@ -1,0 +1,2 @@
+
+(mw-thesaurus . [(20190620 2330) ((emacs (25)) (request (0 3 0)) (dash (2 16 0))) "Merriam-Webster Thesaurus" single ((:commit . "0576de7f6ba4583efd7c88aa01e1035cb9b4d726") (:keywords "wp" "matching") (:authors ("Ag Ibragimov")) (:maintainer "Ag Ibragimov") (:url . "https://github.com/agzam/mw-thesaurus.el"))])
