@@ -5,8 +5,8 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20190618.555
-;; Version: 2.32.128
+;; Package-Version: 20190621.2006
+;; Version: 2.33.128
 
 ;; This file is not part of GNU Emacs.
 
@@ -75,7 +75,7 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst rtags-protocol-version 128)
-(defconst rtags-package-version "2.32")
+(defconst rtags-package-version "2.33")
 (defconst rtags-popup-available (require 'popup nil t))
 (defconst rtags-supported-major-modes '(c-mode c++-mode objc-mode) "Major modes RTags supports.")
 (defconst rtags-verbose-results-delimiter "------------------------------------------")

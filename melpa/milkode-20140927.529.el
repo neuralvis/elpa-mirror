@@ -4,6 +4,7 @@
 
 ;; Author: ongaeshi
 ;; Keywords: milkode, search, grep, jump, keyword
+;; Package-Version: 20140927.529
 ;; Version: 0.4
 ;; Package-Requires:
 

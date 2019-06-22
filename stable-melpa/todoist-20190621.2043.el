@@ -20,7 +20,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20190604.1428
+;; Package-Version: 20190621.2043
 ;; Author: Adrien Brochard
 ;; Keywords: todoist task todo comm
 ;; URL: https://github.com/abrochard/emacs-todoist
@@ -62,6 +62,17 @@
 (defconst todoist-buffer-name
   "*todoist*")
 
+(defgroup todoist nil
+  "Interface for todoist.com, a task tracking tool."
+  :group 'extensions
+  :group 'tools
+  :link '(url-link :tag "Repository" "https://github.com/abrochard/emacs-todoist"))
+
+(defcustom todoist-timeout nil
+  "Timeout in second to reach todoist API."
+  :group 'todoist
+  :type 'number)
+
 (defvar todoist--cached-projects nil)
 
 (defun todoist--query (method endpoint &optional data)
@@ -75,7 +86,7 @@ DATA is the request body."
         (url-request-extra-headers (append`(("Authorization" . ,(concat "Bearer " todoist-token)))
                                           (when data '(("Content-Type". "application/json")))))
         (url-request-data data))
-    (with-current-buffer (url-retrieve-synchronously url)
+    (with-current-buffer (url-retrieve-synchronously url nil nil todoist-timeout)
       (goto-char url-http-end-of-headers)
       ;; (message (buffer-string))
       (unless (string-equal (buffer-substring (point) (point-max)) "\n") ;; no body

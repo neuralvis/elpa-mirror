@@ -4,7 +4,7 @@
 
 ;; Author: Nathan Dwarshuis <natedwarshuis@gmail.com>
 ;; Keywords: org-mode, data
-;; Package-Version: 20190621.317
+;; Package-Version: 20190621.2111
 ;; Homepage: https://github.com/ndwarshuis/org-sql
 ;; Package-Requires: ((emacs "25") (dash "2.15"))
 ;; Version: 0.0.1
@@ -518,6 +518,7 @@ Return nil if TS is nil or if TS cannot be understood."
    (save-match-data (org-2ft it))
    (when (> it 0) (+ (round it)))))
 
+;; TODO this can be refactored
 (defun org-sql--parse-ts-range (ts &optional fun)
   "Return 'start' or 'end' of timestamp TS.
 Return value will be a cons cell like (START . END) where START is
@@ -546,8 +547,9 @@ its sole argument."
             (cons start end))
         `(,(funcall split ts))))))
 
+;; TODO is this really necessary?
 (defun org-sql--parse-ts-maybe (txt)
-  "Convert TXT to ISO 8601 format if possible.
+  "Convert TXT to epoch time format if possible.
 Returns formatted string or TXT if it is not a timestamp."
   ;; assume the iso parser to return nil on failure
   (-> txt org-sql--ts-fmt-unix-time (or txt)))
