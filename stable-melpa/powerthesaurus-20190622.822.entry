@@ -1,0 +1,2 @@
+
+(powerthesaurus . [(20190622 822) ((emacs (24)) (request (0 3 0)) (s (1 12 0))) "Powerthesaurus integration" single ((:commit . "76c397c590e4498a6eb094cb1424cd43b4c7d534") (:keywords "convenience" "writing") (:url . "http://github.com/SavchenkoValeriy/emacs-powerthesaurus"))])
