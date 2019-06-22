@@ -1,2 +1,0 @@
-
-(elpher . [(20190621 2015) ((emacs (25))) "A friendly gopher client." single ((:commit . "e6dfc7ba2560bef5785e932f22b9fd291273e05a") (:keywords "comm" "gopher") (:authors ("Tim Vaughan" . "tgvaughan@gmail.com")) (:maintainer "Tim Vaughan" . "tgvaughan@gmail.com") (:url . "https://github.com/tgvaughan/elpher"))])
