@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Yonchovski
 ;; Keywords: languages
-;; Package-Version: 20190621.1745
+;; Package-Version: 20190622.531
 ;; Package-Requires: ((emacs "25.1") (dash "2.14.1") (dash-functional "2.14.1") (f "0.20.0") (ht "2.0") (treemacs "2.5") (lsp-mode "6.0"))
 ;; Version: 0.1
 
@@ -120,7 +120,7 @@
               (save-excursion
                 (goto-char (point-min))
                 (forward-line (lsp-diagnostic-line diag))
-                (call-interactively #'lsp-execute-code-action)))))
+                (lsp-execute-code-action-by-kind "quickfix")))))
       (user-error "Not no a diagnostic"))))
 
 (defun lsp-treemacs-open-file (&rest _)

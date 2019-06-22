@@ -4,7 +4,7 @@
 
 ;; Authors: Valeriy Savchenko <sinmipt@gmail.com>
 ;; URL: http://github.com/SavchenkoValeriy/emacs-powerthesaurus
-;; Package-Version: 20180719.908
+;; Package-Version: 20190622.709
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (request "0.3.0") (s "1.12.0"))
 ;; Keywords: convenience, writing
@@ -103,6 +103,7 @@ In this case, a selected synonym will be inserted at the point."
     (request
      (powerthesaurus-compose-url word)
      :parser (lambda () (libxml-parse-html-region (point) (point-max)))
+     :headers '(("User-Agent" . "Chrome/74.0.3729.169"))
      :success (cl-function (lambda (&key data &allow-other-keys)
                              ;; in order to allow users to quit powerthesaurus
                              ;; prompt with C-g, we need to wrap callback with this
