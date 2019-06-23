@@ -1,0 +1,2 @@
+
+(jsonl . [(20190616 1951) ((emacs (25))) "Utility functions for working with line-delimited JSON" single ((:commit . "213299ad3d6a87de0029e334aca2d5f7ff7df467") (:keywords "tools") (:authors ("Erik Anderson" . "erik@ebpa.link")) (:maintainer "Erik Anderson" . "erik@ebpa.link") (:url . "https://github.com/ebpa/jsonl.el"))])

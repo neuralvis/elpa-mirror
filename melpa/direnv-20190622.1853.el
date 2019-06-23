@@ -2,7 +2,7 @@
 
 ;; Author: wouter bolsterlee <wouter@bolsterl.ee>
 ;; Version: 2.0.0
-;; Package-Version: 20190619.726
+;; Package-Version: 20190622.1853
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0"))
 ;; Keywords: direnv, environment, processes, unix, tools
 ;; URL: https://github.com/wbolster/emacs-direnv
@@ -64,7 +64,7 @@ usually results in coloured output."
   :group 'direnv
   :type 'boolean)
 
-(defcustom direnv-non-file-modes '(eshell-mode dired-mode)
+(defcustom direnv-non-file-modes '(eshell-mode dired-mode magit-mode)
   "List of modes where direnv will update even if the buffer has no file.
 
 In these modes, or modes derived from them, direnv will use
