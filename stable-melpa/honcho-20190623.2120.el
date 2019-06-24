@@ -4,7 +4,7 @@
 
 ;; Author: Mario Rodas <marsam@users.noreply.github.com>
 ;; URL: https://github.com/emacs-pe/honcho.el
-;; Package-Version: 20180707.24
+;; Package-Version: 20190623.2120
 ;; Keywords: convenience
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "25.1") (sudo-edit "0.1"))
@@ -114,7 +114,7 @@ load `.env.dev' i.e. will use the same suffix."
   :group 'honcho)
 
 (defface honcho-loaded
-  '((t (:inherit warning)))
+  '((t (:inherit shadow)))
   "Face for showing process loaded."
   :group 'honcho)
 
@@ -126,6 +126,11 @@ load `.env.dev' i.e. will use the same suffix."
 (defface honcho-failed
   '((t (:inherit error)))
   "Face for showing process failed."
+  :group 'honcho)
+
+(defface honcho-stopped
+  '((t (:inherit warning)))
+  "Face for showing process successfully stopped."
   :group 'honcho)
 
 (defvar honcho-services (make-hash-table :test #'equal)
@@ -238,9 +243,13 @@ Otherwise convert it to a symbol and return that."
 (defun honcho-process-status (process)
   "Return an string to show the current PROCESS status."
   (cond
-   ((null process)           (propertize "loaded"  'face 'honcho-loaded))
-   ((process-live-p process) (propertize "started" 'face 'honcho-success))
-   (t                        (propertize "stopped" 'face 'honcho-failed))))
+   ((null process)
+    (propertize "loaded" 'face 'honcho-loaded))
+   ((process-live-p process)
+    (propertize "started" 'face 'honcho-success))
+   ((zerop (process-exit-status process))
+    (propertize "stopped" 'face 'honcho-stopped 'help-echo "status: 0/SUCCESS"))
+   (t (propertize "failed" 'face 'honcho-failed 'help-echo (format "status: %s/FAILURE" (process-exit-status process))))))
 
 (defun honcho-entry-generate (service)
   "Generate a tabulated list entry from a honcho SERVICE."

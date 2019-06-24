@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: github search clone api gh magit vc tools
-;; Package-Version: 20170824.323
+;; Package-Version: 20190624.436
 ;; URL: https://github.com/IvanMalison/github-search
 ;; Version: 0.0.1
 ;; Package-Requires: ((magit "0.8.1") (gh "1.0.0"))
@@ -37,8 +37,12 @@
 (defvar github-search-get-clone-url-function 'github-search-get-clone-url)
 (defvar github-search-get-target-directory-for-repo-function
   'github-search-prompt-for-target-directory)
-(defvar github-search-clone-repository-function 'magit-clone)
+(defvar github-search-clone-repository-function
+  'github-search-default-clone-repository-function)
 (defvar github-search-page-limit 1)
+
+(defun github-search-default-clone-repository-function (repo directory)
+  (magit-clone-regular repo directory nil))
 
 (defun github-search-format-repository (repo)
   (cons (funcall github-search-repo-format-function repo) repo))
