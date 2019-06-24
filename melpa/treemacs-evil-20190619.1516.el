@@ -4,7 +4,8 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((evil "1.2.12") (treemacs "0.0"))
-;; Package-Version: 0
+;; Package-Version: 20190619.1516
+;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
 ;; This program is free software; you can redistribute it and/or modify

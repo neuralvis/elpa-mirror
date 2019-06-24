@@ -1,6 +1,7 @@
 This file implements support for Vale programming in Emacs, including:
 
 * Syntax highlighting
+* Prettification (prettify-symbols-mode)
 * Interactive proving
 * Jumping to procedure under cursor
 
