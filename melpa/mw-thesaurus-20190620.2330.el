@@ -2,6 +2,7 @@
 ;;
 ;; Author: Ag Ibragimov
 ;; URL: https://github.com/agzam/mw-thesaurus.el
+;; Package-Version: 20190620.2330
 ;; Created: Nov-2017
 ;; Keywords: wp, matching
 ;; License: GPL v3
