@@ -1,2 +1,0 @@
-
-(frog-jump-buffer . [(20190622 2115) ((emacs (24)) (avy (0 4 0)) (dash (2 4 0)) (frog-menu (0 2 8)) (projectile (2 0 0))) "The fastest buffer-jumping Emacs lisp package around." single ((:commit . "20e7393f07dfe2f4671c93912c8b3374b9bea678") (:keywords "convenience" "tools") (:authors ("Justin Talbott")) (:maintainer "Justin Talbott") (:url . "https://github.com/waymondo/frog-jump-buffer"))])
