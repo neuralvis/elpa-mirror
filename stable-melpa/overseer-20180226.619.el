@@ -5,6 +5,7 @@
 ;; Author: Samuel Tonini <tonini.samuel@gmail.com>
 
 ;; URL: http://www.github.com/tonini/overseer.el
+;; Package-Version: 20180226.619
 ;; Version: 0.3.0
 ;; Package-Requires: ((emacs "24") (dash "2.10.0") (pkg-info "0.4") (f "0.18.1"))
 ;; Keywords:
