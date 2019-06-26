@@ -14,7 +14,7 @@ To launch Elpher, simply use 'M-x elpher'.  This will open a start
 page containing information on key bindings and suggested starting
 points for your gopher exploration.
 
-Further instructions can be found in the Elpher info manual.
+Full instructions can be found in the Elpher info manual.
 
 Elpher is under active development.  Any suggestions for
 improvements are welcome!
