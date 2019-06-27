@@ -5,7 +5,7 @@
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 15 Mar 2018
 ;; Version: 0.3.1
-;; Package-Version: 20190618.724
+;; Package-Version: 20190626.1902
 ;; Keywords: convenience, php
 ;; Homepage: https://github.com/emacs-php/phpstan.el
 ;; Package-Requires: ((emacs "24.3") (flycheck "26") (phpstan "0.2.1"))
@@ -71,7 +71,7 @@
   :enabled (lambda () (flycheck-phpstan--enabled-and-set-variable))
   :error-patterns
   ((error line-start (1+ (not (any ":"))) ":" line ":" (message) line-end))
-  :modes (php-mode))
+  :modes (php-mode phps-mode))
 
 (add-to-list 'flycheck-checkers 'phpstan t)
 (flycheck-add-next-checker 'php 'phpstan)

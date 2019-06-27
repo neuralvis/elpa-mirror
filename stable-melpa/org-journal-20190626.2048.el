@@ -2,7 +2,7 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20190626.1626
+;; Package-Version: 20190626.2048
 ;; Version: 1.15.1
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -750,7 +750,8 @@ If no next/PREVious entry was found print MSG."
                                                (set-buffer (find-file-noselect filename))
                                              (find-file filename))))
           (goto-char (point-min))
-          (unless (org-journal-daily-p)
+          (if (org-journal-daily-p)
+              (outline-next-visible-heading 1)
             (org-journal-search-forward-created date))
           (org-journal-finalize-view)
           (view-mode (if view-mode-p 1 -1))
