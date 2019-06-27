@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <naehring@smtp.1und1.de>
 ;; Keywords: tools, matching, files, unix
-;; Package-Version: 20190518.1539
+;; Package-Version: 20190627.502
 ;; Version: 1.0.0
 ;; URL: https://github.com/TobiasZawada/elgrep
 ;; Package-Requires: ((emacs "25.1"))
@@ -170,7 +170,8 @@ Keywords supported: :test"
 	  :recursive (widget-value elgrep-w-recursive)
 	  :mindepth (widget-value elgrep-w-mindepth)
 	  :maxdepth (widget-value elgrep-w-maxdepth)
-	  :c-beg (- (widget-value elgrep-w-c-beg))
+	  :c-beg (let ((val (widget-value elgrep-w-c-beg)))
+		   (if (numberp val) (- val) val))
 	  :c-end (widget-value elgrep-w-c-end)
 	  :case-fold-search (widget-value elgrep-w-c-case-fold-search)
 	  :exclude-file-re (elgrep-widget-value-update-hist elgrep-w-exclude-file-re)
@@ -247,6 +248,10 @@ Binds M-up and M-down to one step in history up and down, respectively.")
              (format "The value of widget %S must be a directory" (widget-get wid :format)))
   value)
 
+(define-widget 'elgrep-context-widget 'menu-choice
+  "Widget type for `elgrep-w-c-beg' and `elgrep-w-c-end'."
+  :value 0 :args '((number :tag "Number of Lines") (regexp :tag "Regexp")))
+
 ;;;###autoload
 (defun elgrep-menu (&optional reset)
   "Present a menu with most of the parameters for `elgrep'.
@@ -303,8 +308,8 @@ Hint: Try <M-tab> for completion, and <M-up>/<M-down> for history access.
       (setq-local elgrep-w-async (widget-create 'checkbox nil))
       (setq-local elgrep-w-mindepth (widget-create 'number :format "\nMinimal recursion depth: %v" 0))
       (setq-local elgrep-w-maxdepth (widget-create 'number :format "Maximal recursion depth: %v" most-positive-fixnum))
-      (setq-local elgrep-w-c-beg (widget-create 'number :format "Context Lines Before The Match: %v" 0))
-      (setq-local elgrep-w-c-end (widget-create 'number :format "Context Lines After The Match: %v" 0))
+      (setq-local elgrep-w-c-beg (widget-create 'elgrep-context-widget :tag "Context Lines Before The Match"))
+      (setq-local elgrep-w-c-end (widget-create 'elgrep-context-widget :tag "Context Lines After The Match"))
       (setq-local elgrep-w-c-case-fold-search
 		  (widget-create
 		   '(choice :tag "Case Sensitivity" :format "%t: %[Options%] %v" :doc "Ignore case."
