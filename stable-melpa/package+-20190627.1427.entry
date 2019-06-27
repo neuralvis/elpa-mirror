@@ -1,0 +1,2 @@
+
+(package+ . [(20190627 1427) ((emacs (24 3))) "Extensions for the package library." single ((:commit . "d17cbcc61b4fba47817aa22bb27628a9a2a2575f") (:keywords "extensions" "tools") (:authors ("Ryan Davis" . "ryand-ruby@zenspider.com")) (:maintainer "Ryan Davis" . "ryand-ruby@zenspider.com") (:url . "https://github.com/zenspider/package"))])
