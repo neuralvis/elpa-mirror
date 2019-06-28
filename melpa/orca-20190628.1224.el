@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/orca
-;; Package-Version: 20171030.1916
+;; Package-Version: 20190628.1224
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: org, convenience
@@ -47,13 +47,19 @@
 (defcustom orca-wash-list
   '((" - Emacs Stack Exchange" "")
     (" - Stack Overflow" ""))
-  "A list of (REGEX REP) to be applied on link title.")
+  "A list of (REGEX REP) to be applied on link title."
+  :type 'list)
 
 (defcustom orca-handler-list
   (let ((emacs "~/Dropbox/org/wiki/emacs.org")
-        (entor "~/Dropbox/org/ent.org"))
-    `((orca-handler-match-url "https://www.reddit.com/r/emacs" ,emacs "Reddit")
+        (reddit "~/Dropbox/org/wiki/reddit.org")
+        (entor "~/Dropbox/org/wiki/ent.org")
+        (stack "~/Dropbox/org/wiki/stack.org"))
+    `((orca-handler-match-url "https://\\(?:www\\.\\)?\\(?:old\\.\\)?reddit.com/r/emacs" ,emacs "\\* Reddit")
+      (orca-handler-match-url "https://\\(?:www\\.\\)?\\(?:old\\.\\)?reddit.com/r/" ,reddit "\\* Posts")
       (orca-handler-match-url "https://emacs.stackexchange.com/" ,emacs "\\* Questions")
+      (orca-handler-match-url "http://stackoverflow.com/" ,stack "Questions")
+      (orca-handler-project)
       (orca-handler-current-buffer "\\* Tasks")
       (orca-handler-file ,entor "\\* Articles")))
   "List of handlers by priority.
@@ -125,6 +131,24 @@ Try to remove superfluous information, like the website title."
        :jump-to-captured t)
       (switch-to-buffer orig-buffer)
       (goto-char (match-end 0)))))
+
+(defun orca-handler-project ()
+  "Select the current project."
+  (let ((orig-buffer (nth 0 (buffer-list)))
+        pt)
+    (setq orca-dbg-buf orig-buffer)
+    (when (with-current-buffer orig-buffer
+            (and (eq major-mode 'org-mode)
+                 (ignore-errors
+                   (save-excursion
+                     (zo-left 1)
+                     (and (equal (org-get-heading) "Projects")
+                          (setq pt (point)))))))
+      (org-capture-put
+       :immediate-finish t
+       :jump-to-captured t)
+      (switch-to-buffer orig-buffer)
+      (goto-char pt))))
 
 (defun orca-handler-file (file heading)
   "Select FILE at HEADING."

@@ -4,6 +4,7 @@
 
 ;; Author: Alessandro Piras <laynor@gmail.com>
 ;; Keywords: convenience, tools
+;; Package-Version: 20151115.1716
 ;; Package-Requires: ((s "1.6.0") (ht "1.5.0") (persistent-soft "0.8.6"))
 ;; Version: 1.0
 
@@ -1051,3 +1052,5 @@ To activate searching in the package summary, see `lpe:search-in-summary-toggle'
 
 (provide 'list-packages-ext)
 ;;; list-packages-extras.el ends here
+
+;;; list-packages-ext.el ends here

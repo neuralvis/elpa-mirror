@@ -1,0 +1,2 @@
+
+(orca . [(20190628 1224) ((emacs (24 3))) "Org Capture" single ((:commit . "a02b24f3910d453792cf2a4404937d2b84a1765b") (:keywords "org" "convenience") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/orca"))])

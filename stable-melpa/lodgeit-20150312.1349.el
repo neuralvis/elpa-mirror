@@ -5,6 +5,7 @@
 ;; Author: Eric Larson <eric@ionrock.org>
 ;; Created: 9 Mar 2012
 ;; Version: 1.0
+;; Package-Version: 20150312.1349
 ;; Keywords: pastebin lodgeit
 ;; X-URL: https://github.com/ionrock/lodgeit-el
 

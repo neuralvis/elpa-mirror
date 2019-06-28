@@ -3,8 +3,8 @@
 ;; Copyright (C) 2014 Randy Morris
 
 ;; Author: Randy Morris <randy.morris@archlinux.us>
-;; Version: 0.4
-;; Package-Version: 20190509.1919
+;; Version: 0.5
+;; Package-Version: 20190628.1207
 ;; Keywords: tramp, ssh
 ;; URL: https://github.com/randymorris/tramp-term.el
 
@@ -48,11 +48,13 @@
   hostname used to connect to the remote machine.")
 
 ;;;###autoload
-(defun tramp-term ()
+(defun tramp-term (&optional host-arg)
   "Create an ansi-term running ssh session and automatically
-enable tramp integration in that terminal."
+enable tramp integration in that terminal.  Optional argument
+HOST-ARG is a list or one or two elements, the last of which is
+the host name."
   (interactive)
-  (let* ((host (tramp-term--select-host))
+  (let* ((host (or host-arg (tramp-term--select-host)))
          (hostname (car (last host)))
          (prompt-bound nil))
     (if (or (> (length host) 2)
