@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190626.1645
+;; Package-Version: 20190628.1813
 ;; Version: 0.11.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.11.0"))
 ;; Keywords: convenience, matching, tools
@@ -5286,6 +5286,7 @@ in the current window."
   (interactive)
   (ivy-read "Switch to buffer: " 'internal-complete-buffer
             :preselect (buffer-name (other-buffer (current-buffer)))
+            :keymap ivy-switch-buffer-map
             :action #'ivy--switch-buffer-action
             :matcher #'ivy--switch-buffer-matcher
             :caller 'counsel-switch-buffer
