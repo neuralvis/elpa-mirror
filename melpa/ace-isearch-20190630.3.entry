@@ -1,0 +1,2 @@
+
+(ace-isearch . [(20190630 3) ((emacs (24))) "A seamless bridge between isearch, ace-jump-mode, avy, helm-swoop and swiper" single ((:commit . "e0b48e62f205215670a6f025cff36832b81ede57") (:authors ("Akira Tamamori")) (:maintainer "Akira Tamamori") (:url . "https://github.com/tam17aki/ace-isearch"))])
