@@ -5,7 +5,7 @@
 ;; Author: Ryan Davis <ryand-ruby@zenspider.com>
 ;; Created: 2013-07-25
 ;; Keywords: extensions, tools
-;; Package-Version: 20190627.1427
+;; Package-Version: 20190702.253
 ;; Package-Requires: ((emacs "24.3"))
 ;; URL: https://github.com/zenspider/package
 ;; Compatibility: GNU Emacs: 24.3?, 24.4+
@@ -237,7 +237,9 @@ t."
   (mapc 'package-maybe-install (package-transitive-closure manifest))
 
   (unless package-disable-cleanup (package-cleanup manifest))
-  (unless package-disable-record  (package+-update-selected-packages manifest)))
+  (unless package-disable-record  (package+-update-selected-packages manifest))
+
+  (sort (package-transitive-closure manifest) 'symbol<))
 
 ;;;###autoload
 (defun package-view-manifest ()
@@ -250,11 +252,26 @@ t."
 (defun package+-update-selected-packages (manifest)
   "Record the MANIFEST in ‘package-selected-packages’.
 This lets Emacs track packages versus their dependencies."
+  (let* ((manifest (sort manifest 'symbol<))
+         (updater (lambda ()
+                    (unless (equal package-selected-packages manifest)
+                      (customize-save-variable 'package-selected-packages manifest)))))
+    (if after-init-time
+        (funcall updater)
+      (add-hook 'after-init-hook updater))))
+
+(defun package+-update-selected-packages (manifest)
+  "Record the MANIFEST in ‘package-selected-packages’.
+This lets Emacs track packages versus their dependencies."
   (let ((manifest (sort manifest 'symbol<)))
-    (add-hook 'after-init-hook
-              (lambda ()
-                (unless (equal package-selected-packages manifest)
-                  (customize-save-variable 'package-selected-packages manifest))))))
+    (if after-init-time
+        (unless (equal package-selected-packages manifest)
+          (customize-save-variable 'package-selected-packages manifest))
+      (add-hook 'after-init-hook
+                (lambda ()
+                  (unless (equal package-selected-packages manifest)
+                    (customize-save-variable 'package-selected-packages manifest)))))))
+
 
 ;; stolen (and modified) from:
 ;; https://github.com/dimitri/el-get/blob/master/el-get-dependencies.el
