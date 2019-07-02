@@ -2,7 +2,7 @@
 
 ;; Author: Alex Griffin <a@ajgrf.com>
 ;; URL: https://github.com/ajgrf/parchment
-;; Package-Version: 20190615.1852
+;; Package-Version: 20190701.2148
 ;; Version: 0.3.0-pre
 ;; Package-Requires: ((emacs "24"))
 
@@ -185,6 +185,7 @@ BACKGROUND are nil then they will be skipped."
     (font-lock-doc-face         green        nil)
 
     ;; filetype syntax highlighting
+    (css-selector               blue         nil)
     (diff-added                 green        pale-green)
     (diff-changed               blue         pale-blue)
     (diff-context               nil          nil)
