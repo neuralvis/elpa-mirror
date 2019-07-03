@@ -1,2 +1,0 @@
-
-(haxe-mode . [(20190630 321) nil "An Emacs major mode for Haxe" single ((:commit . "985780518ac999b5be42b2421175e9c2f502bd9d") (:authors ("Jens Peter Secher")) (:maintainer "Jens Peter Secher") (:url . "http://people.debian.org/~jps/misc/haxe-mode.el"))])
