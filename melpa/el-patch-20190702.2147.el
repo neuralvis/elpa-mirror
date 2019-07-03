@@ -1,4 +1,4 @@
-;;; el-patch.el --- Future-proof your Elisp. -*- lexical-binding: t -*-
+;;; el-patch.el --- Future-proof your Elisp -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2016 Radon Rosborough
 
@@ -6,7 +6,7 @@
 ;; Created: 31 Dec 2016
 ;; Homepage: https://github.com/raxod502/el-patch
 ;; Keywords: extensions
-;; Package-Version: 20190410.1631
+;; Package-Version: 20190702.2147
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 2.2.3
 

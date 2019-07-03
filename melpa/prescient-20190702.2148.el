@@ -1,11 +1,11 @@
-;;; prescient.el --- Better sorting and filtering. -*- lexical-binding: t -*-
+;;; prescient.el --- Better sorting and filtering -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2017-2018 Radon Rosborough
 
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20190619.2305
+;; Package-Version: 20190702.2148
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 3.1

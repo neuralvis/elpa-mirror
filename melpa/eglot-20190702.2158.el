@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.4
-;; Package-Version: 20190627.1656
+;; Package-Version: 20190702.2158
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1025,7 +1025,7 @@ If optional MARKER, return a marker instead"
             (col (plist-get pos-plist :character)))
         (unless (wholenump col)
           (eglot--warn
-           :eglot "Caution: LSP server sent invalid character position %s. Using 0 instead."
+           "Caution: LSP server sent invalid character position %s. Using 0 instead."
            col)
           (setq col 0))
         (funcall eglot-move-to-column-function col)))

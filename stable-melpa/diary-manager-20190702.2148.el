@@ -1,4 +1,4 @@
-;;; diary-manager.el --- Simple personal diary. -*- lexical-binding: t -*-
+;;; diary-manager.el --- Simple personal diary -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2017 Radon Rosborough
 
@@ -6,7 +6,7 @@
 ;; Created: 28 Dec 2017
 ;; Homepage: https://github.com/raxod502/diary-manager
 ;; Keywords: extensions
-;; Package-Version: 20181215.326
+;; Package-Version: 20190702.2148
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 2.0.2
 
