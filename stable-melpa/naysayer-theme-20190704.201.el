@@ -2,7 +2,7 @@
 
 ;; Author: Nick Aversano <nickav@users.noreply.github.com>
 ;; Version: 0.2
-;; Package-Version: 20190613.1451
+;; Package-Version: 20190704.201
 ;; Filename: naysayer-theme.el
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/nickav/naysayer-theme.el
@@ -85,7 +85,7 @@
    `(whitespace-trailing ((t (:background nil :foreground ,warning :inverse-video t))))
 
    `(linum ((t (:foreground ,line-fg :background ,background))))
-   `(linum-relative-current-face ((t (:foreground ,line-fg :background ,background))))
+   `(linum-relative-current-face ((t (:foreground ,white :background ,background))))
    `(line-number ((t (:foreground ,line-fg :background ,background))))
    `(line-number-current-line ((t (:foreground ,white :background ,background))))
 
