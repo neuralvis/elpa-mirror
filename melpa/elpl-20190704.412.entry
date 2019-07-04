@@ -1,2 +1,0 @@
-
-(elpl . [(20190704 412) ((emacs (24 4))) "Emacs Lisp REPL" single ((:commit . "573e140d134f1fd23db031f8332cd02d758619b4") (:keywords "lisp" "tool") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/elpl"))])
