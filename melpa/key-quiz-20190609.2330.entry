@@ -1,2 +1,0 @@
-
-(key-quiz . [(20190609 2330) ((emacs (26))) "Emacs Keys Quiz" single ((:commit . "83c71692054e685c5539df29fd01c1450a220bd9") (:keywords "games") (:authors ("Federico Tedin" . "federicotedin@gmail.com")) (:maintainer "Federico Tedin" . "federicotedin@gmail.com") (:url . "https://github.com/federicotdn/key-quiz"))])
