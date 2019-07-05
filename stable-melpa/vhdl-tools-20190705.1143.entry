@@ -1,0 +1,2 @@
+
+(vhdl-tools . [(20190705 1143) ((ggtags (0 8 13)) (emacs (26 2)) (helm-rg (0 1)) (outshine (0))) "Utilities for navigating vhdl sources." single ((:commit . "cf8de6a3160532e2ce0018ecd52f2aefd0199a65") (:keywords "languages" "convenience") (:authors ("Cayetano Santos")) (:maintainer "Cayetano Santos") (:url . "https://github.com/csantosb/vhdl-tools/wiki"))])
