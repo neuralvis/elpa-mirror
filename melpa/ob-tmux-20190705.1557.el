@@ -7,7 +7,7 @@
 ;; Keywords: literate programming, interactive shell, tmux
 ;; URL: https://github.com/ahendriksen/ob-tmux
 ;; Version: 0.1.5
-;; Package-Version: 20180831.1017
+;; Package-Version: 20190705.1557
 ;; Package-X-Original-version: 0.1.5
 ;; Package-Requires: ((emacs "25.1") (seq "2.3") (s "1.9.0"))
 
@@ -61,11 +61,20 @@ Change in case you want to use a different tmux than the one in your $PATH."
   :group 'org-babel
   :type 'string)
 
+(defcustom org-babel-tmux-terminal "gnome-terminal"
+  "This is the terminal that will be spawned."
+  :group 'org-babel
+  :type 'string)
+
+(defcustom org-babel-tmux-terminal-opts '("--")
+  "The list of options that will be passed to the terminal."
+  :group 'org-babel
+  :type 'list)
+
 (defvar org-babel-default-header-args:tmux
   '((:results . "silent")
     (:session . "default")
-    (:socket . nil)
-    (:terminal . "gnome-terminal"))
+    (:socket . nil))
   "Default arguments to use when running tmux source blocks.")
 
 (add-to-list 'org-src-lang-modes '("tmux" . sh))
@@ -83,7 +92,8 @@ Argument PARAMS the org parameters of the code block."
   (message "Sending source code block to interactive terminal session...")
   (save-window-excursion
     (let* ((org-session (cdr (assq :session params)))
-	   (terminal (cdr (assq :terminal params)))
+	   (org-header-terminal (cdr (assq :terminal params)))
+	   (terminal (or org-header-terminal org-babel-tmux-terminal))
 	   (socket (cdr (assq :socket params)))
 	   (socket (when socket (expand-file-name socket)))
 	   (ob-session (ob-tmux--from-org-session org-session socket))
@@ -100,8 +110,12 @@ Argument PARAMS the org parameters of the code block."
       ;; Disable window renaming from within tmux
       (ob-tmux--disable-renaming ob-session)
       (ob-tmux--send-body
-       ob-session (org-babel-expand-body:generic body params)))))
-
+       ob-session (org-babel-expand-body:generic body params))
+      ;; Warn that setting the terminal from the org source block
+      ;; header arguments is going to be deprecated.
+      (message "ob-tmux terminal: %s" org-header-terminal)
+      (when org-header-terminal
+	(ob-tmux--deprecation-warning org-header-terminal)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ob-tmux object
@@ -185,19 +199,17 @@ automatically space separated."
 (defun ob-tmux--start-terminal-window (ob-session terminal)
   "Start a TERMINAL window with tmux attached to session.
 
-Argument OB-SESSION: the current ob-tmux session."
-  (let* ((process-name (concat "org-babel: terminal")))
+  Argument OB-SESSION: the current ob-tmux session."
+  (let ((start-process-mandatory-args `("org-babel: terminal"
+					"*Messages*"
+					,terminal))
+	(tmux-cmd `(,org-babel-tmux-location
+		    "attach-session"
+		    "-t" ,(ob-tmux--target ob-session))))
     (unless (ob-tmux--socket ob-session)
-      (if (string-equal terminal "xterm")
-	  (start-process process-name "*Messages*"
-			 terminal
-			 "-T" (ob-tmux--target ob-session)
-			 "-e" org-babel-tmux-location "attach-session"
-			 "-t" (ob-tmux--target ob-session))
-	(start-process process-name "*Messages*"
-		       terminal "--"
-		       org-babel-tmux-location "attach-session"
-		       "-t" (ob-tmux--target ob-session))))))
+      (apply 'start-process (append start-process-mandatory-args
+				    org-babel-tmux-terminal-opts
+				    tmux-cmd)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tmux interaction
@@ -247,33 +259,23 @@ Argument OB-SESSION: the current ob-tmux session."
     (ob-tmux--set-window-option ob-session "allow-rename" "off")
     (ob-tmux--set-window-option ob-session "automatic-rename" "off")))
 
+
+(defun ob-tmux--format-keys (string)
+  "Format STRING as a sequence of hexadecimal numbers, to be sent via the `send-keys' command."
+  (mapcar (lambda (c) (format "0x%x" c))
+	string))
+
 (defun ob-tmux--send-keys (ob-session line)
   "If tmux window exists, send a LINE of text to it.
 
 Argument OB-SESSION: the current ob-tmux session."
   (when (ob-tmux--window-alive-p ob-session)
-    (ob-tmux--execute ob-session
-     "send-keys"
-     "-l"
-     "-t" (ob-tmux--target ob-session)
-     ;; Replace semicolon at end of line with `\;'.
-
-     ;; Tmux assumes a semicolon at the end of a command-line argument
-     ;; means that a new command is started. See tmux man page around
-     ;; "Multiple commands may ... a command sequence." This allows,
-     ;; for example, the following two commands to be executed in one
-     ;; line:
-     ;;
-     ;;     tmux new-window; split-window -d
-     ;;
-     ;; To prevent tmux from interpreting a trailing semicolon as a
-     ;; command separator, we replace the semicolon with `\;'.
-     ;;
-     ;; Note: we are already using the `-l' (literal) flag. This does
-     ;; not prevent tmux from interpreting a trailing semicolon as a
-     ;; command separator.
-     (replace-regexp-in-string ";$" "\\\\;" line)
-     "\n")))
+    (let* ((hex-line (ob-tmux-format-keys line)))
+      (apply 'ob-tmux--execute
+	     ob-session
+	     "send-keys"
+	     "-t" (ob-tmux--target ob-session)
+	     hex-line))))
 
 (defun ob-tmux--send-body (ob-session body)
   "If tmux window (passed in OB-SESSION) exists, send BODY to it.
@@ -281,7 +283,9 @@ Argument OB-SESSION: the current ob-tmux session."
 Argument OB-SESSION: the current ob-tmux session."
   (let ((lines (split-string body "[\n\r]+")))
     (when (ob-tmux--window-alive-p ob-session)
-      (mapc (lambda (l) (ob-tmux--send-keys ob-session l)) lines))))
+      (mapc (lambda (l)
+	      (ob-tmux--send-keys ob-session (concat l "\n")))
+	    lines))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tmux interrogation
@@ -312,6 +316,42 @@ If no window is specified in OB-SESSION, returns 't."
 	  ((null window)
 	   't))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Warnings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun ob-tmux--deprecation-warning (org-header-terminal)
+  (let* ((message (format "DEPRECATION WARNING: Setting `:terminal` using org source block header arguments is deprecated.
+
+Consider changing your ob-tmux configuration as follows:
+
+(setq org-babel-default-header-args:tmux
+      '((:results . \"\")
+        (:session . \"\")
+        (:terminal. \"%s\")         ; <--- REMOVE THIS LINE
+        (:socket  . nil)))
+
+;; You can now customize the terminal and its options as follows:
+(setq org-babel-tmux-terminal \"%s\")
+(setq org-babel-tmux-terminal-opts '(\"-T\" \"ob-tmux\" \"-e\"))
+; The default terminal is \"gnome-terminal\" with options \"--\".
+
+If you have any source blocks containing `:terminal`, please consider removing them:
+
+    #+begin_src tmux :session test :terminal %s
+    echo hello
+    #+end_src
+
+Becomes:
+
+    #+begin_src tmux :session test
+    echo hello
+    #+end_src
+
+End of warning. (See *Warnings* buffer for full message)
+" org-header-terminal org-header-terminal org-header-terminal)))
+    (display-warning 'deprecation-warning message :warning)
+    message))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Test functions

@@ -18,7 +18,7 @@
 ;;
 ;; Author: Alex Lynham <alex@lynh.am>
 ;; Version: 0.0.1
-;; Package-Version: 20190228.1453
+;; Package-Version: 20190705.1501
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: cyberpunk, theme, themes
 ;; URL: https://github.com/the-frey/cyberpunk-2019
@@ -126,6 +126,12 @@
  `(helm-match ((t (:background "#9C00FF"))))
  `(helm-selection ((t ( :background "#FF9C00" :foreground "#FFFAFA" :underline nil))))
  )
+
+;; Makes sure that the theme is loaded
+;;;###autoload
+(when load-file-name
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
 
 (provide-theme 'cyberpunk-2019)
 

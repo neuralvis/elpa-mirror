@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20190606.853
+;; Package-Version: 20190705.1645
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -25,6 +25,7 @@
 ;;
 ;; - Angular/Vue (prettier)
 ;; - Assembly (asmfmt)
+;; - Bazel Starlark (buildifier)
 ;; - BibTeX (emacs)
 ;; - C/C++/Objective-C (clang-format)
 ;; - Clojure/ClojureScript (node-cljfmt)
@@ -368,6 +369,14 @@ Consult the existing formatters for examples of BODY."
             executable "-q"
             (when (format-all--buffer-extension-p "pyi") "--pyi")
             "-")))
+
+(define-format-all-formatter buildifier
+  (:executable "buildifier")
+  (:install
+   (macos "brew install buildifier")
+   "go get github.com/bazelbuild/buildtools/buildifier")
+  (:modes bazel-mode)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter brittany
   (:executable "brittany")
