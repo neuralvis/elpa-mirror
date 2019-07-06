@@ -1,0 +1,2 @@
+
+(spacebar . [(20190706 519) ((eyebrowse (0 7 7)) (emacs (25 4 0))) "Workspaces Bar" single ((:commit . "6082a9d38230c196386b1b0fbcd10d1f7b3531f8") (:keywords "convenience") (:authors ("Matthias Margush" . "matthias.margush@gmail.com")) (:maintainer "Matthias Margush" . "matthias.margush@gmail.com") (:url . "https://github.com/matthias-margush/spacebar"))])

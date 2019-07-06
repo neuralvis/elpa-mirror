@@ -4,6 +4,7 @@
 
 ;; Author: Samer Masterson <samer@samertm.com>
 ;; Keywords: tools
+;; Package-Version: 20150430.2142
 ;; URL: https://github.com/samertm/go-stacktracer.el
 
 ;; This program is free software; you can redistribute it and/or modify
