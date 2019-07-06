@@ -1,10 +1,10 @@
 ;;; org-reverse-datetree.el --- Create reverse date trees in org-mode -*- lexical-binding: t -*-
 
-;; Copyright (C) 2018 Akira Komamura
+;; Copyright (C) 2018-2019 Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.3
-;; Package-Version: 20190701.1223
+;; Package-Version: 20190706.203
 ;; Package-Requires: ((emacs "26.1") (dash "2.12"))
 ;; Keywords: outlines
 ;; URL: https://github.com/akirak/org-reverse-datetree

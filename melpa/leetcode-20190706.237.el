@@ -4,7 +4,7 @@
 
 ;; Author: Wang Kai <kaiwkx@gmail.com>
 ;; Keywords: extensions, tools
-;; Package-Version: 20190615.1249
+;; Package-Version: 20190706.237
 ;; URL: https://github.com/kaiwk/leetcode.el
 ;; Package-Requires: ((emacs "25") (dash "2.15.0") (request-deferred "0.2.0") (graphql "0.1.1") (spinner "1.7.3"))
 ;; Version: 0.1.1
@@ -151,12 +151,32 @@ VALUE should be the referer."
           (request leetcode--url-login :sync t)
           (leetcode--csrf-token)))))
 
+(defun leetcode--credentials ()
+  (let* ((auth-source-creation-prompts
+          '((user  . "Leetcode user: ")
+            (secret . "Leetcode password for %u: ")))
+         (found (cl-first (auth-source-search :max 1
+                                              :host "leetcode.com"
+                                              :require '(:user :secret)
+                                              :create t))))
+    (when found
+      (eval `(ht ,@(--map `(,it ,(plist-get found it))
+                          '(:user :secret :save-function)))))))
+
+(defun leetcode--credentials-username (credentials)
+  (ht-get credentials :user))
+
+(defun leetcode--credentials-password (credentials)
+  (let ((secret (ht-get credentials :secret)))
+    (if (functionp secret) (funcall secret) secret)))
+
 (defun leetcode--login (account password)
   "Send login request and return a deferred object.
 When ACCOUNT or PASSWORD is empty string it will show a prompt."
   (when (or (string-empty-p account) (string-empty-p password))
-    (setq account (read-string "account: "))
-    (setq password (read-passwd "password: ")))
+    (let ((credentials (leetcode--credentials)))
+      (setq account (leetcode--credentials-username credentials))
+      (setq password (leetcode--credentials-password credentials))))
   (leetcode--loading-mode t)
   (request-deferred
    leetcode--url-login

@@ -1,0 +1,2 @@
+
+(hg-histedit . [(20190705 1858) ((emacs (25 1)) (with-editor (2 8 3))) "Edit HG histedit files" single ((:commit . "63f5eb99d756db88d50dcb5074f6cecd45d46f11") (:keywords "mercurial" "hg" "emacs" "tools") (:authors ("James Nguyen" . "james@jojojames.com")) (:maintainer "James Nguyen" . "james@jojojames.com") (:url . "https://github.com/jojojames/hg-histedit"))])
