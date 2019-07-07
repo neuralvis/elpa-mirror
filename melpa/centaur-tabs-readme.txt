@@ -1,4 +1,1 @@
-Provide an out of box configuration to use tabs in Emacs.
-
-
-Require
+Emacs plugin aiming to become an aesthetic, modern looking tabs plugin.
