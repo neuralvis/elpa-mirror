@@ -1,2 +1,0 @@
-
-(centaur-tabs . [(20190707 1906) ((emacs (24 4)) (powerline (2 4)) (cl-lib (0 5))) "Provide an out of box configuration to use tabs" single ((:commit . "0d08ed3cef8a2f34b80a2224691894a2847b1d88") (:authors ("Emmanuel Bustos" . "ema2159@gmail.com")) (:maintainer "Emmanuel Bustos" . "ema2159@gmail.com") (:url . "https://github.com/ema2159/centaur-tabs"))])
