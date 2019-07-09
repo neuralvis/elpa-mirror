@@ -36,10 +36,6 @@ file.
 
 Suggestions/Ideas:
 
-Maybe we can ask the user if we can "mess" a little with the file, in order
-to force the fontification code of CC Mode to trigger.  Or maybe we can
-trigger it without "messing" with the file.
-
 GNU C Coding Conventions, and other coding conventions as well, say that
 macro names should be all upper case.  Maybe check that when asked to add
 a macro name (but ctune should not enforce it, so there could be a user

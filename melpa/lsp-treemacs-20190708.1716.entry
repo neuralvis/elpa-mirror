@@ -1,2 +1,0 @@
-
-(lsp-treemacs . [(20190708 1716) ((emacs (25 1)) (dash (2 14 1)) (dash-functional (2 14 1)) (f (0 20 0)) (ht (2 0)) (treemacs (2 5)) (lsp-mode (6 0))) "LSP treemacs" single ((:commit . "d7385d0c1db2f3906dbbaed24f60505cb777e711") (:keywords "languages") (:authors ("Ivan Yonchovski")) (:maintainer "Ivan Yonchovski"))])
