@@ -2,7 +2,7 @@
 
 ;; Author: Kuang Chen <http://github.com/kchenphy>
 ;; URL: https://github.com/kchenphy/counsel-world-clock
-;; Package-Version: 20171202.737
+;; Package-Version: 20190709.2211
 ;; Version: 0.2.1
 ;; Package-Requires: ((ivy "0.9.0") (s "1.12.0"))
 
@@ -540,6 +540,7 @@ added which is replaced by the return value of
     (ivy-read
      "Time zone: "
      counsel-world-clock--time-zones
+     :caller 'counsel-world-clock
      :action (lambda (time-zone)
 	       (message
 		"Local time in %s is %s"
