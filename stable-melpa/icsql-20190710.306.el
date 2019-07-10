@@ -1,9 +1,9 @@
-;;; icsql.el --- interactive iSQL iteraface to ciSQL -*- lexical-binding: t; -*-
+;;; icsql.el --- Interactive iSQL iteraface to ciSQL. -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Paul Landes
 
-;; Version: 0.2
-;; Package-Version: 20190703.109
+;; Version: 0.1
+;; Package-Version: 20190710.306
 ;; Author: Paul Landes
 ;; Maintainer: Paul Landes
 ;; Keywords: isql sql rdbms data
@@ -227,6 +227,24 @@ LEINP if non-nil start using a lein run command."
 	    (list (icsql-jvm)))
 	  (append (list "-jar" (expand-file-name (icsql-jar-path))))
 	  (append options)))))
+
+(defun icsql-help-command-line ()
+  "Provide the ciSQL command line help."
+  (interactive)
+  (let ((cmd (mapconcat 'identity
+			(append (icsql-compose-command nil nil) '("--help"))
+			" "))
+	(buf (get-buffer-create "*ciSQL Command Line Help*")))
+    (message "Creating command line help, this might take a minute...")
+    (with-current-buffer buf
+      (save-excursion
+	(read-only-mode 0)
+	(erase-buffer)
+	(insert (shell-command-to-string cmd))
+	(read-only-mode 1)
+	(set-buffer-modified-p nil)))
+    (display-buffer buf)
+    (message "Command line help for version %s" icsql-sql-cisql-version)))
 
 
 ;;;###autoload

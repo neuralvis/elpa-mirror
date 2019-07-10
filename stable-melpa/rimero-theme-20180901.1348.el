@@ -6,8 +6,7 @@
 ;; Maintainer: Yves Zoundi <yveszoundi@users.sf.net>
 ;; Created: 12th August 2017
 ;; URL: https://github.com/yveszoundi/emacs-rimero-theme
-;; Package-Version: 20180901.1348
-;; Package-X-Original-Version: 20180630.821
+;; Package-Version: 20180630.821
 ;; Keywords: faces, theme, dark, light colors
 ;; Version: 0.0.5
 ;; Package-Requires: ((emacs "24"))
