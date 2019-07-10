@@ -14,6 +14,7 @@ Usage:
   `counsel-etags-recent-tag' to open recent tag
   `counsel-etags-find-tag' to two steps tag matching use regular expression and filter
   `counsel-etags-list-tag' to list all tags
+  `counsel-etags-update-tags-force' to update current tags file by force
 
 Tips:
 - Add below code into "~/.emacs" to AUTOMATICALLY update tags file:
