@@ -1,0 +1,2 @@
+
+(go-mode . [(20190711 149) nil "Major mode for the Go programming language" single ((:commit . "287595a375388cce16ecd8f44b44008e7679bc59") (:keywords "languages" "go") (:authors ("The go-mode Authors")) (:maintainer "The go-mode Authors") (:url . "https://github.com/dominikh/go-mode.el"))])

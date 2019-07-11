@@ -1,6 +1,7 @@
 ;;; sdlang-mode.el --- Major mode for Simple Declarative Language files.
 
 ;; Version: 0.1.0
+;; Package-Version: 20161201.711
 ;; Author: Vladimir Panteleev
 ;; Url: https://github.com/CyberShadow/sdlang-mode
 ;; Keywords: languages
