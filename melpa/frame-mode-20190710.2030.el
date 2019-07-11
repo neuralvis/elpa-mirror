@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: frames
-;; Package-Version: 20190507.500
+;; Package-Version: 20190710.2030
 ;; URL: https://github.com/IvanMalison/frame-mode
 ;; Version: 0.0.0
 ;; Package-Requires: ((s "1.9.0") (emacs "24.4"))
@@ -131,6 +131,7 @@ displayed using frames intead of windows."
  ;; deactivating the effect of `frame-mode-other-window-or-frame-next-command'.
  '(("\\*helm.*" . ((display-buffer-same-window display-buffer-pop-up-window)))
    (".*popup\*" . ((display-buffer-pop-up-window)))
+   ("\\*Org Note\\*" . ((display-buffer-pop-up-window)))
    (".*\\*transient\\*.*" . ((display-buffer-in-side-window)))
    ("\\*Completions.\\*" . (display-buffer-same-window))
    ("\\*Org todo\\*" . ((display-buffer-same-window)))

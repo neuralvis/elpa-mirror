@@ -4,9 +4,9 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20190622.1854
+;; Package-Version: 20190710.2356
 ;; Keywords: help, lisp
-;; Version: 0.17
+;; Version: 0.18
 ;; Package-Requires: ((emacs "25") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -2022,6 +2022,25 @@ may contain duplicates."
    (t
     (helpful--pretty-print value))))
 
+(defun helpful--original-value (sym)
+  "Return the original value for SYM, if any.
+
+If SYM has an original value, return it in a list. Return nil
+otherwise."
+  (let* ((orig-val-expr (get sym 'standard-value)))
+    (when (consp orig-val-expr)
+      (ignore-errors
+        (list
+         (eval (car orig-val-expr)))))))
+
+(defun helpful--original-value-differs-p (sym)
+  "Return t if SYM has an original value, and its current
+value is different."
+  (let ((orig-val-list (helpful--original-value sym)))
+    (and (consp orig-val-list)
+         (not (eq (car orig-val-list)
+                  (symbol-value sym))))))
+
 (defun helpful-update ()
   "Update the current *Helpful* buffer to the latest
 state of the current symbol."
@@ -2106,6 +2125,13 @@ state of the current symbol."
            (t "Value")))
          (helpful--format-value sym val)
          "\n\n")
+        (when (helpful--original-value-differs-p sym)
+          (insert
+           (helpful--heading "Original Value")
+           (helpful--format-value
+            sym
+            (car (helpful--original-value sym)))
+           "\n\n"))
         (when multiple-views-p
           (insert (helpful--make-toggle-literal-button) " "))
 
@@ -2483,6 +2509,25 @@ or :foo."
   (or (fboundp symbol)
       (helpful--variable-p symbol)))
 
+(defun helpful--bookmark-jump (bookmark)
+  "Create and switch to helpful bookmark BOOKMARK."
+  (let ((callable-p (bookmark-prop-get bookmark 'callable-p))
+        (sym (bookmark-prop-get bookmark 'sym))
+        (position (bookmark-prop-get bookmark 'position)))
+    (if callable-p
+        (helpful-callable sym)
+      (helpful-variable sym))
+    (goto-char position)))
+
+(defun helpful--bookmark-make-record ()
+  "Create a bookmark record for helpful buffers.
+
+See docs of `bookmark-make-record-function'."
+  `((sym . ,helpful--sym)
+    (callable-p . ,helpful--callable-p)
+    (position    . ,(point))
+    (handler     . helpful--bookmark-jump)))
+
 (defun helpful--convert-c-name (symbol var)
   "Convert SYMBOL from a C name to an Elisp name.
 E.g. convert `Fmake_string' to `make-string' or
@@ -2621,13 +2666,25 @@ See also `helpful-max-buffers'."
     map)
   "Keymap for `helpful-mode'.")
 
+(declare-function bookmark-prop-get "bookmark" (bookmark prop))
+(declare-function bookmark-make-record-default "bookmark"
+                  (&optional no-file no-context posn))
+;; Ensure this variable is defined even if bookmark.el isn't loaded
+;; yet. This follows the pattern in help-mode.el.gz.
+;; TODO: find a cleaner solution.
+(defvar bookmark-make-record-function)
+
 (define-derived-mode helpful-mode special-mode "Helpful"
   "Major mode for *Helpful* buffers."
   (add-hook 'xref-backend-functions #'elisp--xref-backend nil t)
 
   (setq imenu-create-index-function #'helpful--imenu-index)
   ;; Prevent imenu converting "Source Code" to "Source.Code".
-  (setq-local imenu-space-replacement " "))
+  (setq-local imenu-space-replacement " ")
+
+  ;; Enable users to bookmark helpful buffers.
+  (set (make-local-variable 'bookmark-make-record-function)
+       #'helpful--bookmark-make-record))
 
 (provide 'helpful)
 ;;; helpful.el ends here

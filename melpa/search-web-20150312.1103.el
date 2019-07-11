@@ -6,7 +6,6 @@
 
 ;; Author: Tomoya Otake <tomoya.ton@gmail.com>
 ;; Version: 1.1
-;; Package-Version: 20150312.1103
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published

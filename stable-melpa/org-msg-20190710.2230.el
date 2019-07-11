@@ -6,8 +6,8 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20181111.1815
-;; Package-X-Original-Version: 1.7
+;; Package-Version: 20190710.2230
+;; Package-X-Original-Version: 1.8
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -531,7 +531,9 @@ absolute paths."
 		     (let ((file (concat base (cdr src))))
 		       (if (file-exists-p file)
 			   (setcdr src (concat base (cdr src)))
-			 (error "'%s' Image is missing" file)))))))))
+			 (unless (y-or-n-p (format "'%s' Image is missing,\
+ do you want to continue ?" file))
+			   (error "'%s' Image is missing" file))))))))))
     (let ((xml (libxml-parse-html-region (point-min) (point-max))))
       (when base
 	(org-msg-xml-walk xml #'make-img-abs))
@@ -801,7 +803,7 @@ function is called.  `org-cycle' is called otherwise."
 
 (defun org-msg-attach-attach (file)
   "Link FILE into the list of attachment."
-  (interactive (list (ido-read-file-name "File to attach: ")))
+  (interactive (list (read-file-name "File to attach: ")))
   (let ((files (org-msg-get-prop "attachment")))
     (org-msg-set-prop "attachment" (push file files))))
 
@@ -809,7 +811,7 @@ function is called.  `org-cycle' is called otherwise."
   "Delete a single attachment."
   (interactive)
   (let* ((files (org-msg-get-prop "attachment"))
-	 (d (ido-completing-read "File to remove: " files)))
+	 (d (completing-read "File to remove: " files)))
     (org-msg-set-prop "attachment" (delete d files))))
 
 (defun org-msg-attach ()
