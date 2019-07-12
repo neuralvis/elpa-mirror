@@ -1,2 +1,0 @@
-
-(execline . [(20190705 1753) ((emacs (26 1)) (s (1 6 0))) "Major mode for editing execline scripts" single ((:commit . "59ef6122225845ddc32af76aac4fa28d2d92f305") (:keywords "tools" "unix" "languages") (:authors ("Dmitry Bogatov" . "KAction@debian.org")) (:maintainer "Dmitry Bogatov" . "KAction@debian.org") (:url . "https://gitlab.com/KAction/emacs-execline"))])

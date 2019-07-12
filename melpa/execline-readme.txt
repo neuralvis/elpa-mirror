@@ -4,7 +4,8 @@ Major mode for editing execline scripts.  Features:
   * completion of builtin commands.
   * working "comment-region" command.
   * indentation of blocks
-  * automatic enable of mode in *.ex files.
+  * automatic enable of mode in *.exec files.
+  * automatic enable of mode in files with "execlineb" interpreter
 
 Missing features:
 
