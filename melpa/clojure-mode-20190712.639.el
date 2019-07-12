@@ -1,7 +1,7 @@
 ;;; clojure-mode.el --- Major mode for Clojure code -*- lexical-binding: t; -*-
 
-;; Copyright © 2007-2018 Jeffrey Chu, Lennart Staflin, Phil Hagelberg
-;; Copyright © 2013-2018 Bozhidar Batsov, Artur Malabarba
+;; Copyright © 2007-2019 Jeffrey Chu, Lennart Staflin, Phil Hagelberg
+;; Copyright © 2013-2019 Bozhidar Batsov, Artur Malabarba
 ;;
 ;; Authors: Jeffrey Chu <jochu0@gmail.com>
 ;;       Lennart Staflin <lenst@lysator.liu.se>
@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20190711.1030
+;; Package-Version: 20190712.639
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.11.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
