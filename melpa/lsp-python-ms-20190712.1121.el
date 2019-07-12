@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson
 ;; Version: 0.2.0
-;; Package-Version: 20190701.802
+;; Package-Version: 20190712.1121
 ;; Package-Requires: ((cl-lib "0.6.1") (lsp-mode "6.0") (python "0.26.1") (json "1.4") (emacs "24.4"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -124,11 +124,11 @@ With prefix, FORCED to redownload the server."
   (unless (and (not forced)
                (file-exists-p lsp-python-ms-executable))
     (let ((temp-file (make-temp-file "mspyls" nil ".zip"))
-          (unzip-script (cond ((executable-find "unzip")
-                               "bash -c 'mkdir -p %2$s && unzip -qq %1$s -d %2$s'")
-                              ((executable-find "powershell")
+          (unzip-script (cond ((executable-find "powershell")
                                "powershell -noprofile -noninteractive \
 -nologo -ex bypass Expand-Archive -path '%s' -dest '%s'")
+                              ((executable-find "unzip")
+                               "bash -c 'mkdir -p %2$s && unzip -qq %1$s -d %2$s'")
                               (t (error "Unable to unzip! You may need to install the `unzip` executable.")))))
       (message "Downloading Microsoft Python Language Server...")
 
