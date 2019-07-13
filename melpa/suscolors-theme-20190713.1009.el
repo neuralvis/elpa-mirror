@@ -2,7 +2,7 @@
 
 ;; Copyright (c) 2016 Tomas Vojtisek
 ;; URL: https://github.com/TheSuspiciousWombat/SusColors-emacs
-;; Package-Version: 20161109.2015
+;; Package-Version: 20190713.1009
 
 ;;; Commentary:
 
@@ -13,8 +13,7 @@
 (deftheme suscolors
   "Colorful theme, inspired by Gruvbox.")
 
-(let (
-      (bg "#262626")
+(let ((bg "#262626")
       (fg "#d7af5f")
       (orange "#d78700")
       (orange2 "#d75f00")
@@ -33,11 +32,11 @@
       (cyan "#008787")
       (cyan2 "#00afaf")
       (red "#D8553B")
-      (red2 "#EF3935")
-      )
+      (red2 "#EF3935"))
   (custom-theme-set-faces
    'suscolors
    `(default ((t (:foreground ,fg :background ,bg))))
+   `(fringe ((t (:inherit default))))
    `(font-lock-string-face ((t (:foreground ,green))))
    `(font-lock-builtin-face ((t (:foreground ,blue))))
    `(region ((t (:background ,grey3))))
@@ -69,11 +68,11 @@
    ;;`(magit-diff-removed-highlight ((t (:background "yellow"))))
    ;;`(magit-diff-context-highlight ((t (:background ,bg))))
    ;; Org
-   `(org-level-1 ((t (:foreground ,green))))
-   `(org-level-2 ((t (:foreground ,red))))
-   `(org-level-3 ((t (:foreground ,blue))))
-   `(org-level-4 ((t (:foreground ,orange))))
-   `(org-level-5 ((t (:foreground ,pink))))
+   `(org-level-1 ((t (:height 2.0 :foreground ,green))))
+   `(org-level-2 ((t (:height 1.8 :foreground ,red))))
+   `(org-level-3 ((t (:height 1.6 :foreground ,blue))))
+   `(org-level-4 ((t (:height 1.6 :foreground ,orange))))
+   `(org-level-5 ((t (:height 1.2 :foreground ,pink))))
    ;; Helm
    `(helm-selection ((t (:foreground ,orange :background ,grey2 :weight bold))))
    `(helm-ff-directory ((t (:foreground ,green :weight bold))))
