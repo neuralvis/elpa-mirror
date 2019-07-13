@@ -5,7 +5,7 @@
 ;; Author: Yujie Wen <yjwen.ty at gmail dot com>
 ;; Created: 2013-04-27
 ;; Version: 1.0
-;; Package-Version: 20190710.1603
+;; Package-Version: 20190713.1555
 ;; Package-Requires: ((org "8.3"))
 ;; Keywords: outlines, hypermedia, slideshow, presentation
 
@@ -1054,7 +1054,7 @@ contextual information."
 						(length (number-to-string (+ code-length
 									     num-start)))))))
 		     (org-export-format-code
-		      code
+		      (org-html-encode-plain-text code)
 		      (lambda (loc line-num ref)
 			(setq loc
 			      (concat

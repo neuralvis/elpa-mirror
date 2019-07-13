@@ -4,7 +4,7 @@
 ;; Author: Daniel Barreto
 ;; Created: Tue Aug 22 13:46:01 2017 (+0200)
 ;; Version: 0.1.0
-;; Package-Version: 20180815.610
+;; Package-Version: 20190713.1748
 ;; Package-Requires: ((emacs "25") (s "1.9.0") (password-store "0.1"))
 ;; URL: https://github.com/volrath/password-store-otp.el
 ;; Keywords: tools, pass
@@ -44,6 +44,10 @@
   :group 'password-store
   :type '(choice (const :tag "Off" nil)
                  (file :tag "Expandable file name")))
+
+(defun password-store-otp--get-screenshot-executable ()
+  "Return the name of the executable that should be used to take screenshots."
+  (if (eq window-system 'mac) "screencapture" "import"))
 
 (defun password-store-otp--otpauth-lines (lines)
   "Return from LINES those that are OTP urls."
@@ -165,8 +169,9 @@ primary \"pass otp\" command line verb."
 (defun password-store-otp-append-from-image (entry)
   "Check clipboard for an image and scan it to get an OTP URI, append it to ENTRY."
   (interactive (list (password-store-otp-completing-read)))
-  (let ((qr-image-filename (password-store-otp--get-qr-image-filename entry)))
-    (when (not (zerop (call-process "import" nil nil nil qr-image-filename)))
+  (let ((qr-image-filename (password-store-otp--get-qr-image-filename entry))
+        (screenshot-executable (password-store-otp--get-screenshot-executable)))
+    (when (not (zerop (call-process screenshot-executable nil nil nil qr-image-filename)))
       (error "Couldn't get image from clipboard"))
     (with-temp-buffer
       (condition-case nil

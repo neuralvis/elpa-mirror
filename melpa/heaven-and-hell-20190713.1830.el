@@ -4,7 +4,7 @@
 
 ;; Author: Valentin Ignatev <valentignatev@gmail.com>
 ;; URL: https://github.com/valignatev/heaven-and-hell
-;; Package-Version: 20180421.921
+;; Package-Version: 20190713.1830
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: faces
@@ -28,7 +28,9 @@
 ;; Default light is Emacs default theme, default dark is wombat
 ;; (setq heaven-and-hell-themes
 ;;       '((light . tsdh-light)
-;; 	(dark . (tsdh-dark wombat))))
+;;         (dark . (tsdh-dark wombat))))
+;; If you want to load themes without manually confirming them, you can do
+;; (setq heaven-and-hell-load-theme-no-confirm t)
 ;;
 ;; Add init-hook so heaven-and-hell can load your theme
 ;; (add-hook 'after-init-hook 'heaven-and-hell-init-hook)
@@ -48,6 +50,9 @@ Theme can be the list.")
 (defvar heaven-and-hell-theme-type 'light
   "Set default theme, either `light' or `dark'.")
 
+(defvar heaven-and-hell-load-theme-no-confirm nil
+  "Call `'load-theme with NO-CONFIRM if non-nil.")
+
 (defun heaven-and-hell-themes-switch-to ()
   "Return themes which should be loaded according to current `heaven-and-hell-theme-type'."
   (cdr (assoc heaven-and-hell-theme-type heaven-and-hell-themes)))
@@ -61,8 +66,8 @@ Themes will be loaded if they weren't loaded previously."
   (when theme-or-themes
     (let ((themes (if (listp theme-or-themes) theme-or-themes `(,theme-or-themes))))
       (dolist (theme themes)
-	(unless (custom-theme-p theme)
-	  (load-theme theme)))
+        (when heaven-and-hell-load-theme-no-confirm
+          (load-theme theme t t)))
       (custom-set-variables `(custom-enabled-themes (quote ,themes))))))
 
 ;;;###autoload
