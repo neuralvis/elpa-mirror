@@ -1,0 +1,2 @@
+
+(prodigy . [(20190714 1036) ((s (1 8 0)) (dash (2 4 0)) (f (0 14 0)) (emacs (24))) "Manage external services from within Emacs" single ((:commit . "cd7741c51064449d5dd3f37fcbf4fb5ed9b69491") (:authors ("Johan Andersson" . "johan.rejeep@gmail.com")) (:maintainer "Johan Andersson" . "johan.rejeep@gmail.com") (:url . "http://github.com/rejeep/prodigy.el"))])
