@@ -21,7 +21,7 @@
 
 ;;; Author: Satoshi Egi <egisatoshi@gmail.com>
 ;;; URL: https://github.com/egisatoshi/egison3/blob/master/elisp/egison-mode.el
-;; Package-Version: 20181109.1624
+;; Package-Version: 20190714.236
 ;;; Version: 0.1.5
 
 ;;; Commentary:
@@ -72,8 +72,10 @@
 
      "\\<loop\\>"
      "\\<match\\>"
+     "\\<match-dfs\\>"
      "\\<match-lambda\\>"
      "\\<match-all\\>"
+     "\\<match-all-dfs\\>"
      "\\<match-all-lambda\\>"
      "\\<matcher\\>"
      "\\<self\\>"
@@ -195,8 +197,10 @@
         ((equal "tensor-map" name) 2)
         ((equal "loop" name) 2)
         ((equal "match" name) 2)
+        ((equal "match-dfs" name) 2)
         ((equal "match-lambda" name) 2)
         ((equal "match-all" name) 2)
+        ((equal "match-all-dfs" name) 2)
         ((equal "match-all-lambda" name) 2)
         ((equal "matcher" name) 2)
         ((equal "algebraic-data-matcher" name) 2)
