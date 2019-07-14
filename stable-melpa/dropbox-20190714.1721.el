@@ -5,7 +5,7 @@
 
 ;; Author: Pavel Panchekha <me@pavpanchekha.com>
 ;; Version: 0.9.1
-;; Package-Version: 20181208.2248
+;; Package-Version: 20190714.1721
 ;; Package-Requires: ((json "1.2") (oauth "1.0.3"))
 ;; Keywords: dropbox
 ;; Contributors:
@@ -343,18 +343,32 @@ debugging but otherwise very intrusive."
     (match-string 1 filename))
    (t (substring filename 4))))
 
-(defun dropbox-handle-expand-file-name (filename &optional default-directory)
-  "Return the canonicalized, absolute version of FILENAME"
+(defun dropbox-remove-slash (filename)
+  "Transform /db:/notes into /db:notes."
+  (if (dropbox-file-p filename)
+      (if (string-match "^/db:/\\(.*\\)$" filename)
+          (concat dropbox-prefix (match-string 1 filename))
+        filename)
+    filename))
 
-  (if (or (file-name-absolute-p filename)
-          (not (dropbox-file-p default-directory)))
-      filename
-    (concat
-     dropbox-prefix
-     (substring
-      (expand-file-name filename
-                        (concat "/" (dropbox-strip-prefix default-directory)))
-      1))))
+(defun dropbox-run-real-handler (operation args)
+  "Invoke normal file name handler for OPERATION.
+First arg specifies the OPERATION, second arg is a list of arguments to
+pass to the OPERATION."
+  (let* ((inhibit-file-name-handlers
+          `(dropbox-handler
+            .
+            ,(and (eq inhibit-file-name-operation operation)
+                  inhibit-file-name-handlers)))
+         (inhibit-file-name-operation operation))
+    (apply operation args)))
+
+(defun dropbox-handle-expand-file-name (filename &optional dir)
+  "Like the normal operation, except that slashes are removed from
+dropbox-like files (/db:/something is transformed into /db:something)."
+  (dropbox-run-real-handler 'expand-file-name
+                            (list (dropbox-remove-slash filename)
+                                  (dropbox-remove-slash dir))))
 
 (defun dropbox-handle-file-truename (filename)
   filename)
@@ -366,10 +380,9 @@ debugging but otherwise very intrusive."
 
 (defun dropbox-handle-directory-file-name (directory)
   "Remove the final slash from a directory name"
-
-  (if (eq (aref directory (1- (length directory))) ?/)
-      (substring directory 0 -1)
-    directory))
+  (concat "/db:" (dropbox-run-real-handler
+                  'directory-file-name
+                  (list (dropbox-strip-prefix directory)))))
 
 (defun dropbox-handle-file-name-as-directory (directory)
   "Remove the final slash from a directory name"
@@ -387,7 +400,9 @@ debugging but otherwise very intrusive."
   (make-temp-name (concat "/tmp/dropbox-el-" (file-name-nondirectory buffer-file-name))))
 
 (defun dropbox-handle-unhandled-file-name-directory (filename)
-  dropbox-prefix)
+  "Files like /db:something are not usable without the intervention of a file
+handler, thus return `nil'."
+  nil)
 
 ;;; Predicates
 
@@ -471,7 +486,7 @@ FILENAME names a directory"
          (dropbox--metadata (dropbox-strip-prefix filename))))
     ;; (if (dropbox-error-p resp)
     ;;     nil
-    (let ((date (date-to-time (alist-get 'client_modified resp)))
+    (let ((date (date-to-time (or (alist-get 'client_modified resp) "Mon, 01 Jan 0000 00:00:00 +0000")))
 	  (folder (string= "folder" (alist-get '.tag resp)))) ;; Is dir?
       (list folder
             1 ; Number of links
@@ -761,7 +776,7 @@ are /db: files, but otherwise is not necessarily atomic."
           (erase-buffer))
         (let* ((path (encode-coding-string (dropbox--sanitize-path (dropbox-strip-prefix filename)) 'utf-8))
                (contents (dropbox-request 'download nil (json-encode `(("path" . ,path))))))
-          (insert contents)))
+          (insert (decode-coding-string contents 'iso-latin-1-unix))))
     (set-buffer-modified-p nil))
   (when visit
     (setf buffer-file-name filename)
@@ -788,7 +803,7 @@ are /db: files, but otherwise is not necessarily atomic."
       (if (not (file-exists-p filename))
           (error "File to copy doesn't exist")
         (with-temp-file newname
-          (set-buffer-file-coding-system 'raw-text)
+          (set-buffer-file-coding-system 'utf-8)
           (dropbox-handle-insert-file-contents filename)))
       newname))))
 
