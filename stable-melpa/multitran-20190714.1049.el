@@ -5,10 +5,10 @@
 ;; Author: Zajcev Evgeny <zevlg@yandex.ru>
 ;; Created: Wed Apr 13 01:00:05 2016
 ;; Keywords: dictionary, hypermedia
-;; Package-Version: 20190402.2004
+;; Package-Version: 20190714.1049
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
-;; Version: 0.4.8
-(defconst multitran-version "0.4.8")
+;; Version: 0.4.9
+(defconst multitran-version "0.4.9")
 
 ;; multitran.el is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@
 ;;; History:
 ;;  ~~~~~~~
 ;;
-;; Version 0.4.9: [TODO]
+;; Version 0.4.10: [TODO]
 ;;   - Support for symbols like &#x2192
 ;;   - Support for <a target=xxx ...>, seen in "the" translation
 ;; 
@@ -226,7 +226,7 @@ Order does not matter."
 (defvar multitran-word "" "Currently translated word.")
 (defvar multitran-saved-window-condition nil)
 
-(defconst multitran-url "https://multitran.com"
+(defconst multitran-url "https://www.multitran.com"
   "URL to use in order to search for words.")
 
 (defface multitran-link-face
@@ -723,7 +723,7 @@ Use `C-u' prefix to select languages."
   (when (> (length multitran-history) multitran-history-max)
     (setq multitran-history (butlast multitran-history)))
 
-  (let ((langs (copy-list multitran-languages)))
+  (let ((langs (cl-copy-list multitran-languages)))
     (when (string-match "l1=\\([0-9]+\\)" url)
       (setcar langs (multitran-lang--by-code (match-string 1 url))))
     (when (string-match "l2=\\([0-9]+\\)" url)
