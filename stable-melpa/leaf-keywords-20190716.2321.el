@@ -5,8 +5,8 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; Keywords: lisp settings
-;; Package-Version: 20190710.1619
-;; Version: 1.2.1
+;; Package-Version: 20190716.2321
+;; Version: 1.2.2
 ;; URL: https://github.com/conao3/leaf-keywords.el
 ;; Package-Requires: ((emacs "24.4") (leaf "3.1.0"))
 
@@ -352,7 +352,7 @@ Example:
                                   ((and (listp elm) (eq 'quote (car elm))) (eval elm))))
                           fns)))))
 
-    ((memq leaf--key '(:delight))
+    ((memq leaf--key '(:delight :diminish))
      (mapcan
       (lambda (elm)
         (cond
@@ -362,14 +362,6 @@ Example:
          ((and (listp elm) (listp (car elm))) (mapcar (lambda (el) `(',(car el) ,@(cdr el))) elm))
          ((listp elm) `((',(car elm) ,@(cdr elm))))))
       leaf--value))
-
-    ((memq leaf--key '(:diminish))
-     (mapcar
-      (lambda (elm) (if (stringp (car elm)) `(,leaf--name ,(car elm)) elm))
-      (mapcar
-       (lambda (elm)
-         (leaf-keywords-normalize-list-in-list (if (eq t elm) leaf--name elm) 'allow-dotlist))
-       leaf--value)))
 
     ((memq leaf--key '(:el-get))
      (mapcar
