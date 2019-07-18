@@ -4,7 +4,7 @@
 ;;
 ;; Author: Sebastian Monia <smonia@outlook.com>
 ;; URL: https://github.com/sebasmonia/pepita.git
-;; Package-Version: 20190714.1724
+;; Package-Version: 20190717.2240
 ;; Package-Requires: ((emacs "25") (csv "2.1"))
 ;; Version: 1.0
 ;; Keywords: tools convenience matching
@@ -497,7 +497,6 @@ Toggle column: <span id=\"cols\"> </span>
 
 (defun pepita--store-history (query-data)
   "Store QUERY-DATA from `pepita--request-history` formatted for `pepita--queries-history-mode`."
-  (message (prin1-to-string query-data))
   (let-alist query-data
     (let ((now (format-time-string "%Y-%m-%d %T")))
       (push(list now
