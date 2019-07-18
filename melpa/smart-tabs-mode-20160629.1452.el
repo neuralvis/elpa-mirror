@@ -12,7 +12,6 @@
 ;;         Matt Renaud <mrenaud92@gmail.com>
 ;; Maintainer: Joel C. Salomon <joelcsalomon@gmail.com>
 ;; URL: http://www.emacswiki.org/emacs/SmartTabs
-;; Package-Version: 20160629.1452
 ;; Created: 19 Sep 2011
 ;; Version: 1.0
 ;; Keywords: languages
