@@ -11,11 +11,11 @@
 ;; Filename: helm-recoll.el
 ;; Description: helm interface for the recoll desktop search tool.
 ;; URL: https://github.com/emacs-helm/helm-recoll
-;; Package-Version: 20190715.1354
+;; Package-Version: 20190719.1211
 ;; Keywords: convenience
-;; Compatibility: GNU Emacs >= 24.4
-;; Version: 0.5
-;; Package-Requires: ((helm "1.9.9"))
+;; Compatibility: GNU Emacs >= 26.2
+;; Version: 1.0
+;; Package-Requires: ((helm "3.3"))
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -264,9 +264,6 @@ For more details see:
 
 ;;; Main
 
-(defun helm-recoll--set-pattern-seq (seq)
-  (cl-loop for cand in seq append (list "-q" (shell-quote-argument cand))))
-
 (defun helm-recoll--setup-cmd (dir)
   (let* ((patterns (split-string helm-pattern))
          (option (helm-aand (member (car patterns) '("-l" "-f" "-a" "-o"))
@@ -275,7 +272,7 @@ For more details see:
     (append (if option
                 (helm-append-at-nth helm-recoll-options (list option) 1)
               helm-recoll-options)
-            (list "-c" dir) (helm-recoll--set-pattern-seq pattern-seq))))
+            (list "-c" dir) (cons "-q" pattern-seq))))
 
 (defun helm-recoll--candidates-process (&optional confdir)
   "Candidates function used by `helm-recoll-source'."
