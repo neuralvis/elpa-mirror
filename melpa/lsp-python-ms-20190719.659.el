@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson
 ;; Version: 0.2.0
-;; Package-Version: 20190712.1121
+;; Package-Version: 20190719.659
 ;; Package-Requires: ((cl-lib "0.6.1") (lsp-mode "6.0") (python "0.26.1") (json "1.4") (emacs "24.4"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -122,7 +122,7 @@ stable, beta or daily.")
 With prefix, FORCED to redownload the server."
   (interactive "P")
   (unless (and (not forced)
-               (file-exists-p lsp-python-ms-executable))
+               (executable-find lsp-python-ms-executable))
     (let ((temp-file (make-temp-file "mspyls" nil ".zip"))
           (unzip-script (cond ((executable-find "powershell")
                                "powershell -noprofile -noninteractive \
@@ -255,10 +255,10 @@ other handlers. "
 (defun lsp-python-ms--command-string ()
   "Return the command to start the server."
   ;; Try to download server if it doesn't exists
-  (unless (file-exists-p lsp-python-ms-executable)
+  (unless (executable-find lsp-python-ms-executable)
     (lsp-python-ms-setup))
 
-  (if (file-exists-p lsp-python-ms-executable)
+  (if (executable-find lsp-python-ms-executable)
       lsp-python-ms-executable
     (error (concat "Cannot find Microsoft Python Language Server executable! It's expected to be "
                    lsp-python-ms-executable))))
