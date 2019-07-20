@@ -62,6 +62,19 @@ screenshot:
 
 ![bing-dict-screenshot2](./screenshot2.png)
 
+## Command Line Usage
+
+Add the following script to your `PATH` to look up a word from the command line:
+
+```
+#!/path/to/emacs --script
+(add-to-list 'load-path "/path/to/bing-dict.el")
+(require 'bing-dict)
+(defun main ()
+  (bing-dict-brief (format "%s" command-line-args-left) t))
+(main)
+```
+
 ## For Features Requests
 This extension aims for a quick search for a word. Currently this extension only
 parses several sections in the search results and show a brief message in the

@@ -1,0 +1,2 @@
+
+(helm-projectile . [(20190719 2136) ((helm (1 9 9)) (projectile (0 14 0)) (cl-lib (0 3))) "Helm integration for Projectile" single ((:commit . "277028889cfdddaf508c9137e607b0394edac851") (:keywords "project" "convenience") (:authors ("Bozhidar Batsov")) (:maintainer "Bozhidar Batsov") (:url . "https://github.com/bbatsov/helm-projectile"))])
