@@ -1,2 +1,0 @@
-
-(android-env . [(20190720 115) ((emacs (24 3))) "Helper functions for working in android" single ((:commit . "3e469d8c442952e62c59923f643cf5fc9b010235") (:keywords "android" "gradle" "java" "tools" "convenience") (:authors ("Fernando Jascovich")) (:maintainer "Fernando Jascovich") (:url . "https://github.com/fernando-jascovich/android-env.el"))])

@@ -1,2 +1,0 @@
-
-(ejson-mode . [(20190720 323) ((emacs (25))) "Major mode for editing ejson files." single ((:commit . "27fed9b1b24a4a90c80e5d0516879afdffabece5") (:keywords "convenience" "languages" "tools") (:authors ("Dante Catalfamo")) (:maintainer "Dante Catalfamo") (:url . "https://github.com/dantecatalfamo/ejson-mode"))])

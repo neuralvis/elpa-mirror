@@ -2,7 +2,8 @@ Major mode designed for editing ejson files.  Will automatocally
 generate encryption keys if none are present in the file and allows
 for manual in-buffer encryption and decryption, and optional
 automatic ejson encryption on save.  Location of ejson keystore and
-binary can be set manually.
+binary can be set manually.  See https://github.com/Shopify/ejson
+for more details.
 
 Default keybindings
 

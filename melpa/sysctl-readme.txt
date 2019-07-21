@@ -1,5 +1,5 @@
 View and edit sysctl in a hierarchical structure.
-Works on Linux, OpenBSD, and macOS.
+Works on Linux, FreeBSD, OpenBSD, and macOS.
 Will work over TRAMP via SSH as well, including multiple hops.
 
 Commands
@@ -13,4 +13,4 @@ C-c C-k Refresh the value of current position in the sysctl tree
 
 Bugs
 
-FreeBSD's multiline values currently break parsing
+Only the first line of a multiline value gets shown

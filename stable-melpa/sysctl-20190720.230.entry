@@ -1,2 +1,0 @@
-
-(sysctl . [(20190720 230) ((emacs (26))) "Manage sysctl though org-mode" single ((:commit . "89636c7127ac4abc18d6b454441b02008ec89d41") (:keywords "sysctl" "tools" "unix") (:authors ("Dante Catalfamo")) (:maintainer "Dante Catalfamo") (:url . "https://github.com/dantecatalfamo/sysctl.el"))])
