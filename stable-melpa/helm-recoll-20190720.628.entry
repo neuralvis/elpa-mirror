@@ -1,2 +1,2 @@
 
-(helm-recoll . [(20190720 628) ((helm (3 3))) "helm interface for the recoll desktop search tool." single ((:commit . "638c0362d6343732eff6d707924b3de707221058") (:keywords "convenience") (:authors ("Thierry Volpiatto <thierry.volpiatto at gmail.com>")) (:maintainer "Thierry Volpiatto <thierry.volpiatto at gmail.com>") (:url . "https://github.com/emacs-helm/helm-recoll"))])
+(helm-recoll . [(20190720 628) ((helm (3 3))) "helm interface for the recoll desktop search tool." single ((:commit . "0332bc9d81009802faa3596ce7d64a8d41c90fe3") (:keywords "convenience") (:authors ("Thierry Volpiatto <thierry.volpiatto at gmail.com>")) (:maintainer "Thierry Volpiatto <thierry.volpiatto at gmail.com>") (:url . "https://github.com/emacs-helm/helm-recoll"))])

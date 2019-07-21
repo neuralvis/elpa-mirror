@@ -1,2 +1,0 @@
-
-(centaur-tabs . [(20190721 251) ((emacs (24 4)) (powerline (2 4)) (cl-lib (0 5))) "Aesthetic, modern looking customizable tabs plugin" single ((:commit . "846f84c405fd476798544f469cac0e4c20ae452b") (:authors ("Emmanuel Bustos" . "ema2159@gmail.com")) (:maintainer "Emmanuel Bustos" . "ema2159@gmail.com") (:url . "https://github.com/ema2159/centaur-tabs"))])
