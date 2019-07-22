@@ -1,14 +1,14 @@
 ;;; org-brain.el --- Org-mode concept mapping         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017--2018  Erik Sjöstrand
+;; Copyright (C) 2017--2019  Erik Sjöstrand
 ;; MIT License
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20190614.1501
+;; Package-Version: 20190722.855
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9"))
-;; Version: 0.5
+;; Version: 0.6
 
 ;;; Commentary:
 
@@ -66,10 +66,9 @@ will be considered org-brain entries."
   :group 'org-brain
   :type '(repeat string))
 
-(defcustom org-brain-suggest-stored-link-as-resource t
-  "If `org-brain-add-resource' should suggest the last link saved with `org-store-link'."
-  :group 'org-brain
-  :type '(boolean))
+(make-obsolete-variable 'org-brain-suggest-stored-link-as-resource
+                        "org-brain-suggest-stored-link-as-resource isn't needed because of `org-insert-link-global'."
+                        "0.6")
 
 (defcustom org-brain-data-file (expand-file-name ".org-brain-data.el" org-brain-path)
   "Where org-brain data is saved."
@@ -261,6 +260,9 @@ Insert links using `org-insert-link'."
   '((t . (:inherit org-brain-button)))
   "Face for pinned entries.")
 
+(defface org-brain-selected
+  '((t . (:inherit org-brain-button)))
+  "Face for selected entries.")
 
 ;; * API
 
@@ -279,6 +281,8 @@ Insert links using `org-insert-link'."
   "Regular expression matching the first line of a resources drawer.")
 
 (defvar org-brain-pins nil "List of pinned org-brain entries.")
+
+(defvar org-brain-selected nil "List of selected org-brain entries.")
 
 ;;;###autoload
 (defun org-brain-update-id-locations ()
@@ -1155,7 +1159,7 @@ After refiling, all headlines will be given an id."
 
 (defun org-brain--remove-relationships (entry &optional recursive)
   "Remove all external relationships from ENTRY.
-Also unpin the entry.
+Also unpin and unselect the entry.
 
 If RECURSIVE is t, remove local children's relationships."
   (dolist (child (org-brain--linked-property-entries
@@ -1166,7 +1170,8 @@ If RECURSIVE is t, remove local children's relationships."
     (org-brain-remove-relationship parent entry))
   (dolist (friend (org-brain-friends entry))
     (org-brain-remove-friendship entry friend))
-  (ignore-errors (org-brain-pin entry -1))
+  (ignore-errors (org-brain-pin entry -1)
+                 (org-brain-select entry -1))
   (when recursive
     (dolist (child (org-brain--local-children entry))
       (org-brain--remove-relationships child t))))
@@ -1311,6 +1316,114 @@ If STATUS is omitted, toggle between pinned / not pinned."
                (message "Pin removed."))
            (error "Entry isn't pinned"))))
   (org-brain--revert-if-visualizing))
+
+;;;###autoload
+(defun org-brain-select (entry &optional status)
+  "Toggle selection of ENTRY.
+If run interactively, get ENTRY from context.
+
+If STATUS is positive, select ENTRY.  If negative, unselect it.
+If STATUS is omitted, toggle between selected / not selected."
+  (interactive (list (org-brain-entry-at-pt)))
+  (when (null entry) (error "Cannot select null entry"))
+  (cond ((eq status nil)
+         (if (member entry org-brain-selected)
+             (org-brain-select entry -1)
+           (org-brain-select entry 1)))
+        ((>= status 1)
+         (if (member entry org-brain-selected)
+             (error "Entry is already selected")
+           (push entry org-brain-selected)
+           (org-brain-save-data)
+           (message "Entry selected.")))
+        ((< status 1)
+         (if (member entry org-brain-selected)
+             (progn
+               (setq org-brain-selected (delete entry org-brain-selected))
+               (org-brain-save-data)
+               (message "Entry unselected."))
+           (error "Entry isn't selected"))))
+  (org-brain--revert-if-visualizing))
+
+;;;###autoload
+(defun org-brain-select-button ()
+  "Toggle selection of the entry linked to by the button at point."
+  (interactive)
+  (when-let* ((button (button-at (point)))
+              (id (button-get button 'id))
+              (entry (or (org-brain-entry-from-id id)
+                         (org-entry-restore-space id))))
+    (org-brain-select entry)))
+
+;;;###autoload
+(defun org-brain-clear-selected ()
+  "Clear the selected list"
+  (interactive)
+  (setq org-brain-selected nil)
+  (org-brain--revert-if-visualizing))
+
+(defun org-brain-add-selected-children (entry)
+  "Add selected entries as children of ENTRY.
+If run interactively, get ENTRY from context.
+
+When ENTRY is in the selected list, it is ignored."
+  (interactive (list (org-brain-entry-at-pt)))
+  ;; org-brain-add-child takes a list of children,
+  ;; but we call it one at a time
+  ;; so that errors don't interrupt the bulk operation.
+  (dolist (child org-brain-selected)
+    (ignore-errors (org-brain-add-child entry (list child)))))
+
+(defun org-brain-remove-selected-children (entry)
+  "Remove selected entries from the list of ENTRY's children
+If run interactively, get ENTRY from context.
+
+Ignores selected entries that are not children of ENTRY."
+  (interactive (list (org-brain-entry-at-pt)))
+  (dolist (child org-brain-selected)
+    (ignore-errors (org-brain-remove-child entry child))))
+
+(defun org-brain-add-selected-parents (entry)
+  "Add selected entries as parents of ENTRY.
+If run interactively, get ENTRY from context.
+
+When ENTRY is in the selected list, it is ignored."
+  (interactive (list (org-brain-entry-at-pt)))
+  ;; org-brain-add-parent takes a list of parents,
+  ;; but we call it one at a time
+  ;; so that errors don't interrupt the bulk operation.
+  (dolist (parent org-brain-selected)
+    (ignore-errors (org-brain-add-parent entry (list parent)))))
+
+(defun org-brain-remove-selected-parents (entry)
+  "Remove selected entries from the list of ENTRY's parents
+If run interactively, get ENTRY from context.
+
+Ignores selected entries that are not parents of ENTRY."
+  (interactive (list (org-brain-entry-at-pt)))
+  (dolist (parent org-brain-selected)
+    (ignore-errors (org-brain-remove-parent entry parent))))
+
+(defun org-brain-add-selected-friendships (entry)
+  "Add selected entries as friends of ENTRY.
+If run interactively, get ENTRY from context.
+
+When ENTRY is in the selected list, it is ignored."
+  (interactive (list (org-brain-entry-at-pt)))
+  ;; org-brain-add-parent takes a list of friends,
+  ;; but we call it one at a time
+  ;; so that errors don't interrupt the bulk operation.
+  (dolist (friend org-brain-selected)
+    (ignore-errors (org-brain-add-friendship entry (list friend)))))
+
+(defun org-brain-remove-selected-friendships (entry)
+    "Remove selected entries from the list of ENTRY's friends
+If run interactively, get ENTRY from context.
+
+Ignores selected entries that are not friends of ENTRY."
+  (interactive (list (org-brain-entry-at-pt)))
+  (dolist (selected org-brain-selected)
+    (ignore-errors (org-brain-remove-friendship entry selected))))
 
 ;;;###autoload
 (defun org-brain-set-title (entry title)
@@ -1524,6 +1637,7 @@ Unless WANDER is t, `org-brain-stop-wandering' will be run."
           (entry-pos))
       (delete-region (point-min) (point-max))
       (org-brain--vis-pinned)
+      (org-brain--vis-selected)
       (if org-brain-visualizing-mind-map
           (setq entry-pos (org-brain-mind-map org-brain--vis-entry org-brain-mind-map-parent-level org-brain-mind-map-child-level))
         (insert "\n\n")
@@ -1615,10 +1729,13 @@ cancelled manually with `org-brain-stop-wandering'."
    (org-brain-title entry (or (not org-brain-visualizing-mind-map)
                               org-brain-cap-mind-map-titles))
    'action (lambda (_x) (org-brain-visualize entry))
+   'id (org-brain-entry-identifier entry)
    'follow-link t
    'help-echo (org-brain-description entry)
    'aa2u-text t
-   'face (or face 'org-brain-button)))
+   'face (if (member entry org-brain-selected)
+             'org-brain-selected
+           (or face 'org-brain-button))))
 
 (defun org-brain-insert-resource-button (resource &optional indent)
   "Insert a new line with a RESOURCE button, indented by INDENT spaces."
@@ -1631,31 +1748,34 @@ cancelled manually with `org-brain-stop-wandering'."
    'follow-link t
    'aa2u-text t))
 
-(defun org-brain-add-resource (link &optional description prompt entry)
-  "Insert LINK with DESCRIPTION in an entry.
-If PROMPT is non nil, use `org-insert-link' even if not being run interactively.
-If ENTRY is omitted, try to get it from context or prompt for it."
-  (interactive (or (and org-brain-suggest-stored-link-as-resource
-                        (when-let ((last-stored-link (car org-stored-links)))
-                          (list (substring-no-properties (car last-stored-link))
-                                (cadr last-stored-link)
-                                t)))
-                   '(nil)))
+(defun org-brain-add-resource (&optional link description prompt entry)
+  "Insert LINK with DESCRIPTION in ENTRY.
+If ENTRY is nil, try to get it from context or prompt for it.
+If LINK is nil then use `org-insert-link-global'. Otherwise:
+If PROMPT is non nil, let user edit the resource even if run non-interactively."
+  (interactive)
   (unless entry
     (setq entry (or (ignore-errors (org-brain-entry-at-pt))
                     (org-brain-choose-entry "Insert link in entry: " 'all))))
   (cl-flet ((insert-resource-link
              ()
-             (unless (and link (not prompt))
-               (setq link (read-string "Insert link: " link))
-               (when (string-match org-bracket-link-regexp link)
-                 (let ((linkdesc (match-string 3 link)))
-                   (when (and (not description) linkdesc)
-                     (setq description linkdesc))
-                   (setq link (match-string 1 link))))
-               (setq description (read-string "Link description: " description)))
-             (newline-and-indent)
-             (insert (format "- %s" (org-make-link-string link description)))
+             (if link
+                 (progn
+                   (when prompt
+                     (setq link (read-string "Insert link: " link))
+                     (when (string-match org-bracket-link-regexp link)
+                       (let ((linkdesc (match-string 3 link)))
+                         (when (and (not description) linkdesc)
+                           (setq description linkdesc))
+                         (setq link (match-string 1 link))))
+                     (setq description (read-string "Link description: " description)))
+                   (newline-and-indent)
+                   (insert "- " (org-make-link-string link description)))
+               (when-let ((l (with-temp-buffer
+                               (org-insert-link-global)
+                               (buffer-string))))
+                 (newline-and-indent)
+                 (insert "- " l)))
              (save-buffer)))
     (if (org-brain-filep entry)
         ;; File entry
@@ -1755,6 +1875,9 @@ See `org-brain-add-resource'."
 (define-key org-brain-visualize-mode-map "*" 'org-brain-add-child-headline)
 (define-key org-brain-visualize-mode-map "h" 'org-brain-add-child-headline)
 (define-key org-brain-visualize-mode-map "n" 'org-brain-pin)
+(define-key org-brain-visualize-mode-map ";" 'org-brain-select)
+(define-key org-brain-visualize-mode-map "." 'org-brain-select-button)
+(define-key org-brain-visualize-mode-map ":" 'org-brain-clear-selected)
 (define-key org-brain-visualize-mode-map "t" 'org-brain-set-title)
 (define-key org-brain-visualize-mode-map "j" 'forward-button)
 (define-key org-brain-visualize-mode-map "k" 'backward-button)
@@ -1792,6 +1915,16 @@ Helper function for `org-brain-visualize'."
     (insert "  ")
     (org-brain-insert-visualize-button pin 'org-brain-pinned))
   (insert "\n"))
+
+(defun org-brain--vis-selected ()
+  "Insert selected entries.
+Helper function for `org-brain-visualize'."
+  (unless (null org-brain-selected)
+    (insert "SELECTED:")
+    (dolist (selection (sort (copy-sequence org-brain-selected) org-brain-visualize-sort-function))
+      (insert "  ")
+      (org-brain-insert-visualize-button selection 'org-brain-selected))
+    (insert "\n")))
 
 (defun org-brain--insert-wire (&rest strings)
   "Helper function for drawing fontified wires in the org-brain visualization buffer."

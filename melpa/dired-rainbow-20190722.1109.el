@@ -5,7 +5,7 @@
 ;; Author: Matus Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
 ;; Keywords: files
-;; Package-Version: 20190522.950
+;; Package-Version: 20190722.1109
 ;; Package-X-Original-Version: 20170922.817
 ;; Version: 0.0.3
 ;; Created: 16th February 2014
@@ -130,8 +130,8 @@ to control the order."
          '((t ,(dired-rainbow--get-face face-props)))
          ,(concat "dired-rainbow face matching " (symbol-name symbol) " files.")
          :group 'dired-rainbow)
-       (font-lock-add-keywords 'dired-mode '((,regexp 1 ',face-name)) ,how)
-       (font-lock-add-keywords 'wdired-mode '((,regexp 1 ',face-name)) ,how)
+       (font-lock-add-keywords 'dired-mode '((,regexp 1 ',face-name prepend)) ,how)
+       (font-lock-add-keywords 'wdired-mode '((,regexp 1 ',face-name prepend)) ,how)
        ,(if (listp matcher) `(push
                               '(,matcher ,face-name ,(concat "\\." (regexp-opt matcher)))
                               dired-rainbow-ext-to-face)))))
@@ -172,8 +172,8 @@ to control the order."
          '((t ,(dired-rainbow--get-face face-props)))
          ,(concat "dired-rainbow face matching " (symbol-name symbol) " files.")
          :group 'dired-rainbow)
-       (font-lock-add-keywords 'dired-mode '((,regexp 1 ',face-name)) ,how)
-       (font-lock-add-keywords 'wdired-mode '((,regexp 1 ',face-name)) ,how))))
+       (font-lock-add-keywords 'dired-mode '((,regexp 1 ',face-name prepend)) ,how)
+       (font-lock-add-keywords 'wdired-mode '((,regexp 1 ',face-name prepend)) ,how))))
 
 (provide 'dired-rainbow)
 

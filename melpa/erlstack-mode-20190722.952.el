@@ -2,7 +2,7 @@
 
 ;; Author: k32
 ;; Keywords: tools, erlang
-;; Package-Version: 20190714.2336
+;; Package-Version: 20190722.952
 ;; Version: 0.2.0
 ;; Homepage: https://github.com/k32/erlstack-mode
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))
@@ -272,7 +272,7 @@ alternative"
        (_              (erlstack--frame-lost))))))
 
 (defun erlstack--re-search-backward (res)
-  (let ((bound (save-excursion (forward-line -1)
+  (let ((bound (save-excursion (forward-line -2)
                                (line-beginning-position))))
     (dolist (i res)
       (when (re-search-backward i bound t)
@@ -283,7 +283,7 @@ alternative"
   (save-excursion
     (let ((point (point))
           (end (re-search-forward erlstack--stack-end-re
-                                  (save-excursion (forward-line 1)
+                                  (save-excursion (forward-line 2)
                                                   (line-end-position))
                                   t))
           (begin (erlstack--re-search-backward `(,erlstack--stack-frame-old-re

@@ -4,7 +4,7 @@
 
 ;; Author: Clemens Radermacher <clemera@posteo.net>
 ;; URL: https://github.com/clemera/ivy-explorer
-;; Package-Version: 20190318.1608
+;; Package-Version: 20190722.845
 ;; Version: 0.3.2
 ;; Package-Requires: ((emacs "25") (ivy "0.10.0"))
 ;; Keywords: convenience, files, matching
@@ -708,8 +708,11 @@ MSGF is the function to be called with the grid string and defaults to
         (ivy-explorer-width (or width (frame-width)))
         (ivy-height (funcall ivy-explorer-max-function))
         (ivy-display-function #'ivy-explorer--display-function)
+        (ivy-display-functions-alist '((t . ivy-explorer--display-function)))
+        (ivy-posframe-display-functions-alist nil)
         (ivy-posframe-hide-minibuffer
          (eq ivy-explorer-message-function #'ivy-explorer--posframe))
+        (ivy-posframe--display-p t)
         (ivy-minibuffer-map (make-composed-keymap
                              ivy-explorer-map ivy-minibuffer-map)))
     (when avy
@@ -720,9 +723,12 @@ MSGF is the function to be called with the grid string and defaults to
 (defun ivy-explorer--internal (f &rest args)
   "Invoke ivy explorer for F with ARGS."
   (let ((ivy-display-function #'ivy-explorer--display-function)
+        (ivy-display-functions-alist '((t . ivy-explorer--display-function)))
+        (ivy-posframe-display-functions-alist nil)
         (completing-read-function 'ivy-completing-read)
         (ivy-posframe-hide-minibuffer
          (eq ivy-explorer-message-function #'ivy-explorer--posframe))
+        (ivy-posframe--display-p t)
         ;; max number of candidates
         (ivy-height (funcall ivy-explorer-max-function))
         (ivy-wrap nil)
