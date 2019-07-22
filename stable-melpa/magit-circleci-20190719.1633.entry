@@ -1,2 +1,0 @@
-
-(magit-circleci . [(20190719 1633) ((dash (2 15 0)) (transient (0 1 0)) (magit (2 90 0)) (emacs (25 3))) "CircleCI integration for Magit" single ((:commit . "e7045381c8876ed23ff417479af7dd72fbb2b4fc") (:keywords "circleci" "continuous" "integration" "magit" "vc" "tools") (:authors ("Adrien Brochard")) (:maintainer "Adrien Brochard") (:url . "https://github.com/abrochard/magit-circleci"))])
