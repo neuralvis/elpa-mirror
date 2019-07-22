@@ -1,2 +1,0 @@
-
-(link-hint . [(20190719 142) ((avy (0 4 0)) (emacs (24 1)) (cl-lib (0 5))) "Use avy to open, copy, etc. visible links." single ((:commit . "2384d309e17ed0e574e3c1ec937f05d76864ab07") (:keywords "convenience" "url" "avy" "link" "links" "hyperlink") (:authors ("Fox Kiester" . "noct@posteo.net")) (:maintainer "Fox Kiester" . "noct@posteo.net") (:url . "https://github.com/noctuid/link-hint.el"))])
