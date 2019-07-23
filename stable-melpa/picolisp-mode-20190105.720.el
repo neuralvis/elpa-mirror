@@ -6,7 +6,6 @@
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2014-11-18
 ;; URL: https://github.com/flexibeast/picolisp-mode
-;; Package-Version: 20190105.720
 ;; Keywords: picolisp, lisp, programming
 
 ;;
