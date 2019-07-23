@@ -1,2 +1,0 @@
-
-(org-drill . [(20190721 2010) ((emacs (25 3)) (seq (2 14)) (org (9 2 4)) (persist (0 3))) "Self-testing using spaced repetition" single ((:commit . "96d7c199a0a48a451020be2d7327c6b6adfb0e15") (:keywords "games" "outlines" "multimedia") (:authors ("Paul Sexton" . "eeeickythump@gmail.com")) (:maintainer "Phillip Lord" . "phillip.lord@russet.org.uk") (:url . "https://gitlab.com/phillord/org-drill/issues"))])
