@@ -1,2 +1,0 @@
-
-(bing-dict . [(20190720 251) nil "Minimalists' English-Chinese Bing dictionary" tar ((:commit . "dc63ee2b1c049188aa5a29ecdc18d7e3b6563307") (:keywords "extensions") (:authors ("Junpeng Qiu" . "qjpchmail@gmail.com")) (:maintainer "Junpeng Qiu" . "qjpchmail@gmail.com") (:url . "https://github.com/cute-jumper/bing-dict.el"))])

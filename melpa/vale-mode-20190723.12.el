@@ -3,7 +3,7 @@
 ;; Copyright (C) 2019 Jay Bosamiya
 ;; Author: Jay Bosamiya <jaybosamiya@gmail.com>
 ;; URL: https://github.com/jaybosamiya/vale-mode.el
-;; Package-Version: 20190712.118
+;; Package-Version: 20190723.12
 
 ;; Created: 7 June 2019
 ;; Version: 0.1
@@ -275,6 +275,9 @@ If in a procedure, then start verification of that procedure."
   (setq-local comment-continue "  ")
   ;; (setq-local comment-style 'extra-line)
   (setq-local indent-tabs-mode nil)
+  ;; Operators should be counted as punctuation
+  (dolist (c (string-to-list "/*%+-<=>|&"))
+    (modify-syntax-entry c "." vale-mode-syntax-table))
   ;; strings won't be showing up in vale code except in directives
   (modify-syntax-entry ?\" "w" vale-mode-syntax-table)
   ;; comments /* */
