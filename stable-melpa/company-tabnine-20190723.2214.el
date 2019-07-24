@@ -4,7 +4,7 @@
 ;;
 ;; Author: Tommy Xiang <tommyx058@gmail.com>
 ;; Keywords: convenience
-;; Package-Version: 20190722.1828
+;; Package-Version: 20190723.2214
 ;; Version: 0.0.1
 ;; URL: https://github.com/TommyX12/company-tabnine/
 ;; Package-Requires: ((emacs "25") (company "0.9.3") (cl-lib "0.5") (dash "2.16.0") (s "1.12.0") (unicode-escape "1.1"))
@@ -528,9 +528,7 @@ Resets every time successful completion is returned.")
   (if (and company-tabnine-use-native-json
            (fboundp 'json-parse-string))
       (ignore-errors
-        (json-parse-string msg
-                           :array-type 'list
-                           :object-type 'alist))
+        (json-parse-string msg :object-type 'alist))
     (let ((json-array-type 'list)
           (json-object-type 'alist))
       (json-read-from-string msg))))
@@ -578,7 +576,7 @@ PROCESS is the process under watch, OUTPUT is the output received."
     (company-tabnine-query)
     (let ((prefix
            (and company-tabnine--response
-                (alist-get 'results company-tabnine--response)
+                (> (length (alist-get 'results company-tabnine--response)) 0)
                 (alist-get 'old_prefix company-tabnine--response))))
       (unless (or prefix
                   company-tabnine-auto-fallback)

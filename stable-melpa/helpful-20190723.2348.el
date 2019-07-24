@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20190710.2356
+;; Package-Version: 20190723.2348
 ;; Keywords: help, lisp
 ;; Version: 0.18
 ;; Package-Requires: ((emacs "25") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2"))
@@ -163,10 +163,6 @@ can make Helpful very slow.")
 (defun helpful--heading (text)
   "Propertize TEXT as a heading."
   (format "%s\n" (propertize text 'face 'helpful-heading)))
-
-(defun helpful--warning (text)
-  "Propertize TEXT as a warning."
-  (format "%s\n" (propertize text 'face 'warning)))
 
 (defun helpful--format-closure (sym form)
   "Given a closure, return an equivalent defun form."
@@ -817,17 +813,6 @@ bound) or else highlight."
    docstring
    t t))
 
-(defun helpful--char-table-keys (char-table)
-  "Convert CHAR-TABLE to list of pairs (KEYCODES COMMAND)."
-  ;; Kludge: use `describe-vector' to convert a char-table to a sparse
-  ;; keymap.
-  (let (result)
-    (map-char-table
-     (lambda (key value)
-       (push (list (vector key) value) result))
-     char-table)
-    result))
-
 (defun helpful--keymap-keys (keymap)
   "Return all the keys and commands in KEYMAP.
 Flattens nested keymaps and follows remapped commands.
@@ -1234,6 +1219,25 @@ If the source code cannot be found, return the sexp used."
       (kill-buffer buf))
     (or (assoc sym completions)
         (assoc-string sym completions))))
+
+(defun helpful--version-info (sym)
+  "If SYM has version information, format and return it.
+Return nil otherwise."
+  (when (symbolp sym)
+    (let ((package-version
+           (get sym 'custom-package-version))
+          (emacs-version
+           (get sym 'custom-version)))
+      (cond
+       (package-version
+        (format
+         "This variable was added, or its default value changed, in %s version %s."
+         (car package-version)
+         (cdr package-version)))
+       (emacs-version
+        (format
+         "This variable was added, or its default value changed, in Emacs %s."
+         emacs-version))))))
 
 (defun helpful--library-path (library-name)
   "Find the absolute path for the source of LIBRARY-NAME.
@@ -2155,14 +2159,20 @@ state of the current symbol."
         (when (custom-variable-p helpful--sym)
           (insert " " (helpful--make-customize-button helpful--sym)))))
 
-    (-when-let (docstring (helpful--docstring helpful--sym helpful--callable-p))
-      (helpful--insert-section-break)
-      (insert
-       (helpful--heading "Documentation")
-       (helpful--format-docstring docstring))
-      (when (helpful--in-manual-p helpful--sym)
-        (insert "\n\n")
-        (insert (helpful--make-manual-button helpful--sym))))
+    (let ((docstring (helpful--docstring helpful--sym helpful--callable-p))
+          (version-info (unless helpful--callable-p
+                          (helpful--version-info helpful--sym))))
+      (when (or docstring version-info)
+        (helpful--insert-section-break)
+        (insert
+         (helpful--heading "Documentation"))
+        (when docstring
+          (insert (helpful--format-docstring docstring)))
+        (when version-info
+          (insert "\n\n" (s-word-wrap 70 version-info)))
+        (when (helpful--in-manual-p helpful--sym)
+          (insert "\n\n")
+          (insert (helpful--make-manual-button helpful--sym)))))
 
     ;; Show keybindings.
     ;; TODO: allow users to conveniently add and remove keybindings.

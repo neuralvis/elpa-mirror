@@ -7,7 +7,6 @@
 ;;             2012 Rüdiger Sonderfeld
 ;; Maintainer: ruediger@c-plusplus.de
 ;; Keywords:   tools languages
-;; Package-Version: 20151122.1940
 ;; Version:    0.02
 ;; URL:        https://github.com/ruediger/systemtap-mode
 
