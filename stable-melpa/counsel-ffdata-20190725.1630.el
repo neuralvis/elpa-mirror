@@ -4,7 +4,7 @@
 
 ;; Author: Zhu Zihao <all_but_last@163.com>
 ;; URL: https://github.com/cireu/counsel-ffdata
-;; Package-Version: 20190703.712
+;; Package-Version: 20190725.1630
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1") (counsel "0.11.0") (emacsql "3.0.0"))
 ;; Keywords: convenience, tools, matching
@@ -241,5 +241,10 @@ If FORCE-UPDATE? is non-nil, force update database and cache before searching."
 
 (ivy-set-display-transformer #'counsel-ffdata-firefox-bookmarks
                              #'counsel-ffdata--bookmarks-display-transformer)
+
+(dolist (it '(counsel-ffdata-firefox-history
+              counsel-ffdata-firefox-bookmarks))
+  (ivy-set-actions it
+                   '(("E" (lambda (it) (eww (cl-third it))) "Open with EWW"))))
 
 ;;; counsel-ffdata.el ends here
