@@ -1,0 +1,2 @@
+
+(elgrep . [(20190726 929) ((emacs (25 1)) (async (1 5))) "Searching files for regular expressions" single ((:commit . "a6f10fc32ddd2fe27298a4656838cde31c8abab8") (:keywords "tools" "matching" "files" "unix") (:authors ("Tobias Zawada" . "naehring@smtp.1und1.de")) (:maintainer "Tobias Zawada" . "naehring@smtp.1und1.de") (:url . "https://github.com/TobiasZawada/elgrep"))])
