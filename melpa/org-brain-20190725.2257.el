@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20190723.1010
+;; Package-Version: 20190725.2257
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9"))
 ;; Version: 0.6
@@ -867,7 +867,7 @@ PROPERTY could for instance be BRAIN_CHILDREN."
   "Delete current line, if matching REGEX."
   (when (string-match regex (buffer-substring (line-beginning-position)
                                               (line-end-position)))
-    (kill-whole-line)))
+    (ignore-errors (kill-whole-line))))
 
 (defun org-brain-remove-relationship (parent child)
   "Remove external relationship between PARENT and CHILD."
@@ -1870,9 +1870,9 @@ See `org-brain-add-resource'."
 (defun org-brain-visualize-back ()
   "Go back to the previously visualized entry."
   (interactive)
-  (pop org-brain--vis-history)
-  (if org-brain--vis-history
-      (org-brain-visualize (car org-brain--vis-history) nil t)
+  (if (cadr org-brain--vis-history)
+      (progn (pop org-brain--vis-history)
+             (org-brain-visualize (car org-brain--vis-history) nil t))
     (error "No further history")))
 
 (defun org-brain-visualize-revert (_ignore-auto _noconfirm)
