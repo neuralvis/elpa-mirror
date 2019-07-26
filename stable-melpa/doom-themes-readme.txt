@@ -8,7 +8,8 @@ Flagship themes
 
 Additional themes
   [X] `doom-city-lights' (added by fuxialexnder)
-  [X] `doom-darcula' (added by fuxialexnder)
+  [X] `doom-dracula' (added by fuxialexnder)
+  [X] `doom-gruvbox' (added by JongW)
   [X] `doom-Iosvkem' (added by neutaaaaan)
   [X] `doom-molokai'
   [X] `doom-nord' (added by fuxialexnder)

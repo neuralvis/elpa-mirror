@@ -1,0 +1,2 @@
+
+(ox-reveal . [(20190726 1608) ((org (8 3))) "reveal.js Presentation Back-End for Org Export Engine" single ((:commit . "116446013f421cf7b06f95a13bed6541186bcba9") (:keywords "outlines" "hypermedia" "slideshow" "presentation") (:authors ("Yujie Wen <yjwen.ty at gmail dot com>")) (:maintainer "Yujie Wen <yjwen.ty at gmail dot com>"))])
