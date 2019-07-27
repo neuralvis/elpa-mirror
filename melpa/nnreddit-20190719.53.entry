@@ -1,2 +1,0 @@
-
-(nnreddit . [(20190719 53) ((emacs (25)) (virtualenvwrapper (20190223 1919)) (json-rpc (20180104 1528))) "Gnus Backend For Reddit" tar ((:commit . "0978c2e8e44ae2ec4c2688b6549f06a6b520c86b") (:url . "https://github.com/dickmao/nnreddit"))])

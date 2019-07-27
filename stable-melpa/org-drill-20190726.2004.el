@@ -5,7 +5,7 @@
 ;; Maintainer: Phillip Lord <phillip.lord@russet.org.uk>
 ;; Author: Paul Sexton <eeeickythump@gmail.com>
 ;; Version: 2.7
-;; Package-Version: 20190722.2120
+;; Package-Version: 20190726.2004
 ;; Package-Requires: ((emacs "25.3") (seq "2.14") (org "9.2.4") (persist "0.3"))
 ;; Keywords: games, outlines, multimedia
 
@@ -1833,6 +1833,7 @@ visual overlay, or with the string TEXT if it is supplied."
       (overlay-put ovl 'display text))))
 
 (defun org-drill-hide-heading-at-point (&optional text)
+  "Hide the heading at point."
   (unless (org-at-heading-p)
     (error "Point is not on a heading"))
   (save-excursion
@@ -1841,6 +1842,7 @@ visual overlay, or with the string TEXT if it is supplied."
       (org-drill-hide-region beg (point) text))))
 
 (defun org-drill-hide-comments ()
+  "Hide comments."
   (save-excursion
     (while (re-search-forward "^#.*$" nil t)
       (org-drill-hide-region (match-beginning 0) (match-end 0)))))
