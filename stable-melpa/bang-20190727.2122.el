@@ -2,7 +2,7 @@
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 0.2.0
-;; Package-Version: 20190723.1152
+;; Package-Version: 20190727.2122
 ;; Keywords: unix, processes, convenience
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://git.sr.ht/~zge/bang
@@ -77,7 +77,8 @@ between BEG and END. Otherwise the whole buffer is processed."
             (has-| (shell-command-on-region
                     beg end rest t t
                     shell-command-default-error-buffer t))
-            (t (shell-command command nil shell-command-default-error-buffer)))
+            (t (shell-command command (if current-prefix-arg t nil)
+                              shell-command-default-error-buffer)))
       (when has->
         (with-current-buffer "*Shell Command Output*"
           (delete-region (point-min) (point-max)))))))

@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20190706.1917
+;; Package-Version: 20190727.2126
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1") (prescient "3.2") (ivy "0.11.0"))
 ;; Version: 3.2
@@ -121,6 +121,11 @@ arbitrary candidates to be compared; they need not be strings."
 This is the value that was associated to
 `read-file-name-internal'.")
 
+(defvar ivy-prescient--old-ivy-sort-completion-in-region-function nil
+  "Previous value for sorting `completion-in-region' results.
+This is the value that was associated to
+`ivy-completion-in-region' in `ivy-sort-functions-alist'.")
+
 (defvar ivy-prescient--old-initial-inputs-alist nil
   "Previous value of `ivy-initial-inputs-alist'.")
 
@@ -184,6 +189,11 @@ enabled."
                      (alist-get #'read-file-name-internal
                                 ivy-sort-functions-alist)
                      #'ivy-prescient-sort-function)
+          (cl-shiftf
+           ivy-prescient--old-ivy-sort-completion-in-region-function
+           (alist-get #'ivy-completion-in-region
+                      ivy-sort-functions-alist)
+           #'ivy-prescient-sort-function)
           (advice-add #'ivy-read :filter-args
                       #'ivy-prescient--enable-sort-commands)
           (advice-add #'ivy--directory-enter :filter-return
@@ -203,6 +213,11 @@ enabled."
                  #'ivy-prescient-sort-function)
       (setf (alist-get #'read-file-name-internal ivy-sort-functions-alist)
             ivy-prescient--old-ivy-sort-file-function))
+    (when (equal (alist-get #'ivy-completion-in-region
+                            ivy-sort-functions-alist)
+                 #'ivy-prescient-sort-function)
+      (setf (alist-get #'ivy-completion-in-region ivy-sort-functions-alist)
+            ivy-prescient--old-ivy-sort-completion-in-region-function))
     (unless ivy-initial-inputs-alist
       (dolist (pair (reverse ivy-prescient--old-initial-inputs-alist))
         (setf (alist-get (car pair) ivy-initial-inputs-alist) (cdr pair))))
