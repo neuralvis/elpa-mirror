@@ -7,6 +7,7 @@
 ;; Description: Show end of line symbol in buffer.
 ;; Keyword: end eol line
 ;; Version: 0.0.1
+;; Package-Version: 20190517.257
 ;; Package-Requires: ((emacs "24.3"))
 ;; URL: https://github.com/jcs090218/show-eol
 
