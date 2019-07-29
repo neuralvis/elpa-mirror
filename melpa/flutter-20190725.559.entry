@@ -1,2 +1,0 @@
-
-(flutter . [(20190725 559) ((emacs (24 5))) "Tools for working with Flutter SDK" tar ((:commit . "380e2e199c8e20e28642dce1eb760853d06bf8c7") (:keywords "languages") (:authors ("Aaron Madlon-Kay")) (:maintainer "Aaron Madlon-Kay") (:url . "https://github.com/amake/flutter.el"))])
