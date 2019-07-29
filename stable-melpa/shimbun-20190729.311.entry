@@ -1,0 +1,2 @@
+
+(shimbun . [(20190729 311) nil "interfacing with web newspapers" tar ((:commit . "12256da445bccd3a2a7bb70e3eb2bd975888f1fe") (:keywords "news") (:authors ("TSUCHIYA Masatoshi" . "tsuchiya@namazu.org") ("Akihiro Arisawa   " . "ari@mbf.sphere.ne.jp") ("Yuuichi Teranishi " . "teranisi@gohome.org") ("Katsumi Yamaoka   " . "yamaoka@jpl.org")) (:maintainer "TSUCHIYA Masatoshi" . "tsuchiya@namazu.org"))])
