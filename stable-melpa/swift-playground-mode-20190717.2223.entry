@@ -1,2 +1,0 @@
-
-(swift-playground-mode . [(20190717 2223) ((emacs (24 4)) (seq (2 2 0))) "Run Apple's playgrounds in Swift buffers" tar ((:commit . "7c6c7aa7767b5087d9ce6aaf5fde5ae7fe77107f") (:keywords "languages" "swift") (:url . "https://gitlab.com/michael.sanders/swift-playground-mode"))])
