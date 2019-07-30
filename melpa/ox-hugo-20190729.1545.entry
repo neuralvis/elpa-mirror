@@ -1,2 +1,0 @@
-
-(ox-hugo . [(20190729 1545) ((emacs (24 4)) (org (9 0))) "Hugo Markdown Back-End for Org Export Engine" tar ((:commit . "dce680eedf84c7a8d206ec2c254ca66ee965e1f8") (:keywords "org" "markdown" "docs") (:url . "https://ox-hugo.scripter.co"))])
