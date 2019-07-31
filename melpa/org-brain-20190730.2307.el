@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20190730.2002
+;; Package-Version: 20190730.2307
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9.2"))
 ;; Version: 0.6
@@ -1909,11 +1909,11 @@ If PROMPT is non nil, let user edit the resource even if run non-interactively."
                                (org-insert-link-global)
                                (buffer-string))))
                  (newline-and-indent)
-                 (insert "- " l)))
-             (save-buffer)))
+                 (insert "- " l)))))
     (if (org-brain-filep entry)
         ;; File entry
-        (with-current-buffer (find-file-noselect (org-brain-entry-path entry))
+        (with-temp-file (org-brain-entry-path entry)
+          (insert-file-contents (org-brain-entry-path entry))
           (goto-char (point-min))
           (or (re-search-forward (concat "^\\(" org-outline-regexp "\\)") nil t)
               (goto-char (point-max)))
@@ -1937,7 +1937,8 @@ If PROMPT is non nil, let user edit the resource even if run non-interactively."
           (insert ":END:")
           (re-search-backward org-brain-resources-start-re nil t)
           (end-of-line))
-        (insert-resource-link))))
+        (insert-resource-link)
+        (save-buffer))))
   (org-brain--revert-if-visualizing))
 
 (defalias 'org-brain-visualize-add-resource #'org-brain-add-resource)
@@ -1964,8 +1965,10 @@ If called interactively use current FILE
 and prompt for ENTRY, unless called with `\\[universal-argument]'
 in which case use the current/last visualized entry."
   (interactive (list (buffer-file-name)))
-  (org-brain-add-resource file nil nil (or entry (when current-prefix-arg
-                                                   org-brain--vis-entry)))
+  (org-brain-add-resource (concat "file:" file)
+                          nil nil
+                          (or entry (when current-prefix-arg
+                                      org-brain--vis-entry)))
   (ignore-errors
     (with-current-buffer "*org-brain*"
       (org-brain--revert-if-visualizing)))
@@ -2204,7 +2207,8 @@ Helper function for `org-brain-visualize'."
           ;; Line to main entry
           (move-to-column (/ (+ (cdar (last parent-positions))
                                 (cdar parent-positions))
-                             2))
+                             2)
+			  t)
           (delete-char 1)
           (when (> (length parent-positions) 1)
             (org-brain--insert-wire "+")
