@@ -4,7 +4,7 @@
 
 ;; Author: Benjamin Andresen
 ;; Version: 0.3.1
-;; Package-Version: 20170813.247
+;; Package-Version: 20190208.1335
 ;; URL: https://gitlab.com/bennya/shrink-path.el
 ;; Package-Requires: ((emacs "24") (s "1.6.1") (dash "1.8.0") (f "0.10.0"))
 
@@ -50,7 +50,7 @@
   "Return fish-style truncated string based on FULL-PATH.
 Optional parameter TRUNCATE-ALL will cause the function to truncate the last
 directory too."
-  (let* ((home (getenv "HOME"))
+  (let* ((home (expand-file-name "~"))
          (path (replace-regexp-in-string
                 (s-concat "^" home) "~" full-path))
          (split (s-split "/" path 'omit-nulls))
