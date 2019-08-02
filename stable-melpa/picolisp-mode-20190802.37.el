@@ -6,7 +6,7 @@
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2014-11-18
 ;; URL: https://github.com/flexibeast/picolisp-mode
-;; Package-Version: 20190801.1116
+;; Package-Version: 20190802.37
 ;; Keywords: picolisp, lisp, programming
 
 ;;
@@ -204,47 +204,47 @@ Must be `t' to access documentation via `picolisp-describe-symbol'."
   :group 'picolisp)
 
 (defface picolisp-abstract-class-face
-  '((((background light)) :foreground "blue"))
+  '((t :inherit font-lock-type-face))
   "Face for PicoLisp abstract classes."
   :group 'picolisp-faces)
 
 (defface picolisp-builtin-face
-  '((((background light)) :foreground "Purple"))
+  '((t :inherit font-lock-builtin-face))
   "Face for PicoLisp builtins."
   :group 'picolisp-faces)
 
 (defface picolisp-comment-face
-  '((((background light)) :foreground "green"))
+  '((t :inherit font-lock-comment-face))
   "Face for PicoLisp comments."
   :group 'picolisp-faces)
 
 (defface picolisp-global-constant-face
-  '((((background light)) :foreground "Purple"))
+  '((t :inherit font-lock-constant-face))
   "Face for PicoLisp global constants."
   :group 'picolisp-faces)
 
 (defface picolisp-global-variable-face
-  '((((background light)) :foreground "blue"))
+  '((t :inherit font-lock-variable-name-face))
   "Face for PicoLisp global variables."
   :group 'picolisp-faces)
 
 (defface picolisp-local-function-face
-  '((((background light)) :foreground "blue"))
+  '((t :inherit font-lock-function-name-face))
   "Face for PicoLisp local functions."
   :group 'picolisp-faces)
 
 (defface picolisp-method-face
-  '((((background light)) :foreground "blue"))
+  '((t :inherit font-lock-function-name-face))
   "Face for PicoLisp methods."
   :group 'picolisp-faces)
 
 (defface picolisp-normal-class-face
-  '((((background light)) :foreground "blue"))
+  '((t :inherit font-lock-type-face))
   "Face for PicoLisp normal classes."
   :group 'picolisp-faces)
 
 (defface picolisp-transient-symbol-face
-  '((((background light)) :foreground "blue"))
+  '((t :inherit font-lock-string-face))
   "Face for PicoLisp transient symbols."
   :group 'picolisp-faces)
 
