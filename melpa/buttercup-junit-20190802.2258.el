@@ -1,13 +1,13 @@
 ;;; buttercup-junit.el --- JUnit reporting for Buttercup -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016-2018  Ola Nilsson
+;; Copyright (C) 2016-2019  Ola Nilsson
 
 ;; Author: Ola Nilsson <ola.nilsson@gmail.com>
 ;; Maintainer: Ola Nilsson <ola.nilsson@gmail.com>
 ;; Created: Oct 2, 2016
 ;; Keywords: tools test unittest buttercup ci
-;; Package-Version: 20181111.2058
-;; Version: 1.0.1
+;; Package-Version: 20190802.2258
+;; Version: 1.1.1
 ;; Package-Requires: ((emacs "24.3") (buttercup "1.15"))
 ;; URL: https://bitbucket.org/olanilsson/buttercup-junit
 

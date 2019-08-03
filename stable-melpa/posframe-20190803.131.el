@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20190608.2318
+;; Package-Version: 20190803.131
 ;; Version: 0.5.0
 ;; Keywords: tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -693,7 +693,7 @@ This posframe's buffer is POSFRAME-BUFFER."
 
 (defun posframe--kill-buffer (posframe-buffer)
   "Kill posframe's buffer: POSFRAME-BUFFER."
-  (when (buffer-live-p posframe-buffer)
+  (when (buffer-live-p (get-buffer posframe-buffer))
     (kill-buffer posframe-buffer)))
 
 (defun posframe-funcall (posframe-buffer function &rest arguments)
