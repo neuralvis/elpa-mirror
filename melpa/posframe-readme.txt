@@ -63,7 +63,7 @@ M-x posframe-hide-all
    #+BEGIN_EXAMPLE
    (posframe-delete " *my-posframe-buffer*")
    #+END_EXAMPLE
-2. Only delete posframe's frame
+2. Only delete the frame
    #+BEGIN_EXAMPLE
    (posframe-delete-frame " *my-posframe-buffer*")
    #+END_EXAMPLE
@@ -93,7 +93,7 @@ border-width to 10 and fallback background color to green.
 
 #+BEGIN_EXAMPLE
 (setq posframe-arghandler #'my-posframe-arghandler)
-(defun my-posframe-arghandler (posframe-buffer arg-name value)
+(defun my-posframe-arghandler (buffer-or-name arg-name value)
   (let ((info '(:internal-border-width 10 :background-color "green")))
     (or (plist-get info arg-name) value)))
 #+END_EXAMPLE
