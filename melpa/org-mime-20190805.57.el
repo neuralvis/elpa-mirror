@@ -5,7 +5,7 @@
 ;; Author: Eric Schulte
 ;; Maintainer: Chen Bin (redguardtoo)
 ;; Keywords: mime, mail, email, html
-;; Package-Version: 20190702.1129
+;; Package-Version: 20190805.57
 ;; Homepage: http://github.com/org-mime/org-mime
 ;; Version: 0.1.6
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
@@ -44,13 +44,14 @@
 ;;
 ;; `org-mime-org-subtree-htmlize' is similar to `org-mime-org-buffer-htmlize'
 ;; but works on current subtree. It can read following subtree properties:
-;; MAIL_SUBJECT, MAIL_TO, MAIL_CC, and MAIL_BCC.
+;; MAIL_SUBJECT, MAIL_TO, MAIL_FROM, MAIL_CC, and MAIL_BCC.
 ;;
 ;; Here is the sample of a subtree:
 ;; * mail one
 ;;   :PROPERTIES:
 ;;   :MAIL_SUBJECT: mail title
 ;;   :MAIL_TO: person1@gmail.com
+;;   :MAIL_FROM: sender@gmail.com
 ;;   :MAIL_CC: person2@gmail.com
 ;;   :MAIL_BCC: person3@gmail.com
 ;;   :END:
@@ -480,18 +481,14 @@ If SUBTREEP is t, curret org node is subtree."
     (message "Warning: org-element-map is not available. File keywords will not work.")
     '())))
 
-(defun org-mime-build-mail-other-headers (cc bcc)
-  "Build mail header from CC and BCC."
-  (cond
-   ((and cc bcc)
-    (list (cons "Cc" cc)
-          (cons "Bcc" bcc)))
-   (cc
-    (list (cons "Cc" cc)))
-   (bcc
-    (list (cons "Bcc" bcc)))
-   (t
-    nil)))
+(defun org-mime-build-mail-other-headers (cc bcc from)
+  "Build mail header from CC, BCC, and FROM."
+  (let* ((arr (list (cons "Cc" cc) (cons "Bcc" bcc)  (cons "From" from )))
+         rlt)
+    (dolist (e arr)
+      (when (cdr e)
+        (push e rlt)))
+    rlt))
 
 ;;;###autoload
 (defun org-mime-org-buffer-htmlize ()
@@ -504,6 +501,7 @@ The following file keywords can be used to control the headers:
 #+MAIL_SUBJECT: a subject line
 #+MAIL_CC: some2@some.place
 #+MAIL_BCC: some3@some.place
+#+MAIL_FROM: sender@some.place
 
 The cursor ends in the TO field."
   (interactive)
@@ -521,7 +519,8 @@ The cursor ends in the TO field."
          (to (cdr (assoc "MAIL_TO" keywords)))
          (cc (cdr (assoc "MAIL_CC" keywords)))
          (bcc (cdr (assoc "MAIL_BCC" keywords)))
-         (other-headers (org-mime-build-mail-other-headers cc bcc)))
+         (from (cdr (assoc "MAIL_FROM" keywords)))
+         (other-headers (org-mime-build-mail-other-headers cc bcc from)))
     (org-mime-compose exported file to subject other-headers nil)
     (message-goto-to)))
 
@@ -544,6 +543,7 @@ Following headline properties can determine the mail headers,
   :MAIL_TO: person1@gmail.com
   :MAIL_CC: person2@gmail.com
   :MAIL_BCC: person3@gmail.com
+  :MAIL_FROM: sender@gmail.com
   :END:
 "
   (interactive "P")
@@ -563,8 +563,9 @@ Following headline properties can determine the mail headers,
              (to (org-mime-attr "MAIL_TO"))
              (cc (org-mime-attr "MAIL_CC"))
              (bcc (org-mime-attr "MAIL_BCC"))
+             (from (org-mime-attr "MAIL_FROM"))
              ;; Thanks to Matt Price improving handling of cc & bcc headers
-             (other-headers (org-mime-build-mail-other-headers cc bcc))
+             (other-headers (org-mime-build-mail-other-headers cc bcc from))
              (org-export-show-temporary-export-buffer nil)
              (subtree-opts (when (fboundp 'org-export--get-subtree-options)
                              (org-export--get-subtree-options)))
