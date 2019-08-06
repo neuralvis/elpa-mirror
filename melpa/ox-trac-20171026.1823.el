@@ -3,7 +3,6 @@
 ;; Copyright (C) 2015  Brian J. Carlson
 
 ;; URL: https://github.com/JalapenoGremlin/ox-trac
-;; Package-Version: 20171026.1823
 ;; Author: Brian J. Carlson <hacker (at) abutilize (dot) com>
 ;; Package-Requires: ((org "9.0"))
 ;; Keywords: org-mode trac

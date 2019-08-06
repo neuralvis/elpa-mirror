@@ -4,7 +4,7 @@
 
 ;; Author: David Engster <deng@randomsample.de>
 ;; Keywords: calendar, caldav
-;; Package-Version: 20190805.1950
+;; Package-Version: 20190805.2013
 ;; Package-Requires: ((org "7"))
 ;;
 ;; This file is not part of GNU Emacs.
@@ -191,8 +191,8 @@ never = Never resume
 always = Always resume")
 
 (defvar org-caldav-oauth2-providers
-  '((google "https://accounts.google.com/o/oauth2/auth"
-	    "https://accounts.google.com/o/oauth2/token"
+  '((google "https://accounts.google.com/o/oauth2/v2/auth"
+	    "https://www.googleapis.com/oauth2/v4/token"
 	    "https://www.googleapis.com/auth/calendar"
 	    "https://apidata.googleusercontent.com/caldav/v2/%s/events"))
   "List of providers that need OAuth2.  Each must be of the form

@@ -8,7 +8,7 @@
 
 ;; Author: The go-mode Authors
 ;; Version: 1.5.0
-;; Package-Version: 20190731.1751
+;; Package-Version: 20190805.2255
 ;; Keywords: languages go
 ;; URL: https://github.com/dominikh/go-mode.el
 ;;
@@ -286,7 +286,7 @@ You can install gogetdoc with 'go get -u github.com/zmb3/gogetdoc'."
       ;; TODO: gogetdoc supports unsaved files, but not introducing
       ;; new artifical files, so this limitation will stay for now.
       (error "Cannot use gogetdoc on a buffer without a file name"))
-  (let ((posn (format "%s:#%d" (shell-quote-argument (file-truename buffer-file-name)) (1- (position-bytes point))))
+  (let ((posn (format "%s:#%d" (file-truename buffer-file-name) (1- (position-bytes point))))
         (out (godoc--get-buffer "<at point>")))
   (with-current-buffer (get-buffer-create "*go-gogetdoc-input*")
     (setq buffer-read-only nil)
@@ -1508,7 +1508,7 @@ It looks for archive files in /pkg/."
   (reverse (remove nil
                    (mapcar
                     (lambda (line)
-                      (when (string-match "^\\(.+\\):\\([[:digit:]]+\\): imported and not used: \".+\".*$" line)
+                      (when (string-match "^\\(.+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\): imported and not used: \".+\".*$" line)
                         (let ((error-file-name (match-string 1 line))
                               (error-line-num (match-string 2 line)))
                           (if (string= (file-truename error-file-name) (file-truename buffer-file-name))

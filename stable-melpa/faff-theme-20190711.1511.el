@@ -4,7 +4,7 @@
 
 ;; Author: James Ferguson <(concat "wjcferguson" at-sign "gmail.com")>
 ;; URL: https://github.com/WJCFerguson/emacs-faff-theme
-;; Package-Version: 20190506.1513
+;; Package-Version: 20190711.1511
 ;; Version: 2.5
 ;; Keywords: color theme
 
@@ -186,7 +186,9 @@
  '(web-mode-doctype-face ((t (:foreground "Grey35"))))
  '(web-mode-html-attr-name-face ((t (:foreground "gray10"))))
  '(web-mode-html-tag-face ((t (:weight bold))))
- '(warning ((t (:foreground "DarkOrange3" :weight bold)))))
+ '(warning ((t (:foreground "DarkOrange3" :weight bold))))
+ '(window-divider-first-pixel ((t (:foreground "ivory2"))))
+ '(window-divider-last-pixel ((t (:foreground "ivory4")))))
 
 ;;;###autoload
 (when load-file-name
