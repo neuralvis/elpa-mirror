@@ -4,7 +4,6 @@
 ;; All rights reserved
 
 ;; Version: 1.8 - 2019-03-01
-;; Package-Version: 20190602.1201
 ;; Author: xristos <xristos@sdf.lonestar.org>
 ;; URL: https://github.com/atomontage/xterm-color
 ;; Package-Requires: ((cl-lib "0.5"))

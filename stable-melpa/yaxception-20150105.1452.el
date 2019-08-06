@@ -4,7 +4,6 @@
 
 ;; Author: Hiroaki Otsu <ootsuhiroaki@gmail.com>
 ;; Keywords: exception error signal
-;; Package-Version: 20150105.1452
 ;; URL: https://github.com/aki2o/yaxception
 ;; Version: 0.3.3
 

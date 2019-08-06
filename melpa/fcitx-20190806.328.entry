@@ -1,2 +1,0 @@
-
-(fcitx . [(20190806 328) nil "Make fcitx better in Emacs" single ((:commit . "e5cc45d4c28d513c7c017a5eba1b06a35a016bcb") (:keywords "extensions") (:authors ("Junpeng Qiu" . "qjpchmail@gmail.com")) (:maintainer "Junpeng Qiu" . "qjpchmail@gmail.com") (:url . "https://github.com/cute-jumper/fcitx.el"))])

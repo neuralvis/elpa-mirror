@@ -1,2 +1,2 @@
 
-(go-rename . [(20190805 2101) ((go-mode (1 3 1))) "Integration of the 'gorename' tool into Emacs." single ((:commit . "ac6dd8c1f4b969fb93ecb8ac62b0700eeb1b62fd") (:keywords "tools"))])
+(go-rename . [(20190805 2101) ((go-mode (1 3 1))) "Integration of the 'gorename' tool into Emacs." single ((:commit . "8ddf0b369cff246d7e14f4592c8c053bda36b2eb") (:keywords "tools"))])
