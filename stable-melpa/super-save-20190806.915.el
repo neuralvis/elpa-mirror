@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/super-save
-;; Package-Version: 20180929.727
+;; Package-Version: 20190806.915
 ;; Keywords: convenience
 ;; Version: 0.3.0
 ;; Package-Requires: ((emacs "24.4"))
@@ -72,12 +72,31 @@ See `super-save-auto-save-when-idle'."
   :type 'boolean
   :package-version '(super-save . "0.3.0"))
 
+(defcustom super-save-exclude nil
+    "A list of regexps for buffer-file-name excluded from super-save.
+When a buffer-file-name matches any of the regexps it is ignored."
+  :group 'super-save
+  :type '(repeat (choice regexp))
+  :package-version '(super-save . "0.4.0"))
+
+(defun super-save-include-p (filename)
+  "Return non-nil if FILENAME doesn't match any of the `super-save-exclude'."
+  (let ((checks super-save-exclude)
+        (keepit t))
+    (while (and checks keepit)
+      (setq keepit (not (ignore-errors
+                          (if (stringp (car checks))
+                              (string-match (car checks) filename))))
+            checks (cdr checks)))
+    keepit))
+
 (defun super-save-command ()
   "Save the current buffer if needed."
   (when (and buffer-file-name
              (buffer-modified-p (current-buffer))
              (file-writable-p buffer-file-name)
-             (if (file-remote-p buffer-file-name) super-save-remote-files t))
+             (if (file-remote-p buffer-file-name) super-save-remote-files t)
+             (super-save-include-p buffer-file-name))
     (save-buffer)))
 
 (defvar super-save-idle-timer)
