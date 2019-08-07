@@ -1,0 +1,2 @@
+
+(bm . [(20190807 1217) nil "Visible bookmarks in buffer." tar ((:commit . "c552dc22422cdd99788cd4c878fc41c25b4c7de1") (:keywords "bookmark" "highlight" "faces" "persistent") (:authors ("Jo Odland <jo.odland(at)gmail.com>")) (:maintainer "Jo Odland <jo.odland(at)gmail.com>") (:url . "https://github.com/joodland/bm"))])

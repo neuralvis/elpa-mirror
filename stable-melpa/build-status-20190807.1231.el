@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017 Skye Shaw
 ;; Author: Skye Shaw <skye.shaw@gmail.com>
 ;; Version: 0.0.3 (unreleased)
-;; Package-Version: 20171111.1947
+;; Package-Version: 20190807.1231
 ;; Keywords: mode-line, ci, circleci, travis-ci
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; URL: http://github.com/sshaw/build-status
@@ -50,6 +50,10 @@ The API token can also be sit via: `git config --add build-status.api-token`.")
 (defvar build-status-travis-ci-token nil
   "Travis CI API token.
 The API token can also be sit via: `git config --add build-status.api-token`.")
+
+(defvar build-status-travis-ci-domain nil
+  "Travis CI domain.
+It can be travis-ci.org, travis-ci.com, or the domain of your own enterprise instance.")
 
 (defvar build-status-circle-ci-status-mapping-alist
   '(("infrastructure_fail" . "failed")
@@ -201,10 +205,15 @@ If `FILENAME' is not part of a CI project return nil."
             (nth 5 project)
             (nth 6 project))))
 
+(defun build-status--travis-ci-domain ()
+  (or build-status-travis-ci-domain
+      "travis-ci.org"))
+
 (defun build-status--travis-ci-url (project)
   (let* ((json (build-status--travis-ci-branch-request project))
          (build (cdr (assq 'id (assq 'branch json)))))
-    (format "https://travis-ci.org/%s/%s/builds/%s"
+    (format "https://%s/%s/%s/builds/%s"
+            (build-status--travis-ci-domain)
             (nth 4 project)
             (nth 5 project)
             build)))
@@ -256,7 +265,8 @@ Signals an error if the response does not contain an HTTP 200 status code."
 
 (defun build-status--travis-ci-branch-request (project)
   "Get the Travis CI build status of `PROJECT'."
-  (let ((url (format "https://api.travis-ci.org/repos/%s/%s/branches/%s"
+  (let ((url (format "https://api.%s/repos/%s/%s/branches/%s"
+                     (build-status--travis-ci-domain)
                      (nth 4 project)
                      (nth 5 project)
                      (nth 6 project)))
