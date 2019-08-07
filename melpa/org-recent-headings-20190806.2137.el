@@ -2,7 +2,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Url: http://github.com/alphapapa/org-recent-headings
-;; Package-Version: 20190805.1402
+;; Package-Version: 20190806.2137
 ;; Version: 0.2-pre
 ;; Package-Requires: ((emacs "26.1") (org "9.0.5") (dash "2.13.0") (dash-functional "1.2.0") (frecency "0.1") (s "1.12.0"))
 ;; Keywords: hypermedia, outlines, Org
@@ -469,6 +469,7 @@ Raises an error if entry can't be found."
               (goto-char (point-min))
               ;; TODO: If showing the entry fails, optionally automatically remove it from list.
               ;; TODO: Factor out entry-finding into separate function.
+              ;; FIXME: `org-id-find' returns nil if it can't find a marker, so we need to test its value.
               (cond (id (org-id-find id 'marker))
                     (outline-path (org-find-olp outline-path 'this-buffer))
                     (t (error "org-recent-headings: No way to find entry: %S" entry))))))
