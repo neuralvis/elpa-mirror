@@ -6,7 +6,7 @@
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2014-11-18
 ;; URL: https://github.com/flexibeast/picolisp-mode
-;; Package-Version: 20190806.348
+;; Package-Version: 20190808.300
 ;; Keywords: picolisp, lisp, programming
 
 ;;
@@ -86,7 +86,9 @@
 
 ;; Access documentation for the function at point with `C-c C-d' (`picolisp-describe-symbol'). By default, documentation will be displayed via the `lynx' HTML browser. However, one can set the value of `picolisp-documentation-method' to either a string containing the absolute path to an alternative browser, or - for users of Emacs 24.4 and above - to the symbol `picolisp--shr-documentation'; this function uses the `shr' library to display the documentation in an Emacs buffer. The absolute path to the documentation is specified via `picolisp-documentation-directory', and defaults to `/usr/share/doc/picolisp/'.
 
-;; ElDoc support is available; note, however, that documentation is not yet accessible for some symbols - in particular, the `c[ad]*ar' functions - due to edge-cases in the reference documentation structure.
+;; Eldoc support is available.
+
+;; If for some reason the PicoLisp documentation is not installed on the system, and cannot be installed, setting `picolisp-documentation-unavailable' to `t' will prevent `picolisp-mode' from trying to provide documentation.
 
 ;; ### Commenting
 
@@ -116,13 +118,7 @@
 
 ;; ## TODO
 
-;; * Implement `pilIndent' in Emacs Lisp, make available as a fallback when `pilIndent' is not available.
-
 ;; * Fix misalignment of single-'#' comments upon newline.
-
-;; * Handle edge-cases in reference documentation structure:
-
-;;   * `picolisp-describe-symbol' failures.
 
 ;; <a name="issues"></a>
 
@@ -179,6 +175,15 @@
   "System to be used to display PicoLisp documentation."
   :type '(radio (function :tag "Function - must already be defined" :value 'picolisp--shr-documentation)
                 (file :tag "HTML browser - absolute path" :value "/usr/bin/lynx"))
+  :group 'picolisp)
+
+(defcustom picolisp-documentation-unavailable nil
+  "Whether the PicoLisp documentation is unavailable on the system.
+
+If for some reason the PicoLisp documentation is not installed on
+the system, and cannot be installed, setting this to `t' will prevent
+`picolisp-mode' from trying to provide documentation."
+  :type 'boolean
   :group 'picolisp)
 
 (defcustom picolisp-repl-debug-p t
@@ -383,36 +388,37 @@ This function thus overrides those overrides, and:
 
 (defun picolisp--eldoc-function ()
   "Function for use by `eldoc-documentation-function'."
-  (let* ((sym (symbol-name (symbol-at-point)))
-         (dl (picolisp--extract-reference-documentation sym))
-         (result nil))
-    (if (string-or-null-p dl)
-        (if (y-or-n-p "Documentation not found. Turn off Eldoc mode in this buffer? ")
-            (eldoc-mode 0))
-      (unless (string= "nil" sym)
-        (dotimes (i (/ (length dl) 2))
-          (let ((fst (nth (* i 2) dl))
-                (snd (nth (1+ (* i 2)) dl)))
-            (if (eq 'dt (car-safe fst))
-                (cond
-                 ((eq 'cons (type-of (nth 2 fst)))
-                  (if (string= sym (cdaadr (nth 2 fst)))
-                      (setq result (concat (propertize sym 'face 'picolisp-builtin-face)
-                                           ", "
-                                           (nth 2 (caddr (nth 2 fst)))))))
-                 ;; Handle the documentation for `c[ad]*[ad]r'.
-                 ((eq 'string (type-of (nth 2 fst)))
-                  (if (string= "cXr" (cdaadr (nth 59 fst)))
-                      (setq result (concat (propertize "c[ad]*ar" 'face 'picolisp-builtin-face)
-                                           ", "
-                                           "(c[ad]*ar 'var) -> any"
-                                           "; "
-                                           (propertize "c[ad]*dr" 'face 'picolisp-builtin-face)
-                                           ", "
-                                           "(c[ad]*dr 'lst) -> any"))
-                    ;; Ignore any other edge-cases in the documentation structure.
-                    (setq result nil)))))))))
-    result))
+  (unless picolisp-documentation-unavailable
+    (let* ((sym (symbol-name (symbol-at-point)))
+           (dl (picolisp--extract-reference-documentation sym))
+           (result nil))
+      (if (string-or-null-p dl)
+          (if (y-or-n-p "Documentation not found. (Check the value of `picolisp-documentation-directory', or set `picolisp-documentation-unavailable' to `t'.) Turn off Eldoc mode in this buffer? ")
+              (eldoc-mode 0))
+        (unless (string= "nil" sym)
+          (dotimes (i (/ (length dl) 2))
+            (let ((fst (nth (* i 2) dl))
+                  (snd (nth (1+ (* i 2)) dl)))
+              (if (eq 'dt (car-safe fst))
+                  (cond
+                   ((eq 'cons (type-of (nth 2 fst)))
+                    (if (string= sym (cdaadr (nth 2 fst)))
+                        (setq result (concat (propertize sym 'face 'picolisp-builtin-face)
+                                             ", "
+                                             (nth 2 (caddr (nth 2 fst)))))))
+                   ;; Handle the documentation for `c[ad]*[ad]r'.
+                   ((eq 'string (type-of (nth 2 fst)))
+                    (if (string= "cXr" (cdaadr (nth 59 fst)))
+                        (setq result (concat (propertize "c[ad]*ar" 'face 'picolisp-builtin-face)
+                                             ", "
+                                             "(c[ad]*ar 'var) -> any"
+                                             "; "
+                                             (propertize "c[ad]*dr" 'face 'picolisp-builtin-face)
+                                             ", "
+                                             "(c[ad]*dr 'lst) -> any"))
+                      ;; Ignore any other edge-cases in the documentation structure.
+                      (setq result nil)))))))))
+      result)))
 
 (defun picolisp--extract-reference-documentation (sym)
   "Helper function to extract the 'Function Reference' definition
@@ -531,37 +537,38 @@ that can be identified by a simple regular expression RE."
 
 (defun picolisp--shr-documentation (sym)
   "Use `shr' to display documentation for symbol SYM at point."
-  (unless (or (> emacs-major-version 24)
-              (and (= emacs-major-version 24)
-                   (> emacs-minor-version 3)))
-    (error "Emacs 24.4 or greater required"))
-  (let ((dl (picolisp--extract-reference-documentation sym)))
-    (if (string-or-null-p dl)
-        (user-error dl))
-    (dotimes (i (/ (length dl) 2))
-      (let ((fst (nth (* i 2) dl))
-            (snd (nth (1+ (* i 2)) dl)))
-        (if (eq 'dt (car-safe fst))
-            (cond
-             ((eq 'cons (type-of (nth 2 fst)))
-              (if (string= sym (cdaadr (nth 2 fst)))
-                  (progn
-                    (switch-to-buffer (generate-new-buffer (concat "*PicoLisp documentation - '" sym "' *")))
-                    (insert (concat (propertize "Symbol:" 'face '(foreground-color . "ForestGreen")) " " (propertize sym 'face 'picolisp-builtin-face) "\n\n"))
-                    (shr-insert-document snd)
-                    (goto-char (point-min))
-                    (help-mode))))
-             ((eq 'string (type-of (nth 2 fst)))
-              ;; Handle the documentation for `c[ad]*[ad]r'.
-              (if (string= "cXr" (cdaadr (nth 59 fst)))
-                  (progn
-                    (switch-to-buffer (generate-new-buffer (concat "*PicoLisp documentation - 'cXr' *")))
-                    (insert (concat (propertize "Symbol:" 'face '(foreground-color . "ForestGreen")) " " (propertize "c[ad]*[ad]r" 'face 'picolisp-builtin-face) "\n\n"))
-                    (shr-insert-document snd)
-                    (goto-char (point-min))
-                    (help-mode))
-                ;; Ignore any other edge-cases in the documentation structure.
-                nil))))))))
+  (unless picolisp-documentation-unavailable
+    (unless (or (> emacs-major-version 24)
+                (and (= emacs-major-version 24)
+                     (> emacs-minor-version 3)))
+      (error "Emacs 24.4 or greater required"))
+    (let ((dl (picolisp--extract-reference-documentation sym)))
+      (if (string-or-null-p dl)
+          (user-error dl))
+      (dotimes (i (/ (length dl) 2))
+        (let ((fst (nth (* i 2) dl))
+              (snd (nth (1+ (* i 2)) dl)))
+          (if (eq 'dt (car-safe fst))
+              (cond
+               ((eq 'cons (type-of (nth 2 fst)))
+                (if (string= sym (cdaadr (nth 2 fst)))
+                    (progn
+                      (switch-to-buffer (generate-new-buffer (concat "*PicoLisp documentation - '" sym "' *")))
+                      (insert (concat (propertize "Symbol:" 'face '(foreground-color . "ForestGreen")) " " (propertize sym 'face 'picolisp-builtin-face) "\n\n"))
+                      (shr-insert-document snd)
+                      (goto-char (point-min))
+                      (help-mode))))
+               ((eq 'string (type-of (nth 2 fst)))
+                ;; Handle the documentation for `c[ad]*[ad]r'.
+                (if (string= "cXr" (cdaadr (nth 59 fst)))
+                    (progn
+                      (switch-to-buffer (generate-new-buffer (concat "*PicoLisp documentation - 'cXr' *")))
+                      (insert (concat (propertize "Symbol:" 'face '(foreground-color . "ForestGreen")) " " (propertize "c[ad]*[ad]r" 'face 'picolisp-builtin-face) "\n\n"))
+                      (shr-insert-document snd)
+                      (goto-char (point-min))
+                      (help-mode))
+                  ;; Ignore any other edge-cases in the documentation structure.
+                  nil)))))))))
 
 
 ;;
@@ -602,23 +609,24 @@ N defaults to 1."
   "Display documentation for symbol at point, via method
 specified by `picolisp-documentation-method'."
   (interactive)
-  (let ((process-environment
-         (if (eq 'string (type-of picolisp-documentation-method))
-             (add-to-list 'process-environment
-                          (concat "BROWSER=" picolisp-documentation-method))
-           process-environment))
-        (sym (symbol-name
-              (symbol-at-point))))
-    (if (member sym picolisp-builtins)
-        (cond
-         ((eq 'symbol (type-of picolisp-documentation-method))
-          (picolisp--shr-documentation sym))
-         ((eq 'string (type-of picolisp-documentation-method))
-          (start-process-shell-command "picolisp-doc" nil
-                                       (concat "pil -\"doc (car (nth (argv) 3)\" -bye - '" sym "' +")))
-         (t
-          (error "Unexpected value type in picolisp-documentation-method")))
-      (message "No PicoLisp builtin at point."))))
+  (unless picolisp-documentation-unavailable
+    (let ((process-environment
+           (if (eq 'string (type-of picolisp-documentation-method))
+               (add-to-list 'process-environment
+                            (concat "BROWSER=" picolisp-documentation-method))
+             process-environment))
+          (sym (symbol-name
+                (symbol-at-point))))
+      (if (member sym picolisp-builtins)
+          (cond
+           ((eq 'symbol (type-of picolisp-documentation-method))
+            (picolisp--shr-documentation sym))
+           ((eq 'string (type-of picolisp-documentation-method))
+            (start-process-shell-command "picolisp-doc" nil
+                                         (concat "pil -\"doc (car (nth (argv) 3)\" -bye - '" sym "' +")))
+           (t
+            (error "Unexpected value type in picolisp-documentation-method")))
+        (message "No PicoLisp builtin at point.")))))
 
 ;;;###autoload
 (define-derived-mode picolisp-mode lisp-mode "PicoLisp"
