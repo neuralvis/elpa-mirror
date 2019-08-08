@@ -1,2 +1,0 @@
-
-(dart-mode . [(20190806 1059) ((emacs (24 5)) (cl-lib (0 5)) (dash (2 10 0)) (flycheck (0 23)) (s (1 10))) "Major mode for editing Dart files" single ((:commit . "e41f41e09cfeb35f3733f07c06ee8037825fb5ab") (:keywords "languages") (:authors ("Natalie Weizenbaum") ("Brady Trainor" . "mail@bradyt.com")) (:maintainer "Brady Trainor" . "mail@bradyt.com") (:url . "https://github.com/bradyt/dart-mode"))])

@@ -4,7 +4,6 @@
 
 ;; Author: John Cinnamond
 ;; Version: 1.2.0
-;; Package-Version: 20170214.1320
 
 ;;; Commentary:
 ;;
@@ -151,5 +150,3 @@ The default prefix is \"C-c ?\"
 
 (provide 'seeing-is-believing)
 ;;; seeing-is-believing-mode.el ends here
-
-;;; seeing-is-believing.el ends here
