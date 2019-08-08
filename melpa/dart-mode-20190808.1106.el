@@ -2,7 +2,7 @@
 
 ;; Author: Brady Trainor <mail@bradyt.net>
 ;; URL: https://github.com/bradyt/dart-mode
-;; Package-Version: 20190808.500
+;; Package-Version: 20190808.1106
 ;; Version: 1.0.4
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: languages
@@ -103,19 +103,19 @@ indentation levels from right to left."
 (defvar dart--builtins
   ;; ECMA 408; Section: Identifier Reference
   ;; "Built-in identifiers"
-  '("abstract" "as" "deferred" "dynamic" "export" "external" "hide"
-    "factory" "get" "implements" "import" "library" "of" "operator"
-    "part" "set" "show" "static" "typedef"))
+  '("abstract" "as" "covariant" "deferred" "dynamic" "export"
+    "external" "factory" "Function" "get" "implements" "import"
+    "interface" "library" "mixin" "operator" "part" "set" "static"
+    "typedef"))
 
 (defvar dart--keywords
   ;; ECMA 408; Section: Reserved Words
   '("assert" "break" "case" "catch" "class" "const" "continue"
     "default" "do" "else" "enum" "extends" "final" "finally" "for"
     "if" "in" "is" "new" "rethrow" "return" "super" "switch" "this"
-    "throw" "try" "var" "while" "with" "mixin"))
-;; mixin is not part of ECMA 408 but it's used in dart.
+    "throw" "try" "var" "while" "with"))
 
-(defvar dart--types '("bool" "double" "dynamic" "int" "num" "void"))
+(defvar dart--types '("bool" "double" "int" "num" "void"))
 
 (defvar dart--constants '("false" "null" "true"))
 
@@ -140,6 +140,11 @@ indentation levels from right to left."
                                        (one-or-more (any (?a . ?f)
                                                          (?A . ?F)
                                                          digit)))))
+
+(defvar dart--operator-declaration-re (rx "operator"
+                                          (one-or-more space)
+                                          (group
+                                           (one-or-more (not (any ?\())))))
 
 (eval-and-compile (defun dart--identifier (&optional case)
    `(and (or word-start symbol-start)
@@ -263,6 +268,43 @@ For example, \"main\" in \"void main() async\" would be matched."
           (scan-error nil))
         (goto-char end))
       (throw 'result nil))))
+
+(defun dart--abstract-method-func (limit)
+  "Font-lock matcher function for abstract methods.
+
+Matches function declarations before LIMIT that look like,
+
+  \"  [^ ][^=]* lowercaseIdentifier([...]);\"
+
+For example, \"compareTo\" in \"  int compareTo(num other);\" would be
+matched."
+  (catch 'result
+    (let (beg end)
+        (while (re-search-forward
+                (rx (and (not (any ?\.)) (group (eval (dart--identifier 'lower)))) ?\() limit t)
+          (setq beg (match-beginning 1))
+          (setq end (match-end 1))
+          (condition-case nil
+              (progn
+                (up-list)
+                (when (and (< (point) (point-max))
+                           (= (char-after (point)) ?\;))
+                  (goto-char beg)
+                  (back-to-indentation)
+                  (when (and (= (current-column) 2)
+                             (not (looking-at "return"))
+                             (string-match-p
+                              " " (buffer-substring-no-properties
+                                   (point) beg))
+                             (not (string-match-p
+                                   "=" (buffer-substring-no-properties
+                                        (point) beg))))
+                    (goto-char end)
+                    (set-match-data (list beg end))
+                    (throw 'result t))))
+            (scan-error nil))
+          (goto-char end)))
+    (throw 'result nil)))
 
 (defun dart--declared-identifier-func (limit)
   "Font-lock matcher function for declared identifiers.
@@ -460,7 +502,9 @@ untyped parameters. For example, in
 
 (defvar dart-font-lock-keywords-1
   `((,(regexp-opt dart--file-directives 'words) . font-lock-builtin-face)
-    (dart--function-declaration-func            . font-lock-function-name-face)))
+    (dart--function-declaration-func            . font-lock-function-name-face)
+    (,dart--operator-declaration-re             . (1 font-lock-function-name-face))
+    (dart--abstract-method-func                 . font-lock-function-name-face)))
 
 (defvar dart-font-lock-keywords-2
   `(,dart--async-keywords-re
@@ -473,7 +517,9 @@ untyped parameters. For example, in
     (,dart--constants-re                   . font-lock-constant-face)
     (,(regexp-opt dart--types 'words)     . font-lock-type-face)
     (,dart--types-re                      . font-lock-type-face)
-    (dart--function-declaration-func      . font-lock-function-name-face)))
+    (dart--function-declaration-func      . font-lock-function-name-face)
+    (,dart--operator-declaration-re       . (1 font-lock-function-name-face))
+    (dart--abstract-method-func           . font-lock-function-name-face)))
 
 (defvar dart-font-lock-keywords-3
   (append
