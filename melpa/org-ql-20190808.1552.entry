@@ -1,0 +1,2 @@
+
+(org-ql . [(20190808 1552) ((emacs (26 1)) (dash (2 13)) (org (9 0)) (s (1 12 0))) "Query language for Org buffers" tar ((:commit . "e7ef4074eedc0c828e874db5b3a148e9e954b695") (:keywords "hypermedia" "outlines" "org" "agenda") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/org-ql"))])
