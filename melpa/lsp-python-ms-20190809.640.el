@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson
 ;; Version: 0.2.0
-;; Package-Version: 20190719.659
+;; Package-Version: 20190809.640
 ;; Package-Requires: ((cl-lib "0.6.1") (lsp-mode "6.0") (python "0.26.1") (json "1.4") (emacs "24.4"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -177,7 +177,7 @@ or projectile, or just return `default-directory'."
   (cond
    ((and (fboundp #'lsp-workspace-root) (lsp-workspace-root)))
    ((fboundp #'ffip-get-project-root-directory) (ffip-get-project-root-directory))
-   ((fboundp #'projectile-project-root)) (projectile-project-root)
+   ((fboundp #'projectile-project-root) (projectile-project-root))
    (t default-directory)))
 
 ;; I based most of this on the vs.code implementation:
