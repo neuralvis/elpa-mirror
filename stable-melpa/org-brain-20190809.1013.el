@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20190731.1217
+;; Package-Version: 20190809.1013
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9.2"))
 ;; Version: 0.7
@@ -123,6 +123,12 @@ filenames will be shown instead, which is faster."
   :group 'org-brain
   :type '(boolean))
 
+(defcustom org-brain-headline-entry-name-format-string "%s::%s"
+  "How headline entries are represented when choosing entries.
+This `format' string is used in `org-brain-entry-name' for headline entries.
+`format' gets two objects: the file and the headline."
+  :group 'org-brain
+  :type '(string))
 (defcustom org-brain-visualize-text-hook nil
   "Hook runs after inserting `org-brain-text' in `org-brain-visualize'.
 
@@ -204,11 +210,21 @@ Doing so allows for adding multiple entries at once."
   :group 'org-brain
   :type '(string))
 
-(defcustom org-brain-visualize-one-child-per-line nil
-  "If non-nil, each child of the visualized entry is listed on its own line.
-If nil (default), children are filled up to the `fill-column'."
+(make-obsolete-variable
+ 'org-brain-visualize-one-child-per-line
+ "Setting `org-brain-child-linebreak-sexp' to 0 visualizes one child per line."
+ "0.7")
+
+(defcustom org-brain-child-linebreak-sexp 'fill-column
+  "Where to break lines when visualizing children?
+Reasonable values include:
+
+'0: every child will be on its own line
+'fill-column: lines will break at `fill-column'
+'(window-width): lines will break at the width of the window
+'most-positive-fixnum: All children will be on one line"
   :group 'org-brain
-  :type '(boolean))
+  :type '(sexp))
 
 (defcustom org-brain-refile-max-level 1
   "The default max-level used by `org-brain-refile'."
@@ -560,13 +576,12 @@ In `org-brain-visualize' just return `org-brain--vis-entry'."
 
 (defun org-brain-entry-name (entry)
   "Get name string of ENTRY."
-  (if org-brain-file-entries-use-title
-      (if (org-brain-filep entry)
+  (if (org-brain-filep entry)
+      (if org-brain-file-entries-use-title
           (concat (file-name-directory entry) (org-brain-title entry))
-        (concat (org-brain-entry-name (car entry)) "::" (cadr entry)))
-    (if (org-brain-filep entry)
-        entry
-      (concat (car entry) "::" (cadr entry)))))
+        entry)
+    (format org-brain-headline-entry-name-format-string
+            (org-brain-entry-name (car entry)) (cadr entry))))
 
 (defun org-brain-entry-data (entry)
   "Run `org-element-parse-buffer' on ENTRY text.
@@ -585,7 +600,8 @@ Isn't recursive, so do not parse local children."
               (delay-mode-hooks
                 (org-mode)
                 (mapcar (lambda (entry)
-                          (cons (concat file-entry-name "::" (car entry))
+                          (cons (format org-brain-headline-entry-name-format-string
+                                        file-entry-name (car entry))
                                 (cadr entry)))
                         (remove nil (org-map-entries
                                      #'org-brain--name-and-id-at-point))))))))
@@ -2258,16 +2274,15 @@ Helper function for `org-brain-visualize'."
 (defun org-brain--vis-children (entry)
   "Insert children of ENTRY.
 Helper function for `org-brain-visualize'."
-  (when-let ((children (org-brain-children entry)))
+  (when-let ((children (org-brain-children entry))
+             (fill-col (eval org-brain-child-linebreak-sexp)))
     (insert "\n\n")
     (dolist (child (sort children org-brain-visualize-sort-function))
       (let ((child-title (org-brain-title child))
             (face (if (member entry (org-brain--local-parent child))
                       'org-brain-local-child
                     'org-brain-child)))
-        (when (or org-brain-visualize-one-child-per-line
-                  (> (+ (current-column) (length child-title))
-                     fill-column))
+        (when (> (+ (current-column) (length child-title)) fill-col)
           (insert "\n"))
         (org-brain-insert-visualize-button child face)
         (insert "  ")))))

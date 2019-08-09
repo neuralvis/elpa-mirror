@@ -8,12 +8,12 @@
 ;; Original author:  wandad guscheh <wandad.guscheh@fh-hagenberg.at>
 ;; Author:           Cayetano Santos
 ;; Keywords: languages, convenience
-;; Package-Version: 20190730.752
+;; Package-Version: 20190809.922
 ;; Filename: vhdl-tools.el
 ;; Description: Utilities for navigating vhdl sources.
 ;; URL: https://github.com/csantosb/vhdl-tools/wiki
 ;; Compatibility: GNU Emacs >= 26.2
-;; Version: 6.1
+;; Version: 6.2
 ;; Package-Requires: ((ggtags "0.8.13") (emacs "26.2") (helm-rg "0.1") outshine)
 
 ;;; License:
