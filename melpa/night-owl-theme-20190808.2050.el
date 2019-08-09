@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Jensen <aaronjensen@gmail.com>
 ;; URL: http://github.com/aaronjensen/night-owl-theme
-;; Package-Version: 20190623.657
+;; Package-Version: 20190808.2050
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24"))
 
@@ -322,7 +322,7 @@ Also affects 'linum-mode' background."
                       :weight bold))))
 
    `(font-lock-preprocessor-face
-     ((t (:foreground ,night-owl-red))))
+     ((t (:foreground ,night-owl-magenta))))
 
    `(font-lock-regexp-grouping-construct
      ((t (:foreground ,night-owl-yellow
@@ -336,7 +336,7 @@ Also affects 'linum-mode' background."
      ((t (:foreground ,night-owl-string))))
 
    `(font-lock-type-face
-     ((t (:foreground ,night-owl-blue
+     ((t (:foreground ,night-owl-magenta
                       :italic nil))))
 
    `(font-lock-variable-name-face
@@ -360,7 +360,8 @@ Also affects 'linum-mode' background."
                        :background ,night-owl-background))))
 
    `(highlight
-     ((t (:background ,night-owl-highlight))))
+     ((t (:background ,night-owl-highlight
+                      :distant-foreground ,night-owl-foreground-muted))))
 
    `(lazy-highlight
      ((t (:inherit highlight
@@ -368,7 +369,8 @@ Also affects 'linum-mode' background."
 
    `(region
      ((t (:inherit highlight
-                   :background ,night-owl-highlight))))
+                   :background ,night-owl-highlight
+                   :distant-foreground ,night-owl-foreground-muted))))
 
    `(secondary-selection
      ((t (:inherit region

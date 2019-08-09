@@ -2,7 +2,7 @@
 
 ;; Author: Brady Trainor <mail@bradyt.net>
 ;; URL: https://github.com/bradyt/dart-mode
-;; Package-Version: 20190808.1106
+;; Package-Version: 20190808.2226
 ;; Version: 1.0.4
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: languages
@@ -335,9 +335,10 @@ For example, \"height\" in \"const int height\" would be matched."
                            '("bool" "double" "dynamic" "int" "num" "void"
                              "var"
                              "get" "set")))
-          (set-match-data (list beg end))
           (goto-char end)
-          (throw 'result t))
+          (unless (nth 3 (syntax-ppss))
+            (set-match-data (list beg end))
+            (throw 'result t)))
         (goto-char (match-end 1)))
       (throw 'result nil))))
 
