@@ -1,0 +1,2 @@
+
+(ellocate . [(20190810 1820) ((emacs (24 4)) (s (1 12 0)) (f (0 20 0)) (ivy (0 11 0))) "The locate command reimplemented in Emacs Lisp" single ((:commit . "a200625e4e7040817da9e04e5522670cb797d5c8") (:keywords "matching") (:authors ("Sebastian Wålinder" . "s.walinder@gmail.com")) (:maintainer "Sebastian Wålinder" . "s.walinder@gmail.com") (:url . "https://github.com/walseb/ellocate"))])
