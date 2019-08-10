@@ -5,7 +5,7 @@
 ;; Filename: centaur-tabs.el
 ;; Description: Provide an out of box configuration to use highly customizable tabs.
 ;; URL: https://github.com/ema2159/centaur-tabs
-;; Package-Version: 20190810.221
+;; Package-Version: 20190810.243
 ;; Author: Emmanuel Bustos <ema2159@gmail.com>
 ;; Maintainer: Emmanuel Bustos <ema2159@gmail.com>
 ;; Created: 2019-21-19 22:14:34
@@ -840,6 +840,12 @@ Call `centaur-tabs-tab-label-function' to obtain a label for TAB."
       'local-map centaur-tabs-default-map)
      modified-marker
      close-button
+     (propertize
+      " "
+      'face face
+      'centaur-tabs-tab tab
+      'pointer centaur-tabs-mouse-pointer
+      'local-map centaur-tabs-default-map)
      (centaur-tabs-separator-render centaur-tabs-style-right face))))
 
 (defun centaur-tabs-line-format (tabset)
