@@ -1,0 +1,2 @@
+
+(marquee-header . [(20190805 140) ((emacs (24 4))) "Code interface for displaying marquee in header." single ((:commit . "731a52ee49e24051bfbbd04c84e2d321d1cb0952") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs090218/marquee-header"))])
