@@ -1,0 +1,2 @@
+
+(cloud-theme . [(20190811 1842) ((emacs (24))) "A light colored theme" single ((:commit . "195ef1d55cf0e9aa25a257c93f1cff5ecf807374") (:keywords "color" "theme") (:authors ("Valerii Lysenko" . "vallyscode@gmail.com")) (:maintainer "Valerii Lysenko" . "vallyscode@gmail.com") (:url . "https://github.com/vallyscode/cloud-theme"))])
