@@ -2,7 +2,7 @@
 
 ;; Author: Sebastian Wålinder <s.walinder@gmail.com>
 ;; URL: https://github.com/walseb/exwm-firefox-core
-;; Package-Version: 20190608.2213
+;; Package-Version: 20190811.1102
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.4") (exwm "0.16"))
 ;; Keywords: extensions
@@ -138,12 +138,14 @@
   (exwm-input--fake-key 'S-next))
 
 ;;; Scroll half page
-(defvar exwm-firefox-core-half-page-lenght 9
-  "The lenght of half a page.")
+(defcustom exwm-firefox-core-half-page-lenght 9
+  "The lenght of half a page."
+  :type 'integer
+  :group 'exwm-firefox-core)
 
 (defun exwm-firefox-core-half-page-move (key)
   "Press KEY the amount of times defined by `exwm-firefox-core-half-page-lenght'."
-  (dotimes (i exwm-firefox-core-half-page-lenght)
+  (dotimes (_ exwm-firefox-core-half-page-lenght)
     (exwm-input--fake-key key)))
 
 ;;;###autoload
@@ -172,17 +174,31 @@
   (exwm-firefox-core-half-page-move 'S-up))
 
 ;;; History
-;;;###autoload
-(defun exwm-firefox-core-history-forward ()
-  "Forward in history."
-  (interactive)
-  (exwm-input--fake-key 'M-right))
+(defcustom exwm-firefox-core-history-move-delay 0.01
+  "Delay used when moving in history multiple times at a time.
+Should be set depending on how fast your system is."
+  :type 'float
+  :group 'exwm-firefox-core)
 
 ;;;###autoload
-(defun exwm-firefox-core-history-back ()
+(defun exwm-firefox-core-history-forward (&optional arg)
+  "Forward in history."
+  (interactive "P")
+  (let ((times (or arg 1)))
+    (dotimes (_ times)
+      (exwm-input--fake-key 'M-right)
+      (when (> times 1)
+        (sit-for exwm-firefox-core-history-move-delay)))))
+
+;;;###autoload
+(defun exwm-firefox-core-history-back (&optional arg)
   "Back in history."
-  (interactive)
-  (exwm-input--fake-key 'M-left))
+  (interactive "P")
+  (let ((times (or arg 1)))
+    (dotimes (_ times)
+      (exwm-input--fake-key 'M-left)
+      (when (> times 1)
+        (sit-for exwm-firefox-core-history-move-delay)))))
 
 ;;;###autoload
 (defun exwm-firefox-core-history-sidebar ()

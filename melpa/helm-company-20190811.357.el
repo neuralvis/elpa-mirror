@@ -5,7 +5,7 @@
 ;; Author: Yasuyuki Oka <yasuyk@gmail.com>
 ;; Maintainer: Daniel Ralston <Sodel-the-Vociferous@users.noreply.github.com>
 ;; Version: 0.2.4
-;; Package-Version: 20190810.2338
+;; Package-Version: 20190811.357
 ;; URL: https://github.com/Sodel-the-Vociferous/helm-company
 ;; Package-Requires: ((helm "1.5.9") (company "0.6.13"))
 
@@ -223,6 +223,10 @@ annotations.")
 (defun helm-company--get-annotations (candidate)
   "Return the annotation (if any) supplied for a candidate by
 company-backend."
+  (let ((annot (company-call-backend 'annotation candidate)))
+    (if (null annot)
+        nil
+      (helm-company--clean-string annot))))
 
 (defun helm-company--make-display-candidate-hash (candidates)
   (let ((hash (make-hash-table :test 'equal :size 1000)))
@@ -248,6 +252,29 @@ company-backend."
   (let ((display-strs (mapcar 'substring-no-properties display-strs)))
     (mapcar (lambda (display-str) (car (gethash display-str helm-company-display-candidates-hash)))
             display-strs)))
+
+;; Taken verbatim from `company--clean-string'. I don't use that function
+;; directly because it's a private function inside `company', so I can't rely on
+;; it. I have copied it here.
+(defun helm-company--clean-string (str)
+  (replace-regexp-in-string
+   "\\([^[:graph:] ]\\)\\|\\(\ufeff\\)\\|[[:multibyte:]]"
+   (lambda (match)
+     (cond
+      ((match-beginning 1)
+       ;; FIXME: Better char for 'non-printable'?
+       ;; We shouldn't get any of these, but sometimes we might.
+       "\u2017")
+      ((match-beginning 2)
+       ;; Zero-width non-breakable space.
+       "")
+      ((> (string-width match) 1)
+       (concat
+        (make-string (1- (string-width match)) ?\ufeff)
+        match))
+      (t match)))
+   str))
+
 
 (defvar helm-company-map
   (let ((keymap (make-sparse-keymap)))
