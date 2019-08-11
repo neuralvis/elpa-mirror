@@ -1,0 +1,2 @@
+
+(helm-company . [(20190810 2338) ((helm (1 5 9)) (company (0 6 13))) "Helm interface for company-mode" single ((:commit . "ca3cbf4a80076c44874d8fea4302ca8fda73a92a") (:authors ("Yasuyuki Oka" . "yasuyk@gmail.com")) (:maintainer "Daniel Ralston" . "Sodel-the-Vociferous@users.noreply.github.com") (:url . "https://github.com/Sodel-the-Vociferous/helm-company"))])

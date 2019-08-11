@@ -4,7 +4,6 @@
 
 ;; Author: Johannes Choo <jhanschoo@gmail.com>
 ;; Version: 1.0.5
-;; Package-Version: 20190303.1358
 ;; Created: 11 Dec 2016
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: i18n, multilingual, input method, greek

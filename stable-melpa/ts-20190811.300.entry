@@ -1,0 +1,2 @@
+
+(ts . [(20190811 300) ((emacs (26 1)) (dash (2 14 1)) (s (1 12 0))) "Timestamp and date/time library" single ((:commit . "d45c0ac4b86a330f423851ac05c8f4675ba1a1ac") (:keywords "date" "time" "timestamp") (:authors (nil . "Adam Porter <adam@alphapapa.net")) (:maintainer nil . "Adam Porter <adam@alphapapa.net") (:url . "http://github.com/alphapapa/ts.el"))])

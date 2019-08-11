@@ -5,7 +5,7 @@
 ;; Author: Yasuyuki Oka <yasuyk@gmail.com>
 ;; Maintainer: Daniel Ralston <Sodel-the-Vociferous@users.noreply.github.com>
 ;; Version: 0.2.4
-;; Package-Version: 20190725.247
+;; Package-Version: 20190810.2338
 ;; URL: https://github.com/Sodel-the-Vociferous/helm-company
 ;; Package-Requires: ((helm "1.5.9") (company "0.6.13"))
 
@@ -221,21 +221,8 @@ annotations.")
       (concat candidate " " (helm-company--propertize-annotation annotation)))))
 
 (defun helm-company--get-annotations (candidate)
-  "Return a list of the annotations (if any) supplied for a
-candidate by company-backend.
-
-When getting annotations from `company-backend', first it tries
-with the `candidate' arg. If that doesn't work, it gets the
-original candidate string(s) from
-`helm-company-display-candidates-hash', and tries with those."
-  (company-call-backend 'annotation candidate))
-
-(defun helm-company--make-display-candidate-pairs (candidates)
-  (cl-loop for cand in candidates
-           append
-           (cl-loop for annot in (helm-company--get-annotations cand)
-                    collect (cons (helm-company--make-display-string cand annot)
-                                  cand))))
+  "Return the annotation (if any) supplied for a candidate by
+company-backend."
 
 (defun helm-company--make-display-candidate-hash (candidates)
   (let ((hash (make-hash-table :test 'equal :size 1000)))
@@ -245,24 +232,6 @@ original candidate string(s) from
              for key = (substring-no-properties display-str)
              do (puthash key (cons display-str candidate) hash))
     hash))
-
-(defun helm-company-add-annotations-transformer-1 (candidates &optional sort)
-  (with-helm-current-buffer
-    (let ((results (helm-company--make-display-candidate-pairs candidates)))
-      (if sort
-          (sort results #'helm-generic-sort-fn)
-        results))))
-
-(defun helm-company-add-annotations-transformer (candidates _source)
-  "Transform a flat list of completion candidate strings
-into (DISPLAY . REAL) pairs.
-
-The display strings have the company-provided annotation
-appended, and formatted in the `company-tooltip-annotation'
-face."
-  (if (or (not helm-company-show-annotations) (consp (car candidates)))
-      candidates
-    (helm-company-add-annotations-transformer-1 candidates (null helm--in-fuzzy))))
 
 (defun helm-company-get-display-strings ()
   (let ((sort (null helm--in-fuzzy))
