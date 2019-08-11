@@ -1,2 +1,0 @@
-
-(chocolate-theme . [(20190809 1016) ((emacs (24 1)) (autothemer (0 2))) "A dark chocolaty theme" single ((:commit . "2265c02c68686778f4d54638442e0b229ff524dd") (:url . "http://github.com/SavchenkoValeriy/emacs-chocolate-theme"))])

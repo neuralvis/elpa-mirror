@@ -6,7 +6,7 @@
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2014-11-18
 ;; URL: https://github.com/flexibeast/picolisp-mode
-;; Package-Version: 20190808.300
+;; Package-Version: 20190811.1431
 ;; Keywords: picolisp, lisp, programming
 
 ;;
@@ -31,11 +31,11 @@
 
 ;; `picolisp-mode' provides a major mode for PicoLisp programming.
 
-;; This package is not based on, nor connected with, the PicoLisp support for Emacs provided in [the PicoLisp distribution](http://software-lab.de/down.html), or the more recently [updated version of that support](https://github.com/tj64/picolisp-mode). At this stage, the main advantages provided by this package are:
+;; The `picolisp-mode' in this package is not based on, nor connected with, the PicoLisp support for Emacs provided in [the PicoLisp distribution](http://software-lab.de/down.html), or the more recently [updated version of that support](https://github.com/tj64/picolisp-mode). At this stage, the main advantages provided by this package are:
 
 ;; * an actively maintained and supported system;
 
-;; * access to the PicoLisp reference documentation, including via ElDoc;
+;; * access to the PicoLisp reference documentation, including via Eldoc;
 
 ;; * basic Imenu support;
 
@@ -50,6 +50,7 @@
 ;; - [Usage](#usage)
 ;;  - [Syntax highlighting](#usage-highlighting)
 ;;  - [REPL](#repl)
+;;  - [Org Babel](#usage-org-babel)
 ;;  - [Documentation](#documentation)
 ;;  - [Commenting](#commenting)
 ;;  - [Indentation](#indentation)
@@ -81,6 +82,14 @@
 ;; ### REPL
 
 ;; Start a `pil' REPL session with `M-x picolisp-repl' or, from a `picolisp-mode' buffer, with `C-c C-r' (`picolisp-repl').
+
+;; <a name='usage-org-babel'></a>
+
+;; ### Org Babel
+
+;; Support for Org Babel sessions is available via the `inferior-picolisp' feature, a fork of [tj64's `inferior-picolisp'](https://github.com/tj64/picolisp-mode/) stripped down to only provide the minimum necessary for Org Babel session support, and modified to be compatible with this package.
+
+;; Load it with `(require 'inferior-picolisp)', and make sure the `org-babel-picolisp-cmd' variable defined by `ob-picolisp' is correctly specified for your system.
 
 ;; ### Documentation
 

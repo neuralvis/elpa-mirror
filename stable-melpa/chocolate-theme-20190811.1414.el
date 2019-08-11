@@ -4,7 +4,7 @@
 
 ;; Authors: Valeriy Savchenko <sinmipt@gmail.com>
 ;; URL: http://github.com/SavchenkoValeriy/emacs-chocolate-theme
-;; Package-Version: 20190809.1016
+;; Package-Version: 20190811.1414
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.1") (autothemer "0.2"))
 
@@ -75,8 +75,8 @@
   (cursor (:background chocolate-hue-4))
   (link (:foreground chocolate-hue-1 :underline t))
   (link-visited (:foreground chocolate-hue-1 :underline nil))
-  (mode-line (:foreground chocolate-hue-6 :background chocolate-syntax-bg :box nil))
-  (mode-line-inactive (:foreground chocolate-hue-6-3 :background chocolate-hue-6 :box nil))
+  (mode-line (:foreground chocolate-hue-6 :background chocolate-syntax-light :box nil))
+  (mode-line-inactive (:foreground chocolate-hue-6-3 :background chocolate-syntax-bg-light :box nil))
   (fringe (:background chocolate-syntax-bg))
   (linum (:foreground chocolate-hue-4-2))
   (region (:background chocolate-syntax-light :distant-foreground chocolate-hue-4))
@@ -241,7 +241,7 @@
 
   ;; MODE SUPPORT: powerline
   (powerline-active1 (:background chocolate-syntax-light :foreground chocolate-hue-4 :inherit 'mode-line))
-  (powerline-active2 (:background chocolate-syntax-light :inherit 'mode-line))
+  (powerline-active2 (:background chocolate-syntax-bg))
   (powerline-inactive1 (:background chocolate-syntax-bg-dark :inherit 'mode-line-inactive))
   (powerline-inactive2 (:background chocolate-syntax-bg-dark :inherit 'mode-line-inactive))
   (spaceline-highlight-face (:background chocolate-hue-6 :foreground chocolate-syntax-bg-dark))
