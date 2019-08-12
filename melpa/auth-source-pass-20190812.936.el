@@ -6,7 +6,7 @@
 ;;         Nicolas Petton <nicolas@petton.fr>
 ;;         Keith Amidon <camalot@picnicpark.org>
 ;; Version: 5.0.0
-;; Package-Version: 20190628.650
+;; Package-Version: 20190812.936
 ;; Package-Requires: ((emacs "25"))
 ;; Url: https://github.com/DamienCassou/auth-password-store
 ;; Created: 07 Jun 2015
@@ -46,7 +46,7 @@
   :group 'auth-source
   :version "27.1")
 
-(defcustom auth-source-pass-filename "~/.password-store"
+(defcustom auth-source-pass-filename (or (getenv "PASSWORD_STORE_DIR") "~/.password-store")
   "Filename of the password-store folder."
   :type 'directory
   :version "27.1")
