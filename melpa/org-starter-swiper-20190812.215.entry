@@ -1,0 +1,2 @@
+
+(org-starter-swiper . [(20190812 215) ((emacs (25 1)) (swiper (0 11)) (org-starter (0 2 3))) "Swiper for org-starter" single ((:commit . "cf99a57ec95773a765e71b764abaff974d7fa278") (:authors ("Akira Komamura" . "akira.komamura@gmail.com")) (:maintainer "Akira Komamura" . "akira.komamura@gmail.com") (:url . "https://github.com/akirak/org-starter"))])

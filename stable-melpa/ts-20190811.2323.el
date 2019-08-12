@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net
 ;; URL: http://github.com/alphapapa/ts.el
-;; Package-Version: 20190811.1900
+;; Package-Version: 20190811.2323
 ;; Version: 0.2-pre
 ;; Package-Requires: ((emacs "26.1") (dash "2.14.1") (s "1.12.0"))
 ;; Keywords: date time timestamp
@@ -362,7 +362,7 @@ not support timestamps that contain seconds."
                 (setf minute 59))
               (unless hour
                 (setf hour 23))))
-      ('nil (error "FILL must be `begin' or `end'")))
+      (_ (error "FILL must be `begin' or `end'")))
     (make-ts :second second :minute minute :hour hour :day day :month month :year year)))
 
 ;;;; Functions

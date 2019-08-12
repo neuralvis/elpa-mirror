@@ -5,6 +5,7 @@
 ;; Author: Matúš Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Version: 1.1.0
+;; Package-Version: 20180406.1156
 ;; Created: 26th March 2015
 ;; Keywords: conf
 

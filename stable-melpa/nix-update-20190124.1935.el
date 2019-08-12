@@ -6,6 +6,7 @@
 ;; Maintainer: John Wiegley <johnw@newartisans.com>
 ;; Created: 1 Feb 2018
 ;; Version: 1.0
+;; Package-Version: 20190124.1935
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: nix
 ;; URL: https://github.com/jwiegley/nix-update-el
