@@ -4,7 +4,7 @@
 ;; Author:      Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; URL: https://github.com/emacs-helm/helm-org
-;; Package-Version: 20190811.910
+;; Package-Version: 20190813.604
 ;; Package-Requires: ((helm "3.3") (emacs "24.4"))
 ;; Version: 1.0
 
@@ -34,9 +34,6 @@
 (require 'easymenu)
 
 (defvar helm-completing-read-handlers-alist)
-
-(add-to-list 'helm-completing-read-handlers-alist '(org-capture . helm-org-completing-read-tags))
-(add-to-list 'helm-completing-read-handlers-alist '(org-set-tags . helm-org-completing-read-tags))
 
 ;; Menu
 ;;;###autoload

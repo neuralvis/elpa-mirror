@@ -1,6 +1,6 @@
 ;;; ox-rst.el --- Export reStructuredText using org-mode. -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015-2018  Masanao Igarashi
+;; Copyright (C) 2015-2019  Masanao Igarashi
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,10 +18,10 @@
 
 ;; Author: Masanao Igarashi <syoux2@gmail.com>
 ;; Keywords: org, rst, reST, reStructuredText
-;; Package-Version: 20190809.847
-;; Version: 0.2
-;; URL: https://github.com/masayuko/ox-rst
-;; Package-Requires: ((emacs "24.4") (org "8.2.4"))
+;; Package-Version: 20190813.427
+;; Version: 0.3
+;; URL: https://github.com/msnoigrs/ox-rst
+;; Package-Requires: ((emacs "26.1") (org "8.3"))
 
 ;;; Commentary:
 ;; This library implements an reStructuredText back-end for
@@ -170,7 +170,7 @@ When nil, an anchor with reference is used to link to the image."
 
 (defcustom org-rst-inline-image-rules
   '(("file" . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\|svgz\\|swf\\)\\'")
-    ("fuzzy" . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\|svgz\\|swf\\)\\'")
+    ("attachment" . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\|svgz\\|swf\\)\\'")
     ("http" . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\|svgz\\|swf\\)\\'")
     ("https" . "\\.\\(jpeg\\|jpg\\|png\\|gif\\|svg\\|svgz\\|swf\\)\\'"))
   "Rules characterizing image files that can be inlined into reStructuredText.
@@ -402,8 +402,7 @@ possible.  It doesn't apply to `inlinetask' elements."
 					(plist-get info :with-tags)
 					(let ((tag-list (org-export-get-tags element info)))
 					  (and tag-list
-						   (format ":%s:"
-								   (mapconcat 'identity tag-list ":"))))))
+                           (org-make-tag-string tag-list)))))
 		 (priority
 		  (and (plist-get info :with-priority)
 			   (let ((char (org-element-property :priority element)))
@@ -442,7 +441,7 @@ See `org-rst-text-markup-alist' for details."
 	    char)
 		(while (string-match "\\`*" text)
 		  (setq char (match-string 0 text))
-		  (if (> (match-beginning 0) 0)
+		  (when (> (match-beginning 0) 0)
 			  (setq rtn (concat rtn (substring text 0 (match-beginning 0)))))
 		  (setq text (substring text (1+ (match-beginning 0))))
 		  (setq char (concat "\\" char)
@@ -955,8 +954,7 @@ INFO is a plist holding contextual information."
 		 (path (cond
 				((member type '("http" "https" "ftp" "mailto"))
 				 (url-encode-url
-				  (org-link-unescape
-				   (concat type ":" raw-path))))
+				   (concat type ":" raw-path)))
 				((string= type "file")
 				 ;; Treat links to ".org" files as ".rst", if needed.
 				 (setq raw-path
@@ -966,19 +964,25 @@ INFO is a plist holding contextual information."
 							  (concat (file-name-as-directory home) raw-path)))
                        (t raw-path)))
 				(t raw-path)))
-		 ;; Extract attributes from parent's paragraph.  HACK: Only do
-		 ;; this for the first link in parent (inner image link for
-		 ;; inline images).  This is needed as long as attributes
-		 ;; cannot be set on a per link basis.
 		 (attributes-plist
-		  (let* ((parent (org-export-get-parent-element link))
-				 (link (let ((container (org-export-get-parent link)))
-						 (if (and (eq (org-element-type container) 'link)
-								  (org-rst-inline-image-p link info))
-							 container
-						   link))))
-			(and (eq (org-element-map parent 'link 'identity info t) link)
-				 (org-export-read-attribute :attr_rst parent))))
+		  (org-combine-plists
+		   ;; Extract attributes from parent's paragraph.  HACK: Only
+		   ;; do this for the first link in parent (inner image link
+		   ;; for inline images).  This is needed as long as
+		   ;; attributes cannot be set on a per link basis.
+		   (let* ((parent (org-export-get-parent-element link))
+				  (link (let ((container (org-export-get-parent link)))
+						  (if (and (eq 'link (org-element-type container))
+								   (org-html-inline-image-p link info))
+							  container
+							link))))
+			 (and (eq link (org-element-map parent 'link #'identity info t))
+				  (org-export-read-attribute :attr_ parent)))
+		   ;; Also add attributes from link itself.	 Currently, those
+		   ;; need to be added programmatically before `org-html-link'
+		   ;; is invoked, for example, by backends building upon HTML
+		   ;; export.
+		   (org-export-read-attribute :attr_rst link)))
 		 (attributes
 		  (let ((attr (org-rst--make-attribute-string attributes-plist)))
 			(if (org-string-nw-p attr) (concat "\n" attr "\n") ""))))

@@ -1,2 +1,0 @@
-
-(ox-rst . [(20190809 847) ((emacs (24 4)) (org (8 2 4))) "Export reStructuredText using org-mode." single ((:commit . "038bce090f30aa3db3efdf14c807ceb476271e23") (:keywords "org" "rst" "rest" "restructuredtext") (:authors ("Masanao Igarashi" . "syoux2@gmail.com")) (:maintainer "Masanao Igarashi" . "syoux2@gmail.com") (:url . "https://github.com/masayuko/ox-rst"))])
