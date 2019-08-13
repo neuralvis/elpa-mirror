@@ -4,7 +4,7 @@
 
 ;; Author: Augusto Stoffel
 ;; URL: https://github.com/astoff/unicode-math-input.el
-;; Package-Version: 20181230.1223
+;; Package-Version: 20190813.1436
 ;; Package-X-Original-Version: 0.1
 ;; Package-Requires: ((emacs "25"))
 
@@ -327,6 +327,7 @@ loaded.  Restart Emacs if needed."
         ("Chi" . #x003A7)
         ("chi" . #x003C7)
         ("cirbot" . #x027DF)
+        ("circ" . #x02218)
         ("circeq" . #x02257)
         ("circlebottomhalfblack" . #x025D2)
         ("circledast" . #x0229B)
