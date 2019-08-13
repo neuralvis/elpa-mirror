@@ -1,2 +1,2 @@
 
-(org-caldav . [(20190812 1918) ((org (7))) "Sync org files with external calendar through CalDAV" single ((:commit . "55d4aa87275183e53bfaf5de3516a688e19ff4a9") (:keywords "calendar" "caldav") (:authors ("David Engster" . "deng@randomsample.de")) (:maintainer "David Engster" . "deng@randomsample.de"))])
+(org-caldav . [(20190812 1918) ((org (7))) "Sync org files with external calendar through CalDAV" single ((:commit . "1fd520490303d9a3e45187f2fe56f00ac403c214") (:keywords "calendar" "caldav") (:authors ("David Engster" . "deng@randomsample.de")) (:maintainer "David Engster" . "deng@randomsample.de"))])

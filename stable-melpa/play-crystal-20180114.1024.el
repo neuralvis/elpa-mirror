@@ -3,7 +3,6 @@
 ;; Copyright © 2018 Vitalii Elenhaupt <velenhaupt@gmail.com>
 ;; Author: Vitalii Elenhaupt
 ;; URL: https://github.com/veelenga/play-crystal.el
-;; Package-Version: 20180114.1024
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0") (request "0.2.0"))
 
