@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20190809.1315
+;; Package-Version: 20190813.1155
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9.2"))
 ;; Version: 0.7
@@ -340,25 +340,24 @@ If FRAME is not specified, `selected-frame' is used."
                    (lambda (f) (not (equal (cdr f) 'unspecified)))
                    (face-all-attributes face (or frame (selected-frame)))))))
 
-(defun org-brain-display-face (entry &optional face)
+(defun org-brain-display-face (entry &optional face edge)
   "Return the final display face for ENTRY.
 Takes FACE as a starting face, or `org-brain-button' if FACE is not specified.
 Applies the attributes in `org-brain-edge-annotation-face-template',
 `org-brain-selected-face-template', and `org-brain-file-face-template'
-as appropriate."
+as appropriate.
+EDGE determines if `org-brain-edge-annotation-face-template' should be used."
   (let ((selected-face-attrs
          (when (member entry org-brain-selected)
            (org-brain-specified-face-attrs 'org-brain-selected-face-template)))
         (file-face-attrs
          (when (org-brain-filep entry)
-           (org-brain-specified-face-attrs 'org-brain-file-face-template)))
-        (annotation-attrs
-         (when (org-brain-get-edge-annotation org-brain--vis-entry entry)
-           (org-brain-specified-face-attrs 'org-brain-edge-annotation-face-template))))
+           (org-brain-specified-face-attrs 'org-brain-file-face-template))))
     (append (list :inherit (or face 'org-brain-button))
             selected-face-attrs
             file-face-attrs
-            annotation-attrs)))
+            (when edge
+              (org-brain-specified-face-attrs 'org-brain-edge-annotation-face-template)))))
 
 (defface org-brain-selected-face-template
   `((t . ,(org-brain-specified-face-attrs 'highlight)))
@@ -373,6 +372,9 @@ as appropriate."
 
 (defvar org-brain--vis-entry nil
   "The last entry argument to `org-brain-visualize'.")
+
+(defvar org-brain--vis-entry-keywords nil
+  "The `org-brain-keywords' of `org-brain--vis-entry'.")
 
 (defvar org-brain--vis-history nil
   "History previously visualized entries.  Newest first.")
@@ -664,7 +666,7 @@ For PREDICATE, REQUIRE-MATCH and INITIAL-INPUT, see `completing-read'."
   "Get alist of `org-mode' keywords and their values in file ENTRY."
   (if (org-brain-filep entry)
       (with-temp-buffer
-        (insert-file-contents (org-brain-entry-path entry))
+        (ignore-errors (insert (org-brain-text entry t)))
         (org-element-map (org-element-parse-buffer) 'keyword
           (lambda (kw)
             (cons (org-element-property :key kw)
@@ -688,10 +690,8 @@ For PREDICATE, REQUIRE-MATCH and INITIAL-INPUT, see `completing-read'."
       (let ((path (org-brain-entry-path entry)))
         (if (file-exists-p path)
             (set-marker (make-marker) 0
-                        (or (get-file-buffer path)
-                            (with-current-buffer (create-file-buffer path)
-                              (set-visited-file-name path)
-                              (current-buffer))))
+                        (or (org-find-base-buffer-visiting path)
+                            (find-file-noselect path)))
           ;; If file doesn't exists, it is probably an id
           (or (org-id-find entry t)
               (org-brain--missing-id-error entry))))
@@ -1755,6 +1755,8 @@ Unless WANDER is t, `org-brain-stop-wandering' will be run."
       (setq org-brain--vis-entry entry)
       (setq org-brain-mind-map-parent-level (default-value 'org-brain-mind-map-parent-level))
       (setq org-brain-mind-map-child-level (default-value 'org-brain-mind-map-child-level)))
+    (setq org-brain--vis-entry-keywords (when (org-brain-filep entry)
+                                          (org-brain-keywords entry)))
     (let ((inhibit-read-only t)
           (entry-pos))
       (delete-region (point-min) (point-max))
@@ -1854,14 +1856,17 @@ cancelled manually with `org-brain-stop-wandering'."
 
 (defun org-brain-insert-visualize-button (entry &optional face)
   "Insert a button, running `org-brain-visualize' on ENTRY when clicked."
-  (insert-text-button
-   (org-brain-title-as-button entry)
-   'action (lambda (_x) (org-brain-visualize entry))
-   'id (org-brain-entry-identifier entry)
-   'follow-link t
-   'help-echo (org-brain-get-edge-annotation org-brain--vis-entry entry)
-   'aa2u-text t
-   'face (org-brain-display-face entry face)))
+  (let ((annotation (org-brain-get-edge-annotation org-brain--vis-entry
+                                                   entry
+                                                   org-brain--vis-entry-keywords)))
+    (insert-text-button
+     (org-brain-title-as-button entry)
+     'action (lambda (_x) (org-brain-visualize entry))
+     'id (org-brain-entry-identifier entry)
+     'follow-link t
+     'help-echo annotation
+     'aa2u-text t
+     'face (org-brain-display-face entry face annotation))))
 
 (defun org-brain-insert-resource-button (resource &optional indent)
   "Insert a new line with a RESOURCE button, indented by INDENT spaces."
@@ -2016,10 +2021,12 @@ then always use `org-brain-select'."
   "Retrun edge annotation property name of ENTRY."
   (concat "BRAIN_EDGE_" (org-brain-entry-identifier entry)))
 
-(defun org-brain-get-edge-annotation (from to)
-  "Get edge annotation FROM an entry TO another entry."
+(defun org-brain-get-edge-annotation (from to &optional keywords)
+  "Get edge annotation FROM an entry TO another entry.
+If KEYWORDS is given, use it instead of `org-brain-keywords' (optimization)."
   (if (org-brain-filep from)
-      (cdr (assoc (upcase (org-brain-edge-prop-name to)) (org-brain-keywords from)))
+      (cdr (assoc (upcase (org-brain-edge-prop-name to))
+                  (or keywords (org-brain-keywords from))))
     (org-entry-get (org-brain-entry-marker from) (org-brain-edge-prop-name to))))
 
 (defun org-brain-annotate-edge (entry target annotation two-way)
@@ -2200,9 +2207,11 @@ Helper function for `org-brain-visualize'."
                                 (org-get-tags nil t))))
                (children-links (unless (member org-brain-exclude-siblings-tag parent-tags)
                                  (cdr parent)))
+               (sibling-middle (ceiling (/ (length children-links) 2.0)))
+               (base-line (if org-brain-show-history 5 4))
                (col-start (+ 3 max-width))
                (parent-title (org-brain-title (car parent))))
-          (org-goto-line 5)
+          (org-goto-line base-line)
           (mapc
            (lambda (child)
              (picture-forward-column col-start)
@@ -2216,8 +2225,8 @@ Helper function for `org-brain-visualize'."
              (setq max-width (max max-width (current-column)))
              (newline (forward-line 1)))
            (sort children-links org-brain-visualize-sort-function))
-          (org-goto-line 5)
-          (forward-line (1- (length children-links)))
+          (org-goto-line base-line)
+          (forward-line (1- sibling-middle))
           (picture-forward-column col-start)
           (push (cons (picture-current-line)
                       (+ (current-column) (/ (string-width parent-title) 2)))

@@ -4,7 +4,6 @@
 
 ;; Author: António Nuno Monteiro <anmonteiro@gmail.com>
 ;; Version: 0.2.0
-;; Package-Version: 20171008.2004
 ;; Package-Requires: ((emacs "24") (cl-lib "0.6"))
 ;; Created: 2017-07-29
 ;; Keywords: lisp
