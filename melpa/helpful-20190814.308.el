@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20190807.2141
+;; Package-Version: 20190814.308
 ;; Keywords: help, lisp
 ;; Version: 0.18
 ;; Package-Requires: ((emacs "25") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2"))
@@ -1776,6 +1776,18 @@ OBJ may be a symbol or a compiled function object."
   (and (symbolp sym)
        (byte-code-function-p (symbol-function sym))))
 
+(defun helpful--join-and (items)
+  "Join a list of strings with commas and \"and\"."
+  (cond
+   ((= (length items) 0)
+    "")
+   ((= (length items) 1)
+    (car items))
+   (t
+    (format "%s and %s"
+            (s-join ", " (-drop-last 1 items))
+            (-last-item items)))))
+
 (defun helpful--summary (sym callable-p buf pos)
   "Return a one sentence summary for SYM."
   (-let* ((primitive-p (helpful--primitive-p sym callable-p))
@@ -1828,30 +1840,16 @@ OBJ may be a symbol or a compiled function object."
            (and callable-p buf (helpful--autoloaded-p sym buf)))
           (compiled-p
            (and callable-p (helpful--compiled-p sym)))
+          (buttons
+           (list
+            (if alias-p alias-button)
+            (if (and callable-p autoloaded-p) autoload-button)
+            (if (and callable-p (commandp sym)) interactive-button)
+            (if compiled-p compiled-button)
+            (if (and (not callable-p) (local-variable-if-set-p sym))
+                buffer-local-button)))
           (description
-           (concat
-            (cond
-             (alias-p
-              (format "%s %s"
-                      (if callable-p "a" "an")
-                      alias-button))
-             ((and callable-p (commandp sym) autoloaded-p)
-              (format "an %s, %s" interactive-button autoload-button))
-             ((helpful--kbd-macro-p sym) "a")
-             ((and callable-p (commandp sym))
-              (format "an %s" interactive-button))
-             ((and callable-p autoloaded-p)
-              (format "an %s" autoload-button))
-             ((and (not callable-p)
-                   (local-variable-if-set-p sym))
-              (format "a %s" buffer-local-button))
-             (t
-              "a"))
-            (if compiled-p
-                (format "%s %s"
-                        (if (or (commandp sym) autoloaded-p) "," "")
-                        compiled-button))
-            ""))
+           (helpful--join-and (-non-nil buttons)))
           (kind
            (cond
             ((special-form-p sym)
@@ -1886,11 +1884,18 @@ OBJ may be a symbol or a compiled function object."
 
     (s-word-wrap
      70
-     (format "%s is %s %s %s."
+     (format "%s is %s %s %s %s."
              (if (symbolp sym)
-                 (format "%S" sym)
+                 (helpful--format-symbol sym)
                "This lambda")
-             description kind defined))))
+             (if (string-match-p
+                  (rx bos (or "a" "e" "i" "o" "u"))
+                  description)
+                 "an"
+               "a")
+             description
+             kind
+             defined))))
 
 (defun helpful--callees (form)
   "Given source code FORM, return a list of all the functions called."
@@ -2350,6 +2355,14 @@ state of the current symbol."
         arg-str
       (s-upcase arg-str))))
 
+(defun helpful--format-symbol (sym)
+  "Format symbol as a string, escaping as necessary."
+  ;; Arguably this is an Emacs bug. We should be able to use
+  ;; (format "%S" sym)
+  ;; but that converts foo? to "foo\\?". You can see this in other
+  ;; parts of the Emacs UI, such as ERT.
+  (s-replace " " "\\ " (format "%s" sym)))
+
 (defun helpful--signature (sym)
   "Get the signature for function SYM, as a string.
 For example, \"(some-func FOO &optional BAR)\"."
@@ -2379,11 +2392,12 @@ For example, \"(some-func FOO &optional BAR)\"."
                       (s-join " " formatted-args)))
              ;; If it has multiple arguments, join them with spaces.
              (formatted-args
-              (format "(%S %s)" sym
+              (format "(%s %s)"
+                      (helpful--format-symbol sym)
                       (s-join " " formatted-args)))
              ;; Otherwise, this function takes no arguments when called.
              (t
-              (format "(%S)" sym)))))
+              (format "(%s)" (helpful--format-symbol sym))))))
 
     ;; If the docstring ends with (fn FOO BAR), extract that.
     (-when-let (docstring (documentation sym))
