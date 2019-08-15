@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20190803.2137
+;; Package-Version: 20190815.755
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (company "0.9") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -111,7 +111,7 @@ will be in different GHCi sessions."
     (nix-ghci ,(lambda (d) (directory-files d t "shell.nix\\|default.nix")) ("nix-shell" "--pure" "--run" "ghci"))
     (stack "stack.yaml" ("stack" "repl" dante-target))
     (mafia "mafia" ("mafia" "repl" dante-target))
-    (bare-cabal ,(lambda (d) (directory-files d t ".cabal$")) ("cabal" "repl" dante-target "--builddir=dist/dante"))
+    (bare-cabal ,(lambda (d) (directory-files d t "..cabal$")) ("cabal" "repl" dante-target "--builddir=dist/dante"))
     (bare-ghci ,(lambda (_) t) ("ghci")))
 "How to automatically locate project roots and launch GHCi.
 This is an alist from method name to a pair of
