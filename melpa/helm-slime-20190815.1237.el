@@ -7,7 +7,7 @@
 ;;               2018, 2019 Pierre Neidhardt <mail@ambrevar.xyz>
 ;; Author: Takeshi Banse <takebi@laafc.net>
 ;; URL: https://github.com/emacs-helm/helm-slime
-;; Package-Version: 20190703.714
+;; Package-Version: 20190815.1237
 ;; Version: 0.3.0
 ;; Keywords: convenience, helm, slime
 ;; Package-Requires: ((emacs "24") (helm "3.2") (slime "2.18") (cl-lib "0.5"))
@@ -52,6 +52,8 @@
 ;;   (slime-setup '([others contribs ...] helm-slime))
 ;;
 ;; or simply require helm-slime in some appropriate manner.
+;;
+;; To use Helm instead of the Xref buffer, enable `global-helm-slime-mode'.
 
 ;;; Code:
 
@@ -449,6 +451,74 @@ will not have anymore separators between candidates."
     (helm :sources 'helm-slime-source-repl-input-history
           :input (buffer-substring-no-properties (point) slime-repl-input-start-mark)
           :buffer "*helm SLIME history*")))
+
+
+(defun helm-slime-normalize-xrefs (xref-alist)
+  "Like `slime-insert-xrefs' but return a formatted list of strings instead.
+The strings are formatted as \"GROUP: LABEL\"."
+  (cl-loop for (group . refs) in xref-alist
+           append
+           (cl-loop for (label location) in refs
+                    collect
+                    (list group label location))))
+
+(defun helm-slime-xref-lineno (location)
+  "Return 0 if there is location does not refer to a proper file."
+  (or
+   (ignore-errors
+
+     (with-current-buffer (progn (slime-goto-location-buffer (nth 1 location))
+                                 (current-buffer))
+       (line-number-at-pos
+        (car (alist-get :position (cdr location))))))
+   0))
+
+(defun helm-slime-xref-transformer (candidates)
+  "Transform CANDIDATES (a list of (GROUP LABEL LOCATION))
+to \"GROUP: LABEL\"."
+  (cl-loop for (group label location) in candidates
+           collect (cons (concat (propertize (abbreviate-file-name group)
+                                             'face 'helm-grep-file)
+                                 ":"
+                                 (propertize
+                                  (number-to-string (helm-slime-xref-lineno location))
+                                  'face 'helm-grep-lineno)
+                                 ":"
+                                 (slime-one-line-ify label))
+                         (list group label location))))
+
+(defun helm-slime-xref-goto (candidate)
+  (let ((location (nth 2 candidate)))
+    (switch-to-buffer
+     (save-window-excursion
+       (slime-show-source-location location t 1)
+       (slime-goto-location-buffer (nth 1 location))))))
+
+(defun helm-slime-build-xref-source (xrefs)
+  (helm-build-sync-source "SLIME xrefs"
+    :candidates (helm-slime-normalize-xrefs xrefs)
+    :candidate-transformer 'helm-slime-xref-transformer
+    :action `(("Switch to buffer(s)" . helm-slime-xref-goto))))
+
+(defun helm-slime-show-xref-buffer (xrefs _type _symbol _package)
+  (helm :sources (list (helm-slime-build-xref-source xrefs))
+        :buffer "*helm-slime-xref*"))
+
+;;;###autoload
+(define-minor-mode helm-slime-mode
+  "Use Helm for SLIME xref selections.
+Note that the local minor mode has a global effect, thus making
+`global-helm-slime-mode' and `helm-slime-mode' equivalent."
+  ;; TODO: Is it possible to disable the local minor mode?
+  :init-value nil
+  (if (advice-member-p 'helm-slime-show-xref-buffer 'slime-show-xref-buffer)
+      (advice-remove 'slime-show-xref-buffer 'helm-slime-show-xref-buffer)
+    (advice-add 'slime-show-xref-buffer :override 'helm-slime-show-xref-buffer)))
+
+;;;###autoload
+(define-globalized-minor-mode global-helm-slime-mode
+  helm-slime-mode
+  helm-slime-mode)
 
 (provide 'helm-slime)
 ;;; helm-slime.el ends here
