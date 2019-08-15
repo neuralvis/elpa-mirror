@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20190810.1848
+;; Package-Version: 20190815.1740
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -82,16 +82,17 @@
        (white          "white")
        (black          "black")
 
-       (green-bg       "#11472b")
-       (teal-bg        "#114747")
-       (dark-teal-bg   "#112b2b")
-       (gray-bg        "#2b2b2b")
-       (blue-bg        "#112b47")
+       (green-bg        "#11472b")
+       (teal-bg         "#114747")
+       (dark-teal-bg    "#112b2b")
+       (gray-bg         "#2b2b2b")
+       (blue-bg         "#112b47")
        (light-purple-bg "#2b2b47")
-       (purple-bg      "#2b1147")
-       (red-bg         "#47112b")
+       (purple-bg       "#2b1147")
+       (red-bg          "#47112b")
 
        (nimbus-err     "red")
+       (nimbus-success light-green)
        (nimbus-warn    "#f57e00")
 
        (bg             "gray10")
@@ -138,15 +139,15 @@
        (diff-markers    bg)
        (diff-markers-bg light-gray)
 
-       (rainbow-1      purple)
-       (rainbow-2      green)
-       (rainbow-3      orange)
-       (rainbow-4      light-blue)
-       (rainbow-5      yellow)
-       (rainbow-6      green)
-       (rainbow-7      orange)
-       (rainbow-8      light-blue)
-       (rainbow-9      yellow)
+       (rainbow-1       purple)
+       (rainbow-2       green)
+       (rainbow-3       orange)
+       (rainbow-4       light-blue)
+       (rainbow-5       yellow)
+       (rainbow-6       green)
+       (rainbow-7       orange)
+       (rainbow-8       light-blue)
+       (rainbow-9       yellow)
        )
 
   ;; Set faces.
@@ -164,7 +165,7 @@
    `(tooltip ((t (:foreground ,bg :background ,fg))))
 
    `(error ((t (:foreground ,nimbus-err :bold t :underline nil :slant normal))))
-   `(success ((t (:foreground ,light-green :bold t :underline nil :slant normal))))
+   `(success ((t (:foreground ,nimbus-success :bold t :underline nil :slant normal))))
    `(warning ((t (:foreground ,nimbus-warn :bold t :underline nil :slant normal))))
 
    ;;; Font lock
@@ -475,7 +476,7 @@
    `(evil-search-highlight-persist-highlight-face ((t (:inherit match))))
 
    ;; flycheck
-   `(flycheck-info ((t (:underline (:color ,light-green :style wave)))))
+   `(flycheck-info ((t (:underline (:color ,nimbus-success :style wave)))))
    `(flycheck-warning ((t (:underline (:color ,nimbus-warn :style wave)))))
    `(flycheck-error ((t (:underline (:color ,nimbus-err :style wave)))))
    `(flycheck-fringe-info ((t (:inherit success :bold nil))))
@@ -483,6 +484,10 @@
    `(flycheck-fringe-error ((t (:inherit error :bold nil))))
    `(flycheck-error-list-info ((t (:foreground ,green))))
    `(flycheck-error-list-checker-name ((t (:foreground ,yellow))))
+
+   `(flymake-note ((t (:underline (:color ,nimbus-success :style wave)))))
+   `(flymake-warning ((t (:underline (:color ,nimbus-warn :style wave)))))
+   `(flymake-error ((t (:underline (:color ,nimbus-err :style wave)))))
 
    ;; forge
    `(forge-post-author ((t (:foreground ,name))))
@@ -718,6 +723,17 @@
    ;; display-line-numbers
    `(line-number ((t (:inherit default :foreground ,line))))
    `(line-number-current-line ((t (:inherit default :foreground ,line-current))))
+
+   ;; lsp-ui
+   ;; This face seems to break once I set it.
+   `(lsp-ui-doc-background ((t (:background ,light-purple-bg))))
+   `(lsp-ui-doc-header ((t (:foreground ,heading))))
+   `(lsp-ui-peek-filename ((t (:foreground ,file))))
+   `(lsp-ui-peek-footer ((t (:inherit lsp-ui-peek-header))))
+   `(lsp-ui-peek-header ((t (:foreground ,diff-markers :background ,diff-markers-bg))))
+   `(lsp-ui-peek-line-number ((t (:foreground ,line))))
+   `(lsp-ui-peek-highlight ((t (:inherit highlight))))
+   `(lsp-ui-peek-selection ((t (:background ,selection))))
 
    ;; magit
    `(magit-section-heading ((t (:foreground ,heading))))

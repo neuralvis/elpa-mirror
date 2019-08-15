@@ -8,7 +8,7 @@
 
 ;; Author: The go-mode Authors
 ;; Version: 1.5.0
-;; Package-Version: 20190814.157
+;; Package-Version: 20190815.1622
 ;; Keywords: languages go
 ;; URL: https://github.com/dominikh/go-mode.el
 ;;
@@ -888,7 +888,8 @@ INDENT is the normal indent of this line, i.e. that of the case body."
               (looking-at (concat go-label-regexp ":\\([[:space:]]*/.+\\)?$\\|" go--case-or-default-regexp))
               ;; don't think last part of multiline case statement is a label
               (not (go-previous-line-has-dangling-op-p))
-              (not (go--in-case-clause-list-p)))
+              (not (go--in-case-clause-list-p))
+              (not (go--in-composite-literal-p)))
 
              ;; comment attached above a "case" statement
              (go--case-comment-p indent))
