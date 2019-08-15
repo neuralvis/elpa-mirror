@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20190629.652
+;; Package-Version: 20190803.2137
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (company "0.9") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -788,10 +788,9 @@ CABAL-FILE rather than trying to locate one."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Idle-hook
 
-(defcustom dante-tap-type-time nil "Number of seconds after which
-GHCi is queried for the type of the thing at point, to display in
-the echo area. Use nil to disable."
-  :group 'dante)
+(defcustom dante-tap-type-time nil
+"Delay after to display type of the thing at point, in seconds.
+Use nil to disable." :group 'dante)
 (defvar dante-timer nil)
 (defvar dante-last-valid-idle-type-message nil)
 
@@ -810,7 +809,7 @@ the echo area. Use nil to disable."
                        (or (not cur-msg)
                            (string-match-p (concat "^Wrote " (buffer-file-name)) cur-msg)
                            (and dante-last-valid-idle-type-message
-                                (string-match-p dante-last-valid-idle-type-message cur-msg))))
+                                (string-equal dante-last-valid-idle-type-message cur-msg))))
                      ;; echo area is free, or the buffer was just saved from having triggered a check, or the queue had many requests for idle display and is displaying the last fulfilled idle type request
                      (not (s-match "^<interactive>" ty)) ;; no error
                      (eq (point) dante-idle-point)) ;; cursor did not move
