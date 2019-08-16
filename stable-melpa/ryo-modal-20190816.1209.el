@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/ryo-modal
-;; Package-Version: 20180331.818
+;; Package-Version: 20190816.1209
 ;; Keywords: convenience, modal, keys
 ;; Version: 0.4
 ;; Package-Requires: ((emacs "24.4"))
@@ -125,8 +125,8 @@ command is unique."
               (setf (cddr x) (plist-put (cddr x) :first (append (plist-get (cddr x) :first)
                                                                 (plist-get args :first)))))
             (apply #'ryo-modal-key `(,(concat key " " (car x))
-                             ,@(cdr x)
-                             ,@(org-plist-delete args :name))))
+                                     ,@(cdr x)
+                                     ,@(org-plist-delete args :name))))
           target))
    ((and (require 'hydra nil t)
          (equal target :hydra))
@@ -160,19 +160,23 @@ command is unique."
                   (interactive)
                   (dolist (f (quote ,(plist-get args :first)))
                     (if (commandp f)
-                        (call-interactively f)
+                        (let ((real-this-command f))
+                          (call-interactively f))
                       (apply f nil)))
                   (if (and (stringp ',target)
                            (keymapp (key-binding (kbd ,target))))
                       (progn
                         (when ,(plist-get args :exit) (ryo-modal-mode -1))
                         (setq unread-command-events (listify-key-sequence (kbd ',target))))
-                    (call-interactively (if (stringp ',target)
-                                            (key-binding (kbd ,target))
-                                          ',target))
+                    (let ((real-this-command
+                           (if (stringp ',target)
+                               (key-binding (kbd ,target))
+                             ',target)))
+                      (call-interactively real-this-command))
                     (dolist (f (quote ,(plist-get args :then)))
                       (if (commandp f)
-                          (call-interactively f)
+                          (let ((real-this-command f))
+                            (call-interactively f))
                         (apply f nil)))
                     (when ,(plist-get args :exit) (ryo-modal-mode -1))
                     (when ,(plist-get args :read) (insert (read-string "Insert: ")))))))
@@ -212,11 +216,11 @@ See `ryo-modal-key' for more information."
     `(progn
        ,@(mapcar (lambda (x)
                    `(ryo-modal-key ,(car x)
-                           ,(if (stringp (cadr x))
-                                (cadr x)
-                              `(quote ,(cadr x)))
-                           ,@(nthcdr 2 x)
-                           ,@kw-list))
+                                   ,(if (stringp (cadr x))
+                                        (cadr x)
+                                      `(quote ,(cadr x)))
+                                   ,@(nthcdr 2 x)
+                                   ,@kw-list))
                  args))))
 
 ;;;###autoload
@@ -226,11 +230,11 @@ ARGS is the same as `ryo-modal-keys'."
   `(progn
      ,@(mapcar (lambda (x)
                  `(ryo-modal-key ,(car x)
-                         (if ,(stringp (cadr x))
-                             ,(cadr x)
-                           (quote ,(cadr x)))
-                         ,@(nthcdr 2 x)
-                         :mode ,mode))
+                                 (if ,(stringp (cadr x))
+                                     ,(cadr x)
+                                   (quote ,(cadr x)))
+                                 ,@(nthcdr 2 x)
+                                 :mode ,mode))
                args)))
 
 ;;;###autoload

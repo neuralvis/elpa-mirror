@@ -6,7 +6,6 @@
 ;; Mantainer: Roman Gonzalez <romanandreg@gmail.com>
 ;; Created: 13 Oct 2012
 ;; Keywords: Window Resizing
-;; Package-Version: 20150819.1120
 ;; Version: 0.0.4
 
 ;; Code inspired by ideas from Tatsuhiro Ujihisa
