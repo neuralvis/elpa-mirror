@@ -4,8 +4,8 @@
 
 ;; Author: Paul W. Rankin <hello@paulwrankin.com>
 ;; Keywords: convenience
-;; Package-Version: 20190715.504
-;; Version: 0.2.0
+;; Package-Version: 20190816.303
+;; Version: 0.2.1
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://github.com/rnkn/side-notes
 
@@ -101,6 +101,7 @@ Return nil if no notes file found."
   (expand-file-name
    side-notes-file (locate-dominating-file default-directory side-notes-file)))
 
+;;;###autoload
 (defun side-notes-toggle-notes ()
   "Pop up a side window containing the notes file.
 

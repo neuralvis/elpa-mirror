@@ -5,8 +5,8 @@
 ;; Author: Matthew Carter <m@ahungry.com>
 ;; Maintainer: Matthew Carter <m@ahungry.com>
 ;; URL: https://github.com/ahungry/pickle-mode
-;; Package-Version: 20190122.1748
-;; Version: 0.0.1
+;; Package-Version: 20190816.341
+;; Version: 0.0.2
 ;; Date: 2018-02-15
 ;; Keywords: languages, cucumber, gherkin
 ;; Package-Requires: ((emacs "25.1") (cl-lib "0.6.1"))
@@ -28,9 +28,7 @@
 
 ;;; Commentary:
 
-;; The dart-mode that exists doesn't properly indent, so give this a try.
-;;
-;; Much of this mode is derived from the js.el package.
+;; A major mode for handling Gherkin files and syntax highlighting.
 ;;
 ;; General Remarks:
 ;;

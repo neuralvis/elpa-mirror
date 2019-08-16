@@ -1,2 +1,0 @@
-
-(aria2 . [(20190815 2220) ((emacs (24 4))) "Control aria2c commandline tool from Emacs" single ((:commit . "bc84fc5ae38987397bcc9f12444e4b5b6c2ef53d") (:keywords "download" "bittorrent" "aria2") (:authors ("Łukasz Gruner" . "lukasz@gruner.lu")) (:maintainer "Łukasz Gruner" . "lukasz@gruner.lu") (:url . "https://bitbucket.org/ukaszg/aria2-mode"))])
