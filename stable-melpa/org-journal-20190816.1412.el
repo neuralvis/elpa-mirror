@@ -2,7 +2,7 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20190815.2050
+;; Package-Version: 20190816.1412
 ;; Version: 1.15.1
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -822,12 +822,13 @@ it into a list of calendar date elements."
 (defun org-journal-mark-entries ()
   "Mark days in the calendar for which a diary entry is present"
   (interactive)
-  (dolist (journal-entry (org-journal-list-dates))
-    (if (calendar-date-is-visible-p journal-entry)
-        (if (time-less-p (org-journal-calendar-date->time journal-entry)
-                         (current-time))
-            (calendar-mark-visible-date journal-entry 'org-journal-calendar-entry-face)
-          (calendar-mark-visible-date journal-entry 'org-journal-calendar-scheduled-face)))))
+  (when (file-exists-p org-journal-dir)
+    (dolist (journal-entry (org-journal-list-dates))
+      (if (calendar-date-is-visible-p journal-entry)
+          (if (time-less-p (org-journal-calendar-date->time journal-entry)
+                           (current-time))
+              (calendar-mark-visible-date journal-entry 'org-journal-calendar-entry-face)
+            (calendar-mark-visible-date journal-entry 'org-journal-calendar-scheduled-face))))))
 
 ;;;###autoload
 (defun org-journal-read-entry (_arg &optional event)
