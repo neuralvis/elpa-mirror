@@ -1,2 +1,0 @@
-
-(baidu-translate . [(20190816 1447) nil "An plugin using baidu-translate-api" single ((:commit . "32efae20c51e11ec7955cc50af8bb5ac9d4f0669") (:keywords "docs") (:authors (nil . "<LiShizhen gsu4017@gmail.com>")) (:maintainer nil . "<LiShizhen gsu4017@gmail.com>") (:url . "https://github.com/liShiZhensPi/baidu-translate"))])

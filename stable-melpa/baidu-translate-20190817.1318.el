@@ -1,10 +1,10 @@
-;;; baidu-translate.el --- An plugin using baidu-translate-api
+;;; baidu-translate.el --- A plugin using baidu-translate-api
 
 ;; Copyright (C) 2019
 
 ;; Author:  <LiShizhen gsu4017@gmail.com>
 ;; Version: 1.0
-;; Package-Version: 20190816.1447
+;; Package-Version: 20190817.1318
 ;; URL: https://github.com/liShiZhensPi/baidu-translate
 
 ;; This file is not part of GNU Emacs
@@ -32,7 +32,6 @@
 
 
 
-(provide 'baidu-translate)
 (require 'unicode-escape)
 
 (defconst baidu-translate-api-host "https://api.fanyi.baidu.com/api/trans/vip/translate")
@@ -162,5 +161,7 @@ Argument END ."
 ;; cht	繁体中文
 ;; vie	越南语
 
+
+(provide 'baidu-translate)
 ;;; baidu-translate.el ends here
 

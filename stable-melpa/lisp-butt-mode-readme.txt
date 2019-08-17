@@ -13,13 +13,13 @@ Local:
 - Activate the mode with {C-u M-x lisp-butt-mode RET}.
 - Deactivate the mode with {C-u -1 M-x lisp-butt-mode RET}.
 
+Unveil the full butt at the cursor temporarily with
+
     {M-x lisp-butt-unfontify}
 
-unveils the full butt at the cursor temporarily.
-
-The appearance can be configured to some extend.  See
+Some configuration is possible.  See
 
     {M-x customize-group RET lisp-butt RET}
 
-See also the literate source file.  E.g. see
+See also the literate source file for modifying the whole thing.  E.g. see
 https://gitlab.com/marcowahl/lisp-butt-mode.

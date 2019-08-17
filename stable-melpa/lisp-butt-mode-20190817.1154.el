@@ -1,4 +1,4 @@
-;;; lisp-butt-mode.el --- Slim Lisp butts -*- lexical-binding: t -*-
+;;; lisp-butt-mode.el --- Slim Lisp Butts -*- lexical-binding: t -*-
 
 
 ;; THIS FILE HAS BEEN GENERATED.  For sustainable program-development
@@ -12,7 +12,7 @@
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-07-11]
 ;; Version: 0.0.2
-;; Package-Version: 20190722.633
+;; Package-Version: 20190817.1154
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: lisp
 ;; URL: https://gitlab.com/marcowahl/lisp-butt-mode
@@ -48,15 +48,15 @@
 ;; - Activate the mode with {C-u M-x lisp-butt-mode RET}.
 ;; - Deactivate the mode with {C-u -1 M-x lisp-butt-mode RET}.
 ;; 
+;; Unveil the full butt at the cursor temporarily with
+;; 
 ;;     {M-x lisp-butt-unfontify}
 ;; 
-;; unveils the full butt at the cursor temporarily.
-;; 
-;; The appearance can be configured to some extend.  See
+;; Some configuration is possible.  See
 ;; 
 ;;     {M-x customize-group RET lisp-butt RET}
 ;; 
-;; See also the literate source file.  E.g. see
+;; See also the literate source file for modifying the whole thing.  E.g. see
 ;; https://gitlab.com/marcowahl/lisp-butt-mode.
 
 
