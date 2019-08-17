@@ -1,0 +1,2 @@
+
+(evil-owl . [(20190807 643) ((emacs (26 1)) (evil (1 2 13)) (posframe (0 5 0))) "Preview evil's registers and marks in a posframe" single ((:commit . "44b63d35f8738ea12a849b27ff8f5a8cdde701ff") (:keywords "emulations" "evil" "visual") (:authors ("Daniel Phan" . "daniel.phan36@gmail.com")) (:maintainer "Daniel Phan" . "daniel.phan36@gmail.com") (:url . "https://github.com/mamapanda/evil-owl"))])
