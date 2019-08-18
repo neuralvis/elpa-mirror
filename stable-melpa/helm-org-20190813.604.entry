@@ -1,2 +1,0 @@
-
-(helm-org . [(20190813 604) ((helm (3 3)) (emacs (24 4))) "Helm for org headlines and keywords completion" single ((:commit . "78b1620884bfe004cc68e2eedc7333b5b9d75b85") (:authors ("Thierry Volpiatto" . "thierry.volpiatto@gmail.com")) (:maintainer "Thierry Volpiatto" . "thierry.volpiatto@gmail.com") (:url . "https://github.com/emacs-helm/helm-org"))])

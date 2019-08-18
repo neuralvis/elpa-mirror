@@ -1,0 +1,2 @@
+
+(json-process-client . [(20190818 745) ((emacs (25 1))) "Interact with a TCP process using JSON" single ((:commit . "b7ebc4219bdc88a9b5be1fbd083a4b19b960294c") (:authors ("Nicolas Petton" . "nicolas@petton.fr") ("Damien Cassou" . "damien@cassou.me")) (:maintainer "Nicolas Petton" . "nicolas@petton.fr") (:url . "https://gitlab.petton.fr/nico/json-process-client"))])
