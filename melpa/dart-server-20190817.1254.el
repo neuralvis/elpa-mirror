@@ -4,7 +4,7 @@
 ;;      Brady Trainor <mail@bradyt.com>
 ;; Maintainer: Brady Trainor <mail@bradyt.com>
 ;; URL: https://github.com/bradyt/dart-server
-;; Package-Version: 20190816.2255
+;; Package-Version: 20190817.1254
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.5") (cl-lib "0.5") (dash "2.10.0") (flycheck "0.23") (s "1.10"))
 ;; Keywords: languages
@@ -1373,6 +1373,11 @@ this can be overridden by customizing
       (kill-buffer patch-buffer)
       (delete-file file))))
 
+(defun dart-server--do-format-on-save ()
+  "Format the buffer if `dart-server-format-on-save' is non-nil."
+  (when dart-server-format-on-save
+    (dart-server-format)))
+
 (defun dart-server--apply-rcs-patch (patch-buffer)
   "Apply an RCS diff from PATCH-BUFFER to the current buffer."
   (let ((target-buffer (current-buffer))
@@ -1439,7 +1444,10 @@ This replaces references to TEMP-FILE with REAL-FILE."
 ;;; Initialization
 
 ;;;###autoload
-(define-minor-mode dart-server nil)
+(define-minor-mode dart-server nil nil nil nil
+  (if dart-server
+      (add-hook 'before-save-hook #'dart-server--do-format-on-save nil t)
+    (remove-hook 'before-save-hook #'dart-server--do-format-on-save t)))
 
 (provide 'dart-server)
 

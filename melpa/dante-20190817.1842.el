@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20190817.1213
+;; Package-Version: 20190817.1842
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (company "0.9") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -34,7 +34,7 @@
 
 ;; DANTE: Do Aim Not To Expand.
 
-;; This is a mode to provide emacs interface for GHCi.  The mode
+;; This is a mode to provide Emacs interface for GHCi.  The mode
 ;; depends on GHCi only, keeping the logic simple.  Additionally it
 ;; aims to be minimal as far as possible.
 
@@ -278,7 +278,8 @@ When the universal argument INSERT is non-nil, insert the type in the buffer."
 
 (defvar-local dante-interpreted nil)
 
-(defvar dante-original-buffer-map (make-hash-table :test 'equal) "Hash table from (local) temp file names to the file they originate")
+(defvar dante-original-buffer-map (make-hash-table :test 'equal)
+  "Hash table from (local) temp file names to the file they originate.")
 
 (lcr-def dante-async-load-current-buffer (interpret)
   "Load and maybe INTERPRET the temp file for current buffer.
@@ -803,11 +804,14 @@ CABAL-FILE rather than trying to locate one."
 
 (defcustom dante-tap-type-time nil
 "Delay after to display type of the thing at point, in seconds.
-Use nil to disable." :group 'dante)
+Use nil to disable." :type 'integer :group 'dante)
 (defvar dante-timer nil)
 (defvar dante-last-valid-idle-type-message nil)
 
+(defvar-local dante-idle-point nil "point when idler kicked in.")
+
 (defun dante-idle-function ()
+  "Eldoc-like support function."
   (when (and dante-mode ;; don't start GHCi if dante is not on.
              (dante-buffer-p) ;; buffer exists
              (with-current-buffer (dante-buffer-p)

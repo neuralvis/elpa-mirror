@@ -1,11 +1,11 @@
-There is a global `global-lisp-butt-mode' and a local `lisp-butt-mode'
+There is a global `lisp-butt-global-mode' and a local `lisp-butt-mode'
 variant.
 
 Global:
 
-- Toggle the mode with {M-x global-lisp-butt-mode RET}.
-- Activate the mode with {C-u M-x global-lisp-butt-mode RET}.
-- Deactivate the mode with {C-u -1 M-x global-lisp-butt-mode RET}.
+- Toggle the mode with {M-x lisp-butt-global-mode RET}.
+- Activate the mode with {C-u M-x lisp-butt-global-mode RET}.
+- Deactivate the mode with {C-u -1 M-x lisp-butt-global-mode RET}.
 
 Local:
 
