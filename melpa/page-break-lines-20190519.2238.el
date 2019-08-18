@@ -4,7 +4,8 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; URL: https://github.com/purcell/page-break-lines
-;; Package-Version: 0
+;; Package-Version: 20190519.2238
+;; Package-X-Original-Version: 0
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience, faces
 

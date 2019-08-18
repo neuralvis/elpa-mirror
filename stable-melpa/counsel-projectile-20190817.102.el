@@ -4,7 +4,7 @@
 
 ;; Author: Eric Danan
 ;; URL: https://github.com/ericdanan/counsel-projectile
-;; Package-Version: 20190724.1903
+;; Package-Version: 20190817.102
 ;; Keywords: project, convenience
 ;; Version: 0.3.0
 ;; Package-Requires: ((counsel "0.12.0") (projectile "2.0.0"))
@@ -1149,7 +1149,7 @@ Optional arguments ARG, KEYS, and RESTRICTION are as in
   (let* ((root (projectile-project-root))
          (org-agenda-files
           (cl-remove-if-not (lambda (file)
-                              (string-prefix-p root file))
+                              (string-prefix-p root (expand-file-name file)))
                             (org-agenda-files t 'ifmode))))
     (org-agenda arg keys restriction))))
 
