@@ -2,7 +2,7 @@
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 0.1.0
-;; Package-Version: 20190818.751
+;; Package-Version: 20190818.1551
 ;; Keywords: faces
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
 ;; URL: https://git.sr.ht/~zge/face-shift
@@ -99,11 +99,11 @@ See `face-shift--interpolate'."
 
 (defun face-shift--interpolate (col-ref col-base)
   "Attempt to find median colour between `col-ref' and `col-base'."
-  (map 'list (lambda (ref base)
-               (if (> face-shift-intensity 0)
-                   (- 1 (* (- 1 (* ref base)) face-shift-intensity))
-                 (* (* ref base) (abs face-shift-intensity))))
-       col-ref col-base))
+  (cl-map 'list (lambda (ref base)
+                  (if (> face-shift-intensity 0)
+                      (- 1 (* (- 1 (* ref base)) face-shift-intensity))
+                    (* (* ref base) (abs face-shift-intensity))))
+          col-ref col-base))
 
 (defun face-shift-setup (&optional buffer)
   "Shift colours in BUFFER according to `face-shift-shifts'.

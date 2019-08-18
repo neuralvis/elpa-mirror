@@ -2,7 +2,7 @@
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 0.2.0
-;; Package-Version: 20190727.2122
+;; Package-Version: 20190818.1548
 ;; Keywords: unix, processes, convenience
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://git.sr.ht/~zge/bang
@@ -40,6 +40,7 @@ When COMMAND starts with
   <  the output of COMMAND replaces the current selection
   >  COMMAND is run with the current selection as input
   |  the current selection is filtered through COMMAND
+  .  COMMAND executes in the relative path following the dot
 
 Without any argument, `bang' will behave like `shell-command'.
 
@@ -53,7 +54,9 @@ between BEG and END. Otherwise the whole buffer is processed."
                      (if (use-region-p) (region-end) (point-max))))
   (save-match-data
     (unless (string-match (rx bos (* space)
-                              (or (group "<") (group ">") (group "|") "")
+                              (or (group "<") (group ">") (group "|")
+                                  (group "." (* (not space))) "")
+                              (* space)
                               (group (* not-newline))
                               eos)
                           command)
@@ -61,13 +64,14 @@ between BEG and END. Otherwise the whole buffer is processed."
     (let ((has-< (match-string-no-properties 1 command))
           (has-> (match-string-no-properties 2 command))
           (has-| (match-string-no-properties 3 command))
+          (has-. (match-string-no-properties 4 command))
           (rest (condition-case nil
                     (replace-regexp-in-string
                      (rx (* ?\\ ?\\) (or ?\\ (group "%")))
                      buffer-file-name
-                     (match-string-no-properties 4 command)
+                     (match-string-no-properties 5 command)
                      nil nil 1)
-                  (error (match-string-no-properties 4 command)))))
+                  (error (match-string-no-properties 5 command)))))
       (cond (has-< (delete-region beg end)
                    (shell-command rest t shell-command-default-error-buffer)
                    (exchange-point-and-mark))
@@ -77,6 +81,9 @@ between BEG and END. Otherwise the whole buffer is processed."
             (has-| (shell-command-on-region
                     beg end rest t t
                     shell-command-default-error-buffer t))
+            (has-. (let ((default-directory (expand-file-name has-.)))
+                     (shell-command rest (if current-prefix-arg t nil)
+                                    shell-command-default-error-buffer)))
             (t (shell-command command (if current-prefix-arg t nil)
                               shell-command-default-error-buffer)))
       (when has->

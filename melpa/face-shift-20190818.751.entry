@@ -1,2 +1,0 @@
-
-(face-shift . [(20190818 751) ((emacs (24 4)) (cl-lib (0 5))) "Shift the colour of certain faces" single ((:commit . "f7922b4216e18ac91d20a8107b944c6d1a408477") (:keywords "faces") (:authors ("Philip K." . "philip@warpmail.net")) (:maintainer "Philip K." . "philip@warpmail.net") (:url . "https://git.sr.ht/~zge/face-shift"))])

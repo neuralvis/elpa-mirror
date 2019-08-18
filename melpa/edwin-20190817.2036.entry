@@ -1,2 +1,0 @@
-
-(edwin . [(20190817 2036) ((emacs (25))) "Dynamic window manager" single ((:commit . "1518c6bfca5fa447d6d3975b9c5e4fcc17cf7ab5") (:authors ("Alex Griffin" . "a@ajgrf.com")) (:maintainer "Alex Griffin" . "a@ajgrf.com") (:url . "https://github.com/ajgrf/edwin"))])

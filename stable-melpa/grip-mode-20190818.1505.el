@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/doom-modeline
 ;; Version: 1.1.0
-;; Package-Version: 20190818.706
+;; Package-Version: 20190818.1505
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience, markdown, preview
 
@@ -118,6 +118,7 @@
 
 (defun grip-start-preview ()
   "Start rendering and previewing with grip."
+  (save-buffer)
   (when buffer-file-name
     (if (eq major-mode 'org-mode)
         (grip-preview-org)
