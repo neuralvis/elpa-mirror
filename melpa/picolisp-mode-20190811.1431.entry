@@ -1,2 +1,2 @@
 
-(picolisp-mode . [(20190811 1431) nil "Major mode for PicoLisp programming." single ((:commit . "bf358e5e75adb7cfa1b7cde24209428a88d86b56") (:keywords "picolisp" "lisp" "programming") (:authors ("Alexis" . "flexibeast@gmail.com")) (:maintainer "Alexis" . "flexibeast@gmail.com") (:url . "https://github.com/flexibeast/picolisp-mode"))])
+(picolisp-mode . [(20190811 1431) nil "Major mode for PicoLisp programming." tar ((:commit . "bf358e5e75adb7cfa1b7cde24209428a88d86b56") (:keywords "picolisp" "lisp" "programming") (:authors ("Alexis" . "flexibeast@gmail.com")) (:maintainer "Alexis" . "flexibeast@gmail.com") (:url . "https://github.com/flexibeast/picolisp-mode"))])

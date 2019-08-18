@@ -11,8 +11,8 @@
 ;; Author: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-07-11]
-;; Version: 1.0.1
-;; Package-Version: 20190817.2255
+;; Version: 1.0.3
+;; Package-Version: 20190817.2347
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: lisp
 ;; URL: https://gitlab.com/marcowahl/lisp-butt-mode

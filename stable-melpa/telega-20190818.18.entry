@@ -1,0 +1,2 @@
+
+(telega . [(20190818 18) ((emacs (26 1)) (visual-fill-column (1 9))) "Telegram client (unofficial)" tar ((:commit . "99a91aaff7fe36570f9af137a5f9904e808978b9") (:keywords "comm") (:authors ("Zajcev Evgeny" . "zevlg@yandex.ru")) (:maintainer "Zajcev Evgeny" . "zevlg@yandex.ru") (:url . "https://github.com/zevlg/telega.el"))])
