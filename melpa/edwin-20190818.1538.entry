@@ -1,2 +1,0 @@
-
-(edwin . [(20190818 1538) ((emacs (25))) "Dynamic window manager" tar ((:commit . "604c28766db274835e28c1aeaccbcf14d0355ce9") (:authors ("Alex Griffin" . "a@ajgrf.com")) (:maintainer "Alex Griffin" . "a@ajgrf.com") (:url . "https://github.com/ajgrf/edwin"))])
