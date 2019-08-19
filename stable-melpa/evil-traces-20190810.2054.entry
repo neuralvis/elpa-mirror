@@ -1,2 +1,0 @@
-
-(evil-traces . [(20190810 2054) ((emacs (25 1)) (evil (1 2 13))) "Visual hints for `evil-ex'" single ((:commit . "b1c64532ad754591c472e0615a10c9a9f8ad3df0") (:keywords "emulations" "evil" "visual") (:authors ("Daniel Phan" . "daniel.phan36@gmail.com")) (:maintainer "Daniel Phan" . "daniel.phan36@gmail.com") (:url . "https://github.com/mamapanda/evil-traces"))])
