@@ -5,7 +5,7 @@
 ;; Author: Titus von der Malsburg <malsburg@posteo.de>
 ;; Maintainer: Titus von der Malsburg <malsburg@posteo.de>
 ;; URL: https://github.com/emacs-helm/helm-mu
-;; Package-Version: 20190410.1718
+;; Package-Version: 20190819.1311
 ;; Version: 1.0.0
 ;; Package-Requires: ((helm "1.5.5"))
 
@@ -111,7 +111,6 @@
 (require 'cl-lib)
 (require 'helm)
 (require 'mu4e)
-(require 'helm-easymenu)
 
 (defgroup helm-mu nil
   "Helm completion for mu."
@@ -187,8 +186,11 @@ than '~/.mu' to store your data"
   :group 'helm-mu
   :type 'string)
 
-(easy-menu-add-item nil '("Tools" "Helm" "Tools") ["Mu" helm-mu t])
-(easy-menu-add-item nil '("Tools" "Helm" "Tools") ["Mu contacts" helm-mu-contacts t])
+;;;###autoload
+(progn
+  (require 'helm-easymenu)
+  (easy-menu-add-item nil '("Tools" "Helm" "Tools") ["Mu" helm-mu t])
+  (easy-menu-add-item nil '("Tools" "Helm" "Tools") ["Mu contacts" helm-mu-contacts t]))
 
 
 (defface helm-mu-contacts-name-face

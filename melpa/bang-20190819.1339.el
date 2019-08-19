@@ -1,8 +1,8 @@
 ;;; bang.el --- A more intelligent shell-command -*- lexical-binding: t -*-
 
 ;; Author: Philip K. <philip@warpmail.net>
-;; Version: 0.2.0
-;; Package-Version: 20190819.1035
+;; Version: 1.0.1
+;; Package-Version: 20190819.1339
 ;; Keywords: unix, processes, convenience
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://git.sr.ht/~zge/bang
@@ -92,7 +92,7 @@ between BEG and END. Otherwise the whole buffer is processed."
                      (match-string-no-properties 5 command)
                      nil nil 1)
                   (error (match-string-no-properties 5 command)))))
-      (let ((default-directory (bang-expand-path path)))
+      (let ((default-directory (bang-expand-path (or path "."))))
         (cond (has-< (delete-region beg end)
                      (shell-command rest t shell-command-default-error-buffer)
                      (exchange-point-and-mark))
@@ -102,7 +102,7 @@ between BEG and END. Otherwise the whole buffer is processed."
               (has-| (shell-command-on-region
                       beg end rest t t
                       shell-command-default-error-buffer t))
-              (t (shell-command command (if current-prefix-arg t nil)
+              (t (shell-command rest (if current-prefix-arg t nil)
                                 shell-command-default-error-buffer))))
       (when has->
         (with-current-buffer "*Shell Command Output*"
