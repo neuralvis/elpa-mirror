@@ -20,7 +20,6 @@
 ;; Author: zk_phi
 ;; Created: 18 Jun 2014
 ;; Version: 0.0.2
-;; Package-Version: 20160304.2220
 ;; URL: https://github.com/ian-kelling/spray
 ;; Mailing list: https://lists.iankelling.org/listinfo/spray
 ;; Keywords: convenience

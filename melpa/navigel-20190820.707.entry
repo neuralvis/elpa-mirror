@@ -1,0 +1,2 @@
+
+(navigel . [(20190820 707) ((emacs (25 1)) (tablist (1 0))) "Facilitate the creation of tabulated-list based UIs" single ((:commit . "3cbdf143c21894a90f036725743552f8ed02ba0c") (:authors ("Damien Cassou" . "damien@cassou.me")) (:maintainer "Damien Cassou" . "damien@cassou.me") (:url . "https://gitlab.petton.fr/DamienCassou/navigel"))])
