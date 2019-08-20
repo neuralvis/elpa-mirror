@@ -1,2 +1,0 @@
-
-(ewal-evil-cursors . [(20190807 240) ((emacs (25)) (ewal (0 1))) "`ewal'-colored evil cursor for Emacs and Spacemacs" single ((:commit . "58ff9b997817ec241aa91dda6aceb00fee75706f") (:keywords "faces") (:authors ("Uros Perisic")) (:maintainer "Uros Perisic") (:url . "https://gitlab.com/jjzmajic/ewal"))])
