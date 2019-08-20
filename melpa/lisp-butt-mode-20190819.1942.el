@@ -12,7 +12,7 @@
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-07-11]
 ;; Version: 1.0.3
-;; Package-Version: 20190817.2347
+;; Package-Version: 20190819.1942
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: lisp
 ;; URL: https://gitlab.com/marcowahl/lisp-butt-mode
@@ -32,6 +32,16 @@
 
 
 ;;; Commentary:
+
+;; lisp-butt-mode brings fat lisp butts in shape.
+;; 
+;; With lisp-butt-mode e.g.
+;; 
+;; 	))))))))))))))))))))))))))))))))
+;; 
+;; gets displayed nicely as (pun intended):
+;; 
+;; 	).)
 
 ;; There is a global `lisp-butt-global-mode' and a local `lisp-butt-mode'
 ;; variant.

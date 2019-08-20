@@ -1,3 +1,13 @@
+lisp-butt-mode brings fat lisp butts in shape.
+
+With lisp-butt-mode e.g.
+
+	))))))))))))))))))))))))))))))))
+
+gets displayed nicely as (pun intended):
+
+	).)
+
 There is a global `lisp-butt-global-mode' and a local `lisp-butt-mode'
 variant.
 
