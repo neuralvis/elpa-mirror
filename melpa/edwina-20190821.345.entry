@@ -1,2 +1,0 @@
-
-(edwina . [(20190821 345) ((emacs (25))) "Dynamic window manager" tar ((:commit . "28f756cc20c19111f6d96528204a370c61227504") (:keywords "convenience") (:authors ("Alex Griffin" . "a@ajgrf.com")) (:maintainer "Alex Griffin" . "a@ajgrf.com") (:url . "https://github.com/ajgrf/edwina"))])

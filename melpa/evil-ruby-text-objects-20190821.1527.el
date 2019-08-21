@@ -4,7 +4,7 @@
 
 ;; Author: Sergio Gil <sgilperez@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20190729.1653
+;; Package-Version: 20190821.1527
 ;; Keywords: languages
 ;; URL: https://github.com/porras/evil-ruby-text-objects
 ;; Package-Requires: ((emacs "25") (evil "1.2.0"))
@@ -20,7 +20,7 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -90,7 +90,7 @@
 (defun evil-ruby-text-objects--make-navigator ()
   "It instantiates a navigator object suitable for the current ruby mode.
 It raises an error if it's not one of the supported
-modes (`ruby-mode` or `enh-ruby-mode`)."
+modes (`ruby-mode' or `enh-ruby-mode')."
   (cond ((eq major-mode 'enh-ruby-mode) (evil-ruby-text-objects--enh-ruby-mode-navigator))
         ((eq major-mode 'ruby-mode) (evil-ruby-text-objects--ruby-mode-navigator))
         (t (user-error "Evil-ruby-text-objects requires ruby-mode or enh-ruby-mode to be enabled"))))

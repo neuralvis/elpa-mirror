@@ -7,8 +7,8 @@
 ;;               2018, 2019 Pierre Neidhardt <mail@ambrevar.xyz>
 ;; Author: Takeshi Banse <takebi@laafc.net>
 ;; URL: https://github.com/emacs-helm/helm-slime
-;; Package-Version: 20190815.1237
-;; Version: 0.3.0
+;; Package-Version: 20190821.1304
+;; Version: 0.4.0
 ;; Keywords: convenience, helm, slime
 ;; Package-Requires: ((emacs "24") (helm "3.2") (slime "2.18") (cl-lib "0.5"))
 

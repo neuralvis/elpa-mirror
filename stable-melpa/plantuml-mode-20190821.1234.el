@@ -7,7 +7,7 @@
 ;; Maintainer: Carlo Sciolla (skuro)
 ;; Keywords: uml plantuml ascii
 ;; Version: 1.2.9
-;; Package-Version: 20190821.1011
+;; Package-Version: 20190821.1234
 ;; Package-X-Original-Version: 1.2.9
 ;; Package-Requires: ((dash "2.0.0") (emacs "25.0"))
 
@@ -93,7 +93,7 @@
 
 (defvar plantuml-mode-hook nil "Standard hook for plantuml-mode.")
 
-(defconst plantuml-mode-version "20190821.1011" "The plantuml-mode version string.")
+(defconst plantuml-mode-version "20190821.1234" "The plantuml-mode version string.")
 
 (defvar plantuml-mode-debug-enabled nil)
 
@@ -110,7 +110,7 @@
   :type 'string
   :group 'plantuml)
 
-(defcustom plantuml-java-args (list "-Djava.awt.headless=true" "-jar")
+(defcustom plantuml-java-args (list "-Djava.awt.headless=true" "-jar" "--illegal-access=deny")
   "The parameters passed to `plantuml-java-command' when executing PlantUML."
   :type '(repeat string)
   :group 'plantuml)
@@ -179,12 +179,12 @@
   (interactive (let* ((completion-ignore-case t)
                       (supported-modes        '("jar" "server" "executable")))
                  (list (completing-read (format "Exec mode [%s]: " plantuml-exec-mode)
-                                  supported-modes
-                                  nil
-                                  t
-                                  nil
-                                  nil
-                                  plantuml-exec-mode))))
+                                        supported-modes
+                                        nil
+                                        t
+                                        nil
+                                        nil
+                                        plantuml-exec-mode))))
   (if (member mode '("jar" "server" "executable"))
       (setq plantuml-exec-mode (intern mode))
     (error (concat "Unsupported mode:" mode))))
@@ -231,9 +231,9 @@
                    (strs       (xml-get-children doc 'str))
                    (version    (->> strs
                                     (--filter (string-equal "v" (xml-get-attribute it 'name)))
-                                    (first)
+                                    (car)
                                     (xml-node-children)
-                                    (first))))
+                                    (car))))
               (message (concat "Downloading PlantUML v" version " into " plantuml-jar-path))
               (url-copy-file (format "https://search.maven.org/remotecontent?filepath=net/sourceforge/plantuml/plantuml/%s/plantuml-%s.jar" version version) plantuml-jar-path t)
               (kill-buffer)))
