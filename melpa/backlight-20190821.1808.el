@@ -4,7 +4,7 @@
 
 ;; Author: Michael Schuldt <mbschuldt@gmail.com>
 ;; Version: 1.3
-;; Package-Version: 20180629.2159
+;; Package-Version: 20190821.1808
 ;; URL: https://github.com/mschuldt/backlight.el
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: hardware
@@ -131,10 +131,7 @@
 (defun backlight--set-brightness (value)
   "Set and verify the backlight brightness to raw VALUE."
   (backlight--set "brightness" value)
-  (let ((actual (backlight--get "actual_brightness")))
-    (when (not (equal actual value))
-      (error "Failed to set backlight brightness"))
-    (setq backlight--current-brightness actual)))
+  (setq backlight--current-brightness (backlight--get "actual_brightness")))
 
 (defun backlight--from-percent (percent)
   "Convert a PERCENT to a brightness value the device accepts."

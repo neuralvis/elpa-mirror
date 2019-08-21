@@ -4,7 +4,7 @@
 
 ;; Author: Phil Jackson <phil@shellarchive.co.uk>
 ;; Keywords: vc tools
-;; Package-Version: 20190324.1459
+;; Package-Version: 20190821.1455
 ;; Package: magit-svn
 ;; Package-Requires: ((emacs "24.4") (magit "2.1.0"))
 
@@ -208,7 +208,7 @@ With a prefix argument also read a branch to search in."
   "Create svn branch NAME.
 \n(git svn branch [--dry-run] NAME)"
   (interactive (list (read-string "Branch name: ")
-                     (transient-args)))
+                     (transient-args 'magit-svn)))
   (magit-run-git "svn" "branch" args name))
 
 ;;;###autoload
@@ -216,21 +216,21 @@ With a prefix argument also read a branch to search in."
   "Create svn tag NAME.
 \n(git svn tag [--dry-run] NAME)"
   (interactive (list (read-string "Tag name: ")
-                     (transient-args)))
+                     (transient-args 'magit-svn)))
   (magit-run-git "svn" "tag" args name))
 
 ;;;###autoload
 (defun magit-svn-rebase (&optional args)
   "Fetch revisions from Svn and rebase the current Git commits.
 \n(git svn rebase [--dry-run])"
-  (interactive (list (transient-args)))
+  (interactive (list (transient-args 'magit-svn)))
   (magit-run-git-async "svn" "rebase" args))
 
 ;;;###autoload
 (defun magit-svn-dcommit (&optional args)
   "Run git-svn dcommit.
 \n(git svn dcommit [--dry-run])"
-  (interactive (list (transient-args)))
+  (interactive (list (transient-args 'magit-svn)))
   (magit-run-git-async "svn" "dcommit" args))
 
 ;;;###autoload

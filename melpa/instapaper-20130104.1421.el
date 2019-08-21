@@ -4,6 +4,7 @@
 ;; Author: Jason F. McBrayer <jmcbray@carcosa.net>
 ;; Last update: 2011-02-17
 ;; Version: 0.9.5
+;; Package-Version: 20130104.1421
 ;; URL: htts://bitbucket.org/jfm/emacs-instapaper
 ;; Contributors:
 

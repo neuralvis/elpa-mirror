@@ -2,7 +2,7 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20190816.2036
+;; Package-Version: 20190821.1531
 ;; Version: 1.15.1
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -61,10 +61,11 @@
 
 
 ;;; Code:
-(require 'org)
 (require 'cal-iso)
+(require 'org)
 (require 'org-crypt nil 'noerror)
 (require 'seq)
+(require 'subr-x)
 
 (when (version< org-version "9.2")
   (defalias 'org-set-tags-to 'org-set-tags))
@@ -506,7 +507,7 @@ hook is run."
       (org-journal-decrypt)
 
       ;; move TODOs from previous day here
-      (when (and org-journal-carryover-items
+      (when (and (not (string-blank-p org-journal-carryover-items))
                  (string= entry-path (org-journal-get-entry-path (current-time))))
         (org-journal-carryover))
 
