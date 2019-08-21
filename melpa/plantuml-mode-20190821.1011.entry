@@ -1,0 +1,2 @@
+
+(plantuml-mode . [(20190821 1011) ((dash (2 0 0)) (emacs (25 0))) "Major mode for PlantUML" single ((:commit . "04110d0110afee9164d8b61dc64c9fc9b44493a2") (:keywords "uml" "plantuml" "ascii") (:authors ("Zhang Weize (zwz)")) (:maintainer "Carlo Sciolla (skuro)"))])
