@@ -7,7 +7,7 @@
 ;; Maintainer: Carlo Sciolla (skuro)
 ;; Keywords: uml plantuml ascii
 ;; Version: 1.2.9
-;; Package-Version: 20190821.1520
+;; Package-Version: 20190822.1403
 ;; Package-X-Original-Version: 1.2.9
 ;; Package-Requires: ((dash "2.0.0") (emacs "25.0"))
 
@@ -94,7 +94,7 @@
 
 (defvar plantuml-mode-hook nil "Standard hook for plantuml-mode.")
 
-(defconst plantuml-mode-version "20190821.1520" "The plantuml-mode version string.")
+(defconst plantuml-mode-version "20190822.1403" "The plantuml-mode version string.")
 
 (defvar plantuml-mode-debug-enabled nil)
 

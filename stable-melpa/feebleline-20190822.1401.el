@@ -6,7 +6,7 @@
 ;; Author: Benjamin Lindqvist <benjamin.lindqvist@gmail.com>
 ;; Maintainer: Benjamin Lindqvist <benjamin.lindqvist@gmail.com>
 ;; URL: https://github.com/tautologyclub/feebleline
-;; Package-Version: 20190711.713
+;; Package-Version: 20190822.1401
 ;; Package-X-Original-Version: 2.0
 ;; Version: 2.0
 
@@ -59,12 +59,18 @@
 
 ;;; Code:
 (require 'cl-macs)
+(autoload 'magit-get-current-branch "magit")
 
 (defun feebleline-git-branch ()
   "Return current git branch, unless file is remote."
   (if (and (buffer-file-name) (file-remote-p (buffer-file-name)))
-      "-"
-    (magit-get-current-branch)))
+      ""
+    (let ((branch (shell-command-to-string
+                   "git rev-parse --symbolic-full-name --abbrev-ref HEAD 2>/dev/null")))
+      (string-trim (replace-regexp-in-string
+                    "^HEAD" "(detached HEAD)"
+                    branch)))
+    ))
 
 (defcustom feebleline-msg-functions
   '((feebleline-line-number         :post "" :fmt "%5s")
@@ -93,6 +99,8 @@
 (defvar feebleline--home-dir nil)
 (defvar feebleline--msg-timer)
 (defvar feebleline--mode-line-format-previous)
+(defvar feebleline--window-divider-previous)
+(defvar feebleline-last-error-shown nil)
 
 (defface feebleline-git-face '((t :foreground "#444444"))
   "Example face for git branch."
@@ -156,20 +164,25 @@
   "Some default settings that works well with feebleline."
   (setq window-divider-default-bottom-width 1
         window-divider-default-places (quote bottom-only))
-  (window-divider-mode t)
+  (setq feebleline--window-divider-previous window-divider-mode)
+  (window-divider-mode 1)
   (setq-default mode-line-format nil)
-  (setq mode-line-format nil))
+  (walk-windows (lambda (window)
+                  (with-selected-window window
+                    (setq mode-line-format nil)))
+                nil t))
 
 (defun feebleline-legacy-settings-on ()
   "Some default settings for EMACS < 25."
   (set-face-attribute 'mode-line nil :height 0.1))
 
-;; disabled, because we really shouldn't silently fail
 (defun feebleline--insert-ignore-errors ()
   "Insert stuff into the echo area, ignoring potential errors."
   (unless (current-message)
-    (condition-case nil (feebleline--insert)
-      (error nil))))
+    (condition-case err (feebleline--insert)
+      (error (unless (equal feebleline-last-error-shown err)
+               (setq feebleline-last-error-shown err)
+               (message (format "feebleline error: %s" err)))))))
 
 (defun feebleline--force-insert ()
   "Insert stuff into the echo area even if it's displaying something."
@@ -215,6 +228,7 @@ Returns a pair with desired column and string."
   (with-current-buffer feebleline--minibuf
     (erase-buffer)))
 
+
 ;;;###autoload
 (define-minor-mode feebleline-mode
   "Replace modeline with a slimmer proxy."
@@ -231,11 +245,14 @@ Returns a pair with desired column and string."
         (if feebleline-use-legacy-settings (feebleline-legacy-settings-on)
           (feebleline-default-settings-on))
         (add-hook 'focus-in-hook 'feebleline--insert-ignore-errors))
-
     ;; Deactivation:
+    (window-divider-mode feebleline--window-divider-previous)
     (set-face-attribute 'mode-line nil :height 1.0)
     (setq-default mode-line-format feebleline--mode-line-format-previous)
-    (setq mode-line-format feebleline--mode-line-format-previous)
+    (walk-windows (lambda (window)
+                    (with-selected-window window
+                      (setq mode-line-format feebleline--mode-line-format-previous)))
+                  nil t)
     (cancel-timer feebleline--msg-timer)
     (remove-hook 'focus-in-hook 'feebleline--insert-ignore-errors)
     (force-mode-line-update)
