@@ -12,7 +12,7 @@
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-07-11]
 ;; Version: 1.0.3
-;; Package-Version: 20190819.1942
+;; Package-Version: 20190822.1102
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: lisp
 ;; URL: https://gitlab.com/marcowahl/lisp-butt-mode
@@ -65,6 +65,10 @@
 ;; Some configuration is possible.  See
 ;; 
 ;;     {M-x customize-group RET lisp-butt RET}
+;; 
+;; To turn on lisp-butt-mode automatically see
+;; 
+;;     {M-x customize-variable RET lisp-butt-global-mode RET}
 ;; 
 ;; See also the literate source file for modifying the whole thing.  E.g. see
 ;; https://gitlab.com/marcowahl/lisp-butt-mode.

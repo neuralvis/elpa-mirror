@@ -31,5 +31,9 @@ Some configuration is possible.  See
 
     {M-x customize-group RET lisp-butt RET}
 
+To turn on lisp-butt-mode automatically see
+
+    {M-x customize-variable RET lisp-butt-global-mode RET}
+
 See also the literate source file for modifying the whole thing.  E.g. see
 https://gitlab.com/marcowahl/lisp-butt-mode.
