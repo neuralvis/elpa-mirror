@@ -1,2 +1,2 @@
 
-(ts . [(20190819 102) ((emacs (26 1)) (dash (2 14 1)) (s (1 12 0))) "Timestamp and date/time library" single ((:commit . "a579492f2b8df3a68dca18e5a15cffb5bdbe0a7d") (:keywords "date" "time" "timestamp") (:authors (nil . "Adam Porter <adam@alphapapa.net")) (:maintainer nil . "Adam Porter <adam@alphapapa.net") (:url . "http://github.com/alphapapa/ts.el"))])
+(ts . [(20190819 102) ((emacs (26 1)) (dash (2 14 1)) (s (1 12 0))) "Timestamp and date/time library" single ((:commit . "93c074f2895a204e003e8c7f3033c37d6486fac8") (:keywords "date" "time" "timestamp") (:authors (nil . "Adam Porter <adam@alphapapa.net")) (:maintainer nil . "Adam Porter <adam@alphapapa.net") (:url . "http://github.com/alphapapa/ts.el"))])
