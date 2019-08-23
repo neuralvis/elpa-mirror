@@ -1,0 +1,2 @@
+
+(pangu-spacing . [(20190823 303) nil "Minor-mode to add space between Chinese and English characters." single ((:commit . "e351fb76aa8688cd7c7de41756e01f0c3534bc2f") (:authors ("coldnew" . "coldnew.tw@gmail.com")) (:maintainer "coldnew" . "coldnew.tw@gmail.com") (:url . "http://github.com/coldnew/pangu-spacing"))])

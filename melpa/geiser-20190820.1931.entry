@@ -1,2 +1,2 @@
 
-(geiser . [(20190820 1931) nil "GNU Emacs and Scheme talk to each other" tar ((:commit . "56e3149aa1158743f96a5a0bdf5940eaf510a35f") (:url . "http://www.nongnu.org/geiser/"))])
+(geiser . [(20190820 1931) nil "GNU Emacs and Scheme talk to each other" tar ((:commit . "73efe9010c753659efada9519a198be49442e03a") (:url . "http://www.nongnu.org/geiser/"))])

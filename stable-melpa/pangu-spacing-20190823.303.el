@@ -5,7 +5,7 @@
 ;; Author: coldnew <coldnew.tw@gmail.com>
 ;; Kyewords: converience
 ;; Version: 0.4
-;; Package-Version: 20190422.514
+;; Package-Version: 20190823.303
 ;; X-URL: http://github.com/coldnew/pangu-spacing
 
 ;; This file is free software: you can redistribute it and/or modify
@@ -209,7 +209,8 @@ pangu-spacing-mode."
        (while (re-search-forward ,regexp end t)
          (when (and (match-beginning 1)
                     (match-beginning 2))
-           ,func)))))
+           ,func
+           (backward-char))))))
 
 (defmacro pangu-spacing-search-overlay (beg end func regexp)
   "Helper macro to search and update overlay according func and regexp for
