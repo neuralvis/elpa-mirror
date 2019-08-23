@@ -5,7 +5,7 @@
 ;; Author: coldnew <coldnew.tw@gmail.com>
 ;; Kyewords: converience
 ;; Version: 0.4
-;; Package-Version: 20190823.303
+;; Package-Version: 20190823.401
 ;; X-URL: http://github.com/coldnew/pangu-spacing
 
 ;; This file is free software: you can redistribute it and/or modify
@@ -48,9 +48,9 @@
 ;;
 ;;      你好，我是coldnew，我喜歡使用emacs。
 
-;; pangu-spacing is named from paranoid-auto-spacing's README.
+;; pangu-spacing is named from [pangu.js](https://github.com/vinta/pangu.js)'s README.
 ;;
-;;      Translation of paranoid-auto-spacing's README [1]
+;;      Translation of pangu.js's README [1]
 ;;
 ;;      If you are the one who feel quiet ill when see Chinese,
 ;;      English and digits characters squeezed together and
@@ -70,14 +70,13 @@
 
 ;;      Let's go for it.
 
-;;      [1] https://github.com/gibuloto/paranoid-auto-spacing
+;;      [1] https://github.com/vinta/pangu.js
 
 ;;; Commentary (Chinese):
 
-;; pangu-spacing-mode 是一個可以自動幫你將中文與英文之間加上`空白'作為分
-;; 隔的 minor-mode, 他的名稱來自於 paranoid-auto-spacing 上的 README。
+;; pangu-spacing-mode 是一個可以自動幫你將中文與英文之間加上`空白'作為分隔的 minor-mode, 他的名稱來自於 [pangu.js](https://github.com/vinta/pangu.js) 上的 README。
 ;;
-;;      引述自 paranoid-auto-spacing README [1]
+;;      引述自 pangu.js README [1]
 ;;
 ;;      如果你跟我一樣，每次看到網頁上的中文字和英文、數字、符號擠在一塊，就會
 ;;      坐立難安，忍不住想在它們之間加個空格。這個外掛（支援 Chrome 和 Firefox）
@@ -91,13 +90,7 @@
 ;;
 ;;      與大家共勉之。
 
-;;      [1] https://github.com/gibuloto/paranoid-auto-spacing
-
-;;
-;; 更完整的介紹，請見我的部若格:
-;;
-;; http://coldnew.github.io/blog/2013/05/20_5cbb7.html
-;;
+;;      [1] https://github.com/vinta/pangu.js
 
 ;;; Installation:
 
@@ -178,12 +171,17 @@ When you set t here, the space will be insert when you save file."
 ;; Url: http://lists.gnu.org/archive/html/emacs-diffs/2014-01/msg00049.html
 
 (defvar pangu-spacing-include-regexp
+  ;; we didn't add korean because korean-hangul-two-byte is not implemented
   (rx (or (and (or (group-n 3 (any "。，！？；：「」（）、"))
-                   (group-n 1 (category chinse-two-byte)))
+                   (group-n 1 (or (category chinse-two-byte)
+                                  (category japanese-hiragana-two-byte)
+                                  (category japanese-katakana-two-byte))))
                (group-n 2 (in "a-zA-Z0-9")))
           (and (group-n 1 (in "a-zA-Z0-9"))
                (or (group-n 3 (any "。，！？；：「」（）、"))
-                   (group-n 2 (category chinse-two-byte))))))
+                   (group-n 2 (or (category chinse-two-byte)
+                                  (category japanese-hiragana-two-byte)
+                                  (category japanese-katakana-two-byte)))))))
   "Regexp to find Chinese character before English character.
 
 Group 1 contains the character before the potential pangu
@@ -218,10 +216,33 @@ pangu-sapce-mode."
   `(pangu-spacing-search-buffer ,regexp ,beg ,end
                                   (,func (match-beginning 1) (match-end 1))))
 
+(defun pangu-spacing-org-mode-at-special-region ()
+  (interactive)
+  (let ((element (org-element-at-point)))
+    (when (or (member (org-element-type element)
+                      '(src-block keyword example-block export-block
+                                  latex-environment planning))
+              (member (car (org-element-context element))
+                      '(inline-src-block timestamp link code verbatim)))
+      t)))
+
+(defcustom pangu-spacing-special-region-func-alist
+  '((org-mode . pangu-spacing-org-mode-at-special-region))
+  "Alist mapping major-mode to the corresponding function to
+  check for special region that shall not write real pangu-space"
+  :group 'pangu-spacing
+  :type '(alist :key-type (symbol)
+                :value-type (function)))
+
 (defun pangu-spacing-search-and-replace (match regexp)
   "Replace regexp with match in buffer."
-  (pangu-spacing-search-buffer regexp (point-min) (point-max)
-                                 (replace-match match nil nil)))
+  (let ((at-special-region-func
+         (cdr (assq major-mode pangu-spacing-special-region-func-alist))))
+    (pangu-spacing-search-buffer
+     regexp (point-min) (point-max)
+     (unless (and at-special-region-func
+                  (save-match-data (funcall at-special-region-func)))
+       (replace-match match nil nil)))))
 
 (defun pangu-spacing-overlay-p (ov)
   "Determine whether overlay OV was created by space-between."
