@@ -6,7 +6,7 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20190710.2230
+;; Package-Version: 20190822.2115
 ;; Package-X-Original-Version: 1.8
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
@@ -527,13 +527,14 @@ absolute paths."
 	     (when (eq (car xml) 'img)
 	       (let ((src (assq 'src (cadr xml))))
 		 (unless (url-type (url-generic-parse-url (cdr src)))
-		   (unless (file-name-absolute-p (cdr src))
-		     (let ((file (concat base (cdr src))))
-		       (if (file-exists-p file)
-			   (setcdr src (concat base (cdr src)))
-			 (unless (y-or-n-p (format "'%s' Image is missing,\
+		   (when src
+		     (unless (file-name-absolute-p (cdr src))
+		       (let ((file (concat base (cdr src))))
+			 (if (file-exists-p file)
+			     (setcdr src (concat base (cdr src)))
+			   (unless (y-or-n-p (format "'%s' Image is missing,\
  do you want to continue ?" file))
-			   (error "'%s' Image is missing" file))))))))))
+			     (error "'%s' Image is missing" file)))))))))))
     (let ((xml (libxml-parse-html-region (point-min) (point-max))))
       (when base
 	(org-msg-xml-walk xml #'make-img-abs))
@@ -826,11 +827,11 @@ command."
 	  (princ "Select an Attachment Command:
 
 a       Select a file and attach it this mail.
-d       Delete one attachment, you will be prompted for a file name.")))
+d       Delete one attachment, you will be prompted for a file name."))
 	(org-fit-window-to-buffer (get-buffer-window "*Org Attach*"))
 	(message "Select command: [ad]")
 	(setq c (read-char-exclusive))
-	(and (get-buffer "*Org Attach*") (kill-buffer "*Org Attach*")))
+	(and (get-buffer "*Org Attach*") (kill-buffer "*Org Attach*"))))
     (cond ((memq c '(?a ?\C-a)) (call-interactively 'org-msg-attach-attach))
 	  ((memq c '(?d ?\C-d)) (call-interactively 'org-msg-attach-delete)))))
 

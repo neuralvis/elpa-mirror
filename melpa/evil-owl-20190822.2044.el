@@ -4,7 +4,7 @@
 
 ;; Author: Daniel Phan <daniel.phan36@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20190821.519
+;; Package-Version: 20190822.2044
 ;; Package-Requires: ((emacs "25.1") (evil "1.2.13"))
 ;; Homepage: https://github.com/mamapanda/evil-owl
 ;; Keywords: emulations, evil, visual
@@ -97,7 +97,8 @@ Possible format specifiers are:
 - %m: the mark
 - %l: the mark's line number
 - %c: the mark's column number
-- %b: the mark's buffer"
+- %b: the mark's buffer
+- %s: text of the mark's line"
   :type 'string)
 
 (defcustom evil-owl-global-mark-format " %m: [l: %-5l, c: %-5c] %b"
@@ -106,7 +107,8 @@ Possible format specifiers are:
 - %m: the mark
 - %l: the mark's line number
 - %c: the mark's column number
-- %b: the mark's buffer"
+- %b: the mark's buffer
+- %s: text of the mark's line"
   :type 'string)
 
 (defcustom evil-owl-separator "\n"
@@ -126,9 +128,11 @@ The value may be either 'window or 'posframe."
   "The idle delay, in seconds, before the popup appears."
   :type 'float)
 
-(defcustom evil-owl-register-char-limit nil
-  "Maximum number of characters to consider in a string register."
+(defcustom evil-owl-max-string-length nil
+  "Maximum number of characters to consider in a string register or context line."
   :type 'integer)
+
+(define-obsolete-variable-alias 'evil-owl-register-char-limit 'evil-owl-max-string-length "0.0.1")
 
 (defcustom evil-owl-lighter " evil-owl"
   "Lighter for evil-owl."
@@ -172,9 +176,9 @@ The result is nil if REG is empty."
   (when-let ((contents (evil-get-register reg t)))
     (cond
      ((stringp contents)
-      (when (and evil-owl-register-char-limit
-                 (> (length contents) evil-owl-register-char-limit))
-        (setq contents (substring contents 0 evil-owl-register-char-limit)))
+      (when (and evil-owl-max-string-length
+                 (> (length contents) evil-owl-max-string-length))
+        (setq contents (substring contents 0 evil-owl-max-string-length)))
       (replace-regexp-in-string "\n" "^J" contents))
      ((vectorp contents)
       (key-description contents)))))
@@ -202,8 +206,8 @@ The result is nil if REG is empty."
 
 (defun evil-owl--get-mark (mark)
   "Get the position stored in MARK.
-The result is a list (line-number column-number buffer), or nil if
-MARK points nowhere."
+The result is a list (line-number column-number buffer context-line),
+or nil if MARK points nowhere."
   (when-let ((pos (condition-case nil
                       (evil-get-marker mark)
                     ;; Some marks error if their use conditions
@@ -213,16 +217,23 @@ MARK points nowhere."
              (buffer (cond ((numberp pos) (current-buffer))
                            ((markerp pos) (marker-buffer pos)))))
     (with-current-buffer buffer
-      (let ((line (line-number-at-pos pos))
-            (column (save-excursion
-                      (goto-char pos)
-                      (current-column))))
-        (list line column (current-buffer))))))
+      (save-excursion
+        (goto-char pos)
+        (let* ((line (line-number-at-pos pos))
+               (column (current-column))
+               (context-beg (line-beginning-position))
+               (context-end (if evil-owl-max-string-length
+                                (min (+ context-beg
+                                        evil-owl-max-string-length)
+                                     (line-end-position))
+                              (line-end-position)))
+               (context (buffer-substring context-beg context-end)))
+          (list line column buffer context))))))
 
 (defun evil-owl--mark-entry-string (mark)
   "Compute the entry string for MARK."
   (if-let ((pos-info (evil-owl--get-mark mark)))
-      (cl-destructuring-bind (line column buffer) pos-info
+      (cl-destructuring-bind (line column buffer contents) pos-info
         (let ((format (if (evil-owl--global-marker-p mark)
                           evil-owl-global-mark-format
                         evil-owl-local-mark-format))
@@ -230,6 +241,7 @@ MARK points nowhere."
                                                      'face 'evil-owl-entry-name)
                                       ?l line
                                       ?c column
+                                      ?s contents
                                       ?b buffer)))
           (concat (format-spec format spec) "\n")))
     ""))
