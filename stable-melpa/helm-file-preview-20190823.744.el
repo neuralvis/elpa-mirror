@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Preview the current helm selection.
 ;; Keyword: file helm preview select selection
-;; Version: 0.0.3
-;; Package-Version: 20190630.839
+;; Version: 0.0.4
+;; Package-Version: 20190823.744
 ;; Package-Requires: ((emacs "24.4") (helm "2.0"))
 ;; URL: https://github.com/jcs090218/helm-file-preview
 
@@ -58,11 +58,11 @@
 (defvar helm-file-preview--prev-window nil
   "Record down the previous window before we do `helm-' related commands.")
 
-(defvar helm-file-preview--file-list '()
-  "List of file the are previewing, and ready to be killed again.")
+(defvar helm-file-preview--file-buffer-list '()
+  "List of file buffer that are previewing, and ready to be killed again.")
 
-(defvar helm-file-preview--current-select-fp ""
-  "Record current selecting filename.")
+(defvar helm-file-preview--current-select-fb nil
+  "Record current selecting file buffer.")
 
 
 (defun helm-file-preview--helm-move-selection-after-hook (&rest _args)
@@ -88,13 +88,12 @@ ARGS : rest of the arguments."
                            ln))
               (select-window helm-file-preview--prev-window)
 
-              (when helm-file-preview-preview-only
-                (setq helm-file-preview--current-select-fp fp)
-                (unless (get-buffer fn)
-                  (push fp helm-file-preview--file-list)))
-
               (find-file fp)
-              (setq did-find-file t))
+              (setq did-find-file t)
+
+              (when helm-file-preview-preview-only
+                (setq helm-file-preview--current-select-fb (current-buffer))
+                (push helm-file-preview--current-select-fb helm-file-preview--file-buffer-list)))
 
             (when did-find-file
               (when ln
@@ -111,18 +110,15 @@ ARGS : rest of the arguments."
 (defun helm-file-preview--helm-before-initialize-hook ()
   "Record all necessary info for `helm-file-preview' package to work."
   (setq helm-file-preview--prev-window (selected-window))
-  (setq helm-file-preview--file-list '())
-  (setq helm-file-preview--current-select-fp ""))
+  (setq helm-file-preview--file-buffer-list '())
+  (setq helm-file-preview--current-select-fb nil))
 
 (defun helm-file-preview--helm-cleanup-hook ()
   "Cleanup and kill preview files."
   (when helm-file-preview-preview-only
-    (dolist (fp helm-file-preview--file-list)
-      (unless (string= helm-file-preview--current-select-fp fp)
-        ;; TODO: This is consider slow, should be killed the buffer
-        ;; directly with the full path!
-        (find-file fp)
-        (kill-buffer)))))
+    (dolist (fb helm-file-preview--file-buffer-list)
+      (unless (equal helm-file-preview--current-select-fb fb)
+        (kill-buffer fb)))))
 
 
 (defun helm-file-preview--enable ()

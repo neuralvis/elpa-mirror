@@ -1,0 +1,2 @@
+
+(helm-file-preview . [(20190823 744) ((emacs (24 4)) (helm (2 0))) "Preview the current helm file selection." single ((:commit . "86033400e3b381fedcd61108c265a355221d6ac0") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs090218/helm-file-preview"))])

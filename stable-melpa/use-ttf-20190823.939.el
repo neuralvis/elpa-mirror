@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Keep font consistency across different OSs.
 ;; Keyword: customize font install ttf
-;; Version: 0.0.4
-;; Package-Version: 20190701.1222
+;; Version: 0.0.5
+;; Package-Version: 20190823.939
 ;; Package-Requires: ((emacs "24.4") (s "1.12.0"))
 ;; URL: https://github.com/jcs090218/use-ttf
 
@@ -179,8 +179,10 @@ IN-STR : string using to check if is contain one of the IN-LIST."
   "Use the font by `use-ttf-default-ttf-font-name` variable.
 This will actually set your Emacs to your target font."
   (interactive)
-  (if (string= use-ttf-default-ttf-font-name "")
-      (error "Your default font name cannot be 'nil' or 'empty string'")
+  (if (or (not use-ttf-default-ttf-font-name)
+          (and (stringp use-ttf-default-ttf-font-name)
+               (string= use-ttf-default-ttf-font-name "")))
+      (user-error "Your default font name cannot be 'nil' or 'empty string'")
     (progn
       ;; NOTE: Install font if not installed.
       (unless (use-ttf-is-contain-list-string (font-family-list) use-ttf-default-ttf-font-name)
