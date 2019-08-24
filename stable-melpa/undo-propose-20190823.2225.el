@@ -3,7 +3,7 @@
 ;; Author: Jack Kamm
 ;; Maintainer: Jack Kamm
 ;; Version: 3.0.0
-;; Package-Version: 20190809.456
+;; Package-Version: 20190823.2225
 ;; Package-Requires: ((emacs "24.3"))
 ;; Homepage: https://github.com/jackkamm/undo-propose.el
 ;; Keywords: convenience, files, undo, redo, history
@@ -53,26 +53,30 @@ Copies 'current-buffer' and 'buffer-undo-list' to a new temporary buffer,
 which is read-only except for undo commands.  After finished undoing, type
 \\[undo-propose-commit] to accept the chain of undos,
 or \\[undo-propose-squash-commit] to copy the buffer but squash the undo's into a single edit event event.  To cancel, type \\[undo-propose-cancel], and
-to view an ediff type \\[undo-propose-diff]."
+to view an ediff type \\[undo-propose-diff].
+
+If already inside an undo-propose buffer, this will simply call `undo'."
   (interactive)
-  (let ((mode major-mode)
-        (orig-buffer (current-buffer))
-        (list-copy (undo-copy-list buffer-undo-list))
-        (pos (point))
-        (win-start (window-start))
-        (tmp-buffer (generate-new-buffer
-                     (concat "*Undo Propose: "
-                             (buffer-name) "*"))))
-    (switch-to-buffer tmp-buffer nil t)
-    (funcall mode)
-    (insert-buffer-substring orig-buffer 1 (1+ (buffer-size orig-buffer)))
-    (goto-char pos)
-    (set-window-start (selected-window) win-start)
-    (setq-local buffer-undo-list list-copy)
-    (setq-local buffer-read-only t)
-    (setq-local undo-propose-parent orig-buffer)
-    (undo-propose-mode 1)
-    (message "undo-propose: C-c C-c to commit, C-c C-s to squash commit, C-c C-k to cancel, C-c C-d to diff")))
+  (if (bound-and-true-p undo-propose-mode)
+      (undo)
+    (let ((mode major-mode)
+          (orig-buffer (current-buffer))
+          (list-copy (undo-copy-list buffer-undo-list))
+          (pos (point))
+          (win-start (window-start))
+          (tmp-buffer (generate-new-buffer
+                       (concat "*Undo Propose: "
+                               (buffer-name) "*"))))
+      (switch-to-buffer tmp-buffer nil t)
+      (funcall mode)
+      (insert-buffer-substring orig-buffer 1 (1+ (buffer-size orig-buffer)))
+      (goto-char pos)
+      (set-window-start (selected-window) win-start)
+      (setq-local buffer-undo-list list-copy)
+      (setq-local buffer-read-only t)
+      (setq-local undo-propose-parent orig-buffer)
+      (undo-propose-mode 1)
+      (message "undo-propose: C-c C-c to commit, C-c C-s to squash commit, C-c C-k to cancel, C-c C-d to diff"))))
 
 (define-minor-mode undo-propose-mode
   "Minor mode for `undo-propose'."
@@ -85,10 +89,10 @@ to view an ediff type \\[undo-propose-diff]."
 (defmacro undo-propose-wrap (command)
   "Wrap COMMAND so it is useable within the ‘undo-propose’ buffer."
   `(define-key undo-propose-mode-map [remap ,command]
-    (lambda ()
-      (interactive)
-      (let ((inhibit-read-only t))
-        (call-interactively ',command)))))
+     (lambda ()
+       (interactive)
+       (let ((inhibit-read-only t))
+         (call-interactively ',command)))))
 
 (undo-propose-wrap undo)
 (undo-propose-wrap undo-only)
@@ -140,6 +144,7 @@ buffer contents are copied."
   (interactive)
   (let ((tmp-buffer (current-buffer))
         (orig-buffer undo-propose-parent))
+    (switch-to-buffer orig-buffer)
     (kill-buffer tmp-buffer)
     (message "Cancel Undo-Propose!")))
 

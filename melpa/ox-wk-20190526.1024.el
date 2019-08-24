@@ -5,6 +5,7 @@
 
 ;; Author: Vilibald Wanča <vilibald@wvi.cz>
 ;; Keywords: org, wp, wiki
+;; Package-Version: 20190526.1024
 ;; URL: https://github.com/w-vi/ox-wk.el
 ;; Package-Requires: ((emacs "24.4") (org "8.3"))
 ;; Keywords: Org, markdown, docs
