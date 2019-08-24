@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Preview the current helm selection.
 ;; Keyword: file helm preview select selection
-;; Version: 0.0.4
-;; Package-Version: 20190823.744
+;; Version: 0.0.6
+;; Package-Version: 20190824.950
 ;; Package-Requires: ((emacs "24.4") (helm "2.0"))
 ;; URL: https://github.com/jcs090218/helm-file-preview
 
@@ -64,6 +64,9 @@
 (defvar helm-file-preview--current-select-fb nil
   "Record current selecting file buffer.")
 
+(defvar helm-file-preview--prev-buffer-list '()
+  "Record the previous buffer list.")
+
 
 (defun helm-file-preview--helm-move-selection-after-hook (&rest _args)
   "Helm after move selection for `helm-' related commands preview action.
@@ -93,7 +96,8 @@ ARGS : rest of the arguments."
 
               (when helm-file-preview-preview-only
                 (setq helm-file-preview--current-select-fb (current-buffer))
-                (push helm-file-preview--current-select-fb helm-file-preview--file-buffer-list)))
+                (push helm-file-preview--current-select-fb helm-file-preview--file-buffer-list)
+                (delete-dups helm-file-preview--file-buffer-list)))
 
             (when did-find-file
               (when ln
@@ -107,30 +111,40 @@ ARGS : rest of the arguments."
                       (move-to-column (1- cl-num)))))))))))))
 
 
+(defun helm-file-preview--opened-buffer (in-list in-buf)
+  "Check if the IN-BUF in the opened buffer list, IN-LIST."
+  (cl-some #'(lambda (buf) (equal buf in-buf)) in-list))
+
 (defun helm-file-preview--helm-before-initialize-hook ()
   "Record all necessary info for `helm-file-preview' package to work."
   (setq helm-file-preview--prev-window (selected-window))
   (setq helm-file-preview--file-buffer-list '())
-  (setq helm-file-preview--current-select-fb nil))
+  (setq helm-file-preview--current-select-fb nil)
+  (setq helm-file-preview--prev-buffer-list (buffer-list)))
 
-(defun helm-file-preview--helm-cleanup-hook ()
+(defun helm-file-preview--cleanup ()
   "Cleanup and kill preview files."
-  (when helm-file-preview-preview-only
+  (when (and helm-file-preview-preview-only
+             helm-file-preview--current-select-fb)
     (dolist (fb helm-file-preview--file-buffer-list)
-      (unless (equal helm-file-preview--current-select-fb fb)
-        (kill-buffer fb)))))
+      (when (and (not (equal helm-file-preview--current-select-fb fb))
+                 (not (helm-file-preview--opened-buffer helm-file-preview--prev-buffer-list fb)))
+        (kill-buffer fb)))
+    (setq helm-file-preview--current-select-fb nil)))
 
 
 (defun helm-file-preview--enable ()
   "Enable `helm-file-preview'."
   (add-hook 'helm-before-initialize-hook #'helm-file-preview--helm-before-initialize-hook)
-  (add-hook 'helm-cleanup-hook #'helm-file-preview--helm-cleanup-hook)
+  (add-hook 'helm-cleanup-hook #'helm-file-preview--cleanup)
+  (add-hook 'minibuffer-exit-hook #'helm-file-preview--cleanup)
   (advice-add 'helm-mark-current-line :after 'helm-file-preview--helm-move-selection-after-hook))
 
 (defun helm-file-preview--disable ()
   "Disable `helm-file-preview'."
   (remove-hook 'helm-before-initialize-hook #'helm-file-preview--helm-before-initialize-hook)
-  (remove-hook 'helm-cleanup-hook #'helm-file-preview--helm-cleanup-hook)
+  (remove-hook 'helm-cleanup-hook #'helm-file-preview--cleanup)
+  (remove-hook 'minibuffer-exit-hook #'helm-file-preview--cleanup)
   (advice-remove 'helm-mark-current-line 'helm-file-preview--helm-move-selection-after-hook))
 
 
