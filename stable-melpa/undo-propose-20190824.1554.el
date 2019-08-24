@@ -3,7 +3,7 @@
 ;; Author: Jack Kamm
 ;; Maintainer: Jack Kamm
 ;; Version: 3.0.0
-;; Package-Version: 20190823.2225
+;; Package-Version: 20190824.1554
 ;; Package-Requires: ((emacs "24.3"))
 ;; Homepage: https://github.com/jackkamm/undo-propose.el
 ;; Keywords: convenience, files, undo, redo, history
@@ -108,6 +108,7 @@ If already inside an undo-propose buffer, this will simply call `undo'."
     (copy-to-buffer orig-buffer 1 (buffer-end 1))
     (with-current-buffer orig-buffer
       (setq-local buffer-undo-list list-copy))
+    (switch-to-buffer orig-buffer)
     (kill-buffer tmp-buffer)
     (goto-char pos)
     (set-window-start (selected-window) win-start)
@@ -131,6 +132,7 @@ buffer contents are copied."
         (goto-char (point-max))
         (insert-buffer-substring tmp-buffer first-diff tmp-end)
         (goto-char first-diff)))
+    (switch-to-buffer orig-buffer)
     (kill-buffer tmp-buffer)
     (message "undo-propose: squash commit")))
 (define-obsolete-function-alias 'undo-propose-commit-buffer-only

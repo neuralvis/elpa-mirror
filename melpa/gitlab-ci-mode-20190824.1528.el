@@ -5,8 +5,8 @@
 ;; Author: Joe Wreschnig
 ;; Keywords: tools, vc
 ;; Package-Requires: ((emacs "25") (yaml-mode "0.0.12"))
-;; Package-Version: 20190425.2058
-;; Package-X-Original-Version: 20190222.11.8
+;; Package-Version: 20190824.1528
+;; Package-X-Original-Version: 20190824.12.2
 ;; URL: https://gitlab.com/joewreschnig/gitlab-ci-mode/
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -48,6 +48,7 @@
     "ARTIFACT_DOWNLOAD_ATTEMPTS"
     "GET_SOURCES_ATTEMPTS"
     "GIT_CHECKOUT"
+    "GIT_CLEAN_FLAGS"
     "GIT_CLONE_PATH"
     "GIT_DEPTH"
     "GIT_STRATEGY"
@@ -67,6 +68,7 @@ set in a ‘variables’ block and act more like keywords.")
      "before_script"
      "branch"
      "cache"
+     "changes"
      "coverage"
      "dependencies"
      "environment"
@@ -77,9 +79,11 @@ set in a ‘variables’ block and act more like keywords.")
      "image"
      "include"
      "key"
+     "kubernetes"
      "local"
      "max"
      "name"
+     "needs"
      "on_stop"
      "only"
      "pages"
@@ -88,6 +92,7 @@ set in a ‘variables’ block and act more like keywords.")
      "policy"
      "project"
      "ref"
+     "refs"
      "remote"
      "reports"
      "retry"
@@ -111,18 +116,20 @@ set in a ‘variables’ block and act more like keywords.")
     "api"
     "api_failure"
     "branches"
-    "changes"
+    "clone"
     "delayed"
     "external"
-    "kubernetes"
+    "fetch"
     "manual"
     "merge_requests"
     "missing_dependency_failure"
+    "none"
+    "normal"
     "on_failure"
     "on_success"
     "pipelines"
     "pushes"
-    "refs"
+    "recursive"
     "runner_system_failure"
     "runner_unsupported"
     "schedules"
@@ -131,7 +138,6 @@ set in a ‘variables’ block and act more like keywords.")
     "tags"
     "triggers"
     "unknown_failure"
-    "variables"
     "web")
   "YAML values with special meaning used in GitLab CI files.")
 
