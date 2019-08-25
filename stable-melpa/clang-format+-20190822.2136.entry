@@ -1,2 +1,0 @@
-
-(clang-format+ . [(20190822 2136) ((emacs (25 1)) (clang-format (20180406 1514))) "Minor mode for automatic clang-format application" single ((:commit . "73197d2a9f46fa90103657f886b60ae419615c9b") (:keywords "c" "c++" "clang-format") (:url . "https://github.com/SavchenkoValeriy/emacs-clang-format-plus"))])

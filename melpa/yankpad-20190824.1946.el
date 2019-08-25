@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/yankpad
-;; Package-Version: 20190617.1004
+;; Package-Version: 20190824.1946
 ;; Version: 2.20
 ;; Keywords: abbrev convenience
 ;; Package-Requires: ((emacs "24"))
@@ -448,7 +448,12 @@ This function can be added to `hippie-expand-try-functions-list'."
 (defun yankpad-edit ()
   "Open the yankpad file for editing."
   (interactive)
-  (find-file yankpad-file))
+  (let ((category yankpad-category))
+    (find-file-other-window yankpad-file)
+    (when category
+      (goto-char (yankpad-category-marker category))
+      (org-show-entry)
+      (org-show-subtree))))
 
 (defun yankpad--file-elements ()
   "Run `org-element-parse-buffer' on the `yankpad-file'."

@@ -4,6 +4,7 @@
 
 ;; Author: Anders Lindgren
 ;; Keywords: faces, tools
+;; Package-Version: 20170211.2024
 ;; Created: 2014-05-15
 ;; Version: 0.0.3
 ;; URL: https://github.com/Lindydancer/highlight-refontification

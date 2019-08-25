@@ -4,7 +4,7 @@
 
 ;; Authors: Valeriy Savchenko <sinmipt@gmail.com>
 ;; URL: https://github.com/SavchenkoValeriy/emacs-clang-format-plus
-;; Package-Version: 20190822.2136
+;; Package-Version: 20190824.2216
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "25.1") (clang-format "20180406.1514"))
 ;; Keywords: c c++ clang-format
@@ -40,27 +40,34 @@
   "Minor mode for automatic clang-format application"
   :group 'convenience)
 
-(defcustom clang-format+-apply-to-modifications-only
-  t
-  "Format only modified parts of the buffer or the whole buffer."
-  :type 'boolean
-  :group 'clang-format+)
+(defcustom clang-format+-context
+  'definition
+  "How much context to reformat after modifications.
 
-(defcustom clang-format+-apply-to-modified-definition
-  t
-  "Format the whole class or function that has been modified.
+When a buffer is modified, clang-format+ can reformat only the
+modified parts or larger enclosing contexts. The default is to
+reformat the whole class or function in which a modification is
+made.
 
-Makes a difference only when `clang-format+-apply-to-modifications-only' is t."
-  :type 'boolean
+Possible values:
+
+`buffer'        Reformat the whole buffer.
+`definition'    Reformat the enclosing definition (class/function/etc., but not
+                namespace).
+`modification'  Reformat only the modified parts."
+  :type '(choice (const :tag "The whole buffer" buffer)
+                 (const :tag "The whole class or function" definition)
+                 (const :tag "Only the modification" modification))
   :group 'clang-format+)
 
 (defcustom clang-format+-offset-modified-region
   0
-  "Number of lines to add to the modified region.
+  "Number of extra lines to reformat outside of a modified region.
 
-Clang-format+ adds it both to the beginning and to the end of the region.
-Used only when `clang-format+-apply-to-modified-definition' is nil or
-when not inside of the function."
+Clang-format+ extends the region to reformat both at the
+beginning and at the end. If `clang-format+-context' is set to
+`definition', the region will only be extended for modifications
+outside of definitions."
   :type 'integer
   :group 'clang-format+)
 
@@ -110,9 +117,9 @@ in place."
 
 (defun clang-format+-before-save ()
   "Run ‘clang-format’ on the current buffer."
-  (if clang-format+-apply-to-modifications-only
-      (clang-format+-apply-to-modifications)
-    (clang-format-buffer)))
+  (if (eq clang-format+-context 'buffer)
+      (clang-format-buffer)
+    (clang-format+-apply-to-modifications)))
 
 (defun clang-format+-apply-to-modifications ()
   "Apply ‘clang-format’ to modified parts of the current buffer."
@@ -176,7 +183,7 @@ FALLBACK-MOVE will be used if POINTER is outside of the definition,
 or when modification of the whole definition is not allowed."
   (save-excursion
     (goto-char pointer)
-    (if (and clang-format+-apply-to-modified-definition
+    (if (and (eq clang-format+-context 'definition)
              (clang-format+-inside-of-enclosing-definition-p))
         (funcall definition-move)
       (funcall fallback-move clang-format+-offset-modified-region))
