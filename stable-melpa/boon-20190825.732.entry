@@ -1,0 +1,2 @@
+
+(boon . [(20190825 732) ((emacs (25 1)) (expand-region (0 10 0)) (dash (2 12 0)) (multiple-cursors (1 3 0))) "Ergonomic Command Mode for Emacs." tar ((:commit . "38683320d4b5139086063bcfd2eb0a57801564ef"))])
