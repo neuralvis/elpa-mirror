@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Jensen <aaronjensen@gmail.com>
 ;; URL: http://github.com/aaronjensen/night-owl-theme
-;; Package-Version: 20190808.2050
+;; Package-Version: 20190825.1559
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24"))
 
@@ -303,7 +303,7 @@ Also affects 'linum-mode' background."
      ((t (:foreground ,night-owl-comments))))
 
    `(font-lock-constant-face
-     ((t (:foreground ,night-owl-violet))))
+     ((t (:foreground ,night-owl-orange))))
 
    `(font-lock-doc-face
      ((t (:foreground ,(if night-owl-doc-face-as-comment
@@ -340,7 +340,7 @@ Also affects 'linum-mode' background."
                       :italic nil))))
 
    `(font-lock-variable-name-face
-     ((t (:foreground ,night-owl-green))))
+     ((t (:foreground ,night-owl-blue))))
 
    `(font-lock-warning-face
      ((t (:foreground ,night-owl-orange
@@ -2365,7 +2365,7 @@ Also affects 'linum-mode' background."
      ((t (:foreground ,night-owl-green))))
 
    `(js2-function-call
-     ((t (:foreground ,night-owl-foreground))))
+     ((t (:foreground ,night-owl-blue))))
 
    `(js2-function-param
      ((t (:foreground ,night-owl-green))))
@@ -2392,7 +2392,10 @@ Also affects 'linum-mode' background."
      ((t (:underline t))))
 
    `(js2-object-property
-     ((t (:foreground ,night-owl-foreground))))
+     ((t (:foreground ,night-owl-magenta))))
+
+   `(js2-object-property-access
+     ((t (:foreground ,night-owl-cyan))))
 
    `(js2-private-function-call
      ((t (:foreground ,night-owl-violet))))
@@ -3389,16 +3392,16 @@ Also affects 'linum-mode' background."
      ((t (:foreground ,night-owl-blue))))
 
    `(rainbow-delimiters-depth-3-face
-     ((t (:foreground ,night-owl-orange))))
-
-   `(rainbow-delimiters-depth-4-face
      ((t (:foreground ,night-owl-yellow))))
 
-   `(rainbow-delimiters-depth-5-face
+   `(rainbow-delimiters-depth-4-face
      ((t (:foreground ,night-owl-green))))
 
-   `(rainbow-delimiters-depth-6-face
+   `(rainbow-delimiters-depth-5-face
      ((t (:foreground ,night-owl-magenta))))
+
+   `(rainbow-delimiters-depth-6-face
+     ((t (:foreground ,night-owl-orange))))
 
    `(rainbow-delimiters-depth-7-face
      ((t (:foreground ,night-owl-violet))))
@@ -3407,16 +3410,16 @@ Also affects 'linum-mode' background."
      ((t (:foreground ,night-owl-blue))))
 
    `(rainbow-delimiters-depth-9-face
-     ((t (:foreground ,night-owl-orange))))
-
-   `(rainbow-delimiters-depth-10-face
      ((t (:foreground ,night-owl-yellow))))
 
-   `(rainbow-delimiters-depth-11-face
+   `(rainbow-delimiters-depth-10-face
      ((t (:foreground ,night-owl-green))))
 
-   `(rainbow-delimiters-depth-12-face
+   `(rainbow-delimiters-depth-11-face
      ((t (:foreground ,night-owl-magenta))))
+
+   `(rainbow-delimiters-depth-12-face
+     ((t (:foreground ,night-owl-orange))))
 
    `(rainbow-delimiters-unmatched-face
      ((t (:foreground ,night-owl-foreground
