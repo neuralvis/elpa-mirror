@@ -1,7 +1,6 @@
 ;;; org-bullets.el --- Show bullets in org-mode as UTF-8 characters
 
 ;; Version: 0.2.4
-;; Package-Version: 20190802.927
 ;; Author: sabof
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacsorphanage/org-bullets
