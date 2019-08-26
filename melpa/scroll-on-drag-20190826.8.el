@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://github.com/ideasman42/emacs-scroll-on-drag
-;; Package-Version: 20190825.843
+;; Package-Version: 20190826.8
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
 
@@ -69,6 +69,11 @@
 
 (defcustom scroll-on-drag-post-hook nil
   "List of functions to be called when scroll-on-drag finishes."
+  :group 'scroll-on-drag
+  :type 'hook)
+
+(defcustom scroll-on-drag-redisplay-hook nil
+  "List of functions to run on scroll redraw."
   :group 'scroll-on-drag
   :type 'hook)
 
@@ -255,7 +260,9 @@ Returns true when scrolling took place, otherwise nil."
                     (- delta-px-accum (* lines this-frame-char-height)))
                   (let ((lines-remainder (scroll-on-drag--scroll-by-lines this-window lines t)))
                     (unless (zerop (- lines lines-remainder))
-                      (let ((inhibit-redisplay nil)) (redisplay))))))
+                      (let ((inhibit-redisplay nil))
+                        (run-hooks 'scroll-on-drag-redisplay-hook)
+                        (redisplay))))))
               (funcall timer-start-fn self-fn)))
 
           ((eq scroll-on-drag-style 'line-by-pixel)
@@ -296,7 +303,10 @@ Returns true when scrolling took place, otherwise nil."
                           (setq do-draw t))))))
 
                 (when do-draw
-                  (let ((inhibit-redisplay nil)) (redisplay))))
+                  (let
+                    ((inhibit-redisplay nil))
+                    (run-hooks 'scroll-on-drag-redisplay-hook)
+                    (redisplay))))
               (funcall timer-start-fn self-fn)))))
 
       ;; Apply pixel offset and snap to a line.
@@ -307,7 +317,10 @@ Returns true when scrolling took place, otherwise nil."
               (scroll-on-drag--scroll-by-lines this-window 1 nil))
             (set-window-vscroll this-window 0 t)
             (setq delta-px-accum 0)
-            (let ((inhibit-redisplay nil)) (redisplay)))))
+            (let
+              ((inhibit-redisplay nil))
+              (run-hooks 'scroll-on-drag-redisplay-hook)
+              (redisplay)))))
 
       (scroll-reset-fn
         (lambda ()
@@ -333,7 +346,10 @@ Returns true when scrolling took place, otherwise nil."
                   (save-excursion (move-beginning-of-line nil) (point)))))
             (when (> scroll-margin lines-from-top)
               (forward-line (- scroll-margin lines-from-top))
-              (let ((inhibit-redisplay nil)) (redisplay))
+              (let
+                ((inhibit-redisplay nil))
+                (run-hooks 'scroll-on-drag-redisplay-hook)
+                (redisplay))
               (setq restore-point-use-scroll-offset t))))))
 
     ;; Set arrow cursor (avoids annoying flicker on scroll).
@@ -354,7 +370,9 @@ Returns true when scrolling took place, otherwise nil."
               (setq has-scrolled nil)
               (funcall scroll-reset-fn)
               (funcall scroll-restore-fn)
-              (let ((inhibit-redisplay nil)) (redisplay))
+              (let ((inhibit-redisplay nil))
+                (run-hooks 'scroll-on-drag-redisplay-hook)
+                (redisplay))
               t)
 
             ;; Space keeps current position, restarts scrolling.
