@@ -1,2 +1,0 @@
-
-(leetcode . [(20190827 223) ((emacs (25)) (request-deferred (0 2 0)) (graphql (0 1 1)) (spinner (1 7 3))) "An leetcode client." single ((:commit . "ade8c0d8631be615149d3188b150bc85fb4c9843") (:keywords "extensions" "tools") (:authors ("Wang Kai" . "kaiwkx@gmail.com")) (:maintainer "Wang Kai" . "kaiwkx@gmail.com") (:url . "https://github.com/kaiwk/leetcode.el"))])
