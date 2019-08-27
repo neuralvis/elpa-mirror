@@ -1,0 +1,2 @@
+
+(crontab-mode . [(20190826 920) ((emacs (24))) "Major mode for crontab(5)" single ((:commit . "b2a4a05ed7afc27d8a6d48aef627f14ddae1480e") (:keywords "languages") (:authors ("Mario Rodas" . "marsam@users.noreply.github.com")) (:maintainer "Mario Rodas" . "marsam@users.noreply.github.com") (:url . "https://github.com/emacs-pe/crontab-mode"))])

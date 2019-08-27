@@ -4,7 +4,7 @@
 
 ;; Author: Mario Rodas <marsam@users.noreply.github.com>
 ;; URL: https://github.com/emacs-pe/crontab-mode
-;; Package-Version: 20190304.1423
+;; Package-Version: 20190826.920
 ;; Keywords: languages
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24"))
@@ -133,6 +133,26 @@
   (interactive)
   (indent-line-to 0))
 
+(defun crontab-eldoc-function ()
+  "Return a list of message numbers from point to the end of the line.
+Expands ranges into set of individual numbers."
+  (let ((point (point))
+        (end-of-line (point-at-eol)))
+    (cl-case (save-excursion
+               (beginning-of-line)
+               (cl-loop while (re-search-forward "[^[:space:]]" end-of-line t)
+                        with field = 0
+                        do (cl-incf field)
+                        if (or (<= point (point)) (>= field 6))
+                        return field))
+      (1 (concat (propertize "minute" 'face 'font-lock-function-name-face) ": values can be from 0 to 59"))
+      (2 (concat (propertize "hour" 'face 'font-lock-function-name-face) ": values can be from 0 to 23"))
+      (3 (concat (propertize "day of month" 'face 'font-lock-function-name-face) ": values can be from 1 to 31"))
+      (4 (concat (propertize "month" 'face 'font-lock-function-name-face) ": values can be from 1 to 12"))
+      (5 (concat (propertize "day of week" 'face 'font-lock-function-name-face) ": values can be from 0 to 6, with 0 denoting Sunday"))
+      (6 "Command to execute")
+      (t ""))))
+
 ;;;###autoload
 (define-derived-mode crontab-mode text-mode "Crontab"
   "Major mode for editing crontab file.
@@ -141,6 +161,12 @@
   :syntax-table sh-mode-syntax-table
   (set (make-local-variable 'comment-start) "# ")
   (set (make-local-variable 'comment-start-skip) "#+\\s-*")
+
+  (if (null eldoc-documentation-function) ; Emacs<25
+      (set (make-local-variable 'eldoc-documentation-function)
+           #'crontab-eldoc-function)
+    (add-function :before-until (local 'eldoc-documentation-function)
+                  #'crontab-eldoc-function))
 
   (set (make-local-variable 'font-lock-defaults)
        '(crontab-font-lock-keywords nil t))

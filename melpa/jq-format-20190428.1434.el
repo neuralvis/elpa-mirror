@@ -4,7 +4,6 @@
 
 ;; Author: wouter bolsterlee <wouter@bolsterl.ee>
 ;; Keywords: languages
-;; Package-Version: 20190428.1434
 ;; URL: https://github.com/wbolster/emacs-jq-format
 ;; Package-Requires: ((emacs "24") (reformatter "0.3"))
 ;; Version: 1.0.0
