@@ -12,16 +12,10 @@ Purpose:
  Please note, that org-index uses org-id throughout and therefore adds
  an id-property to all nodes in the index.
 
- In the addition to the index table, org-index introduces these
- supplemental concepts:
-
- - 'References' are decorated numbers (e.g. 'R237' or '--455--'); they are
-    well suited to be used outside of org, e.g. in folder names,
-    ticket systems or on printed documents.
- - 'Working set' (short: ws) is a small set of nodes for your daily work;
-    it can be managed easily and traversed very fast.  All related tasks
-    are also available through the interactive function
-    org-index-working-set, which see.
+ In the addition to the index table, org-index introduces the concept of
+ references: These are decorated numbers (e.g. 'R237' or '--455--'); they are
+ well suited to be used outside of org, e.g. in folder names,
+ ticket systems or on printed documents.
 
  On first invocation org-index will assist you in creating the index
  table.
