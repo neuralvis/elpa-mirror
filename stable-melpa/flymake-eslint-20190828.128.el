@@ -1,7 +1,7 @@
 ;;; flymake-eslint.el --- A Flymake backend for Javascript using eslint -*- lexical-binding: t; -*-
 
-;;; Version: 1.3.5
-;; Package-Version: 20190720.1501
+;;; Version: 1.4.0
+;; Package-Version: 20190828.128
 
 ;;; Author: Dan Orzechowski
 ;;; Contributor: Terje Larsen
@@ -48,6 +48,13 @@
 
 (defcustom flymake-eslint-show-rule-name t
   "Set to t to append rule name to end of warning or error message, nil otherwise."
+  :type 'boolean
+  :group 'flymake-eslint)
+
+(defcustom flymake-eslint-defer-binary-check nil
+  "Set to t to bypass the initial check which ensures eslint is present.
+
+Useful when the value of `exec-path' is set dynamically and the location of eslint might not be known ahead of time."
   :type 'boolean
   :group 'flymake-eslint)
 
@@ -137,6 +144,8 @@ Create linter process for SOURCE-BUFFER which invokes CALLBACK once linter is fi
 (defun flymake-eslint--check-and-report (source-buffer flymake-report-fn)
   "Internal function.
 Run eslint against SOURCE-BUFFER and use FLYMAKE-REPORT-FN to report results."
+  (if flymake-eslint-defer-binary-check
+      (flymake-eslint--ensure-binary-exists))
   (flymake-eslint--create-process
    source-buffer
    (lambda (eslint-stdout)
@@ -158,7 +167,8 @@ Run eslint on the current buffer, and report results using FLYMAKE-REPORT-FN.  A
 (defun flymake-eslint-enable ()
   "Enable Flymake and add flymake-eslint as a buffer-local Flymake backend."
   (interactive)
-  (flymake-eslint--ensure-binary-exists)
+  (if (not flymake-eslint-defer-binary-check)
+      (flymake-eslint--ensure-binary-exists))
   (flymake-mode t)
   (add-hook 'flymake-diagnostic-functions 'flymake-eslint--checker nil t))
 
