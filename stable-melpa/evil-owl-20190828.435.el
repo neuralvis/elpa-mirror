@@ -4,7 +4,7 @@
 
 ;; Author: Daniel Phan <daniel.phan36@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20190822.2044
+;; Package-Version: 20190828.435
 ;; Package-Requires: ((emacs "25.1") (evil "1.2.13"))
 ;; Homepage: https://github.com/mamapanda/evil-owl
 ;; Keywords: emulations, evil, visual
@@ -300,6 +300,7 @@ This is used to restore the window configuration when
 
 (defun evil-owl--hide-posframe ()
   "Hide the preview posframe."
+  (require 'posframe)
   (posframe-delete evil-owl--buffer))
 
 (defun evil-owl--show-popup (string)
@@ -310,7 +311,7 @@ The popup type is determined by `evil-owl-display-method'."
     (posframe (evil-owl--show-posframe string))))
 
 (defun evil-owl--idle-show-popup (string)
-  "Show STRING in a posframe after `evil-owl-idle-delay' seconds."
+  "Show STRING in a popup after `evil-owl-idle-delay' seconds."
   (setq evil-owl--timer
         (run-at-time evil-owl-idle-delay nil #'evil-owl--show-popup string)))
 

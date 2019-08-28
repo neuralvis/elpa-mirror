@@ -8,8 +8,8 @@
 
 ;; Author:	Matt Mackall <mpm@selenic.com>
 ;; Maintainer:	Jan Stranik <jan@stranik.org>
-;; Version:	0.5
-;; Package-Version: 20190304.540
+;; Version:	0.6
+;; Package-Version: 20190828.506
 ;; Keywords:	extensions
 ;; Package-Requires: ((emacs "26.0"))
 ;; URL: https://github.com/jstranik/emacs-quilt
@@ -51,6 +51,8 @@
 ;; stack (push/pop).
 ;; 
 ;;; History:
+;;  0.6   2019 Jan Stranik <jan@stranik.org>
+;;        - Introduced global quilt mode.
 ;;  0.5   2019 Jan Stranik <jan@stranik.org>
 ;;        - Packaged for melpa.
 ;;  0.4.1 2011 Jari Aalto <jari.aato@cante.net>
@@ -67,12 +69,15 @@
 
 (defun quilt-find-dir (fn)
   "Find the top level dir for quilt from FN."
-  (let* ((d (file-name-directory fn)))
-    (if (or (not fn) (equal fn "/"))
-	nil
-      (if (file-accessible-directory-p (concat d "/.pc"))
-	  d
-	(quilt-find-dir (directory-file-name d))))))
+  (when fn
+    (let ((d (file-name-directory fn)))
+      (cond
+       ((file-accessible-directory-p (concat d "/.pc"))
+	d)
+       ((equal fn d)
+	nil)
+       (t
+	(quilt-find-dir (directory-file-name d)))))))
 
 (defun quilt-dir (&optional fn)
   "Return root for quilt patches or nil if FN is not under quilt."
@@ -107,8 +112,10 @@
   "Execute a quilt command CMD at the top of the quilt tree.
 
 If BUF is non-nill writes command output to that buffer."
-  (let* ((d default-directory))
-    (cd (quilt-dir))
+  (let* ((d default-directory)
+	 (qd (quilt-dir)))
+    (unless qd (error "File %s is not part of quilt tree" (buffer-file-name)))
+    (cd qd)
     (shell-command (concat "quilt " cmd) buf)
     (cd d)))
 
@@ -384,7 +391,8 @@ The extension .patch is automatically added to the patch name."
   :init-value nil
   :lighter quilt-mode-line
   :keymap 'quilt-mode-map
-  (if quilt-mode
+  (when quilt-mode
+    (unless (quilt-p) (error "File is not part of quilt tree. Call \"quilt init\" first."))
       (let* ((f buffer-file-name))
 	(if (quilt-owned-p f)
 	    (if (not (quilt-editable f))
@@ -393,18 +401,17 @@ The extension .patch is automatically added to the patch name."
 	(quilt-update-modeline))))
 
 
-;;;###autoload
-(defun quilt-hook ()
+(defun quilt--hook ()
   "Enable quilt mode for quilt-controlled files."
   (if (buffer-file-name)
       (if (quilt-p) (quilt-mode 1))))
 
 ;;;###autoload
+(define-globalized-minor-mode global-quilt-mode quilt-mode quilt--hook)
+
+;;;###autoload
 (progn
-  (add-hook 'find-file-hook #'quilt-hook)
-  (add-hook 'after-change-major-mode-hook #'quilt-hook)
-  (add-hook 'after-revert-hook #'quilt-hook)
-  )
+  (global-quilt-mode 1))
 
 (provide 'quilt)
 ;;; quilt.el ends here
