@@ -4,8 +4,8 @@
 ;;
 ;; Author: Göktuğ Kayaalp <self@gkayaalp.com>
 ;; Keywords: weather, forecast
-;; Package-Version: 20190124.1828
-;; Version: 0.6.3
+;; Package-Version: 20190829.1514
+;; Version: 0.7
 ;; URL: https://dev.gkayaalp.com/elisp/index.html#forecast-el
 ;; Package-Requires: ((emacs "24.4"))
 ;;
@@ -148,8 +148,9 @@
 ;;
 
 ;;; Changes:
-;; (this section won't be updated anymore)
-;;
+;; 0.7, 29 Aug 2019
+;;   - Switch to maj.min versioning
+;;   - (forecast-sun-symbol) New defcustom replacing hardcoded char.
 ;; 0.6.4, 23 Sep 2017
 ;;   - (forecast--get-forecast) Fix truncation of coordinates in request
 ;;     url (Thanks to @dnbarbato on GitHub, issue#26).
@@ -317,6 +318,11 @@ If not one of these, then `en' is selected."
   :group 'forecast)
 
 (defcustom forecast-rain-symbol "⛆"
+  "A single-character string for a symbol to represent snowy wheather."
+  :type 'string
+  :group 'forecast)
+
+(defcustom forecast-sun-symbol "☉"
   "A single-character string for a symbol to represent snowy wheather."
   :type 'string
   :group 'forecast)
@@ -611,7 +617,7 @@ Uses box-drawing characters."
          (sunsec  (- now sunrise))
          (wwidth  58)
          (graph   (concat "┝" (make-string (- wwidth 5) ?━) "┥"))
-         (sun     ?☉)
+         (sun     (aref forecast-sun-symbol 1))
          (pos    (cond
                   ((< sunrise sunset now) (- wwidth 4))
                   ((> sunrise now) 0)
