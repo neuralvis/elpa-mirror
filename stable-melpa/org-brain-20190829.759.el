@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20190813.1155
+;; Package-Version: 20190829.759
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25") (org "9.2"))
 ;; Version: 0.7
@@ -1351,6 +1351,7 @@ If NOCONFIRM is nil, ask if we really want to delete."
                (format "%s and its %d local children will be deleted. Are you sure? "
                        (org-brain-entry-name entry)
                        (length local-children))))
+      (ignore-errors (org-brain-select entry -1))
       (dolist (child local-children)
         (org-brain-delete-entry child t))
       (org-brain--remove-relationships entry)
@@ -1546,6 +1547,12 @@ Ignores selected entries that are not friends of ENTRY."
   (interactive (list (org-brain-entry-at-pt)))
   (dolist (selected org-brain-selected)
     (ignore-errors (org-brain-remove-friendship entry selected))))
+
+(defun org-brain-delete-selected-entries ()
+  "Delete all of the selected entries."
+  (interactive)
+  (dolist (selected org-brain-selected)
+    (org-brain-delete-entry selected)))
 
 ;;;###autoload
 (defun org-brain-set-title (entry title)
@@ -1897,25 +1904,22 @@ If PROMPT is non nil, let user edit the resource even if run non-interactively."
   (unless entry
     (setq entry (or (ignore-errors (org-brain-entry-at-pt))
                     (org-brain-choose-entry "Insert link in entry: " 'all))))
-  (cl-flet ((insert-resource-link
-             ()
-             (if link
-                 (progn
-                   (when prompt
-                     (setq link (read-string "Insert link: " link))
-                     (when (string-match org-bracket-link-regexp link)
-                       (let ((linkdesc (match-string 3 link)))
-                         (when (and (not description) linkdesc)
-                           (setq description linkdesc))
-                         (setq link (match-string 1 link))))
-                     (setq description (read-string "Link description: " description)))
-                   (newline-and-indent)
-                   (insert "- " (org-make-link-string link description)))
-               (when-let ((l (with-temp-buffer
-                               (org-insert-link-global)
-                               (buffer-string))))
-                 (newline-and-indent)
-                 (insert "- " l)))))
+  (let ((link-text
+         (if link
+             (progn
+               (when prompt
+                 (setq link (read-string "Insert link: " link))
+                 (when (string-match org-bracket-link-regexp link)
+                   (let ((linkdesc (match-string 3 link)))
+                     (when (and (not description) linkdesc)
+                       (setq description linkdesc))
+                     (setq link (match-string 1 link))))
+                 (setq description (read-string "Link description: " description)))
+               (concat "- " (org-make-link-string link description)))
+           (when-let ((l (with-temp-buffer
+                           (org-insert-link-global)
+                           (buffer-string))))
+             (concat "- " l)))))
     (if (org-brain-filep entry)
         ;; File entry
         (org-with-point-at (org-brain-entry-marker entry)
@@ -1928,7 +1932,8 @@ If PROMPT is non nil, let user edit the resource even if run non-interactively."
             (insert ":RESOURCES:\n:END:\n")
             (re-search-backward org-brain-resources-start-re nil t)
             (end-of-line))
-          (insert-resource-link)
+          (newline-and-indent)
+          (insert link-text)
           (save-buffer))
       ;; Headline entry
       (org-with-point-at (org-brain-entry-marker entry)
@@ -1938,12 +1943,13 @@ If PROMPT is non nil, let user edit the resource even if run non-interactively."
             (end-of-line)
           (open-line 1)
           (indent-for-tab-command)
-          (insert ":RESOURCES:\n")
-          (indent-for-tab-command)
-          (insert ":END:")
-          (re-search-backward org-brain-resources-start-re nil t)
-          (end-of-line))
-        (insert-resource-link)
+          (insert ":RESOURCES:")
+          (save-excursion
+            (insert "\n")
+            (indent-for-tab-command)
+            (insert ":END:")))
+        (newline-and-indent)
+        (insert link-text)
         (save-buffer))))
   (org-brain--revert-if-visualizing))
 
@@ -2137,6 +2143,7 @@ TWO-WAY will be t unless called with `\\[universal-argument\\]'."
 (define-key org-brain-select-map "F" 'org-brain-remove-selected-friendships)
 (define-key org-brain-select-map "s" 'org-brain-clear-selected)
 (define-key org-brain-select-map "S" 'org-brain-clear-selected)
+(define-key org-brain-select-map "d" 'org-brain-delete-selected-entries)
 
 (define-key org-brain-visualize-mode-map "s" 'org-brain-select-dwim)
 (define-key org-brain-visualize-mode-map "S" 'org-brain-select-map)
