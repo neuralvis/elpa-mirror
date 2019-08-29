@@ -3,7 +3,7 @@
 ;; Copyright (C) 2013-2019 Skye Shaw and others
 ;; Author: Skye Shaw <skye.shaw@gmail.com>
 ;; Version: 0.7.4
-;; Package-Version: 20190817.302
+;; Package-Version: 20190829.145
 ;; Keywords: git, vc, github, bitbucket, gitlab, sourcehut, convenience
 ;; URL: http://github.com/sshaw/git-link
 ;; Package-Requires: ((emacs "24.3"))
@@ -36,6 +36,9 @@
 
 ;;; Change Log:
 
+;; 2019-08-28 - v0.7.5
+;; * Add support for Azure DevOps (Issue #62, thanks Roey Darwish Dror)
+;;
 ;; 2019-08-16 - v0.7.4
 ;; * Add support for Magit-Blob buffers (Issue #61, thanks Miciah Dashiel Butler Masters)
 ;;
@@ -167,7 +170,8 @@
     ("github" git-link-github)
     ("bitbucket" git-link-bitbucket)
     ("gitorious" git-link-gitorious)
-    ("gitlab" git-link-gitlab))
+    ("gitlab" git-link-gitlab)
+    ("visualstudio\\|azure" git-link-azure))
   "Alist of host names and functions creating file links for those.
 Each element looks like (REGEXP FUNCTION) where REGEXP is used to
 match the remote's host name and FUNCTION is used to generate a link
@@ -183,7 +187,8 @@ As an example, \"gitlab\" will match with both \"gitlab.com\" and
     ("github" git-link-commit-github)
     ("bitbucket" git-link-commit-bitbucket)
     ("gitorious" git-link-commit-gitorious)
-    ("gitlab" git-link-commit-github))
+    ("gitlab" git-link-commit-github)
+    ("visualstudio\\|azure" git-link-commit-azure))
   "Alist of host names and functions creating commit links for those.
 Each element looks like (REGEXP FUNCTION) where REGEXP is used to
 match the remote's host name and FUNCTION is used to generate a link
@@ -333,6 +338,21 @@ return (FILENAME . REVISION) otherwise nil."
           (setq host (car parts)
                 path (concat (cadr parts) "/" path))))
 
+      ;; Fix-up Azure SSH URLs
+      (when (string= "ssh.dev.azure.com" host)
+        (setq host "dev.azure.com")
+        (setq path (replace-regexp-in-string
+                    "v3/\\([^/]+\\)/\\([^/]+\\)/\\([^/]+\\)"
+                    "\\1/\\2/_git/\\3"
+                    path)))
+      (when (string= "vs-ssh.visualstudio.com" host)
+        (setq host (concat (url-user url) ".visualstudio.com"))
+        (setq path (replace-regexp-in-string
+                    (concat "^v3/" (url-user url) "/\\([^/]+\\)/")
+                    "\\1/_git/"
+                    path)))
+
+
       (list host path))))
 
 (defun git-link--using-git-timemachine ()
@@ -412,11 +432,29 @@ return (FILENAME . REVISION) otherwise nil."
                                 (format "L%s-L%s" start end)
                               (format "L%s" start)))))))
 
+(defun git-link-azure (hostname dirname filename branch commit start end)
+  (format "https://%s/%s?path=%s&version=%s%s"
+	  hostname
+	  dirname
+      filename
+      (concat "G" (if branch "B" "C") (or branch commit))
+      (concat
+       (when start (format "&line=%s" start))
+       (when end (format "&lineEnd=%s" end)))))
+
 (defun git-link-commit-github (hostname dirname commit)
   (format "https://%s/%s/commit/%s"
 	  hostname
 	  dirname
 	  commit))
+
+(defun git-link-commit-azure (hostname dirname commit)
+  (format "https://%s/%s/commit/%s"
+	  hostname
+	  dirname
+
+      ;; Azure only supports full 32 characters SHA
+      (car (git-link--exec "rev-parse" commit))))
 
 (defun git-link-gitorious (hostname dirname filename _branch commit start _end)
   (format "https://%s/%s/source/%s:%s#L%s"
