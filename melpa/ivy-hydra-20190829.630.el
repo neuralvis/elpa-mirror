@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190731.1602
+;; Package-Version: 20190829.630
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.12.0") (hydra "0.13.4"))
 ;; Keywords: convenience
@@ -109,7 +109,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _M_: matcher %-5s(ivy--matcher-desc)
          (estimated-len (length doc))
          (n-columns (if (> estimated-len (window-width))
                         ivy-dispatching-done-columns
-                      nil)))
+                      nil))
+         (i 0))
     (if (null (ivy--actionp actions))
         (ivy-done)
       (funcall
@@ -119,7 +120,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _M_: matcher %-5s(ivy--matcher-desc)
            ,@(mapcar (lambda (x)
                        (list (nth 0 x)
                              `(progn
-                                (ivy-set-action ',(nth 1 x))
+                                (setcar (ivy-state-action ivy-last) ,(cl-incf i))
                                 (ivy-done))
                              (nth 2 x)))
                      (cdr actions))
