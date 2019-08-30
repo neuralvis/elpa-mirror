@@ -2,7 +2,7 @@
 
 ;; Author: Álvaro González Sotillo <alvarogonzalezsotillo@gmail.com>
 ;; URL: https://github.com/alvarogonzalezsotillo/region-occurrences-highlighter
-;; Package-Version: 20190804.1931
+;; Package-Version: 20190830.1152
 ;; Package-Requires: ((emacs "24"))
 ;; Version: 1.2
 ;; Keywords: convenience
@@ -74,7 +74,6 @@
 
 (defun region-occurrences-highlighter--accept (begin end)
   "Accept to highlight occurrences if BEGIN and END are between limits, and the selection doesn't match ignore regex."
-(message "accept:")
   (and
    (not (eq begin end))
    (>= (abs (- begin end)) region-occurrences-highlighter-min-size)

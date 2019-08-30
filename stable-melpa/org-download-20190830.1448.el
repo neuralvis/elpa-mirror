@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
-;; Package-Version: 20190821.501
+;; Package-Version: 20190830.1448
 ;; Version: 0.1.0
 ;; Package-Requires: ((async "1.2"))
 ;; Keywords: images, screenshots, download
@@ -352,7 +352,7 @@ The screenshot tool is determined by `org-download-screenshot-method'."
 
 (defun org-download-annotate-default (link)
   "Annotate LINK with the time of download."
-  (format "#+DOWNLOADED: %s @ %s"
+  (format "#+DOWNLOADED: %s @ %s\n"
           link
           (format-time-string "%Y-%m-%d %H:%M:%S")))
 
@@ -458,7 +458,6 @@ It's inserted before the image link and is used to annotate it.")
         (delete-region (match-beginning 0) (match-end 0))
       (newline))
     (insert (funcall org-download-annotate-function link))
-    (insert "\n")
     (dolist (attr org-download-image-attr-list)
       (insert attr "\n"))
     (insert (if (= org-download-image-html-width 0)
