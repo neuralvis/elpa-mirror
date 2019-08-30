@@ -5,7 +5,7 @@
 ;; Author: Louis Roché <louis@louisroche.net>
 ;; Created: 27 April 2018
 ;; Version: 1.3
-;; Package-Version: 20190314.806
+;; Package-Version: 20190830.517
 ;; Keywords: merlin ocaml languages eldoc
 ;; Homepage: https://github.com/khady/merlin-eldoc
 ;; Package-Requires: ((emacs "24.4") (merlin "3.0"))
@@ -31,7 +31,7 @@
 ;; code.
 
 ;; Installation:
-;; You need merlin-mode amd merlin installed on your
+;; You need merlin-mode and merlin installed on your
 ;; system (ocamlmerlin binary) for merlin-eldoc to work.
 
 ;;; Code:

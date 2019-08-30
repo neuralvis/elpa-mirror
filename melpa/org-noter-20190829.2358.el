@@ -5,7 +5,7 @@
 ;; Author: Gonçalo Santos (aka. weirdNox@GitHub)
 ;; Homepage: https://github.com/weirdNox/org-noter
 ;; Keywords: lisp pdf interleave annotate external sync notes documents org-mode
-;; Package-Version: 20190828.852
+;; Package-Version: 20190829.2358
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (org "9.0"))
 ;; Version: 1.3.0
 
@@ -46,6 +46,8 @@
 (declare-function image-mode-window-get "image-mode")
 (declare-function image-scroll-up "image-mode")
 (declare-function nov-render-document "ext:nov")
+(declare-function org-attach-dir "org-attach")
+(declare-function org-attach-file-list "org-attach")
 (declare-function pdf-info-getannots "ext:pdf-info")
 (declare-function pdf-info-gettext "ext:pdf-info")
 (declare-function pdf-info-outline "ext:pdf-info")
@@ -2107,10 +2109,10 @@ notes file, even if it finds one."
       (when (catch 'should-continue
               (when (or (numberp arg) (eq arg '-))
                 (cond ((> (prefix-numeric-value arg) 0)
-                       (find-file document-path)
+                       (find-file document-property)
                        (throw 'should-continue nil))
                       ((< (prefix-numeric-value arg) 0)
-                       (find-file (file-name-directory document-path))
+                       (find-file (file-name-directory document-property))
                        (throw 'should-continue nil))))
 
               ;; NOTE(nox): Check if it is an existing session
