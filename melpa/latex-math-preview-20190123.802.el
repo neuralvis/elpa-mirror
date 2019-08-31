@@ -14,6 +14,7 @@
 
 ;; Author: Takayuki YAMAGUCHI <d@ytak.info>
 ;; Keywords: LaTeX TeX
+;; Package-Version: 20190123.802
 ;; Version: 0.7.3
 ;; Created: Wed Jan 23 17:02:18 2019
 ;; URL: https://gitlab.com/latex-math-preview/latex-math-preview
