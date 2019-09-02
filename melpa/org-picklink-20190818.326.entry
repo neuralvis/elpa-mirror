@@ -1,2 +1,0 @@
-
-(org-picklink . [(20190818 326) ((emacs (24 4))) "Pick a headline link from org-agenda" single ((:commit . "2c80a59d60360206db440812fb048e69d4f9227b") (:keywords "convenience") (:authors ("Feng Shu" . "tumashu@163.com")) (:maintainer "Feng Shu" . "tumashu@163.com") (:url . "https://github.com/tumashu/org-picklink"))])
