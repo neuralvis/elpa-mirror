@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Fuzzy matching for helm source.
 ;; Keyword: fuzzy helm matching source
-;; Version: 0.1.2
-;; Package-Version: 20190831.1655
+;; Version: 0.1.4
+;; Package-Version: 20190903.256
 ;; Package-Requires: ((emacs "24.4") (helm "1.7.9") (flx "0.5"))
 ;; URL: https://github.com/jcs090218/helm-fuzzy
 
@@ -60,10 +60,11 @@
   (let ((pattern "")
         (pos -1))
     (when (active-minibuffer-window)
-      (select-window (active-minibuffer-window))
-      (setq pattern (buffer-string))
-      (setq pos (string-match-p helm-pattern pattern))
-      (setq pattern (substring pattern pos (length pattern))))
+      (save-selected-window
+        (select-window (active-minibuffer-window))
+        (setq pattern (buffer-string))
+        (setq pos (string-match-p helm-pattern pattern))
+        (setq pattern (substring pattern pos (length pattern)))))
     pattern))
 
 (defun helm-fuzzy--sort-candidates (candidates)
@@ -116,7 +117,6 @@
 ;;;###autoload
 (define-minor-mode helm-fuzzy-mode
   "Minor mode 'helm-fuzzy-mode'."
-  :lighter " HelmFuzzy"
   :global t
   :require 'helm-fuzzy
   :group 'helm-fuzzy

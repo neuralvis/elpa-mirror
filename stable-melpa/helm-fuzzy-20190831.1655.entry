@@ -1,2 +1,0 @@
-
-(helm-fuzzy . [(20190831 1655) ((emacs (24 4)) (helm (1 7 9)) (flx (0 5))) "Fuzzy matching for helm source." single ((:commit . "1adef0ecd49507f72e1b63bc20eae35a504e0fa2") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs090218/helm-fuzzy"))])

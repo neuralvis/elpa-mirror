@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Preview the current helm selection.
 ;; Keyword: file helm preview select selection
-;; Version: 0.1.1
-;; Package-Version: 20190825.247
+;; Version: 0.1.3
+;; Package-Version: 20190903.301
 ;; Package-Requires: ((emacs "24.4") (helm "2.0"))
 ;; URL: https://github.com/jcs090218/helm-file-preview
 
@@ -160,8 +160,9 @@ ARGS : rest of the arguments."
 ;;;###autoload
 (define-minor-mode helm-file-preview-mode
   "Minor mode 'helm-file-preview-mode'."
-  :lighter " HelmFilePrev"
-  :group helm-file-preview
+  :global t
+  :require 'helm-file-preview
+  :group 'helm-file-preview
   (if helm-file-preview-mode
       (helm-file-preview--enable)
     (helm-file-preview--disable)))
