@@ -1,2 +1,0 @@
-
-(balanced-windows . [(20190902 1828) ((emacs (25))) "Keep windows balanced" single ((:commit . "141a76e83e53f5e8c4204ac1be1c0d316e16daee") (:keywords "convenience") (:authors ("wouter bolsterlee" . "wouter@bolsterl.ee")) (:maintainer "wouter bolsterlee" . "wouter@bolsterl.ee") (:url . "https://github.com/wbolster/emacs-balanced-windows"))])

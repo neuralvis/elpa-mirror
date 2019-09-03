@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Preview the current helm selection.
 ;; Keyword: file helm preview select selection
-;; Version: 0.1.3
-;; Package-Version: 20190903.301
+;; Version: 0.1.4
+;; Package-Version: 20190903.331
 ;; Package-Requires: ((emacs "24.4") (helm "2.0"))
 ;; URL: https://github.com/jcs090218/helm-file-preview
 
@@ -71,6 +71,36 @@
   "Exit flag for this minor mode.")
 
 
+(defun helm-file-preview--do-preview (fp ln cl)
+  "Do preview with filepath (FP), line number (LN), column (CL)."
+  (let ((did-find-file nil))
+    (save-selected-window
+      (when (or (not helm-file-preview-only-when-line-numbers)
+                (and helm-file-preview-only-when-line-numbers
+                     ln))
+        (select-window helm-file-preview--prev-window)
+
+        (find-file fp)
+        (setq did-find-file t)
+
+        (when helm-file-preview-preview-only
+          (setq helm-file-preview--current-select-fb (current-buffer))
+          (push helm-file-preview--current-select-fb helm-file-preview--file-buffer-list)
+          (delete-dups helm-file-preview--file-buffer-list)))
+
+      (when did-find-file
+        (let ((ln-num nil)
+              (cl-num nil))
+          (when ln
+            (setq ln-num (string-to-number ln))
+            (when (< 0 ln-num)
+              (goto-char (point-min))
+              (forward-line (1- ln-num))
+              (when cl
+                (setq cl-num (string-to-number cl))
+                (when (< 0 cl-num)
+                  (move-to-column (1- cl-num)))))))))))
+
 (defun helm-file-preview--helm-move-selection-after-hook (&rest _args)
   "Helm after move selection for `helm-' related commands preview action.
 ARGS : rest of the arguments."
@@ -83,35 +113,12 @@ ARGS : rest of the arguments."
              (cl (nth 2 sel-lst))   ; column
              (root (cdr (project-current)))
              (fp (concat root fn))  ; file path
-             (ln-num nil)
-             (cl-num nil)
-             (did-find-file nil)
              )
+        ;; NOTE: Try expand file, if the file not found relative to
+        ;; project directory.
+        (unless (file-exists-p fp) (setq fp (expand-file-name fn)))
         (when (file-exists-p fp)
-          (save-selected-window
-            (when (or (not helm-file-preview-only-when-line-numbers)
-                      (and helm-file-preview-only-when-line-numbers
-                           ln))
-              (select-window helm-file-preview--prev-window)
-
-              (find-file fp)
-              (setq did-find-file t)
-
-              (when helm-file-preview-preview-only
-                (setq helm-file-preview--current-select-fb (current-buffer))
-                (push helm-file-preview--current-select-fb helm-file-preview--file-buffer-list)
-                (delete-dups helm-file-preview--file-buffer-list)))
-
-            (when did-find-file
-              (when ln
-                (setq ln-num (string-to-number ln))
-                (when (< 0 ln-num)
-                  (goto-char (point-min))
-                  (forward-line (1- ln-num))
-                  (when cl
-                    (setq cl-num (string-to-number cl))
-                    (when (< 0 cl-num)
-                      (move-to-column (1- cl-num)))))))))))))
+          (helm-file-preview--do-preview fp ln cl))))))
 
 
 (defun helm-file-preview--opened-buffer (in-list in-buf)
