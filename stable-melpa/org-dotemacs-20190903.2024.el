@@ -7,7 +7,7 @@
 ;; Copyleft (Ↄ) 2013, Joe Bloggs, all rites reversed.
 ;; Created: 2013-04-27 20:19:18
 ;; Version: 0.4
-;; Package-Version: 20190116.2155
+;; Package-Version: 20190903.2024
 ;; Last-Updated: 2018-07-28 22:22:18
 ;;           By: Joe Bloggs
 ;; URL: https://github.com/vapniks/org-dotemacs
@@ -431,7 +431,7 @@ The optional argument ERROR-HANDLING determines how errors are handled and takes
 		      (depends (org-entry-get beg-block "DEPENDS" org-dotemacs-dependency-inheritance)))
 		  (push (cons name (and depends (split-string depends "[[:space:]]+"))) graph)
 		  (push (point) positions)
-		  (push (cons name (substring-no-properties body)) blocks)))))
+		  (push (cons name (substring-no-properties (or body ""))) blocks)))))
 	(let ((efile (expand-file-name file))
 	      (blkalist (cl-loop for blk in (mapcar 'car graph)
 				 for pos in positions
