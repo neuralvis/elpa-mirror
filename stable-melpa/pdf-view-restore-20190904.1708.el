@@ -4,7 +4,7 @@
 
 ;; Author: Kevin Kim <kevinkim1991@gmail.com>
 ;; URL: https://github.com/007kevin/pdf-view-restore
-;; Package-Version: 20190904.104
+;; Package-Version: 20190904.1708
 ;; Keywords: files convenience
 ;; Version: 0.1
 ;; Package-Requires: ((pdf-tools "0.90") (emacs "26.0"))
@@ -94,7 +94,7 @@
   "Key for storing data is based on filename."
   (if use-file-base-name-flag
    (file-name-base buffer-file-name)
-   buffer-file-name)
+   buffer-file-name))
 
 ;;; Serialization
 (defun pdf-view-restore-serialize (data)
