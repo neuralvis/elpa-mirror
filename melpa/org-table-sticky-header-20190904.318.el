@@ -4,7 +4,7 @@
 
 ;; Author: Junpeng Qiu <qjpchmail@gmail.com>
 ;; Keywords: extensions
-;; Package-Version: 20190703.405
+;; Package-Version: 20190904.318
 ;; Version: 0.1.0
 ;; Package-Requires: ((org "8.2.10") (emacs "24.4"))
 
@@ -172,7 +172,9 @@
                       '((space :align-to
                                ,(+ (org-table-sticky-header--get-display-line-number-width)
                                    (org-table-sticky-header--get-line-prefix-width line)))))
-                     ,line))))))
+                     (propertize
+                      ,line
+                      'face '(:inherit 'default))))))
 
 (defun org-table-sticky-header--scroll-function (win start-pos)
   (unless (= org-table-sticky-header--last-win-start start-pos)
