@@ -5,7 +5,7 @@
 ;; Author: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; Homepage: https://gitlab.com/Ambrevar/emacs-fish-completion
 ;; Version: 1.0
-;; Package-Version: 20190429.822
+;; Package-Version: 20190904.254
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
@@ -98,6 +98,8 @@ In `eshell', fish completion is only used when `pcomplete' fails."
                                                (eshell-bol))
                                              (point))
                              (point))))
+
+(declare-function bash-completion-dynamic-complete-nocomint "ext:bash-completion")
 
 (defun fish-completion-complete (raw-prompt)
   "Complete RAW-PROMPT (any string) using the fish shell.

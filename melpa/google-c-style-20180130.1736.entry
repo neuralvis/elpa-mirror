@@ -1,2 +1,2 @@
 
-(google-c-style . [(20180130 1736) nil "Google's C/C++ style for c-mode" single ((:commit . "dceb47fb3ea99ad7cc4308fa2c9ecb0d012639e1") (:keywords "c" "tools"))])
+(google-c-style . [(20180130 1736) nil "Google's C/C++ style for c-mode" single ((:commit . "c89900f7211ba6c36f7f0ef451f1aee625dbfe5c") (:keywords "c" "tools"))])
