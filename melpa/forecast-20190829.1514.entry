@@ -1,2 +1,0 @@
-
-(forecast . [(20190829 1514) ((emacs (24 4))) "Weather forecasts" single ((:commit . "f2fcfc0d4e7cdb1312c5c06fd5e1820788268de3") (:keywords "weather" "forecast") (:authors ("Göktuğ Kayaalp" . "self@gkayaalp.com")) (:maintainer "Göktuğ Kayaalp" . "self@gkayaalp.com") (:url . "https://dev.gkayaalp.com/elisp/index.html#forecast-el"))])
