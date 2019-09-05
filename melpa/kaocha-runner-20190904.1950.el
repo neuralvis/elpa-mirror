@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019 Magnar Sveen
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
-;; Version: 0.2.0
-;; Package-Version: 20190826.916
+;; Version: 0.3.0
+;; Package-Version: 20190904.1950
 ;; Package-Requires: ((emacs "26") (s "1.4.0") (cider "0.21.0") (parseedn "0.1.0"))
 ;; URL: https://github.com/magnars/kaocha-runner.el
 
@@ -46,6 +46,13 @@
   "Extra configuration options passed to kaocha, a string containing an edn map."
   :group 'kaocha-runner
   :type 'string)
+
+(defcustom kaocha-runner-long-running-seconds
+  3
+  "After a test run has taken this many seconds, pop up the output window to see what is going on."
+  :group 'kaocha-runner
+  :type 'integer
+  :package-version '(kaocha-runner . "0.3.0"))
 
 (defcustom kaocha-runner-ongoing-tests-win-min-height
   12
@@ -195,13 +202,20 @@ This is to show the ongoing progress from kaocha."
           ns
           (when test-name (concat "/" test-name))))
 
-(defun kaocha-runner--run-tests (testable-sym &optional run-all? background?)
+(defun kaocha-runner--hide-window (buffer-name)
+  (when-let (buffer (get-buffer buffer-name))
+    (when-let (window (get-buffer-window buffer))
+      (delete-window window))))
+
+(defun kaocha-runner--run-tests (testable-sym &optional run-all? background? original-buffer)
   "Run kaocha tests.
 
 If RUN-ALL? is t, all tests are run, otherwise attempt a run with the provided
 TESTABLEY-SYM. In practice TESTABLEY-SYM can be a test id, an ns or an ns/test-fn.
 
-If BACKGROUND? is t, we don't message when the tests start running."
+If BACKGROUND? is t, we don't message when the tests start running.
+
+Given an ORIGINAL-BUFFER, use that instead of (current-buffer) when switching back."
   (interactive)
   (kaocha-runner--clear-buffer kaocha-runner--out-buffer)
   (kaocha-runner--clear-buffer kaocha-runner--err-buffer)
@@ -213,7 +227,7 @@ If BACKGROUND? is t, we don't message when the tests start running."
               "(kaocha.repl/run %s %s)"
               testable-sym
               kaocha-runner-extra-configuration)))
-   (let ((original-buffer (current-buffer))
+   (let ((original-buffer (or original-buffer (current-buffer)))
          (done? nil)
          (any-errors? nil)
          (shown-details? nil)
@@ -230,7 +244,8 @@ If BACKGROUND? is t, we don't message when the tests start running."
            (when (let ((case-fold-search nil))
                    (string-match-p kaocha-runner--fail-re out))
              (setq any-errors? t))
-           (when (and (< 1 (- (float-time) start-time))
+           (when (and (< kaocha-runner-long-running-seconds
+                         (- (float-time) start-time))
                       (not shown-details?))
              (setq shown-details? t)
              (kaocha-runner--show-details-window original-buffer kaocha-runner-ongoing-tests-win-min-height)))
@@ -246,17 +261,17 @@ If BACKGROUND? is t, we don't message when the tests start running."
              (unless (get-buffer-window kaocha-runner--err-buffer 'visible)
                (message "Kaocha run failed. See error window for details.")
                (switch-to-buffer-other-window kaocha-runner--err-buffer))))
-         (when (and done? any-errors?)
-           (kaocha-runner--show-details-window original-buffer kaocha-runner-failure-win-min-height)))))))
+         (when done?
+           (if any-errors?
+               (kaocha-runner--show-details-window original-buffer kaocha-runner-failure-win-min-height)
+             (kaocha-runner--hide-window kaocha-runner--out-buffer))))))))
 
 ;;;###autoload
 (defun kaocha-runner-hide-windows ()
   "Hide all windows that kaocha has opened."
   (interactive)
-  (when (get-buffer kaocha-runner--out-buffer)
-    (kill-buffer kaocha-runner--out-buffer))
-  (when (get-buffer kaocha-runner--err-buffer)
-    (kill-buffer kaocha-runner--err-buffer)))
+  (kaocha-runner--hide-window kaocha-runner--out-buffer)
+  (kaocha-runner--hide-window kaocha-runner--err-buffer))
 
 ;;;###autoload
 (defun kaocha-runner-run-tests (&optional test-id?)
@@ -265,10 +280,10 @@ If prefix argument TEST-ID? is present ask user for a test-id to run."
   (interactive "P")
   (kaocha-runner-hide-windows)
   (let ((test-id (when test-id? (read-from-minibuffer "test id: "))))
-      (kaocha-runner--run-tests
-       (if test-id
-           test-id
-         (kaocha-runner--testable-sym (cider-current-ns) nil (eq major-mode 'clojurescript-mode))))))
+    (kaocha-runner--run-tests
+     (if test-id
+         test-id
+       (kaocha-runner--testable-sym (cider-current-ns) nil (eq major-mode 'clojurescript-mode))))))
 
 ;;;###autoload
 (defun kaocha-runner-run-test-at-point ()

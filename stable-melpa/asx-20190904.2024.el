@@ -4,8 +4,8 @@
 ;; Created: 24 August 2019
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
-;; Package-Version: 20190902.1821
-;; Version: 0.1.0
+;; Package-Version: 20190904.2024
+;; Version: 0.1.1
 ;; Package-Requires: ((request "0.3.0") (org "9.2.5") (seq "2") (emacs "25"))
 
 ;; This file is not part of GNU Emacs.
@@ -144,7 +144,6 @@ Otherwise show the first post."
 
 (defun asx--request (url callback)
   "Request URL with CALLBACK."
-  (message "Loading %s" url)
   (let ((request-curl-options (list (format "-A %s" (asx--get-user-agent)))))
     (request url
              :parser (lambda () (libxml-parse-html-region (point-min) (point-max)))
@@ -152,6 +151,11 @@ Otherwise show the first post."
                                    (error "%s" error-thrown)))
              :success (cl-function (lambda (&key data &allow-other-keys)
                                      (funcall callback data))))))
+
+(defun asx--request-post (post)
+  "Request POST."
+  (message "Loading: %s" (car post))
+  (asx--request (cdr post) #'asx--insert-post-dom))
 
 (defun asx--get-user-agent ()
   "Return random user-agent from `asx--user-agents'."
@@ -172,8 +176,7 @@ Otherwise show the first post."
                               :test #'equal
                               :key #'car))
             0))
-  (asx--request (cdr (asx--get-current-post))
-                #'asx--insert-post-dom))
+  (asx--request-post (asx--get-current-post)))
 
 (defun asx--extract-links (dom)
   "Extract links from DOM."
@@ -353,8 +356,7 @@ Otherwise show the first post."
   "Jump N steps in `asx--posts' and insert the post."
   (setq asx--current-post-index
         (mod (+ n asx--current-post-index) (length asx--posts)))
-  (asx--request (cdr (asx--get-current-post))
-                #'asx--insert-post-dom))
+  (asx--request-post (asx--get-current-post)))
 
 ;;;; Footer
 
