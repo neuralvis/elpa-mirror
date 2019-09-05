@@ -5,7 +5,7 @@
 ;; Author: Thomas Fini Hansen <xen@xen.dk>
 ;; Created: August 11, 2019
 ;; Version: 1.0.0
-;; Package-Version: 20190828.1934
+;; Package-Version: 20190905.611
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: tools
 ;; Url: https://github.com/xendk/reaper
@@ -82,7 +82,8 @@
     (define-key map (kbd "r") #'reaper-refresh-buffer)
     (define-key map (kbd "g") #'reaper-refresh)
     (define-key map (kbd "d") #'reaper-goto-date)
-    (define-key map (kbd "RET") #'reaper-start-timer)
+    (define-key map (kbd "SPC") #'reaper-start-timer)
+    (define-key map (kbd "RET") #'reaper-start-timer-and-quit-window)
     (define-key map (kbd "c") #'reaper-start-new-timer)
     (define-key map (kbd "s") #'reaper-stop-timer)
     (define-key map (kbd "k") #'reaper-delete-entry)
@@ -132,6 +133,7 @@
     (cancel-timer reaper-update-timer)
     (setq reaper-update-timer nil)))
 
+;;;###autoload
 (defun reaper ()
   "Open Reaper buffer."
   (interactive)
@@ -311,7 +313,7 @@ goes back a month or year."
     (and time (format-time-string "%Y-%m-%d" time))))
 
 (defun reaper-start-timer ()
-  "Start the timer under point.
+  "Start the timer at point.
 Stops any previously running timers."
   (interactive)
   (when (tabulated-list-get-id)
@@ -324,6 +326,12 @@ Stops any previously running timers."
   (when reaper-running-timer
     (reaper-api "PATCH" (format "time_entries/%s/stop" reaper-running-timer) nil "Stopped timer")
     (reaper-refresh)))
+
+(defun reaper-start-timer-and-quit-window ()
+  "Start timer at point and close window."
+  (interactive)
+  (reaper-start-timer)
+  (quit-window))
 
 (defun reaper-start-new-timer ()
   "Create a new running timer."
@@ -343,7 +351,7 @@ Stops any previously running timers."
     (reaper-refresh)))
 
 (defun reaper-delete-entry ()
-  "Delete time entry under point."
+  "Delete time entry at point."
   (interactive)
   (let* ((entry-id (tabulated-list-get-id))
          (entry (assoc entry-id reaper-timeentries)))
@@ -361,7 +369,7 @@ Stops any previously running timers."
   (kill-buffer reaper-buffer-name))
 
 (defun reaper-edit-entry ()
-  "Delete time entry under point."
+  "Delete time entry at point."
   (interactive)
   (let* ((entry-id (tabulated-list-get-id))
          (entry (assoc entry-id reaper-timeentries)))
@@ -377,7 +385,7 @@ Stops any previously running timers."
         (reaper-refresh)))))
 
 (defun reaper-edit-entry-time ()
-  "Edit time of entry under point."
+  "Edit time of entry at point."
   (interactive)
   (let* ((entry-id (tabulated-list-get-id))
          (entry (assoc entry-id reaper-timeentries))

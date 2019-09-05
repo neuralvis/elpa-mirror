@@ -7,7 +7,7 @@
 ;; Maintainer: Carlo Sciolla (skuro)
 ;; Keywords: uml plantuml ascii
 ;; Version: 1.2.9
-;; Package-Version: 20190903.2113
+;; Package-Version: 20190905.838
 ;; Package-X-Original-Version: 1.2.9
 ;; Package-Requires: ((dash "2.0.0") (emacs "25.0"))
 
@@ -38,6 +38,7 @@
 
 ;;; Change log:
 ;;
+;; version 1.4.1, 2019-09-03 Better indentation; more bugfixing; actually adding `executable' mode
 ;; version 1.4.0, 2019-08-21 Added `executable' exec mode to use locally installed `plantuml' binaries, various bugfixes
 ;; version 1.3.1, 2019-08-02 Fixed interactive behavior of `plantuml-set-exec-mode'
 ;; version 1.3.0, 2019-05-31 Added experimental support for multiple rendering modes and, specifically, preview using a PlantUML server
@@ -94,7 +95,7 @@
 
 (defvar plantuml-mode-hook nil "Standard hook for plantuml-mode.")
 
-(defconst plantuml-mode-version "20190822.1403" "The plantuml-mode version string.")
+(defconst plantuml-mode-version "20190905.838" "The plantuml-mode version string.")
 
 (defvar plantuml-mode-debug-enabled nil)
 
@@ -241,6 +242,15 @@
         (message "Aborted."))
     (message "Aborted.")))
 
+(defun plantuml-jar-java-version ()
+  "Inspects the Java runtime version of the configured Java command in `plantuml-java-command'."
+  (save-excursion
+    (save-match-data
+      (with-temp-buffer
+        (call-process plantuml-java-command nil t nil "-XshowSettings:properties" "-version")
+        (re-search-backward "java.version = \\(1.\\)?\\([[:digit:]]+\\)")
+        (string-to-number (match-string 2))))))
+
 (defun plantuml-jar-get-language (buf)
   "Retrieve the language specification from the PlantUML JAR file and paste it into BUF."
   (unless (or (eq system-type 'cygwin) (file-exists-p plantuml-jar-path))
@@ -358,13 +368,16 @@ Note that output type `txt' is promoted to `utxt' for better rendering."
 
 (defun plantuml-jar-start-process (buf)
   "Run PlantUML as an Emacs process and puts the output into the given buffer (as BUF)."
-  (apply #'start-process
-         "PLANTUML" buf plantuml-java-command
-         `(,@plantuml-java-args
-           ,(expand-file-name plantuml-jar-path)
-           ,(plantuml-jar-output-type-opt plantuml-output-type)
-           ,@plantuml-jar-args
-           "-p")))
+  (let ((java-args (if (<= 8 (plantuml-jar-java-version))
+                       (remove "--illegal-access=deny" plantuml-java-args)
+                     plantuml-java-args)))
+    (apply #'start-process
+           "PLANTUML" buf plantuml-java-command
+           `(,@java-args
+             ,(expand-file-name plantuml-jar-path)
+             ,(plantuml-jar-output-type-opt plantuml-output-type)
+             ,@java-args
+             "-p"))))
 
 (defun plantuml-executable-start-process (buf)
   "Run PlantUML as an Emacs process and puts the output into the given buffer (as BUF)."
@@ -586,7 +599,7 @@ or it is followed by line end.")
                                                  plantuml-indent-regexp-footer-start
                                                  plantuml-indent-regexp-macro-start
                                                  plantuml-indent-regexp-oldif-start
-						 plantuml-indent-regexp-user-control-start))
+                                                 plantuml-indent-regexp-user-control-start))
       (defvar plantuml-indent-regexp-block-end "^\s*\\(?:}\\|endif\\|else\s*.*\\|end\\)\s*\\('.*\\)?$")
       (defvar plantuml-indent-regexp-note-end "^\s*\\(end\s+note\\|end[rh]note\\)\s*\\('.*\\)?$")
       (defvar plantuml-indent-regexp-group-end "^\s*end\s*\\('.*\\)?$")
@@ -601,19 +614,19 @@ or it is followed by line end.")
       (defvar plantuml-indent-regexp-macro-end "^\s*!enddefinelong\s*\\('.*\\)?$")
       (defvar plantuml-indent-regexp-user-control-end "^.*'.*\s*PLANTUML_MODE_INDENT_DECREASE\s*.*$")
       (defvar plantuml-indent-regexp-end (list plantuml-indent-regexp-block-end
-                                                 plantuml-indent-regexp-group-end
-                                                 plantuml-indent-regexp-activate-end
-                                                 plantuml-indent-regexp-box-end
-                                                 plantuml-indent-regexp-ref-end
-                                                 plantuml-indent-regexp-legend-end
-                                                 plantuml-indent-regexp-note-end
-                                                 plantuml-indent-regexp-oldif-end
-                                                 plantuml-indent-regexp-title-end
-                                                 plantuml-indent-regexp-header-end
-                                                 plantuml-indent-regexp-footer-end
-                                                 plantuml-indent-regexp-macro-end
-                                                 plantuml-indent-regexp-oldif-end
-						 plantuml-indent-regexp-user-control-end))
+                                               plantuml-indent-regexp-group-end
+                                               plantuml-indent-regexp-activate-end
+                                               plantuml-indent-regexp-box-end
+                                               plantuml-indent-regexp-ref-end
+                                               plantuml-indent-regexp-legend-end
+                                               plantuml-indent-regexp-note-end
+                                               plantuml-indent-regexp-oldif-end
+                                               plantuml-indent-regexp-title-end
+                                               plantuml-indent-regexp-header-end
+                                               plantuml-indent-regexp-footer-end
+                                               plantuml-indent-regexp-macro-end
+                                               plantuml-indent-regexp-oldif-end
+                                               plantuml-indent-regexp-user-control-end))
       (setq plantuml-font-lock-keywords
             `(
               (,plantuml-types-regexp . font-lock-type-face)

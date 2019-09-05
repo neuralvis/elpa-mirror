@@ -5,7 +5,7 @@
 ;; Author: Gaby Launay <gaby.launay@protonmail.com>
 ;; URL: https://github.com/galaunay/poetry.el
 ;; Keywords: Python, Tools
-;; Package-Version: 20190706.1141
+;; Package-Version: 20190905.959
 ;; Package-X-Original-Version: 0.1.0
 ;; Package-Requires: ((transient "0.1.0") (pyvenv "1.2") (emacs "25.1"))
 
@@ -104,7 +104,7 @@
 ;; Transient interface
 ;;;;;;;;;;;;;;;;;;;;;;
 
-;;;###autoload
+;;;###autoload (autoload 'poetry "poetry" nil t)
 (define-transient-command poetry ()
   "Poetry menu."
   [:description (lambda ()
