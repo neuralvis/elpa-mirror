@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Fuzzy matching for helm source.
 ;; Keyword: fuzzy helm matching source
-;; Version: 0.1.4
-;; Package-Version: 20190903.256
+;; Version: 0.1.5
+;; Package-Version: 20190905.526
 ;; Package-Requires: ((emacs "24.4") (helm "1.7.9") (flx "0.5"))
 ;; URL: https://github.com/jcs090218/helm-fuzzy
 
@@ -50,6 +50,33 @@
   :group 'helm-fuzzy)
 
 
+
+(defun helm-fuzzy--flatten-list (l)
+  "Flatten the multiple dimensional array, L to one dimensonal array."
+  (cond ((null l) nil)
+        ((atom l) (list l))
+        (t (loop for a in l appending (helm-fuzzy--flatten-list a)))))
+
+(defun helm-fuzzy--get-faces (pos)
+  "Get the font faces at POS."
+  (helm-fuzzy--flatten-list
+   (remq nil
+         (list
+          (get-char-property pos 'read-face-name)
+          (get-char-property pos 'face)
+          (plist-get (text-properties-at pos) 'face)))))
+
+(defun helm-fuzzy--is-current-point-face (in-face)
+  "Check if current face the same face as IN-FACE."
+  (let ((faces (helm-fuzzy--get-faces (point))))
+    (if (listp faces)
+        (if (equal (cl-position in-face faces :test 'string=) nil)
+            ;; If return nil, mean not found in the `faces' list.
+            nil
+          ;; If have position, meaning the face exists.
+          t)
+      (string= in-face faces))))
+
 (defun helm-fuzzy--is-contain-list-string (in-list in-str)
   "Check if a string IN-STR contain in any string in the string list IN-LIST."
   (cl-some #'(lambda (lb-sub-str) (string-match-p (regexp-quote lb-sub-str) in-str)) in-list))
@@ -63,7 +90,13 @@
       (save-selected-window
         (select-window (active-minibuffer-window))
         (setq pattern (buffer-string))
-        (setq pos (string-match-p helm-pattern pattern))
+        (save-excursion
+          (goto-char (point-min))
+          (while (and (< (point) (length pattern))
+                      (= pos -1))
+            (forward-char 1)
+            (unless (helm-fuzzy--is-current-point-face "helm-minibuffer-prompt")
+              (setq pos (1- (point))))))
         (setq pattern (substring pattern pos (length pattern)))))
     pattern))
 

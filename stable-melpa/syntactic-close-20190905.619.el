@@ -4,7 +4,7 @@
 ;; Maintainer: Emacs User Group Berlin <emacs-berlin@emacs-berlin.org>
 
 ;; Version: 0.1
-;; Package-Version: 20190513.947
+;; Package-Version: 20190905.619
 
 ;; URL: https://github.com/emacs-berlin/syntactic-close
 
@@ -716,7 +716,7 @@ Argument IACT signals an interactive call."
       (insert closer))
     (or (< orig (point)) (and iact (message "%s" "nil") nil))))
 
-;;;###$autoload
+;;;###autoload
 (defun syntactic-close (&optional arg beg pps iact)
   "Insert closing delimiter.
 
