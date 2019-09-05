@@ -4,7 +4,7 @@
 
 ;; Author: Kyle Meyer <kyle@kyleam.com>
 ;; URL: https://github.com/magit/magit-tbdiff
-;; Package-Version: 20190808.1639
+;; Package-Version: 20190905.214
 ;; Keywords: vc, tools
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "24.4") (magit "2.10.0"))
@@ -149,6 +149,23 @@ otherwise."
     (aset ansi-color-faces-vector 7 'magit-tbdiff-dual-color)
     (ansi-color-make-color-map)))
 
+(defun magit-tbdiff-wash-hunk ()
+  ;; The is a less strict variant of magit-diff-wash-hunk that we need
+  ;; for range-diff output changes introduced by Git 2.23.0.
+  (when (looking-at "^@@\\(?: \\(.*\\)\\)?")
+    (let ((heading (match-string 0))
+          (value (match-string 1)))
+      (magit-delete-line)
+      (magit-insert-section section (hunk value)
+        (insert (propertize (concat heading "\n")
+                            'font-lock-face 'magit-diff-hunk-heading))
+        (magit-insert-heading)
+        (while (not (or (eobp) (looking-at "^[^-+\s\\]")))
+          (forward-line))
+        (oset section end (point))
+        (oset section washer 'magit-diff-paint-hunk)))
+    t))
+
 (defun magit-tbdiff-wash (args)
   (when (member "--dual-color" args)
     (require 'ansi-color)
@@ -207,7 +224,7 @@ otherwise."
                 (goto-char beg)
                 (save-restriction
                   (narrow-to-region beg end)
-                  (magit-wash-sequence #'magit-diff-wash-hunk))))))
+                  (magit-wash-sequence #'magit-tbdiff-wash-hunk))))))
       (error "Unexpected tbdiff output"))))
 
 (defun magit-tbdiff-insert ()

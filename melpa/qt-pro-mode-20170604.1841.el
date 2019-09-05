@@ -4,7 +4,6 @@
 ;;
 ;;; Author: Todd Neal <tolchz@gmail.com>
 ;; Version: 1.0.0
-;; Package-Version: 20170604.1841
 ;; Keywords: extensions
 ;; Package-Requires: ((emacs "24"))
 ;;
