@@ -57,9 +57,9 @@ To use =elpa-mirror= with Spacemacs, you need to modify
 
   ;; local
   (setq configuration-layer-elpa-archives
-        `(("melpa" . ,(concat user-home-directory "elpa-mirror/melpa/"))
-          ("org"   . ,(concat user-home-directory "elpa-mirror/org/"))
-          ("gnu"   . ,(concat user-home-directory "elpa-mirror/gnu/"))))
+        `(("melpa" . ,(concat user-home-directory ".elpa-mirror/melpa/"))
+          ("org"   . ,(concat user-home-directory ".elpa-mirror/org/"))
+          ("gnu"   . ,(concat user-home-directory ".elpa-mirror/gnu/"))))
 #+END_SRC
 
 For more grained control over =package-archives= (e. g. if you wish to use
