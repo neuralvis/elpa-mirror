@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2.5
-;; Package-Version: 20190901.625
+;; Package-Version: 20190906.30
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (dash-functional "1.2.0"))
 ;; URL: https://github.com/akirak/org-starter
 
@@ -834,8 +834,9 @@ is returned as the result of this function."
                 (org-starter--log-error "%s file is deprecated"
                                         (abbreviate-file-name fpath))
                 (add-to-list 'org-starter-deprecated-files fpath))
-              (when agenda
-                (add-to-list 'org-agenda-files fpath 'append #'file-equal-p))
+              (if agenda
+                  (add-to-list 'org-agenda-files fpath 'append #'file-equal-p)
+                (cl-delete fpath org-agenda-files :test #'file-equal-p))
               (mapc (lambda (symbol) (customize-set-variable symbol fpath))
                     (org-starter--to-symbol-list custom-vars))
               (mapc (lambda (symbol) (set-default symbol fpath))
