@@ -4,7 +4,7 @@
 
 ;; Author: Wang Kai <kaiwkx@gmail.com>
 ;; Keywords: extensions, tools
-;; Package-Version: 20190906.1044
+;; Package-Version: 20190907.251
 ;; URL: https://github.com/kaiwk/leetcode.el
 ;; Package-Requires: ((emacs "26") (dash "2.16.0") (graphql "0.1.1") (spinner "1.7.3") (aio "1.0"))
 ;; Version: 0.1.5
@@ -398,6 +398,7 @@ Return a list of rows, each row is a vector:
 
 (aio-defun leetcode-refresh ()
   "Refresh problems and update `tabulated-list-entries'."
+  (interactive)
   (if-let ((users-and-problems
             (aio-await (leetcode--fetch-user-and-problems))))
       (leetcode--set-user-and-problems users-and-problems)
@@ -417,7 +418,7 @@ Return a list of rows, each row is a vector:
       (tabulated-list-print t)
       (leetcode--loading-mode -1))))
 
-;;;###autoload
+;;;###autoload (autoload 'leetcode "leetcode" t t)
 (aio-defun leetcode ()
   "Show leetcode problems buffer."
   (interactive)
