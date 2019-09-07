@@ -4,7 +4,7 @@
 
 ;; Author: Daniel Phan <daniel.phan36@gmail.com>
 ;; Version: 0.1.0
-;; Package-Version: 20190818.2331
+;; Package-Version: 20190906.538
 ;; Package-Requires: ((emacs "25.1") (evil "1.2.13"))
 ;; Homepage: https://github.com/mamapanda/evil-traces
 ;; Keywords: emulations, evil, visual
@@ -28,10 +28,9 @@
 
 ;;; Commentary:
 ;;
-;; evil-traces is a port of traces.vim
-;; (https://github.com/markonm/traces.vim).  It adds visual hints to
-;; certain `evil-ex' commands.  To enable the hints, turn on
-;; `evil-traces-mode'.
+;; evil-traces is a port of traces.vim (https://github.com/markonm/traces.vim).
+;; It adds visual hints to certain `evil-ex' commands.  To enable the hints,
+;; turn on `evil-traces-mode'.
 
 ;;; Code:
 
@@ -55,8 +54,6 @@
 ;; - Eventually make `evil-traces--run-timer',
 ;;   `evil-traces--cancel-timer', `evil-traces--reset-state' and
 ;;   `evil-traces--with-possible-suspend' public
-;; - Option for evil-traces to not echo warnings.
-;;   - `evil-traces-echo-information' variable + `evil-traces-echo' function
 
 ;; * Setup
 (require 'cl-lib)
@@ -148,6 +145,10 @@
   "A zero-argument function that returns if highlighting should be suspended."
   :type 'function)
 
+(defcustom evil-traces-enable-echo t
+  "Whether to echo warnings and information."
+  :type 'boolean)
+
 (defcustom evil-traces-join-indicator "<<<"
   "The indicator for :join.
 This will be placed at the end of each line that will be joined with
@@ -208,6 +209,12 @@ the next."
      ((t (:inherit diff-refine-removed :foreground unspecified :background unspecified))))
    '(evil-ex-substitute-replacement
      ((t (:inherit diff-refine-added :foreground unspecified :background unspecified))))))
+
+;; ** Echo
+(defun evil-traces--echo (string &rest args)
+  "Echo STRING formatted with ARGS if `evil-traces-enable-echo' is non-nil."
+  (when evil-traces-enable-echo
+    (apply #'evil-ex-echo string args)))
 
 ;; ** Overlays
 (defvar evil-traces--highlights (make-hash-table)
@@ -453,7 +460,7 @@ highlights."
                                      (cons insert-pos insert-pos)
                                      'before-string
                                      (propertize move-text 'face preview-hl-face)))
-            (evil-ex-echo "Invalid address"))))
+            (evil-traces--echo "Invalid address"))))
     (progn
       (evil-traces--delete-hl range-hl-name)
       (evil-traces--delete-hl preview-hl-name))))
@@ -546,9 +553,9 @@ highlights."
                                      'evil-traces-global-match)
                 (setq evil-traces--last-global-params params)))
           (user-error
-           (evil-ex-echo (cl-second error-info)))
+           (evil-traces--echo (cl-second error-info)))
           (invalid-regexp
-           (evil-ex-echo (cl-second error-info)))))
+           (evil-traces--echo (cl-second error-info)))))
     (progn
       (evil-traces--delete-hl 'evil-traces-global-range)
       (evil-traces--delete-hl 'evil-traces-global-matches))
@@ -631,7 +638,7 @@ OUT-POSITIONS are positions outside the current ex range."
               (evil-traces--place-join-indicators (list (pop indicator-positions))
                                                   indicator-positions)))
            (t
-            (evil-ex-echo "Invalid count")))))
+            (evil-traces--echo "Invalid count")))))
     (progn
       (evil-traces--delete-hl 'evil-traces-join-range)
       (evil-traces--delete-hl 'evil-traces-join-in-indicators)
@@ -667,7 +674,7 @@ FLAG indicates whether to update or stop highlights."
          ((and evil-ex-argument
                (cl-notevery #'evil-traces--sort-option-p
                             (string-to-list evil-ex-argument)))
-          (evil-ex-echo "Invalid option"))
+          (evil-traces--echo "Invalid option"))
          ((not evil-ex-range)
           (evil-traces--set-hl 'evil-traces-sort nil))
          (t
