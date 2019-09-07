@@ -4,8 +4,8 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/magit-todos
-;; Package-Version: 20190805.552
-;; Version: 1.4
+;; Package-Version: 20190907.1321
+;; Version: 1.5-pre
 ;; Package-Requires: ((emacs "25.2") (async "1.9.2") (dash "2.13.0") (f "0.17.2") (hl-todo "1.9.0") (magit "2.13.0") (pcre2el "1.8") (s "1.12.0"))
 ;; Keywords: magit, vc
 
@@ -947,7 +947,7 @@ This is a copy of `async-start-process' that does not override
   (let* ((args (cdr command))
          (command (car command))
          (buf (generate-new-buffer (concat " *" name "*")))
-         (proc (apply #'start-process name buf command args)))
+         (proc (apply #'start-file-process name buf command args)))
     (with-current-buffer buf
       (set-process-query-on-exit-flag proc nil)
       (set (make-local-variable 'async-callback) finish-func)
@@ -972,11 +972,15 @@ if the process's buffer has already been deleted."
   ;; `rg' scanner buffer!  It's as if Emacs is mixing up the process buffers.  I really don't know
   ;; what's going on.  But maybe I can work around it by copying this function and checking whether
   ;; the process's buffer is alive.
-  (when (and (eq 'exit (process-status proc))
+  ;; NOTE: TRAMP processes seem to have the status `signal' instead of
+  ;; `exit'.  I can't find documentation as to why.
+  (when (and (memq (process-status proc) '(exit signal))
              (buffer-live-p (process-buffer proc)))
     (with-current-buffer (process-buffer proc)
       (let ((async-current-process proc))
-        (if (= 0 (process-exit-status proc))
+        ;; TRAMP processes seem to have the exit status 9 instead of
+        ;; 0.  I can't find documentation or code about it.
+        (if (memq (process-exit-status proc) '(0 9))
             (if async-callback-for-process
                 (if async-callback
                     (prog1
@@ -1331,6 +1335,8 @@ When SYNC is non-nil, match items are returned."
 
 ;; These add optional support for Helm and Ivy.  This code does not require
 ;; Helm or Ivy to be installed; it is only called after one of them is loaded.
+
+(declare-function helm-make-source "ext:helm-source")
 
 (with-eval-after-load 'helm
   (defvar helm-magit-todos-source

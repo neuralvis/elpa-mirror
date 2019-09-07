@@ -3,7 +3,7 @@
 ;; Author: Sarah Iovan <sarah@hwaetageek.com>
 ;;         Campbell Barton <ideasman42@gmail.com>
 ;; URL: https://github.com/ideasman42/emacs-inkpot-theme
-;; Package-Version: 20190816.715
+;; Package-Version: 20190907.1024
 ;; Version: 0.1
 ;; Keywords: color, theme
 
@@ -223,6 +223,10 @@
 
  ;; highlight-numbers (melpa)
  '(highlight-numbers-number ((t (:foreground "#f0ad6d"))))
+
+ ;; lsp-mode
+ '(lsp-face-highlight-read ((t (:background "#343443"))))
+ '(lsp-face-highlight-textual ((t (:background "#343443"))))
 
  ;; auto-complete (melpa)
  '(ac-candidate-face ((t (:foreground "#ffffff" :background "#4e4e8f"))))
