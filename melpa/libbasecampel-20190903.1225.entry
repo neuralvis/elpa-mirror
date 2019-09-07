@@ -1,0 +1,2 @@
+
+(libbasecampel . [(20190903 1225) ((emacs (26 1)) (json-process-client (0 2 0))) "Library to connect to basecamp 3 API" tar ((:commit . "07f6bf7081c7f3d31209921ae69366781ed20410") (:authors ("Damien Cassou" . "damien@cassou.me")) (:maintainer "Damien Cassou" . "damien@cassou.me") (:url . "https://gitlab.petton.fr/basecampel/libbasecampel"))])
