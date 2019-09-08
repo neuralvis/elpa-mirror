@@ -2,7 +2,7 @@
 
 ;; Author: Wanderson Ferreira <iagwanderson@gmail.com>
 ;; URL: https://github.com/wandersoncferreira/ivy-clojuredocs
-;; Package-Version: 20190810.258
+;; Package-Version: 20190907.2053
 ;; Package-Requires: ((edn "1.1.2") (ivy "0.12.0") (emacs "24.4"))
 ;; Version: 0.1
 ;; Keywords: matching
@@ -112,7 +112,7 @@ function."
 (defun ivy-clojuredocs-thing-at-point (thing)
   "Preprocess THING to be given as parameter as a candidate to search."
   (when thing
-    (first (last (split-string thing "/")))))
+    (car (last (split-string thing "/")))))
 
 (defun ivy-clojuredocs-invoke (&optional initial-input)
   "Ivy function to read and display candidates to the user.
