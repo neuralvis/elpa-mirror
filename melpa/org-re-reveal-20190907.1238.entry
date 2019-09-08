@@ -1,2 +1,2 @@
 
-(org-re-reveal . [(20190907 1238) ((emacs (24 4)) (org (8 3)) (htmlize (1 34))) "Org export to reveal.js presentations" tar ((:commit . "f8c2fd6bd0a62f9d83bb9dd605cf7cc4b60bcac2") (:keywords "tools" "outlines" "hypermedia" "slideshow" "presentation" "oer") (:url . "https://gitlab.com/oer/org-re-reveal"))])
+(org-re-reveal . [(20190907 1238) ((emacs (24 4)) (org (8 3)) (htmlize (1 34))) "Org export to reveal.js presentations" tar ((:commit . "77c631afb1b8cba329bde704fcf45b70935a46f4") (:keywords "tools" "outlines" "hypermedia" "slideshow" "presentation" "oer") (:url . "https://gitlab.com/oer/org-re-reveal"))])
