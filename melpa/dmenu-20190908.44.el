@@ -5,7 +5,7 @@
 ;; Author: DarkSun <lujun9972@gmail.com>
 ;; Created: 2015-12-01
 ;; Version: 0.1
-;; Package-Version: 20190907.1501
+;; Package-Version: 20190908.44
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; Keywords: convenience, usability
 
@@ -89,11 +89,12 @@ Must be set before initializing Dmenu."
                                                               dmenu--cache-executable-files))
                                         nil
                                         'confirm
-                                        nil
-                                        'dmenu--history-list))
+                                        nil))
          (args (when (= prefix 4)
                  (split-string-and-unquote (read-string "please input the parameters: ")))))
-    (setq dmenu--history-list (cons execute-file (remove execute-file dmenu--history-list)))
+    (if (member (car (split-string execute-file)) dmenu--cache-executable-files)
+        (setq dmenu--history-list (cons execute-file
+                                        (remove execute-file dmenu--history-list))))
     (cond ((< dmenu-history-size 1)
            (setq dmenu--history-list nil))
           ((> (length dmenu--history-list) dmenu-history-size)

@@ -1,14 +1,16 @@
 ;;; olivetti.el --- Minor mode for a nice writing environment -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2014-2019  Free Software Foundation, Inc.
+;; Copyright (c) 2014-2019 Free Software Foundation, Inc.
+;; Copyright (c) 2019 Paul W. Rankin
 
-;; Author: Paul Rankin <hello@paulwrankin.com>
+;; Author: Paul W. Rankin <pwr@sdf.org>
 ;; Keywords: wp, text
-;; Package-Version: 20190519.1316
-;; Version: 1.7.1
+;; Package-Version: 20190907.2028
+;; Version: 1.8.0
 ;; Package-Requires: ((emacs "24.5"))
+;; URL: https://gthub.com/rnkn/olivetti
 
-;; This file is part of GNU Emacs.
+;; This file is not part of GNU Emacs.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,58 +23,74 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
-;; Olivetti is a simple Emacs minor mode for a nice writing environment.
+;; # Olivetti #
 
-;; Features
-;; --------
+;; A simple Emacs minor mode for a nice writing environment.
 
-;; - Set a desired text body width to automatically resize window margins
-;;   to keep the text comfortably in the middle of the window.
-;; - Text body width can be the number of characters (an integer) or a
-;;   fraction of the window width (a float between 0.0 and 1.0).
+;; Screenshot: https://f002.backblazeb2.com/file/pwr-share/olivetti.png
+
+;; ## Features ##
+
+;; - Set a desired text body width to automatically resize window margins to
+;;   keep the text comfortably in the middle of the window.
+;; - Text body width can be the number of characters (an integer) or a fraction
+;;   of the window width (a float between 0.0 and 1.0).
 ;; - Interactively change body width with:
-;;   `olivetti-shrink' C-c [ [ [ ...
-;;   `olivetti-expand' C-c ] ] ] ...
-;;   `olivetti-set-width' C-c \
-;; - If `olivetti-body-width' is an integer, the text body width will scale
-;;   with use of `text-scale-mode`, whereas if a fraction (float) then the
-;;   text body width will remain at that fraction.
-;; - Optionally remember the state of `visual-line-mode' on entry and
-;;   recall its state on exit.
+;;   olivetti-shrink C-c { { { ...
+;;   olivetti-expand C-c } } } ...
+;;   olivetti-set-width C-c \
+;; - If olivetti-body-width is an integer, the text body width will scale with
+;;   use of text-scale-mode, whereas if a fraction (float) then the text body
+;;   width will remain at that fraction.
+;; - Optionally remember the state of visual-line-mode on entry and recall its
+;;   state on exit.
 
 ;; Olivetti keeps everything it does buffer-local, so you can write prose in one
 ;; buffer and code in another, side-by-side in the same frame. For those looking
 ;; for a hardcore distraction-free writing mode with a much larger scope, I
-;; recommend writeroom-mode: <https://github.com/joostkremers/writeroom-mode>.
+;; recommend writeroom-mode: https://github.com/joostkremers/writeroom-mode.
 
-;; Requirements
-;; ------------
+;; ## Requirements ##
 
 ;; - Emacs 24.5
 
-;; Installation
-;; ------------
+;; ## Installation ##
 
-;; Olivetti is now part of GNU ELPA and can be installed with M-x package-install
-;; RET olivetti RET.
+;; The latest stable release of Olivetti is available via [MELPA-stable]
+;; and can be installed with:
 
-;; Bugs
-;; ----
+;;     M-x package-install RET olivetti RET
 
-;; To report bugs, please use `M-x report-emacs-bug RET` or send an email to
-;; <bug-gnu-emacs@gnu.org>. Please include "olivetti" in the subject.
+;; Alternately, download the [latest release], move this file into your
+;; load-path and add to your .emacs/init.el file:
 
-;; Hints
-;; -----
+;;     (require 'olivetti)
 
-;; To always use a different width for a specific file, set a File Variable
-;; specifying `olivetti-body-width':
+;; If you prefer the latest but perhaps unstable version, install via
+;; [MELPA], or clone the repository into your load-path and require as
+;; above:
 
-;; M-x add-file-local-variable RET olivetti-body-width RET 66 RET
+;;     git clone https://github.com/rnkn/olivetti.git
+
+;; [melpa]: https://melpa.org/#/olivetti "MELPA"
+;; [melpa-stable]: https://stable.melpa.org/#/olivetti "MELPA-stable"
+;; [latest release]: https://github.com/rnkn/olivetti/releases/latest "Olivetti latest release"
+
+;; ## Contributing ##
+
+;; Please report bugs and request features at
+;; <https://github.com/rnkn/fountain-mode/issues>
+
+;; ## Hints ##
+
+;; To always use a different width for a specific file, set a File
+;; Variable:
+
+;;     M-x add-file-local-variable RET olivetti-body-width RET 66 RET
 
 ;; See (info "(emacs) File Variables").
 
@@ -196,12 +214,14 @@ Cycle through all windows displaying current buffer and call
   (set-window-margins window nil))
 
 (defun olivetti-split-window (&optional window size side pixelwise)
-  "Call `split-window' after resetting WINDOW."
+  "Call `split-window' after resetting WINDOW.
+Pass SIZE, SIDE and PIXELWISE unchanged."
   (olivetti-reset-window window)
   (split-window window size side pixelwise))
 
 (defun olivetti-split-window-sensibly (&optional window)
-  "Like `olivetti-split-window' but calls `split-window-sensibly'."
+  "Like `olivetti-split-window' but call `split-window-sensibly'.
+Pass WINDOW unchanged."
   (olivetti-reset-window window)
   (split-window-sensibly window))
 
@@ -275,8 +295,8 @@ If prefixed with ARG, incrementally decrease."
   (message "Text body width set to %s" olivetti-body-width)
   (set-transient-map
    (let ((map (make-sparse-keymap)))
-     (define-key map "]" 'olivetti-expand)
-     (define-key map "[" 'olivetti-shrink) map)))
+     (define-key map "}" #'olivetti-expand)
+     (define-key map "{" #'olivetti-shrink) map)))
 
 (defun olivetti-shrink (&optional arg)
   "Incrementally decrease the value of `olivetti-body-width'.
@@ -291,8 +311,8 @@ If prefixed with ARG, incrementally increase."
 
 (defvar olivetti-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c [") #'olivetti-shrink)
-    (define-key map (kbd "C-c ]") #'olivetti-expand)
+    (define-key map (kbd "C-c }") #'olivetti-expand)
+    (define-key map (kbd "C-c {") #'olivetti-shrink)
     (define-key map (kbd "C-c \\") #'olivetti-set-width)
     map)
   "Mode map for `olivetti-mode'.")
