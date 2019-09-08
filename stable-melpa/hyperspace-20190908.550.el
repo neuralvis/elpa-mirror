@@ -4,8 +4,8 @@
 
 ;; Author: Ian Eure <ian@retrospec.tv>
 ;; URL: https://github.com/ieure/hyperspace-el
-;; Package-Version: 20190702.2331
-;; Version: 0.8.4
+;; Package-Version: 20190908.550
+;; Version: 0.8.5
 ;; Package-Requires: ((emacs "25") (s "1.12.0"))
 ;; Keywords: tools, convenience
 
@@ -61,7 +61,7 @@
 
 (defun hyperspace-action->browse-url-pattern (pattern query)
   "Browse a URL former from PATTERN and QUERY."
-  (browse-url (format pattern query)))
+  (browse-url (format pattern (url-hexify-string query))))
 
 (defun hyperspace-action->info (node &optional query)
   "Open an Info buffer for NODE.
