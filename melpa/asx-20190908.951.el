@@ -4,7 +4,7 @@
 ;; Created: 24 August 2019
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
-;; Package-Version: 20190904.2024
+;; Package-Version: 20190908.951
 ;; Version: 0.1.1
 ;; Package-Requires: ((request "0.3.0") (org "9.2.5") (seq "2") (emacs "25"))
 
@@ -120,6 +120,12 @@ Otherwise show the first post."
   (asx--request (asx--query-construct query)
                 #'asx--handle-search))
 
+(defun asx-jump ()
+  "Jump to post."
+  (interactive)
+  (asx--select-post asx--posts)
+  (asx--request-post (asx--get-current-post)))
+
 (defun asx-next-post ()
   "Go to next post."
   (interactive)
@@ -169,14 +175,19 @@ Otherwise show the first post."
   "Handle search for DOM."
   (setq asx--posts (asx--filter-posts
                     (asx--extract-links dom)))
-  (setq asx--current-post-index
-        (or (and asx-prompt-post-p
-                 (cl-position (completing-read "Post: " asx--posts)
-                              asx--posts
-                              :test #'equal
-                              :key #'car))
-            0))
+  (if asx-prompt-post-p
+      (asx--select-post asx--posts)
+    (setq asx--current-post-index 0))
   (asx--request-post (asx--get-current-post)))
+
+(defun asx--select-post (posts)
+  "Prompt user to select from POSTS."
+  (setq asx--current-post-index
+        (cl-position (completing-read "Post: " posts)
+                     asx--posts
+                     :test #'equal
+                     :key #'car)))
+
 
 (defun asx--extract-links (dom)
   "Extract links from DOM."
