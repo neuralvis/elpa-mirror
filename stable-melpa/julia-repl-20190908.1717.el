@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016  Tamas K. Papp
 ;; Author: Tamas Papp <tkpapp@gmail.com>
 ;; Keywords: languages
-;; Package-Version: 20190907.1710
+;; Package-Version: 20190908.1717
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25"))
 ;; URL: https://github.com/tpapp/julia-repl
@@ -75,6 +75,11 @@ Note that this affects all buffers using the ‘ansi-term’ map."
 
 (defcustom julia-repl-compilation-mode t
   "When non-nil, highlight error locations using function ‘compilation-shell-minor-mode’."
+  :type 'boolean
+  :group 'julia-repl)
+
+(defcustom julia-repl-save-buffer-on-send nil
+  "When non-nil, save buffer without prompting on send."
   :type 'boolean
   :group 'julia-repl)
 
@@ -513,7 +518,7 @@ this with a prefix argument ARG."
   (interactive "P")
   (let* ((file (and (not arg) buffer-file-name)))
     (when (and file (buffer-modified-p))
-      (if (y-or-n-p "Buffer modified, save? ")
+      (if (or julia-repl-save-buffer-on-send (y-or-n-p "Buffer modified, save? "))
           (save-buffer)
         (setq file nil)))
     (julia-repl--send-string
@@ -533,7 +538,7 @@ If a buffer corresponds to a file and is not saved, the function prompts the use
     (if file
         (progn
           (when (buffer-modified-p)
-            (if (y-or-n-p "Buffer modified, save? ")
+            (if (or julia-repl-save-buffer-on-send (y-or-n-p "Buffer modified, save? "))
                 (save-buffer)
               (unless (file-exists-p file)
                 (message "need to save the file first"))))

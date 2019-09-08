@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/prism.el
-;; Package-Version: 20190903.1525
+;; Package-Version: 20190908.1804
 ;; Version: 0.1-pre
 ;; Package-Requires: ((emacs "26.1") (dash "2.14.1"))
 ;; Keywords: faces lisp
@@ -136,6 +136,32 @@ for `python-mode'.")
 (defvar prism-strings-fn)
 (defvar prism-strings)
 (defvar prism-whitespace-mode-indents)
+
+;;;; Macros
+
+(defmacro prism-extrapolate (start times length form)
+  "Return list of numbers extrapolated from FORM.
+Starting from number START, repeating below TIMES, collect the
+value of FORM.  Each iteration, `i' is bound to the iteration
+number (the incremented value of START), and `c' is bound to the
+number of cycles through LENGTH, i.e. `i' divided by LENGTH (or 0
+on the first iteration).
+
+For example, this form:
+
+    (prism-extrapolate 0 24 3 (* c 3))
+
+Evaluates to:
+
+    (0 0 0 3 3 3 6 6 6 9 9 9 12 12 12 15 15 15 18 18 18 21 21 21)
+
+Intended for use as the DESATURATIONS and LIGHTENS arguments to
+`prism-set-colors'."
+  `(cl-loop for i from ,start below ,times
+            for c = (pcase i
+                      (0 0)
+                      (_ (/ i ,length)))
+            collect ,form))
 
 ;;;; Minor mode
 
@@ -601,6 +627,8 @@ modified as desired for comments or strings, respectively."
   (declare (indent defun))
   (when shuffle
     (setf colors (prism-shuffle colors)))
+  ;; MAYBE: Extrapolate desaturations and lightens cleverly, instead
+  ;; of requiring the user to call `prism-extrapolate'.
   (cl-flet ((faces (colors &optional suffix (fn #'identity))
                    (setf suffix (if suffix
                                     (concat "-" suffix)

@@ -1,0 +1,2 @@
+
+(asx . [(20190908 1624) ((request (0 3 0)) (org (9 2 5)) (seq (2)) (emacs (25))) "Ask Stack Exchange" single ((:commit . "7a62b1b3a3366fae6b39e128b9627e9f566d6212") (:keywords "convenience") (:authors ("Alex Ragone" . "ragonedk@gmail.com")) (:maintainer "Alex Ragone" . "ragonedk@gmail.com") (:url . "https://github.com/ragone/asx"))])

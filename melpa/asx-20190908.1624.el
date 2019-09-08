@@ -4,7 +4,7 @@
 ;; Created: 24 August 2019
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
-;; Package-Version: 20190908.951
+;; Package-Version: 20190908.1624
 ;; Version: 0.1.1
 ;; Package-Requires: ((request "0.3.0") (org "9.2.5") (seq "2") (emacs "25"))
 
@@ -188,7 +188,6 @@ Otherwise show the first post."
                      :test #'equal
                      :key #'car)))
 
-
 (defun asx--extract-links (dom)
   "Extract links from DOM."
   (funcall (cadr (plist-get (asx--get-search-engine) :extract-fn))
@@ -314,9 +313,9 @@ Otherwise show the first post."
   "Insert ANSWERS."
   (let ((first-answer t))
     (mapcar (lambda (answer)
-              (insert (format "\n* Answer (%s)" (plist-get answer :score)))
+              (insert (format "\n* Answer (%s)\n" (plist-get answer :score)))
               (when first-answer
-                (insert "\n:PROPERTIES:\n:VISIBILITY: all\n:END:\n")
+                (insert ":PROPERTIES:\n:VISIBILITY: all\n:END:\n")
                 (setq first-answer nil))
               (asx--insert-node (plist-get answer :body)))
             answers)))
@@ -328,7 +327,7 @@ Otherwise show the first post."
       (cond
        ((and (equal (car node) 'a)
              (not (dom-by-tag node 'img)))
-        (asx--map-node-to-link node))
+        (org-link-make-string (dom-attr node 'href) (dom-texts node)))
        ((equal (car node) 'pre)
         (dom-node 'pre
                   '()
@@ -351,10 +350,6 @@ Otherwise show the first post."
   "Return language string from CLASS."
   (when (string-match "lang-\\b\\(.+?\\)\\b" class)
     (match-string 1 class)))
-
-(defun asx--map-node-to-link (node)
-  "Return Org link from NODE."
-  (concat "[[" (dom-attr node 'href) "][" (dom-texts node) "]]"))
 
 (defun asx--insert-node (node)
   "Map NODE and insert."
