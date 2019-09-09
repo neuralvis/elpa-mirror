@@ -1,2 +1,0 @@
-
-(undo-propose . [(20190906 401) ((emacs (24 3))) "Simple and safe undo navigation" single ((:commit . "5b4579ef89598145a568c42c6eacb47dab60d738") (:keywords "convenience" "files" "undo" "redo" "history") (:authors ("Jack Kamm")) (:maintainer "Jack Kamm") (:url . "https://github.com/jackkamm/undo-propose.el"))])
