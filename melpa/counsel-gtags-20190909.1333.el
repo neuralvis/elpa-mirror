@@ -3,8 +3,9 @@
 ;; Copyright (C) 2016 by Syohei YOSHIDA
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
-;; URL: https://github.com/syohex/emacs-counsel-gtags
-;; Package-Version: 20190422.1501
+;;         Felipe Lema <felipelema@mortemale.org>
+;; URL: https://github.com/FelipeLema/emacs-counsel-gtags
+;; Package-Version: 20190909.1333
 ;; Version: 0.01
 ;; Package-Requires: ((emacs "25.1") (counsel "0.8.0") (seq "1.0"))
 

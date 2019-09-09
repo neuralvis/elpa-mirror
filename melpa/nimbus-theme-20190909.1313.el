@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20190903.843
+;; Package-Version: 20190909.1313
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -79,8 +79,8 @@
        (darkerer-gray  "#404040")
        (darkest-gray   "#353535")
        (blue-gray      "#608079")
-       (white          "white")
-       (black          "black")
+       (white          "#ffffff")
+       (black          "#000000")
 
        (green-bg        "#11472b")
        (teal-bg         "#114747")
@@ -91,17 +91,17 @@
        (purple-bg       "#2b1147")
        (red-bg          "#47112b")
 
-       (nimbus-err     "red")
+       (nimbus-err     "#ff0000")
        (nimbus-success light-green)
        (nimbus-warn    "#f57e00")
 
-       (bg             "gray10")
+       (bg             "#1a1a1a")
        (fg             "#bdbdb3")
 
        ;; Define color variables.
 
        (cursor         nimbus-warn)
-       (fringe         "gray12")
+       (fringe         "#212121")
 
        (archive        orange)
        (code           orange)

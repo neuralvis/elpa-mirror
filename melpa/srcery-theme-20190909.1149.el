@@ -3,7 +3,7 @@
 
 ;; Author: Daniel Berg
 ;; URL: https://github.com/srcery-colors/srcery-emacs
-;; Package-Version: 20190526.1227
+;; Package-Version: 20190909.1149
 
 ;; Version: 0.2.0
 ;; Keywords: faces
@@ -2397,8 +2397,8 @@
 
    ;; paren-face
    `(parenthesis
-     ((,srcery-class (:foreground ,srcery-gray-5))
-      (,srcery-256-class (:foreground ,srcery-256-gray5))))
+     ((,srcery-class (:foreground ,srcery-white))
+      (,srcery-256-class (:foreground ,srcery-256-white))))
 
 
    ;; smartparens
@@ -2576,8 +2576,8 @@
       (,srcery-256-class (:foreground ,srcery-256-blue))))
 
    `(web-mode-html-tag-bracket-face
-     ((,srcery-class (:foreground ,srcery-gray-5))
-      (,srcery-256-class (:foreground ,srcery-256-gray5))))
+     ((,srcery-class (:foreground ,srcery-white))
+      (,srcery-256-class (:foreground ,srcery-white))))
 
    `(web-mode-keyword-face
      ((,srcery-class (:foreground ,srcery-red))
