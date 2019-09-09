@@ -135,3 +135,10 @@ For example, to include current task in commit message:
 - It is possible to answer to hg questions, e.g. pick action during merge
 
 - Option to display shelves in `vc-dir'
+
+- View changes made by revision; diff to parents
+Additional bindings in `log-view-mode':
+ - `c c' view change made by revision at point (-c option to hg diff command)
+ - `c 1' view diff between revision at point and its first parent
+ - `c 2' view diff between revision at point and its second parent
+`C c', `C 1' and `C 2' shows corresponding diffs for whole changeset.
