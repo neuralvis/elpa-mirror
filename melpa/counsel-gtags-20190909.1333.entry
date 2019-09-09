@@ -1,2 +1,0 @@
-
-(counsel-gtags . [(20190909 1333) ((emacs (25 1)) (counsel (0 8 0)) (seq (1 0))) "ivy for GNU global" single ((:commit . "5df12da961fb3ff4f2997ea422e26c39ab530aed") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com") ("Felipe Lema" . "felipelema@mortemale.org")) (:maintainer "Syohei YOSHIDA" . "syohex@gmail.com") (:url . "https://github.com/FelipeLema/emacs-counsel-gtags"))])

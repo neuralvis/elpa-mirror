@@ -1,2 +1,0 @@
-
-(howdoyou . [(20190904 358) ((emacs (25 1)) (promise (1 1)) (request (0 3 0)) (org (9 2))) "A stackoverflow and its sisters' sites reader" single ((:commit . "b8efd2f5dfa58b56b7f3b0a563e3e27e6f7e0335") (:authors ("Thanh Vuong" . "thanhvg@gmail.com")) (:maintainer "Thanh Vuong" . "thanhvg@gmail.com") (:url . "https://github.com/thanhvg/howdoyou/"))])
