@@ -4,6 +4,7 @@
 
 ;; Author: Mario Rodas <marsam@users.noreply.github.com>
 ;; URL: https://github.com/emacs-pe/http.el
+;; Package-Version: 20181008.2121
 ;; Keywords: convenience
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4") (request "0.2.0") (edit-indirect "0.1.4"))
