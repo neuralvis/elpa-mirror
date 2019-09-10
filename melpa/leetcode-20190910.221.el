@@ -4,10 +4,10 @@
 
 ;; Author: Wang Kai <kaiwkx@gmail.com>
 ;; Keywords: extensions, tools
-;; Package-Version: 20190908.831
+;; Package-Version: 20190910.221
 ;; URL: https://github.com/kaiwk/leetcode.el
 ;; Package-Requires: ((emacs "26") (dash "2.16.0") (graphql "0.1.1") (spinner "1.7.3") (aio "1.0"))
-;; Version: 0.1.5
+;; Version: 0.1.6
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ The elements of :problems has attributes:
 (defconst leetcode--api-try                 (concat leetcode--base-url "/problems/%s/interpret_solution/"))
 
 
-(defsubst leetcode--referer (value)
+(defun leetcode--referer (value)
   "It will return an alist as the HTTP Referer Header.
 VALUE should be the referer."
   (cons "Referer" value))
@@ -166,7 +166,7 @@ VALUE should be the referer."
                   secret))
               (plist-get found :save-function)))))
 
-(defsubst leetcode--multipart-form-data (name value)
+(defun leetcode--multipart-form-data (name value)
   `("file"
     ("name"         . ,name)
     ("filedata"     . ,value)

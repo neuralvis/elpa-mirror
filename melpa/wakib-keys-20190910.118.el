@@ -2,7 +2,7 @@
 
 ;; Author: Abdulla Bubshait
 ;; URL: https://github.com/darkstego/wakib-keys/
-;; Package-Version: 20190828.916
+;; Package-Version: 20190910.118
 ;; Created: 6 April 2018
 ;; Keywords: convenience, keybindings, keys
 ;; License: GPL v3
@@ -387,8 +387,8 @@ Then add C-d and C-e to KEYMAP"
     ("M-o" . forward-word)
     ("M-;" . wakib-next)
     ("M-:" . wakib-previous)
-    ("M-U" . beginning-of-line)
-    ("M-O" . end-of-line)
+    ("M-U" . move-beginning-of-line)
+    ("M-O" . move-end-of-line)
     ("M-J" . backward-paragraph)
     ("M-L" . forward-paragraph)
     ("M-," . backward-sexp)
