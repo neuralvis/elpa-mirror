@@ -17,12 +17,13 @@ Dependencies
 user must have `org-mode' 9.2 or later installed also.
 
 Commands
-howdoyou-query:                 prompt for query and do search
-howdoyou-next-query:            go to next link
-howdoyou-previous-query:        go to previous link
-howdoyou-go-back-to-first-link: go back to first link
-howdoyou-reload-link:           reload link
+howdoyou-query:                   prompt for query and do search
+howdoyou-next-link:               go to next link
+howdoyou-previous-link:           go to previous link
+howdoyou-go-back-to-first-link:   go back to first link
+howdoyou-reload-link:             reload link
 
 Customization
-howdoyou-use-curl:              default is true if curl is available
-howdoyou-number-of-answers:     maximal number of answers to show, default is 3
+howdoyou-use-curl:                default is true if curl is available
+howdoyou-number-of-answers:       maximal number of answers to show, default is 3
+howdoyou-switch-to-answer-buffer: switch to answer buffer if non nil, default is nil

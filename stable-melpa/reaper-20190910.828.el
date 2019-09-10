@@ -5,7 +5,7 @@
 ;; Author: Thomas Fini Hansen <xen@xen.dk>
 ;; Created: August 11, 2019
 ;; Version: 1.0.0
-;; Package-Version: 20190909.1957
+;; Package-Version: 20190910.828
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: tools
 ;; Url: https://github.com/xendk/reaper
@@ -116,7 +116,6 @@
         tabulated-list-entries #'reaper--list-entries
         tabulated-list-padding 3)
   (reaper-refresh-buffer)
-  (tabulated-list-init-header)
   ;; Start a timer to update the running timer.
   (setq reaper-update-timer (run-at-time t 60 #'reaper--update-timer))
   (add-hook 'kill-buffer-hook #'reaper-kill-buffer-hook))
@@ -235,6 +234,7 @@ Will create it if it doesn't exist yet."
   (interactive)
   (unless (bound-and-true-p reaper-timeentries)
     (reaper-refresh-entries))
+  (tabulated-list-init-header)
   (tabulated-list-print t)
   (reaper--highlight-running))
 
