@@ -142,3 +142,7 @@ Additional bindings in `log-view-mode':
  - `c 1' view diff between revision at point and its first parent
  - `c 2' view diff between revision at point and its second parent
 `C c', `C 1' and `C 2' shows corresponding diffs for whole changeset.
+
+- View log for revset
+Command `vc-hgcmd-print-log-revset' allows to print log for
+revset, e.g. "branch(branch1) or branch(branch2)"

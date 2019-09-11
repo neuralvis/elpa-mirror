@@ -4,7 +4,7 @@
 
 ;; Author: Thanh Vuong <thanhvg@gmail.com>
 ;; URL: https://github.com/thanhvg/howdoyou/
-;; Package-Version: 20190910.806
+;; Package-Version: 20190910.2044
 ;; Package-Requires: ((emacs "25.1") (promise "1.1") (request "0.3.0") (org "9.2"))
 ;; Version: 0.1
 
@@ -100,6 +100,7 @@
 (defvar howdoyou--current-user-agent 0
   "Index to be rotated.")
 
+;; idea from https://github.com/gleitz/howdoi
 (defvar howdoyou--user-agents
   '("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0"
     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100 101 Firefox/22.0"
