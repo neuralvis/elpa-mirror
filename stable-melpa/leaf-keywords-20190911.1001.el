@@ -5,8 +5,8 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; Keywords: lisp settings
-;; Package-Version: 20190910.1652
-;; Version: 1.2.5
+;; Package-Version: 20190911.1001
+;; Version: 1.2.6
 ;; URL: https://github.com/conao3/leaf-keywords.el
 ;; Package-Requires: ((emacs "24.4") (leaf "3.1.0"))
 
@@ -564,8 +564,7 @@ NOTE: BIND can also accept list of these."
 
   ;; require all dependent packages
   (dolist (pkg leaf-keywords-packages-list)
-    (when (featurep pkg)
-      (require pkg))))
+    (require pkg nil 'no-error)))
 
 (provide 'leaf-keywords)
 ;;; leaf-keywords.el ends here
