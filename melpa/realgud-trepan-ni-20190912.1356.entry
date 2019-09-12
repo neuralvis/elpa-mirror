@@ -1,2 +1,0 @@
-
-(realgud-trepan-ni . [(20190912 1356) ((load-relative (1 2)) (realgud (1 5 0)) (emacs (25))) "Realgud front-end to trepan-ni" tar ((:commit . "db6bab02bb3f3ba16559fd542c2cae2064deb4e9") (:authors ("Rocky Bernstein" . "rocky@gnu.org")) (:maintainer "Rocky Bernstein" . "rocky@gnu.org") (:url . "http://github.com/realgud/realgud-trepan-ni"))])

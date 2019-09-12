@@ -1,0 +1,2 @@
+
+(rbtagger . [(20190912 1516) ((emacs (25))) "Ruby tagging tools" tar ((:commit . "2eaf463ea2d62776573f5a7327f1e2081336cd94") (:keywords "languages" "tools") (:authors ("Thiago Araújo" . "thiagoaraujos@gmail.com")) (:maintainer "Thiago Araújo" . "thiagoaraujos@gmail.com") (:url . "https://www.github.com/thiagoa/rbtagger"))])
