@@ -1,2 +1,0 @@
-
-(reaper . [(20190910 828) ((emacs (24 3))) "Interact with Harvest time tracking app" single ((:commit . "eeeb7bb986604fc6a9add1349010ff7e911127da") (:keywords "tools") (:authors ("Thomas Fini Hansen" . "xen@xen.dk")) (:maintainer "Thomas Fini Hansen" . "xen@xen.dk") (:url . "https://github.com/xendk/reaper"))])
