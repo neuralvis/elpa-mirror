@@ -4,7 +4,6 @@
 
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: processes
-;; Package-Version: 20140410.2022
 ;; Version: 0.0.1
 ;; Url: https://github.com/nicferrier/emacs-lxc
 
