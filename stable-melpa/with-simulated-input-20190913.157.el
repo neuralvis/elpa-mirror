@@ -6,7 +6,7 @@
 ;; Author: Ryan C. Thompson
 ;; Created: Thu Jul 20 11:56:23 2017 (-0700)
 ;; Version: 2.3
-;; Package-Version: 20170821.617
+;; Package-Version: 20190913.157
 ;; Package-Requires: ((emacs "24.4") (seq "2.0") (s "0"))
 ;; URL:
 ;; Keywords: lisp, tools, extensions
@@ -70,7 +70,7 @@ this checks ALL keymaps, not just currently active ones."
                (keys "abcdefghijklmnopqrstuvwxyz0123456789"))
   "Return a key binding that is not bound in any known keymap.
 
-This function will try check every letter from a to z and every
+This function will check every letter from a to z and every
 number from 0 through 9 with several combinations of multiple
 modifiers (i.e. control, meta, alt, super, hyper). For each such
 key combination, it will check for bindings in all known keymaps,
@@ -122,6 +122,9 @@ environment."
       `(closure ,env () ,expr)
     `(lambda () ,expr)))
 
+(defconst wsi--canary-sym (cl-gensym "wsi-canary-")
+  "A unique symbol.")
+
 ;;;###autoload
 (defmacro with-simulated-input (keys &rest body)
   "Eval BODY forms with KEYS as simulated input.
@@ -160,22 +163,47 @@ in `progn'."
   (declare (indent 1))
   `(cl-letf*
        ((lexenv (wsi-current-lexical-environment))
+        (correct-current-buffer (current-buffer))
         (next-action-key (wsi-get-unbound-key))
-        (canary-sym ',(cl-gensym "wsi-canary-"))
-        (result canary-sym)
+        (result wsi--canary-sym)
         (thrown-error nil)
         (body-form
          '(throw 'wsi-body-finished (progn ,@body)))
         (end-of-actions-form
          (list 'throw
                '(quote wsi-body-finished)
-               (list 'quote canary-sym)))
+               (list 'quote wsi--canary-sym)))
         ;; Ensure KEYS is a list, and put the body form as the first
         ;; item and `C-g' as the last item
         (keylist ,keys)
         (keylist (if (listp keylist)
                      keylist
                    (list keylist)))
+        ;; Build the full action list, which includes everything in
+        ;; KEYS, as well as some additional setup beforehand and
+        ;; cleanup afterward.
+        (action-list
+         (nconc
+          (list
+           ;; First we switch back to the correct buffer (since
+           ;; `execute-kbd-macro' switches to the wrong one).
+           (list 'switch-to-buffer correct-current-buffer)
+           ;; Then we run the body form
+           body-form)
+          ;; Then we run each of the actions specified in KEYS
+          (cl-loop
+           for action in keylist
+           if (not (stringp action))
+           collect action)
+          ;; Finally we throw the canary if we read past the end of
+          ;; the input.
+          (list end-of-actions-form)))
+        ;; Wrap each action in a lexical closure so it can refer to
+        ;; variables from the caller.
+        (action-closures
+         (cl-loop
+          for action in action-list
+          collect (wsi-make-closure action lexenv)))
         ;; Replace non-strings with `next-action-key' and concat
         ;; everything together
         (full-key-sequence
@@ -186,27 +214,17 @@ in `progn'."
           else
           collect next-action-key into key-sequence-list
           finally return
-          ;; Prepend and append `next-action-key' to run body and canary
+          ;; Prepend and append `next-action-key' as appropriate to
+          ;; switch buffer, run body, and throw canary.
           (concat
+           ;; Switch to correct buffer
            next-action-key " "
+           ;; Start executing body
+           next-action-key " "
+           ;; Execute the actual key sequence
            (mapconcat #'identity key-sequence-list " ")
+           ;; Throw the canary if BODY reads past the provided input
            " " next-action-key)))
-        ;; Extract non-string forms, adding body at the front and
-        ;; canary at the back
-        (action-list
-         (nconc
-          (list body-form)
-          (cl-loop
-           for action in keylist
-           if (not (stringp action))
-           collect action)
-          (list end-of-actions-form)))
-        ;; Wrap each action in a lexical closure so it can refer to
-        ;; variables from the caller.
-        (action-closures
-         (cl-loop
-          for action in action-list
-          collect (wsi-make-closure action lexenv)))
         ;; Define the next action command with lexical scope so it can
         ;; access `action-closures'.
         ((symbol-function 'wsi-run-next-action)
@@ -234,7 +252,7 @@ in `progn'."
         (throw 'wsi-threw-error nil)))
      (when thrown-error
        (signal (car thrown-error) (cdr thrown-error)))
-     (if (eq result canary-sym)
+     (if (eq result wsi--canary-sym)
          (error "Reached end of simulated input while evaluating body")
        result)))
 
