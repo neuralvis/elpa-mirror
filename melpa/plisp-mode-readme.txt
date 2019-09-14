@@ -98,6 +98,9 @@ in `plisp-mode' and `plisp-repl-mode':
 * `C-c M-r' : Send the region to the inferior PicoLisp process and
   switch to its buffer (`inferior-plisp-send-region-and-go').
 
+* `C-c C-l' : Load a PicoLisp file into the inferior PicoLisp
+  process (`inferior-plisp-load-file')."
+
 * `C-c C-x' : Switch to the inferior PicoLisp buffer
   (`inferior-plisp-switch-to-picolisp').
 
