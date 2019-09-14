@@ -4,7 +4,6 @@
 
 ;; Author: Phil Hagelberg
 ;; URL: https://gitlab.com/technomancy/fennel-mode
-;; Package-Version: 20190807.17
 ;; Version: 0.1.0
 ;; Created: 2018-02-18
 ;;

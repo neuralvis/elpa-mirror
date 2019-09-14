@@ -2,7 +2,7 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20190914.1406
+;; Package-Version: 20190914.1643
 ;; Version: 1.15.1
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -69,6 +69,24 @@
 
 (when (version< org-version "9.2")
   (defalias 'org-set-tags-to 'org-set-tags))
+
+(unless (fboundp 'org--tag-add-to-alist)
+  ;; This function can be removed once emacs-26 es required or de-facto standard.
+  (defun org-tag-add-to-alist (alist1 alist2)
+    "Append ALIST1 elements to ALIST2 if they are not there yet.
+
+From branch \"emacs-26\", added for compatibility.
+"
+    (cond
+      ((null alist2) alist1)
+      ((null alist1) alist2)
+      (t (let ((alist2-cars (mapcar (lambda (x) (car-safe x)) alist2))
+               to-add)
+           (dolist (i alist1)
+             (unless (member (car-safe i) alist2-cars)
+               (push i to-add)))
+           (append to-add alist2)))))
+  (defalias 'org--tag-add-to-alist 'org-tag-add-to-alist))
 
 (defvar org-journal-file-pattern
   (expand-file-name "~/Documents/journal/\\(?1:[0-9]\\{4\\}\\)\\(?2:[0-9][0-9]\\)\\(?3:[0-9][0-9]\\)\\'")
@@ -1027,6 +1045,7 @@ If a prefix argument is given, search all dates."
 
 (defvar org-journal-search-history nil)
 
+;;;###autoload
 (defun org-journal-search-calendar-week (str)
   "Search for a string within a current calendar-mode week entries."
   (interactive
@@ -1034,6 +1053,7 @@ If a prefix argument is given, search all dates."
     (read-string "Enter a string to search for: " nil 'org-journal-search-history)))
   (org-journal-search str 'week))
 
+;;;###autoload
 (defun org-journal-search-calendar-month (str)
   "Search for a string within a current calendar-mode month entries."
   (interactive
@@ -1041,6 +1061,7 @@ If a prefix argument is given, search all dates."
     (read-string "Enter a string to search for: " nil 'org-journal-search-history)))
   (org-journal-search str 'month))
 
+;;;###autoload
 (defun org-journal-search-calendar-year (str)
   "Search for a string within a current calendar-mode year entries."
   (interactive
@@ -1048,6 +1069,7 @@ If a prefix argument is given, search all dates."
     (read-string "Enter a string to search for: " nil 'org-journal-search-history)))
   (org-journal-search str 'year))
 
+;;;###autoload
 (defun org-journal-search-forever (str)
   "Search for a string within all entries."
   (interactive
@@ -1055,6 +1077,7 @@ If a prefix argument is given, search all dates."
     (read-string "Enter a string to search for: " nil 'org-journal-search-history)))
   (org-journal-search str 'forever))
 
+;;;###autoload
 (defun org-journal-search-future (str)
   "Search for a string within all future entries."
   (interactive

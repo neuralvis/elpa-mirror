@@ -1,10 +1,10 @@
-;;; asx.el --- Ask Stack Exchange -*- lexical-binding: t; -*-
+;;; asx.el --- Ask StackExchange/StackOverflow -*- lexical-binding: t; -*-
 
 ;; Author: Alex Ragone <ragonedk@gmail.com>
 ;; Created: 24 August 2019
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
-;; Package-Version: 20190912.657
+;; Package-Version: 20190914.1737
 ;; Version: 0.1.1
 ;; Package-Requires: ((request "0.3.0") (org "9.2.5") (seq "2") (emacs "25"))
 
@@ -88,6 +88,11 @@ Otherwise show the first post."
   :type '(alist :key-type symbol :value-type plist)
   :group 'asx)
 
+(defcustom asx-skip-unanswered t
+  "If non-nil, skip posts which have no answers."
+  :type 'boolean
+  :group 'asx)
+
 (defcustom asx-buffer-name "*AskStackExchange*"
   "Name of buffer to insert post."
   :type 'string
@@ -118,7 +123,8 @@ Otherwise show the first post."
 
 ;;;###autoload
 (defun asx (query)
-  "Search for QUERY."
+  "Search for QUERY.
+If a prefix argument is provided, the initial input will be the symbol at point."
   (interactive (list (read-string
                       "Query: "
                       (and current-prefix-arg (asx--symbol-or-region))
@@ -175,11 +181,11 @@ Optionally specify ERROR-CALLBACK."
   (message "Loading: %s" (car post))
   (asx--request (cdr post)
                 #'asx--insert-post-dom
-                #'asx--handle-error))
+                #'asx--remove-and-next))
 
-(defun asx--handle-error (url)
-  "Handle request error for the URL.
-Delete the post from `asx--posts' and try to insert the next post instead."
+(defun asx--remove-and-next (url)
+  "Delete the URL from `asx--posts'.
+Try to insert the next post instead."
   (setq asx--posts (seq-remove
                     (lambda (post)
                       (string= (cdr post) url))
@@ -258,7 +264,11 @@ Delete the post from `asx--posts' and try to insert the next post instead."
 
 (defun asx--insert-post-dom (dom)
   "Insert post DOM."
-  (asx--insert-post (asx--normalize-post dom)))
+  (let ((post (asx--normalize-post dom)))
+    (if (and asx-skip-unanswered
+             (not (plist-get post :answers)))
+        (asx--remove-and-next (plist-get post :url))
+      (asx--insert-post post))))
 
 (defun asx--query-construct (query)
   "Return URI for QUERY."
