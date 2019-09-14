@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/relative-buffers
-;; Package-Version: 20160221.1923
+;; Package-Version: 20190914.1042
 ;; Version: 0.0.1
 ;; Package-Requires: ((cl-lib "0.5") (dash "2.6.0") (s "1.9.0") (f "0.16.2"))
 
@@ -46,6 +46,11 @@
   "List of files marked its directory as project root."
   :group 'relative-buffers
   :type '(repeat string))
+
+(defcustom relative-buffers-project-prefix nil
+  "Display project prefix in front of buffer name."
+  :group 'relative-buffers
+  :type 'boolean)
 
 ;;;###autoload
 (define-minor-mode relative-buffers-mode
@@ -92,18 +97,20 @@ FILE must be absolute python module file name."
 (defun relative-buffers-directory (directory)
   "Directory relative to project root.
 DIRECTORY must be specified as absolute path."
-  (let ((root (relative-buffers-project-root directory))
-        (directory-path (f-full directory)))
+  (let* ((root (relative-buffers-project-root directory))
+         (directory-path (f-full directory))
+         (prefix (when relative-buffers-project-prefix (concat (file-name-nondirectory (directory-file-name (relative-buffers-project-root directory-path))) "/"))))
     (when (and root (f-ancestor-of? root directory-path))
-      (s-chop-prefix root directory-path))))
+      (concat prefix (s-chop-prefix root directory-path)))))
 
 (defun relative-buffers-file-name (file)
   "File name relative to project root.
 FILE must be specified as absolute path."
   (when file
-    (let ((file-path (f-full file)))
+    (let* ((file-path (f-full file))
+           (prefix (when relative-buffers-project-prefix (concat (file-name-nondirectory (directory-file-name (relative-buffers-project-root file-path))) "/"))))
       (--when-let (relative-buffers-project-root file-path)
-        (s-chop-prefix it file-path)))))
+        (concat prefix (s-chop-prefix it file-path))))))
 
 (defun relative-buffers-project-root (path)
   "Return project root for PATH in different VCS."

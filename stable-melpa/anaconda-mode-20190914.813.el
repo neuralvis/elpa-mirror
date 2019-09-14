@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20190911.709
+;; Package-Version: 20190914.813
 ;; Version: 0.1.13
 ;; Package-Requires: ((emacs "25") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
@@ -657,8 +657,11 @@ Show ERROR-MESSAGE if result is empty."
           (if (not (cdr xrefs))
               (progn
                 (xref-push-marker-stack)
-                (xref--pop-to-location (cl-first xrefs)
-                                       (assoc-default 'display-action display-action)))
+                (funcall (if (fboundp 'xref-pop-to-location)
+                             'xref-pop-to-location
+                           'xref--pop-to-location)
+                         (cl-first xrefs)
+                         (assoc-default 'display-action display-action)))
             (xref--show-xrefs (if (functionp 'xref--create-fetcher)
                                   (-const xrefs)
                                 xrefs)
