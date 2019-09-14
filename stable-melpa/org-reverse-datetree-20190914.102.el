@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.3
-;; Package-Version: 20190806.1412
+;; Package-Version: 20190914.102
 ;; Package-Requires: ((emacs "26.1") (dash "2.12"))
 ;; Keywords: outlines
 ;; URL: https://github.com/akirak/org-reverse-datetree
@@ -362,7 +362,7 @@ into the header, and returns the value."
       ("t" 'week)
       ("nil" 'month)
       ('nil (let* ((char (read-char-choice "Choose a datetree type ([y/w] week, [n/m] month, [b] week and month): "
-                                           (string-to-list "ynb")))
+                                           (string-to-list "ywnmb")))
                    (value (cl-case char
                             ((?y ?w) 'week)
                             ((?n ?m) 'month)
