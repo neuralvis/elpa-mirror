@@ -1,0 +1,2 @@
+
+(jiralib2 . [(20190915 1652) ((emacs (25)) (request (0 3))) "JIRA REST API bindings to Elisp" single ((:commit . "f8e2200003934b9cf081d8a2631a2a14e9e52c39") (:keywords "comm" "jira" "rest" "api") (:authors ("Henrik Nyman" . "h@nyymanni.com")) (:maintainer "Henrik Nyman" . "h@nyymanni.com") (:url . "https://github.com/nyyManni/jiralib2"))])
