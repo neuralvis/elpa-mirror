@@ -7,8 +7,8 @@
 ;; Website: https://activitywatch.net
 ;; Homepage: https://github.com/pauldub/activity-watch-mode
 ;; Keywords: calendar, comm
-;; Package-Version: 20190423.1529
-;; Package-Requires: ((emacs "24") (projectile "0") (request "0") (json "0") (cl "0"))
+;; Package-Version: 20190916.1212
+;; Package-Requires: ((emacs "25") (projectile "0") (request "0") (json "0") (cl-lib "0"))
 ;; Version: 1.0.2
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -35,14 +35,14 @@
 ;; Requires request.el (https://tkf.github.io/emacs-request/)
 ;;
 
-;;; Dependencies: request, projectile, json, cl
+;;; Dependencies: request, projectile, json, cl-lib
 
 ;;; Code:
 
 (require 'ert)
 (require 'request)
 (require 'json)
-(require 'cl)
+(require 'cl-lib)
 
 (defconst activity-watch-version "1.0.0")
 (defconst activity-watch-user-agent "emacs-activity-watch")
