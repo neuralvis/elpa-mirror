@@ -4,9 +4,9 @@
 ;; Created: 24 August 2019
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
-;; Package-Version: 20190914.1737
+;; Package-Version: 20190916.1038
 ;; Version: 0.1.1
-;; Package-Requires: ((request "0.3.0") (org "9.2.5") (seq "2") (emacs "25"))
+;; Package-Requires: ((request "0.3.0") (org "9.2.5") (emacs "26"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -374,7 +374,7 @@ Try to insert the next post instead."
       (cond
        ((and (equal (car node) 'a)
              (not (dom-by-tag node 'img)))
-        (org-link-make-string (dom-attr node 'href) (dom-texts node)))
+        (org-make-link-string (dom-attr node 'href) (dom-texts node)))
        ((equal (car node) 'pre)
         (dom-node 'pre
                   '()
