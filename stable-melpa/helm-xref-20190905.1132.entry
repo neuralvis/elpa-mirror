@@ -1,2 +1,0 @@
-
-(helm-xref . [(20190905 1132) ((emacs (25 1)) (helm (1 9 4))) "Helm interface for xref results" single ((:commit . "d7d14dc01c52711ffa56f07ca8f113442eefa389") (:authors ("Fritz Stelzer" . "brotzeitmacher@gmail.com")) (:maintainer "Fritz Stelzer" . "brotzeitmacher@gmail.com") (:url . "https://github.com/brotzeit/helm-xref"))])
