@@ -1,7 +1,7 @@
 ;;; extempore-mode.el --- Emacs major mode for Extempore source files
 ;; Author: Ben Swift <ben@benswift.me>
 ;; Keywords: Extempore
-;; Package-Version: 20180105.621
+;; Package-Version: 20190917.1031
 ;; Version: 1.0
 ;; Keywords: lisp, extempore
 ;; URL: http://github.com/extemporelang/extempore-emacs-mode
@@ -395,7 +395,7 @@ To restore the old C-x prefixed versions, add something like this to your .emacs
          (0 font-lock-constant-face))
        ;; definitions
        (list (concat
-              "(\\(define\\|macro\\|define-macro\\|define-syntax\\|bind-instrument\\|bind-sampler\\)\\_>\\s-*(?\\(\\sw+\\)?")
+              "(\\(define\\|macro\\|define-macro\\|define-syntax\\|make-instrument\\)\\_>\\s-*(?\\(\\sw+\\)?")
              '(1 font-lock-keyword-face)
              '(2 font-lock-function-name-face))
        ;; scheme functions
