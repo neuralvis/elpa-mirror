@@ -1,10 +1,10 @@
 ;;; popup-switcher.el --- switch to other buffers and files via popup. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2013-2016  Kostafey <kostafey@gmail.com>
+;; Copyright (C) 2013-2019  Kostafey <kostafey@gmail.com>
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/kostafey/popup-switcher
-;; Package-Version: 20171205.851
+;; Package-Version: 20190917.1634
 ;; Keywords: popup, switch, buffers, functions
 ;; Version: 0.2.14
 ;; Package-Requires: ((cl-lib "0.3")(popup "0.5.3"))
@@ -315,12 +315,31 @@ SWITCHER - function, that describes what do with the selected item."
 (defun psw-switch-projectile-files ()
   (interactive)
   (psw-switcher
-   :items-list (projectile-current-project-files)
+   :items-list (let ((current-projectile-mode projectile-mode)
+                     (files (projectile-current-project-files)))
+                 (setq projectile-mode current-projectile-mode)
+                 files)
    :item-name-getter 'identity
    :switcher (lambda (file)
                (find-file
                 (expand-file-name file
                                   (projectile-project-root))))))
+
+;;;###autoload
+(defun psw-switch-projectile-projects ()
+  (interactive)
+  (psw-switcher
+   :items-list projectile-known-projects
+   :item-name-getter 'projectile-project-name
+   :switcher (lambda (p-root)
+               (psw-switcher
+                :items-list (projectile-project-files
+                             (expand-file-name p-root))
+                :item-name-getter 'identity
+                :switcher (lambda (file)
+                            (find-file
+                             (expand-file-name file
+                                               p-root)))))))
 
 ;;;###autoload
 (defun psw-navigate-files (&optional start-path)

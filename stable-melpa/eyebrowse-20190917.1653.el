@@ -4,7 +4,7 @@
 
 ;; Author: Vasilij Schneidermann <v.schneidermann@gmail.com>
 ;; URL: https://github.com/wasamasa/eyebrowse
-;; Package-Version: 20190827.1828
+;; Package-Version: 20190917.1653
 ;; Version: 0.7.8
 ;; Package-Requires: ((dash "2.7.0") (emacs "24.3.1"))
 ;; Keywords: convenience
@@ -150,6 +150,11 @@ t: Clean up and display the scratch buffer."
 
 (defcustom eyebrowse-pre-window-delete-hook nil
   "Hook run before deleting a window config."
+  :type 'hook
+  :group 'eyebrowse)
+
+(defcustom eyebrowse-post-window-delete-hook nil
+  "Hook run after deleting a window config."
   :type 'hook
   :group 'eyebrowse)
 
@@ -456,7 +461,8 @@ another appropriate window config."
           (eyebrowse-prev-window-config nil)
         (eyebrowse-next-window-config nil))
       (run-hooks 'eyebrowse-pre-window-delete-hook)
-      (eyebrowse--delete-window-config (eyebrowse--get 'last-slot)))))
+      (eyebrowse--delete-window-config (eyebrowse--get 'last-slot))
+      (run-hooks 'eyebrowse-post-window-delete-hook))))
 
 (defun eyebrowse-rename-window-config (slot tag)
   "Rename the window config at SLOT to TAG.

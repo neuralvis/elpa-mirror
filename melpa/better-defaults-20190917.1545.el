@@ -1,11 +1,11 @@
 ;;; better-defaults.el --- Fixing weird quirks and poor defaults
 
-;; Copyright © 2013-2016 Phil Hagelberg and contributors
+;; Copyright © 2013-2019 Phil Hagelberg and contributors
 
 ;; Author: Phil Hagelberg
 ;; URL: https://github.com/technomancy/better-defaults
-;; Package-Version: 20190224.1816
-;; Version: 0.1.3
+;; Package-Version: 20190917.1545
+;; Version: 0.1.4
 ;; Created: 2013-04-16
 ;; Keywords: convenience
 
@@ -43,7 +43,7 @@
 ;;; Code:
 
 (progn
-  (unless (fboundp 'helm-mode)
+  (unless (or (fboundp 'helm-mode) (fboundp 'ivy-mode))
     (ido-mode t)
     (setq ido-enable-flex-matching t))
 
