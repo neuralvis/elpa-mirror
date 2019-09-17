@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net
 ;; URL: http://github.com/alphapapa/ts.el
-;; Package-Version: 20190819.102
+;; Package-Version: 20190917.217
 ;; Version: 0.2-pre
 ;; Package-Requires: ((emacs "26.1") (dash "2.14.1") (s "1.12.0"))
 ;; Keywords: date time timestamp
@@ -420,7 +420,8 @@ to `make-ts'."
        "Return TS having filled all slots from its Unix timestamp.
 This is non-destructive."
        ;; MAYBE: Use `decode-time' instead of `format-time-string'?  It provides most of the values we need.  Should benchmark.
-       (let ((time-values (split-string (format-time-string ,format-string (ts-unix ts)) "\f")))
+       (let ((time-values (save-match-data
+                            (split-string (format-time-string ,format-string (ts-unix ts)) "\f"))))
          (make-ts :unix (ts-unix ts) ,@value-conversions)))))
 (ts-define-fill)
 

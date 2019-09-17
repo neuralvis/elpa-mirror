@@ -4,7 +4,7 @@
 
 ;; Author: Adam Schwalm <adamschwalm@gmail.com>
 ;; Version: 0.1.0
-;; Package-Version: 20190605.443
+;; Package-Version: 20190917.124
 ;; URL: https://github.com/ALSchwalm/janet-mode
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -407,6 +407,9 @@ STATE is the `parse-partial-sexp' state for that position."
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.janet\\'" . janet-mode))
+
+;;;###autoload
+(add-to-list 'interpreter-mode-alist '("janet" . janet-mode))
 
 (provide 'janet-mode)
 ;;; janet-mode.el ends here
