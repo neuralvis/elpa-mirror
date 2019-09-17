@@ -5,7 +5,7 @@
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; Homepage: https://github.com/proofit404/blacken
 ;; Version: 0.0.1
-;; Package-Version: 20190521.841
+;; Package-Version: 20190917.535
 ;; Package-Requires: ((emacs "25.2"))
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -75,6 +75,11 @@ If `fill', the `fill-column' variable value is used."
   :type 'boolean
   :safe 'booleanp)
 
+(defcustom blacken-only-if-project-is-blackened nil
+  "Only blacken if project has a pyproject.toml with a [tool.black] section."
+  :type 'boolean
+  :safe 'booleanp)
+
 (defun blacken-call-bin (input-buffer output-buffer error-buffer)
   "Call process black.
 
@@ -114,8 +119,15 @@ Return black process the exit code."
    (when blacken-skip-string-normalization
      (list "--skip-string-normalization"))
    (when (string-match "\.pyi$" (buffer-file-name (current-buffer)))
-     (list "--pyi"))   
+     (list "--pyi"))
    '("-")))
+
+(defun blacken-project-is-blackened (&optional display)
+  "Whether the project has a pyproject.toml with [tool.black] in it."
+  (when-let ((parent (locate-dominating-file default-directory "pyproject.toml")))
+    (with-temp-buffer
+      (insert-file-contents (concat parent "pyproject.toml"))
+      (re-search-forward "^\\[tool.black\\]$" nil t 1))))
 
 ;;;###autoload
 (defun blacken-buffer (&optional display)
@@ -151,7 +163,9 @@ Show black output, if black exit abnormally and DISPLAY is t."
   "Automatically run black before saving."
   :lighter " Black"
   (if blacken-mode
-      (add-hook 'before-save-hook 'blacken-buffer nil t)
+      (when (or (not blacken-only-if-project-is-blackened)
+                (blacken-project-is-blackened))
+        (add-hook 'before-save-hook 'blacken-buffer nil t))
     (remove-hook 'before-save-hook 'blacken-buffer t)))
 
 (provide 'blacken)

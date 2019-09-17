@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20190914.813
+;; Package-Version: 20190917.321
 ;; Version: 0.1.13
 ;; Package-Requires: ((emacs "25") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
@@ -36,6 +36,7 @@
 (require 'url)
 (require 's)
 (require 'f)
+(require 'posframe)
 
 (defgroup anaconda-mode nil
   "Code navigation, documentation lookup and completion for Python."
@@ -61,6 +62,21 @@
   "Address used by `anaconda-mode' to resolve localhost."
   :group 'anaconda-mode
   :type 'string)
+
+(defcustom anaconda-mode-doc-frame-background (face-attribute 'default :background)
+  "Doc frame background color, default color is current theme's background."
+  :group 'anaconda-mode
+  :type 'string)
+
+(defcustom anaconda-mode-doc-frame-foreground (face-attribute 'default :foreground)
+  "Doc frame foreground color, default color is current theme's foreground."
+  :group 'anaconda-mode
+  :type 'string)
+
+(defcustom anaconda-mode-use-posframe-show-doc nil
+  "If the value is not nil, use posframe to show eldoc."
+  :group 'anaconda-mode
+  :type 'boolean)
 
 
 ;;; Server.
@@ -264,6 +280,15 @@ service_factory.service_factory(app, server_address, 0, 'anaconda_mode port {por
 
 (defvar anaconda-mode-ssh-process nil
   "Currently running `anaconda-mode' ssh port forward companion process.")
+
+(defvar anaconda-mode-doc-frame-name "*Anaconda Posframe*"
+  "The posframe to show anaconda documentation.")
+
+(defvar anaconda-mode-frame-last-point 0
+  "The last point of anaconda doc view frame, use for hide frame after move point.")
+
+(defvar anaconda-mode-frame-last-scroll-offset 0
+  "The last scroll offset when show doc view frame, use for hide frame after window scroll.")
 
 (defun anaconda-mode-server-directory ()
   "Anaconda mode installation directory."
@@ -542,8 +567,9 @@ number position, column number position and file path."
 (defun anaconda-mode-show-doc-callback (result)
   "Process view doc RESULT."
   (if (> (length result) 0)
-      (pop-to-buffer
-       (anaconda-mode-documentation-view result))
+      (if anaconda-mode-use-posframe-show-doc
+          (anaconda-mode-documentation-posframe-view result)
+        (pop-to-buffer (anaconda-mode-documentation-view result)))
     (message "No documentation available")))
 
 (defun anaconda-mode-documentation-view (result)
@@ -562,6 +588,39 @@ number position, column number position and file path."
       (view-mode 1)
       (goto-char (point-min))
       buf)))
+
+(defun anaconda-mode-documentation-posframe-view (result)
+  "Show documentation view in posframe for rpc RESULT."
+  (let ((buf (get-buffer-create anaconda-mode-doc-frame-name)))
+    (with-current-buffer buf
+      (erase-buffer)
+      (mapc
+       (lambda (it)
+         (insert (propertize (aref it 0) 'face 'bold))
+         (insert "\n")
+         (insert (s-trim-left (aref it 1)))
+         (insert "\n\n"))
+       result)
+      buf)
+    (when (posframe-workable-p)
+      (posframe-show anaconda-mode-doc-frame-name
+                     :position (point)
+                     :internal-border-width 10
+                     :background-color anaconda-mode-doc-frame-background
+                     :foreground-color anaconda-mode-doc-frame-foreground)
+      (add-hook 'post-command-hook 'anaconda-mode-hide-frame)
+      (setq anaconda-mode-frame-last-point (point))
+      (setq anaconda-mode-frame-last-scroll-offset (window-start)))
+    ))
+
+(defun anaconda-mode-hide-frame ()
+  "Hide posframe when window scroll or move point."
+  (ignore-errors
+    (when (get-buffer anaconda-mode-doc-frame-name)
+      (unless (and
+               (equal (point) anaconda-mode-frame-last-point)
+               (equal (window-start) anaconda-mode-frame-last-scroll-offset))
+        (posframe-hide anaconda-mode-doc-frame-name)))))
 
 
 ;;; Find definitions.
