@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20190917.645
+;; Package-Version: 20190917.2022
 ;; Version: 2.34.129
 
 ;; This file is not part of GNU Emacs.
@@ -168,7 +168,8 @@ with mismatched versions"
 (rtags-set-suspend-during-compilation-enabled)
 
 (defcustom rtags-references-tree-truncate t
-  "Whether RTags should truncate the output. Set to t to truncate to window-width, a number to truncate to that many columns or nil for no truncation")
+  "Whether RTags should truncate the output. Set to t to truncate to window-width, a number to truncate to that many columns or nil for no truncation"
+  :type 'sexp)
 
 (defcustom rtags-use-bookmarks t
   "Whether RTags uses bookmarks for locations."
