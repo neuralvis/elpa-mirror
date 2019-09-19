@@ -1,14 +1,14 @@
-;;; copyit.el --- Copy it, yank anything! -*- mode: lexical-binding: t -*-
+;;; copyit.el --- Copy it, yank anything! -*- lexical-binding: t -*-
 
-;; Copyright (C) 2016 USAMI Kenta
+;; Copyright (C) 2019 USAMI Kenta
 
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 6 Jun 2016
-;; Version: 0.0.1
-;; Package-Version: 20161126.1229
+;; Version: 0.1.0
+;; Package-Version: 20190919.1258
 ;; Keywords: convenience yank clipboard
 ;; Homepage: https://github.com/zonuexe/emacs-copyit
-;; Package-Requires: ((emacs "24") (cl-lib "0.5") (s "1.9.0"))
+;; Package-Requires: ((emacs "24.3") (s "1.9.0"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -49,6 +49,7 @@
 
 (defgroup copyit nil
   "Copy it!"
+  :prefix "copyit-"
   :group 'convenience)
 
 (defcustom copyit-binary-file-copy-method 'data-uri
@@ -59,10 +60,14 @@
                  (function-item)))
 
 (defcustom copyit-ssh-directory-path "~/.ssh/"
-  "Directory path string for SSH.")
+  "Directory path string for SSH."
+  :type 'directory
+  :group 'copyit)
 
 (defcustom copyit-copy-bare-string t
-  "Copy non-quoted string value if T when interactively called.")
+  "Copy non-quoted string value if T when interactively called."
+  :type 'boolean
+  :group 'copyit)
 
 (defun copyit--copy-binary-file (buffer)
   "Copy binary file content by `BUFFER'."

@@ -1,14 +1,14 @@
-;;; copyit-pandoc.el --- Copy it, yank anything! -*- mode: lexical-binding: t -*-
+;;; copyit-pandoc.el --- Copy it, yank anything! -*- lexical-binding: t -*-
 
-;; Copyright (C) 2016 USAMI Kenta
+;; Copyright (C) 2019 USAMI Kenta
 
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 6 Jun 2016
-;; Version: 0.0.1
-;; Package-Version: 20160624.2028
-;; Keywords: convinience yank clipboard
+;; Version: 0.1.0
+;; Package-Version: 20190919.1258
+;; Keywords: convenience yank clipboard
 ;; Homepage: https://github.com/zonuexe/emacs-copyit
-;; Package-Requires: ((emacs "24") (copyit "0.0.1") (pandoc "0.0.1"))
+;; Package-Requires: ((emacs "24.3") (copyit "0.1.0") (pandoc "0.0.1"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -41,23 +41,23 @@
 (defun copyit-pandoc-export-to-html (file-path)
   "Convert and Copy `FILE-PATH' file as HTML."
   (interactive "p")
-  (cond
-   ((null file-path)
-    (setq file-path (read-file-name "")))
-   ((and (equal 4 file-path) buffer-file-name)
-    (setq file-path buffer-file-name)))
-  (kill-new (pandoc-convert-file file-path nil "html")))
+  (kill-new
+   (pandoc-convert-file
+    (if (and (eq 4 file-path) buffer-file-name)
+        buffer-file-name
+      (read-file-name ""))
+    nil "html")))
 
 ;;;###autoload
 (defun copyit-pandoc-export-to-markdown (file-path)
   "Convert and Copy `FILE-PATH' file as Markdown."
   (interactive "p")
-  (cond
-   ((null file-path)
-    (setq file-path (read-file-name "")))
-   ((and (equal 4 file-path) buffer-file-name)
-    (setq file-path buffer-file-name)))
-  (kill-new (pandoc-convert-file file-path nil (pandoc-markdown-dialect))))
+  (kill-new
+   (pandoc-convert-file
+    (if (and (eq 4 file-path) buffer-file-name)
+        buffer-file-name
+      (read-file-name ""))
+    nil (pandoc-markdown-dialect))))
 
 (provide 'copyit-pandoc)
 ;;; copyit-pandoc.el ends here

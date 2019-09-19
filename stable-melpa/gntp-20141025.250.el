@@ -2,6 +2,7 @@
 
 ;; Author: Engelke Eschner <tekai@gmx.li>
 ;; Version: 0.1
+;; Package-Version: 20141025.250
 ;; Created: 2013-03-21
 
 ;; LICENSE

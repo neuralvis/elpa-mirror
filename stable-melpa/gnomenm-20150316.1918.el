@@ -4,6 +4,7 @@
 
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: processes, hardware
+;; Package-Version: 20150316.1918
 ;; URL: http://github.com/nicferrier/emacs-nm
 ;; Version: 0.0.8
 ;; Package-requires: ((s "1.9.0")(dash "2.3.0")(kv "0.0.19"))
