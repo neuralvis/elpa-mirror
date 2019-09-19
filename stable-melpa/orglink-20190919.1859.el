@@ -6,7 +6,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20130501
 ;; Package-Requires: ((emacs "24.3") (dash "2.12.1") (org "9.3"))
-;; Package-Version: 20190630.1437
+;; Package-Version: 20190919.1859
 ;; Homepage: https://github.com/tarsius/orglink
 ;; Keywords: hypertext
 
@@ -188,13 +188,13 @@ On the links the following commands are available:
       (org-remove-flyspell-overlays-in (match-beginning 0) (match-end 0))
       (remove-text-properties (match-beginning 0) (match-end 0)
                               '(invisible nil))
-      (if (match-end 3)
+      (if (match-end 2)
           (progn
-            (add-text-properties (match-beginning 0) (match-beginning 3) ip)
-            (org-rear-nonsticky-at (match-beginning 3))
-            (add-text-properties (match-beginning 3) (match-end 3) vp)
-            (org-rear-nonsticky-at (match-end 3))
-            (add-text-properties (match-end 3) (match-end 0) ip)
+            (add-text-properties (match-beginning 0) (match-beginning 2) ip)
+            (org-rear-nonsticky-at (match-beginning 2))
+            (add-text-properties (match-beginning 2) (match-end 2) vp)
+            (org-rear-nonsticky-at (match-end 2))
+            (add-text-properties (match-end 2) (match-end 0) ip)
             (org-rear-nonsticky-at (match-end 0)))
         (add-text-properties (match-beginning 0) (match-beginning 1) ip)
         (org-rear-nonsticky-at (match-beginning 1))
