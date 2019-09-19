@@ -4,7 +4,7 @@
 
 ;; Author: Bill Piel <bill@billpiel.com>
 ;; Version: 0.0.18
-;; Package-Version: 20190826.1037
+;; Package-Version: 20190919.654
 ;; URL: https://github.com/clojure-emacs/sayid
 ;; Package-Requires: ((cider "0.21.0"))
 
@@ -913,7 +913,8 @@ Place expression in kill ring."
     (define-key map (kbd "s")   'sayid-show-traced)
     (define-key map (kbd "S")   'sayid-show-traced-ns)
     (define-key map (kbd "V s") 'sayid-set-view)
-    (define-key map (kbd "h")   'sayid-show-help)))
+    (define-key map (kbd "h")   'sayid-show-help)
+    map))
 
 (defun sayid-show-help ()
   "Show sayid help buffer."

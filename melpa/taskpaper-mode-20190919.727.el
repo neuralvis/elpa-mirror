@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20190918.1146
+;; Package-Version: 20190919.727
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -2432,11 +2432,10 @@ past one. Return unchanged any year larger than 99."
         (day    (nth 3 nowdecode))
         (hour   (nth 2 nowdecode))
         (minute (nth 1 nowdecode))
-        (second (nth 0 nowdecode)) spec period inc wday1)
+        (second (nth 0 nowdecode)) inc period wday1)
     (when (string-match taskpaper-time-relative-period-regexp time-str)
-      (setq spec (match-string 1 time-str)
+      (setq inc (taskpaper-time-relative-spec-to-inc (match-string 1 time-str))
             period (match-string 2 time-str)
-            inc (taskpaper-time-relative-spec-to-inc spec)
             time-str (replace-match "" t t time-str)))
     (cond
      ((equal period "year")
@@ -2460,18 +2459,17 @@ past one. Return unchanged any year larger than 99."
     (cons (list second minute hour day month year) time-str)))
 
 (defun taskpaper-time-parse-relative-month (nowdecode time-str)
-  "Parse relative month name with optional date."
+  "Parse relative month name with optional day."
   (let ((year   (nth 5 nowdecode))
         (month  (nth 4 nowdecode))
         (day    (nth 3 nowdecode))
         (hour   (nth 2 nowdecode))
         (minute (nth 1 nowdecode))
-        (second (nth 0 nowdecode)) spec inc)
+        (second (nth 0 nowdecode)) inc)
     (when (string-match taskpaper-time-relative-month-regexp time-str)
-      (setq spec (match-string 1 time-str)
+      (setq inc (taskpaper-time-relative-spec-to-inc (match-string 1 time-str))
             month (cdr (assoc (match-string 2 time-str) parse-time-months))
             day (if (match-end 3) (string-to-number (match-string 3 time-str)) 1)
-            inc (taskpaper-time-relative-spec-to-inc spec)
             year (+ year inc)
             hour 0 minute 0 second 0
             time-str (replace-match "" t t time-str)))
@@ -2486,11 +2484,10 @@ past one. Return unchanged any year larger than 99."
         (day    (nth 3 nowdecode))
         (hour   (nth 2 nowdecode))
         (minute (nth 1 nowdecode))
-        (second (nth 0 nowdecode)) spec wday1 inc)
+        (second (nth 0 nowdecode)) inc wday1)
     (when (string-match taskpaper-time-relative-weekday-regexp time-str)
-      (setq spec (match-string 1 time-str)
+      (setq inc (taskpaper-time-relative-spec-to-inc (match-string 1 time-str))
             wday1 (cdr (assoc (match-string 2 time-str) parse-time-weekdays))
-            inc (taskpaper-time-relative-spec-to-inc spec)
             time-str (replace-match "" t t time-str)))
     (and (= wday 0) (setq wday 7)) (and (= wday1 0) (setq wday1 7))
     (setq day (+ day (- wday1 wday) (* inc 7))
