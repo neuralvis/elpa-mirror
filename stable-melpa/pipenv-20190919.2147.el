@@ -4,7 +4,7 @@
 
 ;; Author: Paul Walsh <paulywalsh@gmail.com>
 ;; URL: https://github.com/pwalsh/pipenv.el
-;; Package-Version: 20190522.803
+;; Package-Version: 20190919.2147
 ;; Version: 0.0.1-beta
 ;; Package-Requires: ((emacs "25.1")(f "0.19.0")(s "1.12.0")(pyvenv "1.20"))
 
@@ -107,7 +107,8 @@
 
 (defun pipenv--clean-response (response)
   "Clean up RESPONSE from shell command."
-  (s-chomp response))
+  (car
+   (s-lines response)))
 
 (defun pipenv--force-list (argument)
   "Force ARGUMENT to a list."
