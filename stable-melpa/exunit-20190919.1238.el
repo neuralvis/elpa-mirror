@@ -4,7 +4,7 @@
 
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
 ;; URL: http://github.com/ananthakumaran/exunit.el
-;; Package-Version: 20190919.1138
+;; Package-Version: 20190919.1238
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
 ;; Package-Requires: ((s "1.11.0") (emacs "24.3") (f "0.20.0"))
@@ -261,9 +261,12 @@ If the file does not exist, display an error message."
 
 ;;;###autoload
 (defun exunit-verify ()
-  "Run all the tests in the current buffer."
+  "Run all the tests associated with the current buffer."
   (interactive)
-  (exunit-compile (list (exunit-test-filename))))
+  (let ((filename (exunit-test-filename)))
+    (exunit-compile (list (if (exunit-test-file-p filename)
+                              filename
+                            (exunit-test-for-file filename))))))
 
 ;;;###autoload
 (defun exunit-toggle-file-and-test ()
