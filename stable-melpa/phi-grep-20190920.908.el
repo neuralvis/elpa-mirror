@@ -18,8 +18,8 @@
 
 ;; Author: zk_phi
 ;; URL: http://github.com/zk-phi/phi-grep
-;; Package-Version: 20170606.807
-;; Version: 1.2.1
+;; Package-Version: 20190920.908
+;; Version: 1.2.2
 ;; Package-Requires: ((cl-lib "0.1"))
 
 ;;; Commentary:
@@ -55,6 +55,7 @@
 ;; 1.1.1 Bug fix
 ;; 1.2.0 do not to query whether to restore changes but to save
 ;; 1.2.1 add recursive phi-grep feature
+;; 1.2.2 add option phi-grep-enable-syntactic-regex
 
 ;;; Code:
 
@@ -62,7 +63,7 @@
 (require 'dired)
 (require 'cl-lib)
 
-(defconst phi-grep-version "1.2.1")
+(defconst phi-grep-version "1.2.2")
 
 ;; + user options
 
@@ -118,6 +119,12 @@ phi-grep not to make backups."
 (defcustom phi-grep-window-height 20
   "height of phi-grep window"
   :type 'integer
+  :group 'phi-grep)
+
+(defcustom phi-grep-enable-syntactic-regex t
+  "when non-nil, phi-grep applies an appropreate major-mode for
+each target files before searching into."
+  :type 'boolean
   :group 'phi-grep)
 
 ;; + faces
@@ -319,8 +326,9 @@ CATEGORY."
                                 (pgr:search-all-regexp regexp))
                             (with-temp-buffer
                               (insert-file-contents file)
-                              (let ((buffer-file-name file))
-                                (ignore-errors (set-auto-mode)))
+                              (when phi-grep-enable-syntactic-regex
+                                (let ((buffer-file-name file))
+                                  (ignore-errors (set-auto-mode))))
                               (pgr:search-all-regexp regexp))))
            (first-item-p t)
            items)
