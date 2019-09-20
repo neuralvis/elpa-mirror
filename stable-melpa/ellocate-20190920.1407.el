@@ -2,7 +2,7 @@
 
 ;; Author: Sebastian Wålinder <s.walinder@gmail.com>
 ;; URL: https://github.com/walseb/ellocate
-;; Package-Version: 20190819.211
+;; Package-Version: 20190920.1407
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.4") (s "1.12.0") (f "0.20.0"))
 ;; Keywords: matching
@@ -106,10 +106,9 @@ Run this function if your file system has changed and you want `ellocate' to fin
     (mapc (lambda (list)
 	    (let* ((path-name (nth 0 list))
 		   (db-name (nth 1 list)))
-	      (when (and db-name (file-in-directory-p default-directory path-name)
-			 (message (concat "Deleting database: " db-name))
-			 (delete-file db-name)
-			 ))))
+	      (when (and db-name (file-in-directory-p default-directory path-name))
+		(message (concat "Deleting database: " db-name))
+		(delete-file db-name))))
 	  ellocate-scan-dirs)))
 
 (defun ellocate-cache-dir (list)

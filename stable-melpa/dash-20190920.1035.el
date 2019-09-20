@@ -4,7 +4,7 @@
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
 ;; Version: 2.16.0
-;; Package-Version: 20190919.1354
+;; Package-Version: 20190920.1035
 ;; Keywords: lists
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -2342,7 +2342,11 @@ or with `-compare-fn' if that's non-nil."
 
 (defun -inits (list)
   "Return all prefixes of LIST."
-  (nreverse (-map 'reverse (-tails (nreverse list)))))
+  (let ((res (list list)))
+    (setq list (reverse list))
+    (while list
+      (push (reverse (!cdr list)) res))
+    res))
 
 (defun -tails (list)
   "Return all suffixes of LIST"
