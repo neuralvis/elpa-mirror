@@ -4,7 +4,7 @@
 
 ;; Author: Aurélien Aptel <aaptel@suse.com>
 ;; URL: http://github.com/aaptel/smblog-mode
-;; Package-Version: 20190918.1906
+;; Package-Version: 20190920.1823
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -265,8 +265,7 @@ The buffer must be visiting an actual file."
 	  (while (and (not (eobp)) (not (looking-at (rx bol "[20"))))
 	    (forward-line))
 	  (setq txt (buffer-substring start (point)))
-	  ;;            0   1    2     3   4    5  6   7
-	  (push (vector day time level pid file nb fun txt) msgs)))
+	  (push (smblog-make-msg day time level pid file nb fun txt) msgs)))
       (apply 'vector (nreverse msgs)))))
 
 (defun smblog-hl-propertize (txt hls)
@@ -564,6 +563,10 @@ ACTION can be one of `collapse' or `expand'. Anything else will toggle the curre
 	    (txt (smblog-msg-txt m)))
 	(cond
 	 ((string-match smblog-reqs-start-rx txt)
+	  (when r
+	    ;; incomplete request
+	    (smblog-req-set-result r (smblog-req-start r) "INCOMPLETE")
+	    (push r reqs))
 	  (setq r (smblog-make-req i (match-string 1 txt) (string-to-number (match-string 2 txt)))))
 	 ((string-match smblog-reqs-end-rx txt)
 	  (when r
@@ -594,7 +597,7 @@ ACTION can be one of `collapse' or `expand'. Anything else will toggle the curre
 		  'smblog-reqs-success-face
 		'smblog-reqs-error-face)))
 
-(defun smblog-req-dump-packet (r)
+;;(defun smblog-req-dump-packet (r)
   
 
 (defun smblog-reqs-popup (&optional arg-vertical)
