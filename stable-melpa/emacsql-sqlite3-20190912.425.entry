@@ -1,0 +1,2 @@
+
+(emacsql-sqlite3 . [(20190912 425) ((emacs (26 1)) (emacsql (3 0 0))) "Yet another EmacsSQL backend for SQLite" single ((:commit . "f7f515e1b19e0d3eb1ee7a3b028a9d99e8776eb8") (:keywords "extensions") (:authors ("Zhu Zihao" . "all_but_last@163.com")) (:maintainer "Zhu Zihao" . "all_but_last@163.com") (:url . "https://github.com/cireu/emacsql-sqlite3"))])

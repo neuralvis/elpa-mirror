@@ -4,7 +4,7 @@
 
 ;; Author: Henrik Nyman <h@nyymanni.com>
 ;; URL: https://github.com/nyyManni/jiralib2
-;; Package-Version: 20190917.1733
+;; Package-Version: 20190921.1843
 ;; Keywords: comm, jira, rest, api
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "25") (request "0.3"))
@@ -58,6 +58,11 @@
   :type 'string
   :group 'jiralib2)
 
+(defcustom jiralib2-user-login-name nil
+  "Username to use to login into JIRA."
+  :group 'jiralib2
+  :type 'string)
+
 (defcustom jiralib2-auth 'cookie
   "Authentication mode for JIRA."
   :group 'jiralib2
@@ -66,12 +71,11 @@
 	  (const :tag "Token authentication" token)
 	  (const :tag "Basic authentication" basic)))
 
+(defvar jiralib2-json-array-type 'list
+  "Set the sequene type used for json parsing.")
+
 (defvar jiralib2-token nil
   "Authentication token used by token auth.")
-
-(defvar jiralib2-user-login-name nil
-  "The name of the user logged into JIRA.
-This is maintained by `jiralib2-login'.")
 
 (defvar jiralib2--session nil
   "Contains the cookie of the active JIRA session.")
@@ -90,7 +94,8 @@ This is maintained by `jiralib2-login'.")
           (cond ((member jiralib2-auth '(basic token))
                  (base64-encode-string (format "%s:%s" username password)))
                 ((eq jiralib2-auth 'cookie)
-                 (let* ((reply-data
+                 (let* ((json-array-type jiralib2-json-array-type)
+                        (reply-data
                          (request (concat jiralib2-url "/rest/auth/1/session")
                                   :type "POST"
                                   :headers `(("Content-Type" . "application/json"))
@@ -160,16 +165,17 @@ This is maintained by `jiralib2-login'.")
 (defun jiralib2--session-call (path args)
   "Do a call to PATH with ARGS using current session.
 Does not check for session validity."
-  (apply #'request (concat jiralib2-url path)
-         :headers `(("Content-Type" . "application/json")
-                    ,(cond ((eq jiralib2-auth 'cookie)
-                            `("cookie" . ,jiralib2--session))
-                           ((member jiralib2-auth '(basic token))
-                            `("Authorization" . ,(format "Basic %s"
-                                                         jiralib2--session)))))
-         :sync t
-         :parser 'json-read
-         args))
+  (let ((json-array-type jiralib2-json-array-type))
+    (apply #'request (concat jiralib2-url path)
+           :headers `(("Content-Type" . "application/json")
+                      ,(cond ((eq jiralib2-auth 'cookie)
+                              `("cookie" . ,jiralib2--session))
+                             ((member jiralib2-auth '(basic token))
+                              `("Authorization" . ,(format "Basic %s"
+                                                           jiralib2--session)))))
+           :sync t
+           :parser 'json-read
+           args)))
 
 (defun jiralib2-session-call (path &rest args)
   "Do a call to PATH with ARGS using current session.
@@ -242,7 +248,9 @@ If no session exists, or it has expired, login first."
   "Run a JQL query and return the list of issues that matched.
 LIMIT is the maximum number of queries to return. Note that JIRA has an internal
 limit of how many queries to return, as such, it might not be possible to find
-*ALL* the issues that match a query."
+*ALL* the issues that match a query.
+
+DEPRECATED, use `jiralib2-jql-search' instead."
   (unless (or limit (numberp limit))
     (setq limit 1000))
   (append
@@ -254,6 +262,27 @@ limit of how many queries to return, as such, it might not be possible to find
                                          `((jql . ,jql)
                                            (maxResults . ,limit))))))
    nil))
+
+(defun jiralib2-jql-search (jql &rest fields)
+  "Run a JQL query and return the list of issues that matched.
+FIELDS specify what fields to fecth.
+JIRA has a limit on how many issues can be retrieved at once, and if the query
+matches for more than that, all the results are fetched with multiple queries."
+  (let ((total nil)
+        (offset 0)
+        (issues nil))
+    (while (or (not total) (< (length issues) total))
+      (let ((reply (jiralib2-session-call "/rest/api/2/search"
+                                    :type "POST"
+                                    :data (json-encode
+                                           `((jql . ,jql)
+                                             (startAt . ,offset)
+                                             (maxResults . 1000)
+                                             (fields . ,fields))))))
+        (unless total (setq total (alist-get 'total reply)))
+        (setq issues (-concat issues (alist-get 'issues reply)))
+        (setq offset (length issues))))
+    issues))
 
 (defun jiralib2-get-actions (issue-key)
   "Get available actions for the issue ISSUE-KEY.
