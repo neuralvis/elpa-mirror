@@ -5,7 +5,6 @@
 ;; Author: Jonathan Arkell <jonnay@jonnay.net>
 ;; Created: 5 Oct 2012
 ;; Keywords: spelling typing
-;; Package-Version: 20160823.439
 ;; Version: 0.93
 
 ;; This file is not part of GNU Emacs.
