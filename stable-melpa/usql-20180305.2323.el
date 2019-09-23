@@ -4,6 +4,7 @@
 ;; Author: Nicholas Barnwell <nb@ul.io>
 ;; Homepage: https://github.com/nickbarwell/usql.el
 ;; Version: 0.0.3
+;; Package-Version: 20180305.2323
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: languages
 ;;; Commentary:

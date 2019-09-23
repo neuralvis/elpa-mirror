@@ -1,0 +1,2 @@
+
+(ejc-sql . [(20190923 1712) ((emacs (25 1)) (clomacs (0 0 4)) (dash (2 16 0)) (auto-complete (1 5 1)) (spinner (1 7 1)) (direx (1 0 0))) "Emacs SQL client uses Clojure JDBC." tar ((:commit . "904101cd4b179dc5ed688277ffcd51ba6bd458a7") (:keywords "sql" "jdbc") (:authors ("Kostafey" . "kostafey@gmail.com")) (:maintainer "Kostafey" . "kostafey@gmail.com") (:url . "https://github.com/kostafey/ejc-sql"))])
