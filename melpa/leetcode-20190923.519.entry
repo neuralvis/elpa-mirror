@@ -1,0 +1,2 @@
+
+(leetcode . [(20190923 519) ((emacs (26)) (dash (2 16 0)) (graphql (0 1 1)) (spinner (1 7 3)) (aio (1 0))) "An leetcode client." single ((:commit . "abb98ab1e252ac9cabafe2c4a3c519d32c4c918e") (:keywords "extensions" "tools") (:authors ("Wang Kai" . "kaiwkx@gmail.com")) (:maintainer "Wang Kai" . "kaiwkx@gmail.com") (:url . "https://github.com/kaiwk/leetcode.el"))])
