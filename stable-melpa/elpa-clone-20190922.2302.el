@@ -3,8 +3,8 @@
 ;; Copyright (C) 2016 ZHANG Weiyi
 
 ;; Author: ZHANG Weiyi <dochang@gmail.com>
-;; Version: 0.0.7
-;; Package-Version: 20190109.2340
+;; Version: 0.0.8
+;; Package-Version: 20190922.2302
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0"))
 ;; Keywords: comm, elpa, clone, mirror
 ;; URL: https://github.com/dochang/elpa-clone

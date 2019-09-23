@@ -1,2 +1,0 @@
-
-(elpa-clone . [(20190109 2340) ((emacs (24 4)) (cl-lib (0))) "Clone ELPA archive" single ((:commit . "fe7e47531ea5a33afc572a7c65032aa8fb279bce") (:keywords "comm" "elpa" "clone" "mirror") (:authors ("ZHANG Weiyi" . "dochang@gmail.com")) (:maintainer "ZHANG Weiyi" . "dochang@gmail.com") (:url . "https://github.com/dochang/elpa-clone"))])

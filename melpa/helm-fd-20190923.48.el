@@ -2,7 +2,7 @@
 
 ;; Author: Romain Leroux <romain@leroux.dev>
 ;; URL: https://github.com/lerouxrgd/helm-fd
-;; Package-Version: 20190906.1320
+;; Package-Version: 20190923.48
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "26.2") (helm "3.3"))
 ;; Keywords: fd, find, files, helm, fast
@@ -23,7 +23,7 @@
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see
-;; <http://www.gnu.org/licenses/>.
+;; <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
