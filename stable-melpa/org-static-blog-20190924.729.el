@@ -2,7 +2,7 @@
 
 ;; Author: Bastian Bechtold
 ;; URL: https://github.com/bastibe/org-static-blog
-;; Package-Version: 20190916.1307
+;; Package-Version: 20190924.729
 ;; Version: 1.2.1
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -134,47 +134,56 @@ The tags page lists all posts as headlines."
      ("en" . "Other posts")
      ("pl" . "Pozostałe wpisy")
      ("ru" . "Другие публикации")
-     ("by" . "Іншыя публікацыі"))
+     ("by" . "Іншыя публікацыі")
+     ("fr" . "Autres articles"))
     (date-format
      ("en" . "%d %b %Y")
      ("pl" . "%Y-%m-%d")
      ("ru" . "%d.%m.%Y")
-     ("by" . "%d.%m.%Y"))
+     ("by" . "%d.%m.%Y")
+     ("fr" . "%d-%m-%Y"))
     (tags
      ("en" . "Tags")
      ("pl" . "Tagi")
      ("ru" . "Ярлыки")
-     ("by" . "Ярлыкі"))
+     ("by" . "Ярлыкі")
+     ("fr" . "Tags"))
     (archive
      ("en" . "Archive")
      ("pl" . "Archiwum")
      ("ru" . "Архив")
-     ("by" . "Архіў"))
+     ("by" . "Архіў")
+     ("fr" . "Archive"))
     (posts-tagged
      ("en" . "Posts tagged")
      ("pl" . "Wpisy z tagiem")
      ("ru" . "Публикации с ярлыками")
-     ("by" . "Публікацыі"))
+     ("by" . "Публікацыі")
+     ("fr" . "Articles tagués"))
     (no-prev-post
      ("en" . "There is no previous post")
      ("pl" . "Poprzedni wpis nie istnieje")
      ("ru" . "Нет предыдущей публикации")
-     ("by" . "Няма папярэдняй публікацыі"))
+     ("by" . "Няма папярэдняй публікацыі")
+     ("fr" . "Il n'y a pas d'article précédent"))
     (no-next-post
      ("en" . "There is no next post")
      ("pl" . "Następny wpis nie istnieje")
      ("ru" . "Нет следующей публикации")
-     ("by" . "Няма наступнай публікацыі"))
+     ("by" . "Няма наступнай публікацыі")
+     ("fr" . "Il n'y a pas d'article suivants"))
     (title
      ("en" . "Title: ")
      ("pl" . "Tytuł: ")
      ("ru" . "Заголовок: ")
-     ("by" . "Загаловак: "))
+     ("by" . "Загаловак: ")
+     ("fr" . "Titre : "))
     (filename
      ("en" . "Filename: ")
      ("pl" . "Nazwa pliku: ")
      ("ru" . "Имя файла: ")
-     ("by" . "Імя файла: "))))
+     ("by" . "Імя файла: ")
+     ("fr" . "Nom du fichier :"))))
 
 (defun org-static-blog-gettext (text-id)
   "Return localized text.

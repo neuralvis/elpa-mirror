@@ -3,7 +3,6 @@
 ;; Author: Štěpán Němec <stepnem@gmail.com>
 ;; Created: 2019-07-15 00:46:28 Monday +0200
 ;; URL: https://gitlab.com/stepnem/vcsh-el
-;; Package-Version: 20190817.2011
 ;; Keywords: vc, files
 ;; License: public domain
 ;; Version: 0.4.1
