@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.4.0
-;; Package-Version: 20190517.2037
+;; Package-Version: 20190923.2214
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -1514,17 +1514,17 @@ This is written mainly to be used as `end-of-defun-function' for Rust."
 (defun rust-compile ()
   "Compile using `cargo build`"
   (interactive)
-  (compile "cargo build"))
+  (compile (format "%s build" rust-cargo-bin)))
 
 (defun rust-run ()
   "Run using `cargo run`"
   (interactive)
-  (compile "cargo run"))
+  (compile (format "%s run" rust-cargo-bin)))
 
 (defun rust-test ()
   "Test using `cargo test`"
   (interactive)
-  (compile "cargo test"))
+  (compile (format "%s test" rust-cargo-bin)))
 
 (defvar rust-mode-map
   (let ((map (make-sparse-keymap)))

@@ -5,7 +5,7 @@
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;;         Felipe Lema <felipelema@mortemale.org>
 ;; URL: https://github.com/FelipeLema/emacs-counsel-gtags
-;; Package-Version: 20190909.1740
+;; Package-Version: 20190923.1842
 ;; Version: 0.01
 ;; Package-Requires: ((emacs "25.1") (counsel "0.8.0") (seq "1.0"))
 
@@ -203,9 +203,10 @@ Otherwise, returns nil if couldn't find any."
 (defun counsel-gtags--build-command-to-collect-candidates (query &optional extra-args)
   "Build command to collect condidates filtering by QUERY.
 
-Used in `counsel-gtags--async-tag-query'.  Forward QUERY and EXTRA-ARGS to
-`counsel-gtags--command-options'.
-Since it's a tag query, we use definition as type when getting options"
+Used in `counsel-gtags--async-tag-query'.  Call global \"list all tags\"
+\(with EXTRA-ARGS\), forward QUERY to grep command (provided by
+`counsel-gtags--get-grep-command') to filter.  We use grep command because using
+ivy's default filter `counsel--async-filter' is too slow with lots of tags."
   (concat
    (mapconcat #'shell-quote-argument
 	      (append
@@ -218,13 +219,6 @@ Since it's a tag query, we use definition as type when getting options"
      (counsel--elisp-to-pcre)
      (shell-quote-argument))))
 
-(defun counsel-gtags--filter-tags (s)
-  "Filter function receving S.
-
-Extract the first part of each line, containing the tag."
-  (replace-regexp-in-string (rx (char space) (* any) line-end)
-			    ""
-			    s))
 
 (defun counsel-gtags--async-tag-query-process (query)
   "Add filter to tag query command.
@@ -234,10 +228,8 @@ Input for searching is QUERY.
 Since we can't look for tags by regex, we look for their definition and filter
 the location, giving us a list of tags with no locations."
   (counsel--async-command
-   (counsel-gtags--build-command-to-collect-candidates query '("--result=ctags"))
-   nil ;; default sentinel
-   (lambda (p s)
-     (counsel--async-filter p (counsel-gtags--filter-tags s)))))
+   (counsel-gtags--build-command-to-collect-candidates query
+						       '("--result=ctags"))))
 
 (defun counsel-gtags--async-tag-query (query)
   "Gather the object names asynchronously for `ivy-read'.
@@ -549,7 +541,7 @@ Useful for jumping from a location when using global commands (like with
 
 (defun counsel-gtags--goto (position)
   "Go to POSITION in context stack.
-  Return t on success, nil otherwise."
+Return t on success, nil otherwise."
   (let ((context (nth position counsel-gtags--context)))
     (when (and context
                (cond
@@ -597,8 +589,8 @@ Useful for jumping from a location when using global commands (like with
 ;;;###autoload
 (defun counsel-gtags-create-tags (rootdir label)
   "Create tag database in ROOTDIR.
-  LABEL is passed as the value for the environment variable GTAGSLABEL.
-  Prompt for ROOTDIR and LABEL if not given.  This command is asynchronous."
+LABEL is passed as the value for the environment variable GTAGSLABEL.
+Prompt for ROOTDIR and LABEL if not given.  This command is asynchronous."
   (interactive
    (list (read-directory-name "Directory: " nil nil t)
          (counsel-gtags--select-gtags-label)))
@@ -640,8 +632,8 @@ Useful for jumping from a location when using global commands (like with
 
 (defun counsel-gtags--update-tags-command (how-to)
   "Build global command line to update commands.
-  HOW-TO ∈ '(entire-update generate-other-directory single-update) per
-  `counsel-gtags--how-to-update-tags' (user prefix)."
+HOW-TO ∈ '(entire-update generate-other-directory single-update) per
+`counsel-gtags--how-to-update-tags' (user prefix)."
   ;; note: mayble use `-flatten' here
   (cl-case how-to
     (entire-update
@@ -672,9 +664,9 @@ Useful for jumping from a location when using global commands (like with
 ;;;###autoload
 (defun counsel-gtags-update-tags ()
   "Update tag database for current file.
-  Changes in other files are ignored.  With a prefix argument, update
-  tags for all files.  With two prefix arguments, generate new tag
-  database in prompted directory."
+Changes in other files are ignored.  With a prefix argument, update
+tags for all files.  With two prefix arguments, generate new tag
+database in prompted directory."
   (interactive)
   (let ((how-to (counsel-gtags--how-to-update-tags))
         (interactive-p (called-interactively-p 'interactive))
@@ -698,8 +690,8 @@ Useful for jumping from a location when using global commands (like with
 ;;;###autoload
 (defun counsel-gtags-dwim ()
   "Find definition or reference of thing at point (Do What I Mean).
-  If point is at a definition, find its references, otherwise, find
-  its definition."
+If point is at a definition, find its references, otherwise, find
+its definition."
   (interactive)
   (let ((cursor-symbol (thing-at-point 'symbol)))
     (if (and (buffer-file-name) cursor-symbol)
