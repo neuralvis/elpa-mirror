@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.4
-;; Package-Version: 20190923.1805
+;; Package-Version: 20190924.1547
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1110,6 +1110,9 @@ under cursor."
              for probe = (plist-member caps feat)
              if (not probe) do (cl-return nil)
              if (eq (cadr probe) :json-false) do (cl-return nil)
+             ;; If the server specifies null as the value of the capability, it
+             ;; makes sense to treat it like false.
+             if (null (cadr probe)) do (cl-return nil)
              if (not (listp (cadr probe))) do (cl-return (if more nil (cadr probe)))
              finally (cl-return (or (cadr probe) t)))))
 
