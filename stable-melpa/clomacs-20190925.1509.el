@@ -4,7 +4,7 @@
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/clojure-emacs/clomacs
-;; Package-Version: 20190925.1454
+;; Package-Version: 20190925.1509
 ;; Keywords: clojure, interaction
 ;; Version: 0.0.4
 ;; Package-Requires: ((emacs "24.3") (cider "0.22.1") (s "1.12.0") (simple-httpd "1.4.6"))
@@ -298,9 +298,11 @@ CL-ENTITY-TYPE - \"value\" or \"function\""
     (format "Wrapped clojure entity: %s%s"
             cl-entity-name
             (let ((cl-entity-doc (if (clomacs-get-connection)
-                                     (nrepl-dict-get
-                                      (cider-var-info
-                                       (symbol-name cl-entity-name)) "doc"))))
+                                     (condition-case _
+                                         (nrepl-dict-get
+                                          (cider-var-info
+                                           (symbol-name cl-entity-name)) "doc")
+                                       (error nil)))))
               (if cl-entity-doc
                   (concat "\n" cl-entity-doc)
                 "")))))

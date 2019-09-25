@@ -1,0 +1,2 @@
+
+(flycheck-clang-tidy . [(20190925 1711) ((flycheck (0 30))) "Flycheck syntax checker using clang-tidy" single ((:commit . "9b13ba3a0449cbb310a73c710dd624da1816586a") (:keywords "convenience" "languages" "tools") (:authors (nil . "Sebastian Nagel<sebastian.nagel@ncoding.at>")) (:maintainer nil . "Sebastian Nagel<sebastian.nagel@ncoding.at>") (:url . "https://github.com/ch1bo/flycheck-clang-tidy"))])
