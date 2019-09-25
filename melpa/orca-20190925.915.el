@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/orca
-;; Package-Version: 20190701.1127
+;; Package-Version: 20190925.915
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: org, convenience
@@ -34,8 +34,10 @@
 (require 'org-capture)
 
 ;;* Org config
-;; sometimes it's "l", sometimes "L", unsure why
-(dolist (key '("l" "L"))
+;; In the Firefox extension https://github.com/sprig/org-capture-extension:
+;; - "l" is unselected template
+;; - "p" is selected template
+(dolist (key '("l" "p"))
   (add-to-list 'org-capture-templates
                `(,key "Link" entry #'orca-handle-link
                       "* TODO %(orca-wash-link)\nAdded: %T\n%?")))
@@ -66,7 +68,7 @@
       (orca-handler-match-url "https://\\(?:www\\.\\)?\\(?:old\\.\\)?reddit.com/r/" ,reddit "\\* Posts")
       (orca-handler-match-url "https://emacs.stackexchange.com/" ,emacs "\\* Questions")
       (orca-handler-match-url "http://stackoverflow.com/" ,stack "\\* Questions")
-      (orca-handler-match-url "https://github.com/\\(?:\\sw\\|\\s_\\)+/\\(?:\\sw\\|\\s_\\)+" ,github "\\* Repos")
+      (orca-handler-match-url "https://git\\(?:hub\\|lab\\).com/\\(?:\\sw\\|\\s_\\)+/\\(?:\\sw\\|\\s_\\)+" ,github "\\* Repos")
       (orca-handler-project)
       (orca-handler-current-buffer "\\* Tasks")
       (orca-handler-file ,entor "\\* Articles")))
