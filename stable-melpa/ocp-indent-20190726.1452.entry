@@ -1,2 +1,2 @@
 
-(ocp-indent . [(20190726 1452) nil "automatic indentation with ocp-indent" single ((:commit . "786f61b01674c3315e91ade9a1e2cf160b705a8d") (:keywords "ocaml" "languages") (:url . "http://www.typerex.org/ocp-indent.html"))])
+(ocp-indent . [(20190726 1452) nil "automatic indentation with ocp-indent" single ((:commit . "03bb53f1a9db9e61b66e6674f995ec150619a68b") (:keywords "ocaml" "languages") (:url . "http://www.typerex.org/ocp-indent.html"))])
