@@ -1,2 +1,0 @@
-
-(ox-rfc . [(20190923 1004) ((emacs (24 3)) (org (8 3))) "RFC Back-End for Org Export Engine" tar ((:commit . "8427bc0b680defd4276bfaa222136b9cbe1f96fc") (:keywords "org" "rfc" "wp" "xml") (:authors ("Christian Hopps" . "chopps@devhopps.com")) (:maintainer "Christian Hopps" . "chopps@devhopps.com") (:url . "https://github.com/choppsv1/org-rfc-export"))])
