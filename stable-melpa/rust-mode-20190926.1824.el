@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.4.0
-;; Package-Version: 20190923.2214
+;; Package-Version: 20190926.1824
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -1456,6 +1456,35 @@ This is written mainly to be used as `end-of-defun-function' for Rust."
             (goto-char save-point)
             (forward-char columns)))
         (min (point) max-pos)))))
+
+(defun rust-format-diff-buffer ()
+  "Show diff to current buffer from rustfmt.
+
+Return the created process."
+  (interactive)
+  (unless (executable-find rust-rustfmt-bin)
+    (error "Could not locate executable \%s\"" rust-rustfmt-bin))
+  (let ((proc
+         (start-process "rustfmt-diff"
+                        (with-current-buffer
+                            (get-buffer-create "*rustfmt-diff*")
+                          (let ((inhibit-read-only t))
+                            (erase-buffer))
+                          (current-buffer))
+                        rust-rustfmt-bin
+                        "--check"
+                        (buffer-file-name))))
+    (set-process-sentinel proc 'rust-format-diff-buffer-sentinel)
+    proc))
+
+(defun rust-format-diff-buffer-sentinel (process _e)
+  (when (eq 'exit (process-status process))
+    (if (> (process-exit-status process) 0)
+        (with-current-buffer "*rustfmt-diff*"
+          (let ((inhibit-read-only t))
+            (diff-mode))
+          (pop-to-buffer (current-buffer)))
+      (message "rustfmt check passed."))))
 
 (defun rust-format-buffer ()
   "Format the current buffer using rustfmt."
