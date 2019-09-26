@@ -4,7 +4,7 @@
 
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/org-tanglesync.el
-;; Package-Version: 20190924.2040
+;; Package-Version: 20190926.1345
 ;; Keywords: outlines
 ;; Package-Requires: ((emacs "24.4"))
 ;; Version: 0.6
@@ -312,10 +312,9 @@ Only takes effect when :custom is set"
       (when (bound-and-true-p org-tanglesync-mode)
         (goto-char org-position)
         (let* ((tangle-fname (org-tanglesync-get-tangledfile
-                              (org-babel-get-src-block-info)))
-               (exists (file-exists-p tangle-fname)))
+                              (org-babel-get-src-block-info))))
           (when tangle-fname
-            (if exists
+            (if (file-exists-p tangle-fname)
                 (let* ((file-buffer (org-tanglesync-get-filedata-buffer tangle-fname))
                        (hasdiff (org-tanglesync-has-diff edit-buffer file-buffer)))
                   (when hasdiff

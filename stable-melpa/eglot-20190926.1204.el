@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.4
-;; Package-Version: 20190924.1547
+;; Package-Version: 20190926.1204
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -2056,7 +2056,10 @@ is not active."
                  (goto-char (point-max))
                  (insert "\n"
                          (propertize
-                          label 'face 'eldoc-highlight-function-argument)
+                          (if (stringp label)
+                              label
+                            (apply #'buffer-substring (mapcar #'1+ label)))
+                          'face 'eldoc-highlight-function-argument)
                          ": " (eglot--format-markup documentation))))))
          (buffer-string))))
    when moresigs concat "\n"))
