@@ -4,7 +4,7 @@
 
 ;; Author: Phil Hagelberg
 ;; URL: https://gitlab.com/technomancy/fennel-mode
-;; Package-Version: 20190921.359
+;; Package-Version: 20190927.4
 ;; Version: 0.1.0
 ;; Created: 2018-02-18
 ;;
@@ -248,7 +248,9 @@ buffer, or when given a prefix arg."
   (interactive)
   (if (get-buffer-process inferior-lisp-buffer)
       (pop-to-buffer inferior-lisp-buffer)
-    (run-lisp inferior-lisp-program)
+    (run-lisp (if (string= inferior-lisp-program "lisp")
+                  "fennel"
+                inferior-lisp-program))
     (set (make-local-variable 'lisp-describe-sym-command) "(doc %s)\n")
     (set (make-local-variable 'inferior-lisp-prompt) ">> ")
     (set (make-local-variable 'lisp-arglist-command) fennel-arglist-command)))
@@ -263,7 +265,7 @@ buffer, or when given a prefix arg."
 (put 'λ 'fennel-indent-function 'defun)
 (put 'fn 'fennel-indent-function 'defun)
 (put 'while 'fennel-indent-function 'defun)
-(put 'do 'fennel-indent-function 0)
+(put 'do 'fennel-indent-function 1)
 (put 'let 'fennel-indent-function 1)
 (put 'when 'fennel-indent-function 1)
 (put 'for 'fennel-indent-function 1)

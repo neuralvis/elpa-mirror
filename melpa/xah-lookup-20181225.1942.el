@@ -4,6 +4,7 @@
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
 ;; Version: 3.4.20181225114156
+;; Package-Version: 20181225.1942
 ;; Created: 14 Nov 2011
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: help, docs, convenience

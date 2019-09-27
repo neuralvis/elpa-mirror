@@ -1,0 +1,2 @@
+
+(org-ql . [(20190927 235) ((emacs (26 1)) (dash (2 13)) (org (9 0)) (org-super-agenda (1 2 -1)) (ov (1 0 6)) (s (1 12 0)) (ts (0 2 -1))) "Org Query Language, search command, and agenda-like view" tar ((:commit . "9295ec4c0675c24c0044d7c6f92efe55de5bcb5d") (:keywords "hypermedia" "outlines" "org" "agenda") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/org-ql"))])
