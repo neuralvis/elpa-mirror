@@ -4,7 +4,7 @@
 
 ;; Author: Henrik Nyman <h@nyymanni.com>
 ;; URL: https://github.com/nyyManni/jiralib2
-;; Package-Version: 20190923.1809
+;; Package-Version: 20190926.1924
 ;; Keywords: comm, jira, rest, api
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "25") (request "0.3") (dash "2.14.1"))
@@ -356,6 +356,11 @@ ARGS is an association list of the fields to set for the issue."
 (defun jiralib2-set-issue-type (issue-id type)
   "Change the issue type of ISSUE-ID to TYPE."
   (jiralib2-update-issue issue-id `(issuetype . ((name . ,type)))))
+
+(defun jiralib2-board-issues (board-id args)
+  "Get issues of board BOARD-ID. Restrict the fetched fields with ARGS."
+  (jiralib2-session-call (format "/rest/agile/1.0/board/%s/issue?%s" board-id
+                                 (request--urlencode-alist args))))
 
 (defun jiralib2-session-logout ()
   "Close the current session."

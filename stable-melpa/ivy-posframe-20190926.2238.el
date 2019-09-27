@@ -7,7 +7,7 @@
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Package-Version: 20190923.2233
+;; Package-Version: 20190926.2238
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.11.0"))
@@ -271,8 +271,7 @@ This variable is useful for `ivy-posframe-read-action' .")
              :internal-border-width ivy-posframe-border-width
              :internal-border-color (face-attribute 'ivy-posframe-border :background nil t)
              :override-parameters ivy-posframe-parameters
-             (funcall ivy-posframe-size-function)))
-    (ivy-posframe--add-prompt 'ignore)))
+             (funcall ivy-posframe-size-function)))))
 
 (defun ivy-posframe-get-size ()
   "The default functon used by `ivy-posframe-size-function'."
@@ -508,9 +507,7 @@ selection, non-nil otherwise."
         (remove-text-properties 0 (length prompt) '(read-only nil) prompt)
         (with-current-buffer ivy-posframe-buffer
           (goto-char (point-min))
-          (if (string-match-p "\n" prompt)
-              (delete-region (point) (line-beginning-position 3))
-            (delete-region (point) (line-beginning-position 2)))
+          (delete-region (point) (line-beginning-position 2))
           (insert prompt "  \n")
           (add-text-properties point (1+ point) '(face ivy-posframe-cursor)))))))
 

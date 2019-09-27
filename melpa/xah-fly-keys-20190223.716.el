@@ -4,7 +4,6 @@
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
 ;; Version: 10.9.20190222215802
-;; Package-Version: 20190223.716
 ;; Created: 10 Sep 2013
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: convenience, emulations, vim, ergoemacs
