@@ -17,7 +17,7 @@
 
 ;; Author: Thomas Letan <contact@thomasletan.fr>
 ;; URL: https://git.sr.ht/~lthms/colorless-themes.el
-;; Package-Version: 20190802.725
+;; Package-Version: 20190927.1305
 ;; Version: 0.1
 ;; License: GPL-3
 ;; Keywords: themes, faces
@@ -87,9 +87,9 @@ ORANGE, YELLOW and GREEN are pretty self-explanatory."
       '(font-lock-comment-face ((t (:foreground ,docs))))
       '(font-lock-doc-face ((t (:weight bold :foreground ,docs))))
       '(font-lock-string-face ((t (:weight bold))))
-      '(whitespace-space ((t (:foreground ,fade))))
-      '(whitespace-tab ((t (:foreground ,fade))))
-      '(whitespace-newline ((t (:foreground ,fade))))
+      '(whitespace-space ((t :foreground ,fade)))
+      '(whitespace-tab ((t :foreground ,fade)))
+      '(whitespace-newline ((t :foreground ,fade)))
       '(compilation-info ((t (:weight bold))))
       '(compilation-line-number ((t ())))
       '(compilation-mode-line-exit ((t (:foreground ,green))))
@@ -243,7 +243,13 @@ ORANGE, YELLOW and GREEN are pretty self-explanatory."
       '(sh-quoted-exec ((t ())))
       '(tuareg-font-lock-governing-face ((t ())))
       '(tuareg-font-lock-operator-face ((t ())))
-      '(tuareg-font-double-colon-face ((t ()))))
+      '(tuareg-font-double-colon-face ((t ())))
+      '(header-line ((t (:background ,current-line :foreground ,fg))))
+      '(centaur-tabs-unselected ((t (:background ,current-line :foreground ,fg))))
+      '(centaur-tabs-unselected-modified ((t (:background ,current-line :foreground ,fg))))
+      '(centaur-tabs-selected ((t (:background ,bg :foreground ,fg))))
+      '(centaur-tabs-selected-modified ((t (:background ,bg :foreground ,fg))))
+      '(centaur-tabs-active-bar-face ((t (:background ,docs)))))
 
      ;;;###autoload
      (when load-file-name
