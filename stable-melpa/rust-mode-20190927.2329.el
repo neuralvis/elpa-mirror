@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.4.0
-;; Package-Version: 20190926.1824
+;; Package-Version: 20190927.2329
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -1584,7 +1584,6 @@ Return the created process."
   ;; Misc
   (setq-local comment-start "// ")
   (setq-local comment-end   "")
-  (setq-local indent-tabs-mode nil)
   (setq-local open-paren-in-column-0-is-defun-start nil)
 
   ;; Auto indent on }
