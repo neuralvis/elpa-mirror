@@ -4,7 +4,6 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: projectile tools terminals vc
-;; Package-Version: 20190307.400
 ;; URL: https://www.github.com/IvanMalison/term-manager
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (term-manager "0.1.0") (projectile "0.13.0"))

@@ -4,7 +4,7 @@
 
 ;; Author: Vasilij Schneidermann <v.schneidermann@gmail.com>
 ;; URL: https://github.com/wasamasa/eyebrowse
-;; Package-Version: 20190917.1653
+;; Package-Version: 20190928.1458
 ;; Version: 0.7.8
 ;; Package-Requires: ((dash "2.7.0") (emacs "24.3.1"))
 ;; Keywords: convenience
@@ -406,7 +406,7 @@ window config COUNT."
          (index (-elem-index match window-configs)))
     (if count
         (eyebrowse-switch-to-window-config count)
-      (when index
+      (when (and index (> (length window-configs) 1))
         (if (< (1+ index) (length window-configs))
             (eyebrowse-switch-to-window-config
              (car (nth (1+ index) window-configs)))
@@ -428,7 +428,7 @@ switch COUNT window configs backwards and always wrap around."
           (eyebrowse-prev-window-config
            (when (> count 1)
              (eyebrowse-prev-window-config (1- count)))))
-      (when index
+      (when (and index (> (length window-configs) 1))
         (if (> index 0)
             (eyebrowse-switch-to-window-config
              (car (nth (1- index) window-configs)))
