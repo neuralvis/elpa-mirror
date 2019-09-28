@@ -4,6 +4,7 @@
 ;;
 ;; Author: Dino Chiesa <dpchiesa@outlook.com>, Sebastian Monia <smonia@outlook.com>
 ;; URL: http://github.com/sebasmonia/tfsmacs/
+;; Package-Version: 20180911.2114
 ;; Package-Requires: ((emacs "25") (tablist "0.70"))
 ;; Version: 1.25
 ;; Keywords: tfs, vc
