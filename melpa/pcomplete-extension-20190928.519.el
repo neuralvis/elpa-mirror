@@ -6,7 +6,7 @@
 
 ;; Compatibility: GNU Emacs 24.1+
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
-;; Package-Version: 20180707.455
+;; Package-Version: 20190928.519
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -419,7 +419,20 @@ Shell buffers.  It implements `shell-completion-execonly' for
                                        (split-string (buffer-string) "\n")))))))))))
 
 (defalias 'pcomplete/apt 'pcomplete/apt-get)
+
+;;; Convert
+;;
+(defun pcomplete-get-convert-options ()
+  (with-temp-buffer
+    (call-process "convert" nil t nil "-help")
+    (goto-char (point-min))
+    (cl-loop while (re-search-forward "^ +\\(-[A-Za-z]*\\)" nil t)
+             collect (match-string 1))))
 
+(defun pcomplete/convert ()
+  (when (pcomplete-match "^-" 'last)
+    (while (pcomplete-here (pcomplete-get-convert-options))))
+  (while (pcomplete-here (pcomplete-entries) nil 'identity)))
 
 (provide 'pcomplete-extension)
 
