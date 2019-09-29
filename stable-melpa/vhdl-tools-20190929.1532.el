@@ -8,7 +8,7 @@
 ;; Original author:  wandad guscheh <wandad.guscheh@fh-hagenberg.at>
 ;; Author:           Cayetano Santos
 ;; Keywords: languages, convenience
-;; Package-Version: 20190809.922
+;; Package-Version: 20190929.1532
 ;; Filename: vhdl-tools.el
 ;; Description: Utilities for navigating vhdl sources.
 ;; URL: https://github.com/csantosb/vhdl-tools/wiki
@@ -567,7 +567,7 @@ When no symbol at point, move point to indentation."
 		 (forward-word))
 	       (forward-char 2)
 	       (vhdl-tools--get-name)))
-	    (helm-rg--current-dir (vc-root-dir))
+	    (helm-rg--current-dir (vc-find-root (buffer-file-name) ".git"))
 	    (helm-rg-default-glob-string "*.vhd"))
 	(vhdl-tools--push-marker)
 	;; Jump by searching using helm-rg
@@ -1125,9 +1125,9 @@ Key bindings:
   (if (and vhdl-tools-mode
 	   vhdl-tools--ggtags-available
 	   (buffer-file-name)
-	   (vc-root-dir)
+	   (vc-find-root (buffer-file-name) ".git")
 	   (file-exists-p
-	    (format "%sGTAGS" (vc-root-dir))))
+	    (format "%sGTAGS" (vc-find-root (buffer-file-name) ".git"))))
       (progn
 	(ggtags-mode 1)
 	;; a bit of feedback
