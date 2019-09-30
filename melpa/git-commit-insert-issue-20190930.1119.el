@@ -4,7 +4,7 @@
 
 ;; Author: Vindarel
 ;; URL: https://gitlab.com/emacs-stuff/git-commit-insert-issue/
-;; Package-Version: 20171102.1841
+;; Package-Version: 20190930.1119
 ;; Keywords: git, github, gitlab, bitbucket, commit, issues
 ;; Version: 0.2.0
 ;; Package-Requires: ((projectile "0") (s "0") (github-issues "0") (gitlab "0") (bitbucket "0"))
@@ -200,7 +200,7 @@
                   (git-commit-insert-issue--construct-regexp (append
                                                               git-commit-insert-issue-github-keywords
                                                               git-commit-insert-issue-gitlab-keywords)))
-                 (insert (git-commit-insert-issue-ask-issues))
+                 (git-commit-insert-issue-ask-issues)
                (self-insert-command 1)))))
     (define-key git-commit-mode-map "#" (insert "#"))))
 
