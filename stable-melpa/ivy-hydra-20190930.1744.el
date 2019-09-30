@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190829.630
+;; Package-Version: 20190930.1744
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.12.0") (hydra "0.13.4"))
 ;; Keywords: convenience
@@ -78,7 +78,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _M_: matcher %-5s(ivy--matcher-desc)
   ("<" ivy-minibuffer-shrink)
   ("w" ivy-prev-action)
   ("s" ivy-next-action)
-  ("a" ivy-read-action)
+  ("a" (let ((ivy-read-action-function #'ivy-read-action-by-key))
+         (ivy-read-action)))
   ("T" (setq truncate-lines (not truncate-lines)))
   ("C" ivy-toggle-case-fold)
   ("U" ivy-occur :exit t)
