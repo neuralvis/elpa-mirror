@@ -8,6 +8,8 @@ Usage:
   `counsel-etags-find-tag-at-point' to navigate.  This command will also
   run `counsel-etags-scan-code' AUTOMATICALLY if tags file is not built yet.
 
+  Run `counsel-etags-list-tag-in-current-file' to list tags in current file.
+
   `counsel-etags-scan-code' to create tags file
   `counsel-etags-grep' to grep
   `counsel-etags-grep-current-directory' to grep in current directory
@@ -66,10 +68,10 @@ Tips:
          keyword)))
 
  - `counsel-etags-find-tag-name-function' finds tag name at point.  If it returns nil,
-   `find-tag-default' is used. `counsel-etags-word-at-point' gets word at point.
+   `find-tag-default' is used.  `counsel-etags-word-at-point' gets word at point.
 
  - User could append the extra content into tags file in `counsel-etags-after-update-tags-hook'.
-   The parameter of hook is full path of the tags file. `counsel-etags-tags-line' is a tool function
+   The parameter of hook is full path of the tags file.  `counsel-etags-tags-line' is a tool function
    to help user
 
 See https://github.com/redguardtoo/counsel-etags/ for more tips.

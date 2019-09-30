@@ -3,7 +3,7 @@ of the features of the Doom One theme.
 
 Features offered:
 * Beautiful dark color scheme inspired by the Doom One theme
-* Custom fringe bitmaps for diff-hl and flycheck
+* Custom fringe bitmaps for diff-hl, flycheck, and flymake
 * Lightweight with no dependencies
 
 To enable custom fringe bitmaps for `diff-hl':
@@ -11,3 +11,6 @@ To enable custom fringe bitmaps for `diff-hl':
 
 To enable custom fringe bitmaps for `flycheck':
 (eval-after-load 'flycheck #'mood-one-theme-flycheck-fringe-bmp-enable)
+
+To enable custom fringe bitmaps for `flymake':
+(eval-after-load 'flymake #'mood-one-theme-flymake-fringe-bmp-enable)
