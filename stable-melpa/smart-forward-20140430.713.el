@@ -4,7 +4,6 @@
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
 ;; Keywords: navigation
-;; Package-Version: 20140430.713
 ;; Version: 1.0.0
 ;; Package-Requires: ((expand-region "0.8.0"))
 
