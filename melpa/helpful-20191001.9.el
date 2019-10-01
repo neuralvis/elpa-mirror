@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20190814.308
+;; Package-Version: 20191001.9
 ;; Keywords: help, lisp
 ;; Version: 0.18
 ;; Package-Requires: ((emacs "25") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2"))
@@ -2363,6 +2363,7 @@ state of the current symbol."
   ;; parts of the Emacs UI, such as ERT.
   (s-replace " " "\\ " (format "%s" sym)))
 
+;; TODO: this is broken for -any?.
 (defun helpful--signature (sym)
   "Get the signature for function SYM, as a string.
 For example, \"(some-func FOO &optional BAR)\"."
@@ -2373,9 +2374,14 @@ For example, \"(some-func FOO &optional BAR)\"."
            (gethash (symbol-function sym) advertised-signature-table))))
     ;; Get the usage from the function definition.
     (let* ((function-args
-            (if (symbolp sym)
-                (help-function-arglist sym)
-              (cadr sym)))
+            (cond
+             ((symbolp sym)
+              (help-function-arglist sym))
+             ((byte-code-function-p sym)
+              (aref sym 0))
+             (t
+              ;; Interpreted function (lambda ...)
+              (cadr sym))))
            (formatted-args
             (cond
              (advertised-args
