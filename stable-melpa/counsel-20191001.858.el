@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190830.1557
+;; Package-Version: 20191001.858
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -915,7 +915,7 @@ when available, in that order of precedence."
 (ivy-set-actions
  'counsel-M-x
  `(("d" counsel--find-symbol "definition")
-   ("h" ,(lambda (x) (describe-function (intern x))) "help")))
+   ("h" ,(lambda (x) (funcall counsel-describe-function-function (intern x))) "help")))
 
 (ivy-set-display-transformer
  'counsel-M-x
@@ -3759,24 +3759,24 @@ This variable has no effect unless
   "Browse `mark-ring' interactively.
 Obeys `widen-automatically', which see."
   (interactive)
-  (let ((counsel--mark-ring-calling-point (point))
-        (cands
-         (save-excursion
-           (save-restriction
-             ;; Widen, both to save `line-number-at-pos' the trouble
-             ;; and for `buffer-substring' to work.
-             (widen)
-             (let ((fmt (format "%%%dd %%s"
-                                (length (number-to-string
-                                         (line-number-at-pos (point-max)))))))
-               (mapcar (lambda (mark)
-                         (goto-char (marker-position mark))
-                         (let ((linum (line-number-at-pos))
-                               (line  (buffer-substring
-                                       (line-beginning-position)
-                                       (line-end-position))))
-                           (cons (format fmt linum line) (point))))
-                       (sort (delete-dups (copy-sequence mark-ring)) #'<)))))))
+  (let* ((counsel--mark-ring-calling-point (point))
+         (width (length (number-to-string (line-number-at-pos (point-max)))))
+         (fmt (format "%%%dd %%s" width))
+         (make-candidate
+          (lambda (mark)
+            (goto-char (marker-position mark))
+            (let ((linum (line-number-at-pos))
+                  (line (buffer-substring
+                         (line-beginning-position) (line-end-position))))
+              (cons (format fmt linum line) (point)))))
+         (marks (sort (delete-dups (copy-sequence mark-ring)) #'<))
+         (cands
+          ;; Widen, both to save `line-number-at-pos' the trouble
+          ;; and for `buffer-substring' to work.
+          (save-excursion
+            (save-restriction
+              (widen)
+              (mapcar make-candidate marks)))))
     (if cands
         (ivy-read "Mark: " cands
                   :require-match t

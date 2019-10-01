@@ -15,6 +15,7 @@ Supported languages:
 - BibTeX (emacs)
 - C/C++/Objective-C (clang-format)
 - Clojure/ClojureScript (node-cljfmt)
+- CMake (cmake-format)
 - Crystal (crystal tool format)
 - CSS/Less/SCSS (prettier)
 - D (dfmt)
