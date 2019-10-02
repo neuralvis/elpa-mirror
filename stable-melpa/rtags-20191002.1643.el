@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20190918.505
+;; Package-Version: 20191002.1643
 ;; Version: 2.34.129
 
 ;; This file is not part of GNU Emacs.
@@ -2362,9 +2362,12 @@ instead of file from `current-buffer'.
 
 (defun rtags-find-file-or-buffer (file-or-buffer &optional other-window)
   (if (file-exists-p file-or-buffer)
-      (if other-window
-          (find-file-other-window file-or-buffer)
-        (find-file file-or-buffer))
+      (let ((buf (find-file-noselect file-or-buffer)))
+        (unless buf
+          (error "Can't open file %s" file-or-buffer))
+        (if other-window
+            (switch-to-buffer-other-window buf)
+          (switch-to-buffer buf)))
     (let ((buf (get-buffer file-or-buffer)))
       (if buf(not buf)
         (rtags-switch-to-buffer file-or-buffer other-window)
