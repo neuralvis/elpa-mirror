@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20190807.2125
+;; Package-Version: 20191002.2
 ;; Keywords: tools
 ;; Version: 0.9
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -190,10 +190,12 @@ It is used to create `imenu' index.")
             (insert
              (propertize (concat separator "\n")
                          'face 'deadgrep-meta-face))))
-         ;; If we don't have a color code, ripgrep must be complaining
-         ;; about something (e.g. zero matches for a
-         ;; glob, or permission denied on some directories).
-         ((not (s-matches-p deadgrep--color-code line))
+         ;; If we have a warning or don't have a color code, ripgrep
+         ;; must be complaining about something (e.g. zero matches for
+         ;; a glob, or permission denied on some directories).
+         ((or
+           (s-starts-with-p "WARNING: " line)
+           (not (s-matches-p deadgrep--color-code line)))
           (when deadgrep--current-file
             (setq deadgrep--current-file nil)
             (insert "\n"))
