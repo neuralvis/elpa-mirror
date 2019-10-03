@@ -6,7 +6,7 @@
 
 ;; Author: Natalie Weizenbaum <nex342@gmail.com>
 ;; URL: http://github.com/nex3/perspective-el
-;; Package-Version: 20190927.1902
+;; Package-Version: 20191002.2321
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; Version: 2.2
 ;; Created: 2008-03-05
@@ -29,6 +29,7 @@
 ;; available by default.
 
 (require 'cl-lib)
+(require 'thingatpt)
 (require 'subr-x)                       ; hash-table-values
 
 ;; 'cl' is still required because the use of 'lexical-let'.  'lexical-let' has
