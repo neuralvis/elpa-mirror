@@ -5,7 +5,6 @@
 ;; Author: Tijs Mallaerts <tijs.mallaerts@gmail.com>
 
 ;; Package-Requires: ((emacs "24.4") (s "1.11.0") (shell-split-string "20151224.208"))
-;; Package-Version: 20161203.2133
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

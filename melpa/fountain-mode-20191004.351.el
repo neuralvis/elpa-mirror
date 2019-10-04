@@ -5,8 +5,8 @@
 
 ;; Author: Paul W. Rankin <pwr@sdf.org>
 ;; Keywords: wp, text
-;; Package-Version: 20190913.637
-;; Version: 2.7.4
+;; Package-Version: 20191004.351
+;; Version: 2.8.0
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://fountain-mode.org
 ;; git: https://github.com/rnkn/fountain-mode
@@ -1003,7 +1003,7 @@ regular expression."
   ;; user to choose which appear in the imenu list.
   (setq imenu-generic-expression
         (list
-         (list "Notes" fountain-note-regexp 2)
+         (list "Notes" fountain-note-regexp 1)
          (list "Scene Headings" fountain-scene-heading-regexp 2)
          (list "Sections" fountain-section-heading-regexp 0))))
 
