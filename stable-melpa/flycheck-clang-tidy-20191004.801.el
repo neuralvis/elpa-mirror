@@ -4,7 +4,7 @@
 ;; Maintainer: tastytea <tastytea@tastytea.de>
 ;; URL: https://github.com/ch1bo/flycheck-clang-tidy
 ;; Keywords: convenience languages tools
-;; Package-Version: 20191002.1536
+;; Package-Version: 20191004.801
 ;; Package-X-Original-Version: 0.2.0
 ;; Package-Requires: ((flycheck "0.30"))
 
@@ -24,6 +24,9 @@
 ;;; Code:
 
 (require 'flycheck)
+
+;; To keep variable names consistent.
+(defvaralias 'flycheck-clang-tidy-executable 'flycheck-c/c++-clang-tidy-executable)
 
 (flycheck-def-config-file-var flycheck-clang-tidy c/c++-clang-tidy ".clang-tidy"
   :type 'string
