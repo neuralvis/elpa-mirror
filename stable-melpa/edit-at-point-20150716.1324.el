@@ -2,6 +2,7 @@
 
 ;; Author: <e.enoson@gmail.com>
 ;; URL: http://github.com/enoson/edit-at-point.el
+;; Package-Version: 20150716.1324
 ;; Version: 1.1
 
 ;;; Commentary:
