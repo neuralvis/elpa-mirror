@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190822.1708
+;; Package-Version: 20191005.1554
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.12.0"))
 ;; Keywords: matching
@@ -678,7 +678,8 @@ When capture groups are present in the input, print them instead of lines."
         (lambda (cand) (concat "./" cand))
         cands))
       (goto-char (point-min))
-      (forward-line 4))))
+      (forward-line 4)
+      (setq-local next-error-function #'ivy-occur-next-error))))
 
 (ivy-set-occur 'swiper 'swiper-occur)
 

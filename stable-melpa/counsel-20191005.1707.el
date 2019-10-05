@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191003.1236
+;; Package-Version: 20191005.1707
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -800,6 +800,11 @@ With prefix arg MODE a query for the symbol help mode is offered."
   "Face used by `counsel-M-x' for key bindings."
   :group 'ivy-faces)
 
+(defface counsel-active-mode
+  '((t :inherit font-lock-builtin-face))
+  "Face used by `counsel-M-x' for activated modes."
+  :group 'ivy-faces)
+
 (defcustom counsel-alias-expand t
   "When non-nil, show the expansion of aliases in `counsel-M-x'."
   :type 'boolean
@@ -807,8 +812,15 @@ With prefix arg MODE a query for the symbol help mode is offered."
 
 (defun counsel-M-x-transformer (cmd)
   "Return CMD annotated with its active key binding, if any."
-  (let ((alias (symbol-function (intern cmd)))
-        (key (where-is-internal (intern cmd) nil t)))
+  (let* ((sym (intern cmd))
+         (alias (symbol-function sym))
+         (key (where-is-internal sym nil t)))
+    (when (or (eq sym major-mode)
+              (and
+               (memq sym minor-mode-list)
+               (boundp sym)
+               (buffer-local-value sym (ivy-state-buffer ivy-last))))
+      (put-text-property 0 (length cmd) 'face 'counsel-active-mode cmd))
     (concat cmd
             (when (and (symbolp alias) counsel-alias-expand)
               (format " (%s)" alias))
@@ -1312,6 +1324,7 @@ INITIAL-INPUT can be given as the initial minibuffer input."
     (define-key map (kbd "C-l") 'ivy-call-and-recenter)
     (define-key map (kbd "M-q") 'counsel-git-grep-query-replace)
     (define-key map (kbd "C-c C-m") 'counsel-git-grep-switch-cmd)
+    (define-key map (kbd "C-x C-d") 'counsel-cd)
     map))
 
 (ivy-set-occur 'counsel-git-grep 'counsel-git-grep-occur)
@@ -5491,6 +5504,11 @@ in the current window."
 (ivy-add-actions
  'ivy-switch-buffer
  '(("x" counsel-open-buffer-file-externally "open externally")))
+
+(ivy-set-actions
+ 'counsel-switch-buffer
+ '(("x" counsel-open-buffer-file-externally "open externally")
+   ("j" ivy--switch-buffer-other-window-action "other window")))
 
 ;;** `counsel-compile'
 (defvar counsel-compile-history nil

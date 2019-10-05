@@ -4,7 +4,7 @@
 
 ;; Author: Martin Haesler
 ;; Version: 0.1
-;; Package-Version: 20180301.1437
+;; Package-Version: 20191005.1903
 ;; Package-Requires: ((emacs "24"))
 ;; Created with ThemeCreator, https://github.com/mswift42/themecreator.
 
@@ -115,6 +115,7 @@
 	`(font-latex-match-reference-keywords ((,class (:foreground ,const))))
 	`(font-latex-match-variable-keywords ((,class (:foreground ,var))))
 	`(ido-only-match ((,class (:foreground ,warning))))
+        `(ivy-current-match ((,class (:foreground ,fg3 :inherit highlight :underline t))))
 	`(org-sexp-date ((,class (:foreground ,fg4))))
 	`(ido-first-match ((,class (:foreground ,keyword :bold t))))
 	`(gnus-header-content ((,class (:foreground ,keyword))))
