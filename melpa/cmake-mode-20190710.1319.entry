@@ -1,2 +1,2 @@
 
-(cmake-mode . [(20190710 1319) ((emacs (24 1))) "major-mode for editing CMake sources" single ((:commit . "395e5f77fcd900b4a7a48eaa2da2e3554b694cf1"))])
+(cmake-mode . [(20190710 1319) ((emacs (24 1))) "major-mode for editing CMake sources" single ((:commit . "3da9733142f15d86e798320226d84ccb71a337f9"))])
