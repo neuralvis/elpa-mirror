@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.4
-;; Package-Version: 20190926.1204
+;; Package-Version: 20191005.1050
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -170,6 +170,10 @@ for the connection in the background.  nil has the same meaning
 as 0, i.e. don't block at all."
   :type '(choice (boolean :tag "Whether to inhibit autoreconnection")
                  (integer :tag "Number of seconds")))
+
+(defcustom eglot-autoshutdown nil
+  "If non-nil, shut down server after killing last managed buffer."
+  :type 'boolean)
 
 (defcustom eglot-events-buffer-size 2000000
   "Control the size of the Eglot events buffer.
@@ -845,7 +849,7 @@ This docstring appeases checkdoc, that's all."
                           (push server
                                 (gethash project eglot--servers-by-project))
                           (setf (eglot--capabilities server) capabilities)
-                          (jsonrpc-notify server :initialized `(:__dummy__ t))
+                          (jsonrpc-notify server :initialized (make-hash-table))
                           (dolist (buffer (buffer-list))
                             (with-current-buffer buffer
                               (eglot--maybe-activate-editing-mode server)))
@@ -1110,9 +1114,6 @@ under cursor."
              for probe = (plist-member caps feat)
              if (not probe) do (cl-return nil)
              if (eq (cadr probe) :json-false) do (cl-return nil)
-             ;; If the server specifies null as the value of the capability, it
-             ;; makes sense to treat it like false.
-             if (null (cadr probe)) do (cl-return nil)
              if (not (listp (cadr probe))) do (cl-return (if more nil (cadr probe)))
              finally (cl-return (or (cadr probe) t)))))
 
@@ -1173,8 +1174,9 @@ and just return it.  PROMPT shouldn't end with a question mark."
    (eglot--managed-mode
     (add-hook 'after-change-functions 'eglot--after-change nil t)
     (add-hook 'before-change-functions 'eglot--before-change nil t)
-    (add-hook 'kill-buffer-hook 'eglot--signal-textDocument/didClose nil t)
     (add-hook 'kill-buffer-hook 'eglot--managed-mode-onoff nil t)
+    ;; Prepend "didClose" to the hook after the "onoff", so it will run first
+    (add-hook 'kill-buffer-hook 'eglot--signal-textDocument/didClose nil t)
     (add-hook 'before-revert-hook 'eglot--signal-textDocument/didClose nil t)
     (add-hook 'before-save-hook 'eglot--signal-textDocument/willSave nil t)
     (add-hook 'after-save-hook 'eglot--signal-textDocument/didSave nil t)
@@ -1224,7 +1226,11 @@ Reset in `eglot--managed-mode-onoff'.")
              (setq eglot--cached-current-server nil)
              (when server
                (setf (eglot--managed-buffers server)
-                     (delq buf (eglot--managed-buffers server)))))))))
+                     (delq buf (eglot--managed-buffers server)))
+               (when (and eglot-autoshutdown
+                          (not (eglot--shutdown-requested server))
+                          (not (eglot--managed-buffers server)))
+                 (eglot-shutdown server))))))))
 
 (defun eglot--current-server ()
   "Find the current logical EGLOT server."
@@ -1953,10 +1959,11 @@ is not active."
        :company-prefix-length
        (save-excursion
          (when (car bounds) (goto-char (car bounds)))
-         (looking-back
-          (regexp-opt
-           (cl-coerce (cl-getf completion-capability :triggerCharacters) 'list))
-          (line-beginning-position)))
+         (when (listp completion-capability)
+           (looking-back
+            (regexp-opt
+             (cl-coerce (cl-getf completion-capability :triggerCharacters) 'list))
+            (line-beginning-position))))
        :exit-function
        (lambda (comp _status)
          (let ((comp (if (get-text-property 0 'eglot--lsp-completion comp)
