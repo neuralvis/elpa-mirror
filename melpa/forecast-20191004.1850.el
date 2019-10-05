@@ -4,7 +4,7 @@
 ;;
 ;; Author: Göktuğ Kayaalp <self@gkayaalp.com>
 ;; Keywords: weather, forecast
-;; Package-Version: 20190904.1257
+;; Package-Version: 20191004.1850
 ;; Version: 0.8
 ;; URL: https://dev.gkayaalp.com/elisp/index.html#forecast-el
 ;; Package-Requires: ((emacs "24.4"))
@@ -367,6 +367,14 @@ On Linux, one can download the Quivira font and put that under
 the $HOME/.fonts directory for using the font.  There are not
 many fonts that support this character.  There are also the
 BabelStone fonts.")
+
+(defface forecast-rain-symbol-face
+  nil
+  "Face for the rain symbol.")
+
+(defface forecast-snow-symbol-face
+  nil
+  "Face for the snow symbol.")
 
 ;;; Functions:
 (defun forecast--assoca (keyseq list)
@@ -741,9 +749,13 @@ wind directions."
                           "       "
                         (format " %%%-3d%s " (* 100 pp)
                                 (cond ((string= pt "rain")
-                                       forecast-rain-symbol)
+                                       (propertize
+                                        forecast-rain-symbol
+                                        'face 'forecast-rain-symbol-face))
                                       ((string= pt "snow")
-                                       forecast-snow-symbol)))))))
+                                       (propertize
+                                        forecast-snow-symbol
+                                        'face 'forecast-snow-symbol-face))))))))
           precip)
     (insert "  Precipitation\n")
     ;; wind

@@ -2,8 +2,8 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/org-sidebar
-;; Package-Version: 20191003.1322
-;; Version: 0.2-pre
+;; Package-Version: 20191004.1824
+;; Version: 0.3-pre
 ;; Package-Requires: ((emacs "26.1") (s "1.10.0") (dash "2.13") (dash-functional "1.2.0") (org "9.0") (org-ql "0.2") (org-super-agenda "1.0"))
 ;; Keywords: hypermedia, outlines, Org, agenda
 
@@ -22,14 +22,22 @@
 
 ;;;; Usage
 
-;; Run command `org-sidebar' to display the default sidebars for the
-;; current Org buffer.  Customization options are in the `org-sidebar'
-;; group.
+;; Call these commands to display sidebars:
 
-;; To display your own sidebars, call the function `org-sidebar' with
-;; the arguments described in its docstring.  Also see the functions
-;; `org-sidebar--upcoming-items' and `org-sidebar--todo-items' for
-;; examples.
+;; - `org-sidebar:' Display the default item sidebars for the current
+;;                  Org buffer.
+;; - `org-sidebar-tree:' Display tree-view sidebar for current Org
+;;                       buffer.
+
+;; Customization options are in the `org-sidebar' group.
+
+;; The functions `org-sidebar-tree-view-buffer' and
+;; `org-sidebar--subtree-buffer' return buffers.
+
+;; To display custom-defined sidebars, call the function `org-sidebar'
+;; with the arguments described in its docstring.  See examples in
+;; documentation, as well as the definitions of functions
+;; `org-sidebar--todo-items' and `org-sidebar--upcoming-items'.
 
 ;;; License:
 
