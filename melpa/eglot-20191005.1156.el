@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.4
-;; Package-Version: 20191005.1050
+;; Package-Version: 20191005.1156
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -174,6 +174,10 @@ as 0, i.e. don't block at all."
 (defcustom eglot-autoshutdown nil
   "If non-nil, shut down server after killing last managed buffer."
   :type 'boolean)
+
+(defcustom eglot-send-changes-idle-time 0.5
+  "Don't tell server of changes before Emacs's been idle for this many seconds."
+  :type 'number)
 
 (defcustom eglot-events-buffer-size 2000000
   "Control the size of the Eglot events buffer.
@@ -1315,7 +1319,7 @@ Uses THING, FACE, DEFS and PREPEND."
                (nick (and server (eglot--project-nickname server)))
                (pending (and server (hash-table-count
                                      (jsonrpc--request-continuations server))))
-               (`(,_id ,doing ,done-p ,detail) (and server (eglot--spinner server)))
+               (`(,_id ,doing ,done-p ,_detail) (and server (eglot--spinner server)))
                (last-error (and server (jsonrpc-last-error server))))
     (append
      `(,(eglot--mode-line-props "eglot" 'eglot-mode-line nil))
@@ -1333,15 +1337,13 @@ Uses THING, FACE, DEFS and PREPEND."
                      (format "An error occured: %s\n" (plist-get last-error
                                                                  :message)))))
          ,@(when (and doing (not done-p))
-             `("/" ,(eglot--mode-line-props
-                     (format "%s%s" doing
-                             (if detail (format ":%s" detail) ""))
-                     'compilation-mode-line-run '())))
+             `("/" ,(eglot--mode-line-props doing
+                                            'compilation-mode-line-run '())))
          ,@(when (cl-plusp pending)
              `("/" ,(eglot--mode-line-props
-                     (format "%d outstanding requests" pending) 'warning
+                     (format "%d" pending) 'warning
                      '((mouse-3 eglot-forget-pending-continuations
-                                "fahgettaboudit"))))))))))
+                                "forget pending continuations"))))))))))
 
 (add-to-list 'mode-line-misc-info
              `(eglot--managed-mode (" [" eglot--mode-line-format "] ")))
@@ -1594,10 +1596,11 @@ Records BEG, END and PRE-CHANGE-LENGTH locally."
   (let ((buf (current-buffer)))
     (setq eglot--change-idle-timer
           (run-with-idle-timer
-           0.5 nil (lambda () (eglot--with-live-buffer buf
-                                (when eglot--managed-mode
-                                  (eglot--signal-textDocument/didChange)
-                                  (setq eglot--change-idle-timer nil))))))))
+           eglot-send-changes-idle-time
+           nil (lambda () (eglot--with-live-buffer buf
+                            (when eglot--managed-mode
+                              (eglot--signal-textDocument/didChange)
+                              (setq eglot--change-idle-timer nil))))))))
 
 ;; HACK! Launching a deferred sync request with outstanding changes is a
 ;; bad idea, since that might lead to the request never having a
