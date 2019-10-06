@@ -4,7 +4,7 @@
 
 ;; Author:  Kien Nguyen <kien.n.quang@gmail.com>
 ;; URL: https://github.com/kiennq/emacs-mini-modeline
-;; Package-Version: 20191006.925
+;; Package-Version: 20191006.1733
 ;; Version: 0.1
 ;; Keywords: convenience, tools
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))
@@ -205,7 +205,7 @@ When ARG is:
   "Render the LEFT and RIGHT part of mini-modeline."
   (let* ((left (or left ""))
          (right (or right ""))
-         (available-width (- (frame-width mini-modeline-frame) (string-width left) 3))
+         (available-width (max (- (frame-width mini-modeline-frame) (string-width left) 3) 0))
          (required-width (string-width right)))
     (if (< available-width required-width)
         (if mini-modeline-truncate-p
