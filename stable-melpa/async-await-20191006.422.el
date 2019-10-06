@@ -4,7 +4,7 @@
 
 ;; Author: chuntaro <chuntaro@sakura-games.jp>
 ;; URL: https://github.com/chuntaro/emacs-async-await
-;; Package-Version: 20170208.1150
+;; Package-Version: 20191006.422
 ;; Package-Requires: ((emacs "25") (promise "1.0"))
 ;; Version: 1.0
 ;; Keywords: async await convenience
@@ -200,6 +200,13 @@
     `(lambda ,arglist
        (async-await--awaiter
         (funcall (iter-lambda () ,exps))))))
+
+(defconst async-font-lock-keywords
+  '(("(\\(async-defun\\)\\_>[ \t']*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
+     (1 font-lock-keyword-face)
+     (2 font-lock-function-name-face nil t))))
+
+(font-lock-add-keywords 'emacs-lisp-mode async-font-lock-keywords)
 
 (provide 'async-await)
 ;;; async-await.el ends here
