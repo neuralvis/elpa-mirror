@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20190706.442
+;; Package-Version: 20191006.443
 ;; Package-Requires: ((emacs "25.1") (dash "2.10") (hydra "0.14") (f "0.20"))
 ;; Keywords: vc convenience
 ;; URL: https://github.com/akirak/git-identity.el
@@ -207,8 +207,8 @@ If it is omitted, the default prompt is used."
 
 (defun git-identity--has-identity-p ()
   "Return non-nil If the current repository has an identity."
-  (and (git-identity--git-config-get "user.name")
-       (git-identity--git-config-get "user.email")))
+  (and (git-identity--git-config-get "user.name" "--local")
+       (git-identity--git-config-get "user.email" "--local")))
 
 (defun git-identity--find-repo (&optional startdir)
   "Find a Git working directory which is STARTDIR or its ancestor."

@@ -1,0 +1,2 @@
+
+(mini-modeline . [(20191006 925) ((emacs (25 1)) (dash (2 12 0))) "Display modeline in minibuffer" single ((:commit . "4f8aebe376fcb8e5eb49aa3c560f55f4e176777f") (:keywords "convenience" "tools") (:authors ("Kien Nguyen" . "kien.n.quang@gmail.com")) (:maintainer "Kien Nguyen" . "kien.n.quang@gmail.com") (:url . "https://github.com/kiennq/emacs-mini-modeline"))])
