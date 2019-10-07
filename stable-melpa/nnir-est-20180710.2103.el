@@ -5,7 +5,6 @@
 ;; Author: KAWABATA, Taichi <kawabata.taichi_at_gmail.com>
 ;; Created: 2014-02-01
 ;; Version: 1.180705
-;; Package-Version: 20180710.2103
 ;; Keywords: mail
 ;; Human-Keywords: gnus nnir
 ;; URL: https://github.com/kawabata/nnir-est
