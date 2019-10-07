@@ -2,7 +2,7 @@
 
 ;; Author: myuhe <yuhei.maeda_at_gmail.com>
 ;; URL: https://github.com/kidd/org-gcal.el
-;; Package-Version: 20190902.252
+;; Package-Version: 20191007.722
 ;; Version: 0.3
 ;; Maintainer: Raimon Grau <raimonster@gmail.com>
 ;; Copyright (C) :2014 myuhe all rights reserved.
@@ -590,9 +590,27 @@ If SKIP-EXPORT is not nil, don’t overwrite the event on the server."
                   elem))
            (event-id (org-gcal--event-id-from-entry-id
                       (org-element-property :ID elem))))
-      (when (and event-id
-                 (y-or-n-p (format "Do you really want to delete event?\n\n%s\n\n" smry)))
-        (org-gcal--delete-event calendar-id event-id etag marker)))))
+      (if (and event-id
+               (y-or-n-p (format "Do you really want to delete event?\n\n%s\n\n" smry)))
+          (deferred:$
+            (org-gcal--delete-event calendar-id event-id etag (copy-marker marker))
+            ;; Delete :org-gcal: drawer after deleting event. This will preserve
+            ;; the ID for links, but will ensure functions in this module don’t
+            ;; identify the entry as a Calendar event.
+            (deferred:nextc it
+              (lambda (res)
+                (message "about to find drawer: %S" res)
+                (org-with-point-at marker
+                  (set-marker marker nil)
+                  (when (re-search-forward
+                         (format
+                          "^[ \t]*:%s:[^z-a]*?\n[ \t]*:END:[ \t]*\n?"
+                          (regexp-quote org-gcal-drawer-name))
+                         (save-excursion (outline-next-heading) (point))
+                         'noerror)
+                    (replace-match "" 'fixedcase))
+                  (deferred:succeed nil)))))
+        (deferred:succeed nil)))))
 
 (defun org-gcal-request-authorization ()
   "Request OAuth authorization at AUTH-URL by launching `browse-url'.
@@ -1122,7 +1140,7 @@ Returns a ‘deferred’ object that can be used to wait for completion."
                                       (concat "Org-gcal post event\n  " (plist-get data :summary)))))
                 (deferred:succeed nil)))))))
       :finally
-      (lambda ()
+      (lambda (_)
         (set-marker marker nil)))))
 
 
@@ -1196,7 +1214,8 @@ Returns a ‘deferred’ object that can be used to wait for completion."
                           (goto-char (marker-position marker))
                           (org-gcal--update-entry
                            calendar-id
-                           (request-response-data response))))))))
+                           (request-response-data response))))
+                      (deferred:succeed nil)))))
                ;; Generic error-handler meant to provide useful information about
                ;; failure cases not otherwise explicitly specified.
                ((not (eq error-msg nil))
@@ -1206,9 +1225,10 @@ Returns a ‘deferred’ object that can be used to wait for completion."
                 (error "Got error %S: %S" status-code error-msg))
                ;; Fetch was successful.
                (t
-                (org-gcal--notify "Event Deleted" "Org-gcal deleted event")))))))
+                (org-gcal--notify "Event Deleted" "Org-gcal deleted event")
+                (deferred:succeed nil)))))))
       :finally
-      (lambda ()
+      (lambda (_)
         (set-marker marker nil)))))
 
 (defun org-gcal--capture-post ()

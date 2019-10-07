@@ -7,6 +7,7 @@
 ;; Original Author: Mark A. Hershberger <mah@everybody.org>
 ;; Created: 2002 Oct 11
 ;; Keywords: weblog blogger cms movable type openweblog blog
+;; Package-Version: 20110926.1618
 ;; URL: http://launchpad.net/weblogger-el
 ;; Version: 1.4.6
 ;; Last Modified: <2011-09-26 12:16:48 mah>

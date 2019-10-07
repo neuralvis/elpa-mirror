@@ -2,7 +2,6 @@
 
 ;; Author: Florian Biermann <fbie@itu.dk>
 ;; URL: http://github.com/fbie/slirm
-;; Package-Version: 20160201.1425
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.4."))
 
