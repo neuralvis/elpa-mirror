@@ -5,7 +5,7 @@
 ;; Author: Sibi Prabakaran <sibi@psibi.in>
 ;; Maintainer: Sibi Prabakaran <sibi@psibi.in>
 ;; Keywords: languages
-;; Package-Version: 20190919.2242
+;; Package-Version: 20191006.2324
 ;; Version: 0.1.3
 ;; Package-Requires: ((emacs "24.4") (reformatter "0.3"))
 ;; URL: https://github.com/psibi/dhall-mode
@@ -289,6 +289,8 @@ STRING-TYPE type of string based off of Emacs syntax table types"
   (setq-local tab-width 4)
   (setq-local comment-start "-- ")
   (setq-local comment-end "")
+  ;; Use only spaces for indentation, for consistency with "dhall format"
+  (setq-local indent-tabs-mode nil)
   ;; Special syntax properties for Dhall
   (setq-local syntax-propertize-function 'dhall-syntax-propertize)
   (add-hook 'after-change-functions 'dhall-after-change nil t)
