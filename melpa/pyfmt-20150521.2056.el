@@ -5,6 +5,7 @@
 ;; Author: Alexandre Héaumé <aheaume@gmail.com>
 ;; Created: 21 May 2015
 ;; Version: 0.0.1
+;; Package-Version: 20150521.2056
 ;; Keywords: tools
 ;; Homepage: https://github.com/aheaume/pyfmt.el
 
