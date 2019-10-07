@@ -4,7 +4,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: kiwix wikipedia
-;; Package-Version: 20190928.549
+;; Package-Version: 20191007.913
 ;; URL: https://github.com/stardiviner/kiwix.el
 ;; Created: 23th July 2016
 ;; Version: 1.0.0
@@ -181,14 +181,8 @@
 (defvar kiwix-server-available? nil
   "The kiwix-server current available?")
 
-;;;###autoload
-(defun kiwix-at-point (&optional interactively)
-  "Search for the symbol at point with `kiwix-query'.
-
-Or When prefix argument `INTERACTIVELY' specified, then prompt
-for query string and library interactively."
-  (interactive "P")
-  ;; ping kiwix-serve generally to make sure server available.
+(defun kiwix-ping-server ()
+  "Ping Kiwix server to set `kiwix-server-available?' global state variable."
   (request kiwix-server-url
            :type "GET"
            :sync t
@@ -196,19 +190,48 @@ for query string and library interactively."
            :success (function* (lambda (&key data &allow-other-keys)
                                  (setq kiwix-server-available? t)))
            :error (function* (lambda (&rest args &key error-thrown &allow-other-keys)
-                               (setq kiwix-server-available? nil))))
+                               (setq kiwix-server-available? nil)))))
+
+(defun kiwix-ajax-search-hints (input)
+  "Instantly AJAX request to get available Kiwix entry keywords
+list and return a list result."
+  (let* ((ajax-api "http://127.0.0.1:8089/suggest?content=wikipedia_zh_all_2015-11&term=")
+         (ajax-url (concat ajax-api input))
+         (data (request-response-data
+                (request ajax-url
+                         :type "GET"
+                         :sync t
+                         :headers '(("Content-Type" . "application/json"))
+                         :parser #'json-read
+                         :success (function*
+                                   (lambda (&key data &allow-other-keys)
+                                     (print data)))))))
+    (if (vectorp data)
+        (mapcar 'cdar data))))
+
+;;;###autoload
+(defun kiwix-at-point (&optional interactively)
+  "Search for the symbol at point with `kiwix-query'.
+
+Or When prefix argument `INTERACTIVELY' specified, then prompt
+for query string and library interactively."
+  (interactive "P")
+  (kiwix-ping-server)
   (if kiwix-server-available?
       (let* ((library (if (or kiwix-search-interactively interactively)
                           (kiwix-select-library)
                         (kiwix--get-library-name kiwix-default-library)))
-             (query (if interactively
-                        (read-string "Kiwix Search: "
-                                     (if mark-active
-                                         (buffer-substring (region-beginning) (region-end))
-                                       (thing-at-point 'symbol)))
-                      (progn (if mark-active
-                                 (buffer-substring (region-beginning) (region-end))
-                               (thing-at-point 'symbol))))))
+             (query (completing-read
+                     "Kiwix related entries: "
+                     (kiwix-ajax-search-hints
+                      (if interactively
+                          (read-string "Kiwix Search: "
+                                       (if mark-active
+                                           (buffer-substring (region-beginning) (region-end))
+                                         (thing-at-point 'symbol)))
+                        (progn (if mark-active
+                                   (buffer-substring (region-beginning) (region-end))
+                                 (thing-at-point 'symbol))))))))
         (message (format "library: %s, query: %s" library query))
         (if (or (null library)
                 (string-empty-p library)
