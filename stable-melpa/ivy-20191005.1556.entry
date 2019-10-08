@@ -1,2 +1,0 @@
-
-(ivy . [(20191005 1556) ((emacs (24 1))) "Incremental Vertical completYon" tar ((:commit . "19840680677db6054dbc8b72f4cf42744623a06f") (:keywords "matching") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/swiper"))])

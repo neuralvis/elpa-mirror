@@ -18,7 +18,6 @@
 
 ;; Author: zk_phi
 ;; URL: http://hins11.yu-yake.com/
-;; Package-Version: 20170531.5
 ;; Version: 0.4.0
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24.3"))
 
