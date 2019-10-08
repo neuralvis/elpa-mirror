@@ -5,7 +5,6 @@
 
 ;; Author: Julien Danjou <julien@danjou.info>
 ;; URL: http://julien.danjou.info/offlineimap-el.html
-;; Package-Version: 20150916.1158
 
 ;; This file is NOT part of GNU Emacs.
 
