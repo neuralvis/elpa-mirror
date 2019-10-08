@@ -1,0 +1,2 @@
+
+(eldoc-box . [(20191008 1427) ((emacs (26 1))) "Display documentation in childframe" single ((:commit . "033df7175d454708460818c66ad9a8c589540ca9") (:authors ("Sebastien Chapuis" . "sebastien@chapu.is")) (:maintainer "Yuan Fu" . "casouri@gmail.com") (:url . "https://github.com/casouri/eldoc-box"))])
