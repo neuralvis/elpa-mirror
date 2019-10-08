@@ -5,7 +5,7 @@
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Created: Jan 9, 2012
 ;; Version: 4.5.0
-;; Package-Version: 20191008.340
+;; Package-Version: 20191008.429
 ;; Keywords: vc
 ;; URL: http://projects.ryuslash.org/git-auto-commit-mode/
 
@@ -165,9 +165,19 @@ should already have been set up."
                             actual-buffer)
                gac--debounce-timers))))
 
+(defun gac--buffer-has-changes (buffer)
+  "Check to see if there is any change in BUFFER."
+  (let ((file-name (convert-standard-filename
+                    (file-name-nondirectory
+                     (buffer-file-name buffer)))))
+    (not (string=
+          (shell-command-to-string (concat "git diff " file-name))
+          ""))))
+
 (defun gac--after-save (buffer)
   (unwind-protect
-      (when (buffer-live-p buffer)
+      (when (and (buffer-live-p buffer)
+                 (gac--buffer-has-changes buffer))
         (gac-commit buffer)
         (with-current-buffer buffer
           ;; with-current-buffer required here because gac-automatically-push-p
