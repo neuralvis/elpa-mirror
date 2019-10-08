@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20190928.2212
+;; Package-Version: 20191008.1422
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -1111,7 +1111,7 @@
    `(whitespace-empty ((t (:foreground ,gray :background "gray10"))))
    `(whitespace-hspace ((t (:foreground ,gray :background "grey11"))))
    `(whitespace-indentation ((t (:foreground ,gray :background "gray12"))))
-   `(whitespace-line ((t (:inherit error :bold nil))))
+   `(whitespace-line ((t (:underline ,nimbus-err :bold nil))))
    `(whitespace-newline ((t (:foreground ,gray))))
    `(whitespace-space ((t (:foreground ,gray))))
    `(whitespace-space-after-tab ((t (:foreground ,gray :background "gray13"))))
