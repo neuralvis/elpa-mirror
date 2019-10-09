@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20190919.727
+;; Package-Version: 20191009.1506
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -1878,13 +1878,13 @@ current file automatically push the old position onto the ring."
 (defun taskpaper-new-item-same-level ()
   "Insert new item at same level."
   (interactive)
-  (let (level indent)
-    (save-excursion
-      (setq level (if (outline-on-heading-p t)
-                      (save-match-data (funcall outline-level))
-                    1)
-            indent (make-string (1- level) ?\t)))
-    (if (bolp) (newline) (newline) (insert indent))))
+  (cond
+   ((bolp) (newline))
+   ((outline-on-heading-p)
+    (let* ((level (save-excursion (save-match-data (funcall outline-level))))
+           (indent (make-string (1- level) ?\t)))
+      (newline) (insert indent)))
+   (t (delete-horizontal-space))))
 
 (defun taskpaper-new-task-same-level ()
   "Insert new task at same level."
