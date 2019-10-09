@@ -8,7 +8,7 @@
 ;;              Vladimir Panteleev <vladimir@thecybershadow.net>
 ;; Created:  March 2007
 ;; Version:  201908262243
-;; Package-Version: 20190826.2244
+;; Package-Version: 20191009.903
 ;; Keywords:  D programming language emacs cc-mode
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -211,7 +211,7 @@ The expression is added to `compilation-error-regexp-alist' and
   (add-to-list
    'compilation-error-regexp-alist-alist
    `(,symbol
-     ,(rx-form
+     ,(rx-to-string
       `(and
 	line-start
 	(group-n 1 (one-or-more any))		; File name

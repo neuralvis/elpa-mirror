@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
-;; Package-Version: 20190830.1448
+;; Package-Version: 20191009.859
 ;; Version: 0.1.0
 ;; Package-Requires: ((async "1.2"))
 ;; Keywords: images, screenshots, download
@@ -133,6 +133,8 @@ will be used."
           (const :tag "scrot" "scrot -s %s")
           (const :tag "gm" "gm import %s")
           (const :tag "imagemagick/import" "import %s")
+          (const :tag "imagemagick/import + xclip to save to clipboard"
+           "export filename=\"%s\"; import png:\"$filename\" ;xclip -selection clipboard -target image/png -filter < \"$filename\" &>/dev/null")
           ;; screenshot method in ms-windows, /capture=4 stands for interactive.
           (const :tag "IrfanView" "i_view64 /capture=4 /convert=\"%s\"")
           ;; screenshot script in osx, -i stands for interactive,
@@ -141,7 +143,7 @@ will be used."
           (const :tag "screencapture" "screencapture -i %s")
           ;; take an image that is already on the clipboard, for Linux
           (const :tag "xclip"
-                 "xclip -selection clipboard -t image/png -o > %s")
+           "xclip -selection clipboard -t image/png -o > %s")
           ;; take an image that is already on the clipboard, for Windows
           (const :tag "imagemagick/convert" "convert clipboard: %s")
           (function :tag "Custom function")))

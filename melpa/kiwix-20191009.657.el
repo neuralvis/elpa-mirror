@@ -4,7 +4,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: kiwix wikipedia
-;; Package-Version: 20191009.128
+;; Package-Version: 20191009.657
 ;; URL: https://github.com/stardiviner/kiwix.el
 ;; Created: 23th July 2016
 ;; Version: 1.0.0
@@ -60,7 +60,7 @@
   :safe #'numberp
   :group 'kiwix-mode)
 
-(defcustom kiwix-server-url (format "http://127.0.0.1:%s/" kiwix-server-port)
+(defcustom kiwix-server-url (format "http://127.0.0.1:%s" kiwix-server-port)
   "Specify Kiwix server URL."
   :type 'string
   :group 'kiwix-mode)
@@ -110,6 +110,10 @@
             (directory-files
              (concat kiwix-default-data-path "/data/library/") nil ".*\.zim")))
   "A list of Kiwix libraries.")
+
+(defvar kiwix--selected-library nil
+  "Global variable of currently select library used in anonymous function.
+Like in function `kiwix-ajax-search-hints'.")
 
 ;; - examples:
 ;; - "wikipedia_en_all" - "wikipedia_en_all_2016-02"
@@ -163,11 +167,11 @@
   "Only capitalize the first word of STRING."
   (concat (string (upcase (aref string 0))) (substring string 1)))
 
-(defun kiwix-query (query &optional library)
+(defun kiwix-query (query &optional selected-library)
   "Search `QUERY' in `LIBRARY' with Kiwix."
-  (let* ((kiwix-library (if library library (kiwix--get-library-name kiwix-default-library)))
+  (let* ((library (or selected-library (kiwix--get-library-name kiwix-default-library)))
          (url (concat
-               kiwix-server-url kiwix-library "/A/"
+               kiwix-server-url library "/A/"
                ;; query need to be convert to URL encoding: "禅宗" https://zh.wikipedia.org/wiki/%E7%A6%85%E5%AE%97
                (url-encode-url
                 ;; convert space to underline: "Beta distribution" "Beta_distribution"
@@ -193,10 +197,15 @@
            :error (function* (lambda (&rest args &key error-thrown &allow-other-keys)
                                (setq kiwix-server-available? nil)))))
 
-(defun kiwix-ajax-search-hints (input)
+(defun kiwix-ajax-search-hints (input &optional selected-library)
   "Instantly AJAX request to get available Kiwix entry keywords
 list and return a list result."
-  (let* ((ajax-api "http://127.0.0.1:8089/suggest?content=wikipedia_zh_all_2015-11&term=")
+  (let* ((library (or selected-library
+                      (kiwix--get-library-name (or kiwix--selected-library
+                                                   kiwix-default-library))))
+         (ajax-api (format "%s/suggest?content=%s&term="
+                           kiwix-server-url
+                           library))
          (ajax-url (concat ajax-api input))
          (data (request-response-data
                 (request ajax-url
@@ -206,7 +215,7 @@ list and return a list result."
                          :parser #'json-read
                          :success (function*
                                    (lambda (&key data &allow-other-keys)
-                                     (print data)))))))
+                                     data))))))
     (if (vectorp data)
         (mapcar 'cdar data))))
 
@@ -219,32 +228,36 @@ for query string and library interactively."
   (interactive "P")
   (kiwix-ping-server)
   (if kiwix-server-available?
-      (let* ((library (if (or kiwix-search-interactively interactively)
-                          (kiwix-select-library)
-                        (kiwix--get-library-name kiwix-default-library)))
-             (query (ivy-read "Kiwix related entries: "
-                              'kiwix-ajax-search-hints
-                              :predicate nil
-                              :require-match nil
-                              :initial-input (if mark-active
-                                                 (buffer-substring
-                                                  (region-beginning) (region-end))
-                                               (thing-at-point 'symbol))
-                              :preselect nil
-                              :def nil
-                              :history nil
-                              :keymap nil
-                              :update-fn 'auto
-                              :sort t
-                              :dynamic-collection t
-                              :caller 'ivy-done)))
-        (message (format "library: %s, query: %s" library query))
-        (if (or (null library)
-                (string-empty-p library)
-                (null query)
-                (string-empty-p query))
-            (error "Your query is invalid")
-          (kiwix-query query library)))
+      (progn
+        (setq kiwix--selected-library (if (or kiwix-search-interactively interactively)
+                                          (kiwix-select-library)
+                                        (kiwix--get-library-name kiwix-default-library)))
+        (let* ((library kiwix--selected-library)
+               (query (ivy-read "Kiwix related entries: "
+                                `(lambda (input)
+                                   (apply 'kiwix-ajax-search-hints
+                                          input `(,kiwix--selected-library)))
+                                :predicate nil
+                                :require-match nil
+                                :initial-input (if mark-active
+                                                   (buffer-substring
+                                                    (region-beginning) (region-end))
+                                                 (thing-at-point 'symbol))
+                                :preselect nil
+                                :def nil
+                                :history nil
+                                :keymap nil
+                                :update-fn 'auto
+                                :sort t
+                                :dynamic-collection t
+                                :caller 'ivy-done)))
+          (message (format "library: %s, query: %s" library query))
+          (if (or (null library)
+                  (string-empty-p library)
+                  (null query)
+                  (string-empty-p query))
+              (error "Your query is invalid")
+            (kiwix-query query library))))
     (warn "kiwix-serve is not available, please start it at first."))
   (setq kiwix-server-available? nil))
 

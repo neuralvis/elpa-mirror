@@ -3,7 +3,6 @@
 ;; Copyright (C) 2005 Pete Kazmier
 
 ;; Version: 0.2
-;; Package-Version: 20130210.2315
 ;; Author: Pete Kazmier
 
 ;; This file is not part of GNU Emacs, but it is distributed under

@@ -7,7 +7,6 @@
 ;; Template: Kaleb Elwert <belak@coded.io>
 
 ;; Keywords: faces, theme, color, snazzy
-;; Package-Version: 20170823.1832
 ;; URL: https://github.com/weijiangan/emacs-snazzy/
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24") (base16-theme "2.1"))

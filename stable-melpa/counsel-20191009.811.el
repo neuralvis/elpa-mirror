@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191008.1105
+;; Package-Version: 20191009.811
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -1327,6 +1327,7 @@ INITIAL-INPUT can be given as the initial minibuffer input."
     (define-key map (kbd "C-x C-d") 'counsel-cd)
     map))
 
+(counsel-set-async-exit-code 'counsel-git-grep 1 "No matches found")
 (ivy-set-occur 'counsel-git-grep 'counsel-git-grep-occur)
 (ivy-set-display-transformer 'counsel-git-grep 'counsel-git-grep-transformer)
 
