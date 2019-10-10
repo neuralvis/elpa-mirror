@@ -4,7 +4,7 @@
 
 ;; Author: Wang Kai <kaiwkx@gmail.com>
 ;; Keywords: extensions, tools
-;; Package-Version: 20191009.1513
+;; Package-Version: 20191010.301
 ;; URL: https://github.com/kaiwk/leetcode.el
 ;; Package-Requires: ((emacs "26") (dash "2.16.0") (graphql "0.1.1") (spinner "1.7.3") (aio "1.0"))
 ;; Version: 0.1.7
@@ -427,7 +427,7 @@ Return a list of rows, each row is a vector:
             (string-match-p leetcode--filter-regex title))
         t)
       (if leetcode--filter-tag
-          (let ((tags (split-string (aref row 5) ",")))
+          (let ((tags (split-string (aref row 5) ", ")))
             (member leetcode--filter-tag tags))
         t)))
    rows))
