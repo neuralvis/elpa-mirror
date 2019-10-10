@@ -1,2 +1,0 @@
-
-(package-build . [(20191010 537) ((cl-lib (0 5))) "Tools for assembling a package archive" tar ((:commit . "15c5687c61c0d3d99f9e281823a192d814bd98dc") (:keywords "tools") (:authors ("Donald Ephraim Curtis" . "dcurtis@milkbox.net")) (:maintainer "Donald Ephraim Curtis" . "dcurtis@milkbox.net"))])
