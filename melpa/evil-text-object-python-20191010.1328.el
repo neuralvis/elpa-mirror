@@ -2,9 +2,9 @@
 
 ;; Author: Wouter Bolsterlee <wouter@bolsterl.ee>
 ;; Version: 1.0.1
-;; Package-Version: 20181126.1324
-;; Package-Requires: ((emacs "24") (evil "1.2.12"))
-;; Keywords: evil python text-object
+;; Package-Version: 20191010.1328
+;; Package-Requires: ((emacs "25") (evil "1.2.14") (dash "2.16.0"))
+;; Keywords: convenience languages tools
 ;; URL: https://github.com/wbolster/evil-text-object-python
 ;;
 ;; This file is not part of GNU Emacs.
@@ -20,6 +20,7 @@
 
 ;;; Code:
 
+(require 'dash)
 (require 'evil)
 (require 'python)
 
@@ -65,13 +66,11 @@
                  (beginning-of-line))
                (point)))
         (end (save-excursion
-               (dotimes (number (1- count))
+               (--dotimes (1- count)
                  (python-nav-forward-statement))
                (python-nav-end-of-statement)
                (when (eq type 'line)
-                 (condition-case nil
-                     (progn (next-line) (beginning-of-line))
-                   (end-of-buffer nil)))
+                 (forward-line))
                (point))))
     (evil-range beg end)))
 
@@ -83,32 +82,27 @@
                  (beginning-of-line))
                (point)))
         (end (save-excursion
-               (dotimes (number (1- count))
+               (--dotimes (1- count)
                  (python-nav-forward-defun))
                (python-nav-end-of-defun)
                (when (eq type 'line)
-                 (condition-case nil
-                     (progn (next-line) (beginning-of-line))
-                   (end-of-buffer nil)))
+                 (forward-line))
                (point))))
     (evil-range beg end)))
 
 ;;;###autoload (autoload 'evil-text-object-python-inner-statement "evil-text-object-python" nil t)
-(evil-define-text-object
-  evil-text-object-python-inner-statement (count &optional beg end type)
+(evil-define-text-object evil-text-object-python-inner-statement (count &optional beg end type)
   "Inner text object for the Python statement under point."
   (evil-text-object-python--make-text-object count type))
 
 ;;;###autoload (autoload 'evil-text-object-python-outer-statement "evil-text-object-python" nil t)
-(evil-define-text-object
-  evil-text-object-python-outer-statement (count &optional beg end type)
+(evil-define-text-object evil-text-object-python-outer-statement (count &optional beg end type)
   "Outer text object for the Python statement under point."
   :type line
   (evil-text-object-python--make-text-object count type))
 
 ;;;###autoload (autoload 'evil-text-object-python-function "evil-text-object-python" nil t)
-(evil-define-text-object
-  evil-text-object-python-function (count &optional beg end type)
+(evil-define-text-object evil-text-object-python-function (count &optional beg end type)
   "Inner text object for the Python statement under point."
   (evil-text-object-python--make-func-text-object count type))
 
