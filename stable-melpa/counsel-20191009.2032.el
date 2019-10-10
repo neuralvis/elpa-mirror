@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191009.811
+;; Package-Version: 20191009.2032
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -5919,6 +5919,36 @@ Additional actions:\\<ivy-minibuffer-map>
                                   (null (help-function-arglist f)))))
             :action #'counsel-M-x-action
             :caller 'counsel-major))
+
+;;* `counsel-google'
+(defun counsel-google-function (input)
+  "Create a request to Google with INPUT.
+Return 0 tells `ivy--exhibit' not to update the minibuffer.
+We update it in the callback with `ivy-update-candidates'."
+  (or
+   (ivy-more-chars)
+   (progn
+     (request
+      "http://suggestqueries.google.com/complete/search"
+      :type "GET"
+      :params (list
+               (cons "client" "firefox")
+               (cons "q" input))
+      :parser 'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (ivy-update-candidates
+                   (mapcar #'identity (aref data 1))))))
+     0)))
+
+(defun counsel-google ()
+  "Ivy interface for Google."
+  (interactive)
+  (ivy-read "search: " #'counsel-google-function
+            :action (lambda (x)
+                      (browse-url (concat "https://www.google.com/search?q=" x)))
+            :dynamic-collection t
+            :caller 'counsel-google))
 
 ;;* `counsel-mode'
 (defvar counsel-mode-map
