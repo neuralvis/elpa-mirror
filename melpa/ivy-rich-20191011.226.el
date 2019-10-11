@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20191004.742
+;; Package-Version: 20191011.226
 ;; Version: 0.1.3
 ;; Keywords: ivy
 
@@ -159,7 +159,7 @@ should be set to 'left (default if not given) or 'right to
 indicate where to pad extra spaces to the columns for alignment.
 
 The value of :delimiter should be a string for current
-transformter. If not given, the default is a single space.
+transformer. If not given, the default is a single space.
 
 If :predicate is provide, it should be a function which takes the
 completion candidate as single argument. A candidate with nil
@@ -180,8 +180,8 @@ again to make this variable take effect.")
   (or (null str)
       (string-empty-p (string-trim str))))
 
-(defun ivy-rich-normailze-width (str len &optional left)
-  "Normailze the width of a string.
+(defun ivy-rich-normalize-width (str len &optional left)
+  "Normalize the width of a string.
 
 If the length of STR is smaller than LEN, the string is padded
 using spaces from right if LEFT is nil or from left if left is
@@ -503,7 +503,7 @@ or /a/…/f.el."
           (setq formated (funcall width formated))
         (if (floatp width)
             (setq width (floor (* (window-width (minibuffer-window)) width))))
-        (setq formated (ivy-rich-normailze-width formated width (eq align 'left)))))
+        (setq formated (ivy-rich-normalize-width formated width (eq align 'left)))))
     (if face
         (setq formated (propertize formated 'face face)))
     formated))
