@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191010.1857
+;; Package-Version: 20191011.1030
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -372,11 +372,7 @@ Update the minibuffer with the amount of lines collected every
          ivy-completion-end))
       (setq ivy-completion-beg (point))
       (insert symbol-name)
-      (setq ivy-completion-end (point))
-      (when (equal (get-text-property 0 'symbol symbol-name) "f")
-        (insert "()")
-        (setq ivy-completion-end (point))
-        (backward-char)))))
+      (setq ivy-completion-end (point)))))
 
 ;;** `counsel-clj'
 (declare-function cider-sync-request:complete "ext:cider-client")

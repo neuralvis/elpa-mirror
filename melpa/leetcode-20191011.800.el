@@ -4,10 +4,10 @@
 
 ;; Author: Wang Kai <kaiwkx@gmail.com>
 ;; Keywords: extensions, tools
-;; Package-Version: 20191010.606
+;; Package-Version: 20191011.800
 ;; URL: https://github.com/kaiwk/leetcode.el
 ;; Package-Requires: ((emacs "26") (dash "2.16.0") (graphql "0.1.1") (spinner "1.7.3") (aio "1.0"))
-;; Version: 0.1.8
+;; Version: 0.1.9
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -585,11 +585,14 @@ see: https://github.com/skeeto/emacs-aio/issues/3."
                   (let-alist actual_res
                     (with-current-buffer res-buf
                       (goto-char (point-max))
-                      (insert (concat "Expected:\n" (aref .expected_code_answer 0) "\n\n"))
-                      (insert "Output:\n")
                       (cond
                        ((eq .status_code 10)
-                        (insert (aref .code_answer 0)))
+                        (insert "Output:\n")
+                        (insert (aref .code_answer 0))
+                        (insert "\n\n")
+                        (insert "Expected:\n")
+                        (insert (aref .expected_code_answer 0))
+                        (insert "\n\n"))
                        ((eq .status_code 14)
                         (insert .status_msg))
                        ((eq .status_code 15)
