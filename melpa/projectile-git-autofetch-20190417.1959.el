@@ -4,6 +4,7 @@
 
 ;; Author: Andreas Müller <code@0x7.ch>
 ;; Keywords: tools, vc
+;; Package-Version: 20190417.1959
 ;; Version: 0.1.0
 ;; URL: https://github.com/andrmuel/projectile-git-autofetch
 ;; Package-Requires: ((emacs "25.1") (projectile "0.14.0") (alert "1.2"))
