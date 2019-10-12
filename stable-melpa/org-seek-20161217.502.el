@@ -3,6 +3,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: org search ag pt
+;; Package-Version: 20161217.502
 ;; URL: https://github.com/stardiviner/org-seek.el
 ;; Created: 12th Dec 2016
 ;; Version: 0.1.1
