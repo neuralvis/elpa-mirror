@@ -4,7 +4,7 @@
 
 ;; Author: Ian Eure <ian.eure@gmail.com>
 ;; Version: 1.3
-;; Package-Version: 20150728.1704
+;; Package-Version: 20191011.1959
 ;; Keywords: unix, tools, processes
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -52,7 +52,7 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 (defvar shell-here-project-root-functions
   '(projectile-project-root ffip-project-root)
@@ -142,6 +142,9 @@ root."
       ;; We need to `cd'
       (when (not (string= (shell-here-stripslash
                            (expand-file-name default-directory)) target))
+        (when (tramp-tramp-file-p target)
+          (with-parsed-tramp-file-name target path
+            (setq target path-localname)))
 
         ;; Save any input on the command line; `comint-kill-input'
         ;; calls `kill-region', which we have flet with a function
@@ -149,13 +152,12 @@ root."
         ;; The (insert (prog1 …)) inserts it (or an empty string, if
         ;; we know we have a new buffer) back into the shell buffer
         ;; after having changed directories.
-        (flet ((kill-region (start end)
+        (cl-flet ((kill-region (start end)
                  (prog1
                      (buffer-substring start end) (delete-region start end))))
           (insert (prog1 (or (when (not new) (comint-kill-input)) "")
                     (insert (concat "cd " (shell-quote-argument target)))
-                    (comint-send-input)
-                    (shell-cd target))))))))
+                    (comint-send-input))))))))
 
 (provide 'shell-here)
 ;;; shell-here.el ends here
