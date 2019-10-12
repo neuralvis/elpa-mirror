@@ -2,7 +2,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/org-sidebar
-;; Package-Version: 20191011.2229
+;; Package-Version: 20191012.514
 ;; Version: 0.3-pre
 ;; Package-Requires: ((emacs "26.1") (s "1.10.0") (dash "2.13") (dash-functional "1.2.0") (org "9.0") (org-ql "0.2") (org-super-agenda "1.0"))
 ;; Keywords: hypermedia, outlines, Org, agenda
@@ -470,6 +470,11 @@ If no items are found, return nil."
                     "<drag-mouse-1>" org-sidebar-tree-jump-branches-mouse
                     "<drag-mouse-2>" org-sidebar-tree-jump-entries-mouse
                     "<tab>" org-sidebar-tree-cycle
+                    ;; I don't know if it's universally necessary to bind
+                    ;; all three of these, but it seems to be on my Org.
+                    "<S-tab>" org-sidebar-tree-cycle-global
+                    "<S-iso-lefttab>" org-sidebar-tree-cycle-global
+                    "<backtab>" org-sidebar-tree-cycle-global
                     )))
     (set-keymap-parent map org-mode-map)
     (cl-loop for (key fn) on mappings by #'cddr
@@ -483,7 +488,7 @@ If no items are found, return nil."
                  (const :tag "Source buffer" org-sidebar-tree-jump-source)
                  (function :tag "Custom function")))
 
-(defcustom org-sidebar-tree-side 'right
+(defcustom org-sidebar-tree-side 'left
   "Which side to show the tree sidebar on."
   :type '(choice (const :tag "Left" left)
                  (const :tag "Right" right)))
@@ -576,7 +581,8 @@ the indirect buffer."
 
 (defun org-sidebar-tree-jump (&optional children)
   "Jump to heading at point using `org-sidebar-tree-jump-fn'.
-Argument CHILDREN controls how child entries are displayed:
+If point is before first heading, show base buffer.  Argument
+CHILDREN controls how child entries are displayed:
 
 If nil (interactively, without prefix), only show the entry's own
 body text.  If `children' (with one universal prefix), also show
@@ -586,12 +592,14 @@ descendants and their body text."
   (interactive "p")
   (unless (buffer-base-buffer)
     (error "Must be in a tree buffer"))
-  (funcall org-sidebar-tree-jump-fn
-           :children (pcase children
-                       (1 nil)
-                       (4 'children)
-                       (16 'branches)
-                       (64 'entries))))
+  (if (org-before-first-heading-p)
+      (org-sidebar-tree-jump-source)
+    (funcall org-sidebar-tree-jump-fn
+             :children (pcase children
+                         (1 nil)
+                         (4 'children)
+                         (16 'branches)
+                         (64 'entries)))))
 
 (cl-defun org-sidebar-tree-jump-indirect (&key children)
   "Jump to an indirect buffer showing the heading at point.
@@ -668,6 +676,39 @@ descendants, show them.  Otherwise, hide the subtree."
         (t ;; Nothing more to expand: hide tree.
          (outline-hide-subtree))))
 
+(defun org-sidebar-tree-cycle-global ()
+  "Cycle global visiblity.
+Similar to `org-cycle-internal-global', but does not expand entry
+bodies."
+  (interactive)
+  (let* ((highest-invisible-heading-level
+          (save-excursion
+            (save-restriction
+              (widen)
+              (goto-char (point-min))
+              (when (org-before-first-heading-p)
+                (outline-next-heading))
+              (cl-loop when (outline-invisible-p)
+                       return (org-current-level)
+                       while (outline-next-heading)))))
+         (regexp (rx-to-string `(seq bol (repeat ,(or highest-invisible-heading-level 1) "*") (1+ blank)))))
+    (if highest-invisible-heading-level
+        ;; Some headings are invisible: Show all headings at that level.
+        (save-excursion
+          (goto-char (point-min))
+          (cl-loop while (re-search-forward regexp nil t)
+                   do (progn
+                        (org-up-heading-safe)
+                        (outline-show-children)
+                        (org-end-of-subtree))))
+      ;; All headings visible: Hide all.
+      (save-excursion
+        (goto-char (point-min))
+        (when (org-before-first-heading-p)
+          (outline-next-heading))
+        (cl-loop do (outline-hide-subtree)
+                 while (re-search-forward regexp nil t))))))
+
 (defun org-sidebar-tree-cycle-mouse (event)
   "Cycle visibility of heading at EVENT and its descendants.
 Like `org-cycle-internal-local', but doesn't show entry bodies."
@@ -681,7 +722,8 @@ Like `org-cycle-internal-local', but doesn't show entry bodies."
 
 (cl-defun org-sidebar-tree-jump-mouse (event &key children)
   "Jump to tree for EVENT.
-If CHILDREN is non-nil, also show children."
+If point is before first heading, jump to base buffer.  If
+CHILDREN is non-nil, also show children."
   (interactive "e")
   (-let* (((_type position _count) event)
           ((window _pos-or-area (_x . _y) _timestamp
@@ -689,7 +731,9 @@ If CHILDREN is non-nil, also show children."
     (with-selected-window window
       (goto-char text-pos)
       (goto-char (point-at-bol))
-      (funcall org-sidebar-tree-jump-fn :children children))))
+      (if (org-before-first-heading-p)
+          (org-sidebar-tree-jump-source)
+        (funcall org-sidebar-tree-jump-fn :children children)))))
 
 (defun org-sidebar-tree-jump-branches-mouse (event)
   "Jump to tree for EVENT, showing branches."
@@ -710,6 +754,7 @@ indirect buffer.  If `branches', show all descendant headings.  If
   ;; what we need in a reusable way, so we have to reimplement it.
   (org-with-wide-buffer
    ;; TODO: Use `org-get-heading' after upgrading to newer Org.
+   ;; TODO: Ensure that links in heading text are replaced with descriptions.
    (let* ((buffer-name (concat (nth 4 (org-heading-components)) "::" (file-name-nondirectory (buffer-file-name (buffer-base-buffer)))))
           (old-buffer (get-buffer buffer-name))
           (_killed-old-buffer-p (when old-buffer
