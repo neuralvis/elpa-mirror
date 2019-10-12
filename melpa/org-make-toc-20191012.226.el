@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/org-make-toc
-;; Package-Version: 20190104.512
+;; Package-Version: 20191012.226
 ;; Version: 0.4-pre
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (s "1.10.0") (org "9.0"))
 ;; Keywords: Org, convenience
@@ -170,7 +170,7 @@ of from the beginning of the buffer."
            when (eql 'headline (car element))
            do (setq children (caddr element))
            if (funcall pred element)
-           do (setq properties (second element))
+           do (setq properties (cadr element))
            else do (setq properties nil)
            collect (list 'headline
                          properties
@@ -201,7 +201,7 @@ When KEEP-ALL is non-nil, return all entries."
 
            for element in tree
            for type = (car element)
-           for properties = (second element)
+           for properties = (cadr element)
            for children = (cddr element)
            when (eql 'headline type)
            for result = (if keep-all
