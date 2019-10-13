@@ -192,7 +192,10 @@ pyim 使用 emacs 动态模块：[[https://gitlab.com/liberime/liberime][liberim
    #+BEGIN_EXAMPLE
    (setq pyim-default-scheme 'rime-quanpin)
    #+END_EXAMPLE
-
+5. 如果通过 rime 使用微软双拼，可以用以下设置：
+   #+BEGIN_EXAMPLE
+   (setq pyim-default-scheme 'rime-microsoft-shuangpin)
+   #+END_EXAMPLE
 *** 使用五笔输入
 pyim 支持五笔输入模式，用户可以通过变量 `pyim-default-scheme' 来设定：
 
