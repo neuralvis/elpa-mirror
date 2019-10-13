@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191013.1332
+;; Package-Version: 20191013.1612
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -1270,7 +1270,7 @@ INITIAL-INPUT can be given as the initial minibuffer input."
     (let ((default-directory (ivy-state-directory ivy-last)))
       (find-file x))))
 
-(defun counsel-git-occur ()
+(defun counsel-git-occur (&optional _cands)
   "Occur function for `counsel-git' using `counsel-cmd-to-dired'."
   (cd (ivy-state-directory ivy-last))
   (counsel-cmd-to-dired
@@ -1557,7 +1557,7 @@ When CMD is non-nil, prompt for a specific \"git grep\" command."
                        " "))))
     (concat (format counsel-git-grep-cmd positive-pattern) negative-patterns)))
 
-(defun counsel-git-grep-occur ()
+(defun counsel-git-grep-occur (&optional _cands)
   "Generate a custom occur buffer for `counsel-git-grep'."
   (counsel-grep-like-occur #'counsel--git-grep-occur-cmd))
 
@@ -2034,7 +2034,7 @@ If USE-IGNORE is non-nil, try to generate a command that respects
      " | grep"
      (concat " -type " type exclude-dots " | grep") cmd)))
 
-(defun counsel-find-file-occur ()
+(defun counsel-find-file-occur (&optional _cands)
   (require 'find-dired)
   (cd ivy--directory)
   (if counsel-find-file-occur-use-find
@@ -2559,7 +2559,7 @@ FZF-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
     (let ((default-directory counsel--fzf-dir))
       (find-file x))))
 
-(defun counsel-fzf-occur ()
+(defun counsel-fzf-occur (&optional _cands)
   "Occur function for `counsel-fzf' using `counsel-cmd-to-dired'."
   (cd counsel--fzf-dir)
   (counsel-cmd-to-dired
@@ -2863,14 +2863,9 @@ Works for `counsel-git-grep', `counsel-ag', etc."
                        switches
                        (shell-quote-argument regex))))))
          (cands (counsel--split-string (shell-command-to-string cmd))))
-    ;; Need precise number of header lines for `wgrep' to work.
-    (insert (format "-*- mode:grep; default-directory: %S -*-\n\n\n"
-                    default-directory))
-    (insert (format "%d candidates:\n" (length cands)))
-    (ivy--occur-insert-lines
-     (mapcar #'counsel--normalize-grep-match cands))))
+    (swiper--occur-insert-lines (mapcar #'counsel--normalize-grep-match cands))))
 
-(defun counsel-ag-occur ()
+(defun counsel-ag-occur (&optional _cands)
   "Generate a custom occur buffer for `counsel-ag'."
   (counsel-grep-like-occur
    counsel-ag-command))
@@ -3041,7 +3036,7 @@ relative to the last position stored here.")
                                      (line-end-position))
             (swiper--add-overlays (ivy--regex ivy-text))))))))
 
-(defun counsel-grep-occur ()
+(defun counsel-grep-occur (&optional _cands)
   "Generate a custom occur buffer for `counsel-grep'."
   (counsel-grep-like-occur
    (format

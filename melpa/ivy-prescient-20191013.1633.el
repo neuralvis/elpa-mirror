@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20190921.3
+;; Package-Version: 20191013.1633
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1") (prescient "3.3") (ivy "0.11.0"))
 ;; Version: 3.3
@@ -34,7 +34,7 @@
 
 ;;;; User options
 
-(defcustom ivy-prescient-sort-commands '(counsel-find-library)
+(defcustom ivy-prescient-sort-commands '(counsel-find-library counsel-M-x)
   "Commands for which candidates should always be sorted.
 This allows you to enable sorting for commands which call
 `ivy-read' with a nil value for `:sort'."

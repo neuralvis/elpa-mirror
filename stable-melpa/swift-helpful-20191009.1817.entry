@@ -1,2 +1,0 @@
-
-(swift-helpful . [(20191009 1817) ((emacs (25 1)) (dash (2 12 0)) (lsp-mode (6 0)) (swift-mode (8 0 0))) "Show documentation for Swift programs." tar ((:commit . "ef979db50e2b98b38a3f94c851347404e73c3375") (:keywords "help" "swift") (:authors ("Daniel Martín" . "mardani29@yahoo.es")) (:maintainer "Daniel Martín" . "mardani29@yahoo.es") (:url . "https://github.com/danielmartin/swift-helpful"))])
