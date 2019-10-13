@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/grip-mode
 ;; Version: 2.1.1
-;; Package-Version: 20191005.1604
+;; Package-Version: 20191013.1246
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience, markdown, preview
 
@@ -151,6 +151,11 @@
   (remove-hook 'after-change-functions #'grip-org-to-md t)
   (remove-hook 'after-change-functions #'grip-refresh-md t)
   (remove-hook 'kill-buffer-hook #'grip-kill-process t))
+
+(defun grip-browse-preview ()
+  "Browse grip preivew."
+  (interactive)
+  (browse-url (format "http://localhost:%d" grip-port)))
 
 ;;;###autoload
 (define-minor-mode grip-mode

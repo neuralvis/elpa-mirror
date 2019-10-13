@@ -1,2 +1,2 @@
 
-(swiper . [(20191011 2149) ((emacs (24 1)) (ivy (0 12 0))) "Isearch with an overview. Oh, man!" single ((:commit . "1a9002bf4be4863bbafd5d42089eb652171775d8") (:keywords "matching") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/swiper"))])
+(swiper . [(20191011 2149) ((emacs (24 1)) (ivy (0 12 0))) "Isearch with an overview. Oh, man!" single ((:commit . "ec1ed07f5788714a523007dc91b9e6c8884bfa1b") (:keywords "matching") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/swiper"))])

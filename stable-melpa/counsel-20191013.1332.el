@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191012.1815
+;; Package-Version: 20191013.1332
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -1937,15 +1937,19 @@ The preselect behavior can be customized via user options
         (file-name-nondirectory buffer-file-name))))
 
 (defun counsel--find-file-1 (prompt initial-input action caller)
-  (ivy-read prompt #'read-file-name-internal
-            :matcher #'counsel--find-file-matcher
-            :initial-input initial-input
-            :action action
-            :preselect (counsel--preselect-file)
-            :require-match 'confirm-after-completion
-            :history 'file-name-history
-            :keymap counsel-find-file-map
-            :caller caller))
+  (let ((default-directory
+         (if (eq major-mode 'dired-mode)
+             (dired-current-directory)
+           default-directory)))
+    (ivy-read prompt #'read-file-name-internal
+              :matcher #'counsel--find-file-matcher
+              :initial-input initial-input
+              :action action
+              :preselect (counsel--preselect-file)
+              :require-match 'confirm-after-completion
+              :history 'file-name-history
+              :keymap counsel-find-file-map
+              :caller caller)))
 
 ;;;###autoload
 (defun counsel-find-file (&optional initial-input)
@@ -4257,9 +4261,9 @@ PREFIX is used to create the key."
                       ": "))
                    (car elm))))
          (list (cons key
-                     (if (overlayp (cdr elm))
-                         (overlay-start (cdr elm))
-                       (cdr elm)))))))
+                     (cons key (if (overlayp (cdr elm))
+                                   (overlay-start (cdr elm))
+                                 (cdr elm))))))))
    alist))
 
 (defvar counsel-imenu-map
@@ -4276,8 +4280,8 @@ PREFIX is used to create the key."
       items)))
 
 (defun counsel-imenu-action (x)
-  (when x
-    (goto-char (cdr x))))
+  (with-ivy-window
+    (imenu (cdr x))))
 
 ;;;###autoload
 (defun counsel-imenu ()
