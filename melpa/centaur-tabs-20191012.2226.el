@@ -5,7 +5,7 @@
 ;; Filename: centaur-tabs.el
 ;; Description: Provide an out of box configuration to use highly customizable tabs.
 ;; URL: https://github.com/ema2159/centaur-tabs
-;; Package-Version: 20190919.2028
+;; Package-Version: 20191012.2226
 ;; Author: Emmanuel Bustos <ema2159@gmail.com>
 ;; Maintainer: Emmanuel Bustos <ema2159@gmail.com>
 ;; Created: 2019-21-19 22:14:34
@@ -1052,6 +1052,15 @@ hidden, it is shown again.  Signal an error if Centaur-Tabs mode is off."
 (defvar centaur-tabs-mode-map
   (let ((km (make-sparse-keymap)))
     (define-key km centaur-tabs-prefix-key centaur-tabs-prefix-map)
+
+    ;;; Use mouse wheel to switch between buffers of same group
+    (define-key km (kbd "<header-line> <mouse-5>") 'centaur-tabs-forward )
+    (define-key km (kbd "<header-line> <mouse-4>") 'centaur-tabs-backward )
+
+    ;;; Use right click to show the rest of groups
+    (define-key km (kbd "<header-line> <mouse-3>") 'centaur-tabs--groups-menu )
+
+    
     km)
   "Keymap to use in  Centaur-Tabs mode.")
 
@@ -2207,6 +2216,24 @@ Operates over buffer BUF"
 (defun centaur-tabs-enable-buffer-reordering ()
   "Enable the buffer adjusting functionality."
   (add-hook 'post-command-hook centaur-tabs-adjust-buffer-order-function))
+
+
+(defun centaur-tabs--groups-menu-list ()
+  "Make the menu of the tabs groups."
+  (cons "Centaur tabs groups menu"
+	(mapcar
+	 (lambda (g)
+	   (cons g g))
+	 (sort (centaur-tabs-get-groups) 'string<))))
+
+(defun centaur-tabs--groups-menu ()
+  "Show a popup menu with the centaur tabs groups."
+  (interactive)
+  (let*
+      ((sorted-groups (centaur-tabs--groups-menu-list))
+       (group (x-popup-menu t (list "Centaur tabs groups menu" sorted-groups))))
+    (centaur-tabs-switch-group group)))
+
 
 (provide 'centaur-tabs)
 
