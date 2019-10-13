@@ -4,7 +4,7 @@
 
 ;; Authors: dickmao <github id: dickmao>
 ;; Version: 0.1.0
-;; Package-Version: 20190930.2347
+;; Package-Version: 20191013.120
 ;; Keywords: news
 ;; URL: https://github.com/dickmao/nnhackernews
 ;; Package-Requires: ((emacs "25.1") (request "20190819") (dash "20190401") (dash-functional "20180107") (anaphora "20180618"))
@@ -462,7 +462,7 @@ If GROUP classification omitted, figure it out."
 
 (deffoo nnhackernews-server-opened (&optional server)
   (nnhackernews--normalize-server)
-  t)
+  nnhackernews--last-item)
 
 (deffoo nnhackernews-status-message (&optional server)
   (nnhackernews--normalize-server)
@@ -696,7 +696,9 @@ The two hashtables being reconciled are `nnhackernews-location-hashtb' and
         (gnus-info-set-marks
          info
          (append (assq-delete-all 'seen (gnus-info-marks info))
-                 (list `(seen (1 . ,num-headers)))))
+                 (list `(seen (1 . ,num-headers))))
+         t)
+        (gnus-info-set-method info (gnus-group-method gnus-newsgroup-name) t)
         (gnus-set-info gnus-newsgroup-name info)))
     t))
 
@@ -1143,7 +1145,7 @@ Optionally provide STATIC-MAX-ITEM and STATIC-NEWSTORIES to prevent querying out
         (nnheader-insert-nov (nnhackernews--make-header i group)))
       'nov)))
 
-(deffoo nnhackernews-close-server (&optional server)
+(deffoo nnhackernews-close-server (&optional server _defs)
   (nnhackernews--normalize-server)
   t)
 
@@ -1163,6 +1165,18 @@ Optionally provide STATIC-MAX-ITEM and STATIC-NEWSTORIES to prevent querying out
             ,nnhackernews--group-job
             ,nnhackernews--group-stories)))
   t)
+
+(deffoo nnhackernews-request-newgroups (_date &optional server)
+  (nnhackernews--normalize-server)
+  (with-current-buffer nntp-server-buffer
+    (erase-buffer)
+    (mapc (lambda (group)
+            (insert (format "%S 0 1 y\n" group)))
+          `(,nnhackernews--group-ask
+            ,nnhackernews--group-show
+            ,nnhackernews--group-job
+            ,nnhackernews--group-stories))
+    t))
 
 (defun nnhackernews-sentinel (process event)
   "Wipe headers state when PROCESS dies from EVENT."
