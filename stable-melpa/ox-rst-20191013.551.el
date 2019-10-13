@@ -18,7 +18,7 @@
 
 ;; Author: Masanao Igarashi <syoux2@gmail.com>
 ;; Keywords: org, rst, reST, reStructuredText
-;; Package-Version: 20191001.921
+;; Package-Version: 20191013.551
 ;; Version: 0.3
 ;; URL: https://github.com/msnoigrs/ox-rst
 ;; Package-Requires: ((emacs "25.1") (org "8.3"))
@@ -99,6 +99,7 @@
     (:rst-link-home "RST_LINK_HOME" nil org-rst-link-home)
     (:rst-link-use-ref-role nil nil org-rst-link-use-ref-role)
     (:rst-extension nil nil org-rst-extension)
+    (:rst-file-link-use-ref-role nil nil org-rst-file-link-use-ref-role)
     (:rst-text-markup-alist nil nil org-rst-text-markup-alist)
     (:rst-quote-margin nil nil org-rst-quote-margin)
     (:rst-headline-underline-characters nil nil org-rst-headline-underline-characters)
@@ -183,6 +184,11 @@ link's path."
 
 (defcustom org-rst-link-use-ref-role nil
   "Non-nil means export internal links using :ref: role."
+  :group 'org-export-rst
+  :type 'boolean)
+
+(defcustom org-rst-file-link-use-ref-role nil
+  "Non-nil means export internal file links using :ref: role."
   :group 'org-export-rst
   :type 'boolean)
 
@@ -948,6 +954,7 @@ INFO is a plist holding contextual information."
 					   (plist-get info :rst-extension)))
 			  (t raw-path)))))
 		 (type (org-element-property :type link))
+		 (search-option (org-element-property :search-option link))
 		 (raw-path (org-element-property :path link))
 		 ;; Ensure DESC really exists, or set it to nil.
 		 (desc (and (not (string= desc "")) desc))
@@ -1051,6 +1058,13 @@ INFO is a plist holding contextual information."
      ((string= type "coderef")
       (format (org-export-get-coderef-format path desc)
 			  (org-export-resolve-coderef path info)))
+     ((and (plist-get info :rst-file-link-use-ref-role)
+           (string= type "file")
+           search-option)
+      (let ((ref (replace-regexp-in-string "^#" "" search-option)))
+        (if desc
+            (format ":ref:`%s <%s>`" desc ref)
+          (format ":ref:`%s`" ref))))
      ;; Link type is handled by a special function.
      ;((functionp (setq protocol (nth 2 (assoc type org-link-protocols))))
      ; (funcall protocol (org-link-unescape path) desc 'latex))
