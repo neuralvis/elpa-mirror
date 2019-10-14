@@ -5,7 +5,7 @@
 ;; Author: Felipe Lema <felipel@mortemale.org>
 ;; Homepage: https://launchpad.net/frecentf.el
 ;; Keywords: files maint
-;; Package-Version: 20190903.2109
+;; Package-Version: 20191014.1435
 ;; Package-Requires: ((emacs "26") (frecency "0.1-pre") (persist "0.4"))
 ;; Version: 0.1
 
@@ -36,6 +36,7 @@
 (require 'map)
 (require 'persist)
 (require 'seq)
+(require 'subr-x)
 
 ;;; Variables
 (persist-defvar frecentf-htable (make-hash-table :test 'equal)
@@ -81,14 +82,17 @@ Based off `recentf-track-opened-file'"
     (frecentf-add-path buffer-file-name))
   ;; Must return nil because it is run from `write-file-functions'.
   nil)
+
 (defun frecentf-add-path (path)
-  "Add PATH and its directory."
-  (if (and frecentf-also-store-dirname
-	   (file-directory-p path))
-      (frecentf--add-directory path) ;; add path-as-directory
-    ;; else, add the file path and its directory
-    (frecentf--add-file path)
-    (frecentf--add-directory (file-name-directory path))))
+  "Add PATH and maybe its directory."
+  (if-let* ((basename (file-name-directory path))
+	    (_should-add-basename (and frecentf-also-store-dirname
+				       (file-directory-p basename))))
+      (frecentf--add-directory basename)) ;; add basename
+  ;; add the path, making distinction of whether it's a directory or file
+  (if (file-directory-p path)
+      (frecentf--add-directory path)
+    (frecentf--add-file path)))
 
 (defun frecentf--add-file (file-path)
   "Add FILE-PATH or update its timestamps if it's already been added."
@@ -234,7 +238,11 @@ Mostly based off `recentf-mode'"
       (dolist (hook '(find-file-hook
 		      write-file-functions))
         (apply hook-setup (list hook
-				'frecentf-track-opened-file))))))
+				'frecentf-track-opened-file)))
+      (apply hook-setup
+	     'dirtrack-directory-change-hook
+	     (lambda ()
+	       (frecentf-add-path (eval 'default-directory)))))))
 
 (provide 'frecentf)
 ;;; frecentf.el ends here
