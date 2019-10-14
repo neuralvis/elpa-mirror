@@ -6,7 +6,7 @@
 ;; Author: Bastian Bechtold
 ;; Maintainer: Bastian Bechtold
 ;; URL: https://github.com/bastibe/annotate.el
-;; Package-Version: 20191010.751
+;; Package-Version: 20191014.751
 ;; Created: 2015-06-10
 ;; Version: 0.4.8
 
@@ -144,8 +144,8 @@ major mode is a member of this list (space separated entries)."
   "The string used when a string is truncated with an ellipse")
 
 (defun annotate-annotations-exist-p ()
-  (find-if 'annotationp
-           (overlays-in 0 (buffer-size))))
+  (cl-find-if 'annotationp
+              (overlays-in 0 (buffer-size))))
 
 (defun annotate-initialize-maybe ()
   "Initialize annotate mode only if buffer's major mode is not in the blacklist (see:
@@ -701,18 +701,22 @@ to 'maximum-width'."
   "Cleans up annotation properties associated with a region."
   ;; inhibit infinite loop
   (setq inhibit-modification-hooks t)
-  ;; inhibit property removal to the undo list
-  (buffer-disable-undo)
-  (save-excursion
-    (goto-char end)
-    ;; go to the EOL where the
-    ;; annotated newline used to be
-    (end-of-line)
-    ;; strip dangling display property
-    (remove-text-properties
-     (point) (1+ (point)) '(display nil)))
-  (buffer-enable-undo)
-  (setq inhibit-modification-hooks nil))
+  ;; copy undo list
+  (let ((saved-undo-list (copy-tree buffer-undo-list t)))
+    ;; inhibit property removal to the undo list (and empty it too)
+    (buffer-disable-undo)
+    (save-excursion
+      (goto-char end)
+      ;; go to the EOL where the
+      ;; annotated newline used to be
+      (end-of-line)
+      ;; strip dangling display property
+      (remove-text-properties
+       (point) (1+ (point)) '(display nil)))
+    ;; restore undo list
+    (setf buffer-undo-list saved-undo-list)
+    (buffer-enable-undo)
+    (setq inhibit-modification-hooks nil)))
 
 (defun annotate--change-guard ()
   "Returns a `facespec` with an `insert-behind-hooks` property
@@ -833,7 +837,7 @@ essentially what you get from:
                    old-checksum
                    new-checksum
                    (not (string= old-checksum new-checksum)))
-          (lwarn "annotate-mode"
+          (lwarn '(annotate-mode)
                  :warning
                  annotate-warn-file-changed-control-string
                  filename))

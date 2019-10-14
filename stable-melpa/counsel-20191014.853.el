@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191013.1612
+;; Package-Version: 20191014.853
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -1848,6 +1848,7 @@ choose between `yes-or-no-p' and `y-or-n-p'; otherwise default to
    ("b" counsel-find-file-cd-bookmark-action "cd bookmark")
    ("x" counsel-find-file-extern "open externally")
    ("r" counsel-find-file-as-root "open as root")
+   ("R" find-file-read-only "read only")
    ("k" counsel-find-file-delete "delete")
    ("c" counsel-find-file-copy "copy file")
    ("m" counsel-find-file-move "move or rename")
