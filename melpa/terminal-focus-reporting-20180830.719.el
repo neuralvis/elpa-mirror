@@ -3,6 +3,7 @@
 ;; Copyright © 2018 Vitalii Elenhaupt <velenhaupt@gmail.com>
 ;; Author: Vitalii Elenhaupt
 ;; URL: https://github.com/veelenga/terminal-focus-reporting.el
+;; Package-Version: 20180830.719
 ;; Keywords: convenience
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "24.4"))
