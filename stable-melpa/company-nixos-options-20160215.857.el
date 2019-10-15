@@ -7,6 +7,7 @@
 ;; Created: 18 July 2015
 
 ;; Keywords: unix
+;; Package-Version: 20160215.857
 ;; Homepage: http://www.github.com/travisbhartwell/nix-emacs/
 ;; Version: 0.1.0
 ;; Package-Requires: ((company "0.8.0") (nixos-options "0.0.1") (cl-lib "0.5.0"))

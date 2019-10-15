@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191014.853
+;; Package-Version: 20191014.1739
 ;; Version: 0.12.0
 ;; Package-Requires: ((emacs "24.3") (swiper "0.12.0"))
 ;; Keywords: convenience, matching, tools
@@ -1881,6 +1881,9 @@ but the leading dot is a lot faster."
                  ,(regexp-opt completion-ignored-extensions))
           (regexp :tag "Regex")))
 
+(defvar counsel--find-file-predicate nil
+  "When non-nil, `counsel--find-file-matcher' will use this predicate.")
+
 (defun counsel--find-file-matcher (regexp candidates)
   "Return REGEXP matching CANDIDATES.
 Skip some dotfiles unless `ivy-text' requires them."
@@ -1890,6 +1893,9 @@ Skip some dotfiles unless `ivy-text' requires them."
           (lambda (re-str)
             (lambda (x)
               (string-match re-str (directory-file-name x)))))))
+    (when counsel--find-file-predicate
+      (let ((default-directory ivy--directory))
+        (setq res (cl-remove-if-not counsel--find-file-predicate res))))
     (if (or (null ivy-use-ignore)
             (null counsel-find-file-ignore-regexp)
             (string-match-p "\\`\\." ivy-text))
@@ -2184,10 +2190,11 @@ result as a URL."
   "Forward to `dired'.
 When INITIAL-INPUT is non-nil, use it in the minibuffer during completion."
   (interactive)
-  (counsel--find-file-1
-   "Dired (directory): " initial-input
-   (lambda (d) (dired (expand-file-name d)))
-   'counsel-dired))
+  (let ((counsel--find-file-predicate #'file-directory-p))
+    (counsel--find-file-1
+     "Dired (directory): " initial-input
+     (lambda (d) (dired (expand-file-name d)))
+     'counsel-dired)))
 
 (ivy-configure 'counsel-dired
   :display-transformer-fn #'ivy-read-file-transformer)

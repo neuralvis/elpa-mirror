@@ -20,7 +20,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20190927.1916
+;; Package-Version: 20191014.2010
 ;; Author: Adrien Brochard
 ;; Keywords: kubernetes k8s tools processes
 ;; URL: https://github.com/abrochard/kubel
@@ -289,6 +289,8 @@ NAMESPACE is the namespace."
 (defun kubel-set-context ()
   "Set the context."
   (interactive)
+  (when (get-buffer (kubel--buffer-name)) ;; kill buffer for previous context if possible
+    (kill-buffer (kubel--buffer-name)))
   (setq kubel-context
         (completing-read
          "Select context: "

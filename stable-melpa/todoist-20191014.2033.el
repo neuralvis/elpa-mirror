@@ -20,7 +20,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20190927.1941
+;; Package-Version: 20191014.2033
 ;; Author: Adrien Brochard
 ;; Keywords: todoist task todo comm
 ;; URL: https://github.com/abrochard/emacs-todoist
@@ -369,8 +369,9 @@ P is a prefix argument to select a project."
   (interactive)
   (let ((projects (todoist--get-projects))
          (tasks (todoist--get-tasks)))
-    (with-output-to-temp-buffer todoist-buffer-name
-      (switch-to-buffer todoist-buffer-name)
+    (with-temp-buffer todoist-buffer-name
+      (pop-to-buffer todoist-buffer-name)
+      (delete-region (point-min) (point-max))
       (todoist-mode)
       (insert "#+title: Todoist\n")
       (todoist--insert-heading 1 "Today")
