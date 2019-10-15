@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/org-make-toc
-;; Package-Version: 20191012.226
+;; Package-Version: 20191014.2307
 ;; Version: 0.4-pre
 ;; Package-Requires: ((emacs "25.1") (dash "2.12") (s "1.10.0") (org "9.0"))
 ;; Keywords: Org, convenience
@@ -114,10 +114,7 @@ with the destination of the published file."
                   (or (outline-next-heading)
                       (goto-char (point-max))))
              finally do (unless made-toc
-                          (let ((message "No TOC node found.  A node must have the \"TOC\" property set to \"this\", \"all\", \"siblings\", or \"children\"."))
-                            (if (called-interactively-p 'interactive)
-                                (message message)
-                              (user-error message)))))))
+                          (message "org-make-toc: No TOC node found.")))))
 
 ;;;; Functions
 

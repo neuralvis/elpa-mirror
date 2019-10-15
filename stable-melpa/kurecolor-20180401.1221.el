@@ -3,6 +3,7 @@
 ;;; Author: Jason Milkins <jasonm23@gmail.com>
 
 ;;; Version: 1.2.6
+;; Package-Version: 20180401.1221
 
 ;;; Commentary:
 ;;

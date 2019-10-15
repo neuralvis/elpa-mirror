@@ -4,7 +4,7 @@
 
 ;; Author: Michał Krzywkowski <k.michal@zoho.com>
 ;; Keywords: mail, tools
-;; Package-Version: 20190421.612
+;; Package-Version: 20191014.2153
 ;; Version: 0.0.0
 ;; Homepage: https://github.com/mkcms/mu4e-overview
 ;; Package-Requires: ((emacs "26"))
@@ -62,6 +62,10 @@
   "Show overview of maildir"
   :group 'mail
   :group 'tools)
+
+(defcustom mu4e-overview-maildir-separators '(?/)
+  "List of characters used to split maildir paths into folders."
+  :type '(repeat character))
 
 (defface mu4e-overview-folder
   '((t))
@@ -198,6 +202,12 @@ passed to CALLBACK will be 0."
                       :unread-count nil
                       :children nil))
                    (mu4e-get-maildirs)))
+         (separators (concat
+                      (if (memq ?- mu4e-overview-maildir-separators)
+                          ;; Move "-" to the front to avoid later using
+                          ;; it to indicate a regexp range, like "[a-z]".
+                          (cons ?- (remq ?- mu4e-overview-maildir-separators))
+                        mu4e-overview-maildir-separators)))
          (n-processes-done 0)
          (pr (make-progress-reporter "Updating maildir status"
                                      0 (length folders)))
@@ -231,9 +241,12 @@ passed to CALLBACK will be 0."
 
     ;; Sort the list so that the most deeply nested folders are before less
     ;; deeply nested folders.
-    (setq folders (cl-sort folders
-                           (lambda (a b) (> (cl-count ?/ a) (cl-count ?/ b)))
-                           :key #'mu4e-overview-folder-name))
+    (setq folders (cl-sort folders #'> :key
+                           (lambda (folder)
+                             (cl-count-if
+                              (lambda (c)
+                                (memq c mu4e-overview-maildir-separators))
+                              (mu4e-overview-folder-name folder)))))
 
     ;; Now create the hierarchy.  For each folder in `folders', find it's
     ;; parent, creating it if necessary.  Insert the folder into it's parent
@@ -241,27 +254,27 @@ passed to CALLBACK will be 0."
     (while (not done)
       (setq done t)
       (dolist (folder folders)
-        (let ((parent-name
-               (ignore-errors
-                 (directory-file-name
-                  (file-name-directory
-                   (directory-file-name
-                    (file-name-as-directory
-                     (mu4e-overview-folder-name folder))))))))
-          (when parent-name
+        (let ((name (mu4e-overview-folder-name folder)))
+          (when (string-match (format "[%s][^%s]+\\'" separators separators)
+                              name)
             (setq done nil)
-            (let ((parent-folder (cl-find parent-name folders
-                                          :key #'mu4e-overview-folder-name
-                                          :test #'string=)))
+            (setf (mu4e-overview-folder-name folder)
+                  (substring name (1+ (match-beginning 0))))
+            (let* ((parent-name (substring name 0 (match-beginning 0)))
+                   (parent-folder (cl-find parent-name folders
+                                           :key #'mu4e-overview-folder-name
+                                           :test #'string=)))
               (unless parent-folder
                 (setq parent-folder
                       (make-mu4e-overview-folder
                        :name parent-name
                        :maildir nil))
                 (push parent-folder folders))
-              (setf (mu4e-overview-folder-name folder)
-                    (file-name-base (mu4e-overview-folder-name folder)))
-              (push folder (mu4e-overview-folder-children parent-folder))
+              (setf (mu4e-overview-folder-children parent-folder)
+                    (cl-sort
+                     (cons folder
+                           (mu4e-overview-folder-children parent-folder))
+                     #'string< :key #'mu4e-overview-folder-name))
               (setq folders (delete folder folders)))))))
 
     (setq mu4e-overview-folders folders)))
@@ -336,4 +349,7 @@ The available keybindings are:
     (pop-to-buffer (current-buffer))))
 
 (provide 'mu4e-overview)
+;; Local Variables:
+;; indent-tabs-mode: nil
+;; End:
 ;;; mu4e-overview.el ends here

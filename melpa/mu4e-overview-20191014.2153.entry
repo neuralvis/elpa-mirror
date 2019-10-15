@@ -1,0 +1,2 @@
+
+(mu4e-overview . [(20191014 2153) ((emacs (26))) "Show overview of maildir" single ((:commit . "41ae8a5e6bef25fea5e006b783fca558143c22a0") (:keywords "mail" "tools") (:authors ("Michał Krzywkowski" . "k.michal@zoho.com")) (:maintainer "Michał Krzywkowski" . "k.michal@zoho.com") (:url . "https://github.com/mkcms/mu4e-overview"))])
