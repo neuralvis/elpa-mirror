@@ -2,6 +2,7 @@
 
 ;; Author: Paulus Esterhazy (pesterhazy@gmail.com)
 ;; URL: https://github.com/pesterhazy/zprint-mode.el
+;; Package-Version: 20181111.1945
 ;; Version: 0.1
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "24.3"))
