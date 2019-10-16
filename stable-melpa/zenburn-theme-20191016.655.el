@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/bbatsov/zenburn-emacs
-;; Package-Version: 20190809.1324
+;; Package-Version: 20191016.655
 ;; Version: 2.7-snapshot
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -250,7 +250,7 @@ Also bind `class' to ((class color) (min-colors 89))."
      ((t (:foreground ,zenburn-green-2
                       :background ,zenburn-bg-05
                       :box (:line-width -1 :style released-button)))))
-   `(region ((,class (:background ,zenburn-bg-1))
+   `(region ((,class (:background ,zenburn-bg-1 :extend t))
              (t :inverse-video t)))
    `(secondary-selection ((t (:background ,zenburn-bg+2))))
    `(trailing-whitespace ((t (:background ,zenburn-red))))
@@ -818,7 +818,7 @@ Also bind `class' to ((class color) (min-colors 89))."
 ;;;;; hl-line-mode
    `(hl-line-face ((,class (:background ,zenburn-bg-05))
                    (t :weight bold)))
-   `(hl-line ((,class (:background ,zenburn-bg-05)) ; old emacsen
+   `(hl-line ((,class (:background ,zenburn-bg-05 :extend t)) ; old emacsen
               (t :weight bold)))
 ;;;;; hl-sexp
    `(hl-sexp-face ((,class (:background ,zenburn-bg+1))
@@ -1176,6 +1176,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(org-agenda-structure
      ((t (:inherit font-lock-comment-face))))
    `(org-archived ((t (:foreground ,zenburn-fg :weight bold))))
+   `(org-block ((t (:background ,zenburn-bg+05 :extend t))))
    `(org-checkbox ((t (:background ,zenburn-bg+2 :foreground ,zenburn-fg+1
                                    :box (:line-width 1 :style released-button)))))
    `(org-date ((t (:foreground ,zenburn-blue :underline t))))
@@ -1201,6 +1202,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(org-level-7 ((t (:inherit ,z-variable-pitch :foreground ,zenburn-red-4))))
    `(org-level-8 ((t (:inherit ,z-variable-pitch :foreground ,zenburn-blue-4))))
    `(org-link ((t (:foreground ,zenburn-yellow-2 :underline t))))
+   `(org-quote ((t (:background ,zenburn-bg+05 :extend t))))
    `(org-scheduled ((t (:foreground ,zenburn-green+4))))
    `(org-scheduled-previously ((t (:foreground ,zenburn-red))))
    `(org-scheduled-today ((t (:foreground ,zenburn-blue+1))))

@@ -6,8 +6,8 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Line annotation similar to Visual Studio.
 ;; Keyword: annotation linum reminder
-;; Version: 0.1.9
-;; Package-Version: 20190807.440
+;; Version: 0.2.2
+;; Package-Version: 20191016.254
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6"))
 ;; URL: https://github.com/jcs090218/line-reminder
 
@@ -361,9 +361,7 @@ IN-LIST : list to be remove or take effect with."
 
 
 (defun line-reminder-before-change-functions (begin end)
-  "Do stuff before buffer is changed.
-BEGIN : beginning of the changes.
-END : end of the changes."
+  "Do stuff before buffer is changed with BEGIN and END."
   (when (line-reminder--is-valid-line-reminder-situation begin end)
     (setq-local line-reminder--before-begin-pt begin)
     (setq-local line-reminder--before-end-pt end)
@@ -371,11 +369,7 @@ END : end of the changes."
     (setq-local line-reminder--before-end-linum (line-number-at-pos end))))
 
 (defun line-reminder-after-change-functions (begin end length)
-  "Do stuff after buffer is changed.
-BEGIN : beginning of the changes.
-END : end of the changes.
-LENGTH : deletion length."
-
+  "Do stuff after buffer is changed with BEGIN, END and LENGTH."
   (when (line-reminder--is-valid-line-reminder-situation begin end)
     (save-excursion
       ;; When begin and end are not the same, meaning the there
@@ -406,11 +400,6 @@ LENGTH : deletion length."
         (setq delta-line-count (- end-linum begin-linum))
         (when is-deleting-line
           (setq delta-line-count (- 0 delta-line-count)))
-
-        ;; Just add the current line.
-        (push begin-linum line-reminder--change-lines)
-        (when (equal line-reminder-show-option 'indicators)
-          (line-reminder--mark-line-by-linum begin-linum 'line-reminder-modified-sign-face))
 
         ;; If adding line, bound is the begin line number.
         (setq bound-current-line begin-linum)
@@ -454,6 +443,11 @@ LENGTH : deletion length."
 
             (line-reminder--delta-list-lines-by-bound-once bound-current-line
                                                            delta-line-count))
+
+          ;; Just add the current line.
+          (push begin-linum line-reminder--change-lines)
+          (when (equal line-reminder-show-option 'indicators)
+            (line-reminder--mark-line-by-linum begin-linum 'line-reminder-modified-sign-face))
 
           ;; NOTE: Addition..
           (when (and (not is-deleting-line)
