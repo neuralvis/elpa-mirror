@@ -1,0 +1,2 @@
+
+(frecentf . [(20191016 1243) ((emacs (26)) (frecency (0 1 -1)) (persist (0 4))) "Pervasive recentf using frecency" single ((:commit . "849dc6c40bff474b5cea5e1a47112d4a5dc75df5") (:keywords "files" "maint") (:authors ("Felipe Lema" . "felipel@mortemale.org")) (:maintainer "Felipe Lema" . "felipel@mortemale.org") (:url . "https://launchpad.net/frecentf.el"))])
