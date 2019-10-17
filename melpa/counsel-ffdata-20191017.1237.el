@@ -4,7 +4,7 @@
 
 ;; Author: Zhu Zihao <all_but_last@163.com>
 ;; URL: https://github.com/cireu/counsel-ffdata
-;; Package-Version: 20190725.1630
+;; Package-Version: 20191017.1237
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1") (counsel "0.11.0") (emacsql "3.0.0"))
 ;; Keywords: convenience, tools, matching
@@ -135,20 +135,22 @@ candidates.
    (if force-update? nil (gethash caller counsel-ffdata--cache nil))
    (let ((buf (generate-new-buffer "*counsel-ffdata sqlite*")))
      (with-current-buffer buf
-       (let* ((db-path counsel-ffdata--temp-db-path)
-              (query-cmd (counsel-ffdata--prepare-sql-stmt query-stmt))
-              (errno (call-process "sqlite3" nil (current-buffer) nil
-                                   "--ascii" db-path query-cmd))
-              result)
-         (if (= errno 0)
-             (unwind-protect
-                  (setq result (counsel-ffdata--parse-sql-result))
-               (kill-buffer buf))
-           (pop-to-buffer buf)
-           (error "SQLite exited with error code %d" errno))
-         (when (functionp transformer)
-           (cl-callf2 mapcar transformer result))
-         (setf (gethash caller counsel-ffdata--cache) result))))))
+       (let ((coding-system-for-read 'utf-8-auto)
+             (coding-system-for-write 'utf-8-auto))
+         (let* ((db-path counsel-ffdata--temp-db-path)
+                (query-cmd (counsel-ffdata--prepare-sql-stmt query-stmt))
+                (errno (call-process "sqlite3" nil (current-buffer) nil
+                                     "--ascii" db-path query-cmd))
+                result)
+           (if (= errno 0)
+               (unwind-protect
+                    (setq result (counsel-ffdata--parse-sql-result))
+                 (kill-buffer buf))
+             (pop-to-buffer buf)
+             (error "SQLite exited with error code %d" errno))
+           (when (functionp transformer)
+             (cl-callf2 mapcar transformer result))
+           (setf (gethash caller counsel-ffdata--cache) result)))))))
 
 (defun counsel-ffdata--history-cands-transformer (cands)
   "Transform raw CANDS to ivy compatible candidates."

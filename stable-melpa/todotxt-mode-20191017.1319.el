@@ -4,7 +4,7 @@
 
 ;; Author: Adolfo Villafiorita <adolfo.villafiorita@me.com>
 ;; Keywords: wp, files
-;; Package-Version: 20150424.1404
+;; Package-Version: 20191017.1319
 
 ;; This code is NOT part of GNU Emacs and is distributed under the conditions
 ;; of the MIT License
@@ -82,6 +82,74 @@
   (define-key todotxt-mode-map "x" 'todotxt-insert-x-maybe-complete)
 )
 
+;;
+;; Faces
+;;
+
+;; Colours are taken from the Nord theme: https://www.nordtheme.com/docs/colors-and-palettes                                
+
+(defconst todotxt-nord-colours
+  '(
+    ("nord0" . "#2e3440")
+    ("nord7" . "#5e81ac")
+    ("nord11" . "#bf616a")
+    ("nord12" . "#d08770")
+    ("nord13" . "#ebcb8b")
+    )
+  "Nord to RGB maps."
+  )
+
+(defun todotxt-nord (colour)
+  (cdr (assoc colour todotxt-nord-colours)))
+
+(defface todotxt-done-face
+  (list
+   (list 't
+         :foreground (todotxt-nord "nord7")
+         :strike-through 't
+         )
+   )
+  "Face for accomplished tasks."
+  )
+
+(defface todotxt-a-priority-face
+  (list
+   (list 't
+         :background (todotxt-nord "nord11")
+         :foreground (todotxt-nord "nord0")
+         )
+   )
+  "Face for tasks with A priority"
+  )
+
+(defface todotxt-b-priority-face
+  (list
+   (list 't
+         :background (todotxt-nord "nord12")
+         :foreground (todotxt-nord "nord0")
+         )
+   )
+  "Face for B priority tasks"
+  )
+
+(defface todotxt-c-priority-face
+  (list
+   (list 't
+         :background (todotxt-nord "nord13")
+         :foreground (todotxt-nord "nord0")
+         )
+   )
+  "Face for C priority tasks"
+  )
+
+(defface todotxt-date-face
+  (list (list 't
+              :foreground (todotxt-nord "nord7")
+              )
+        )
+  "Face for date strings"
+  )
+
 ;;;
 ;;; Font-lock keywords
 ;;;
@@ -89,21 +157,21 @@
 (defvar todotxt-mode-keywords nil "Font lock keywords for todotxt-mode")
 (setq todotxt-mode-keywords
   '(
-	("^x .*$" 0 '(:foreground "gray80" :strike-through t))
-	("^(A).*$" 0 '(:background "red"))
-	("^(B).*$" 0 '(:background "orange"))
-	("^(C).*$" 0 '(:background "orange"))
+	("^x .*$" 0 'todotxt-done-face)
+	("^(A)" 0 'todotxt-a-priority-face)
+	("^(B)" 0 'todotxt-b-priority-face)
+	("^(C)" 0 'todotxt-c-priority-face)
 	;("^.*#waiting.*" 0 '(:foreground "DeepPink1")) ; special tag
 	;("^.*#important.*" 0 '(:foreground "IndianRed")) ; special tag
 	("([A-Z]+)" . font-lock-builtin-face)
 	("\\([a-zA-Z0-9_-]+\\):\\([a-zA-Z0-9._-]+\\)" . font-lock-variable-name-face)
-	("+\\w+" . font-lock-function-name-face)
-	("@\\w+" . font-lock-type-face)
+	("+[[:alnum:]_]+" 0 font-lock-function-name-face)
+	("@[[:alnum:]_]+" 0 font-lock-type-face)
 	("#important" 0 '(:foreground "orange red")) ; special tag
 	("#waiting" 0 '(:foreground "dark orange")) ; special tag
 	("#\\w+" . font-lock-comment-face)
 	("-\\([a-zA-Z_-]+\\)" . font-lock-variable-name-face)
-	("^[0-9]+-[0-9]+-[0-9]+" 0 '(:foreground "gray90"))))
+	("[0-9]+-[0-9]+-[0-9]+" 0 'todotxt-date-face)))
 
 ;;;
 ;;; Todotxt Functions for managing the file
