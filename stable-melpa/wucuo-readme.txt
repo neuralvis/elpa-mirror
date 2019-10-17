@@ -4,7 +4,12 @@ Please install either aspell or hunspell and its corresponding dictionaries.
 2. Usage
 Run `wucuo-start' to setup and start `flyspell-mode'.
 It spell check camel case words in code.
-Or just add "(wucuo-start)" into "~/.emacs".
+
+To enable wucuo for all languages, insert below code into ".emacs",
+
+  (defun prog-mode-hook-setup ()
+    (wucuo-start))
+  (add-hook 'prog-mode-hook 'prog-mode-hook-setup)
 
 Please note `flyspell-prog-mode' should not be enabled when using "wucuo".
 `flyspell-prog-mode' could be replaced by "wucuo".

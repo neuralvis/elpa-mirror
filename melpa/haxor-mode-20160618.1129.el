@@ -4,6 +4,7 @@
 
 ;; Author: Krzysztof Magosa <krzysztof@magosa.pl>
 ;; URL: https://github.com/krzysztof-magosa/haxor-mode
+;; Package-Version: 20160618.1129
 ;; Package-Requires: ((emacs "24.0"))
 ;; Created: 09 January 2015
 ;; Version: 0.7.0

@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2018 Chen Bin
 ;;
-;; Version: 0.0.4
-;; Package-Version: 20181106.2257
+;; Version: 0.0.5
+;; Package-Version: 20191016.2324
 ;; Keywords: convenience
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/wucuo
@@ -33,7 +33,12 @@
 ;; 2. Usage
 ;; Run `wucuo-start' to setup and start `flyspell-mode'.
 ;; It spell check camel case words in code.
-;; Or just add "(wucuo-start)" into "~/.emacs".
+;;
+;; To enable wucuo for all languages, insert below code into ".emacs",
+;;
+;;   (defun prog-mode-hook-setup ()
+;;     (wucuo-start))
+;;   (add-hook 'prog-mode-hook 'prog-mode-hook-setup)
 ;;
 ;; Please note `flyspell-prog-mode' should not be enabled when using "wucuo".
 ;; `flyspell-prog-mode' could be replaced by "wucuo".
@@ -276,7 +281,7 @@ property of the major mode name."
 ;;;###autoload
 (defun wucuo-version ()
   "Output version."
-  (message "0.0.4"))
+  (message "0.0.5"))
 
 ;;;###autoload
 (defun wucuo-start ()
@@ -284,6 +289,7 @@ property of the major mode name."
   (interactive)
   (setq flyspell-generic-check-word-predicate
         #'wucuo-generic-check-word-predicate)
+  ;; start flyspell mode
   (flyspell-mode 1))
 
 (provide 'wucuo)
