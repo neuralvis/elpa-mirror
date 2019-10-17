@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson, Vincent Zhang
 ;; Version: 0.3.0
-;; Package-Version: 20191016.1317
+;; Package-Version: 20191017.534
 ;; Package-Requires: ((cl-lib "0.6.1") (lsp-mode "6.0") (python "0.26.1") (json "1.4") (emacs "24.4"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -107,14 +107,14 @@ stable, beta or daily."
                                  "positional-argument-after-keyword"
                                  "too-many-function-arguments"]
   "Microsoft Python Language Server Error types."
-  :type '(vector (repeat :inline t string))
+  :type 'lsp-string-vector
   :group 'lsp-python-ms)
 
 (defcustom lsp-python-ms-warnings ["unresolved-import"
                                    "parameter-already-specified"
                                    "too-many-positional-arguments-before-star"]
   "Microsoft Python Language Server Warning types."
-  :type '(vector (repeat :inline t string))
+  :type 'lsp-string-vector
   :group 'lsp-python-ms)
 
 (defconst lsp-python-ms--base-url "https://pvsc.blob.core.windows.net"
