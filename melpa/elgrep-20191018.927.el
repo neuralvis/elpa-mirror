@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <naehring@smtp.1und1.de>
 ;; Keywords: tools, matching, files, unix
-;; Package-Version: 20191017.409
+;; Package-Version: 20191018.927
 ;; Version: 1.0.0
 ;; URL: https://github.com/TobiasZawada/elgrep
 ;; Package-Requires: ((emacs "25.1") (async "1.5"))
@@ -290,6 +290,11 @@ Comparison done with `equal'."
       (stringp ctxt)
       (functionp ctxt)))
 
+(defun elgrep-menu-async-p (async)
+  "Check whether ASYNC is admissible for `elgrep-w-async'."
+  (or (booleanp async)
+      (eq async 'thread)))
+
 (defconst elgrep-menu-arg-alist '((recursive . booleanp)
 				  (mindepth . integerp)
 				  (maxdepth . integerp)
@@ -301,7 +306,7 @@ Comparison done with `equal'."
 				  (exclude-file-re . stringp)
 				  (dir-re . stringp)
 				  (exclude-dir-re . stringp)
-				  (async . booleanp)
+				  (async . elgrep-menu-async-p)
 				  (buffer-init . (lambda (val)
 						   (memq val '(nil syntax-table major-mode))))
 				  (file-fun . functionp)
@@ -335,13 +340,19 @@ such as `elgrep-w-start'.")
 			     ret))))))
      (nreverse ret))))
 
+(defvar-local elgrep-thread nil
+  "")
+
 (defun elgrep-menu-stop (&rest _ignore)
   "Stop elgrep process of current buffer.
 If there is no elgrep process reset Start button."
   (interactive "@")
-  (if (process-live-p (get-buffer-process (current-buffer)))
-      (kill-process) ;; The process sentinel resets the button.
-    (elgrep-reset-start-button)))
+  (cond
+   ((and (threadp elgrep-thread) (thread-live-p elgrep-thread))
+    (thread-signal elgrep-thread 'quit nil))
+   ((process-live-p (get-buffer-process (current-buffer)))
+    (kill-process))) ;; The process sentinel resets the button.
+   (elgrep-reset-start-button))
 
 (defun elgrep-menu-elgrep (&rest _ignore)
   "Start `elgrep' with data from `elgrep-menu'."
@@ -921,7 +932,10 @@ Otherwise add a unnamed command at the top of WIDGET."
 	(and first
 	     (string-empty-p (car (widget-value first))))
       (setq first (elgrep-menu-call-list-insert-before widget first)))
-    (widget-value-set first (cons "" command)))
+    (widget-value-set first (cons "" command))
+    (widget-apply widget :notify first) ;; Should already be done by `widget-value-set'.
+    ;; I consider that a bug of the widget library.
+    )
   (widget-setup))
 
 
@@ -992,9 +1006,12 @@ Hint: Try <M-tab> for completion, and <M-up>/<M-down> for history access.
 							      :format "Exclude Directory Name Regular Expression (ignored when empty): %v" ""))
     (widget-insert  "Recurse into subdirectories ")
     (setq-local elgrep-w-recursive (elgrep-widget-create 'checkbox nil))
-    (widget-insert "\nRun asynchronously (experimental) ")
-    (setq-local elgrep-w-async (elgrep-widget-create 'checkbox nil))
-    (setq-local elgrep-w-mindepth (elgrep-widget-create 'number :format "\nMinimal recursion depth: %v" 0))
+    (setq-local elgrep-w-async (elgrep-widget-create
+				'(radio-button-choice :tag "\nRun asynchronously (experimental)" :format "%t: %v"
+					 (const :tag "Separate instance of Emacs" :format "%t\t" t)
+					 (const :tag "Separate thread" :format "%t\t" thread)
+					 (const :tag "Synchronous" nil))))
+    (setq-local elgrep-w-mindepth (elgrep-widget-create 'number :format "Minimal recursion depth: %v" 0))
     (setq-local elgrep-w-maxdepth (elgrep-widget-create 'number :format "Maximal recursion depth: %v" most-positive-fixnum))
     (setq-local elgrep-w-r-beg (elgrep-widget-create 'elgrep-record-widget :tag "Beginning of Record" :value #'point-min))
     (setq-local elgrep-w-r-end (elgrep-widget-create 'elgrep-record-widget :tag "End of Record" :value #'point-max))
@@ -1329,6 +1346,9 @@ Avoid descriptive header into <*elgrep*> buffer.
 
 :async
 Asynchronous search (experimental).
+Search synchronous if this option is nil,
+search in a separate thread if this option is equal to 'thread,
+and search with the help of the library async otherwise.
 
 :mindepth Minimal depth. Defaults to 0.
 
@@ -1351,8 +1371,24 @@ Asynchronous search (experimental).
   (when (and (stringp re) (= (length re) 0))
     (setq re nil))
   (setq dir (elgrep-dir-name dir))
-  (let ((elgrep-path (locate-library "elgrep")))
-    (if (plist-get options :async)
+  (let ((async (plist-get options :async)))
+    (cond
+     ((eq async 'thread)
+      (setq elgrep-thread
+	    (make-thread
+	     `(lambda ()
+		(unwind-protect
+		    (apply #'elgrep-show (apply #'elgrep-search ,dir ,file-name-re (quote ,re) '(,@options))
+			   ,dir ,file-name-re (quote ,re) '(,@options))
+		  (let ((buf ,(current-buffer)))
+		    (when (buffer-live-p buf)
+		      (message "Finishing elgrep thread.")
+		      (with-current-buffer buf
+			(setq elgrep-thread nil))
+		      (when (derived-mode-p 'elgrep-menu-mode)
+			(elgrep-reset-start-button)))))))))
+     (async
+      (let ((elgrep-path (locate-library "elgrep")))
 	(async-start
 	 `(lambda ()
 	    (package-initialize)
@@ -1368,9 +1404,10 @@ Asynchronous search (experimental).
 	    (apply #'elgrep-show (car filematches-and-log) ,dir ,file-name-re (quote ,re) '(,@options))
 	    (elgrep-reset-start-button ,(plist-get options :elgrep-menu))
 	    (when (stringp (cdr filematches-and-log))
-	      (elgrep-log "%s" (cdr filematches-and-log)))))
+	      (elgrep-log "%s" (cdr filematches-and-log)))))))
+     (t
       (apply #'elgrep-show (apply #'elgrep-search dir file-name-re re options)
-	     dir file-name-re re options))))
+	    dir file-name-re re options)))))
 
 (defun elgrep-required-matches (fun req)
   "Return t when we find each required match from REQ by FUN.
@@ -1432,7 +1469,11 @@ Each submatch is a plist of :match, :context, :line,
 
 See `elgrep' for the valid options in plist OPTIONS."
   (setq dir (elgrep-dir-name dir))
-  (with-current-buffer (get-buffer-create " *elgrep-search*")
+  (with-current-buffer (get-buffer-create (or
+					   (let ((buf (plist-get options :search-buffer)))
+					     (and (buffer-live-p buf)
+						  buf))
+					   " *elgrep-search*"))
     (buffer-disable-undo)
     (setq default-directory dir)
     (unless (plist-get options :depth)
@@ -1465,6 +1506,7 @@ See `elgrep' for the valid options in plist OPTIONS."
 			(elgrep-log "File %S not readable." file)
 			nil))
 		  (>= depth mindepth))
+	 (thread-yield)
 	 (if re
 	     (elgrep-prepare-buffer file dir options
 	       (let ((last-pos (point-min))
@@ -1480,6 +1522,7 @@ See `elgrep' for the valid options in plist OPTIONS."
 		       (while (or (setq pos-found (funcall search-fun re-str nil 'noError))
 				  (null (or (eq point-prev (setq point-prev (point)))
 					    (eobp))))
+			 (thread-yield)
 			 (when-let* (pos-found
 				     (n (/ (length (match-data)) 2))
 				     (context-beginning
@@ -1521,7 +1564,8 @@ See `elgrep' for the valid options in plist OPTIONS."
 		     if (and
 			 (file-directory-p (setq path (expand-file-name file dir)))
 			 (or (file-accessible-directory-p path)
-			     (progn (elgrep-log "Directory %S not accessible\n")
+			     (progn (thread-yield)
+				    (elgrep-log "Directory %S not accessible\n")
 				    nil))
 			 (let ((dir-re (plist-get options :dir-re))
 			       (exclude-dir-re (plist-get options :exclude-dir-re)))
@@ -1535,6 +1579,7 @@ See `elgrep' for the valid options in plist OPTIONS."
 		     collect file))
 	(let ((deep-options (plist-put (cl-copy-list options) :depth (1+ depth))))
 	  (dolist (file files)
+	    (thread-yield)
 	    (setq filematches
 		  (append
 		   (if (plist-get options :abs)
@@ -2022,7 +2067,6 @@ The ARGS are the same as for `re-search-forward'.
   (let ((ret (apply #'re-search-forward args)))
     (and (elgrep/outside-comment-p) ret)))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun elgrep-load-elgrep-data-file ()
@@ -2040,7 +2084,7 @@ This can be used as `kill-emacs-hook'."
   (interactive)
   (when (stringp elgrep-data-file)
     (with-temp-buffer
-      (insert (prin1-to-string `(setq elgrep-call-list (quote ,elgrep-call-list))))
+      (insert (format "%S" `(setq elgrep-call-list (quote ,elgrep-call-list))))
       (write-file
        (expand-file-name elgrep-data-file user-emacs-directory)))))
 
