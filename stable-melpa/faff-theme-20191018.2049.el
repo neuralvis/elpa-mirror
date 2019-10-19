@@ -4,7 +4,7 @@
 
 ;; Author: James Ferguson <(concat "wjcferguson" at-sign "gmail.com")>
 ;; URL: https://github.com/WJCFerguson/emacs-faff-theme
-;; Package-Version: 20190927.1831
+;; Package-Version: 20191018.2049
 ;; Version: 2.6
 ;; Keywords: color theme
 
@@ -116,6 +116,7 @@
  '(dired-filetype-plain ((t (:foreground "SeaGreen"))))
  '(dired-filetype-source ((t (:foreground "red4" :weight bold))))
  '(dired-filetype-video ((t (:foreground "brown"))))
+ '(flymake-note ((t (:underline (:color "green yellow" :style wave)))))
  '(flymake-warning ((t (:background "gray"))))
  '(dired-filetype-js ((t (:foreground "goldenrod4"))))
  '(dired-subtree-depth-2-face ((t (:background "cornsilk1"))))
@@ -125,7 +126,7 @@
  '(dired-subtree-depth-6-face ((t (:background "white")))) '(flymake-warnline ((t (:background "LightBlue3"))))
  '(highlight-indentation-face ((t (:inherit fringe :background "cornsilk3"))))
  '(hi-green-b ((t (:foreground "green4" :weight bold))))
- '(hl-line ((t (:background "cornsilk2"))))
+ '(hl-line ((t (:background "cornsilk2" :extend t))))
  '(jabber-activity-face ((t (:background "green1"))))
  '(jabber-chat-error ((t (:background "pink"))))
  '(jabber-chat-prompt-system ((t (:foreground "green3" :weight bold))))

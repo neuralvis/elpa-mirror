@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <naehring@smtp.1und1.de>
 ;; Keywords: tools, matching, files, unix
-;; Package-Version: 20191018.927
+;; Package-Version: 20191018.2308
 ;; Version: 1.0.0
 ;; URL: https://github.com/TobiasZawada/elgrep
 ;; Package-Requires: ((emacs "25.1") (async "1.5"))
@@ -365,7 +365,7 @@ If there is no elgrep process reset Start button."
        :value "Stop elgrep"
        :action #'elgrep-menu-stop
        ))
-    (elgrep-menu-call-add-to-list elgrep-w-call-list (cons 'elgrep (elgrep-menu-arg-list)))
+    (elgrep-menu-call-add-to-list elgrep-w-call-list (cons 'elgrep/i (elgrep-menu-arg-list)))
     (elgrep (elgrep-widget-value-update-hist elgrep-w-dir)
 	    (elgrep-widget-value-update-hist elgrep-w-file-name-re)
 	    (elgrep-widget-value-update-hist elgrep-w-re)
@@ -391,7 +391,7 @@ If there is no elgrep process reset Start button."
 (defun elgrep-menu-elgrep-command (&rest _ignore)
   "Copy elgrep command resulting from current elgrep menu settings."
   (interactive "@")
-  (kill-new (prin1-to-string (cons 'elgrep
+  (kill-new (prin1-to-string (cons 'elgrep/i
 				   (elgrep-menu-arg-list)))))
 
 (defun elgrep-menu-check-elgrep-command (command)
@@ -410,7 +410,7 @@ The car of the elgrep call is a name string and the cdr is the actual elgrep com
     (when (stringp (car command))
       (setq name (car command)
 	    command (cdr command)))
-    (unless (eq (car command) 'elgrep)
+    (unless (memq (car command) '(elgrep elgrep/m elgrep/i))
       (user-error "Command \"%S\" is not elgrep" command))
     (when (< (length command) 4)
       (user-error "Not enough arguments to `elgrep' in command \"%S\"" command))
@@ -920,7 +920,7 @@ want to move point back to the menu."
 	   (command (cdr (widget-value widget))))
       (progn
 	(elgrep-menu-check-elgrep-command command)
-	(apply (car command) (append (cdr command) '(:interactive t))))
+	(apply #'elgrep (append (cdr command) '(:interactive t))))
     (error "Run button action failed; command:%s" command)))
 
 (defun elgrep-menu-call-add-to-list (widget command)
@@ -2066,6 +2066,15 @@ The ARGS are the same as for `re-search-forward'.
 \(fn REGEXP &optional BOUND NOERROR COUNT)"
   (let ((ret (apply #'re-search-forward args)))
     (and (elgrep/outside-comment-p) ret)))
+
+(defmacro elgrep/m (&rest args)
+  "Call `elgrep' with unevaluated ARGS."
+  `(apply #'elgrep '(,@args)))
+
+(defmacro elgrep/i (&rest args)
+  "Call `elgrep' interactively with unevaluated ARGS.
+The interactive call is accomplished by appending (:interactive t) to ARGS."
+  `(apply #'elgrep '(,@args :interactive t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
