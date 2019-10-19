@@ -7,7 +7,7 @@
 ;; Maintainer: Carlo Sciolla (skuro)
 ;; Keywords: uml plantuml ascii
 ;; Version: 1.2.9
-;; Package-Version: 20190905.838
+;; Package-Version: 20191019.1309
 ;; Package-X-Original-Version: 1.2.9
 ;; Package-Requires: ((dash "2.0.0") (emacs "25.0"))
 
@@ -376,7 +376,7 @@ Note that output type `txt' is promoted to `utxt' for better rendering."
            `(,@java-args
              ,(expand-file-name plantuml-jar-path)
              ,(plantuml-jar-output-type-opt plantuml-output-type)
-             ,@java-args
+             ,@plantuml-jar-args
              "-p"))))
 
 (defun plantuml-executable-start-process (buf)

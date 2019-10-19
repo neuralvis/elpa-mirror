@@ -1,0 +1,2 @@
+
+(didyoumean . [(20190923 851) ((emacs (24 4))) "Did you mean to open another file?" single ((:commit . "8c4c84694a94b95fa7750047b61423a1d1d17bf9") (:keywords "convenience") (:url . "https://gitlab.com/kisaragi-hiu/didyoumean.el"))])
