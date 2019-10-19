@@ -5,6 +5,7 @@
 ;; Author: Xu Chunyang <mail@xuchunyang.me>
 ;; Homepage: https://github.com/xuchunyang/github-stars.el
 ;; Package-Requires: ((emacs "25.1") (ghub "2.0.0"))
+;; Package-Version: 20190517.1319
 ;; Keywords: tools
 ;; Created: Tue, 27 Mar 2018 20:59:43 +0800
 ;; Version: 0.1
