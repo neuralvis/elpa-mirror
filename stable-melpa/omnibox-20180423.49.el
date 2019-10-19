@@ -4,7 +4,6 @@
 
 ;; Author: Sebastien Chapuis <sebastien@chapu.is>
 ;; URL: https://github.com/sebastiencs/omnibox
-;; Package-Version: 20180423.49
 ;; Keywords: completion, selection, convenience, frames
 ;; Package-Requires: ((emacs "26.1") (dash "2.13") (frame-local "0.0.1"))
 ;; Version: 0.0.1
