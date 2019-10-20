@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.4
-;; Package-Version: 20191016.2213
+;; Package-Version: 20191019.2209
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1173,8 +1173,33 @@ and just return it.  PROMPT shouldn't end with a question mark."
 (defvar-local eglot--saved-bindings nil
   "Bindings saved by `eglot--setq-saving'.")
 
+(defvar eglot-stay-out-of '()
+  "List of Emacs things that Eglot should try to stay of.
+Before Eglot starts \"managing\" a particular buffer, it
+opinionatedly sets some peripheral Emacs facilites, such as
+Flymake, Xref and Company.  These overriding settings help ensure
+consistent Eglot behaviour and only stay in place until
+\"managing\" stops (usually via `eglot-shutdown'), whereupon the
+previous settings are restored.
+
+However, if you wish for Eglot to stay out of a particular Emacs
+facility that you'd like to keep control of, add a string, a
+symbol, or a regexp here that will be matched against the
+variable's name, and Eglot will refrain from setting it.
+
+For example, to keep your Company customization use
+
+(add-to-list 'eglot-stay-out-of 'company)")
+
 (defmacro eglot--setq-saving (symbol binding)
-  `(when (boundp ',symbol)
+  `(when (and (boundp ',symbol)
+              (not (cl-find (symbol-name ',symbol)
+                            eglot-stay-out-of
+                            :test
+                            (lambda (s thing)
+                              (let ((re (if (symbolp thing) (symbol-name thing)
+                                          thing)))
+                                (string-match re s))))))
      (push (cons ',symbol (symbol-value ',symbol))
            eglot--saved-bindings)
      (setq-local ,symbol ,binding)))
@@ -1201,11 +1226,10 @@ and just return it.  PROMPT shouldn't end with a question mark."
     (eglot--setq-saving xref-prompt-for-identifier nil)
     (eglot--setq-saving flymake-diagnostic-functions '(eglot-flymake-backend t))
     (eglot--setq-saving company-backends '(company-capf))
-    (add-function :around (local 'imenu-create-index-function) #'eglot-imenu)
+    (eglot--setq-saving imenu-create-index-function #'eglot-imenu)
     (flymake-mode 1)
     (eldoc-mode 1))
    (t
-    (remove-hook 'flymake-diagnostic-functions 'eglot-flymake-backend t)
     (remove-hook 'after-change-functions 'eglot--after-change t)
     (remove-hook 'before-change-functions 'eglot--before-change t)
     (remove-hook 'kill-buffer-hook 'eglot--signal-textDocument/didClose t)
@@ -1890,47 +1914,46 @@ is not active."
                                         (or (get-text-property 0 :sortText a) "")
                                         (or (get-text-property 0 :sortText b) ""))))))
            (metadata `(metadata . ((display-sort-function . ,sort-completions))))
-           (response (jsonrpc-request server
-                                      :textDocument/completion
-                                      (eglot--CompletionParams)
-                                      :deferred :textDocument/completion
-                                      :cancel-on-input t))
-           (items (append ; coerce to list
-                   (if (vectorp response) response (plist-get response :items))
-                   nil))
+           resp items (cached-proxies :none)
            (proxies
-            (mapcar (jsonrpc-lambda
-                        (&rest item &key label insertText insertTextFormat
-                               &allow-other-keys)
-                      (let ((proxy
-                             (cond ((and (eql insertTextFormat 2)
-                                         (eglot--snippet-expansion-fn))
-                                    (string-trim-left label))
-                                   (t
-                                    (or insertText (string-trim-left label))))))
-                        (unless (zerop (length proxy))
-                          (put-text-property 0 1 'eglot--lsp-item item proxy))
-                        proxy))
-                    items))
-           (bounds
-            (cl-loop with probe =
-                     (plist-get (plist-get (car items) :textEdit) :range)
-                     for item in (cdr items)
-                     for range = (plist-get (plist-get item :textEdit) :range)
-                     unless (and range (equal range probe))
-                     return (bounds-of-thing-at-point 'symbol)
-                     finally (cl-return (or (and probe
-                                                 (eglot--range-region probe))
-                                            (bounds-of-thing-at-point 'symbol))))))
+            (lambda ()
+              (if (listp cached-proxies) cached-proxies
+                (setq resp
+                      (jsonrpc-request server
+                                       :textDocument/completion
+                                       (eglot--CompletionParams)
+                                       :deferred :textDocument/completion
+                                       :cancel-on-input t))
+                (setq items (append
+                             (if (vectorp resp) resp (plist-get resp :items))
+                             nil))
+                (setq cached-proxies
+                      (mapcar
+                       (jsonrpc-lambda
+                           (&rest item &key label insertText insertTextFormat
+                                  &allow-other-keys)
+                         (let ((proxy
+                                (cond ((and (eql insertTextFormat 2)
+                                            (eglot--snippet-expansion-fn))
+                                       (string-trim-left label))
+                                      (t
+                                       (or insertText (string-trim-left label))))))
+                           (unless (zerop (length item))
+                             (put-text-property 0 1 'eglot--lsp-item item proxy))
+                           proxy))
+                       items)))))
+           (bounds (bounds-of-thing-at-point 'symbol)))
       (list
        (or (car bounds) (point))
        (or (cdr bounds) (point))
        (lambda (probe pred action)
          (cond
           ((eq action 'metadata) metadata)               ; metadata
-          ((eq action 'lambda) (member probe proxies))   ; test-completion
+          ((eq action 'lambda)                           ; test-completion
+           (member probe (funcall proxies)))
           ((eq (car-safe action) 'boundaries) nil)       ; boundaries
-          ((and (null action) (member probe proxies) t)) ; try-completion
+          ((and (null action)                            ; try-completion
+                (member probe (funcall proxies)) t))
           ((eq action t)                                 ; all-completions
            (cl-remove-if-not
             (lambda (proxy)
@@ -1939,7 +1962,7 @@ is not active."
                 (and (or (null pred) (funcall pred proxy))
                      (string-prefix-p
                       probe (or filterText proxy) completion-ignore-case))))
-            proxies))))
+            (funcall proxies)))))
        :annotation-function
        (lambda (proxy)
          (eglot--dbind ((CompletionItem) detail kind insertTextFormat)
@@ -1994,7 +2017,8 @@ is not active."
                  ;; buffer, `proxy' won't have any properties.  A
                  ;; lookup should fix that (github#148)
                  (get-text-property
-                  0 'eglot--lsp-item (cl-find proxy proxies :test #'string=)))
+                  0 'eglot--lsp-item
+                  (cl-find proxy (funcall proxies) :test #'string=)))
            (let ((snippet-fn (and (eql insertTextFormat 2)
                                   (eglot--snippet-expansion-fn))))
              (cond (textEdit
