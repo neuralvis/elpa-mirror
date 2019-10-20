@@ -4,8 +4,8 @@
 
 ;; Author: Michał Krzywkowski <k.michal@zoho.com>
 ;; Keywords: mail, tools
-;; Package-Version: 20191014.2153
-;; Version: 0.0.0
+;; Package-Version: 20191020.842
+;; Version: 0.1.0
 ;; Homepage: https://github.com/mkcms/mu4e-overview
 ;; Package-Requires: ((emacs "26"))
 
@@ -67,6 +67,10 @@
   "List of characters used to split maildir paths into folders."
   :type '(repeat character))
 
+(defcustom mu4e-overview-indent-width 2
+  "Number of characters that subfolders are indented per level."
+  :type 'integer)
+
 (defface mu4e-overview-folder
   '((t))
   "Base face used for all folders.")
@@ -104,7 +108,8 @@ inserted entry."
         (count (mu4e-overview-folder-count folder))
         (unread-count (mu4e-overview-folder-unread-count folder))
         (face 'mu4e-overview-folder))
-    (insert (make-string depth ?\ ) (mu4e-overview-folder-name folder))
+    (insert (make-string (* depth mu4e-overview-indent-width) ?\s)
+            (mu4e-overview-folder-name folder))
     (cond ((null maildir)
            (setq face 'mu4e-overview-group-folder))
           ((or (null count) (null unread-count))
