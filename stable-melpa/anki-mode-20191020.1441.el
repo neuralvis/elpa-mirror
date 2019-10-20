@@ -4,7 +4,7 @@
 
 ;; Author: David Shepherd <davidshepherd7@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20181106.1837
+;; Package-Version: 20191020.1441
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0") (markdown-mode "2.2") (s "1.11.0") (request "0.3.0"))
 ;; Keywords: tools
 ;; URL: https://github.com/davidshepherd7/anki-mode
@@ -27,7 +27,7 @@
 (require 'json)
 
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 ;; (setq request-log-level 'debug)
 ;; (setq request-message-level 'debug)
@@ -212,7 +212,7 @@ When done CALLBACK will be called."
              :parser 'json-read
              :sync sync
              :success (anki-mode--http-success-factory callback)
-             :error  (function*
+             :error  (cl-function
                       (lambda (&key error-thrown &allow-other-keys)
                         (message "Anki mode http request failed, is anki running and is the anki-connect extension installed?\nrequest.el error was: %S, request.el normally uses the curl backend so check the curl manual for the meaning of exit codes."
                                  error-thrown)
@@ -221,7 +221,7 @@ When done CALLBACK will be called."
                         )))))
 
 (defun anki-mode--http-success-factory (callback)
-  (function*
+  (cl-function
    (lambda (&key data &allow-other-keys)
      (when anki-mode--log-requests
        (message "Anki connect recv %S" data))
@@ -316,8 +316,12 @@ When done CALLBACK will be called."
                        (fields . ,md-fields))) hash-table)
     (anki-mode-connect #'anki-mode--create-card-cb "addNotes" hash-table t)))
 (defun anki-mode--create-card-cb (ret)
-  (message "Created card, got back %S" ret)
-  (anki-mode-menu))
+  ;; We can't emit errors from here because it runs async, so a message is the
+  ;; best we can do
+  (if (equal (format "%S" ret) "[nil]")
+      (message "Card creation returned a null card id, normally this means that the card already exists")
+    (message "Created card, got back %S" ret)
+    (anki-mode-menu)))
 
 (defun anki-mode--parse-fields (string)
   (--> string
