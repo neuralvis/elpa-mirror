@@ -6,8 +6,8 @@
 ;; Copyright (C) 2010, ahei, all rights reserved.
 ;; Created: <2008-09-19 23:02:42>
 ;; Version: 1.4
-;; Package-Version: 20190624.1147
-;; Last-Updated: 2017-03-03 13:48:38
+;; Package-Version: 20191020.218
+;; Last-Updated: Sat Oct 19 22:14:47 2019 (-0400)
 ;; URL: http://www.emacswiki.org/emacs/download/multi-term.el
 ;; Keywords: term, terminal, multiple buffer
 ;; Compatibility: GNU Emacs 23.2.1, GNU Emacs 24.4 (and prereleases)
@@ -127,6 +127,9 @@
 ;;
 
 ;;; Change log:
+;;
+;; 2019/10/19
+;;      * Support tramp
 ;;
 ;; 2017/03/03
 ;;      * Switch to cl-lib
@@ -454,8 +457,7 @@ Will prompt you shell name when you type `C-u' before this command."
     (set-buffer term-buffer)
     ;; Internal handle for `multi-term' buffer.
     (multi-term-internal)
-    ;; Switch buffer
-    (switch-to-buffer term-buffer)))
+    (multi-term-switch-buffer term-buffer default-directory)))
 
 ;;;###autoload
 (defun multi-term-next (&optional offset)
@@ -623,6 +625,15 @@ Similar to how `quoted-insert' works in a regular buffer."
         term-scroll-to-bottom-on-output multi-term-scroll-to-bottom-on-output)
   ;; Add hook to be sure `term' quit subjob before buffer killed.
   (add-hook 'kill-buffer-hook 'multi-term-kill-buffer-hook))
+
+(defun multi-term-switch-buffer (term-buffer default-dir)
+  "If we are in `tramp-mode', switch to TERM-BUFFER based on DEFAULT-DIR."
+  (switch-to-buffer term-buffer)
+  (when (tramp-tramp-file-p default-dir)
+    (with-parsed-tramp-file-name default-dir path
+      (let ((method (cadr (assoc `tramp-login-program (assoc path-method tramp-methods)))))
+        (term-send-raw-string (concat method " " path-user "@" path-host "\C-m"))
+        (term-send-raw-string (concat "cd " path-localname "\C-m"))))))
 
 (defun multi-term-get-buffer (&optional special-shell dedicated-window)
   "Get term buffer.
