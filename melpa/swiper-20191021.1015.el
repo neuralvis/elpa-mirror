@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191016.1657
+;; Package-Version: 20191021.1015
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (ivy "0.13.0"))
 ;; Keywords: matching
@@ -566,7 +566,7 @@ When non-nil, INITIAL-INPUT is the initial search pattern."
   (let ((thing (ivy-thing-at-point)))
     (when (use-region-p)
       (deactivate-mark))
-    (swiper thing)))
+    (swiper (regexp-quote thing))))
 
 ;;;###autoload
 (defun swiper-all-thing-at-point ()
@@ -575,7 +575,7 @@ When non-nil, INITIAL-INPUT is the initial search pattern."
   (let ((thing (ivy-thing-at-point)))
     (when (use-region-p)
       (deactivate-mark))
-    (swiper-all thing)))
+    (swiper-all (regexp-quote thing))))
 
 (defun swiper--extract-matches (regex cands)
   "Extract captured REGEX groups from CANDS."
@@ -1098,20 +1098,24 @@ WND, when specified is the window."
             (when (eq ivy-exit 'done)
               (push-mark swiper--opoint t)
               (message "Mark saved where search started"))))
-        (add-to-history
-         'regexp-search-ring
-         re
-         regexp-search-ring-max)
-        ;; integration with evil-mode's search
-        (when (bound-and-true-p evil-mode)
-          (when (eq evil-search-module 'isearch)
-            (setq isearch-string ivy-text))
-          (when (eq evil-search-module 'evil-search)
-            (add-to-history 'evil-ex-search-history re)
-            (setq evil-ex-search-pattern (list re t t))
-            (setq evil-ex-search-direction 'forward)
-            (when evil-ex-search-persistent-highlight
-              (evil-ex-search-activate-highlight evil-ex-search-pattern))))))))
+        (swiper--remember-search-history re)))))
+
+(defun swiper--remember-search-history (re)
+  "Add the search pattern RE to the search history ring."
+  (add-to-history
+   'regexp-search-ring
+   re
+   regexp-search-ring-max)
+  ;; integration with evil-mode's search
+  (when (bound-and-true-p evil-mode)
+    (when (eq evil-search-module 'isearch)
+      (setq isearch-string ivy-text))
+    (when (eq evil-search-module 'evil-search)
+      (add-to-history 'evil-ex-search-history re)
+      (setq evil-ex-search-pattern (list re t t))
+      (setq evil-ex-search-direction 'forward)
+      (when evil-ex-search-persistent-highlight
+        (evil-ex-search-activate-highlight evil-ex-search-pattern)))))
 
 (defun swiper-from-isearch ()
   "Invoke `swiper' from isearch."
@@ -1458,7 +1462,8 @@ that we search only for one character."
           (goto-char (match-beginning 0)))
         (isearch-range-invisible (point) (1+ (point)))
         (swiper--maybe-recenter)
-        (unless (eq ivy-exit 'done)
+        (if (eq ivy-exit 'done)
+            (swiper--remember-search-history (ivy--regex ivy-text))
           (swiper--cleanup)
           (swiper--delayed-add-overlays)
           (swiper--add-cursor-overlay
