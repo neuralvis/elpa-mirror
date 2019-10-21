@@ -4,7 +4,7 @@
 
 ;; Authors: Valeriy Savchenko <sinmipt@gmail.com>
 ;; URL: http://github.com/SavchenkoValeriy/emacs-chocolate-theme
-;; Package-Version: 20190818.756
+;; Package-Version: 20191021.1346
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.1") (autothemer "0.2"))
 
@@ -176,6 +176,7 @@
   (ivy-subdir (:inherit 'dired-directory))
   (ivy-match-required-face (:foreground chocolate-syntax-accent :inherit 'minibuffer-prompt))
   (ivy-confirm-face (:foreground chocolate-syntax-bg-dark :inherit 'minibuffer-prompt))
+  (ivy-org (:foreground chocolate-hue-1-5))
   (ivy-minibuffer-match-face-4 (:foreground chocolate-hue-6-2 :inherit 'ivy-minibuffer-match-face-1))
   (ivy-minibuffer-match-face-3 (:foreground chocolate-syntax-added :inherit 'ivy-minibuffer-match-face-1))
   (ivy-minibuffer-match-face-2 (:foreground chocolate-hue-6 :inherit 'ivy-minibuffer-match-face-1))

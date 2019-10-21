@@ -4,7 +4,7 @@
 
 ;; Author: Nathan Kot <nk@nathankot.com>
 ;; Version: 0.1.3
-;; Package-Version: 20190823.1334
+;; Package-Version: 20191021.1648
 ;; Package-Requires: ((emacs "24.4") (dash-docs "1.4.0") (counsel "0.8.0") (cl-lib "0.5"))
 ;; Keywords: dash, ivy, counsel
 ;; URL: https://github.com/nathankot/counsel-dash
@@ -65,9 +65,9 @@
 
 (defun counsel-dash--browse-matching-result (match)
   "Given a MATCH, find matching result and browse it's url."
-  (when-let (result
-             (cdr (cl-find-if (lambda (e)
-                                (string= match (car e))) counsel-dash--results)))
+  (when-let ((result
+              (cdr (cl-find-if (lambda (e)
+                                 (string= match (car e))) counsel-dash--results))))
     (dash-docs-browse-url result)))
 
 

@@ -5,7 +5,7 @@
 ;; Created: March 20, 2019
 ;; Modified: March 26, 2019
 ;; Version: 1.0.0
-;; Package-Version: 20190510.1647
+;; Package-Version: 20191021.1647
 ;; Keywords: convenience, jump, history, evil
 ;; Homepage: https://github.com/gilbertw1/better-jumper
 ;; Package-Requires: ((emacs "25.1"))
@@ -452,7 +452,7 @@ Cleans up deleted windows and copies history to newly created windows."
         (when found-buffer
           (better-jumper-set-jumps found-buffer struct)))))
   (add-hook 'savehist-save-hook #'better-jumper--sync-savehist)
-  (remove-hook 'savehist-mode-hook #'better-jumper--load--savehist))
+  (remove-hook 'savehist-mode-hook #'better-jumper--load-savehist))
 
 (defun better-jumper--is-local-file-buffer (buffer)
   "Return non-nil if BUFFER refers to a local file that exists."
