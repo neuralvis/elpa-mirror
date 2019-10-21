@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191020.1215
+;; Package-Version: 20191021.1208
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -2308,7 +2308,9 @@ If SKIP-SIGNATURE, don't try to send textDocument/signatureHelp."
                           ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=32237
                           ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=32278
                           (let ((inhibit-modification-hooks t)
-                                (length (- end beg)))
+                                (length (- end beg))
+                                (beg (marker-position beg))
+                                (end (marker-position end)))
                             (run-hook-with-args 'before-change-functions
                                                 beg end)
                             (replace-buffer-contents temp)

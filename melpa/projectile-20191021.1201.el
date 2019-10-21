@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20191020.428
+;; Package-Version: 20191021.1201
 ;; Keywords: project, convenience
 ;; Version: 2.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -3481,7 +3481,9 @@ to run the replacement."
                     (projectile-prepend-project-name
                      (format "Replace %s with: " old-text))))
          (files (projectile-files-with-string old-text directory)))
-    (if (version< emacs-version "27")
+    (if (fboundp #'fileloop-continue)
+        ;; Emacs 25 and 26
+        ;;
         ;; Adapted from `tags-query-replace' for literal strings (not regexp)
         (progn
           (setq tags-loop-scan `(let ,(unless (equal old-text (downcase old-text))
@@ -3494,9 +3496,9 @@ to run the replacement."
                 tags-loop-operate `(perform-replace ',old-text ',new-text t nil nil
                                                     nil multi-query-replace-map))
           (tags-loop-continue (or (cons 'list files) t)))
-      (progn
-        (fileloop-initialize-replace old-text new-text files 'default)
-        (fileloop-continue)))))
+      ;; Emacs 27+
+      (fileloop-initialize-replace old-text new-text files 'default)
+      (fileloop-continue))))
 
 ;;;###autoload
 (defun projectile-replace-regexp (&optional arg)

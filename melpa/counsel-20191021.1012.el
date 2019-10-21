@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191017.1812
+;; Package-Version: 20191021.1012
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -1317,7 +1317,7 @@ INITIAL-INPUT can be given as the initial minibuffer input."
     (define-key map (kbd "C-x C-d") 'counsel-cd)
     map))
 
-(defvar counsel-git-grep-cmd-default "git --no-pager grep -n --no-color -i -I -e \"%s\""
+(defvar counsel-git-grep-cmd-default "git --no-pager grep -n --no-color -I -e \"%s\""
   "Initial command for `counsel-git-grep'.")
 
 (defvar counsel-git-grep-cmd nil
@@ -1363,7 +1363,9 @@ Typical value: '(recenter)."
    (ivy-more-chars)
    (progn
      (counsel--async-command
-      (funcall counsel-git-grep-cmd-function string))
+      (concat
+       (funcall counsel-git-grep-cmd-function string)
+       (if (ivy--case-fold-p string) " -i" "")))
      nil)))
 
 (defun counsel-git-grep-action (x)
@@ -1512,7 +1514,10 @@ When CMD is non-nil, prompt for a specific \"git grep\" command."
    (ivy-more-chars)
    (let ((regex (setq ivy--old-re
                       (ivy--regex str t))))
-     (counsel--async-command (format counsel-git-grep-cmd regex))
+     (counsel--async-command
+      (concat
+       (format counsel-git-grep-cmd regex)
+       (if (ivy--case-fold-p str) " -i" "")))
      nil)))
 
 (defun counsel-git-grep-switch-cmd ()
@@ -5725,7 +5730,8 @@ This variable is suitable for addition to
 `savehist-additional-variables'.")
 
 (defvar counsel-compile-root-functions
-  '(counsel--project-current
+  '(counsel--projectile-root
+    counsel--project-current
     counsel--configure-root
     counsel--git-root
     counsel--dir-locals-root)
@@ -5739,6 +5745,12 @@ found.")
 The root is determined by `counsel-compile-root-functions'."
   (or (run-hook-with-args-until-success 'counsel-compile-root-functions)
       (error "Couldn't find project root")))
+
+(defun counsel--projectile-root ()
+  "Return root of current projectile project or nil on failure.
+Use `projectile-project-root' to determine the root."
+  (and (fboundp 'projectile-project-root)
+       (projectile-project-root)))
 
 (defun counsel--project-current ()
   "Return root of current project or nil on failure.
@@ -5992,6 +6004,14 @@ specified by the `blddir' property."
             :action #'counsel-compile--action
             :caller 'counsel-compile))
 
+(ivy-add-actions
+ 'counsel-compile
+ '(("d" counsel-compile-forget-command "delete")))
+
+(defun counsel-compile-forget-command (cmd)
+  "Delete CMD from `counsel-compile-history'."
+  (setq counsel-compile-history
+        (delete cmd counsel-compile-history)))
 
 (defun counsel-compile-env--format-hint (cands)
   "Return a formatter for compile-env CANDS."
