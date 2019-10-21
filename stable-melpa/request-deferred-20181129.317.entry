@@ -1,2 +1,2 @@
 
-(request-deferred . [(20181129 317) ((deferred (0 3 1)) (request (0 2 0))) "Wrap request.el by deferred" single ((:commit . "1632fbc1f98ab2fbfaf6ee8407f2a907ec2065e9") (:authors ("Takafumi Arakaki <aka.tkf at gmail.com>")) (:maintainer "Takafumi Arakaki <aka.tkf at gmail.com>") (:url . "https://github.com/tkf/emacs-request"))])
+(request-deferred . [(20181129 317) ((deferred (0 3 1)) (request (0 2 0))) "Wrap request.el by deferred" single ((:commit . "e045e231490302df641a590c658655775d473b44") (:authors ("Takafumi Arakaki <aka.tkf at gmail.com>")) (:maintainer "Takafumi Arakaki <aka.tkf at gmail.com>") (:url . "https://github.com/tkf/emacs-request"))])
