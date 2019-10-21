@@ -1,0 +1,2 @@
+
+(elpa-deploy . [(20191020 1451) ((emacs (24 4)) (f (0 0))) "ELPA deployment library" single ((:commit . "8eb1153c90867aeeee3bb4fd0ee5ae8d2fa90771") (:keywords "tools") (:authors ("Bruno Félix Rezende Ribeiro" . "oitofelix@gnu.org")) (:maintainer "Bruno Félix Rezende Ribeiro" . "oitofelix@gnu.org") (:url . "https://github.com/oitofelix/elpa-deploy"))])

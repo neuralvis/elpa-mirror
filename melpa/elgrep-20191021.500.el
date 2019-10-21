@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <naehring@smtp.1und1.de>
 ;; Keywords: tools, matching, files, unix
-;; Package-Version: 20191020.1348
+;; Package-Version: 20191021.500
 ;; Version: 1.0.0
 ;; URL: https://github.com/TobiasZawada/elgrep
 ;; Package-Requires: ((emacs "25.1") (async "1.5"))
@@ -348,7 +348,8 @@ such as `elgrep-w-start'.")
      (nreverse ret))))
 
 (defvar-local elgrep-thread nil
-  "")
+  "Thread of the elgrep call with :async option 'thread.
+Normally bound in the `elgrep-menu' buffer.")
 
 (defun elgrep-menu-stop (&rest _ignore)
   "Stop elgrep process of current buffer.
@@ -1537,10 +1538,15 @@ See `elgrep' for the valid options in plist OPTIONS."
 			 (required-matches (cdr-safe re))
 			 (re-str (or (car-safe re)
 				     re))
-			 (point-prev (point-min))
+			 (point-prev 0)
 			 pos-found)
 		     (when (elgrep-required-matches search-fun required-matches)
-		       (while (or (setq pos-found (funcall search-fun re-str nil 'noError))
+		       (while (or (and
+				   (setq pos-found (funcall search-fun re-str nil 'noError))
+				   (or (< point-prev (setq point-prev (point)))
+				       (progn
+					 (setq pos-found nil)
+					 (goto-char (1+ point-prev)))))
 				  (null (or (eq point-prev (setq point-prev (point)))
 					    (eobp))))
 			 (thread-yield)
