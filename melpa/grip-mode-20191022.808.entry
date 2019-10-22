@@ -1,0 +1,2 @@
+
+(grip-mode . [(20191022 808) ((emacs (24 4))) "Instant GitHub-flavored Markdown/Org preview using grip." single ((:commit . "8fd4102a25c2dd9ccbbee082bc61d8f44eb5ed74") (:keywords "convenience" "markdown" "preview") (:authors ("Vincent Zhang" . "seagle0128@gmail.com")) (:maintainer "Vincent Zhang" . "seagle0128@gmail.com") (:url . "https://github.com/seagle0128/grip-mode"))])
