@@ -1,2 +1,0 @@
-
-(literal-string . [(20191022 1407) ((emacs (25)) (edit-indirect (0 1 5))) "edit string literals in a dedicated buffer" single ((:commit . "0beac22f06e0086f22378cf8d71511e50d98bf08") (:keywords "lisp" "tools" "docs") (:authors ("Joost Diepenmaat" . "joost@zeekat.nl")) (:maintainer "Joost Diepenmaat" . "joost@zeekat.nl") (:url . "https://github.com/joodie/literal-string-mode/"))])

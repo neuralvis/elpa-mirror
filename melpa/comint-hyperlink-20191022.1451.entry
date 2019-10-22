@@ -1,0 +1,2 @@
+
+(comint-hyperlink . [(20191022 1451) ((emacs (24 3))) "Create hyperlinks in comint for SGR URL control sequences" single ((:commit . "bd5a5e95f0e451a774fc5b197456f47f9eb4c50b") (:keywords "comint" "shell" "processes" "hypermedia" "terminals") (:authors ("Matthew Bauer" . "mjbauer95@gmail.com")) (:maintainer "Matthew Bauer" . "mjbauer95@gmail.com") (:url . "https://github.com/matthewbauer/comint-hyperlink"))])
