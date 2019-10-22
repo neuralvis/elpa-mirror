@@ -6,7 +6,7 @@
 
 ;; Author: Takafumi Arakaki <aka.tkf at gmail.com>
 ;; URL: https://github.com/tkf/emacs-request
-;; Package-Version: 20191020.2233
+;; Package-Version: 20191022.15
 ;; Package-Requires: ((emacs "24.4"))
 ;; Version: 0.3.2
 
@@ -1196,7 +1196,9 @@ START-URL is the URL requested."
 (defun engdegard-auto-revert-notify-rm-watch ()
   "Disable file notification for current buffer's associated file."
   (let ((desc auto-revert-notify-watch-descriptor)
-        (table auto-revert-notify-watch-descriptor-hash-list))
+        (table (if (boundp 'auto-revert--buffers-by-watch-descriptor)
+                   auto-revert--buffers-by-watch-descriptor
+                 auto-revert-notify-watch-descriptor-hash-list)))
     (when desc
       (let ((buffers (delq (current-buffer) (gethash desc table))))
         (if buffers

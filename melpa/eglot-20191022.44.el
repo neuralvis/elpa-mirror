@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191021.2125
+;; Package-Version: 20191022.44
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1227,6 +1227,7 @@ For example, to keep your Company customization use
     (eglot--setq-saving xref-prompt-for-identifier nil)
     (eglot--setq-saving flymake-diagnostic-functions '(eglot-flymake-backend t))
     (eglot--setq-saving company-backends '(company-capf))
+    (eglot--setq-saving company-tooltip-align-annotations t)
     (eglot--setq-saving imenu-create-index-function #'eglot-imenu)
     (flymake-mode 1)
     (eldoc-mode 1))
