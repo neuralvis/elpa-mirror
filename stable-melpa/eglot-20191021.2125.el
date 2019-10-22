@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191021.1507
+;; Package-Version: 20191021.2125
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -2006,6 +2006,7 @@ is not active."
                (erase-buffer)
                (insert formatted)
                (current-buffer)))))
+       :company-require-match 'never
        :company-prefix-length
        (save-excursion
          (when (car bounds) (goto-char (car bounds)))
