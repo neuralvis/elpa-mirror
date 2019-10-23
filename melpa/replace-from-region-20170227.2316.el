@@ -8,6 +8,7 @@
 ;; Time-stamp: <2017-02-28 08:12:56 rubikitch>
 ;; Created: 2013-01-28 14:49:07
 ;; Version: 0.2
+;; Package-Version: 20170227.2316
 ;; URL: http://www.emacswiki.org/emacs/download/replace-from-region.el
 ;; Keywords: replace, search, region
 ;; Compatibility: GNU Emacs 24.2.2, 25.1
