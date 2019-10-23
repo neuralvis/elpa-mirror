@@ -17,7 +17,7 @@ To enable literal-string-mode in your preferred programming modes,
 turn it on using the relevant mode hooks.
 
 You can customize `literal-string-editing-mode` to set the major
-mode of the editing buffer. (For instance, to markdown-mode).
+mode of the editing buffer.  (For instance, to markdown-mode).
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
