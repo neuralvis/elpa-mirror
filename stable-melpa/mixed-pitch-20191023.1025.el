@@ -5,7 +5,7 @@
 ;; Author: J. Alexander Branham <branham@utexas.edu>
 ;; Maintainer: J. Alexander Branham <branham@utexas.edu>
 ;; URL: https://gitlab.com/jabranham/mixed-pitch
-;; Package-Version: 20190307.2210
+;; Package-Version: 20191023.1025
 ;; Version: 1.0.1
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -105,11 +105,13 @@
     org-code
     org-latex-and-related
     org-checkbox
+    org-formula
     org-meta-line
     org-table
     org-verbatim)
   "This is a list holding names of faces that will not be variable pitch when function `mixed-pitch-mode' is enabled."
   :type '(repeat face)
+  :package-version '(mixed-pitch . "1.0.2")
   :group 'mixed-pitch)
 
 (defcustom mixed-pitch-variable-pitch-cursor 'bar

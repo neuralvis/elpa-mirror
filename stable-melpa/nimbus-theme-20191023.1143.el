@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20191016.1558
+;; Package-Version: 20191023.1143
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -53,7 +53,7 @@
        (lighter-green  "#8fbc8f")
        (light-green    "#9ccc65")
        (green          "#6aaf50")
-       (dark-green     "#1bd297ac709b")
+       (dark-green     "#1bd197ac709b")
        (darker-green   "#058945")
        (lighter-blue   "#86b5e8")
        (light-blue     "#68a5e9")
