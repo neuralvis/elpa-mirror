@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191022.1207
+;; Package-Version: 20191024.1621
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -2877,6 +2877,7 @@ CALLER is passed to `ivy-read'."
   "Change the directory for the currently running Ivy grep-like command.
 Works for `counsel-git-grep', `counsel-ag', etc."
   (interactive)
+  (counsel-delete-process)
   (let ((input ivy-text)
         (new-dir (counsel-read-directory-name "cd: ")))
     (ivy-quit-and-run

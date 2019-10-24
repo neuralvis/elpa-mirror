@@ -1,2 +1,2 @@
 
-(erlang . [(20191023 843) ((emacs (24 1))) "Erlang major mode" tar ((:commit . "3e5a9d1ccd72bc279d7153b4d86cbea99bdc9b34"))])
+(erlang . [(20191023 843) ((emacs (24 1))) "Erlang major mode" tar ((:commit . "0dc1a5522657d14a95954af902611748216c7a82"))])
