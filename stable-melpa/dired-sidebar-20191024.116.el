@@ -5,7 +5,7 @@
 ;; Author: James Nguyen <james@jojojames.com>
 ;; Maintainer: James Nguyen <james@jojojames.com>
 ;; URL: https://github.com/jojojames/dired-sidebar
-;; Package-Version: 20191017.459
+;; Package-Version: 20191024.116
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1") (dired-subtree "0.0.1"))
 ;; Keywords: dired, files, tools
@@ -1031,14 +1031,15 @@ This is somewhat experimental/hacky."
   (dired-sidebar-redisplay-icons))
 
 (defun dired-sidebar-redisplay-icons ()
-  "Redisplay icon themes."
-  (when (and (eq dired-sidebar-theme 'icons)
-             (fboundp 'all-the-icons-dired--display))
-    ;; Refresh `all-the-icons-dired'.
-    (dired-sidebar-revert)
-    (all-the-icons-dired--display))
-  (when (dired-sidebar-using-tui-p)
-    (dired-sidebar-tui-update-with-delay)))
+  "Redisplay icon themes unless over TRAMP."
+  (unless (file-remote-p default-directory)
+    (when (and (eq dired-sidebar-theme 'icons)
+               (fboundp 'all-the-icons-dired--display))
+      ;; Refresh `all-the-icons-dired'.
+      (dired-sidebar-revert)
+      (all-the-icons-dired--display))
+    (when (dired-sidebar-using-tui-p)
+      (dired-sidebar-tui-update-with-delay))))
 
 (defun dired-sidebar-advice-hide-temporarily (f &rest args)
   "A function meant to be used with advice to temporarily hide itself.

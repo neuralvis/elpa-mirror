@@ -3,7 +3,6 @@
 ;; Copyright (C) 2011-2013, Vitalie Spinu
 ;; Author: Vitalie Spinu
 ;; URL: https://github.com/vitoshka/ac-math
-;; Package-Version: 20141116.2127
 ;; Keywords: latex, auto-complete, Unicode, symbols
 ;; Version: 1.1
 ;; Package-Requires: ((auto-complete "1.4") (math-symbol-lists "1.0"))
