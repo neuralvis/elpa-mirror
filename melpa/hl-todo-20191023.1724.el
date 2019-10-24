@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/hl-todo
 ;; Keywords: convenience
-;; Package-Version: 20190918.2149
+;; Package-Version: 20191023.1724
 
 ;; Package-Requires: ((emacs "25"))
 
@@ -334,17 +334,19 @@ current line."
     (insert (concat (and (not (memq (char-before) '(?\s ?\t))) " ")
                     keyword
                     (and (not (memq (char-after) '(?\s ?\t ?\n))) " "))))
-   ((eolp)
+   ((and (eolp)
+         (not (looking-back "^[\s\t]*" (line-beginning-position) t)))
     (insert (concat (and (not (memq (char-before) '(?\s ?\t))) " ")
                     (format "%s %s " comment-start keyword))))
    (t
     (goto-char (line-beginning-position))
-    (insert (format "%s %s \n"
+    (insert (format "%s %s "
                     (if (derived-mode-p 'lisp-mode 'emacs-lisp-mode)
                         (format "%s%s" comment-start comment-start)
                       comment-start)
                     keyword))
-    (backward-char)
+    (unless (looking-at "[\s\t]*$")
+      (save-excursion (insert "\n")))
     (indent-region (line-beginning-position) (line-end-position)))))
 
 (define-obsolete-function-alias 'hl-todo-insert-keyword
