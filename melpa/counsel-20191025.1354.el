@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191024.1621
+;; Package-Version: 20191025.1354
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -410,7 +410,13 @@ Update the minibuffer with the amount of lines collected every
                 :caller 'counsel-company))))
 
 (ivy-configure 'counsel-company
+  :display-transformer-fn #'counsel--company-display-transformer
   :unwind-fn #'company-abort)
+
+(defun counsel--company-display-transformer (s)
+  (concat s (let ((annot (company-call-backend 'annotation s)))
+              (when annot
+                (company--clean-string annot)))))
 
 ;;** `counsel-irony'
 (declare-function irony-completion-candidates-async "ext:irony-completion")
