@@ -1,2 +1,0 @@
-
-(typescript-mode . [(20191006 2134) ((emacs (24 3))) "Major mode for editing typescript" tar ((:commit . "42b366e669385515fe44967f2676787e7dfd654f") (:keywords "typescript" "languages") (:url . "http://github.com/ananthakumaran/typescript.el"))])
