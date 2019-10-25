@@ -1,0 +1,2 @@
+
+(es-mode . [(20191024 1952) ((dash (2 11 0)) (cl-lib (0 5)) (spark (1 0)) (s (1 11 0)) (request (0 3 0))) "A major mode for editing and executing Elasticsearch queries" tar ((:commit . "6170a2e0976aaa66df364b949c7e109f1202a60f") (:keywords "elasticsearch") (:authors ("Lee Hinman" . "lee@writequit.org")) (:maintainer "Lee Hinman" . "lee@writequit.org") (:url . "http://www.github.com/dakrone/es-mode"))])
