@@ -41,6 +41,7 @@ Supported languages:
 - PHP (prettier plugin-php)
 - Protocol Buffers (clang-format)
 - Python (black)
+- R (styler)
 - Ruby (rufo)
 - Rust (rustfmt)
 - Shell script (shfmt)
