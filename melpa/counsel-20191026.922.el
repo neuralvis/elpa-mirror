@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191025.1354
+;; Package-Version: 20191026.922
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -1949,7 +1949,8 @@ The preselect behavior can be customized via user options
    (when counsel-find-file-at-point
      (require 'ffap)
      (let ((f (ffap-guesser)))
-       (when f (expand-file-name f))))
+       (when (and f (not (ivy-ffap-url-p f)))
+         (expand-file-name f))))
    (and counsel-preselect-current-file
         buffer-file-name
         (file-name-nondirectory buffer-file-name))))
