@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20191025.354
+;; Package-Version: 20191026.1903
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1") (prescient "3.3") (ivy "0.11.0"))
 ;; Version: 3.3
@@ -34,7 +34,7 @@
 
 ;;;; User options
 
-(defcustom ivy-prescient-sort-commands '(:not swiper)
+(defcustom ivy-prescient-sort-commands '(:not swiper ivy-switch-buffer)
   "Control which commands have their candidates sorted by `ivy-prescient'.
 If nil, then sorting is disabled for all commands. If t, then
 sorting is enabled for all commands. If a list of commands, then

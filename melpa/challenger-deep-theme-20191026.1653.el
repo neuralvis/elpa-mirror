@@ -2,7 +2,7 @@
 
 ;; Author: MaxSt
 ;; Version: 0.0.2
-;; Package-Version: 20181205.1834
+;; Package-Version: 20191026.1653
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/challenger-deep-theme/emacs
 
@@ -330,6 +330,9 @@
                                     (,ct (:foreground ,ct-vertical-bar))))
      `(window-divider-last-pixel   ((,c (:foreground ,vertical-bar))
                                     (,ct (:foreground ,ct-vertical-bar))))
+
+     `(fill-column-indicator      ((,c (:foreground ,grey-ddd))
+                                  (,ct (:foreground ,ct-grey-ddd))))
 
      ;; Plugins
      ;; Avy
@@ -849,8 +852,7 @@
      `(org-list-bullet           ((,c (:foreground ,cyan))
                                   (,ct (:foreground ,ct-cyan))))
      `(message-header-name ((,c (:foreground ,green))
-                            (,ct (:foreground ,ct-green)))))
-    ))
+                            (,ct (:foreground ,ct-green)))))))
 
 ;;;###autoload
 (when load-file-name

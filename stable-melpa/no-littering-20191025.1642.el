@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20191022.659
+;; Package-Version: 20191025.1642
 
 ;; This file is not part of GNU Emacs.
 
@@ -255,6 +255,7 @@ This variable has to be set before `no-littering' is loaded.")
     (setq ac-comphist-file                 (var "ac-comphist.el"))
     (setq amx-save-file                    (var "amx-save.el"))
     (setq anaconda-mode-installation-directory (var "anaconda-mode/"))
+    (setq annotate-file                    (var "annotations.el"))
     (setq async-byte-compile-log-file      (var "async-bytecomp.log"))
     (eval-after-load 'bbdb
       `(make-directory ,(var "bbdb/") t))
