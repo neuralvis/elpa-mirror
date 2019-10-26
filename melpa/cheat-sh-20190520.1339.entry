@@ -1,0 +1,2 @@
+
+(cheat-sh . [(20190520 1339) ((emacs (24))) "Interact with cheat.sh" single ((:commit . "4b29b3e7be0eadeddc8424b327cb2a2726f751f4") (:keywords "docs" "help") (:authors ("Dave Pearson" . "davep@davep.org")) (:maintainer "Dave Pearson" . "davep@davep.org") (:url . "https://github.com/davep/cheat-sh.el"))])

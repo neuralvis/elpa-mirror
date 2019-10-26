@@ -8,7 +8,6 @@
 ;; Copyright (C)  2014, lugecy,myuhe all rights reserved.
 ;; Created: 2014-11-24
 ;; Version: 0.1
-;; Package-Version: 20141124.1013
 ;; Keywords: convenience, 
 ;; URL: https://github.com/myuhe/tinysegmenter.el
 ;; Package-Requires: ((cl-lib "0.5"))

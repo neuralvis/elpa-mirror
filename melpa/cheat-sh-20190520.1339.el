@@ -1,9 +1,9 @@
 ;;; cheat-sh.el --- Interact with cheat.sh  -*- lexical-binding: t -*-
-;; Copyright 2017 by Dave Pearson <davep@davep.org>
+;; Copyright 2017-2019 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
 ;; Version: 1.7
-;; Package-Version: 20170802.1118
+;; Package-Version: 20190520.1339
 ;; Keywords: docs, help
 ;; URL: https://github.com/davep/cheat-sh.el
 ;; Package-Requires: ((emacs "24"))
@@ -47,6 +47,35 @@
 (defcustom cheat-sh-list-timeout (* 60 60 4)
   "Seconds to wait before deciding the cached sheet list is \"stale\"."
   :type 'integer
+  :group 'cheat-sh)
+
+(defcustom cheat-sh-topic-mode-map
+  '((awk-mode . "awk")
+    (c++-mode . "cpp")
+    (c-mode . "c")
+    (clojure-mode . "clojure")
+    (clojurescript-mode . "clojure")
+    (dockerfile-mode . "docker")
+    (emacs-lisp-mode . "elisp")
+    (fish-mode . "fish")
+    (go-mode . "go")
+    (haskell-mode . "haskell")
+    (hy-mode . "hy")
+    (java-mode . "java")
+    (js-jsx-mode . "javascript")
+    (js-mode . "javascript")
+    (lisp-interaction-mode . "elisp")
+    (lisp-mode . "lisp")
+    (objc-mode . "objectivec")
+    (pike-mode . "pike")
+    (powershell-mode . "powershell")
+    (python-mode . "python")
+    (rust-mode . "rust")
+    (sh-mode . "bash"))
+  "Map of Emacs major mode names to cheat.sh topic names."
+  :type '(repeat (cons
+                  (symbol :tag "Major mode")
+                  (string :tag "cheat.sh topic")))
   :group 'cheat-sh)
 
 (defconst cheat-sh-url "http://cheat.sh/%s?T"
@@ -94,13 +123,16 @@ refreshed after `cheat-sh-list-timeout' seconds."
           (setq cheat-sh-sheet-list-acquired (time-to-seconds))
           (setq cheat-sh-sheet-list (split-string list "\n"))))))
 
-(defun cheat-sh-read (prompt)
+(defun cheat-sh-read (prompt &optional initial)
   "Read input from the user, showing PROMPT to prompt them.
 
 This function is used by some `interactive' functions in
 cheat-sh.el to get the item to look up. It provides completion
-based of the sheets that are available on cheat.sh."
-  (completing-read prompt (cheat-sh-sheet-list-cache)))
+based of the sheets that are available on cheat.sh.
+
+If a value is passed for INITIAL it is used as the initial
+input."
+  (completing-read prompt (cheat-sh-sheet-list-cache) nil nil initial))
 
 (defun cheat-sh-decorate-all (buffer regexp face)
   "Decorate BUFFER, finding REGEXP and setting face to FACE."
@@ -165,13 +197,17 @@ empty string."
   (interactive "sSearch: ")
   (cheat-sh (concat "~" thing)))
 
+(defun cheat-sh-guess-topic ()
+  "Attempt to guess a topic to search."
+  (alist-get major-mode cheat-sh-topic-mode-map))
+
 ;;;###autoload
 (defun cheat-sh-search-topic (topic thing)
   "Search TOPIC for THING on cheat.sh and display the result."
   (interactive
-   (list (cheat-sh-read "Topic: ")
+   (list (cheat-sh-read "Topic: " (cheat-sh-guess-topic))
          (read-string "Search: ")))
-  (cheat-sh (concat topic "/~" thing)))
+  (cheat-sh (concat topic "/" thing)))
 
 (provide 'cheat-sh)
 
