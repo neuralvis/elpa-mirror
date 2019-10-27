@@ -21,6 +21,7 @@ Supported languages:
 - D (dfmt)
 - Dart (dartfmt)
 - Dhall (dhall format)
+- Dockerfile (dockfmt)
 - Elixir (mix format)
 - Elm (elm-format)
 - Emacs Lisp (emacs)

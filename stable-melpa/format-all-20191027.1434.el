@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20191024.2151
+;; Package-Version: 20191027.1434
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -35,6 +35,7 @@
 ;; - D (dfmt)
 ;; - Dart (dartfmt)
 ;; - Dhall (dhall format)
+;; - Dockerfile (dockfmt)
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (emacs)
@@ -446,6 +447,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install dhall"))
   (:modes dhall-mode)
   (:format (format-all--buffer-easy executable "format")))
+
+(define-format-all-formatter dockfmt
+  (:executable "dockfmt")
+  (:install "go get github.com/jessfraz/dockfmt")
+  (:modes dockerfile-mode)
+  (:format (format-all--buffer-easy executable "fmt")))
 
 (define-format-all-formatter elm-format
   (:executable "elm-format")

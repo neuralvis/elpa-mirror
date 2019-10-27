@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191026.2151
+;; Package-Version: 20191027.1541
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1084,7 +1084,9 @@ Doubles as an indicator of snippet support."
                        major-mode))))
     (with-temp-buffer
       (insert string)
-      (ignore-errors (funcall mode)) (font-lock-ensure) (buffer-string))))
+      (ignore-errors (delay-mode-hooks (funcall mode)))
+      (font-lock-ensure)
+      (buffer-string))))
 
 (defcustom eglot-ignored-server-capabilites (list)
   "LSP server capabilities that Eglot could use, but won't.
