@@ -10,6 +10,10 @@ Usage:
 
   Run `counsel-etags-list-tag-in-current-file' to list tags in current file.
 
+  Or just use native imenu with below setup,
+     (setq imenu-create-index-function
+           'counsel-etags-imenu-default-create-index-function)
+
   `counsel-etags-scan-code' to create tags file
   `counsel-etags-grep' to grep
   `counsel-etags-grep-current-directory' to grep in current directory
