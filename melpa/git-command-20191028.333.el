@@ -2,7 +2,7 @@
 
 ;; Author: 10sr <8slashes+el [at] gmail [dot] com>
 ;; URL: https://github.com/10sr/git-command-el
-;; Package-Version: 20191025.627
+;; Package-Version: 20191028.333
 ;; Version: 0.2.0
 ;; Package-Requires: ((term-run "0.1.4") (with-editor "2.3.1"))
 ;; Keywords: utility git
@@ -133,8 +133,8 @@ This variable is used internally only.")
       (let ((inhibit-read-only t))
         (insert-file-contents filename)
         (ansi-color-apply-on-region (point-min)
-                                    (point-max))))
-    (setq buffer-read-only t)
+                                    (point-max)))
+      (setq buffer-read-only t))
     (display-buffer buf)))
 
 
