@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191027.1541
+;; Package-Version: 20191028.1529
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -490,7 +490,8 @@ treated as in `eglot-dbind'."
                                            t
                                          :json-false))
                                     :contextSupport t)
-             :hover              `(:dynamicRegistration :json-false)
+             :hover              (list :dynamicRegistration :json-false
+                                       :contentFormat ["markdown" "plaintext"])
              :signatureHelp      (list :dynamicRegistration :json-false
                                        :signatureInformation
                                        `(:parameterInformation
@@ -1081,7 +1082,9 @@ Doubles as an indicator of snippet support."
                (if (stringp markup) (list (string-trim markup)
                                           (intern "gfm-view-mode"))
                  (list (plist-get markup :value)
-                       major-mode))))
+                       (pcase (plist-get markup :kind)
+                         ("markdown" 'gfm-view-mode)
+                         (_ major-mode))))))
     (with-temp-buffer
       (insert string)
       (ignore-errors (delay-mode-hooks (funcall mode)))

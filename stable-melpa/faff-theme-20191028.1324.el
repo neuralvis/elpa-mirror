@@ -4,7 +4,7 @@
 
 ;; Author: James Ferguson <(concat "wjcferguson" at-sign "gmail.com")>
 ;; URL: https://github.com/WJCFerguson/emacs-faff-theme
-;; Package-Version: 20191018.2049
+;; Package-Version: 20191028.1324
 ;; Version: 2.6
 ;; Keywords: color theme
 
@@ -81,7 +81,7 @@
  '(link-visited ((default (:inherit (link))) (((class color) (background light)) (:foreground "magenta4")) (((class color) (background dark)) (:foreground "violet"))))
  '(ein:cell-input-area ((t (:background "cornsilk2"))) t)
  '(fringe ((t (:inherit default :background "cornsilk3"))))
- '(header-line ((t (:inherit mode-line :background "cornsilk2" :box nil))))
+ '(header-line ((t (:inherit mode-line :background "cornsilk4" :weight bold))))
  '(js2-external-variable ((t (:foreground "orange3"))))
  '(js2-function-call ((t (:inherit font-lock-function-name-face))))
  '(js2-jsdoc-type ((t (:inherit font-lock-type-face))))
@@ -190,10 +190,10 @@
  '(warning ((t (:foreground "DarkOrange3" :weight bold))))
  '(whitespace-hspace ((t (:background "LemonChiffon1"))))
  '(whitespace-line ((t (:background "yellow2"))))
- '(whitespace-newline ((t (:background "ivory2" :foreground "ivory4" :weight normal))))
- '(whitespace-space ((t (:foreground "ivory2"))))
- '(window-divider-first-pixel ((t (:foreground "ivory2"))))
- '(window-divider-last-pixel ((t (:foreground "ivory4")))))
+ '(whitespace-newline ((t (:background "cornsilk2" :foreground "cornsilk4" :weight normal))))
+ '(whitespace-space ((t (:foreground "cornsilk2"))))
+ '(window-divider-first-pixel ((t (:foreground "cornsilk2"))))
+ '(window-divider-last-pixel ((t (:foreground "cornsilk4")))))
 
 ;;;###autoload
 (when load-file-name
