@@ -1,2 +1,0 @@
-
-(w3m . [(20191002 427) nil "an Emacs interface to w3m" tar ((:commit . "361297e8539770f2f396d30928ebc01de60ca637") (:keywords "w3m" "www" "hypermedia"))])
