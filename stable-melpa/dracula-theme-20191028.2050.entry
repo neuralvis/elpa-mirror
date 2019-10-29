@@ -1,0 +1,2 @@
+
+(dracula-theme . [(20191028 2050) ((emacs (24))) "Dracula Theme" single ((:commit . "fb99b218422ac20df6843ba01cc8d82c7583e126") (:authors ("film42")) (:maintainer "film42") (:url . "https://github.com/dracula/emacs"))])
