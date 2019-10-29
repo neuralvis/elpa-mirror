@@ -1,2 +1,0 @@
-
-(handle . [(20191005 629) ((emacs (25 1)) (parent-mode (2 3))) "A handle for major-mode generic functions." single ((:commit . "7253fa4d9469fa0fc6c8f1dea83e3ea77a0d9916") (:keywords "convenience") (:authors ("Uros Perisic")) (:maintainer "Uros Perisic") (:url . "https://gitlab.com/jjzmajic/handle"))])
