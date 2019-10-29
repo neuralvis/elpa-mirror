@@ -5,7 +5,7 @@
 ;; Author: Felipe Lema <felipel@mortemale.org>
 ;; Homepage: https://launchpad.net/frecentf.el
 ;; Keywords: files maint
-;; Package-Version: 20191024.1342
+;; Package-Version: 20191029.1249
 ;; Package-Requires: ((emacs "26.1") (frecency "0.1-pre") (persist "0.4"))
 ;; Version: 0.1
 
@@ -32,6 +32,7 @@
 
 ;;; Code:
 (require 'cl-lib)
+(require 'dirtrack)
 (require 'frecency)
 (require 'map)
 (require 'persist)
@@ -238,7 +239,13 @@ Mostly based off `recentf-mode'"
       (dolist (hook '(find-file-hook
 		      write-file-functions))
         (apply hook-setup (list hook
-				'frecentf-track-opened-file))))))
+				'frecentf-track-opened-file)))
+      (apply hook-setup
+	     (list
+	      'dirtrack-directory-change-hook
+	      (lambda ()
+		(frecentf-add-path (eval 'default-directory))))))))
+
 
 (provide 'frecentf)
 ;;; frecentf.el ends here

@@ -2,7 +2,7 @@
 
 ;; Author: MaxSt
 ;; Version: 0.0.2
-;; Package-Version: 20191026.1653
+;; Package-Version: 20191029.1243
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/challenger-deep-theme/emacs
 
@@ -355,8 +355,8 @@
                                     (,ct (:background ,ct-selection))))
      `(company-tooltip-mouse       ((,c (:background ,magenta :foreground ,bg))
                                     (,ct (:background ,ct-magenta :foreground ,ct-bg))))
-     `(company-tooltip-annotation  ((,c (:foreground ,magenta-d))
-                                    (,ct (:foreground ,ct-magenta-d))))
+     `(company-tooltip-annotation  ((,c (:foreground ,cyan))
+                                    (,ct (:foreground ,ct-cyan))))
      `(company-scrollbar-bg        ((,c (:background ,black))
                                     (,ct (:background ,ct-black))))
      `(company-scrollbar-fg        ((,c (:background ,blue))
