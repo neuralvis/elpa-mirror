@@ -5,7 +5,7 @@
 ;; Filename: centaur-tabs.el
 ;; Description: Provide an out of box configuration to use highly customizable tabs.
 ;; URL: https://github.com/ema2159/centaur-tabs
-;; Package-Version: 20191020.237
+;; Package-Version: 20191030.1802
 ;; Author: Emmanuel Bustos <ema2159@gmail.com>
 ;; Maintainer: Emmanuel Bustos <ema2159@gmail.com>
 ;; Created: 2019-21-19 22:14:34
@@ -2047,7 +2047,7 @@ not the actual logical index position of the current group."
 	 (key (make-vector 1 event))
 	 (key-desc (key-description key)))
     (centaur-tabs-select-visible-nth-tab
-     (string-to-number (nth 1 (split-string key-desc "-"))))))
+     (string-to-number (car (last (split-string key-desc "-")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;; Utils functions ;;;;;;;;;;;;;;;;;;;;;;;
 (defun centaur-tabs-get-groups ()

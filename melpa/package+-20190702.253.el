@@ -5,6 +5,7 @@
 ;; Author: Ryan Davis <ryand-ruby@zenspider.com>
 ;; Created: 2013-07-25
 ;; Keywords: extensions, tools
+;; Package-Version: 20190702.253
 ;; Package-Requires: ((emacs "24.3"))
 ;; URL: https://github.com/zenspider/package
 ;; Compatibility: GNU Emacs: 24.3?, 24.4+

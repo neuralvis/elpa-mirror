@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191026.922
+;; Package-Version: 20191030.1543
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -390,6 +390,8 @@ Update the minibuffer with the amount of lines collected every
 (declare-function company-abort "ext:company")
 (declare-function company-complete "ext:company")
 (declare-function company-mode "ext:company")
+(declare-function company-call-backend "ext:company")
+(declare-function company--clean-string "ext:company")
 
 ;;;###autoload
 (defun counsel-company ()
@@ -1909,7 +1911,7 @@ Skip some dotfiles unless `ivy-text' requires them."
         (setq res (cl-remove-if-not counsel--find-file-predicate res))))
     (if (or (null ivy-use-ignore)
             (null counsel-find-file-ignore-regexp)
-            (string-match-p "\\`\\." ivy-text))
+            (string-match-p counsel-find-file-ignore-regexp ivy-text))
         res
       (or (cl-remove-if
            (lambda (x)
@@ -2021,7 +2023,7 @@ If USE-IGNORE is non-nil, try to generate a command that respects
         (when (and use-ignore ivy-use-ignore
                    counsel-find-file-ignore-regexp
                    (cdr filter-cmd)
-                   (not (string-match-p "\\`\\." ivy-text))
+                   (not (string-match-p counsel-find-file-ignore-regexp ivy-text))
                    (not (string-match-p counsel-find-file-ignore-regexp
                                         (or (car ivy--old-cands) ""))))
           (let ((ignore-re (list (counsel--elisp-to-pcre
