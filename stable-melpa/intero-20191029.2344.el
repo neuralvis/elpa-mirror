@@ -11,7 +11,7 @@
 ;; Author: Chris Done <chrisdone@fpcomplete.com>
 ;; Maintainer: Chris Done <chrisdone@fpcomplete.com>
 ;; URL: https://github.com/commercialhaskell/intero
-;; Package-Version: 20190919.216
+;; Package-Version: 20191029.2344
 ;; Created: 3rd June 2016
 ;; Version: 0.1.13
 ;; Keywords: haskell, tools
@@ -2260,7 +2260,7 @@ Guess: You might need the \"tinfo\" package, e.g. libtinfo-dev.
 
 WHAT TO DO NEXT
 
-If you don't want to Intero to try installing itself again for
+If you don't want Intero to try installing itself again for
 this project, just keep this buffer around in your Emacs.
 
 If you'd like to try again next time you try use an Intero
@@ -2307,7 +2307,7 @@ problem.
 
 WHAT TO DO NEXT
 
-If you don't want to Intero to try installing itself again for
+If you don't want Intero to try installing itself again for
 this project, just keep this buffer around in your Emacs.
 
 If you'd like to try again next time you try use an Intero
