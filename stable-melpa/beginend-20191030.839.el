@@ -4,8 +4,8 @@
 
 ;; Authors: Damien Cassou <damien@cassou.me>
 ;;          Matus Goljer <matus.goljer@gmail.com>
-;; Version: 2.0.0
-;; Package-Version: 20190708.1856
+;; Version: 2.0.1
+;; Package-Version: 20191030.839
 ;; URL: https://github.com/DamienCassou/beginend
 ;; Package-Requires: ((emacs "25.3"))
 ;; Created: 01 Jun 2015
@@ -96,10 +96,8 @@ This is possible if buffer was narrowed after POINT was stored."
      ,@body))
 
 (defvar beginend-modes
-  '(
-    (mu4e-view-mode-hook . beginend-message-mode)
-    (mu4e-compose-mode-hook . beginend-message-mode)
-    )
+  '((mu4e-view-mode-hook . beginend-message-mode)
+    (mu4e-compose-mode-hook . beginend-message-mode))
   "List all beginend modes.
 Each element has the form (STD-MODE-HOOK . BEGINEND-MODE).  STD-MODE-HOOK
 is the standard mode hook (e.g., `dired-mode-hook') to which
@@ -334,13 +332,15 @@ If optional argument P is present test at that point instead of `point'."
       (outline-next-visible-heading 1)))
   (progn))
 
-(declare-function org-next-visible-heading "org")
+(declare-function org-with-limited-levels "org-macs")
+(declare-function outline-next-visible-heading "outline")
 (declare-function org-on-heading-p "org")
 
 (beginend-define-mode org-mode
   (progn
     (unless (org-on-heading-p)
-      (org-next-visible-heading 1)))
+      (org-with-limited-levels
+       (outline-next-visible-heading 1))))
   (progn))
 
 
