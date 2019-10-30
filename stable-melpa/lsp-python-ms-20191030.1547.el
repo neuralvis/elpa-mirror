@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson, Vincent Zhang
 ;; Version: 0.3.0
-;; Package-Version: 20191024.2219
+;; Package-Version: 20191030.1547
 ;; Package-Requires: ((cl-lib "0.6.1") (lsp-mode "6.0") (python "0.26.1") (json "1.4") (emacs "24.4"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -100,6 +100,15 @@ stable, beta or daily."
   :type 'string
   :group 'lsp-python-ms)
 
+;; See https://github.com/microsoft/python-language-server/blob/master/src/Analysis/Ast/Impl/Definitions/AnalysisOptions.cs
+(defcustom lsp-python-ms-cache "Library"
+  "The cache level of analysis for Microsoft Python Language Server."
+  :type '(choice
+          (const "None")
+          (const "System")
+          (const "Library"))
+  :group 'lsp-python-ms)
+
 ;; See https://github.com/microsoft/python-language-server for more diagnostics
 (defcustom lsp-python-ms-errors ["unknown-parameter-name"
                                  "undefined-variable"
@@ -114,6 +123,16 @@ stable, beta or daily."
                                    "parameter-already-specified"
                                    "too-many-positional-arguments-before-star"]
   "Microsoft Python Language Server Warning types."
+  :type 'lsp-string-vector
+  :group 'lsp-python-ms)
+
+(defcustom lsp-python-ms-information []
+  "Microsoft Python Language Server Information types."
+  :type 'lsp-string-vector
+  :group 'lsp-python-ms)
+
+(defcustom lsp-python-ms-disabled []
+  "Microsoft Python Language Server Disabled types."
   :type 'lsp-string-vector
   :group 'lsp-python-ms)
 
@@ -190,14 +209,14 @@ With prefix, FORCED to redownload the server."
                                                     (format unzip-script temp-file lsp-python-ms-dir))
                        (lambda (proc _)
                          (let ((status (process-exit-status proc)))
-                           (if (= 0 status)
+                           (if (and (= 0 status)
+                                    (file-exists-p lsp-python-ms-executable))
                                (progn
                                  (message "Extracting Microsoft Python Language Server...done")
-                                 (when (file-exists-p lsp-python-ms-executable)
-                                   ;; Make the binary executable
-                                   (chmod lsp-python-ms-executable #o755)
-                                   ;; Revert the buffer to start LSP in case it wasn't
-                                   (revert-buffer t t)))
+                                 ;; Make the binary executable
+                                 (chmod lsp-python-ms-executable #o755)
+                                 ;; Start LSP if need
+                                 (when lsp-mode (lsp)))
                              (message "Failed to extract Microsoft Python Language Server: %d" status)))))
                       ) `(,download-reporter))
       (dotimes (k 100)
@@ -342,8 +361,13 @@ other handlers. "
     (error (concat "Cannot find Microsoft Python Language Server executable! It's expected to be "
                    lsp-python-ms-executable))))
 
-(lsp-register-custom-settings '(("python.analysis.errors" lsp-python-ms-errors)))
-(lsp-register-custom-settings '(("python.analysis.warnings" lsp-python-ms-warnings)))
+(lsp-register-custom-settings
+ '(("python.analysis.cachingLevel" lsp-python-ms-cache)
+   ("python.analysis.errors" lsp-python-ms-errors)
+   ("python.analysis.warnings" lsp-python-ms-warnings)
+   ("python.analysis.information" lsp-python-ms-information)
+   ("python.analysis.disabled" lsp-python-ms-disabled)
+   ("python.analysis.autoSearchPaths" (> (length lsp-python-ms-extra-paths) 0) t)))
 
 (lsp-register-client
  (make-lsp-client
