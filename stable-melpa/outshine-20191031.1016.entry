@@ -1,0 +1,2 @@
+
+(outshine . [(20191031 1016) ((outorg (2 0)) (cl-lib (0 5))) "outline with outshine outshines outline" tar ((:commit . "317a3c925a191172ebf2c48dabf35a91713b6206") (:keywords "convenience" "outlines" "org") (:authors ("Thorsten Jolitz")) (:maintainer "Thibault Polge" . "thibault@thb.lt") (:url . "https://github.com/alphapapa/outshine"))])
