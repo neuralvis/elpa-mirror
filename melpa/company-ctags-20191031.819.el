@@ -4,7 +4,7 @@
 
 ;; Author: Chen Bin <chenbin.sh@gmail.com>
 ;; URL: https://github.com/redguardtoo/company-ctags
-;; Package-Version: 20191020.937
+;; Package-Version: 20191031.819
 ;; Version: 0.0.1
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "24.3") (company "0.9.0"))
@@ -34,11 +34,10 @@
 ;; even when new tags file is created.
 ;;
 ;; Usage:
-;;   Step 1, insert below code into Emacs setup,
+;;   Step 1, insert below code into your configuration,
 ;;
 ;;   (eval-after-load 'company
 ;;     '(progn
-;;        (require 'company-ctags)
 ;;        (company-ctags-auto-setup)))
 ;;
 ;;   Step 2, Use Ctags to create tags file and enjoy.

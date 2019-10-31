@@ -6,11 +6,10 @@ After initial loading, this library will always respond immediately
 even when new tags file is created.
 
 Usage:
-  Step 1, insert below code into Emacs setup,
+  Step 1, insert below code into your configuration,
 
   (eval-after-load 'company
     '(progn
-       (require 'company-ctags)
        (company-ctags-auto-setup)))
 
   Step 2, Use Ctags to create tags file and enjoy.

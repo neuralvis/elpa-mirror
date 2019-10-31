@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson, Vincent Zhang
 ;; Version: 0.3.0
-;; Package-Version: 20191030.1547
+;; Package-Version: 20191031.841
 ;; Package-Requires: ((cl-lib "0.6.1") (lsp-mode "6.0") (python "0.26.1") (json "1.4") (emacs "24.4"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -196,10 +196,15 @@ With prefix, FORCED to redownload the server."
                     (lambda (_data bar)
                       ;; Skip http header
                       (re-search-forward "\r?\n\r?\n")
-                      (write-region (point) (point-max) temp-file)
 
+                      ;; Save to the temp file
+                      (let ((coding-system-for-write 'binary))
+                        (write-region (point) (point-max) temp-file))
+
+                      ;; Report progress
                       (progress-reporter-done bar)
 
+                      ;; Extract the archive
                       (message "Extracting Microsoft Python Language Server...")
                       (when (file-exists-p lsp-python-ms-dir)
                         (delete-directory lsp-python-ms-dir 'recursive))
@@ -362,12 +367,12 @@ other handlers. "
                    lsp-python-ms-executable))))
 
 (lsp-register-custom-settings
- '(("python.analysis.cachingLevel" lsp-python-ms-cache)
+ `(("python.analysis.cachingLevel" lsp-python-ms-cache)
    ("python.analysis.errors" lsp-python-ms-errors)
    ("python.analysis.warnings" lsp-python-ms-warnings)
    ("python.analysis.information" lsp-python-ms-information)
    ("python.analysis.disabled" lsp-python-ms-disabled)
-   ("python.analysis.autoSearchPaths" (> (length lsp-python-ms-extra-paths) 0) t)))
+   ("python.analysis.autoSearchPaths" ,(<= (length lsp-python-ms-extra-paths) 0) t)))
 
 (lsp-register-client
  (make-lsp-client
