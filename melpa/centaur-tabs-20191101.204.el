@@ -5,7 +5,7 @@
 ;; Filename: centaur-tabs.el
 ;; Description: Provide an out of box configuration to use highly customizable tabs.
 ;; URL: https://github.com/ema2159/centaur-tabs
-;; Package-Version: 20191030.1802
+;; Package-Version: 20191101.204
 ;; Author: Emmanuel Bustos <ema2159@gmail.com>
 ;; Maintainer: Emmanuel Bustos <ema2159@gmail.com>
 ;; Created: 2019-21-19 22:14:34
@@ -43,7 +43,6 @@
 ;;; Require
 (require 'cl-lib)
 (require 'color)
-(require 'which-func)
 (require 'powerline)
 
 ;; Compiler pacifier
@@ -293,7 +292,7 @@ Default is 'hand.  The following scopes are possible:
 
 (defvar centaur-tabs-hide-tab-function 'centaur-tabs-hide-tab
   "Function to hide tab.
-This function filters tabs.  The tab will hide if this function returns nil.")
+This function filters tabs.  The tab will hide if this function returns t.")
 
 (defvar centaur-tabs-current-tabset-function nil
   "Function called with no argument to obtain the current tab set.
@@ -930,7 +929,8 @@ element."
 
 (defun centaur-tabs-line ()
   "Return the header line templates that represent the tab bar.
-Inhibit display of the tab bar in current window `centaur-tabs-hide-tab-function' return nil."
+Inhibit display of the tab bar in current window where
+`centaur-tabs-hide-tab-function' return t."
   (cond
    ((centaur-tabs-hide-tab-cached (current-buffer))
     ;; Don't show the tab bar.
@@ -1064,7 +1064,6 @@ Depend on the setting of the option `centaur-tabs-cycle-scope'."
 (defun centaur-tabs-backward--button (event)
   "Same as centaur-tabs-backward, but changing window to EVENT source."
   (interactive "e")
-  (message "backward button")
   (select-window (posn-window (event-start event)))
   (centaur-tabs-backward))
 
@@ -1072,7 +1071,6 @@ Depend on the setting of the option `centaur-tabs-cycle-scope'."
 (defun centaur-tabs-forward--button (event)
   "Same as centaur-tabs-forward, but changing window to EVENT source."
   (interactive "e")
-  (message "forward button")
   (select-window (posn-window (event-start event)))
   (centaur-tabs-forward))
 
