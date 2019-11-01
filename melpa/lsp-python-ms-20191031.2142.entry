@@ -1,2 +1,0 @@
-
-(lsp-python-ms . [(20191031 2142) ((cl-lib (0 6 1)) (lsp-mode (6 0)) (python (0 26 1)) (json (1 4)) (emacs (24 4))) "lsp-mode client for Microsoft python-language-server" single ((:commit . "c731832b71267f1da2072c06a8b4758d725a0608") (:keywords "languages" "tools") (:authors ("Charl Botha")) (:maintainer "Andrew Christianson, Vincent Zhang") (:url . "https://github.com/andrew-christianson/lsp-python-ms"))])

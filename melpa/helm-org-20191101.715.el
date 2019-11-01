@@ -4,7 +4,7 @@
 ;; Author:      Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; URL: https://github.com/emacs-helm/helm-org
-;; Package-Version: 20190819.617
+;; Package-Version: 20191101.715
 ;; Package-Requires: ((helm "3.3") (emacs "24.4"))
 ;; Version: 1.0
 
