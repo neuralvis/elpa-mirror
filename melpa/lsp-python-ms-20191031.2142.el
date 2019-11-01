@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson, Vincent Zhang
 ;; Version: 0.4.0
-;; Package-Version: 20191031.1948
+;; Package-Version: 20191031.2142
 ;; Package-Requires: ((cl-lib "0.6.1") (lsp-mode "6.0") (python "0.26.1") (json "1.4") (emacs "24.4"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -395,8 +395,8 @@ other handlers. "
   :notification-handlers (lsp-ht ("python/languageServerStarted" 'lsp-python-ms--language-server-started-callback)
                                  ("telemetry/event" 'ignore)
                                  ("python/reportProgress" 'lsp-python-ms--log-progress)
-                                 ("python/beginProgress" 'lsp-python-ms--log-progress)
-                                 ("python/endProgress" 'lsp-python-ms--log-progress))
+                                 ("python/beginProgress" (lambda (&rest _) (lsp--spinner-start)))
+                                 ("python/endProgress" (lambda (&rest _) (lsp--spinner-stop))))
   :initialized-fn (lambda (workspace)
                     (with-lsp-workspace workspace
                       (lsp--set-configuration (lsp-configuration-section "python"))))))

@@ -1,0 +1,2 @@
+
+(challenger-deep-theme . [(20191031 2052) ((emacs (24))) "challenger-deep Theme" single ((:commit . "17ac92b95cd7d2f23a1ba4c49e4a87aa02cc8655") (:authors ("MaxSt")) (:maintainer "MaxSt") (:url . "https://github.com/challenger-deep-theme/emacs"))])

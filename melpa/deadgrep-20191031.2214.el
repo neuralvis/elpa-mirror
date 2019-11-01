@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20191002.2
+;; Package-Version: 20191031.2214
 ;; Keywords: tools
 ;; Version: 0.9
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -1487,6 +1487,12 @@ This is intended for use with `next-error-function', which see."
      (format "default-directory: %S\n" default-directory)
      (format "\nInitial output from ripgrep:\n%S" output)
      (format "\n\nPlease file bugs at https://github.com/Wilfred/deadgrep/issues/new"))))
+
+(defun deadgrep-kill-all-buffers ()
+  "Kill all open deadgrep buffers."
+  (interactive)
+  (dolist (buffer (deadgrep--buffers))
+    (kill-buffer buffer)))
 
 (provide 'deadgrep)
 ;;; deadgrep.el ends here

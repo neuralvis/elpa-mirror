@@ -2,7 +2,7 @@
 
 ;; Author: MaxSt
 ;; Version: 0.0.2
-;; Package-Version: 20191029.1243
+;; Package-Version: 20191031.2052
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/challenger-deep-theme/emacs
 
@@ -37,6 +37,7 @@
       (ct-yellow-d    "#ffaf5f")
       (red-d          "#ff5458")
       (ct-red-d       "#ff5f00")
+      (red-dd         "#8e3939")
       (red            "#ff8080")
       (ct-red         "#ff8787")
       (magenta        "#c991e1")
@@ -54,6 +55,7 @@
       (green          "#95ffa4")
       (ct-green       "#5fffaf")
       (green-d        "#62d196")
+      (green-dd       "#128046")
       (ct-green-d     "#5fd787")
       )
 
@@ -621,11 +623,11 @@
                                          (,ct (:foreground ,ct-cyan))))
      `(magit-diff-added                 ((,c (:foreground ,vc-added))
                                          (,ct (:foreground ,ct-vc-added))))
-     `(magit-diff-added-highlight       ((,c (:background ,vc-added :foreground ,bg))
+     `(magit-diff-added-highlight       ((,c (:background ,vc-added :foreground ,green-dd))
                                          (,ct (:background ,ct-vc-added :foreground ,bg))))
      `(magit-diff-removed               ((,c (:foreground ,vc-deleted))
                                          (,ct (:foreground ,ct-vc-deleted))))
-     `(magit-diff-removed-highlight     ((,c (:background ,vc-deleted :foreground ,bg))
+     `(magit-diff-removed-highlight     ((,c (:background ,vc-deleted :foreground ,red-dd))
                                          (,ct (:background ,ct-vc-deleted :foreground ,bg))))
      `(smerge-refined-added             ((,c (:foreground ,vc-added))
                                          (,ct (:foreground ,ct-vc-added))))
