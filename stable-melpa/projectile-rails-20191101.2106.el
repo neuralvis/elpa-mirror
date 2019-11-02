@@ -4,7 +4,7 @@
 
 ;; Author:            Adam Sokolnicki <adam.sokolnicki@gmail.com>
 ;; URL:               https://github.com/asok/projectile-rails
-;; Package-Version: 20191023.621
+;; Package-Version: 20191101.2106
 ;; Version:           0.18.0
 ;; Keywords:          rails, projectile
 ;; Package-Requires:  ((emacs "24.3") (projectile "0.12.0") (inflections "1.1") (inf-ruby "2.2.6") (f "0.13.0") (rake "0.3.2"))
@@ -1634,8 +1634,7 @@ If file does not exist and ASK in not nil it will ask user to proceed."
     (projectile-rails-set-assets-dirs)
     (projectile-rails-set-fixture-dirs)))
 
-(dolist (mode '(ruby-mode-hook enh-ruby-mode-hook))
-  (add-hook mode #'projectile-rails-expand-snippet-maybe))
+(add-hook 'projectile-rails-mode-hook #'projectile-rails-expand-snippet-maybe)
 
 ;;;###autoload
 (defun projectile-rails-on ()
