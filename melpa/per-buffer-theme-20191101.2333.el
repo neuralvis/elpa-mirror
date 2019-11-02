@@ -2,10 +2,10 @@
 
 ;; Copyright (C) 2015-9 Free Software Foundation, Inc.
 
-;; Author: Iñigo Serna <inigoserna@gmail.com>
-;; URL: https://bitbucket.com/inigoserna/per-buffer-theme.el
-;; Package-Version: 20190703.2014
-;; Version: 1.6
+;; Author: Iñigo Serna <inigoserna@gmx.com>
+;; URL: https://hg.serna.eu/emacs/per-buffer-theme
+;; Package-Version: 20191101.2333
+;; Version: 1.7
 ;; Keywords: themes
 ;; Package-Requires: ((cl-lib "0.5"))
 

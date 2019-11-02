@@ -1,2 +1,2 @@
 
-(metaweblog . [(20191018 242) ((emacs (26 3))) "An XML-RPC MetaWeblog and WordPress API client." single ((:commit . "b02a056e1fa1a044a5bc5d44cc0fb0b8c62e1442") (:keywords "comm") (:authors ("Puneeth Chaganti" . "punchagan+org2blog@gmail.com")) (:maintainer "Grant Rettke" . "grant@wisdomandwonder.com") (:url . "https://github.com/org2blog/org2blog"))])
+(metaweblog . [(20191018 242) ((emacs (26 3))) "An XML-RPC MetaWeblog and WordPress API client." single ((:commit . "58398120907504ff200adfd9b817f297142c9680") (:keywords "comm") (:authors ("Puneeth Chaganti" . "punchagan+org2blog@gmail.com")) (:maintainer "Grant Rettke" . "grant@wisdomandwonder.com") (:url . "https://github.com/org2blog/org2blog"))])

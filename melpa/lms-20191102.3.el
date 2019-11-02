@@ -1,12 +1,12 @@
 ;;; lms.el --- Squeezebox / Logitech Media Server frontend
 
-;; Copyright (C) 2017 Free Software Foundation, Inc.
-;; Time-stamp: <2018-12-16 23:46:08 inigo>
+;; Copyright (C) 2017-9 Free Software Foundation, Inc.
+;; Time-stamp: <2019-11-02 00:55:11 inigo>
 
-;; Author: Iñigo Serna <inigoserna@gmail.com>
-;; URL: https://bitbucket.com/inigoserna/lms.el
-;; Package-Version: 20181216.2246
-;; Version: 0.11
+;; Author: Iñigo Serna <inigoserna@gmx.com>
+;; URL: https://hg.serna.eu/emacs/lms
+;; Package-Version: 20191102.3
+;; Version: 0.12
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: multimedia
 
@@ -108,6 +108,16 @@ Note that small values could freeze your Emacs use while refreshing window."
 
 (defcustom lms-number-recent-albums 25
   "Number of recent albums to show."
+  :type 'integer
+  :group 'lms)
+
+(defcustom lms-number-random-albums 25
+  "Number of random albums to show."
+  :type 'integer
+  :group 'lms)
+
+(defcustom lms-number-random-songs 50
+  "Number of random songs to show."
   :type 'integer
   :group 'lms)
 
@@ -635,13 +645,11 @@ If VLIBID is specified use only that virtual library."
          (buf (lms--send-command-get-response cmd)))
     (lms--build-list-from-string-attrs buf '("id" "album" "year" "artist"))))
 
-(defun lms-get-random-albums (&optional max vlibid)
-  "Get a list of 50 or MAX random albums.
+(defun lms-get-random-albums (n &optional vlibid)
+  "Get a list of N random albums.
 If VLIBID is specified use only that virtual library."
-  (unless max
-    (setq max 50))
    (let* ((vlib (if vlibid (format " library_id:%s" vlibid) ""))
-          (buf (lms--send-command-get-response (format "albums 0 %d tags:lay sort:random%s" max vlib))))
+          (buf (lms--send-command-get-response (format "albums 0 %d tags:lay sort:random%s" n vlib))))
     (lms--build-list-from-string-attrs buf '("id" "album" "artist" "year"))))
 
 ;; tracks
@@ -759,7 +767,7 @@ More information on what a *squeezebox controller* is at https://inigo.katxi.org
 Quick instructions: customize some basic parameters 'lms-hostname', 'lms-telnet-port', 'lms-html-port', 'lms-username', 'lms-password' and run it with *lms-ui*.
 From there, you could read complete documentation after pressing *h* key.
 
-Package should appear in [[https://melpa.org][MELPA repository]], and the code is in [[https://bitbucket.com/inigoserna/lms.el][BitBucket code repository]] as well.
+Package should appear in [[https://melpa.org][MELPA repository]], and the code is in [[https://hg.serna.eu/emacs/lms][the code repository]] as well.
 
 * Features
 This is Squeezebox controller, i.e. a program which can handle your local music library.
@@ -787,6 +795,8 @@ There are some parameters you could customize:
 | lms-ui-cover-width               | Cover image width                                       | 400  (2)  |
 | lms-ui-update-interval           | Time in seconds between UI updates                      | nil  (3)  |
 | lms-number-recent-albums         | Number of recent albums to show                         | 25        |
+| lms-number-random-albums         | Number of random albums to show                         | 25        |
+| lms-number-random-songs          | Number of random songs to show                          | 50        |
 | lms-use-helm-in-library-browsing | Use helm to select item in library browsing             | nil  (4)  |
 | lms-helm-candidate-number-limit  | Maximum number of candidates to show in items selection | 9999 (5)  |
 |----------------------------------+---------------------------------------------------------+-----------|
