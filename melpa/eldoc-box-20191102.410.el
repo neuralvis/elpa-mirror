@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017-2018 Sebastien Chapuis, 2018 Yuan Fu
 
 ;; Version: 1.8
-;; Package-Version: 20191008.1427
+;; Package-Version: 20191102.410
 
 ;; Author: Sebastien Chapuis <sebastien@chapu.is>
 ;; Maintainer: Yuan Fu <casouri@gmail.com>
@@ -243,21 +243,17 @@ Position is calculated base on WIDTH and HEIGHT of childframe text window"
         ;; y position + a little padding (16)
         16))
 
-(defun eldoc-box--point-position-relative-to-native-frame (&optional position window)
-  "Return (X . Y) as the coordinate of POSITION in WINDOW.
+(defun eldoc-box--point-position-relative-to-native-frame (&optional point window)
+  "Return (X . Y) as the coordinate of POINT in WINDOW.
 The coordinate is relative to the native frame.
 
 WINDOW nil means use selected window."
-  (let* ((window (window-normalize-window window t))
-	 (pos-in-window
-	  (pos-visible-in-window-p
-	   (or position (window-point window)) window t)))
-    (when pos-in-window
-      ;; change absolute to relative to native frame
-      (let ((edges (window-edges window t nil t)))
-	(cons (+ (nth 0 edges) (nth 0 pos-in-window)) ; x
-              (+ (nth 1 edges) (nth 1 pos-in-window)
-                 (- (window-header-line-height window)))))))) ; y
+  (let* ((pos (pos (posn-at-point point window)))
+         (x-y (posn-x-y pos))
+         (window (posn-window pos))
+         (edges (window-body-pixel-edges window)))
+    (cons (+ (car x-y) (car edges))
+          (+ (cdr x-y) (cadr edges)))))
 
 (defun eldoc-box--default-at-point-position-function-1 (width height)
   "See `eldoc-box--default-at-point-position-function'."
@@ -466,9 +462,10 @@ If (point) != last point, cleanup frame.")
 (defun eldoc-box--at-point-x-by-company ()
   "Return the x position that accommodates company's popup."
   (if (and (featurep 'company) company-pseudo-tooltip-overlay)
-      (* (frame-char-width)
-         (+ (overlay-get company-pseudo-tooltip-overlay 'company-width)
-            (overlay-get company-pseudo-tooltip-overlay 'company-column)))
+      (+ (* (frame-char-width)
+            (+ (overlay-get company-pseudo-tooltip-overlay 'company-width)
+               (overlay-get company-pseudo-tooltip-overlay 'company-column)))
+         (or (line-number-display-width t) 0))
     nil))
 
 (provide 'eldoc-box)

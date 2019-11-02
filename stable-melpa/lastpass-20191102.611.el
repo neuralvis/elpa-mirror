@@ -4,7 +4,7 @@
 
 ;; Author: Petter Storvik
 ;; URL: https://github.com/storvik/emacs-lastpass
-;; Package-Version: 20171208.1016
+;; Package-Version: 20191102.611
 ;; Version: 0.2.0
 ;; Created: 2017-02-17
 ;; Package-Requires: ((emacs "24.4") (seq "1.9") (cl-lib "0.5"))
@@ -49,7 +49,9 @@
 ;; - `lastpass-addpass'
 ;; - `lastpass-version'
 ;; - `lastpass-visit-url'
-;; These functions can also used in elisp when configuring Emacs.
+;; These functions can also be used in elisp when configuring Emacs.
+;;
+;; A hook, `lastpass-logged-in-hook' is run on successful login.
 ;;
 ;; A lpass manager is available by running `lastpass-list-all'.
 ;; This function will list all passwords and a major mode takes care of
@@ -100,6 +102,11 @@
   "LastPass agent timeout in seconds.
 Set to 0 to never quit and nil to not use."
   :type 'integer
+  :group 'lastpass)
+
+(defcustom lastpass-logged-in-hook nil
+  "Hook called on login."
+  :type 'hook
   :group 'lastpass)
 
 (defcustom lastpass-list-all-delimiter ","
@@ -207,7 +214,8 @@ If run interactively PRINT-MESSAGE gets set and version is printed to minibuffer
               (concat (read-passwd "Wrong password. LastPass master password: ") "\n")
             (concat (read-passwd "LastPass master password: ") "\n"))))
        (when (string-match "success" string)
-         (message (concat "LastPass: Successfully logged in as " lastpass-user)))))))
+         (message (concat "LastPass: Successfully logged in as " lastpass-user))
+         (run-hooks 'lastpass-logged-in-hook))))))
 
 ;;;###autoload
 (defun lastpass-status ()
