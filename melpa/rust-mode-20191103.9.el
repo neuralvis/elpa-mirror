@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.5.0
-;; Package-Version: 20191031.1902
+;; Package-Version: 20191103.9
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -1806,8 +1806,11 @@ visit the new file."
 (defun rust-insert-dbg ()
   "Insert the dbg! macro."
   (cond ((region-active-p)
-         (insert-parentheses)
-         (backward-char 1))
+         (when (< (mark) (point))
+           (exchange-point-and-mark))
+         (let ((old-point (point)))
+           (insert-parentheses)
+           (goto-char old-point)))
         (t
          (insert "(")
          (forward-sexp)

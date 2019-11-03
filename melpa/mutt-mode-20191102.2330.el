@@ -4,7 +4,7 @@
 
 ;; Author: Felix Weilbach <felix.weilbach@t-online.de>
 ;; URL: https://gitlab.com/flexw/mutt-mode
-;; Package-Version: 20190302.1515
+;; Package-Version: 20191102.2330
 ;; Keywords: languages
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24"))
@@ -983,7 +983,11 @@ This is buffer-local in every such buffer.")
 ;;;###autoload
 (define-derived-mode mutt-mode prog-mode "mutt"
   "Major mode for editing mutt configuration files."
-  (setq font-lock-defaults '((mutt-font-lock-keywords))))
+  (setq font-lock-defaults '((mutt-font-lock-keywords)))
+  (setq-local comment-start "#")
+  (setq-local comment-start-skip "#+ *")
+  (setq-local comment-end "")
+  (setq-local comment-end-skip ""))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.muttrc\\'". mutt-mode))

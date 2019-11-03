@@ -7,7 +7,7 @@
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Package-Version: 20190928.554
+;; Package-Version: 20191103.135
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.11.0"))
@@ -568,7 +568,7 @@ selection, non-nil otherwise."
 (provide 'ivy-posframe)
 
 ;; Local Variables:
-;; coding: utf-8-unix
+;; coding: utf-8
 ;; End:
 
 ;;; ivy-posframe.el ends here
