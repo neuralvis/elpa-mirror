@@ -1,2 +1,0 @@
-
-(solarized-theme . [(20191102 1833) ((emacs (24 1)) (cl-lib (0 5)) (dash (2 6 0))) "The Solarized color theme, ported to Emacs." tar ((:commit . "6b2e9d8a88d13a111125856923be39e3525e8b2f"))])
