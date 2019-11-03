@@ -1,0 +1,2 @@
+
+(remark-mode . [(20191103 1048) ((emacs (25 1)) (markdown-mode (2 0))) "Major mode for the remark slideshow tool" tar ((:commit . "591e433de835ecbc40a09e28d203d8135cdf2fff") (:keywords "remark" "slideshow" "markdown" "hot reload") (:authors ("@torgeir")) (:maintainer "@torgeir"))])

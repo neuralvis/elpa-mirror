@@ -1,2 +1,0 @@
-
-(intero . [(20191029 2344) ((flycheck (0 25)) (company (0 8)) (emacs (24 4)) (haskell-mode (13 0))) "Complete development mode for Haskell" single ((:commit . "064e8f7e501f2f039dc34f349bd4f4237ec467fc") (:keywords "haskell" "tools") (:authors ("Chris Done" . "chrisdone@fpcomplete.com")) (:maintainer "Chris Done" . "chrisdone@fpcomplete.com") (:url . "https://github.com/commercialhaskell/intero"))])

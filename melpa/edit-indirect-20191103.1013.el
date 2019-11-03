@@ -2,12 +2,14 @@
 
 ;; Author: Fanael Linithien <fanael4@gmail.com>
 ;; URL: https://github.com/Fanael/edit-indirect
-;; Package-Version: 20180422.1807
+;; Package-Version: 20191103.1013
 ;; Version: 0.1.5
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is NOT part of GNU Emacs.
 
+;; SPDX-License-Identifier: BSD-2-clause
+;;
 ;; Copyright (c) 2014-2017, Fanael Linithien
 ;; All rights reserved.
 ;;
