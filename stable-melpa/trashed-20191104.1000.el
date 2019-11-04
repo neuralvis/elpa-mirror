@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019 Shingo Tanaka
 
 ;; Author: Shingo Tanaka <shingo.fg8@gmail.com>
-;; Version: 1.8.1
-;; Package-Version: 20191104.322
+;; Version: 1.8.2
+;; Package-Version: 20191104.1000
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: files, convenience, unix
 ;; URL: https://github.com/shingo256/trashed
@@ -42,7 +42,8 @@
   :group 'files)
 
 (defcustom trashed-use-header-line t
-  "Non-nil means Trash Can buffer use a header line."
+  "Non-nil means Emacs window's header line is used to show the column names.
+Otherwise, text based header line is used."
   :group 'trashed
   :type 'boolean)
 
@@ -91,12 +92,12 @@ Formatting is done with `format-time-string'.  See the function for details."
   :type 'hook)
 
 (defcustom trashed-before-readin-hook nil
-  "Run before a Trash Can buffer is read in (created or reverted)."
+  "Run before Trash Can buffer is read in (created or reverted)."
   :group 'trashed
   :type 'hook)
 
 (defcustom trashed-after-readin-hook nil
-  "Run after each time a file/directory is read."
+  "Run after Trash Can buffer is read in (created or reverted)."
   :group 'trashed
   :type 'hook)
 

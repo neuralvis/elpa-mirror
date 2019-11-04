@@ -2,7 +2,7 @@
 
 ;; Author: Harry R. Schwartz <hello@harryrschwartz.com>
 ;; Version: 2.1.0
-;; Package-Version: 20181222.2027
+;; Package-Version: 20191104.805
 ;; URL: https://github.com/hrs/engine-mode
 ;; Package-Requires: ((cl-lib "0.5"))
 
@@ -94,7 +94,7 @@ Defaults to `nil' which means to go with `browse-url-browser-function'."
     (format "Search %s (%s): " (capitalize engine-name) default-word)))
 
 (defun engine/prompted-search-term (engine-name)
-  (let ((current-word (or (thing-at-point 'symbol) "")))
+  (let ((current-word (or (thing-at-point 'symbol 'no-properties) "")))
     (read-string (engine/search-prompt engine-name current-word)
      nil nil current-word)))
 
