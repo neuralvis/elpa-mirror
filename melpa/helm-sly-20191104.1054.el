@@ -4,7 +4,7 @@
 ;;
 ;; Author: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; URL: https://github.com/emacs-helm/helm-sly
-;; Package-Version: 20191102.1912
+;; Package-Version: 20191104.1054
 ;; Version: 0.4.1
 ;; Keywords: convenience, helm, sly, lisp
 ;; Package-Requires: ((emacs "25.1") (helm "3.2") (cl-lib "0.5") (sly "0.0"))
@@ -77,6 +77,12 @@
   "Disable SLY own's completion system, e.g. to use Helm instead.
 This is mostly useful when added to `sly-mrepl-hook'."
   (sly-symbol-completion-mode -1))
+
+(defgroup helm-sly nil
+  "Helm sources and some utilities for SLY."
+  :prefix "helm-sly-"
+  :group 'helm
+  :link '(url-link :tag "GitHub" "https://github.com/emacs-helm/helm-sly"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -465,7 +471,7 @@ CANDIDATES is a list of (GROUP LABEL LOCATION) as per
        (sly--pop-to-source-location location 'sly-xref)))))
 
 (defun helm-sly-build-xref-source (xrefs)
-  "Return a Helm source of Xrefs."
+  "Return a Helm source of XREFS."
   (helm-build-sync-source "Lisp xrefs"
     :candidates (helm-sly-normalize-xrefs xrefs)
     :candidate-transformer 'helm-sly-xref-transformer

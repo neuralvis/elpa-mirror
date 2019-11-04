@@ -3,10 +3,10 @@
 ;; Copyright (C) 2017
 
 ;; Author: Shawn Ellis <shawn.ellis17@gmail.com>
-;; Version: 0.0.7
-;; Package-Version: 20190217.1632
+;; Version: 0.0.8
+;; Package-Version: 20191104.358
 ;; Package-Requires: ((emacs "24.3"))
-;; URL: https://bitbucket.org/ellisvelo/lognav-mode
+;; URL: https://hg.osdn.net/view/lognav-mode/lognav-mode
 ;; Keywords: log error lognav-mode convenience
 ;;
 
