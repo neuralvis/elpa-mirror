@@ -1,0 +1,2 @@
+
+(dired-rsync . [(20191104 1459) ((s (1 12 0)) (dash (2 0 0)) (emacs (24))) "Allow rsync from dired buffers" tar ((:commit . "c8fab5ac307ac1ae111835b92701d6e336c772d2") (:authors ("Alex Bennée" . "alex@bennee.com")) (:maintainer "Alex Bennée" . "alex@bennee.com") (:url . "https://github.com/stsquad/dired-rsync"))])
