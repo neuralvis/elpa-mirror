@@ -4,8 +4,8 @@
 
 ;; Author: Joris Engbers <info@jorisengbers.nl>
 ;; Homepage: https://github.com/JorisE/yapfify
-;; Version: 0.0.6
-;; Package-Version: 20180830.733
+;; Version: 0.0.7
+;; Package-Version: 20191103.2100
 ;; Package-Requires: ()
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@
 ;;
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
 
 (defun yapfify-call-bin (input-buffer output-buffer start-line end-line)
   "Call process yapf on INPUT-BUFFER saving the output to OUTPUT-BUFFER.
