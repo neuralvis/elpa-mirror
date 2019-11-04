@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019 Shingo Tanaka
 
 ;; Author: Shingo Tanaka <shingo.fg8@gmail.com>
-;; Version: 1.8
-;; Package-Version: 20191103.1001
+;; Version: 1.8.1
+;; Package-Version: 20191104.322
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: files, convenience, unix
 ;; URL: https://github.com/shingo256/trashed
@@ -46,7 +46,7 @@
   :group 'trashed
   :type 'boolean)
 
-(defcustom trashed-sort-key (cons "Deletion Time" t)
+(defcustom trashed-sort-key (cons "Date deleted" t)
   "Default sort key.
 If nil, no additional sorting is performed.
 Otherwise, this should be a cons cell (COLUMN . FLIP).
@@ -56,7 +56,7 @@ FLIP, if non-nil, means to invert the resulting sort."
   :type '(choice (const :tag "No sorting" nil)
                  (cons (string) (boolean))))
 
-(defcustom trashed-file-size-format 'human-readable
+(defcustom trashed-size-format 'human-readable
   "Trash file size format displayed in the list.
 `plain' means a plain number, `human-readable' means a human readable number
 formatted with `file-size-human-readable', `with-comma' means a number
@@ -66,8 +66,8 @@ with comma every 3 digits."
                  (const human-readable)
                  (const with-comma)))
 
-(defcustom trashed-deletion-time-format "%Y-%m-%d %T"
-  "Deletion time format displayed in the list.
+(defcustom trashed-date-format "%Y-%m-%d %T"
+  "Deletion date format displayed in the list.
 Formatting is done with `format-time-string'.  See the function for details."
   :group 'trashed
   :type 'string)
@@ -237,7 +237,9 @@ This is automatically set in `trashed-readin'.")
   "Current column id for column forward/backward movement.")
 
 (defvar trashed-font-lock-keywords
-  `(("^." . trashed-mark-face)
+  `((,(string ?^ trashed-res-char ?\\ ?| ?^ trashed-del-char ?\\ ?|
+              ?^ trashed-marker-char)
+     . trashed-mark-face)
     (,(concat "^" (char-to-string trashed-res-char))
      (".+" (trashed-reset-hpos) nil (0 trashed-restored-face)))
     (,(concat "^" (char-to-string trashed-del-char))
@@ -251,12 +253,12 @@ This is automatically set in `trashed-readin'.")
 ;;; Internal functions
 
 (defun trashed-format-size-string (sizestr)
-  "Format file string SIZESTR based on `trashed-file-size-format'."
-  (cond ((eq trashed-file-size-format 'plain)
+  "Format file string SIZESTR based on `trashed-size-format'."
+  (cond ((eq trashed-size-format 'plain)
          sizestr)
-        ((eq trashed-file-size-format 'human-readable)
+        ((eq trashed-size-format 'human-readable)
          (file-size-human-readable (string-to-number sizestr)))
-        ((eq trashed-file-size-format 'with-comma)
+        ((eq trashed-size-format 'with-comma)
          (let ((size (string-to-number sizestr)) ret)
            (while (> size 0)
              (setq ret (concat (format (if (< size 1000) "%d" "%03d")
@@ -266,20 +268,20 @@ This is automatically set in `trashed-readin'.")
            (or ret "0")))
         (t sizestr)))
 
-(defun trashed-format-time-string (timestr)
-  "Format time string TIMESTR based on `trashed-time-format'."
-  (string-match "\\([0-9]+\\) \\([0-9]+\\)" timestr)
-  (format-time-string trashed-deletion-time-format
-                      (list (string-to-number (match-string 1 timestr))
-                            (string-to-number (match-string 2 timestr)))))
+(defun trashed-format-date-string (datestr)
+  "Format date string DATESTR based on `trashed-date-format'."
+  (string-match "\\([0-9]+\\) \\([0-9]+\\)" datestr)
+  (format-time-string trashed-date-format
+                      (list (string-to-number (match-string 1 datestr))
+                            (string-to-number (match-string 2 datestr)))))
 
 (defun trashed-list-print-entry (id cols)
-  "Wrapper for `tabulated-list-print-entry' to format trash file size and time.
+  "Wrapper for `tabulated-list-print-entry' to format trash file size and date.
 See the original function for ID and COLS."
   (tabulated-list-print-entry
    id (vector (aref cols 0)
               (trashed-format-size-string (aref cols 1))
-              (trashed-format-time-string (aref cols 2))
+              (trashed-format-date-string (aref cols 2))
               (aref cols 3))))
 
 (defun trashed-size-sorter (f1 f2)
@@ -334,7 +336,7 @@ NAME and ATTRS are name and attributes of the trash file."
               (if (and path deletion-date)
                   (let ((type (substring (nth 8 attrs) 0 1)) ;; file type
                         (size (number-to-string (nth 7 attrs))) ;; file size
-                        (time (format "%07d %05d"
+                        (date (format "%07d %05d"
                                       (car deletion-date) (cadr deletion-date)))
                         (file (propertize (decode-coding-string
                                            (url-unhex-string path)
@@ -344,10 +346,10 @@ NAME and ATTRS are name and attributes of the trash file."
                     (trashed-update-col-width
                      1 (string-width (trashed-format-size-string size)))
                     (trashed-update-col-width
-                     2 (string-width (trashed-format-time-string time)))
+                     2 (string-width (trashed-format-date-string date)))
                     (trashed-update-col-width 3 (string-width file))
                     ;; File info
-                    (list name (vector type size time file)))
+                    (list name (vector type size date file)))
                 (message "Skipping %s: wrong info file format." name)
                 nil))
           (message "Skipping %s: cannot find or read info file." name)
@@ -357,7 +359,7 @@ NAME and ATTRS are name and attributes of the trash file."
   "Read trash information from trash files and info directories.
 The information is stored in `tabulated-list-entries', where ID is trash file
 name in files directory, and DESC is a vector of file type(-/D), size,
-deletion time and original file name."
+deletion date and original file name."
   ;; Initialize column width
   (trashed-update-col-width 1 nil)
   (trashed-update-col-width 2 nil)
@@ -600,8 +602,8 @@ Customization variables:
 
   `trashed-use-header-line'
   `trashed-sort-key'
-  `trashed-file-size-format'
-  `trashed-deletion-time-format'
+  `trashed-size-format'
+  `trashed-date-format'
   `trashed-action-confirmer'
 
 Hooks:
@@ -614,12 +616,12 @@ Hooks:
 Keybindings:
 
 \\{trashed-mode-map}"
-  ;; Column widths of size/time/file are set in `trashed-read-files'
-  (setq tabulated-list-format [("T"             1 t)
-			       ("Size"          0 trashed-size-sorter
-                                                    :right-align t)
-			       ("Deletion Time" 0 t :right-align t)
-			       ("File"          0 t)]
+  ;; Column widths of size/date/name are set in `trashed-read-files'
+  (setq tabulated-list-format [("T"            1 t)
+			       ("Size"         0 trashed-size-sorter
+                                                   :right-align t)
+			       ("Date deleted" 0 t :right-align t)
+			       ("Name"         0 t)]
         tabulated-list-sort-key trashed-sort-key
         tabulated-list-printer 'trashed-list-print-entry
         tabulated-list-padding 2
