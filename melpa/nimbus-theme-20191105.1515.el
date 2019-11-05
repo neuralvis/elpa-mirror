@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20191023.1143
+;; Package-Version: 20191105.1515
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -53,7 +53,7 @@
        (lighter-green  "#8fbc8f")
        (light-green    "#9ccc65")
        (green          "#6aaf50")
-       (dark-green     "#1bd197ac709b")
+       (dark-green     "#1d9a79")
        (darker-green   "#058945")
        (lighter-blue   "#86b5e8")
        (light-blue     "#68a5e9")
@@ -456,8 +456,8 @@
    `(epa-field-body ((t (:foreground ,light-blue))))
 
    ;; erc
-   `(erc-current-nick-face ((t (:foreground ,current))))
-   `(erc-input-face ((t (:foreground ,white))))
+   `(erc-current-nick-face ((t (:foreground ,orange))))
+   `(erc-input-face ((t (:foreground ,current))))
    `(erc-keyword-face ((t (:foreground, light-green :bold t))))
    `(erc-my-nick-face ((t (:foreground ,orange))))
    `(erc-nick-default-face ((t (:foreground ,blue))))

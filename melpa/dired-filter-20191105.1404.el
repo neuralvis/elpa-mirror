@@ -5,7 +5,7 @@
 ;; Author: Matúš Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Keywords: files
-;; Package-Version: 20190211.2020
+;; Package-Version: 20191105.1404
 ;; Version: 0.0.2
 ;; Created: 14th February 2014
 ;; Package-requires: ((dash "2.10.0") (dired-hacks-utils "0.0.1") (f "0.17.0") (cl-lib "0.3"))
@@ -1132,7 +1132,8 @@ Examples:
 (dired-filter-define directory
     "Toggle current view to show only directories."
   (:description "directory")
-  (or (looking-at dired-re-dir)
+  (or (and (looking-at-p dired-re-dir)
+           (not (looking-at-p dired-re-dot)))
       (and (looking-at dired-re-sym)
            (file-directory-p (dired-utils-get-filename)))))
 

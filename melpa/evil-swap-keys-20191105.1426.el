@@ -1,10 +1,10 @@
-;;; evil-swap-keys.el --- intelligently swap keys on text input with evil -*- lexical-binding: t; -*-
+;;; evil-swap-keys.el --- Intelligently swap keys on text input with evil -*- lexical-binding: t; -*-
 
 ;; Author: Wouter Bolsterlee <wouter@bolsterl.ee>
 ;; Version: 1.0.0
-;; Package-Version: 20170726.1820
-;; Package-Requires: ((emacs "24"))
-;; Keywords: evil key swap numbers symbols
+;; Package-Version: 20191105.1426
+;; Package-Requires: ((emacs "24.4"))
+;; Keywords: convenience data languages tools
 ;; URL: https://github.com/wbolster/evil-swap-keys
 ;;
 ;; This file is not part of GNU Emacs.
@@ -130,8 +130,11 @@ This should match the actual keyboard layout."
   "Active mappings for this buffer.")
 (make-variable-buffer-local 'evil-swap-keys--mappings)
 
+(defvar evil-state)
+(defvar evil-this-type)
+
 (defun evil-swap-keys--text-input-p (buffer)
-  "Determine whether the current input should treated as text input."
+  "Determine whether the current input for BUFFER should treated as text input."
   ;; NOTE: The evil-this-type check is a hack that seems to work well
   ;; for motions in operator mode. This variable is non-nil while
   ;; reading motions themselves, but not while entering a (optional)
