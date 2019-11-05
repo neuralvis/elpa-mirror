@@ -1,2 +1,0 @@
-
-(berrys-theme . [(20191103 1839) ((emacs (24 1))) "A light, clean and elegant theme" single ((:commit . "89d1b5eef77cef5dda254ac3cde2268edc1b58e8") (:authors ("Slava Buzin" . "v8v.buzin@gmail.com")) (:maintainer "Slava Buzin" . "v8v.buzin@gmail.com") (:url . "https://github.com/vbuzin/berrys-theme"))])

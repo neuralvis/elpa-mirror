@@ -4,7 +4,7 @@
 ;; Copyright 2011-2019 François-Xavier Bois
 
 ;; Version: 16.0.25
-;; Package-Version: 20191103.1620
+;; Package-Version: 20191104.1859
 ;; Author: François-Xavier Bois <fxbois AT Google Mail Service>
 ;; Maintainer: François-Xavier Bois
 ;; Package-Requires: ((emacs "23.1"))
@@ -7645,7 +7645,7 @@ another auto-completion with different ac-sources (e.g. ac-php)")
 
   (let ((offset nil)
         (char nil)
-        (debug t)
+        (debug nil)
         (inhibit-modification-hooks nil)
         (adjust t))
 
@@ -7945,10 +7945,17 @@ another auto-completion with different ac-sources (e.g. ac-php)")
 
          ((member curr-char '(?\} ?\) ?\]))
           (when debug (message "I250(%S) closing-paren" pos))
-          (let (ori)
+          (let (ori pos2)
+            (setq pos2 pos)
+            ;; #1096
+            (when (looking-at-p ".[\]})]+")
+              (skip-chars-forward "[\]})]")
+              (backward-char)
+              (setq pos2 (point))
+              ) ;when
             (if (get-text-property pos 'block-side)
-                (setq ori (web-mode-block-opening-paren-position pos reg-beg))
-              (setq ori (web-mode-part-opening-paren-position pos reg-beg)))
+                (setq ori (web-mode-block-opening-paren-position pos2 reg-beg))
+              (setq ori (web-mode-part-opening-paren-position pos2 reg-beg)))
             ;;(message "ori=%S" ori)
             (cond
              ((null ori)
@@ -8683,10 +8690,10 @@ another auto-completion with different ac-sources (e.g. ac-php)")
       (setq prev-line (car h))
       (setq prev-indentation (cdr h))
       (cond
-       ((string-match-p "^\\(pass\\|else\\|elif\\|when\\)" line)
+       ((string-match-p "^\\(pass\\|else\\|elif\\|when\\|except\\)" line)
         (setq out (- prev-indentation language-offset))
         )
-       ((string-match-p "\\(if\\|else\\|elif\\|for\\|while\\)" prev-line)
+       ((string-match-p "\\(if\\|else\\|elif\\|for\\|while\\|try\\|except\\)" prev-line)
         (setq out (+ prev-indentation language-offset))
         )
        (t
