@@ -10,7 +10,7 @@
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
 ;; Version: 0.2.0
-;; Package-Version: 20190715.1843
+;; Package-Version: 20191104.2059
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
@@ -84,14 +84,16 @@
     ("money" . "$$$")
     ("easy" . "₰")
     ("music" . "♬"))
-  "List of pretty replacements for tags."
+  "List of pairs of tag and replacement e.g. (\"money\" \"$\") of
+  surrogates for tags."
   :type '(alist :key-type string :value-type string)
   :group 'org-pretty-tags)
 
 ;;;###autoload
 (defcustom org-pretty-tags-surrogate-images
   '()
-  "List of pretty image replacements for tags."
+  "List of pairs of tag and file-path to an image e.g. (\"@alice\" \"/images/alice.png\") of
+  image surrogates for tags."
   :type '(alist :key-type string :value-type string)
   :group 'org-pretty-tags)
 
