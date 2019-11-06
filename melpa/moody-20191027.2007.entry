@@ -1,2 +1,0 @@
-
-(moody . [(20191027 2007) ((emacs (25 3))) "Tabs and ribbons for the mode line" single ((:commit . "8f96f1ec6b331747774d84a6cc49968503bac7d0") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/tarsius/moody"))])
