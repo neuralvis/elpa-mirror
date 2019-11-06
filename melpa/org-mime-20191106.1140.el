@@ -5,7 +5,7 @@
 ;; Author: Eric Schulte
 ;; Maintainer: Chen Bin (redguardtoo)
 ;; Keywords: mime, mail, email, html
-;; Package-Version: 20190805.57
+;; Package-Version: 20191106.1140
 ;; Homepage: http://github.com/org-mime/org-mime
 ;; Version: 0.1.6
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
@@ -100,6 +100,14 @@
 ;; 3. Now the quoted mail uses a modern style (like Gmail), so mail replies
 ;; looks clean and modern. If you prefer the old style, please set
 ;; `org-mime-beautify-quoted-mail' to nil.
+;;
+;; 4. Please note this program can only embed exported HTML into mail.
+;;    Org-mode is responsible for rendering HTML.
+;;
+;;    For example, see https://github.com/org-mime/org-mime/issues/38
+;;    The solution is patching org-mode,
+;;    https://lists.gnu.org/archive/html/emacs-orgmode/2019-11/msg00016.html
+;;
 
 ;;; Code:
 (require 'cl-lib)
