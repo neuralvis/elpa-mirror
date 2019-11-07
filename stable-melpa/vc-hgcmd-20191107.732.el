@@ -1,12 +1,12 @@
-;;; vc-hgcmd.el --- VC mercurial backend that uses hg command server -*- lexical-binding: t; -*-
+;;; vc-hgcmd.el --- VC mercurial backend that uses hg command server -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2018-2019 Andrii Kolomoiets
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: vc
 ;; URL: https://github.com/muffinmad/emacs-vc-hgcmd
-;; Package-Version: 20191010.1129
-;; Package-X-Original-Version: 1.8.1
+;; Package-Version: 20191107.732
+;; Package-X-Original-Version: 1.9
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -63,6 +63,7 @@
 ;; * print-log (files buffer &optional shortlog start-revision limit)  OK but graph log if shortlog
 ;; * log-outgoing (backend remote-location)        OK
 ;; * log-incoming (backend remote-location)        OK
+;; - log-search (buffer pattern)                   OK
 ;; - log-view-mode ()                              OK
 ;; - show-log-entry (revision)                     OK
 ;; - comment-history (file)                        NO
@@ -568,12 +569,13 @@ Insert output to process buffer and check if amount of data is enought to parse 
 
 (defun vc-hgcmd--parents (template &optional revision)
   "Return parents of REVISION formatted by TEMPLATE string."
-  (let ((parents (vc-hgcmd-command
-                  "log"
-                  "-r"
-                  (format "p1(%1$s)+p2(%1$s)" (or revision ""))
-                  "--template"
-                  (concat template "\\n"))))
+  (let* ((revision (or revision ""))
+         (parents (vc-hgcmd-command
+                   "log"
+                   "-r"
+                   (format "p1(%s)+p2(%s)" revision revision)
+                   "--template"
+                   (concat template "\\n"))))
     (when parents (split-string parents "\n"))))
 
 (defun vc-hgcmd--file-relative-name (file)
@@ -665,8 +667,7 @@ Insert output to process buffer and check if amount of data is enought to parse 
                                  (forward-line -1)
                                  (vc-hgcmd-create-extra-fileinfo
                                   'renamed-to
-                                  (buffer-substring-no-properties (+ (point) 2) (line-end-position))))))
-                   ))
+                                  (buffer-substring-no-properties (+ (point) 2) (line-end-position))))))))
                 result)))
       (forward-line))
     (funcall update-function result)))
@@ -1084,6 +1085,20 @@ Insert output to process buffer and check if amount of data is enought to parse 
   "Log incoming from REMOTE-LOCATION to BUFFER."
   (vc-hgcmd--log-in-or-out "incoming" buffer remote-location))
 
+(defun vc-hgcmd-log-search (buffer pattern)
+  "Search the change log for keyword PATTERN and output results into BUFFER.
+
+PATTERN is passed as argument to 'hg log -k' command.
+
+With prefix argument, ask for 'log' command arguments."
+  (let ((args (if current-prefix-arg
+                  (split-string-and-unquote
+                   (read-shell-command
+                    "Search log with command 'hg log': "
+                    "-k "))
+                (list "-k" pattern))))
+    (apply #'vc-hgcmd-command-to-buffer buffer (nconc (list "log") args))))
+
 (defun vc-hgcmd--graph-data-re (re)
   "Add graph data re to RE."
   (concat "^\\(?:[o@_x*+-~|/: ]*\\)" re))
@@ -1200,8 +1215,7 @@ If FILES is nil show diff for whole changeset."
 (defconst vc-hgcmd-annotate-re
   (concat
    "^\\(?: *[^ ]+ +\\)?\\([0-9]+\\) "
-   "\\([0-9]\\{4\\}-[0-1][0-9]-[0-3][0-9]\\)[^:]*: "
-   ))
+   "\\([0-9]\\{4\\}-[0-1][0-9]-[0-3][0-9]\\)[^:]*: "))
 
 (defun vc-hgcmd--file-name-at-rev (files rev)
   "Return filename of FILES at REV."

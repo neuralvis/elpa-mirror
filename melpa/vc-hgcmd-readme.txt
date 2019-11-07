@@ -35,6 +35,7 @@ HISTORY FUNCTIONS
 * print-log (files buffer &optional shortlog start-revision limit)  OK but graph log if shortlog
 * log-outgoing (backend remote-location)        OK
 * log-incoming (backend remote-location)        OK
+- log-search (buffer pattern)                   OK
 - log-view-mode ()                              OK
 - show-log-entry (revision)                     OK
 - comment-history (file)                        NO
