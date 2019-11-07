@@ -5,7 +5,6 @@
 ;; Maintainer: Junsong Li
 ;; Created: 11 June 2016
 ;; Keywords: languages, pollen, pollenpub
-;; Package-Version: 20190310.538
 ;; License: LGPL
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.3") (cl-lib "0.5"))

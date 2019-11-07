@@ -5,9 +5,9 @@
 ;; Authors: Zachary Elliott <contact@zell.io>
 ;; Maintainer: Zachary Elliott <contact@zell.io>
 ;; URL: http://github.com/zellio/ansible-vault-mode
-;; Package-Version: 20190126.1936
+;; Package-Version: 20191106.2317
 ;; Created: 2016-09-25
-;; Version: 0.3.5
+;; Version: 0.3.6
 ;; Keywords: ansible, ansible-vault, tools
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -36,7 +36,7 @@
 
 ;;; Code:
 
-(defconst ansible-vault-version "0.3.5"
+(defconst ansible-vault-version "0.3.6"
   "`ansible-vault' version.")
 
 (defgroup ansible-vault nil
@@ -104,11 +104,11 @@ generates the shell string for any such command.
 
 SUBCOMMAND is the \"ansible-vault\" sucommand to use."
   (concat
-   ansible-vault-command " "
+   ansible-vault-command " " subcommand " "
    (when ansible-vault-pass-file
      (format "--vault-password-file='%s' " ansible-vault-pass-file))
    "--output=- "
-   subcommand))
+   ))
 
 (defun ansible-vault-decrypt-current-buffer ()
   "In place decryption of `current-buffer' using `ansible-vault'."
