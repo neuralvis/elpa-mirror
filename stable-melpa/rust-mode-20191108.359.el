@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.5.0
-;; Package-Version: 20191103.9
+;; Package-Version: 20191108.359
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -1584,7 +1584,7 @@ Return the created process."
 (defvar rust-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-f") 'rust-format-buffer)
-    (define-key map (kbd "C-c d") 'rust-dbg-wrap-or-unwrap)
+    (define-key map (kbd "C-c C-d") 'rust-dbg-wrap-or-unwrap)
     map)
   "Keymap for Rust major mode.")
 
