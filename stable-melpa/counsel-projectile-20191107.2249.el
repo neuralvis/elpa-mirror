@@ -4,10 +4,10 @@
 
 ;; Author: Eric Danan
 ;; URL: https://github.com/ericdanan/counsel-projectile
-;; Package-Version: 20191010.1427
+;; Package-Version: 20191107.2249
 ;; Keywords: project, convenience
-;; Version: 0.3.0
-;; Package-Requires: ((counsel "0.12.0") (projectile "2.0.0"))
+;; Version: 0.3.1
+;; Package-Requires: ((counsel "0.13.0") (projectile "2.0.0"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -679,7 +679,7 @@ construct the command.")
   ;; `counsel-ag'-like commands.
   (counsel-git-grep-transformer (string-remove-prefix "./" str)))
 
-(defun counsel-projectile-grep-occur ()
+(defun counsel-projectile-grep-occur (&optional _cands)
   "Generate a custom occur buffer for `counsel-projectile-grep'."
   (counsel-grep-like-occur
    counsel-projectile-grep-command))

@@ -7,7 +7,7 @@
 ;; Created: February 20, 2016
 ;; Modified: February 09, 2018
 ;; Version: 1.3.9
-;; Package-Version: 20191105.2339
+;; Package-Version: 20191107.1939
 ;; Keywords: multiple cursors, editing, iedit
 ;; Homepage: https://github.com/hlissner/evil-multiedit
 ;; Package-Requires: ((emacs "24.4") (evil "1.2.12") (iedit "0.9") (cl-lib "0.5"))
@@ -582,9 +582,14 @@ state."
   "Delete occurrences."
   (interactive "*")
   (iedit-barf-if-buffering)
-  (save-excursion
-    (dolist (occurrence iedit-occurrences-overlays)
-      (delete-region (overlay-start occurrence) (overlay-end occurrence)))))
+  (when iedit-occurrences-overlays
+    (save-excursion
+      (kill-new
+       (buffer-substring-no-properties
+        (overlay-start (car iedit-occurrences-overlays))
+        (overlay-end (car iedit-occurrences-overlays))))
+      (dolist (occurrence iedit-occurrences-overlays)
+        (delete-region (overlay-start occurrence) (overlay-end occurrence))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
