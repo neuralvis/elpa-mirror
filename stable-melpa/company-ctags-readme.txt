@@ -18,4 +18,4 @@ You can also turn on `company-ctags-support-etags' to support tags
 file created by etags.  But it will increase initial loading time.
 
 Make sure `diff-command' is executable on Windows.  You might need install GNU Diff.
-It optional but highly recommended. It can speed up tags file updating.
+It optional but highly recommended.  It can speed up tags file updating.
