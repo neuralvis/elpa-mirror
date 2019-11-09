@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019 Jared Lumpe
 
 ;; Author: Jared Lumpe <mjlumpe@gmail.com>
-;; Version: 0.2.0
-;; Package-Version: 20190819.1506
+;; Version: 0.3.0
+;; Package-Version: 20191109.108
 ;; Keywords: outlines
 ;; Homepage: https://github.com/jlumpe/ox-json
 
@@ -686,22 +686,41 @@ to encode the values of each key-value pair. By default
     info
     valuetype))
 
-(defun ox-json-make-object (type info properties)
-  "Make an encoded JSON object.
+(defun ox-json-make-alist (info properties)
+  "Make an alist with JSON-encoded values of heterogeneous types.
 
-TYPE is the data type string to add to the object.
 INFO is the plist of export options.
-PROPERTIES is an alist of property names and encoded property values."
-  (let ((props-alist
-          (cl-loop
-            for (key type value) in properties
-            collect
-            (cons
-              key
-              (if type
-                (ox-json-encode-with-type type value info)
-                value)))))
-    (ox-json-encode-alist-raw type props-alist info)))
+PROPERTIES is a list of (key type value) forms for each property of the JSON
+object. Each value will be JSON-encoded with `ox-json-encode-with-type'
+according to the type symbol given. Values with a type of nil will be considered
+to be already encoded."
+  (cl-loop
+    for (key type value) in properties
+    collect
+    (cons
+      key
+      (if type
+        (ox-json-encode-with-type type value info)
+        value))))
+
+(defun ox-json-make-object (data-type info properties)
+  "Make an encoded JSON object from heterogeneous data.
+
+DATA-TYPE is the data type string to add to the object.
+INFO is the plist of export options.
+PROPERTIES is interpreted as in `ox-json-make-alist'."
+  (ox-json-encode-alist-raw data-type (ox-json-make-alist info properties) info))
+
+(cl-defmacro ox-json--add-alist-encoded (alist key value info &optional (type t))
+  "JSON-encode VALUE and add it to alist ALIST with key KEY.
+
+INFO is the plist of export options.
+TYPE is the data type symbol representing how VALUE should be encoded.
+The default is t, which means the type is chosen automatically based on the
+data."
+  `(push
+    (ox-json-encode-with-type ,type ,value ,info)
+     ,alist))
 
 
 ;;; Export generic org data
@@ -766,7 +785,7 @@ TIMESTAMP is the timestamp object from the org buffer parse tree.
 INFO is the plist of export options."
   (ox-json-make-object "timestamp" info
     `(
-      (begin string ,(ox-json-timestamp-isoformat timestamp "start" info))
+      (start string ,(ox-json-timestamp-isoformat timestamp "start" info))
       (end string ,(ox-json-timestamp-isoformat timestamp "end" info))
       (type string ,(org-element-property :type timestamp))
       (raw-value string ,(org-element-property :raw-value timestamp))
@@ -816,41 +835,50 @@ INFO is the plist of export options."
       (plist-get ox-json-default-property-types node-type)
       (plist-get ox-json-default-property-types 'all))))
 
-(cl-defun ox-json-export-properties (node info)
+(defun ox-json-export-properties (node info &optional property-types)
   "Get alist of encoded property values for element/object NODE.
 
 INFO is the plist of export options.
+PROPERTY-TYPES is an optional additional plist of property type symbols that
+overrides the defaults for the type of NODE.
 
 Returns an alist where the items are property names and their
 JSON-encoded values."
   (let ((node-type (org-element-type node))
         (property-plist (ox-json-node-properties node)))
-    (ox-json--export-properties-for-type node-type property-plist info)))
+    (ox-json--export-properties-for-type node-type property-plist info property-types)))
 
-(cl-defun ox-json--export-properties-for-type (node-type property-plist info)
+(defun ox-json--export-properties-for-type (node-type property-plist info &optional property-types)
   "Export a plist of properties for the given element/object type.
 
 NODE-TYPE is the symbol returned by `org-element-type'.
-PROPERTY-PLIST is the plist of all property values.
+PROPERTY-PLIST is a plist containing the property values.
 INFO is the plist of export options.
+PROPERTY-TYPES is an optional additional plist of property type symbols that
+overrides the defaults derived from INFO and NODE-TYPE.
 
 Returns an alist where the items are property names and their
 JSON-encoded values."
   (let ((type-plists (ox-json--get-property-types node-type info))
         (include-extra (plist-get info :json-include-extra-properties)))
+    (when property-types
+      (push property-types type-plists))
     (apply #'ox-json--export-properties-base
       property-plist
       (if include-extra t nil)
       info
       type-plists)))
 
-(cl-defun ox-json--export-properties-base (property-plist default-type info &rest type-plists)
-  "TODO
+(defun ox-json--export-properties-base (property-plist default-type info &rest type-plists)
+  "Export org node property values by looking up their types in a series of plists.
 
-PROPERTY-PLIST is the plist of all property values.
+PROPERTY-PLIST is a plist containing the property values.
 DEFAULT-TYPE is the type symbol to be used for properties not found in
 TYPE-PLISTS. A value of nil means these properties will be ignored.
-TYPE-PLISTS TODO...
+INFO is the plist of export options.
+TYPE-PLISTS is a sequence of plists containing the type symbols used to encode
+property values with (see `ox-json-encode-with-type'). The lookup stops at the
+first match, so earlier plists override later ones.
 
 Returns an alist where the items are property names and their
 JSON-encoded values."
@@ -861,16 +889,26 @@ JSON-encoded values."
       if property-type
         collect (cons key (ox-json-encode-with-type property-type value info)))))
 
-(cl-defun ox-json-export-node-base (node info &key extra
-                                      (properties (ox-json-export-properties node info))
-                                      (contents (ox-json-export-contents node info)))
+(cl-defun ox-json-export-node-base (node info &key
+                                     property-types
+                                     (ref (org-export-get-reference node info))
+                                     (properties (ox-json-export-properties node info property-types))
+                                     extra-properties
+                                     extra
+                                     (contents (ox-json-export-contents node info)))
   "Base export function for a generic org element/object.
 
 NODE is an org element or object and INFO is the export environment plist.
 INFO is the plist of export options.
+PROPERTY-TYPES is a plist of type symbols which override the default way of
+determining how to encode property values (see equivalent argument in
+`ox-json-export-properties').
 PROPERTIES is an alist of pre-encoded property values that will be used in place
 of the return value of `ox-json-export-properties' if given (passing a
 value of nil will result in no properties being included).
+EXTRA-PROPERTIES is an alist of pre-encoded property values to add to the
+automatically-derived ones instead of replacing them, as the PROPERTIES argument
+does.
 EXTRA is an alist of keys and pre-encoded values to add directly to the returned
 JSON object at the top level (note that this is not checked for conflicts with
 the existing keys).
@@ -882,13 +920,15 @@ It is expected for all transcoding functions to call this function to do most
 of the work, possibly using the keyword arguments to override behavior."
   (unless (stringp contents)
     (setq contents (ox-json-encode-array-raw contents)))
+  (when extra-properties
+    (setq properties (append properties extra-properties)))
   (ox-json-encode-alist-raw
     "org-node"
     `(
-      (ref . ,(json-encode-string (org-export-get-reference node info)))
       (type . ,(json-encode-string (symbol-name (org-element-type node))))
+      (ref . ,(json-encode-string ref))
       ,@extra
-      (properties . ,(ox-json-encode-alist-raw "mapping" properties info))
+      (properties . ,(ox-json-encode-alist-raw nil properties info))
       (contents . ,contents))
     info))
 
@@ -913,19 +953,21 @@ but its value is ignored (`ox-json-export-contents' is used instead).
 INFO is the plist of export options."
   (ox-json-export-node-base node info))
 
-(defun ox-json--get-doc-info-alist (info)
+(defun ox-json-document-properties (info)
   "Get alist of top level document properties (values already encoded).
 
 INFO is the plist of export options."
-  `(
-     (title . ,(ox-json-export-secondary-string (plist-get info :title) info))
-     (file_tags . ,(json-encode-list (plist-get info :filetags)))
-     (author . ,(ox-json-export-secondary-string (plist-get info :author) info))
-     (creator . ,(ox-json-encode-string (plist-get info :creator) info))
-     (date . ,(ox-json-export-secondary-string (plist-get info :date) info))
-     (description . ,(ox-json-export-secondary-string (plist-get info :description) info))
-     (email . ,(ox-json-encode-string (plist-get info :email) info))
-     (language . ,(ox-json-encode-string (plist-get info :language) info))))
+  (ox-json-make-alist
+    info
+    (
+      ('title 'secondary-string (plist-get info :title))
+      ('filetags '(array string) (plist-get info :filetags))
+      ('author 'secondary-string (plist-get info :author))
+      ('creator 'string (plist-get info :creator))
+      ('date 'secondary-string (plist-get info :date))
+      ('description 'secondary-string (plist-get info :description))
+      ('email 'string (plist-get info :email))
+      ('language 'string (plist-get info :language)))))
 
 (defun ox-json-transcode-template (_contents info)
   "Transcode an entire org document to JSON.
@@ -933,13 +975,14 @@ INFO is the plist of export options."
 CONTENTS is a string containing the encoded document contents,
 but its value is ignored (`ox-json-export-contents' is used instead).
 INFO is the plist of export options."
-  (let* ((docinfo (ox-json--get-doc-info-alist info))
+  (let* ((properties (ox-json-document-properties info))
+         (properties-encoded (ox-json-encode-alist-raw nil properties info))
          (parse-tree (plist-get info :parse-tree))
          (contents-encoded (ox-json-export-contents parse-tree info)))
     (ox-json-encode-alist-raw
       "org-document"
       `(
-         ,@docinfo
+         (properties . ,properties-encoded)
          (contents . ,contents-encoded))
       info)))
 
@@ -977,13 +1020,16 @@ and the drawer properties in the cdr."
            (setq regular-props (plist-put regular-props name value))))
     (cons regular-props drawer-props)))
 
-(defun ox-json-transcode-headline (headline _contents info)
+(defun ox-json-transcode-headline (headline _contents info &rest kw &key extra)
   "Transcode a headline element to JSON.
 
 HEADLINE is the parsed headline to encode.
 CONTENTS is a string containing the encoded contents of the headline,
 but its value is ignored (`ox-json-export-contents' is used instead).
-INFO is the plist of export options."
+INFO is the plist of export options.
+KW is a plist of keyword arguments to pass to `ox-json-export-node-base'.
+EXTRA is an alist of additional properties to attach to the exported JSON object
+at the top level."
   (pcase-let*
     ((all-props (ox-json-node-properties headline))
      (`(,regular-props . ,drawer-props)
@@ -991,25 +1037,28 @@ INFO is the plist of export options."
      (regular-encoded
        (ox-json--export-properties-for-type 'headline regular-props info))
      (drawer-encoded
-       (ox-json-encode-plist "mapping" drawer-props info 'string))
-     (extra `(("drawer" . ,drawer-encoded))))
-    (ox-json-export-node-base headline info :properties regular-encoded :extra extra)))
+       (ox-json-encode-plist nil drawer-props info 'string)))
+    ; Add "drawer" object to top-level JSON properties
+    (push
+      (cons "drawer" drawer-encoded)
+      extra)
+    ; Add list of tags including inherited
+    (push
+      (cons 'tags-all (ox-json-encode-array (org-get-tags) info 'string))
+      regular-encoded)
+    (apply #'ox-json-export-node-base headline info
+      :properties regular-encoded
+      :extra extra
+      kw)))
 
-(defun ox-json-link-properties (link info)
+(defun ox-json-link-extra-properties (link info)
   "Get properties to export from a link object.
 
 LINK is the parsed link object.
 INFO is the plist of export options."
-  (let* ((properties (ox-json-export-properties link info))
-         (link-type (intern (org-element-property :type link)))
-         (is-internal nil))
-    ; Check if Org thinks it should be an inline image
-    (push
-      (cons
-        'is-inline-image
-        (ox-json-encode-bool (org-export-inline-image-p link) info nil))
-        properties)
-    ; Handle internal links
+  (let* ((link-type (intern (org-element-property :type link)))
+         (is-internal nil)
+         (target-ref nil))
     (when (memq link-type '(custom-id fuzzy radio))
       (setq is-internal t)
       (let* ((target
@@ -1022,11 +1071,15 @@ INFO is the plist of export options."
                     (org-export-resolve-fuzzy-link link info))
                   ('radio
                     (org-export-resolve-radio-link link info)))
-                (error nil)))
-             (target-ref (if target (org-export-get-reference target info))))
-        (push (cons 'target-ref (ox-json-encode-string target-ref)) properties)))
-    (push (cons 'is-internal (ox-json-encode-bool is-internal)) properties)
-    properties))
+                (error nil))))
+        (when target
+          (setq target-ref (org-export-get-reference target info)))))
+    (ox-json-make-alist
+      info
+      `(
+        (is-internal bool ,is-internal)
+        (target-ref string ,target-ref)
+        (is-inline-image info ,(org-export-inline-image-p link))))))
 
 (defun ox-json-transcode-link (link _contents info)
   "Transcode a link object to JSON.
@@ -1036,19 +1089,18 @@ CONTENTS is a string containing the encoded contents of the element,
 but its value is ignored (`ox-json-export-contents' is used instead).
 INFO is the plist of export options."
   (ox-json-export-node-base link info
-    :properties (ox-json-link-properties link info)))
+    :extra-properties (ox-json-link-extra-properties link info)))
 
-(defun ox-json-timestamp-properties (timestamp info)
-  "Get properties to export from a timestamp object.
+(defun ox-json-timestamp-extra-properties (timestamp info)
+  "Get additional properties to export from a timestamp object.
 
 TIMESTAMP is the parsed timestamp object.
 INFO is the plist of export options."
-  (let ((properties (ox-json-export-properties timestamp info)))
-    (append
-      properties
-      (list
-        (cons 'start (ox-json-encode-string (ox-json-timestamp-isoformat timestamp "start" info)))
-        (cons 'end (ox-json-encode-string (ox-json-timestamp-isoformat timestamp "end" info)))))))
+  (ox-json-make-alist
+    info
+    `(
+      (start string ,(ox-json-timestamp-isoformat timestamp "start" info))
+      (end string ,(ox-json-timestamp-isoformat timestamp "end" info)))))
 
 (defun ox-json-transcode-timestamp (timestamp _contents info)
   "Transcode a timestamp object to JSON.
@@ -1058,7 +1110,7 @@ CONTENTS is a string containing the encoded contents of the element,
 but its value is ignored (`ox-json-export-contents' is used instead).
 INFO is the plist of export options."
   (ox-json-export-node-base timestamp info
-    :properties (ox-json-timestamp-properties timestamp info)))
+    :extra-properties (ox-json-timestamp-extra-properties timestamp info)))
 
 
 (provide 'ox-json)
