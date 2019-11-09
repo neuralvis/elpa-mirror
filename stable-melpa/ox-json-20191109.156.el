@@ -4,7 +4,7 @@
 
 ;; Author: Jared Lumpe <mjlumpe@gmail.com>
 ;; Version: 0.3.0
-;; Package-Version: 20191109.108
+;; Package-Version: 20191109.156
 ;; Keywords: outlines
 ;; Homepage: https://github.com/jlumpe/ox-json
 
@@ -711,17 +711,6 @@ INFO is the plist of export options.
 PROPERTIES is interpreted as in `ox-json-make-alist'."
   (ox-json-encode-alist-raw data-type (ox-json-make-alist info properties) info))
 
-(cl-defmacro ox-json--add-alist-encoded (alist key value info &optional (type t))
-  "JSON-encode VALUE and add it to alist ALIST with key KEY.
-
-INFO is the plist of export options.
-TYPE is the data type symbol representing how VALUE should be encoded.
-The default is t, which means the type is chosen automatically based on the
-data."
-  `(push
-    (ox-json-encode-with-type ,type ,value ,info)
-     ,alist))
-
 
 ;;; Export generic org data
 
@@ -1079,7 +1068,7 @@ INFO is the plist of export options."
       `(
         (is-internal bool ,is-internal)
         (target-ref string ,target-ref)
-        (is-inline-image info ,(org-export-inline-image-p link))))))
+        (is-inline-image bool ,(org-export-inline-image-p link))))))
 
 (defun ox-json-transcode-link (link _contents info)
   "Transcode a link object to JSON.

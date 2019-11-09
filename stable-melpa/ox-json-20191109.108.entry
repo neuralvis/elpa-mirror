@@ -1,2 +1,0 @@
-
-(ox-json . [(20191109 108) ((emacs (24)) (org (9)) (s (1 12))) "JSON export backend for Org mode" single ((:commit . "104f9407d5f7b0ba483b7fecf305016e7c4e4c0d") (:keywords "outlines") (:authors ("Jared Lumpe" . "mjlumpe@gmail.com")) (:maintainer "Jared Lumpe" . "mjlumpe@gmail.com") (:url . "https://github.com/jlumpe/ox-json"))])
