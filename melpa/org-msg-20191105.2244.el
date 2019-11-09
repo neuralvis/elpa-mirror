@@ -6,8 +6,8 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20190916.2334
-;; Package-X-Original-Version: 2.1
+;; Package-Version: 20191105.2244
+;; Package-X-Original-Version: 2.2
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -160,6 +160,14 @@ name of the person you are replying to.
 
 Example: \"\nHi %s,\n\n\""
   :type '(string))
+
+(defcustom org-msg-greeting-name-limit 1
+  "Maximum number of recipient first name for the greeting format.
+If replying to an email for which the 'To' field contains more
+than one recipient and the `org-msg-greeting-fmt' contains a '%s'
+format, this variable limits the number of recipient first name
+used as a replacement of the '%s' format.  nil means unlimited."
+  :type '(integer))
 
 (defcustom org-msg-greeting-fmt-mailto nil
   "Define the format behavior for recipient greeting.
@@ -742,20 +750,26 @@ This function is used as an advice function of `org-html--todo'.
 It parses the 'To:' field of the current `org-msg-edit-mode'
 buffer to extract and return the first name.  It is used to
 automatically greet the right name, see `org-msg-greeting-fmt'."
-  (save-excursion
-    (message-goto-to)
-    (cl-multiple-value-bind (name mail)
-	(gnus-extract-address-components
-	 (message-fetch-field "to"))
-      (if name
-	  (let* ((split (split-string name ", " t))
-		 (first-name (if (= (length split) 2)
-				 (cadr split)
-			       (car (split-string name " " t)))))
-	    (if org-msg-greeting-fmt-mailto
-		(format "[[mailto:%s][%s]]" mail first-name)
-	      first-name))
-	""))))
+  (cl-flet ((recipient2name (r)
+	     (cl-multiple-value-bind (name mail) r
+		 (when name
+		   (let* ((split (split-string name ", " t))
+			  (first-name (if (= (length split) 2)
+					  (cadr split)
+					(car (split-string name " " t)))))
+		     (setf first-name (capitalize first-name))
+		     (if org-msg-greeting-fmt-mailto
+			 (format "[[mailto:%s][%s]]" mail first-name)
+		       first-name))))))
+    (save-excursion
+      (let ((recipients (mail-extract-address-components
+			 (save-restriction
+			   (message-narrow-to-headers)
+			   (message-fetch-field "to"))
+			 t)))
+	(when org-msg-greeting-name-limit
+	  (setf recipients (seq-take recipients org-msg-greeting-name-limit)))
+	(mapconcat #'recipient2name recipients ", ")))))
 
 (defun org-msg-header (reply-to)
   "Build the Org OPTIONS and PROPERTIES blocks.

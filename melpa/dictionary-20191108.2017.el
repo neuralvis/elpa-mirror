@@ -2,7 +2,7 @@
 
 ;; Author: Torsten Hilbrich <torsten.hilbrich@gmx.net>
 ;; Keywords: interface, dictionary
-;; Package-Version: 20190403.1918
+;; Package-Version: 20191108.2017
 ;; Version: 1.10
 ;; Package-Requires: ((connection "1.10") (link "1.10"))
 
@@ -23,14 +23,14 @@
 
 ;;; Commentary:
 
-;; dictionary allows you to interact with dictionary servers. Use M-x
-;; customize-group dictioanry to modify all user settings.
+;; dictionary allows you to interact with dictionary servers.
+;; Use M-x customize-group dictionary to modify user settings.
 ;;
 ;; Main functions for interaction are:
 ;; dictionary        - opens a new dictionary buffer
 ;; dictionary-search - search for the definition of a word
 ;;
-;; You can find more information in the README file of the gibhub
+;; You can find more information in the README file of the GitHub
 ;; repository https://github.com/myrkr/dictionary-el
 
 ;;; Code:
