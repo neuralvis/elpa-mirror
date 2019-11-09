@@ -1,5 +1,5 @@
 ;;; bash-completion.el --- BASH completion for the shell buffer -*- lexical-binding: t -*-
-;; Package-Version: 20190820.1804
+;; Package-Version: 20191109.1029
 
 ;; Copyright (C) 2009 Stephane Zermatten
 
@@ -42,7 +42,7 @@
 ;; running in term mode.  Also, term mode is not available in
 ;; shell-command prompts.
 ;;
-;; Bash completion can also be run programatically, outside of a
+;; Bash completion can also be run programmatically, outside of a
 ;; shell-mode command, by calling
 ;; `bash-completion-dynamic-complete-nocomint'
 ;;
@@ -584,7 +584,7 @@ This function is meant to be called exclusively from
 This function expect the point to be at the start of a new
 element to be added to the list of tokens.
 
-Return TOKENS with new tokens found betwen the current point and
+Return TOKENS with new tokens found between the current point and
 END prepended to it."
   (skip-chars-forward " \t\n\r" end)
   (if (< (point) end)
@@ -1072,7 +1072,7 @@ Return a bash command-line for going to default-directory or \"\"."
 BUFFER should contains the output of:
   complete -p
 
-The returned alist is a sligthly parsed version of the output of
+The returned alist is a slightly parsed version of the output of
 \"complete -p\"."
   (let ((alist (list)))
     (with-current-buffer buffer
