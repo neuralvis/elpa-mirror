@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191105.336
+;; Package-Version: 20191109.1611
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -1396,7 +1396,7 @@ Typical value: '(recenter)."
         (swiper--add-overlays (ivy--regex ivy-text))))))
 
 (defun counsel-git-grep-transformer (str)
-  "Higlight file and line number in STR."
+  "Highlight file and line number in STR."
   (when (string-match "\\`\\([^:]+\\):\\([^:]+\\):" str)
     (ivy-add-face-text-property (match-beginning 1) (match-end 1)
                                 'ivy-grep-info
