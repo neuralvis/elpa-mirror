@@ -12,8 +12,8 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-;; Version: 2.0.4
-;; Package-Version: 20191103.815
+;; Version: 2.0.6
+;; Package-Version: 20191110.910
 ;; URL: https://gitlab.emacsos.com/sylecn/zero-el
 ;; Package-Requires: ((emacs "24.3") (s "1.2.0"))
 
@@ -244,7 +244,7 @@ If item is not in lst, return nil."
 
 ;; zero-input-el version
 (defvar zero-input-version nil "Zero package version.")
-(setq zero-input-version "2.0.4")
+(setq zero-input-version "2.0.7")
 
 ;; FSM state
 (defconst zero-input--state-im-off 'IM-OFF)
@@ -464,13 +464,17 @@ COMPLETE-FUNC the function to call when build candidates completes."
     ;; update cache to make SPC and digit key selection possible.
     (funcall complete-func candidates)))
 
-(defvar zero-input-full-width-char-map
-  ;; ascii 33 to 126 map to
-  ;; unicode FF01 to FF5E
-  (cl-loop
-   for i from 33 to 126
-   collect (cons (make-char 'ascii i) (make-char 'unicode 0 255 (- i 32))))
+(defvar zero-input-full-width-char-map nil
   "An alist that map half-width char to full-width char.")
+(setq zero-input-full-width-char-map
+      (cons
+       ;; ascii 32 -> unicode 3000
+       (cons ?\s ?\u3000)
+       ;; ascii [33, 126] -> unicode [FF01, FF5E]
+       (cl-loop
+	for i from 33 to 126
+	collect (cons (make-char 'ascii i)
+		      (make-char 'unicode 0 255 (- i 32))))))
 
 (defun zero-input-convert-ch-to-full-width (ch)
   "Convert half-width char CH to full-width.
@@ -787,8 +791,9 @@ Otherwise, show Zero."
   (:eval (zero-input-modeline-string))
   zero-input-mode-map
   ;; local variables and variable init
-  (zero-input-reset)
   (make-local-variable 'zero-input-candidates-per-page)
+  (make-local-variable 'zero-input-full-width-mode)
+  (zero-input-reset)
   (zero-input-set-im zero-input-im)
   ;; hooks
   (add-hook 'focus-in-hook 'zero-input-focus-in)
