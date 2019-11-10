@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191105.1846
+;; Package-Version: 20191109.2207
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1679,20 +1679,23 @@ When called interactively, use the currently active server"
   (apply #'vector
          (mapcar
           (eglot--lambda ((ConfigurationItem) scopeUri section)
-            (let* ((path (eglot--uri-to-path scopeUri)))
-              (when (file-directory-p path)
-                (with-temp-buffer
-                  (let ((default-directory path))
-                    (setq-local major-mode (eglot--major-mode server))
-                    (hack-dir-local-variables-non-file-buffer)
-                    (alist-get section eglot-workspace-configuration
-                               nil nil
-                               (lambda (wsection section)
-                                 (string=
-                                  (if (keywordp wsection)
-                                      (substring (symbol-name wsection) 1)
-                                    wsection)
-                                  section))))))))
+            (with-temp-buffer
+              (let* ((uri-path (eglot--uri-to-path scopeUri))
+                     (default-directory
+                       (if (and (not (string-empty-p uri-path))
+                                (file-directory-p uri-path))
+                           uri-path
+                           (car (project-roots (eglot--project server))))))
+                (setq-local major-mode (eglot--major-mode server))
+                (hack-dir-local-variables-non-file-buffer)
+                (alist-get section eglot-workspace-configuration
+                           nil nil
+                           (lambda (wsection section)
+                             (string=
+                              (if (keywordp wsection)
+                                  (substring (symbol-name wsection) 1)
+                                wsection)
+                              section))))))
           items)))
 
 (defun eglot--signal-textDocument/didChange ()
