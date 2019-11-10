@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20191105.935
+;; Package-Version: 20191110.425
 
 ;; This file is not part of GNU Emacs.
 
@@ -272,8 +272,9 @@ This variable has to be set before `no-littering' is loaded.")
     (setq cider-repl-history-file          (var "cider-repl-history.el"))
     (setq company-statistics-file          (var "company/statistics.el"))
     (setq company-tabnine-binaries-folder  (var "company/tabnine-binaries"))
-    (setq dap--breakpoints-file            (var "dap-breakpoints"))
+    (setq dap-breakpoints-file             (var "dap/breakpoints.el"))
     (setq dap-java-test-runner             (var "lsp-java/eclipse.jdt.ls/test-runner/junit-platform-console-standalone.jar"))
+    (setq dap-utils-extension-path         (var "dap/extensions/"))
     (setq debbugs-gnu-persistency-file     (var "debbugs.el"))
     (setq dired-recent-directories-file    (var "dired-recent-directories.el"))
     (setq elbank-data-file                 (var "elbank-data.el"))
