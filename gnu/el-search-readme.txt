@@ -13,10 +13,10 @@ patterns and your own multi-search commands.
 Key bindings
 ============
 
-Loading this file doesn't install any key bindings - but you
-probably want some.  There are two predefined installable schemes
-of key bindings.  The first scheme defines bindings mostly of the
-form "Control-Shift-Letter", e.g. C-S, C-R, C-% etc.  These can be
+Loading this file doesn't install any key bindings - but you maybe
+want some.  There are two predefined installable schemes of key
+bindings.  The first scheme defines bindings mostly of the form
+"Control-Shift-Letter", e.g. C-S, C-R, C-% etc.  These can be
 installed by calling (el-search-install-shift-bindings) - typically
 from your init file.  For console users (and others), the function
 `el-search-install-bindings-under-prefix' installs bindings of the
@@ -29,93 +29,108 @@ this function to install key bindings, installed bindings are
 "repeatable" where it makes sense so that you can for example hit
 M-s e j s s s a % to reactive the last search, go to the next match
 three times, then go back to the first match in the current buffer,
-and finally invoke query-replace.
+and finally invoke `el-search-query-replace'.
 
-Here is a complete list of key bindings installed when
+It follows a complete list of key bindings installed when
 you call
+
   (el-search-install-shift-bindings)
+
 or
+
   (el-search-install-bindings-under-prefix [(meta ?s) ?e])
 
-respectively:
+respectively.  If you don't want to install any key bindings, you
+want to remember the command name "el-search-pattern" or its alias
+"el-search" to get a start, and that after starting a search C-h
+will give you access to some help commands; among other things C-h
+b listing the relevant key bindings for controlling a search.
 
-  C-S, M-s e s (el-search-pattern)
+  C-S, M-s e s (`el-search-pattern')
     Start a search in the current buffer/go to the next match.
 
     While searching, the searched buffer is current (not the
     minibuffer).  All commands that are not search or scrolling
     commands terminate the search, while the state of the search is
     always automatically saved.  Like in isearch you can also just
-    hit RET to exit.
+    hit RET to exit or C-g to abort and jump back to where you
+    started.
 
-  C-R, M-s e r (el-search-pattern-backward)
+    By using the prefix arg this command can be used to reactivate
+    the last or a former search and to restart searches from the
+    beginning.
+
+  C-h (aka the `help-char')
+
+    C-h offers access to some help commands special to el-search
+    when a search is active.  Among other things C-h b (or ?) gives
+    you a list of bindings to control the search.
+
+  C-R, M-s e r (`el-search-pattern-backward')
     Search backward.
 
-  C-%, M-s e % (el-search-query-replace)
-    Do a query-replace.
+  C-%, M-s e % (`el-search-query-replace')
+    Start a query-replace session.  Resume or restart sessions with
+    prefix arg.
 
   M-x el-search-directory
     Prompt for a directory name and start a multi el-search for all
     Emacs-Lisp files in that directory.  With prefix arg,
     recursively search files in subdirectories.
 
-  C-S, M-s e s in Dired (el-search-dired-marked-files)
+  C-S, M-s e s in Dired (`el-search-dired-marked-files')
     Like above but uses the marked files and directories.
 
-  C-S, M-s e s in Ibuffer (el-search-ibuffer-marked-buffers)
+  C-S, M-s e s in Ibuffer (`el-search-ibuffer-marked-buffers')
     Search marked buffers in *Ibuffer*.
 
-  C-O, M-s e o (el-search-occur)
+  C-O, M-s e o (`el-search-occur')
     Pop up an occur buffer for the current search.
 
   C-O or M-RET (from a search pattern prompt)
     Execute this search command as occur.
 
-  C-N, M-s e n (el-search-continue-in-next-buffer)
+  C-X, M-s e x (`el-search-continue-in-next-buffer')
     Skip over current buffer or file.
 
-  C-D, M-s e d (el-search-skip-directory)
+  C-D, M-s e d (`el-search-skip-directory')
     Prompt for a directory name and skip all subsequent files
     located under this directory.
 
-  C-A, M-s e a, M-s e < (el-search-from-beginning)
-    Go back to the first match in this buffer or (with positive
-    prefix arg) completely restart the current search from the
-    first file or buffer.
-
-    With negative prefix arg, or with >, go to the last match in
+  C-A, M-s e a, M-s e < (`el-search-from-beginning')
+    Go back to the first match in this buffer.
+    With prefix arg or with M-s e >, go to the last match in
     the current buffer.
 
-  C-J, M-s e j (el-search-jump-to-search-head)
-    Resume the last search from the position of the last visited
-    match.
+  C-J, M-s e j (`el-search-jump')
+    Convenience command to move by matches.  Resumes the last
+    search if necessary.
+    Without prefix arg, jump (back) to the current match.
     With prefix arg 0, resume from the position of the match
-    following point instead.  With prefix arg 1 or -1, jump to the
-    first or last match visible in the selected window.  This can
-    be useful even when a search is current, e.g. after scrolling
-    the searched buffer.
-    With a plain C-u prefix arg, prompt for a former search to
-    resume.
+    following point instead.
+    With prefix arg 1 or -1, jump to the first or last match
+    visible in the selected window.
 
-  C-S-next, v   when search is active (el-search-scroll-down)
-  C-S-prior, V  when search is active (el-search-scroll-up)
+  C-S-next, v   when search is active (`el-search-scroll-down')
+  C-S-prior, V  when search is active (`el-search-scroll-up')
     Scrolling by matches: Select the first match after
     `window-end', or select the first match before `window-start',
     respectively.
 
-  C-H, M-s e h (el-search-this-sexp)
+  C-H, M-s e h (`el-search-this-sexp')
     Grab the symbol or sexp under point and initiate an el-search
     for other occurrences.
 
   M-x el-search-to-register
-    Save the current search to an Emacs register.  Use C-x r j
-    (`jump-to-register') to make that search current and jump to
-    the latest position.
+  M-x el-search-query-replace-to-register
+    Save the current el-search or el-search-query-replace session
+    to an Emacs register.  Use `jump-to-register' (C-x r j) to
+    continue that search or query-replace session.
 
 
 The setup you need for your init file is trivial: you only need to
-install the key bindings you want to use.  All important commands
-are autoloaded.
+install key bindings if you want some (see above).  All important
+commands are autoloaded.
 
 
 Usage
@@ -191,17 +206,16 @@ found in the current file or buffer, the search automatically
 switches to the next one.  Examples for search commands that start
 a multi search are `el-search-buffers' (search all live elisp mode
 buffers), `el-search-directory' (search all elisp files in a
-specified directory), `el-search-emacs-elisp-sources' and
-`el-search-dired-marked-files'.  Actually, every search is
-internally a multi search.
+specified directory), `el-search-emacs-elisp-sources',
+`el-search-dired-marked-files' and `el-search-repository'.
+Actually, every search is internally a multi search.
 
 You can pause any search by just doing something different (no
 explicit quitting needed); the state of the search is automatically
 saved.  You can later continue searching by calling
-`el-search-jump-to-search-head' (C-J; M-s e j): this command jumps
-to the last match and re-activates the search.
+`el-search-pattern' (C-S; M-s e s) with a prefix arg.
 
-`el-search-continue-in-next-buffer' (C-N; n) skips all remaining
+`el-search-continue-in-next-buffer' (C-X; x) skips all remaining
 matches in the current buffer and continues searching in the next
 buffer.  `el-search-skip-directory' (C-D; d) even skips all
 subsequent files under a specified directory.
@@ -229,13 +243,11 @@ of headlines.
 Multiple multi searches
 =======================
 
-Every search is collected in a history.  You can resume older
-searches from the position of the last match by calling
-`el-search-jump-to-search-head' (C-J; M-s e j) with a prefix
-argument.  That let's you select an older search to resume and
-switches to the buffer and position where this search had been
-suspended.  Like any search you can restart the search driving an
-`el-search-query-replace' with C-u C-A or C-u M-s e a respectively.
+Every search is stored in a history.  You can resume older searches
+from the position of the last match by calling `el-search-pattern'
+(C-S; M-s e s) with a prefix argument.  That let's you select an
+older search to resume and switches to the buffer and position
+where this search had been suspended.
 
 
 Query-replace
@@ -264,15 +276,34 @@ This will do it:
    `(foo ,b ,a . ,rest) RET
 
 Type y to replace a match and go to the next one, r to replace
-without moving, SPC or n to go to the next match and ! to replace
-all remaining matches automatically.  q quits.  And ? shows a quick
-help summarizing all of these keys.
+without moving (hitting r again restores that match), n to go to
+the next match without replacing and ! to replace all remaining
+matches automatically.  q quits.  ? shows a quick help summarizing
+all of these keys.
 
 It is possible to replace a match with an arbitrary number of
 expressions using "splicing mode".  When it is active, the
-replacement expression must evaluate to a list, and is spliced into
-the buffer for any match.  Hit s from the prompt to toggle splicing
-mode in an `el-search-query-replace' session.
+replacement expression must evaluate to a list, and this list is
+spliced into the buffer for any match.  Hit s from the prompt to
+toggle splicing mode in an `el-search-query-replace' session.
+
+Much like `el-search' sessions, `el-search-query-replace' sessions
+are also internally represented as objects with state, and are also
+collected in a history.  That means you can pause, resume and
+restart query-replace sessions, store them in registers, etc.
+
+There are two ways to edit replacements directly while performing
+an el-search-query-replace:
+
+(1) Without suspending the search: hit e at the prompt to show the
+replacement of the current match in a separate buffer.  You can
+edit the replacement in this buffer.  Confirming with C-c C-c will
+make el-search replace the current match with this buffer's
+contents.
+
+(2) At any time you can interrupt a query-replace session by
+hitting RET.  You can resume the query-replace session by calling
+`el-search-query-replace' with a prefix argument.
 
 
 Multi query-replace
@@ -284,14 +315,6 @@ search domain is the set of files and buffers you want to treat.
 Answer "yes" to the prompt asking whether you want the started
 search to drive the query-replace.  The user interface is
 self-explanatory.
-
-It is always possible to resume an aborted query-replace session
-even if you did other stuff in the meantime (including other
-`el-search-query-replace' invocations).  Since internally every
-query-replace is driven by a search, call
-`el-search-jump-to-search-head' to make that search current, and
-invoke `el-search-query-replace'.  This will continue the
-query-replace session from where you left.
 
 
 Advanced usage: Replacement rules for semi-automatic code rewriting
@@ -345,18 +368,6 @@ Known Limitations and Bugs
   to reading-printing.  "Some" because we can handle this problem
   in most cases.
 
-- Similar: comments are normally preserved (where it makes sense).
-  But when replacing like `(foo ,a ,b) -> `(foo ,b ,a)
-
-  in a content like
-
-    (foo
-      a
-      ;; comment
-      b)
-
-  the comment will be lost.
-
 - Something like (1 #1#) is unmatchable (because it is un`read'able
   without context).
 
@@ -373,11 +384,16 @@ Known Limitations and Bugs
 
 TODO:
 
-- There should be a way to go back to the starting position, like
-  in Isearch, which does this with (push-mark isearch-opoint t) in
-  `isearch-done'.
+- Add org and/or Info documentation
 
-- Add a help command that can be called while searching.
+- Could we profit from the edebug-read-storing-offsets reader?
+
+- Make currently hardcoded bindings in
+  `el-search-loop-over-bindings' configurable
+
+- When reading input, bind up and down to
+  next-line-or-history-element and
+  previous-line-or-history-element?
 
 - Make searching work in comments, too? (->
   `parse-sexp-ignore-comments').  Related: should the pattern
@@ -388,10 +404,6 @@ TODO:
 - Port this package to non Emacs Lisp modes?  How?  Would it
   already suffice using only syntax tables, sexp scanning and
   font-lock?
-
-- Replace: pause and warn when replacement might be wrong
-  (ambiguous reader syntaxes; lost comments, comments that can't
-  non-ambiguously be assigned to rewritten code)
 
 - There could be something much better than pp to format the
   replacement, or pp should be improved.

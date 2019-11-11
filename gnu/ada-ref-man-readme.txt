@@ -1,10 +1,6 @@
 Emacs info version of Ada Reference Manual 2012 TC1
 
-The Ada Reference Manual is provided as a Gnu ELPA package; to install
-the package, add to ~./emacs:
+Italics in syntax element names are indicated by <>.
 
-(package-initialize)
-
-then invoke M-x list-packages, install Ada Reference Manual.
-
-(end of file)
+Other formats are available at
+http://www.adaic.org/ada-resources/standards/

@@ -1,4 +1,4 @@
-Emacs Ada mode version 6.0.0
+Emacs Ada mode version 6.2.1
 
 Ada mode provides auto-casing, fontification, navigation, and
 indentation for Ada source code files.
@@ -18,21 +18,17 @@ Ada mode uses project files to define large (multi-directory)
 projects, and to define casing exceptions.
 
 Ada mode uses a parser to provide fontification, navigation, and
-indentation. There are twp parsers provided:
+indentation. There are two parsers provided:
 
 - elisp, which can be slow on large files, and does not recover from
   syntax errors.
 
 - process, which is implemented in Ada, is fast enough for reasonably
-  large files, and recovers from most syntax errors. The 'process'
-  parser must be compiled; see ada-mode.info section "process parser".
+  large files, supports partial parse for very large files (see
+  wisi-partial-parse-threshold), and recovers from almost all syntax
+  errors. The 'process' parser must be compiled; see ada-mode.info
+  section "process parser".
 
-In addition, there is support for running the AdaCore GPS indentation
-engine in a subprocess, either as a backup when the primary parser
-fails, or as the primary indentation engine. The GPS indentation
-engine must be compiled; see ada-mode.info section ada-gps for
-instructions.
-   
 See ada-mode.info for help on using and customizing Ada mode, and
 notes for Ada mode developers.
 
