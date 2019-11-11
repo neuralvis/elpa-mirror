@@ -2,8 +2,8 @@
 
 ;; Author: Torsten Hilbrich <torsten.hilbrich@gmx.net>
 ;; Keywords: interface, hypermedia
-;; Package-Version: 20140718.329
-;; Version: 1.10
+;; Package-Version: 20191111.446
+;; Version: 1.11
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

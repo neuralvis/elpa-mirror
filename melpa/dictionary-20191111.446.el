@@ -2,9 +2,9 @@
 
 ;; Author: Torsten Hilbrich <torsten.hilbrich@gmx.net>
 ;; Keywords: interface, dictionary
-;; Package-Version: 20191108.2017
-;; Version: 1.10
-;; Package-Requires: ((connection "1.10") (link "1.10"))
+;; Package-Version: 20191111.446
+;; Version: 1.11
+;; Package-Requires: ((connection "1.11") (link "1.11"))
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -437,6 +437,18 @@ by the choice value:
   
   (link-initialize-keymap dictionary-mode-map))
 
+(defmacro dictionary-reply-code (reply)
+  "Return the reply code stored in `reply'."
+  (list 'get reply ''reply-code))
+
+(defmacro dictionary-reply (reply)
+  "Return the string reply stored in `reply'."
+  (list 'get reply ''reply))
+
+(defmacro dictionary-reply-list (reply)
+  "Return the reply list stored in `reply'."
+  (list 'get reply ''reply-list))
+
 (defun dictionary-check-connection ()
   "Check if there is already a connection open"
   (if (not (and dictionary-connection
@@ -560,18 +572,6 @@ This function knows about the special meaning of quotes (\")"
       (put answer 'reply-list reply-list)
       (put answer 'reply-code (string-to-number (car reply-list)))
       answer)))
-
-(defmacro dictionary-reply-code (reply)
-  "Return the reply code stored in `reply'."
-  (list 'get reply ''reply-code))
-
-(defmacro dictionary-reply (reply)
-  "Return the string reply stored in `reply'."
-  (list 'get reply ''reply))
-
-(defmacro dictionary-reply-list (reply)
-  "Return the reply list stored in `reply'."
-  (list 'get reply ''reply-list))
 
 (defun dictionary-read-answer ()
   "Read an answer delimited by a . on a single line"
@@ -1234,6 +1234,8 @@ It presents the word at point as default input and allows editing it."
 	(require 'balloon-help)
       (error nil))))
 
+(make-variable-buffer-local 'dictionary-balloon-help-extent)
+
 (if dictionary-use-balloon-help
     (progn
 
@@ -1261,8 +1263,6 @@ It presents the word at point as default input and allows editing it."
 
 (defvar dictionary-balloon-help-extent nil
   "The extent for activating the balloon help")
-
-(make-variable-buffer-local 'dictionary-balloon-help-extent)
 
 ;;;###autoload
 (defun dictionary-tooltip-mode (&optional arg)
