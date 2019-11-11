@@ -1,2 +1,0 @@
-
-(lusty-explorer . [(20191110 1832) nil "Dynamic filesystem explorer and buffer switcher" single ((:commit . "2315034337c0c5f31cbd9376b046eeef5a038c09") (:keywords "convenience" "files" "matching"))])

@@ -49,11 +49,11 @@ Tips:
   (eval-after-load 'counsel-etags
     '(progn
        ;; counsel-etags-ignore-directories does NOT support wildcast
-       (add-to-list 'counsel-etags-ignore-directories "build_clang")
-       (add-to-list 'counsel-etags-ignore-directories "build_clang")
+       (push "build_clang" counsel-etags-ignore-directories)
+       (push "build_clang" counsel-etags-ignore-directories)
        ;; counsel-etags-ignore-filenames supports wildcast
-       (add-to-list 'counsel-etags-ignore-filenames "TAGS")
-       (add-to-list 'counsel-etags-ignore-filenames "*.json")))
+       (push "TAGS" counsel-etags-ignore-filenames)
+       (push "*.json" counsel-etags-ignore-filenames)))
 
  - Rust programming language is supported.
    The easiest setup is to use ".dir-locals.el".
