@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson, Vincent Zhang
 ;; Version: 0.4.0
-;; Package-Version: 20191109.1750
+;; Package-Version: 20191111.957
 ;; Package-Requires: ((emacs "25.1") (cl-lib "0.6.1") (lsp-mode "6.0"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -250,7 +250,7 @@ After stopping or killing the process, retry to update."
   (interactive)
   (lsp-python-ms-setup t))
 
-(defun lsp-python-ms-locate-python (root)
+(defun lsp-python-ms-locate-python ()
   "Look for virtual environments local to the workspace"
   (let* ((venv (locate-dominating-file default-directory "venv/"))
          (sys-python (executable-find lsp-python-ms-python-executable-cmd))
@@ -258,6 +258,7 @@ After stopping or killing the process, retry to update."
     (cond
      ((and venv (file-executable-p venv-python)) venv-python)
      (sys-python))))
+
 ;; it's crucial that we send the correct Python version to MS PYLS,
 ;; else it returns no docs in many cases furthermore, we send the
 ;; current Python's (can be virtualenv) sys.path as searchPaths
@@ -266,13 +267,14 @@ After stopping or killing the process, retry to update."
 
 The WORKSPACE-ROOT will be prepended to the list of python search
 paths and then the entire list will be json-encoded."
-  (let ((python (lsp-python-ms-locate-python workspace-root))
-        (default-directory workspace-root)
-        (init "from __future__ import print_function; import sys; sys.path = list(filter(lambda p: p != '', sys.path)); import json;")
-        (ver "v=(\"%s.%s\" % (sys.version_info[0], sys.version_info[1]));")
-        (sp (concat "sys.path.insert(0, '" workspace-root "'); p=sys.path;"))
-        (ex "e=sys.executable;")
-        (val "print(json.dumps({\"version\":v,\"paths\":p,\"executable\":e}))"))
+  (when-let ((python (lsp-python-ms-locate-python))
+             (default-directory workspace-root)
+             (init "from __future__ import print_function; import sys; \
+sys.path = list(filter(lambda p: p != '', sys.path)); import json;")
+             (ver "v=(\"%s.%s\" % (sys.version_info[0], sys.version_info[1]));")
+             (sp (concat "sys.path.insert(0, '" workspace-root "'); p=sys.path;"))
+             (ex "e=sys.executable;")
+             (val "print(json.dumps({\"version\":v,\"paths\":p,\"executable\":e}))"))
     (with-temp-buffer
       (call-process python nil t nil "-c" (concat init ver sp ex val))
       (let* ((json-array-type 'vector)
@@ -311,7 +313,7 @@ directory"
   (let ((workspace-root (if workspace (lsp--workspace-root workspace) (lsp-python-ms--workspace-root))))
     (when lsp-python-ms-parse-dot-env-enabled
       (lsp-python-ms--parse-dot-env workspace-root))
-    (cl-destructuring-bind (pyver _pysyspath pyintpath)
+    (cl-destructuring-bind (pyver pysyspath pyintpath)
         (lsp-python-ms--get-python-ver-and-syspath workspace-root)
       `(:interpreter
         (:properties (
@@ -327,7 +329,7 @@ directory"
                          :maxDocumentationTextLength 0)
         :searchPaths ,(if lsp-python-ms-extra-paths
                           (vconcat lsp-python-ms-extra-paths nil)
-                        _pysyspath)
+                        pysyspath)
         :analysisUpdates t
         :asyncStartup t
         :logLevel ,lsp-python-ms-log-level

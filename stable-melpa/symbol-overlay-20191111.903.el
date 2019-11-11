@@ -4,7 +4,7 @@
 
 ;; Author: wolray <wolray@foxmail.com>
 ;; Version: 4.1
-;; Package-Version: 20191105.736
+;; Package-Version: 20191111.903
 ;; URL: https://github.com/wolray/symbol-overlay/
 ;; Keywords: faces, matching
 ;; Package-Requires: ((emacs "24.3"))
@@ -157,6 +157,11 @@
   :group 'symbol-overlay
   :type 'float)
 
+(defcustom symbol-overlay-overlay-created-functions '()
+  "Functions called after overlay creation that may modify the overlay."
+  :group 'symbol-overlay
+  :type 'hook)
+
 (defcustom symbol-overlay-ignore-functions
   '((c-mode . symbol-overlay-ignore-function-c)
     (c++-mode . symbol-overlay-ignore-function-c++)
@@ -173,6 +178,13 @@ definitions to prevent a language's keywords from getting highlighted."
   :type '(repeat (cons (function :tag "Mode") function)))
 
 ;;; Internal
+
+(defvar-local symbol-overlay-inhibit-map nil
+  "When non-nil, don't use `symbol-overlay-map'.
+This is intended for buffers/modes that use the keymap text
+property for their own purposes.  Because this package uses
+overlays it would always override the text property keymaps
+of such packages.")
 
 (defvar symbol-overlay-map
   (let ((map (make-sparse-keymap)))
@@ -339,11 +351,14 @@ If FACE is non-nil, use it as the overlay’s face.
 Otherwise apply `symbol-overlay-default-face'."
   (let ((ov (make-overlay (match-beginning 0) (match-end 0))))
     (if face (progn (overlay-put ov 'face face)
-                    (overlay-put ov 'keymap symbol-overlay-map)
+                    (unless symbol-overlay-inhibit-map
+                      (overlay-put ov 'keymap symbol-overlay-map))
                     (overlay-put ov 'evaporate t)
                     (overlay-put ov 'symbol symbol))
       (overlay-put ov 'face 'symbol-overlay-default-face)
-      (overlay-put ov 'symbol ""))))
+      (overlay-put ov 'symbol ""))
+    (dolist (fun symbol-overlay-overlay-created-functions)
+      (funcall fun ov))))
 
 (defun symbol-overlay-put-all (symbol scope &optional keyword)
   "Put overlays on all occurrences of SYMBOL in the buffer.
