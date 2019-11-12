@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/orca
-;; Package-Version: 20190925.915
+;; Package-Version: 20191112.1629
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: org, convenience
@@ -68,7 +68,7 @@
       (orca-handler-match-url "https://\\(?:www\\.\\)?\\(?:old\\.\\)?reddit.com/r/" ,reddit "\\* Posts")
       (orca-handler-match-url "https://emacs.stackexchange.com/" ,emacs "\\* Questions")
       (orca-handler-match-url "http://stackoverflow.com/" ,stack "\\* Questions")
-      (orca-handler-match-url "https://git\\(?:hub\\|lab\\).com/\\(?:\\sw\\|\\s_\\)+/\\(?:\\sw\\|\\s_\\)+" ,github "\\* Repos")
+      (orca-handler-match-url "https://git\\(?:hub\\|lab\\).com/[^/]+/[^/]+\\'" ,github "\\* Repos")
       (orca-handler-project)
       (orca-handler-current-buffer "\\* Tasks")
       (orca-handler-file ,entor "\\* Articles")))
@@ -186,7 +186,7 @@ Try to remove superfluous information, like the website title."
         (progn
           (message "%d old link(s)" (length old-links))
           (let ((old-link (car old-links)))
-            (if (string-match "\\([^:]+\\):\\([0-9]+\\):\\*+ *TODO" old-link)
+            (if (string-match "\\([^:]+\\):\\([0-9]+\\):\\*+ *\\(TODO\\|DONE\\)" old-link)
                 (let ((file (match-string 1 old-link))
                       (line (string-to-number (match-string 2 old-link))))
                   (find-file file)
