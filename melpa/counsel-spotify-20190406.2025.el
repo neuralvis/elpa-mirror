@@ -4,7 +4,6 @@
 ;; Author: Lautaro García <https://github.com/Lautaro-Garcia>
 ;; Package: counsel-spotify
 ;; Package-Requires: ((emacs "25") (ivy "0.9.0"))
-;; Package-Version: 20190406.2025
 ;; Version: 0.1
 
 ;; This file is not part of GNU Emacs.
