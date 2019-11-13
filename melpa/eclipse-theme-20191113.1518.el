@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/eclipse-theme
-;; Package-Version: 20191112.1008
+;; Package-Version: 20191113.1518
 ;; Version: 0.1.0
 ;; Keywords: themes
 
@@ -122,17 +122,17 @@
             (magit-tag :background "LemonChiffon1" :foreground "goldenrod4")
             (magit-section-heading :inherit header-line)
             (magit-section-highlight :weight bold)
-            (magit-diff-context :foreground "grey20")
-            (magit-diff-context-highlight :weight bold :foreground "grey20")
-            (magit-diff-added :inherit diff-added)
-            (magit-diff-added-highlight :inherit diff-added :weight bold)
-            (magit-diff-removed :inherit diff-removed)
-            (magit-diff-removed-highlight :inherit diff-removed :weight bold)
+            (magit-diff-context :foreground "grey20" :extend t)
+            (magit-diff-context-highlight :weight bold :foreground "grey20" :extend t)
+            (magit-diff-added :inherit diff-added :extend t)
+            (magit-diff-added-highlight :inherit diff-added :weight bold :extend t)
+            (magit-diff-removed :inherit diff-removed :extend t)
+            (magit-diff-removed-highlight :inherit diff-removed :weight bold :extend t)
             (magit-diff-file-heading)
             (magit-diff-file-heading-highlight :weight bold)
             (magit-diff-file-heading-selection :foreground "red")
-            (magit-diff-hunk-heading :inherit diff-hunk-header)
-            (magit-diff-hunk-heading-highlight :inherit diff-hunk-header :weight bold)
+            (magit-diff-hunk-heading :inherit diff-hunk-header :extend t)
+            (magit-diff-hunk-heading-highlight :inherit diff-hunk-header :weight bold :extend t)
             (magit-hash :foreground "firebrick")
             (magit-branch-remote :background "Grey85" :foreground "OliveDrab4" :box t)
             (magit-branch-local :background "Grey85" :foreground "LightSkyBlue4" :box t)

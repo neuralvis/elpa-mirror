@@ -2,8 +2,8 @@
 ;;
 ;; Copyright (C) 2008-2019 Stephen Bach
 ;;
-;; Version: 3.0.x
-;; Package-Version: 20191110.2327
+;; Version: 3.0.1
+;; Package-Version: 20191113.1610
 ;; Keywords: convenience, files, matching
 ;; Compatibility: GNU Emacs 24.3+
 ;;

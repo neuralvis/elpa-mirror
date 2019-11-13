@@ -2,7 +2,7 @@
 
 ;; Authors: Juri Linkov <juri@jurta.org> (initial idea), Dmitry K. (packager and maintainer)
 ;; Package-Requires: ((emacs "25.1"))
-;; Package-Version: 20191113.1438
+;; Package-Version: 20191113.1509
 ;; Keywords: input method
 ;; Homepage: https://github.com/a13/reverse-im.el
 
@@ -124,7 +124,7 @@ Example usage: (reverse-im-activate \"russian-computer\")"
     (customize-save-variable 'reverse-im-input-methods reverse-im-input-methods)))
 
 (defun reverse-im-which-key-show (input-method)
-  "Show translation bindings for INPUT-METHOD using `which-key'"
+  "Show translation bindings for INPUT-METHOD using `which-key'."
   (interactive
    (list (read-input-method-name "Translate input method: ")))
   (if (require 'which-key nil t)
