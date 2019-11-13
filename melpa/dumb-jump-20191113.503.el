@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2019 jack angers
 ;; Author: jack angers and contributors
 ;; Version: 0.5.3
-;; Package-Version: 20191105.745
+;; Package-Version: 20191113.503
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
 
@@ -1865,11 +1865,13 @@ This is the persistent action (\\[helm-execute-persistent-action]) for helm."
           (plist-get result :line)
           (s-trim (plist-get result :context))))
 
-(defun dumb-jump-ivy-jump-to-selected (results choices proj)
-  "Offer CHOICES as canidates through ivy-read then execute
-dumb-jump-to-selected on RESULTS CHOICES and selected choice.
-Ignore PROJ"
-  (dumb-jump-to-selected results choices (ivy-read "Jump to: " choices)))
+(defun dumb-jump-ivy-jump-to-selected (results choices _proj)
+  "Offer CHOICES as candidates through `ivy-read', then execute
+`dumb-jump-result-follow' on the selected choice.  Ignore _PROJ."
+  (ivy-read "Jump to: " (-zip choices results)
+            :action (lambda (cand)
+                      (dumb-jump-result-follow (cdr cand)))
+            :caller 'dumb-jump-ivy-jump-to-selected))
 
 (defun dumb-jump-prompt-user-for-choice (proj results)
   "Put a PROJ's list of RESULTS in a 'popup-menu' (or helm/ivy)
