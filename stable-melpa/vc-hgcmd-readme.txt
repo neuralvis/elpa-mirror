@@ -3,6 +3,7 @@ Functions implementation status
 FUNCTION NAME                                   STATUS
 BACKEND PROPERTIES
 * revision-granularity                          OK
+- update-on-retrieve-tag                        OK
 STATE-QUERYING FUNCTIONS
 * registered (file)                             OK
 * state (file)                                  OK
