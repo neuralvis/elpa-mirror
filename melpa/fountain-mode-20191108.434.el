@@ -5,6 +5,7 @@
 
 ;; Author: Paul W. Rankin <pwr@sdf.org>
 ;; Keywords: wp, text
+;; Package-Version: 20191108.434
 ;; Version: 2.8.1
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://fountain-mode.org
