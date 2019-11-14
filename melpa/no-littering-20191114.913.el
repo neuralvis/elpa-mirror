@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20191110.425
+;; Package-Version: 20191114.913
 
 ;; This file is not part of GNU Emacs.
 
@@ -357,6 +357,7 @@ directories."
     (setq prescient-save-file              (var "prescient-save.el"))
     (setq projectile-cache-file            (var "projectile/cache.el"))
     (setq projectile-known-projects-file   (var "projectile/known-projects.el"))
+    (setq psession-elisp-objects-default-directory (var "psession/"))
     (setq purpose-default-layout-file      (etc "window-purpose/default-layout.el"))
     (setq purpose-layout-dirs              (list (etc "window-purpose/layouts/")))
     (setq pyim-dcache-directory            (var "pyim/dcache/"))

@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191109.1611
+;; Package-Version: 20191114.1015
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -4338,6 +4338,9 @@ PREFIX is used to create the key."
   (with-ivy-window
     (imenu (cdr x))))
 
+(defvar counsel-imenu-history nil
+  "History for `counsel-imenu'.")
+
 ;;;###autoload
 (defun counsel-imenu ()
   "Jump to a buffer position indexed by imenu."
@@ -4347,6 +4350,7 @@ PREFIX is used to create the key."
             :require-match t
             :action #'counsel-imenu-action
             :keymap counsel-imenu-map
+            :history 'counsel-imenu-history
             :caller 'counsel-imenu))
 
 ;;** `counsel-list-processes'
