@@ -3,8 +3,8 @@
 ;; Copyright (C) 2016 Powershop NZ Ltd.
 
 ;; Author: Kieran Trezona-le Comte <trezona.lecomte@gmail.com>
-;; Version: 0.4
-;; Package-Version: 20191008.2203
+;; Version: 0.5
+;; Package-Version: 20191113.1958
 ;; Package-Requires: ((ov "1.0") (cl-lib "0.5"))
 ;; Created: 2016-01-21
 ;; Keywords: coverage metrics simplecov ruby rspec
@@ -166,8 +166,8 @@ root."
   (with-temp-buffer
     (insert-file-contents filepath)
     (goto-char (point-max))
-    (re-search-backward "\"timestamp\": [0-9]+")
-    (re-search-forward ": ")
+    (re-search-backward "\"timestamp\": *[0-9]+")
+    (re-search-forward ": *")
     (current-word)))
 
 (defun coverage-get-timestamp-for-current-buffer ()
