@@ -43,6 +43,7 @@ Respects these variables:
 
 Development:    <http://github.com/sjbach/lusty-emacs>
 Further info:   <http://www.emacswiki.org/cgi-bin/wiki/LustyExplorer>
+                (Probably out-of-date)
 
 
 Contributors:
@@ -56,3 +57,6 @@ Alex Schroeder
 Sasha Kovar
 John Wiegley
 Johan Walles
+p3r7
+Nick Alcock
+Jonas Bernoulli

@@ -1,10 +1,12 @@
-;;; lusty-explorer.el --- Dynamic filesystem explorer and buffer switcher -*- lexical-binding: t; mode: emacs-lisp -*-
+;;; lusty-explorer.el --- Dynamic filesystem explorer and buffer switcher -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2008-2019 Stephen Bach
 ;;
-;; Version: 3.0.1
-;; Package-Version: 20191113.1610
-;; Keywords: convenience, files, matching
+;; Version: 3.1
+;; Package-Version: 20191115.1552
+;; Keywords: convenience, files, matching, tools
+;; URL: https://github.com/sjbach/lusty-emacs
+;; Package-Requires: (cl-lib dired)
 ;; Compatibility: GNU Emacs 24.3+
 ;;
 ;; Permission is hereby granted to use and distribute this code, with or
@@ -60,6 +62,7 @@
 ;;
 ;; Development:    <http://github.com/sjbach/lusty-emacs>
 ;; Further info:   <http://www.emacswiki.org/cgi-bin/wiki/LustyExplorer>
+;;                 (Probably out-of-date)
 ;;
 
 ;;; Contributors:
@@ -73,6 +76,9 @@
 ;; Sasha Kovar
 ;; John Wiegley
 ;; Johan Walles
+;; p3r7
+;; Nick Alcock
+;; Jonas Bernoulli
 ;;
 
 ;;; Code:
@@ -180,7 +186,7 @@ buffer names in the matches window; 0.10 = %10."
 
 (defvar lusty--highlighted-coords (cons 0 0))  ; (x . y)
 
-;; Set by lusty--compute-layout-matrix
+;; Set later by lusty--compute-layout-matrix
 (defvar lusty--matches-matrix (make-vector 0 nil))
 (defvar lusty--matrix-column-widths '())
 (defvar lusty--matrix-truncated-p nil)
@@ -199,14 +205,19 @@ buffer names in the matches window; 0.10 = %10."
            (null (aref (aref lusty--matches-matrix x) y)))))
 
 (defun lusty--compute-column-width (start-index end-index lengths-v lengths-h)
+  ;; Dynamic programming algorithm. Split the index range into smaller and
+  ;; smaller chunks in recursive calls to this function, then calculate and
+  ;; memoize the widths from the bottom up. The memoized widths are likely to
+  ;; be used again in subsequent calls to this function.
   (if (= start-index end-index)
-      ;; Single-element remainder
+      ;; This situation describes a column consisting of a single element.
       (aref lengths-v start-index)
     (let* ((range (cons start-index end-index))
            (width (gethash range lengths-h)))
       (or width
           (let* ((split-point
                   (+ start-index
+                     ;; Same thing as: (/ (- end-index start-index) 2)
                      (ash (- end-index start-index) -1)))
                  (first-half
                   (lusty--compute-column-width
@@ -600,15 +611,39 @@ does not begin with '.'."
        (- (window-height test-window)
           (window-body-height test-window))
        ;; And minibuffer height.
+       ;; FIXME: but only if (eq (window-frame (minibuffer-window))
+       ;;                        (window-frame test-window)), right?
        (window-height (minibuffer-window)))))
 
-(defun lusty-max-window-width ()
-  (frame-width))
-
-(defun lusty-window-width ()
-  (window-width
-   (get-buffer-window
-    (get-buffer-create lusty-buffer-name))))
+(defun lusty--exploitable-window-body-width ()
+  (let* ((window (get-buffer-window
+                  (get-buffer-create lusty-buffer-name)))
+         (body-width (window-body-width window))
+         (window-fringe-absent-p
+          (and (equal (window-fringes) '(0 0 nil nil))
+               ;; (Probabably these are redundant checks.)
+               (eq (fringe-columns 'left) 0)
+               (eq (fringe-columns 'right) 0)
+               (eq (frame-fringe-width) 0)
+               ;; There are also `left-fringe-width`, `right-fringe-width`, but
+               ;; I'm not sure about them.
+               )))
+    ;; Emacs manual for window-body-width: "Note that the returned value
+    ;; includes the column reserved for the continuation glyph." So if we're
+    ;; configured such that a continuation glyph would show, we need to
+    ;; subtract one column for the "true" body width.
+    ;;
+    ;; Elsewhere in the manual: "[When] fringes are not available, Emacs uses
+    ;; the leftmost and rightmost character cells to indicate continuation and
+    ;; truncation with special ASCII characters ... .";
+    ;;
+    ;; So if we have no fringe, we can expect to lose that one column. There
+    ;; doesn't appear to be a way to reclaim it. We can possibly change the
+    ;; continuation character with `set-display-table-slot`, but not elide the
+    ;; character altogether.
+    (if window-fringe-absent-p
+        (1- body-width)
+      body-width)))
 
 ;; Only needed for Emacs 23 compatibility, because the Emacs root window in an
 ;; already split frame is not a living window.
@@ -666,9 +701,10 @@ does not begin with '.'."
                                 (split-window (lusty--setup-window-to-split))))))
         (select-window lusty-window)
         (when lusty-fully-expand-matches-window-p
-          ;; Try to get a window covering the full frame.  Sometimes
-          ;; this takes more than one try, but we don't want to do it
-          ;; infinitely in case of weird setups.
+          ;; Attempt to grow the window to cover the full frame.  Sometimes
+          ;; this takes more than one try, but we don't want to accidentally
+          ;; loop on it infinitely in the case of some unconventional
+          ;; window/frame setup.
           (cl-loop repeat 5
                    while (< (window-width) (frame-width))
                    do
@@ -703,17 +739,53 @@ does not begin with '.'."
       (with-current-buffer lusty-buffer
         (setq buffer-read-only t)
         (let ((buffer-read-only nil))
-          (erase-buffer)
-          (lusty--display-matches)
-          (goto-char (point-min))))
+              (when (and (boundp 'visual-line-mode)
+                         visual-line-mode)
+                ;; Remove visual-line-mode if it's enabled to make wrapping --
+                ;; which we don't want, and which shouldn't happen -- look a
+                ;; little better. This is probably not necessary or useful
+                ;; given we're setting `truncate-lines` below.
+                (visual-line-mode -1))
+              (unless truncate-lines
+                ;; More gracefully handle any remaining bugs in the layout
+                ;; algorithm. If an inserted line of completions happens
+                ;; to be longer than the window's text body -- which
+                ;; shouldn't happen -- don't wrap the line, just show a
+                ;; truncation indicator in the fringe (or, if there's no
+                ;; fringe, in the final text column).
+                ;;
+                ;; The below is most of what `(toggle-truncate-lines 1)` does,
+                ;; but without emitting a noisy line to *Messages*.
+                (setq truncate-lines t)
+                (let ((window (get-buffer-window lusty-buffer)))
+                  (when window
+                    (set-window-hscroll window 0))))
+              ;; Minor look-and-feel tweaks. We disable these display settings
+              ;; in the completions buffer in case the user has enabled them
+              ;; globally. Is this overreaching? Maybe, I'm not sure.
+              (when indicate-buffer-boundaries
+                (setq indicate-buffer-boundaries nil))
+              (when show-trailing-whitespace
+                (setq show-trailing-whitespace nil))
+              ;; (Probably not necessary or useful.)
+              (when indicate-empty-lines
+                (setq indicate-empty-lines nil))
+              ;; There is also `overflow-newline-into-fringe`, which would best
+              ;; be t: "If nil, also continue lines which are exactly as wide
+              ;; as the window"; but it can't be set buffer-local.
+              (with-silent-modifications
+                (atomic-change-group
+                  (erase-buffer)
+                  (lusty--display-matches)))
+              (goto-char (point-min))
+              (set-buffer-modified-p nil)))
 
-      ;; If only our matches window is open,
+      ;; If our matches window has somehow become the only window:
       (when (one-window-p t)
         ;; Restore original window configuration before fitting the
         ;; window so the minibuffer won't grow and look silly.
         (set-window-configuration lusty--initial-window-config))
-      (fit-window-to-buffer (display-buffer lusty-buffer))
-      (set-buffer-modified-p nil))))
+      (fit-window-to-buffer (display-buffer lusty-buffer)))))
 
 (defun lusty-buffer-list ()
   "Return a list of buffers ordered with those currently visible at the end."
@@ -766,10 +838,18 @@ does not begin with '.'."
         (sort filtered 'string<)
       (lusty-sort-by-fuzzy-score filtered file-portion))))
 
+;; Principal goal: fit as many items as possible into as few buffer/window rows
+;; as possible. This leads to maximizing the number of columns (approximately).
 (defun lusty--compute-layout-matrix (items)
   (let* ((max-visible-rows (1- (lusty-max-window-height)))
-         (max-width (lusty-window-width))
-         (upper-bound most-positive-fixnum)
+         (max-width
+          ;; Prior to calling this function we called
+          ;; `lusty--setup-matches-window`, which expanded the window for the
+          ;; matches buffer horizontally as much as it could. Therefore the
+          ;; current width of that window is the maximum width.
+          (lusty--exploitable-window-body-width))
+         ;; Upper bound of the count of displayable items.
+         (upper-bound most-positive-fixnum)  ; (set below)
          (n-items (length items))
          (lengths-v (make-vector n-items 0))
          (separator-length (length lusty-column-separator)))
@@ -785,12 +865,12 @@ does not begin with '.'."
             (setq length-of-longest-name
                   (max length-of-longest-name len)))
 
-      ;; Calculate upper-bound
+      ;; Calculate an upper-bound.
       (let ((width (+ length-of-longest-name
                       separator-length))
             (columns 1)
-            (sorted-shortest (sort (append lengths-v nil) '<)))
-        (cl-dolist (item-len sorted-shortest)
+            (shortest-first (sort (append lengths-v nil) '<)))
+        (cl-dolist (item-len shortest-first)
           (cl-incf width item-len)
           (when (> width max-width)
             (cl-return))
@@ -836,6 +916,8 @@ does not begin with '.'."
 
         (when (and (zerop n-columns)
                    (cl-plusp n-items))
+          ;; Turns out there's not enough window space to do anything clever,
+          ;; so just stack 'em up (and truncate).
           (setq n-columns 1)
           (setq column-widths
                 (list
@@ -844,14 +926,14 @@ does not begin with '.'."
                             :end (min n-items max-visible-rows)))))
 
         (let ((matrix
-               ;; Create an empty matrix.
+               ;; Create an empty matrix using the calculated dimensions.
                (let ((col-vec (make-vector n-columns nil)))
                  (dotimes (i n-columns)
                    (aset col-vec i
                          (make-vector optimal-n-rows nil)))
                  col-vec)))
 
-          ;; Fill the matrix with propertized matches.
+          ;; Fill the matrix with propertized match strings.
           (unless (zerop n-columns)
             (let ((x 0)
                   (y 0)
@@ -871,7 +953,7 @@ does not begin with '.'."
                 lusty--matrix-column-widths column-widths
                 lusty--matrix-truncated-p truncated-p))))))
 
-;; Returns number of rows and whether this truncates the matches.
+;; Returns number of rows and whether this row count will truncate the matches.
 (cl-defun lusty--compute-optimal-row-count (lengths-v)
   ;;
   ;; Binary search; find the lowest number of rows at which we
@@ -880,17 +962,20 @@ does not begin with '.'."
   (let* ((separator-length (length lusty-column-separator))
          (n-items (length lengths-v))
          (max-visible-rows (1- (lusty-max-window-height)))
-         (available-width (lusty-window-width))
+         (available-width (lusty--exploitable-window-body-width))
+         ;; Holds memoized widths of candidate columns (ranges of items).
          (lengths-h
           ;; Hashes by cons, e.g. (0 . 2), representing the width
           ;; of the column bounded by the range of [0..2].
           (make-hash-table :test 'equal
-                           ; not scientific
+                           ;; Not scientific; will certainly grow larger for a
+                           ;; nontrivial count of items (and so probably should
+                           ;; be set higher here).
                            :size n-items))
          ;; We've already failed for a single row, so start at two.
          (lower 1)
          (upper (min (1+ max-visible-rows)
-                     (length lengths-v))))
+                     n-items)))
 
     (while (/= (1+ lower) upper)
       (let* ((n-rows (/ (+ lower upper) 2)) ; Mid-point
@@ -899,14 +984,14 @@ does not begin with '.'."
              (total-width 0))
 
         (cl-block :column-widths
-          (while (< col-end-index (length lengths-v))
+          (while (< col-end-index n-items)
             (cl-incf total-width
                      (lusty--compute-column-width
                       col-start-index col-end-index
                       lengths-v lengths-h))
 
             (when (> total-width available-width)
-              ;; Early exit.
+              ;; Early exit; this row count is unworkable.
               (setq total-width most-positive-fixnum)
               (cl-return-from :column-widths))
 
@@ -915,10 +1000,10 @@ does not begin with '.'."
             (cl-incf col-start-index n-rows)
             (cl-incf col-end-index n-rows)
 
-            (when (and (>= col-end-index (length lengths-v))
-                       (< col-start-index (length lengths-v)))
+            (when (and (>= col-end-index n-items)
+                       (< col-start-index n-items))
               ;; Remainder; last iteration will not be a full column.
-              (setq col-end-index (1- (length lengths-v))))))
+              (setq col-end-index (1- n-items)))))
 
         ;; The final column doesn't need a separator.
         (cl-decf total-width separator-length)
