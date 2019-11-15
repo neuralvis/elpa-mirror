@@ -4,7 +4,6 @@
 ;; Copyright (C) 2012-2018 Andrew Johnson <andrew@andrewjamesjohnson.com>
 
 ;; Version: 1.3
-;; Package-Version: 20180227.46
 ;; Keywords: convenience, faces, frames
 ;; Author: Matthew Kennedy <mkennedy@killr.ath.cx>
 ;; Author: Andrew Johnson <andrew@andrewjamesjohnson.com>
