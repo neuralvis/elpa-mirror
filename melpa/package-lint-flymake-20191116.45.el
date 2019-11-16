@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2018 J. Alexander Branham (alex DOT branham AT gmail DOT com)
 
-;; Package-Requires: ((emacs "26") (package-lint "0.5"))
-;; Package-Version: 20181117.856
+;; Package-Requires: ((emacs "26.1") (package-lint "0.5"))
+;; Package-Version: 20191116.45
 ;; Package-X-Original-Version: 0
 ;; Homepage: https://github.com/purcell/package-lint
 
@@ -42,8 +42,6 @@
 (require 'flymake)
 (require 'package-lint)
 
-(defvar-local package-lint--flymake-proc nil)
-
 (declare-function flymake-diag-region "flymake")
 (declare-function flymake-make-diagnostic "flymake")
 
@@ -65,12 +63,16 @@ Use `package-lint-setup-flymake' to add this to
              finally (funcall report-fn diags))))
 
 ;;;###autoload
-(defun package-lint-setup-flymake ()
+(defun package-lint-flymake-setup ()
   "Setup package-lint integration with Flymake."
+  (interactive)
   (if (< emacs-major-version 26)
       (error "Package-lint-flymake requires Emacs 26 or later")
     (add-hook 'flymake-diagnostic-functions #'package-lint-flymake nil t)
     (flymake-mode)))
+
+;;;###autoload
+(define-obsolete-function-alias 'package-lint-setup-flymake 'package-lint-flymake-setup)
 
 (provide 'package-lint-flymake)
 
