@@ -1,2 +1,0 @@
-
-(promise . [(20191108 943) ((emacs (26 1)) (async (1 9))) "Promises/A+" tar ((:commit . "0d9dc0e77d4cb858418acad69535a14f6c763bf4") (:keywords "async" "promise" "convenience") (:authors ("chuntaro" . "chuntaro@sakura-games.jp")) (:maintainer "chuntaro" . "chuntaro@sakura-games.jp") (:url . "https://github.com/chuntaro/emacs-promise"))])

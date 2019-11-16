@@ -1,10 +1,10 @@
-;;; jsx-mode.el --- major mode for JSX
+;;; jsx-mode.el --- major mode for JSX, an altJS
 
 ;; Copyright (c) 2012 DeNA, Co., Ltd (http://dena.jp/intl/)
 
 ;; Author: Takeshi Arabiki (abicky)
 ;; Version: 0.1.10
-;; Package-Version: 20130908.1724
+;; Package-Version: 20191116.1044
 ;; URL: https://github.com/jsx/jsx-mode.el
 
 ;; Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -823,8 +823,9 @@ if there are any errors or warnings in `jsx-mode'."
   "Preserve the line feeds in documents
 cf. https://github.com/auto-complete/popup-el/issues/43"
   (when jsx--try-to-show-document-p
-    (beginning-of-buffer)
-    (replace-string "\n" jsx--hard-line-feed)
+    (goto-char (point-min))
+    (while (search-forward "\n") 
+           (replace-match jsx--hard-line-feed))
     (setq use-hard-newlines t)))
 
 (defun jsx--sort-docs (a b)

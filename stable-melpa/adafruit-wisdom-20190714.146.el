@@ -1,11 +1,11 @@
 ;;; adafruit-wisdom.el --- Get/display adafruit.com quotes
 
 ;; Author: Neil Okamoto <neil.okamoto+melpa@gmail.com>
-;; Version: 0.2.1
-;; Package-Version: 20180225.52
+;; Version: 0.3.0
+;; Package-Version: 20190714.146
 ;; Keywords: games
 ;; URL: https://github.com/gonewest818/adafruit-wisdom.el
-;; Package-Requires: ((emacs "25"))
+;; Package-Requires: ((emacs "25") (request "0.3.1"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@
 ;;; Code:
 
 (require 'dom)
-(require 'url)
+(require 'request)
 (require 'xml)
 
 (defconst adafruit-wisdom-quote-url "https://www.adafruit.com/feed/quotes.xml"
@@ -54,8 +54,14 @@ Returns the parsed XML."
           (insert-file-contents cache)
           (xml-parse-region (point-min) (point-max)))
       (with-temp-file cache
-        (url-insert-file-contents adafruit-wisdom-quote-url)
-        (xml-parse-region (point-min) (point-max))))))
+        (let ((resp (request adafruit-wisdom-quote-url
+                             :type "GET"
+                             :sync t
+                             :timeout 15
+                             :parser 'buffer-string)))
+          (set-buffer-file-coding-system 'no-conversion)
+          (insert (request-response-data resp))
+          (xml-parse-region (point-min) (point-max)))))))
 
 ;;;###autoload
 (defun adafruit-wisdom-select ()
