@@ -4,7 +4,6 @@
 ;;
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/mrkkrp/fix-word
-;; Package-Version: 20190713.1338
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5"))
 ;; Keywords: word, convenience

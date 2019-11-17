@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191115.1924
+;; Package-Version: 20191117.1317
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1964,9 +1964,7 @@ is not active."
                                        :textDocument/completion
                                        (eglot--CompletionParams)
                                        :deferred :textDocument/completion
-                                       :cancel-on-input (prog1 non-essential
-                                                          (when non-essential
-                                                            (message "OH IT'S NON ESSENTIAL")))))
+                                       :cancel-on-input t))
                 (setq items (append
                              (if (vectorp resp) resp (plist-get resp :items))
                              nil))
@@ -2036,10 +2034,7 @@ is not active."
              (when annotation
                (concat " "
                        (propertize annotation
-                                   'face 'font-lock-function-name-face)
-                       (and (eql insertTextFormat 2)
-                            (eglot--snippet-expansion-fn)
-                            " (snippet)"))))))
+                                   'face 'font-lock-function-name-face))))))
        :company-doc-buffer
        (lambda (proxy)
          (let* ((documentation

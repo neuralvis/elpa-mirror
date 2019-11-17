@@ -2,7 +2,7 @@
 
 ;; Author: jixiuf  jixiuf@qq.com
 ;; Keywords: vterm terminals
-;; Package-Version: 20191029.631
+;; Package-Version: 20191117.805
 ;; Version: 0.0.3
 ;; URL: https://github.com/jixiuf/vterm-toggle
 ;; Package-Requires: ((emacs "25.1") (vterm "0.0.1"))
@@ -92,6 +92,7 @@ for example
 
 (defvar vterm-toggle--window-configration nil)
 (defvar vterm-toggle--vterm-dedicated-buffer nil)
+(defvar-local vterm-toggle--dedicated-p nil)
 (defvar vterm-toggle--vterm-buffer-p-function 'vterm-toggle--default-vterm-mode-p
   "Function to check whether a buffer is vterm-buffer mode.")
 (defvar vterm-toggle--buffer-list nil
@@ -247,7 +248,10 @@ Optional argument ARGS optional args."
   "Get dedicated buffer."
   (if (buffer-live-p vterm-toggle--vterm-dedicated-buffer)
       vterm-toggle--vterm-dedicated-buffer
-    (setq vterm-toggle--vterm-dedicated-buffer (vterm-toggle--new))))
+    (setq vterm-toggle--vterm-dedicated-buffer (vterm-toggle--new))
+    (with-current-buffer vterm-toggle--vterm-dedicated-buffer
+      (setq vterm-toggle--dedicated-p t)
+      vterm-toggle--vterm-dedicated-buffer)))
 
 (defun vterm-toggle--recent-vterm-buffer(&optional make-cd ignore-prompt-p args)
   "Get recent vterm buffer.
@@ -262,7 +266,8 @@ Optional argument ARGS optional args."
       (setq buffer-host (system-name)))
     (dolist (buf (buffer-list))
       (with-current-buffer buf
-        (when (funcall vterm-toggle--vterm-buffer-p-function args)
+        (when (and (funcall vterm-toggle--vterm-buffer-p-function args)
+                   (not vterm-toggle--dedicated-p))
           (cond
            ((and (derived-mode-p 'vterm-mode)
                  make-cd)

@@ -4,6 +4,7 @@
 
 ;; Author: Anshul Verma <anshul.verma86@gmail.com>
 ;; URL: https://github.com/anshulverma/projectile-speedbar
+;; Package-Version: 20190807.2010
 ;; Keywords: project, convenience, speedbar, projectile
 ;; Version: 0.0.1
 ;; Package-Requires: ((projectile "0.11.0") (sr-speedbar "0"))
