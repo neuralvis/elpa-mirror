@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191117.1317
+;; Package-Version: 20191118.1123
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1873,7 +1873,9 @@ Try to visit the target file for a richer summary line."
                                method
                                :extra-params extra-params
                                :capability capability)))
-    (xref-find-references "LSP identifier at point.")))
+    (if eglot--lsp-xref-refs
+        (xref-find-references "LSP identifier at point.")
+      (eglot--message "%s returned no references" method))))
 
 (defun eglot-find-declaration ()
   "Find declaration for SYM, the identifier at point."

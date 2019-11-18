@@ -1,2 +1,0 @@
-
-(ace-link . [(20191110 1713) ((avy (0 4 0))) "Quickly follow links" single ((:commit . "59a3ec64bc6da9842d2045c6ffe6128ec1807cbf") (:keywords "convenience" "links" "avy") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/ace-link"))])

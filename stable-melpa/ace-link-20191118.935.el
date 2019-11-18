@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/ace-link
-;; Package-Version: 20191110.1713
+;; Package-Version: 20191118.935
 ;; Version: 0.5.0
 ;; Package-Requires: ((avy "0.4.0"))
 ;; Keywords: convenience, links, avy
@@ -224,6 +224,8 @@
     (if (button-at pt)
         (push-button pt)
       (call-interactively #'man-follow))))
+
+(declare-function Man-default-man-entry "man")
 
 (defun ace-link--man-collect ()
   "Collect all visible links in `Man-mode'.
