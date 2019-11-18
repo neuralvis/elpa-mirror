@@ -6,7 +6,6 @@
 
 ;; Author: Tong Sun <suntong@users.sourceforge.net>
 ;; URL: https://github.com/suntong/preseed-generic-mode
-;; Package-Version: 20180210.500
 
 ;;{{{ GPL
 
