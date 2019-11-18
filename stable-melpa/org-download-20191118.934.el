@@ -1,13 +1,13 @@
-;;; org-download.el --- Image drag-and-drop for Emacs org-mode. -*- lexical-binding: t -*-
+;;; org-download.el --- Image drag-and-drop for Org-mode. -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2014-2019 Free Software Foundation, Inc.
 
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
-;; Package-Version: 20191016.1227
+;; Package-Version: 20191118.934
 ;; Version: 0.1.0
-;; Package-Requires: ((async "1.2"))
-;; Keywords: images, screenshots, download
+;; Package-Requires: ((emacs "24.3") (async "1.2"))
+;; Keywords: multimedia images screenshots download
 
 ;; This file is not part of GNU Emacs.
 
@@ -70,8 +70,7 @@
 ;;; Code:
 
 
-(eval-when-compile
-  (require 'cl))
+(require 'cl-lib)
 (require 'async)
 (require 'url-parse)
 (require 'url-http)
@@ -248,7 +247,7 @@ The directory is created if it didn't exist before."
       (let* ((part1 (org-download--dir-1))
              (part2 (org-download--dir-2))
              (dir (if part2
-                      (format "%s/%s" part1 part2)
+                      (expand-file-name part2 part1)
                     part1)))
         (unless (file-exists-p dir)
           (make-directory dir t))
@@ -301,13 +300,13 @@ COMMAND is a format-style string with two slots for LINK and FILENAME."
    `(lambda () (shell-command
                 ,(format command link
                          (expand-file-name filename))))
-   (lexical-let ((cur-buf (current-buffer)))
+   (let ((cur-buf (current-buffer)))
      (lambda (_x)
        (with-current-buffer cur-buf
          (org-download--display-inline-images))))))
 
 (defun org-download--write-image (status filename)
-  ;; Write current buffer to FILENAME
+  "Write current buffer STATUS to FILENAME."
   (let ((err (plist-get status :error)))
     (when err
       (error
@@ -401,7 +400,7 @@ It's inserted before the image link and is used to annotate it.")
                  (when (re-search-forward "^Content-Type: image/\\(.*\\)$")
                    (setq ext (match-string 1)))))
               (t
-               (error "link %s does not point to an image; unaliasing failed" link)))))
+               (error "Link %s does not point to an image; unaliasing failed" link)))))
     (let ((filename
            (cond ((eq org-download-method 'attach)
                   (let ((org-download-image-dir (progn (require 'org-attach)
@@ -541,7 +540,7 @@ It's inserted before the image link and is used to annotate it.")
   (interactive)
   (let ((context (org-element-context)))
     (if (not (eq (car-safe context) 'link))
-        (user-error "not on a link")
+        (user-error "Not on a link")
       (start-process-shell-command
        "org-download-edit"
        "org-download-edit"
@@ -557,7 +556,7 @@ When TIMES isn't nil, delete only TIMES links."
     (setq times most-positive-fixnum))
   (save-excursion
     (goto-char beg)
-    (while (and (>= (decf times) 0)
+    (while (and (>= (cl-decf times) 0)
                 (re-search-forward "\\[\\[file:\\([^]]*\\)\\]\\]" end t))
       (let ((str (match-string-no-properties 1)))
         (delete-region beg
