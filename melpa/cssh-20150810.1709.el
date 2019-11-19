@@ -4,7 +4,6 @@
 ;;
 ;; Author: Dimitri Fontaine <dim@tapoueh.org>
 ;; URL: http://tapoueh.org/emacs/cssh.html
-;; Package-Version: 20150810.1709
 ;; Version: 0.7
 ;; Created: 2008-09-26
 ;; Keywords: ClusterSSH ssh cssh

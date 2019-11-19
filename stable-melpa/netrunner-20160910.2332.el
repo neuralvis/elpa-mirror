@@ -5,6 +5,7 @@
 
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/netrunner
+;; Package-Version: 20160910.2332
 ;; Version: 1.00
 ;; Keywords: games
 ;; Package-Requires: ((popup "0.5.3") (company "0.9.0") (helm "1.9.5"))
