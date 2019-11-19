@@ -4,7 +4,7 @@
 
 ;; Author: Thanh Vuong <thanhvg@gmail.com>
 ;; URL: https://github.com/thanhvg/howdoyou/
-;; Package-Version: 20191114.711
+;; Package-Version: 20191118.2222
 ;; Package-Requires: ((emacs "25.1") (promise "1.1") (request "0.3.0") (org "9.2"))
 ;; Version: 0.1
 
@@ -414,7 +414,7 @@ a, img or pre. Otherwise just copy"
 
 (defun howdoyou--print-history ()
   "Print `howdoyou--query-history'."
-  (insert "* History\n")
+  (insert "\n* History\n")
   (dolist (query howdoyou--query-history)
     (insert (format "[[elisp:(howdoyou-promise-answer \"%s\")][%s]]\n"
                     query
