@@ -4,7 +4,7 @@
 
 ;; Author: Alf Lervåg
 ;; Keywords: literate programming, reproducible research
-;; Package-Version: 20190626.1824
+;; Package-Version: 20191119.924
 ;; Homepage: https://github.com/alf/ob-restclient.el
 ;; Version: 0.02
 ;; Package-Requires: ((restclient "0"))
@@ -94,10 +94,14 @@ This function is called by `org-babel-execute-src-block'"
   "Just return the payload."
   (let ((comments-start
          (save-excursion
-           (while (not (looking-at "//"))
-             (forward-line))
+           (goto-char (point-max))
+           (while (comment-only-p (line-beginning-position) (line-end-position))
+             (forward-line -1))
+           ;; Include the last line as well
+           (forward-line)
            (point))))
     (buffer-substring (point-min) comments-start)))
+
 
 (defun org-babel-restclient-return-pure-payload-result-p (params)
   "Return `t' if the `:results' key in PARAMS contains `value' or `table'."

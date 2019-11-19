@@ -4,7 +4,7 @@
 
 ;; Author: PythonNut <pythonnut@pythonnut.com>
 ;; Keywords: convenience, search, flx
-;; Package-Version: 20180103.514
+;; Package-Version: 20191119.515
 ;; Version: 20141313
 ;; URL: https://github.com/pythonnut/flx-isearch
 ;; Package-Requires: ((emacs "24") (flx "20140821") (cl-lib "0.5"))
@@ -313,6 +313,7 @@ enabled."
 ;; derived from flex-isearch.el
 ;;;###autoload
 (define-minor-mode flx-isearch-mode
+  "Minor mode to allow you to use `flx' fuzzy match with `isearch'."
   :init-value nil
   :group 'flx-isearch
   (if flx-isearch-mode
