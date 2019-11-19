@@ -1,2 +1,2 @@
 
-(go-guru . [(20181012 330) ((go-mode (1 3 1)) (cl-lib (0 5))) "Integration of the Go 'guru' analysis tool into Emacs." single ((:commit . "dac200f7a8de7bf22793d39b5dd46756cbadb295") (:keywords "tools"))])
+(go-guru . [(20181012 330) ((go-mode (1 3 1)) (cl-lib (0 5))) "Integration of the Go 'guru' analysis tool into Emacs." single ((:commit . "cad6d0a522f8f5c351a1332bcd54bd5ffd8ce30d") (:keywords "tools"))])
