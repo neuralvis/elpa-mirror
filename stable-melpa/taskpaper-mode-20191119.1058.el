@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20191118.1404
+;; Package-Version: 20191119.1058
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -1363,8 +1363,9 @@ absolute path is used, if possible with \"~/\" for your home
 directory. An absolute path can be forced with a
 \\[universal-argument] prefix argument."
   (interactive "P")
-  (let* ((path (taskpaper-file-path-complete arg))
-         (path (taskpaper-file-path-escape path)))
+  (let ((path (taskpaper-file-path-escape
+               (taskpaper-file-path-complete arg))))
+    (unless (or (bolp) (eq (char-before) ?\ )) (insert " "))
     (insert (concat "file:" path))))
 
 (defun taskpaper-open-link (link)
@@ -1379,8 +1380,8 @@ directory. An absolute path can be forced with a
         (setq link (concat "http://" link)))
       (browse-url link))
      ((eq type 'file)
-      (setq link (string-remove-prefix "file:" link)
-            link (taskpaper-file-path-unescape link))
+      (setq link (taskpaper-file-path-unescape
+                  (string-remove-prefix "file:" link)))
       (taskpaper-open-file link))
      (t (find-file-other-window link)))))
 

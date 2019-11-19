@@ -5,7 +5,7 @@
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;;         Felipe Lema <felipelema@mortemale.org>
 ;; URL: https://github.com/FelipeLema/emacs-counsel-gtags
-;; Package-Version: 20190923.1842
+;; Package-Version: 20191119.1243
 ;; Version: 0.01
 ;; Package-Requires: ((emacs "25.1") (counsel "0.8.0") (seq "1.0"))
 
@@ -215,6 +215,7 @@ ivy's default filter `counsel--async-filter' is too slow with lots of tags."
 	      " ")
    " | "
    (counsel-gtags--get-grep-command) " "
+   "--color=never" " "
    (thread-last (ivy--regex query)
      (counsel--elisp-to-pcre)
      (shell-quote-argument))))
