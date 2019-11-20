@@ -4,7 +4,7 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Keywords: multimedia
-;; Package-Version: 20191015.803
+;; Package-Version: 20191119.1933
 ;; Url: https://gitlab.petton.fr/mpdel/libmpdel
 ;; Package-requires: ((emacs "25.1"))
 ;; Version: 1.1.1
@@ -896,7 +896,11 @@ If HANDLER is nil, ignore response."
 ENTITY can also be a list of entities to add.")
 
 (cl-defmethod libmpdel-playlist-add (entity (_ (eql current-playlist)))
-  (libmpdel-send-command `("findadd %s" ,(libmpdel-entity-to-criteria entity))))
+  (let ((id (libmpdel-entity-id entity)))
+    (libmpdel-send-command
+     (if id
+         `("addid %S" ,id)
+       `("findadd %s" ,(libmpdel-entity-to-criteria entity))))))
 
 (cl-defmethod libmpdel-playlist-add (entity (stored-playlist libmpdel-stored-playlist))
   (libmpdel-send-command
