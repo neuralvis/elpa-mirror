@@ -1,2 +1,0 @@
-
-(dimmer . [(20191119 1929) ((emacs (25))) "visually highlight the selected buffer" single ((:commit . "dce4874c66c2e3a84243741dacb42103b6b90e39") (:keywords "faces" "editing") (:authors ("Neil Okamoto")) (:maintainer "Neil Okamoto") (:url . "https://github.com/gonewest818/dimmer.el"))])

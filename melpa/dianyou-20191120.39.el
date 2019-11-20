@@ -3,7 +3,7 @@
 ;; Copyright (C) 2019 Chen Bin
 ;;
 ;; Version: 0.0.2
-;; Package-Version: 20190604.1215
+;; Package-Version: 20191120.39
 ;; Keywords: mail
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/dianyou
@@ -303,7 +303,7 @@ Final result is inserted into `kill-ring' and returned."
 ;;;###autoload
 (defun dianyou-get-all-email-addresses ()
   "Get all email addresses in received mails and update history."
-  (let* ((all-addresses (dianyou-all-email-address))
+  (let* ((all-addresses (mapcar 'rfc2047-decode-string (dianyou-all-email-address)))
          (cands (cond
                  ((and dianyou-email-address-history all-addresses)
                   (append dianyou-email-address-history
