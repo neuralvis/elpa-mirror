@@ -3,8 +3,7 @@
 ;; Copyright (C) 2017 Google Inc.
 
 ;; Author: Fangrui Song <i@maskray.me>
-;; Package-Version: 20170709.726
-;; Package-X-Original-Version: 20170708.1
+;; Package-Version: 20170708.1
 ;; Version: 0.0.1
 ;; URL: https://github.com/MaskRay/emacs-helm-kythe
 ;; Package-Requires: ((emacs "25") (dash "2.12.0") (helm "2.0"))

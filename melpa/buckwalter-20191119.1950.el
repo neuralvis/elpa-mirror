@@ -4,7 +4,7 @@
 
 ;; Author: Joe HAKIM RAHME <joehakimrahme@gmail.com>
 ;; Version: 20171126.1
-;; Package-Version: 20190204.1451
+;; Package-Version: 20191119.1950
 ;; Keywords: arabic, transliteration, i18n
 ;; URL: https://github.com/joehakimrahme/buckwalter-arabic
 
@@ -116,6 +116,12 @@ http://www.qamus.org/transliteration.htm"
         (delete-region from to)
         (goto-char from)
         (insert output-str)))))
+
+;;;###autoload
+(defun buckwalter-table ()
+  "Displays the buckwalter-unicode conversion table for reference"
+  (interactive)
+  (describe-variable 'buckwalter-to-unicode))
 
 (provide 'buckwalter)
 ;;; buckwalter.el ends here
