@@ -13,7 +13,6 @@
 ;; Created: February 18, 2016
 ;; Modified: December 08, 2017
 ;; Version: 1.0.7
-;; Package-Version: 20180513.2126
 ;; Homepage: https://github.com/hlissner/emacs-pug-mode
 ;; Keywords: markup, language, jade, pug
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
