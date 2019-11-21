@@ -4,7 +4,7 @@
 
 ;; Author: Tobias Zawada <i@tn-home.de>
 ;; Keywords: tex, languages, wp
-;; Package-Version: 20191105.1300
+;; Package-Version: 20191120.2239
 ;; Package-X-Original-Version: 1.0.1
 ;; URL: https://github.com/TobiasZawada/texfrag
 ;; Package-Requires: ((emacs "25") (auctex "11.90.2"))
@@ -1056,6 +1056,7 @@ Example:
         (unless texfrag-preview-region-function
           (setq texfrag-preview-region-function #'texfrag-region))
 	(define-key texfrag-mode-map texfrag-prefix texfrag-submap)
+	(require 'tex-mode)
 	(LaTeX-preview-setup)
 	(preview-mode-setup)
 	(when texfrag-preview-buffer-at-start
