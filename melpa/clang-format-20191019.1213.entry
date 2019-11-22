@@ -1,2 +1,0 @@
-
-(clang-format . [(20191019 1213) ((cl-lib (0 3))) "Format code using clang-format" single ((:commit . "113b767848ec1568f538e547d7c456a07d66b598") (:keywords "tools" "c"))])
