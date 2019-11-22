@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014-2019 Stefano Barbi
 ;; Author: Stefano Barbi <stefanobarbi@gmail.com>
 ;; Version: 0.2
-;; Package-Version: 20191121.1431
+;; Package-Version: 20191122.1017
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,7 +22,9 @@
 
 ;; jack-connect and jack-disconnect allow to manage connections of
 ;; jackd audio server from Emacs minibuffer.
-
+;; jack-snapshot-to-register stores a snapshot of current connections
+;; in a register.  That can be later restored using
+;; `jump-to-register'.
 ;;; Code:
 
 (require 'cl-lib)
@@ -299,26 +301,30 @@ Recursively accumulate atoms descendent from node into each node."
   (interactive
    (progn
      (jack-lsp)
-     (let* ((tree   (-> (jack--list-ports)
+     (let* ((from (if current-prefix-arg 'input 'output))
+            (tree   (-> (jack--list-ports)
                        (make--jtrie)))
             (node1 (-> tree
                       (jtrie--filter
-                       (if current-prefix-arg
-                           #'jack-port-input-p
-                         #'jack-port-output-p))
+                       (case from
+                         (input  #'jack-port-input-p)
+                         (output #'jack-port-output-p)))
                       (jtrie--disband (lambda (p)
                                           (list
                                            (jack-port-client p)
                                            (jack-port-type p))))
                       (jtrie-->alst)))
-            (sel1  (completing-read "connect: " node1))
+            (sel1
+             (if node1
+                 (completing-read "connect: " node1)
+               (error (format "There are no %s ports registered" from))))
             (p1s   (cdr (assoc sel1 node1)))
             (type  (jack-port-type (car p1s)))
             (node2 (-> tree
                       (jtrie--filter
-                       (if current-prefix-arg
-                           #'jack-port-output-p
-                         #'jack-port-input-p))
+                       (case from
+                         (input  #'jack-port-output-p)
+                         (output #'jack-port-input-p)))
                       (jtrie--filter
                        (lambda (p)
                          (string= (jack-port-type p) type)))
@@ -352,7 +358,10 @@ Recursively accumulate atoms descendent from node into each node."
                       (jtrie--filter #'jack-port-connected-p)
                       (jtrie--disband #'jack-port-client)
                       (jtrie-->alst)))
-            (sel1  (completing-read "disconnect jack port(s): " node1))
+            (sel1
+             (if node1
+                 (completing-read "disconnect jack port(s): " node1)
+               (error "There are no jack connections")))
             (p1s   (cdr (assoc sel1 node1)))
             ;; make an alst with p1s
             (node2 (-> (jack--merge-connections p1s)
@@ -369,6 +378,48 @@ Recursively accumulate atoms descendent from node into each node."
         (when (member p2 p2s)
           (call-process "jack_disconnect" nil nil nil
                         p1 p2))))))
+
+
+
+(defun jack--snapshot-restore (alst)
+  "Restore all the connections in ALST."
+  (jack-lsp)
+  (cl-loop
+   for cell in alst
+   for (k . v) = cell
+   when (and (gethash k jack--port-table )
+           (gethash v jack--port-table))
+   do
+   (call-process "jack_connect" nil nil nil k v)))
+
+(defun jack--snapshot-princ (alst)
+  "Display snapshot stored in ALST."
+  (princ (format "jack-snapshot:\n%s" alst)))
+
+(defun jack--snapshot ()
+  "Return an alist with all the current connections in jack."
+  (jack-lsp)
+  (cl-loop
+   for p in (jack--list-ports)
+   when (jack-port-output-p p)
+   append
+   (cl-loop
+    for c in (jack-port-connections p)
+    collect   (cons p c))))
+
+;;;###autoload
+(defun jack-snapshot-to-register (reg)
+  "Store a snapshot of jack connections into register REG.
+Restore connections using `jump-to-register'."
+  (interactive (list (register-read-with-preview "Jack snapshot to register: ")))
+  (let ((snapshot (jack--snapshot)))
+    (if snapshot
+        (set-register reg
+                      (registerv-make
+                       snapshot
+                      :print-func #'jack--snapshot-princ
+                      :jump-func #'jack--snapshot-restore))
+      (message "There are no connections"))))
 
 (provide 'jack-connect)
 ;;; jack-connect.el ends here
