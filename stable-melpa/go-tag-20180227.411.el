@@ -4,7 +4,6 @@
 
 ;; Author: Brantou <brantou89@gmail.com>
 ;; URL: https://github.com/brantou/emacs-go-tag
-;; Package-Version: 20180227.411
 ;; Keywords: tools
 ;; Version: 1.1.0
 ;; Package-Requires: ((emacs "24.0")(go-mode "1.5.0"))

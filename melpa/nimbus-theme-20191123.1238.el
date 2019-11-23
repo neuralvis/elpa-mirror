@@ -6,7 +6,7 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20191106.1807
+;; Package-Version: 20191123.1238
 ;; Package-Requires: ((emacs "24"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -928,7 +928,7 @@
    `(powerline-active1 ((t (:foreground ,black :background ,darker-green))))
    `(powerline-active2 ((t (:foreground ,gray :background ,fringe))))
    `(powerline-inactive1 ((t (:foreground ,bg :background ,blue-gray))))
-   `(powerline-inactive2 ((t (:foreground ,gray :background ,fringe))))
+   `(powerline-inactive2 ((t (:foreground ,gray :background ,gray-bg))))
 
    ;; rainbow-blocks
    `(rainbow-blocks-depth-1-face ((t (:foreground ,rainbow-1))))
@@ -1013,6 +1013,10 @@
    `(spaceline-flycheck-info ((t (:inherit success :bold nil))))
    `(spaceline-flycheck-warning ((t (:inherit warning :bold nil))))
    `(spaceline-flycheck-error ((t (:inherit error :bold nil))))
+   `(spaceline-highlight-face ((t (:foreground ,bg :background ,orange))))
+   `(spaceline-modified ((t (:foreground ,bg :background ,light-blue))))
+   `(spaceline-read-only ((t (:foreground ,bg :background ,purple))))
+   `(spaceline-unmodified ((t (:foreground ,bg :background ,orange))))
 
    ;; term
    `(term-color-black ((t (:foreground ,darkest-gray :background ,darkest-gray))))

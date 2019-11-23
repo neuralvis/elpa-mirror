@@ -29,7 +29,7 @@
 ;;;; Accounting
 
 ;; Version: 0.3.1
-;; Package-Version: 20190928.1451
+;; Package-Version: 20191123.958
 ;; Author: Aad Versteden <madnificent@gmail.com>
 ;; Keywords: ember ember.js emberjs
 ;; License: MIT
@@ -283,6 +283,7 @@ From the string base, a type can be built.")
    ("util"         "source"      (:prefix "/utils/" :class "." :jsext))
    ("service"      "source"      (:prefix "/services/" :class "." :jsext))
    ("component"    "template"    (:prefix "/templates/components/" :class "." :hbext))
+   ("component"    "template"    (:prefix "/components/" :class "." :hbext))
    ("template"     ".*"          (:prefix "/templates/" :class "." :hbext))
    (".*"           "template"    (:prefix "/templates/" :class "." :hbext)               "template")
    ;; END contains the definition of each matcher
@@ -494,14 +495,16 @@ Sources are specified in ember by a few orthogonal factors:
       - source
       - (blank)"
   (let ((templates (ember--matcher-templates-for base-type target-kind)))
-    (when templates
-      (mapcar #'ember--matcher-relative-path
-              (ember--matcher-template-map-extensions
-               (ember--matcher-partial-fill (cl-first templates)
-                                            :prefix base-prefix
-                                            :class base-class
-                                            :base-type base-type
-                                            :target-kind target-kind))))))
+    (cl-loop
+     for template in templates
+     append
+     (mapcar #'ember--matcher-relative-path
+             (ember--matcher-template-map-extensions
+              (ember--matcher-partial-fill template
+                                           :prefix base-prefix
+                                           :class base-class
+                                           :base-type base-type
+                                           :target-kind target-kind))))))
 
 (defun ember--current-project-root ()
   "Returns the root folder of the current ember project."
@@ -572,7 +575,7 @@ javascript (or coffeescript) source file should be opened."
 Kind should be one of \"template\" or \"source\"."
   (cl-destructuring-bind (base-prefix base-class base-type target-kind)
       (ember--current-file-components)
-    (message "%s" (list base-prefix base-class base-type target-kind))
+    (message "Current file components: %s" (list base-prefix base-class base-type target-kind))
     (if (equal kind target-kind)
         (ember--select-file-by-type-and-kind (concat "Open " base-type ": ") base-type kind)
       (ember-generic-open-file base-prefix base-class base-type kind))))
