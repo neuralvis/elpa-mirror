@@ -4,7 +4,6 @@
 
 ;; Author: Anders Lindgren
 ;; Keywords: faces
-;; Package-Version: 20180829.1818
 ;; Created: 2016-02-12
 ;; Version: 0.0.1
 ;; URL: https://github.com/Lindydancer/highlight-doxygen
