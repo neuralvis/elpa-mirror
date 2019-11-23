@@ -4,7 +4,7 @@
 
 ;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 20190310.1048
+;; Package-Version: 20191123.725
 ;; Package-X-Original-Version: 2.1.0
 ;; Version: 2.1.0
 ;; Keywords: convenience, comm, paste
@@ -206,7 +206,7 @@ precalculated, and also available both for pre and post request access.")
                  (webpaste--paste-text text))))
 
 
-(cl-defun webpaste--providers-error-lambda-no-failover (&rest)
+(cl-defun webpaste--providers-error-lambda-no-failover (&rest _)
   "Predefined error callback for providers that shouldn't do failover."
   (cl-function (lambda (&key error-thrown &allow-other-keys)
                  (message "Got error: %S" error-thrown))))
