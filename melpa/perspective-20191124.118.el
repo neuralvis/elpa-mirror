@@ -6,9 +6,9 @@
 
 ;; Author: Natalie Weizenbaum <nex342@gmail.com>
 ;; URL: http://github.com/nex3/perspective-el
-;; Package-Version: 20191120.3
+;; Package-Version: 20191124.118
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Version: 2.2
+;; Version: 2.3
 ;; Created: 2008-03-05
 ;; By: Natalie Weizenbaum <nex342@gmail.com>
 ;; Keywords: workspace, convenience, frames
@@ -75,10 +75,10 @@ perspectives."
   "Prefix key to activate perspective-map"
   :group 'perspective-mode
   :set (lambda (sym value)
-	 (when (and (bound-and-true-p persp-mode-map)
-		    (bound-and-true-p perspective-map))
+         (when (and (bound-and-true-p persp-mode-map)
+                    (bound-and-true-p perspective-map))
            (persp-mode-set-prefix-key value))
-	 (set-default sym value))
+         (set-default sym value))
   :type 'key-sequence)
 
 (defcustom persp-switch-wrap t
@@ -416,6 +416,7 @@ buffer called \"*scratch* (NAME)\"."
   (make-persp :name name
     (switch-to-buffer (concat "*scratch* (" name ")"))
     (funcall initial-major-mode)
+    (insert initial-scratch-message)
     (persp-reset-windows)))
 
 (defun persp-reactivate-buffers (buffers)

@@ -4,6 +4,7 @@
 
 ;; Author: Stephen Pegoraro <spegoraro@tutive.com>
 ;; Version: 0.1.0
+;; Package-Version: 20180524.133
 ;; Package-Requires: ((s "1.10.0") (dash "2.11.0") (alert "1.2"))
 ;; Keywords: org, org-mode, notify, notifications, calendar
 ;; URL: https://github.com/groksteve/org-alert
