@@ -3,6 +3,7 @@
 ;; Description: RenderMan® Interface Bytestream (RIB) Emacs Major Mode
 ;; Author: Remik Ziemlinski and Daniel Blezek <daniel.blezek@gmail.com>
 ;; URL: https://github.com/blezek/rib-mode
+;; Package-Version: 20170726.1448
 ;; Version: 1.0
 ;; Copyright © 2006 Remik Ziemlinski
 ;; Package-Requires: ((emacs "24"))
