@@ -11,6 +11,7 @@
 ;; Maintainer (1.1): Christian Neukirchen <chneukirchen@gmail.com>
 ;; Maintainer (1.2-1.3): Simon Michael <simon@joyful.com>
 ;; Version: 1.3
+;; Package-Version: 20190316.2215
 ;; Location: http://joyful.com/repos/darcsum
 ;; Keywords: completion convenience tools vc
 
