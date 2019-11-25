@@ -4,8 +4,8 @@
 
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; Created: 2019/04/20
-;; Version: 0.3.0
-;; Package-Version: 20191124.551
+;; Version: 0.4.0
+;; Package-Version: 20191125.117
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/twlz0ne/with-emacs.el
 ;; Keywords: tools
@@ -27,16 +27,38 @@
 
 ;; Evaluate expressions in a separate Emacs process:
 ;;
-;; ```elisp
-;; (with-emacs :path "/path/to/version/emacs" :lexical t
-;;   (do-something)
-;;   ...)
-;; ```
+;; ,---
+;; | ;;; `with-emacs'
+;; |
+;; | ;; Evaluate expressions in a separate Emacs.
+;; | (with-emacs ...)
+;; |
+;; | ;; Specify the version of Emacs and enable lexical binding
+;; | (with-emacs :path "/path/to/{version}/emacs" :lexical t ...)
+;; |
+;; | ;; Use partially applied function (see `with-emacs-define-partially-applied' for more)
+;; | ;; instead of writting verry long parameter each time:
+;; | (with-emacs-nightly-t ...)
+;; | ;; Equaivalent to:
+;; | ;; (with-emacs :path "/path/to/nightly/emacs" :lexical t ...)
+;; |
+;; | ;;; `with-emacs-server'
+;; |
+;; | ;; Evaluate expressions in server "name" or signal an error if no such server.
+;; | (with-emacs-server "name" ...)
+;; |
+;; | ;; Evaluate expressions in server "name" and start a server if necessary.
+;; | (with-emacs-server "name" :ensure t ...)
+;; | (with-emacs-server "name" :ensure "/path/to/{version}/emacs" ...)
+;; `---
 ;;
 ;; See README for more information.
 
 ;;; Change Log:
 
+;;
+;; 0.4.0  2019/11/25
+;;   Add macro `with-emacs-server'.
 ;;
 ;; 0.3.0  2019/11/15
 ;;   Add macro `with-emacs-define-partially-applied'.
@@ -59,6 +81,7 @@
 
 (require 'cl-lib)
 (require 'comint)
+(require 'server)
 
 (defcustom with-emacs-executable-path (concat invocation-directory invocation-name)
   "Location of Emacs executable."
@@ -246,18 +269,17 @@ a path of emacs, if it is t, use `with-emacs-executable-path'.
   (1+ 1))
 => 2"
   (declare (indent 1) (debug t))
-  (require 'server)
-  (let* ((server-dir (if server-use-tcp server-auth-dir server-socket-dir))
-         (server-file (expand-file-name server server-dir)))
-    (unless (file-exists-p server-file)
-      (if has-ensure?
-          (shell-command
-           (format "%s -Q --daemon=%s"
-                   (cond ((stringp ensure) ensure)
-                         (t with-emacs-executable-path))
-                   server))
-        (error "No such server: %s" server)))
-    `(server-eval-at ,server ',@(with-emacs--cl-args-body body))))
+  `(let* ((server-dir (if server-use-tcp server-auth-dir server-socket-dir))
+          (server-file (expand-file-name ,server server-dir)))
+       (unless (file-exists-p server-file)
+         (if ,has-ensure?
+             (shell-command
+              (format "%s -Q --daemon=%s"
+                      (cond ((stringp ,ensure) ,ensure)
+                            (t with-emacs-executable-path))
+                      ,server))
+           (error "No such server: %s" ,server)))
+       (server-eval-at ,server '(progn ,@(with-emacs--cl-args-body body)))))
 
 (defvar with-emacs-partially-applied-functions '() "List of partially applied functions")
 
