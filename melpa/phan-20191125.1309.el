@@ -5,7 +5,7 @@
 ;; Author: USAMI Kenta <tadsan@pixiv.com>
 ;; Created: 28 Jan 2017
 ;; Version: 0.0.4
-;; Package-Version: 20190521.203
+;; Package-Version: 20191125.1309
 ;; Keywords: tools php
 ;; Package-Requires: ((emacs "24") (composer "0.0.8") (f "0.17"))
 ;; URL: https://github.com/emacs-php/phan.el
@@ -27,7 +27,7 @@
 
 ;;; Commentary:
 
-;; Phan is static analizer for PHP.  https://github.com/etsy/phan
+;; Phan is static analizer for PHP.  https://github.com/phan/phan
 ;; This package has utilities and major mode for phan log format.
 ;;
 ;; # Major modes
@@ -69,6 +69,11 @@
     "PhanContinueTargetingSwitch"
     "PhanContinueOrBreakNotInLoop"
     "PhanContinueOrBreakTooManyLevels"
+    "PhanSyntaxCompileWarning"
+    "PhanSyntaxEmptyListArrayDestructuring"
+    "PhanSyntaxMixedKeyNoKeyArrayDestructuring"
+    "PhanSyntaxReturnExpectedValue"
+    "PhanSyntaxReturnValueInVoid"
 
     ;; Removed issues
     "PhanUnreferencedMethod"
@@ -101,7 +106,9 @@
     "PhanUndeclaredFunction"
     "PhanUndeclaredInterface"
     "PhanUndeclaredMethod"
+    "PhanPossiblyUndeclaredMethod"
     "PhanUndeclaredProperty"
+    "PhanPossiblyUndeclaredProperty"
     "PhanUndeclaredStaticMethod"
     "PhanUndeclaredStaticProperty"
     "PhanUndeclaredTrait"
@@ -110,6 +117,7 @@
     "PhanUndeclaredTypeProperty"
     "PhanUndeclaredTypeThrowsType"
     "PhanUndeclaredVariable"
+    "PhanUndeclaredGlobalVariable"
     "PhanUndeclaredThis"
     "PhanUndeclaredVariableDim"
     "PhanUndeclaredVariableAssignOp"
@@ -122,6 +130,7 @@
     "PhanInvalidFQSENInCallable"
     "PhanEmptyFQSENInClasslike"
     "PhanInvalidFQSENInClasslike"
+    "PhanPossiblyUnsetPropertyOfThis"
 
     ;; Issue::CATEGORY_TYPE
     "PhanNonClassMethodCall"
@@ -132,15 +141,19 @@
     "PhanTypeArraySuspicious"
     "PhanTypeArrayUnsetSuspicious"
     "PhanTypeArraySuspiciousNullable"
+    "PhanTypeArraySuspiciousNull"
     "PhanTypeSuspiciousIndirectVariable"
     "PhanTypeObjectUnsetDeclaredProperty"
     "PhanTypeComparisonFromArray"
     "PhanTypeComparisonToArray"
     "PhanTypeConversionFromArray"
     "PhanTypeInstantiateAbstract"
+    "PhanTypeInstantiateAbstractStatic"
     "PhanTypeInstantiateInterface"
     "PhanTypeInstantiateTrait"
+    "PhanTypeInstantiateTraitStaticOrSelf"
     "PhanTypeInvalidCloneNotObject"
+    "PhanTypePossiblyInvalidCloneNotObject"
     "PhanTypeInvalidClosureScope"
     "PhanTypeInvalidLeftOperand"
     "PhanTypeInvalidRightOperand"
@@ -156,6 +169,8 @@
     "PhanTypeInvalidInstanceof"
     "PhanTypeInvalidDimOffset"
     "PhanTypeInvalidDimOffsetArrayDestructuring"
+    "PhanTypePossiblyInvalidDimOffset"
+    "PhanTypeInvalidCallExpressionAssignment"
     "PhanTypeInvalidExpressionArrayDestructuring"
     "PhanTypeInvalidThrowsNonObject"
     "PhanTypeInvalidThrowsNonThrowable"
@@ -163,8 +178,11 @@
     "PhanTypeInvalidThrowsIsInterface"
     "PhanTypeMagicVoidWithReturn"
     "PhanTypeMismatchArgument"
+    "PhanTypeMismatchArgumentReal"
     "PhanTypeMismatchArgumentNullable"
     "PhanTypeMismatchArgumentInternal"
+    "PhanTypeMismatchArgumentInternalProbablyReal"
+    "PhanTypeMismatchArgumentInternalReal"
     "PhanTypeMismatchArgumentNullableInternal"
     "PhanPartialTypeMismatchArgument"
     "PhanPartialTypeMismatchArgumentInternal"
@@ -194,6 +212,7 @@
     "PhanPartialTypeMismatchProperty"
     "PhanTypeMismatchReturn"
     "PhanTypeMismatchReturnNullable"
+    "PhanTypeMismatchReturnReal"
     "PhanPartialTypeMismatchReturn"
     "PhanPossiblyNullTypeReturn"
     "PhanPossiblyFalseTypeReturn"
@@ -203,6 +222,7 @@
     "PhanTypeMismatchDeclaredParamNullable"
     "PhanTypeMissingReturn"
     "PhanTypeNonVarPassByRef"
+    "PhanTypeNonVarReturnByRef"
     "PhanTypeParentConstructorCalled"
     "PhanTypeSuspiciousEcho"
     "PhanTypeSuspiciousStringExpression"
@@ -230,12 +250,46 @@
     "PhanTypeInvalidTraitReturn"
     "PhanTypeInvalidTraitParam"
     "PhanInfiniteRecursion"
+    "PhanPossiblyInfiniteRecursionSameParams"
     "PhanTypeComparisonToInvalidClass"
     "PhanTypeComparisonToInvalidClassType"
     "PhanTypeInvalidPropertyName"
     "PhanTypeInvalidStaticPropertyName"
     "PhanTypeErrorInInternalCall"
+    "PhanTypeErrorInOperation"
     "PhanTypeInvalidPropertyDefaultReal"
+    "PhanTypeMismatchPropertyReal"
+    "PhanTypeMismatchPropertyRealByRef"
+    "PhanTypeMismatchPropertyByRef"
+    "PhanImpossibleCondition"
+    "PhanImpossibleConditionInLoop"
+    "PhanImpossibleConditionInGlobalScope"
+    "PhanRedundantCondition"
+    "PhanRedundantConditionInLoop"
+    "PhanRedundantConditionInGlobalScope"
+    "PhanInfiniteLoop"
+    "PhanImpossibleTypeComparison"
+    "PhanImpossibleTypeComparisonInLoop"
+    "PhanImpossibleTypeComparisonInGlobalScope"
+    "PhanSuspiciousValueComparison"
+    "PhanSuspiciousValueComparisonInLoop"
+    "PhanSuspiciousValueComparisonInGlobalScope"
+    "PhanSuspiciousLoopDirection"
+    "PhanSuspiciousWeakTypeComparison"
+    "PhanSuspiciousWeakTypeComparisonInLoop"
+    "PhanSuspiciousWeakTypeComparisonInGlobalScope"
+    "PhanCoalescingNeverNull"
+    "PhanCoalescingNeverNullInLoop"
+    "PhanCoalescingNeverNullInGlobalScope"
+    "PhanCoalescingAlwaysNull"
+    "PhanCoalescingAlwaysNullInLoop"
+    "PhanCoalescingAlwaysNullInGlobalScope"
+    "PhanTypeMismatchArgumentPropertyReference"
+    "PhanTypeMismatchArgumentPropertyReferenceReal"
+    "PhanDivisionByZero"
+    "PhanModuloByZero"
+    "PhanPowerOfZero"
+    "PhanInvalidMixin"
 
     ;; Issue::CATEGORY_ANALYSIS
     "PhanUnanalyzable"
@@ -254,6 +308,7 @@
     "PhanContextNotObject"
     "PhanContextNotObjectInCallable"
     "PhanContextNotObjectUsingSelf"
+    "PhanSuspiciousMagicConstant"
 
     ;; Issue::CATEGORY_DEPRECATED
     "PhanDeprecatedClass"
@@ -332,6 +387,9 @@
     "PhanNoopEmpty"
     "PhanNoopIsset"
     "PhanNoopCast"
+    "PhanNoopTernary"
+    "PhanNoopNew"
+    "PhanNoopNewNoSideEffects"
     "PhanUnreachableCatch"
     "PhanUnreferencedClass"
     "PhanUnreferencedFunction"
@@ -358,10 +416,18 @@
     "PhanUnreferencedUseNormal"
     "PhanUnreferencedUseFunction"
     "PhanUnreferencedUseConstant"
+    "PhanDuplicateUseNormal"
+    "PhanDuplicateUseFunction"
+    "PhanDuplicateUseConstant"
     "PhanUseNormalNoEffect"
     "PhanUseNormalNamespacedNoEffect"
     "PhanUseFunctionNoEffect"
     "PhanUseConstantNoEffect"
+    "PhanEmptyPublicMethod"
+    "PhanEmptyProtectedMethod"
+    "PhanEmptyPrivateMethod"
+    "PhanEmptyFunction"
+    "PhanEmptyClosure"
 
     "PhanUnusedVariable"
     "PhanUnusedPublicMethodParameter"
@@ -377,11 +443,18 @@
     "PhanUnusedClosureParameter"
     "PhanUnusedGlobalFunctionParameter"
     "PhanUnusedVariableValueOfForeachWithKey"
+    "PhanEmptyForeach"
+    "PhanEmptyForeachBody"
+    "PhanEmptyYieldFrom"
+    "PhanUselessBinaryAddRight"
+    "PhanSuspiciousBinaryAddLists"
     "PhanUnusedVariableCaughtException"
     "PhanUnusedGotoLabel"
     "PhanUnusedVariableReference"
     "PhanUnusedVariableStatic"
     "PhanUnusedVariableGlobal"
+    "PhanUnusedReturnBranchWithoutSideEffects"
+    "PhanRedundantArrayValuesCall"
     "PhanVariableDefinitionCouldBeConstant"
     "PhanVariableDefinitionCouldBeConstantEmptyArray"
     "PhanVariableDefinitionCouldBeConstantString"
@@ -420,6 +493,7 @@
     "PhanAccessMethodProtectedWithCallMagicMethod"
     "PhanAccessSignatureMismatch"
     "PhanAccessSignatureMismatchInternal"
+    "PhanConstructAccessSignatureMismatch"
     "PhanPropertyAccessSignatureMismatch"
     "PhanPropertyAccessSignatureMismatchInternal"
     "PhanConstantAccessSignatureMismatch"
@@ -444,6 +518,7 @@
     "PhanAccessExtendsFinalClass"
     "PhanAccessExtendsFinalClassInternal"
     "PhanAccessOverridesFinalMethod"
+    "PhanAccessOverridesFinalMethodInTrait"
     "PhanAccessOverridesFinalMethodInternal"
     "PhanAccessOverridesFinalMethodPHPDoc"
 
@@ -462,6 +537,14 @@
     "PhanCompatibleMultiExceptionCatchPHP70"
     "PhanCompatibleNegativeStringOffset"
     "PhanCompatibleAutoload"
+    "PhanCompatibleUnsetCast"
+    "PhanCompatibleSyntaxNotice"
+    "PhanCompatibleDimAlternativeSyntax"
+    "PhanCompatibleImplodeOrder"
+    "PhanCompatibleUnparenthesizedTernary"
+    "PhanCompatibleTypedProperty"
+    "PhanCompatibleDefaultEqualsNull"
+    "PhanCompatiblePHP8PHP4Constructor"
 
     ;; Issue::CATEGORY_GENERIC
     "PhanTemplateTypeConstant"
@@ -473,6 +556,7 @@
     "PhanTemplateTypeNotDeclaredInFunctionParams"
 
     ;; Issue::CATEGORY_COMMENT
+    "PhanDebugAnnotation"
     "PhanInvalidCommentForDeclarationType"
     "PhanMisspelledAnnotation"
     "PhanUnextractableAnnotation"
@@ -489,15 +573,203 @@
     "PhanThrowTypeAbsentForCall"
     "PhanThrowTypeMismatch"
     "PhanThrowTypeMismatchForCall"
+    "PhanThrowStatementInToString"
+    "PhanThrowCommentInToString"
     "PhanCommentAmbiguousClosure"
     "PhanCommentDuplicateParam"
     "PhanCommentDuplicateMagicMethod"
     "PhanCommentDuplicateMagicProperty"
-     )
+
+    ;;; Plugins
+
+    ;; UnreachableCodePlugin.php
+    "PhanPluginUnreachableCode"
+
+    ;; StrictComparisonPlugin
+    "PhanPluginComparisonNotStrictInCall"
+    "PhanPluginComparisonObjectEqualityNotStrict"
+    "PhanPluginComparisonObjectOrdering"
+
+    ;; AlwaysReturnPlugin.php
+    "PhanPluginAlwaysReturnFunction"
+    "PhanPluginAlwaysReturnMethod"
+
+    ;; PregRegexCheckerPlugin.php
+    "PhanPluginInvalidPregRegex"
+    "PhanPluginInvalidPregRegexReplacement"
+
+    ;; LoopVariableReusePlugin.php
+    "PhanPluginLoopVariableReuse"
+
+    ;; DuplicateArrayKeyPlugin.php
+    "PhanPluginDuplicateArrayKey"
+    "PhanPluginDuplicateArrayKeyExpression"
+    "PhanPluginDuplicateSwitchCase"
+    "PhanPluginDuplicateSwitchCaseLooseEquality"
+    "PhanPluginMixedKeyNoKey"
+
+    ;; NotFullyQualifiedUsagePlugin.php
+    "PhanPluginNotFullyQualifiedFunctionCall"
+    "PhanPluginNotFullyQualifiedGlobalConstant"
+    "PhanPluginNotFullyQualifiedOptimizableFunctionCall"
+
+    ;; PHPDocToRealTypesPlugin.php
+    "PhanPluginCanUseNullableParamType"
+    "PhanPluginCanUseNullableReturnType"
+    "PhanPluginCanUsePHP71Void"
+    "PhanPluginCanUseParamType"
+    "PhanPluginCanUseReturnType"
+
+    ;; NoAssertPlugin.php
+    "PhanPluginNoAssert"
+
+    ;; InlineHTMLPlugin.php
+    "PhanPluginInlineHTML"
+    "PhanPluginInlineHTMLLeading"
+    "PhanPluginInlineHTMLTrailing"
+
+    ;; UnknownElementTypePlugin.php
+    "PhanPluginUnknownArrayClosureParamType"
+    "PhanPluginUnknownArrayClosureReturnType"
+    "PhanPluginUnknownArrayFunctionParamType"
+    "PhanPluginUnknownArrayFunctionReturnType"
+    "PhanPluginUnknownArrayMethodParamType"
+    "PhanPluginUnknownArrayMethodReturnType"
+    "PhanPluginUnknownArrayPropertyType"
+    "PhanPluginUnknownClosureParamType"
+    "PhanPluginUnknownClosureReturnType"
+    "PhanPluginUnknownFunctionParamType"
+    "PhanPluginUnknownFunctionReturnType"
+    "PhanPluginUnknownMethodParamType"
+    "PhanPluginUnknownMethodReturnType"
+    "PhanPluginUnknownPropertyType"
+
+    ;; NumericalComparisonPlugin.php
+    "PhanPluginNumericalComparison"
+
+    ;; EmptyStatementListPlugin.php
+    "PhanPluginEmptyStatementDoWhileLoop"
+    "PhanPluginEmptyStatementForLoop"
+    "PhanPluginEmptyStatementForeachLoop"
+    "PhanPluginEmptyStatementIf"
+    "PhanPluginEmptyStatementSwitch"
+    "PhanPluginEmptyStatementTryBody"
+    "PhanPluginEmptyStatementTryFinally"
+    "PhanPluginEmptyStatementWhileLoop"
+
+    ;; DemoPlugin.php
+    "PhanPluginInstanceOfObject"
+
+    ;; AvoidableGetterPlugin.php
+    "PhanPluginAvoidableGetter"
+    "PhanPluginAvoidableGetterInTrait"
+
+    ;; NonBoolBranchPlugin.php
+    "PhanPluginNonBoolBranch"
+
+    ;; PHPDocRedundantPlugin.php
+    "PhanPluginRedundantClosureComment"
+    "PhanPluginRedundantFunctionComment"
+    "PhanPluginRedundantMethodComment"
+    "PhanPluginRedundantReturnComment"
+
+    ;; PhanSelfCheckPlugin.php
+    "PhanPluginTooFewArgumentsForIssue"
+    "PhanPluginTooManyArgumentsForIssue"
+    "PhanPluginUnknownIssueType"
+
+    ;; RedundantAssignmentPlugin.php
+    "PhanPluginRedundantAssignment"
+    "PhanPluginRedundantAssignmentInGlobalScope"
+    "PhanPluginRedundantAssignmentInLoop"
+
+    ;; DollarDollarPlugin.php
+    "PhanPluginDollarDollar"
+
+    ;; InvalidVariableIssetPlugin.php
+    "PhanPluginComplexVariableInIsset"
+    "PhanPluginInvalidVariableIsset"
+    "PhanPluginInvalidVariableIsset"
+    "PhanPluginUndeclaredVariableIsset"
+    "PhanPluginUnexpectedExpressionIsset"
+
+    ;; WhitespacePlugin.php
+    "PhanPluginWhitespaceCarriageReturn"
+    "PhanPluginWhitespaceTab"
+    "PhanPluginWhitespaceTrailing"
+
+    ;; HasPHPDocPlugin.php
+    "PhanPluginDescriptionlessCommentOnClass"
+    "PhanPluginDescriptionlessCommentOnFunction"
+    "PhanPluginDescriptionlessCommentOnPrivateMethod"
+    "PhanPluginDescriptionlessCommentOnPrivateProperty"
+    "PhanPluginDescriptionlessCommentOnProtectedMethod"
+    "PhanPluginDescriptionlessCommentOnProtectedProperty"
+    "PhanPluginDescriptionlessCommentOnPublicMethod"
+    "PhanPluginDescriptionlessCommentOnPublicProperty"
+    "PhanPluginDuplicateMethodDescription"
+    "PhanPluginDuplicatePropertyDescription"
+    "PhanPluginNoCommentOnClass"
+    "PhanPluginNoCommentOnFunction"
+    "PhanPluginNoCommentOnPrivateMethod"
+    "PhanPluginNoCommentOnPrivateProperty"
+    "PhanPluginNoCommentOnProtectedMethod"
+    "PhanPluginNoCommentOnProtectedProperty"
+    "PhanPluginNoCommentOnPublicMethod"
+    "PhanPluginNoCommentOnPublicProperty"
+
+    ;; PrintfCheckerPlugin.php
+    "PhanPluginMyIssue"
+    "PhanPluginPrintfIncompatibleArgumentType"
+    "PhanPluginPrintfIncompatibleArgumentTypeWeak"
+    "PhanPluginPrintfIncompatibleSpecifier"
+    "PhanPluginPrintfNoArguments"
+    "PhanPluginPrintfNoArguments"
+    "PhanPluginPrintfNoSpecifiers"
+    "PhanPluginPrintfNonexistentArgument"
+    "PhanPluginPrintfNonexistentArgument"
+    "PhanPluginPrintfNotPercent"
+    "PhanPluginPrintfTranslatedHasMoreArgs"
+    "PhanPluginPrintfTranslatedIncompatible"
+    "PhanPluginPrintfUnusedArgument"
+    "PhanPluginPrintfVariableFormatString"
+    "PhanPluginPrintfWidthNotPosition"
+
+    ;; PreferNamespaceUsePlugin.php
+    "PhanPluginPreferNamespaceUseParamType"
+    "PhanPluginPreferNamespaceUseReturnType"
+
+    ;; SuspiciousParamOrderPlugin.php
+    "PhanPluginSuspiciousParamOrder"
+    "PhanPluginSuspiciousParamOrderInternal"
+
+    ;; DuplicateExpressionPlugin.php
+    "PhanPluginBothLiteralsBinaryOp"
+    "PhanPluginDuplicateConditionalNullCoalescing"
+    "PhanPluginDuplicateConditionalTernaryDuplication"
+    "PhanPluginDuplicateConditionalUnnecessary"
+    "PhanPluginDuplicateExpressionAssignment"
+    "PhanPluginDuplicateExpressionBinaryOp"
+    "PhanPluginDuplicateIfCondition"
+    "PhanPluginDuplicateIfStatements"
+
+    ;; NonBoolInLogicalArithPlugin.php
+    "PhanPluginNonBoolInLogicalArith"
+
+    ;; PossiblyStaticMethodPlugin.php
+    "PhanPluginPossiblyStaticClosure"
+    "PhanPluginPossiblyStaticPrivateMethod"
+    "PhanPluginPossiblyStaticProtectedMethod"
+    "PhanPluginPossiblyStaticPublicMethod"
+
+    ;; InvokePHPNativeSyntaxCheckPlugin.php
+
+    ;; PHPUnitAssertionPlugin.php
+    "PhanPluginPHPUnitAssertionInvalidInternalType")
   "Issue names of Phan.
 
-https://github.com/etsy/phan/blob/master/src/Phan/Issue.php
-https://github.com/etsy/phan/wiki/Issue-Types-Caught-by-Phan")
+https://github.com/phan/phan/blob/master/src/Phan/Issue.php
+https://github.com/phan/phan/wiki/Issue-Types-Caught-by-Phan")
 
 (defconst phan-log-warning-keywords
   '("can't be"
