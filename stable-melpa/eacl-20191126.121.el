@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017, 2018 Chen Bin
 ;;
 ;; Version: 2.0.1
-;; Package-Version: 20190801.213
+;; Package-Version: 20191126.121
 
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/eacl
@@ -335,8 +335,9 @@ Whitespace in the keyword could match any characters."
      (if rlt (line-end-position))))
 
 (defun eacl-html-p ()
+  "Is html related mode."
   (or (memq major-mode '(web-mode rjsx-mode xml-mode js2-jsx-mode))
-      (derived-mode-p '(sgml-mode))))
+      (derived-mode-p 'sgml-mode)))
 
 (defmacro eacl-match-html-start-tag-p (line html-p)
   "LINE is like '>'."
