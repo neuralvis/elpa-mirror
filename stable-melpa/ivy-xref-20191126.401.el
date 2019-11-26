@@ -4,7 +4,7 @@
 
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/ivy-xref
-;; Package-Version: 20190611.1305
+;; Package-Version: 20191126.401
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "25.1") (ivy "0.10.0"))
 
@@ -121,6 +121,8 @@
 
 ;;;###autoload
 (defun ivy-xref-show-defs (fetcher alist)
+  "Show the list of definitions returned by FETCHER and ALIST via ivy.
+Will jump to the definition if only one is found."
   (let ((xrefs (funcall fetcher)))
     (cond
      ((not (cdr xrefs))
