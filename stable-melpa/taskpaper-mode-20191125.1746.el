@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20191125.1603
+;; Package-Version: 20191125.1746
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -1548,28 +1548,28 @@ tabs."
   "Move to the next (possibly invisible) sibling.
 This version will not throw an error."
   (condition-case nil
-      (progn (outline-forward-same-level 1) (not (eobp)))
+      (progn (outline-forward-same-level 1) t)
     (error nil)))
 
 (defun taskpaper-outline-backward-same-level-safe ()
   "Move to the preceeding (possibly invisible) sibling.
 This version will not throw an error."
   (condition-case nil
-      (progn (outline-backward-same-level 1) (not (bobp)))
+      (progn (outline-backward-same-level 1) t)
     (error nil)))
 
 (defun taskpaper-outline-next-item-safe ()
   "Move to the next (possibly invisible) item.
 This version will not throw an error."
   (condition-case nil
-      (progn (outline-next-heading) (not (eobp)))
+      (progn (outline-next-heading) t)
     (error nil)))
 
 (defun taskpaper-outline-previous-item-safe ()
   "Move to the previous (possibly invisible) item.
 This version will not throw an error."
   (condition-case nil
-      (progn (outline-previous-heading) (not (bobp)))
+      (progn (outline-previous-heading) t)
     (error nil)))
 
 (defun taskpaper-outline-map-descendants (func &optional self)
