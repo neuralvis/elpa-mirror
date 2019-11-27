@@ -8,8 +8,7 @@
 ;; Maintainer: Joe Wreschnig <joe.wreschnig@gmail.com>
 ;; URL: https://git.korewanetadesu.com/apt-sources-list.git
 ;; Package-Requires: ((emacs "24.4"))
-;; Package-Version: 20180527.1241
-;; Package-X-Original-Version: 0
+;; Package-Version: 0
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
