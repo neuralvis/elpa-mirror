@@ -19,7 +19,7 @@ You can add hook to `vc-msg-hook',
   (add-hook 'vc-msg-hook 'vc-msg-hook-setup)
 
 Hook `vc-msg-show-code-hook' is hook after code of certain commit
-is displayed. Here is sample code:
+is displayed.  Here is sample code:
   (defun vc-msg-show-code-setup ()
     ;; use `ffip-diff-mode' from package find-file-in-project instead of `diff-mode'
     (ffip-diff-mode))

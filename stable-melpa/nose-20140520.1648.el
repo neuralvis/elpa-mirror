@@ -5,7 +5,6 @@
 ;; Licensed under the same terms as Emacs.
 
 ;; Version: 0.1.1
-;; Package-Version: 20140520.1648
 ;; Keywords: nose python testing
 ;; Created: 04 Apr 2009
 
