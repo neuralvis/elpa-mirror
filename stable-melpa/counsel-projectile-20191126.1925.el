@@ -4,7 +4,7 @@
 
 ;; Author: Eric Danan
 ;; URL: https://github.com/ericdanan/counsel-projectile
-;; Package-Version: 20191107.2249
+;; Package-Version: 20191126.1925
 ;; Keywords: project, convenience
 ;; Version: 0.3.1
 ;; Package-Requires: ((counsel "0.13.0") (projectile "2.0.0"))
@@ -673,7 +673,7 @@ construct the command.")
   (counsel-projectile-switch-project 'counsel-projectile-switch-project-action-git-grep))
 
 (defun counsel-projectile-grep-transformer (str)
-  "Higlight file and line number in STR, first removing the
+  "Highlight file and line number in STR, first removing the
 \"./\" prefix from the filename."
   ;; This makes the display consistent with `counsel-git-grep' and
   ;; `counsel-ag'-like commands.

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014 by Shingo Fukuyama
 
 ;; Version: 1.0.6
-;; Package-Version: 20150312.528
+;; Package-Version: 20191127.32
 ;; Author: Shingo Fukuyama - http://fukuyama.co
 ;; URL: https://github.com/ShingoFukuyama/ov.el
 ;; Created: Mar 20 2014
@@ -270,7 +270,7 @@ Finally, the variable is set to nil."
   "Make an overlay specification list.
 This is of the form:
 
-  (beginnig end buffer &rest properties).
+  (beginning end buffer &rest properties).
 
 OV-OR-OVS should be an overlay or a list of overlays."
   (or (listp ov-or-ovs) (setq ov-or-ovs (cons ov-or-ovs nil)))
@@ -508,7 +508,7 @@ beginning or end of the buffer."
       (ov-set ov-or-ovs-or-id 'keymap map))))
 
 
-;; Impliment pseudo read-only overlay function ---------------------------------
+;; Implement pseudo read-only overlay function ---------------------------------
 (defun ov-read-only (ov-or-ovs &optional insert-in-front insert-behind)
   "Implement a read-only like feature for an overlay or a list of overlays.
 
