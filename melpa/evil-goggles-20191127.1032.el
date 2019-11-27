@@ -4,7 +4,7 @@
 
 ;; Author: edkolev <evgenysw@gmail.com>
 ;; URL: http://github.com/edkolev/evil-goggles
-;; Package-Version: 20181123.1946
+;; Package-Version: 20191127.1032
 ;; Package-Requires: ((emacs "24.4") (evil "1.0.0"))
 ;; Version: 0.0.1
 ;; Keywords: emulations, evil, vim, visual
@@ -79,8 +79,8 @@ This variable can also hold a custom function which should return t or nil.
 The default is to pulse if the display is graphical, otherwise not."
   :group 'evil-goggles
   :type '(choice
-          (const :tag "Always" nil)
-          (const :tag "Never" t)
+          (const :tag "Always" t)
+          (const :tag "Never" nil)
           (function :tag "If graphical display" #'display-graphic-p)
           (function :tag "Custom function")))
 

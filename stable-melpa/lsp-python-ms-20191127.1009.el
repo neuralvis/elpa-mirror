@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson, Vincent Zhang
 ;; Version: 0.5.0
-;; Package-Version: 20191119.1605
+;; Package-Version: 20191127.1009
 ;; Package-Requires: ((emacs "25.1") (cl-lib "0.6.1") (lsp-mode "6.0"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -204,7 +204,7 @@ With prefix, FORCED to redownload the server."
                                "bash -c 'mkdir -p %2$s && unzip -qq %1$s -d %2$s'")
                               (t (error "Unable to unzip! You may need to install the `unzip` executable."))))
           (download-reporter (make-progress-reporter
-                              "Downloading Microsoft Python Language Server..."
+                              (lsp--info "Downloading Microsoft Python Language Server...")
                               0  100)))
       (url-retrieve (lsp-python-ms-latest-nupkg-url lsp-python-ms-nupkg-channel)
                     (lambda (_data bar)
