@@ -4,7 +4,7 @@
 ;;   Phil Hagelberg, Doug Alcorn, Will Farrington, Chen Bin
 ;;
 ;; Version: 5.7.7
-;; Package-Version: 20190914.524
+;; Package-Version: 20191128.503
 ;; Author: Phil Hagelberg, Doug Alcorn, and Will Farrington
 ;; Maintainer: Chen Bin <chenbin.sh@gmail.com>
 ;; URL: https://github.com/technomancy/find-file-in-project
@@ -158,10 +158,10 @@
 (defvar ffip-use-rust-fd nil "Use use fd instead of find.")
 
 (defvar ffip-rust-fd-respect-ignore-files t
-  "Don 't show search results from '.*ignore' files")
+  "Don 't show search results from '.*ignore' files.")
 
 (defvar ffip-rust-fd-extra-opts ""
-  "rust fd extra options passed to cli.")
+  "Rust fd extra options passed to cli.")
 
 (defvar ffip-window-ratio-alist
   '((1 . 1.61803398875)
@@ -202,9 +202,9 @@ The file path is passed to the hook as the first argument.")
         standard-output
       (shell-command command t))))
 
-(defun ffip-nonempty-lines (s)
-  "Return non empty lines."
-  (split-string s "[\r\n]+" t))
+(defun ffip-nonempty-lines (str)
+  "Return non empty lines from STR."
+  (split-string str "[\r\n]+" t))
 
 (defun ffip-diff-git-versions ()
   "List all versions of code under Git."
@@ -361,10 +361,10 @@ May be set using .dir-locals.el.  Checks each entry if set to a list.")
 Use this to exclude portions of your project: \"-not -regex \\\".*svn.*\\\"\".")
 
 (defvar ffip-find-pre-path-options ""
-  "Extra options to pass to `find' before path name options when using `find-file-in-project'.
+  "Options for find porgram.
 
-As required by `find', `-H', `-L', `-P', `-D' and `-O' must appear before the first path name, `.'.
-For example, use this to follow symbolic links inside your project: \"-L\".")
+GNU Find requires '-H', '-L', '-P', '-D' and `-O' appear before first path '.'.
+For example, use '-L' to follow symbolic links.")
 
 (defvar ffip-project-root nil
   "If non-nil, overrides the project root directory location.")
@@ -404,7 +404,7 @@ This overrides variable `ffip-project-root' when set.")
   "The callback after calling `find-relative-path'.")
 
 (defun ffip--some (predicate seq)
-  "Return if PREDICATE is of true of any element of SEQ"
+  "Return if PREDICATE is t for any element of SEQ."
   (let* (elem rlt)
     (while (and (setq elem (car seq))
                 (not rlt))
@@ -770,6 +770,7 @@ This function is the API to find files."
   (cons 'ffip-project-root root))
 
 (defun ffip--read-selected ()
+  "Read select string."
   (buffer-substring-no-properties (region-beginning) (region-end)))
 
 (defun ffip-read-keyword ()
@@ -852,15 +853,19 @@ You can override this by setting the variable `ffip-project-root'."
   "Is FILENAME relative?"
   (if (string-match-p ffip-relative-path-pattern filename) t))
 
+(defun ffip-guess-file-name-at-point ()
+  "Guess file name at point."
+  (or (and (region-active-p) (ffip--read-selected))
+      (thing-at-point 'filename)
+      (thing-at-point 'symbol)
+      (read-string "No file name at point. Please provide one:")))
+
 ;;;###autoload
 (defun find-file-in-project-at-point (&optional open-another-window)
   "Find file whose name is guessed around point.
 If OPEN-ANOTHER-WINDOW is not nil, the file will be opened in new window."
   (interactive "P")
-  (let* ((fn (or (and (region-active-p) (ffip--read-selected))
-                       (thing-at-point 'filename)
-                       (thing-at-point 'symbol)
-                       (read-string "No file name at point. Please provide file name:")))
+  (let* ((fn (ffip-guess-file-name-at-point))
          ;; could be a path
          (ffip-match-path-instead-of-filename t)
          tfn)
@@ -968,11 +973,11 @@ If OPEN-ANOTHER-WINDOW is not nil, the file will be opened in new window."
     (find-file-in-project-by-selected open-another-window)))
 
 ;;;###autoload
-(defun find-relative-path(&optional find-directory)
+(defun ffip-find-relative-path(&optional find-directory)
   "Find file/directory and copy its relative path into `kill-ring'.
-Optional prefix FIND-DIRECTORY copy the directory path; file path by default.
+If FIND-DIRECTORY is t, copy the directory path.
 
-You can set `ffip-find-relative-path-callback' to format the string before copying,
+Set `ffip-find-relative-path-callback' to format the result,
   (setq ffip-find-relative-path-callback 'ffip-copy-reactjs-import)
   (setq ffip-find-relative-path-callback 'ffip-copy-org-file-link)"
   (interactive "P")
@@ -1012,7 +1017,7 @@ If OPEN-ANOTHER-WINDOW is not nil, the file will be opened in new window."
 
 ;;;###autoload
 (defalias 'ffip 'find-file-in-project)
-
+(defalias 'find-relative-path 'ffip-find-relative-path)
 
 (defun ffip-path (candidate)
   "Get path from ivy CANDIDATE."
@@ -1219,6 +1224,7 @@ If NUM is not nil, the corresponding backend is executed directly."
 (defalias 'ffip-show-diff 'ffip-show-diff-by-description)
 
 (defadvice read-file-name (around ffip-read-file-name-hack activate)
+  "Advice `read-file-name'."
   (cond
    (ffip-read-file-name-hijacked-p
     ;; only hack read-file-name once

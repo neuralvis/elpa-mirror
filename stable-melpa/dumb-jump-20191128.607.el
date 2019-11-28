@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2019 jack angers
 ;; Author: jack angers and contributors
 ;; Version: 0.5.3
-;; Package-Version: 20191126.1948
+;; Package-Version: 20191128.607
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
 
@@ -1471,6 +1471,7 @@ or most optimal searcher."
     (:language "coffeescript" :ext "coffee" :agtype "coffee" :rgtype "coffeescript")
     (:language "faust" :ext "dsp" :agtype nil :rgtype nil)
     (:language "faust" :ext "lib" :agtype nil :rgtype nil)
+    (:language "fortran" :ext "F" :agtype "fortran" :rgtype "fortran")
     (:language "fortran" :ext "f" :agtype "fortran" :rgtype "fortran")
     (:language "fortran" :ext "f77" :agtype "fortran" :rgtype "fortran")
     (:language "fortran" :ext "f90" :agtype "fortran" :rgtype "fortran")
