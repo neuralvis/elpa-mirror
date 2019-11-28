@@ -2,7 +2,8 @@
 
 ;; Copyright (c) 2018 Robert Schwarz
 ;; Package-Requires: ((emacs "24"))
-;; Package-Version: 0.1
+;; Package-Version: 20180302.1555
+;; Package-X-Original-Version: 0.1
 ;; Author: Robert Schwarz <mail@rschwarz.net>
 ;; Homepage: https://github.com/leethargo/sql-clickhouse
 ;;
