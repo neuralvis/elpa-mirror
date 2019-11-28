@@ -5,7 +5,6 @@
 ;; Author: DarkSun <lujun9972@gmail.com>
 ;; Created: 2016-01-03
 ;; Version: 0.1
-;; Package-Version: 20160426.1225
 ;; Keywords: convenience, menu
 ;; Package-Requires: ((cl-lib "0.5") (config-parser "0.1"))
 ;; URL: https://github.com/lujun9972/el-start-menu

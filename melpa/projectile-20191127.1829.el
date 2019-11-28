@@ -4,7 +4,7 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20191024.721
+;; Package-Version: 20191127.1829
 ;; Keywords: project, convenience
 ;; Version: 2.1.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -1169,7 +1169,7 @@ Files are returned as relative paths to DIRECTORY."
 The function calls itself recursively until all sub-directories
 have been indexed.  The PROGRESS-REPORTER is updated while the
 function is executing."
-  (apply 'append
+  (apply #'append
          (mapcar
           (lambda (f)
             (unless (or (and patterns (projectile-ignored-rel-p f directory patterns))
@@ -2666,7 +2666,10 @@ test/impl/other files as below:
                                   :test-suffix "_test")
 (projectile-register-project-type 'bloop '(".bloop")
                                   :compile "bloop compile root"
-                                  :test "bloop test --propagate --reporter scalac root")
+                                  :test "bloop test --propagate --reporter scalac root"
+                                  :src-dir "src/main/"
+                                  :test-dir "src/test/"
+                                  :test-suffix "Spec")
 ;; Ruby
 (projectile-register-project-type 'ruby-rspec '("Gemfile" "lib" "spec")
                                   :compile "bundle exec rake"
@@ -2936,7 +2939,7 @@ Fallback to DEFAULT-VALUE for missing attributes."
   (let ((grouped-candidates (projectile-group-file-candidates file candidates)))
     (if (= (length (car grouped-candidates)) 2)
         (list (car (last (car grouped-candidates))))
-      (apply 'append (mapcar 'cdr grouped-candidates)))))
+      (apply #'append (mapcar #'cdr grouped-candidates)))))
 
 (defun projectile--impl-to-test-predicate (impl-file)
   "Return a predicate, which returns t for any test files for IMPL-FILE."
@@ -3061,7 +3064,7 @@ which it shares its arglist."
                  ;; we should use shell-quote-argument here
                  " -path "
                  (mapconcat
-                  'identity
+                  #'identity
                   (delq nil (mapcar
                              #'(lambda (ignore)
                                  (cond ((stringp ignore)
@@ -3335,21 +3338,21 @@ regular expression."
   "Invoke `execute-extended-command' in the project's root."
   (interactive)
   (projectile-with-default-dir (projectile-ensure-project (projectile-project-root))
-    (call-interactively 'execute-extended-command)))
+    (call-interactively #'execute-extended-command)))
 
 ;;;###autoload
 (defun projectile-run-shell-command-in-root ()
   "Invoke `shell-command' in the project's root."
   (interactive)
   (projectile-with-default-dir (projectile-ensure-project (projectile-project-root))
-    (call-interactively 'shell-command)))
+    (call-interactively #'shell-command)))
 
 ;;;###autoload
 (defun projectile-run-async-shell-command-in-root ()
   "Invoke `async-shell-command' in the project's root."
   (interactive)
   (projectile-with-default-dir (projectile-ensure-project (projectile-project-root))
-    (call-interactively 'async-shell-command)))
+    (call-interactively #'async-shell-command)))
 
 ;;;###autoload
 (defun projectile-run-shell ()
@@ -4341,7 +4344,7 @@ is chosen."
 
   (def-projectile-commander-method ?a
     "Run ag on project."
-    (call-interactively 'projectile-ag))
+    (call-interactively #'projectile-ag))
 
   (def-projectile-commander-method ?s
     "Switch project."
@@ -4460,7 +4463,7 @@ If the current buffer does not belong to a project, call `previous-buffer'."
   "Prompt for a variable and return its name."
   (completing-read "Variable: "
                    obarray
-                   '(lambda (v)
+                   (lambda (v)
                       (and (boundp v) (not (keywordp v))))
                    t))
 
