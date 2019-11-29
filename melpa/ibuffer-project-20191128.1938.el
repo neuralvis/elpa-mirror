@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-ibuffer-project
-;; Package-Version: 20191122.1232
+;; Package-Version: 20191128.1938
 ;; Package-X-Original-Version: 1.2.1
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -104,6 +104,8 @@
                      (nameb (buffer-name bufb))
                      (asteriska (string-match-p "^*" namea))
                      (asteriskb (string-match-p "^*" nameb)))
+                ;; This is xor :) Just to not autoload xor from
+                ;; "array" on Emacs pre 27 where xor is added to subr.el
                 (if (if asteriska (not asteriskb) asteriskb)
                     (null asteriska)
                   (string-lessp namea nameb))))))
