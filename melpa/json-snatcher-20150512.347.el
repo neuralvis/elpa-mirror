@@ -4,7 +4,6 @@
 
 ;; Author: Sterling Graham <sterlingrgraham@gmail.com>
 ;; URL: http://github.com/sterlingg/json-snatcher
-;; Package-Version: 20150512.347
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24"))
 
