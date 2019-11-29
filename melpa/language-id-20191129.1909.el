@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-language-id
-;; Package-Version: 20190207.1057
+;; Package-Version: 20191129.1909
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -28,10 +28,10 @@
 ;;
 ;;; Code:
 
-(defvar language-id-file-name-extension nil
+(defvar language-id--file-name-extension nil
   "Internal variable for file name extension during lookup.")
 
-(defconst language-id-definitions
+(defconst language-id--definitions
   '(
 
     ;; TypeScript/TSX need to come before JavaScript/JSX because in
@@ -48,11 +48,11 @@
      (web-mode
       (web-mode-content-type "javascript")
       (web-mode-engine "none")
-      (language-id-file-name-extension ".ts"))
+      (language-id--file-name-extension ".ts"))
      (web-mode
       (web-mode-content-type "jsx")
       (web-mode-engine "none")
-      (language-id-file-name-extension ".tsx")))
+      (language-id--file-name-extension ".tsx")))
 
     ("Assembly"
      asm-mode
@@ -154,11 +154,10 @@
      xml-mode
      (web-mode (web-mode-content-type "xml") (web-mode-engine "none")))
     ("YAML"
-     yaml-mode)
-    )
+     yaml-mode))
   "Internal table of programming language definitions.")
 
-(defun language-id-mode-match-p (mode)
+(defun language-id--mode-match-p (mode)
   "Interal helper to match current buffer against MODE."
   (let ((mode (if (listp mode) mode (list mode))))
     (cl-destructuring-bind (wanted-major-mode . variables) mode
@@ -188,13 +187,13 @@ are updated in new releases of the library.
 
 If the language is not unambiguously recognized, the function
 returns nil."
-  (let ((language-id-file-name-extension
+  (let ((language-id--file-name-extension
          (downcase (file-name-extension (or (buffer-file-name) "") t))))
     (cl-some (lambda (definition)
                (cl-destructuring-bind (language-id . modes) definition
-                 (when (cl-some #'language-id-mode-match-p modes)
+                 (when (cl-some #'language-id--mode-match-p modes)
                    language-id)))
-             language-id-definitions)))
+             language-id--definitions)))
 
 (provide 'language-id)
 
