@@ -5,7 +5,6 @@
 ;; Author: Johan Andersson <johan.rejeep@gmail.com>
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20150917.600
 ;; URL: http://github.com/rejeep/handoff.el
 
 ;; This file is NOT part of GNU Emacs.
