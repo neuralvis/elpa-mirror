@@ -4,7 +4,6 @@
 
 ;; Author: Iñigo Serna <inigoserna@gmx.com>
 ;; URL: https://hg.serna.eu/emacs/per-buffer-theme
-;; Package-Version: 20191101.2333
 ;; Version: 1.7
 ;; Keywords: themes
 ;; Package-Requires: ((cl-lib "0.5"))
