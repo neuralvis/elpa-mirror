@@ -1,2 +1,2 @@
 
-(ox-hugo . [(20191130 512) ((emacs (24 4)) (org (9 0))) "Hugo Markdown Back-End for Org Export Engine" tar ((:commit . "e42a824c3253e127fc8b86a5370c8d5b96a45166") (:keywords "org" "markdown" "docs") (:url . "https://ox-hugo.scripter.co"))])
+(ox-hugo . [(20191130 512) ((emacs (24 4)) (org (9 0))) "Hugo Markdown Back-End for Org Export Engine" tar ((:commit . "2d055bafd6272d9694aaea9e49eae2a3d578b5b7") (:keywords "org" "markdown" "docs") (:url . "https://ox-hugo.scripter.co"))])

@@ -1,2 +1,0 @@
-
-(zprint-mode . [(20191130 1659) ((emacs (24 3))) "reformat Clojure(Script) code using zprint" single ((:commit . "b2515be3001f00ef0097f08e494733210ed78807") (:keywords "tools") (:authors ("Paulus Esterhazy" . "pesterhazy@gmail.com")) (:maintainer "Paulus Esterhazy" . "pesterhazy@gmail.com") (:url . "https://github.com/pesterhazy/zprint-mode.el"))])

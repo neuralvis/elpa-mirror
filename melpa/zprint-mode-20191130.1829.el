@@ -1,8 +1,8 @@
-;;; zprint-mode.el --- reformat Clojure(Script) code using zprint
+;;; zprint-mode.el --- Reformat Clojure(Script) code using zprint
 
 ;; Author: Paulus Esterhazy (pesterhazy@gmail.com)
 ;; URL: https://github.com/pesterhazy/zprint-mode.el
-;; Package-Version: 20191130.1659
+;; Package-Version: 20191130.1829
 ;; Version: 0.2
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "24.3"))
@@ -55,7 +55,7 @@ show a buffer if the formatting fails"
                                 (list (current-buffer) err-file)
                                 nil
                                 (concat zprint-mode-dir
-                                        (file-name-as-directory "scripts")
+                                        (file-name-as-directory "bin")
                                         "wrap-zprint")
                                 in-file
                                 out-file))))
