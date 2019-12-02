@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20191025.432
+;; Package-Version: 20191202.30
 ;; Version: 0.1.3
 ;; Keywords: ivy
 
@@ -468,7 +468,9 @@ or /a/…/f.el."
                   "")
                  ((file-remote-p filename)
                   candidate)
-                 (t (file-truename filename)))))))
+                 ((file-exists-p filename)
+                  (file-truename filename))
+                 (t filename))))))
 
 ;; Supports for `counsel-projectile'
 ;; Possible setup:
