@@ -1,11 +1,11 @@
-;;; scroll-on-drag.el --- Interactive scrolling. -*- lexical-binding: t -*-
+;;; scroll-on-drag.el --- Interactive scrolling -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2019  Campbell Barton
 
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://github.com/ideasman42/emacs-scroll-on-drag
-;; Package-Version: 20190826.8
+;; Package-Version: 20191202.327
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
 
@@ -185,7 +185,6 @@ Returns true when scrolling took place, otherwise nil."
       ;; Restoration position.
       (restore-window-start (window-start))
       (restore-point (point))
-      (restore-point-use-scroll-offset nil)
 
       ;; X11 cursor.
       (restore-x-pointer-shape (and (boundp 'x-pointer-shape) x-pointer-shape))
@@ -277,14 +276,12 @@ Returns true when scrolling took place, otherwise nil."
 
                 (if scroll-on-drag-smooth
                   ;; Smooth-Scrolling.
-                  (let
-                    (
-                      (lines-remainder
-                        (scroll-on-drag--scroll-by-pixels
-                          this-window
-                          this-frame-char-height
-                          delta-scaled
-                          t)))
+                  (progn
+                    (scroll-on-drag--scroll-by-pixels
+                      this-window
+                      this-frame-char-height
+                      delta-scaled
+                      t)
                     (when (>= (point) point-of-last-line)
                       (set-window-vscroll this-window 0 t))
                     (setq do-draw t))
@@ -299,8 +296,8 @@ Returns true when scrolling took place, otherwise nil."
                       (unless (zerop lines)
                         (setq delta-px-accum
                           (- delta-px-accum (* lines this-frame-char-height)))
-                        (let ((lines-remainder (scroll-on-drag--scroll-by-lines this-window lines t)))
-                          (setq do-draw t))))))
+                        (scroll-on-drag--scroll-by-lines this-window lines t)
+                        (setq do-draw t)))))
 
                 (when do-draw
                   (let
@@ -349,8 +346,7 @@ Returns true when scrolling took place, otherwise nil."
               (let
                 ((inhibit-redisplay nil))
                 (run-hooks 'scroll-on-drag-redisplay-hook)
-                (redisplay))
-              (setq restore-point-use-scroll-offset t))))))
+                (redisplay)))))))
 
     ;; Set arrow cursor (avoids annoying flicker on scroll).
     (when (display-graphic-p)
