@@ -7,6 +7,7 @@
 ;; Maintainer: Masahiro Hayashi <mhayashi1120@gmail.com>
 ;; Created: 2007-10-31
 ;; Version: 0.9.3
+;; Package-Version: 20160615.643
 ;; Keywords: docs help
 ;; Package-Requires: ((cl-lib "0.5"))
 
