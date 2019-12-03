@@ -5,15 +5,12 @@ dynamically such that your overall color scheme is shown in a muted
 form without requiring you to define what is a "dim" version of
 every face.
 
-The `default` background color is the target for all dimming
-calculations.  If your default background is "white" then faces
-will be made brighter when "dimmed".  If your default background is
-a dark blue, then faces will be shifted "darker" and "more blue"
-when buffers are dimmed.
+`dimmer.el` can be configured to adjust foreground colors (default),
+background colors, or both.
 
 Usage:
 
-     (require 'dimmer) ; unless installed as a package
+     (require 'dimmer)
      (dimmer-configure-which-key)
      (dimmer-configure-helm)
      (dimmer-mode t)
@@ -36,6 +33,9 @@ users that modifies the customizations so which-key popups are not dimmed.
 Please submit pull requests with configurations for other packages!
 
 Customization:
+
+`dimmer-adjustment-mode` controls what aspect of the color scheme is adjusted
+when dimming.  Choices are :foreground (default), :background, or :both.
 
 `dimmer-fraction` controls the degree to which buffers are dimmed.
 Range is 0.0 - 1.0, and default is 0.20.  Increase value if you

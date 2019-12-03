@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Homepage: https://github.com/tumashu/org-picklink
 ;; Version: 0.1.0
-;; Package-Version: 20190902.654
+;; Package-Version: 20191203.59
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience
 
@@ -66,6 +66,9 @@
     keymap)
   "Keymap for org picklink mode.")
 
+(defvar org-picklink-buffer nil
+  "The buffer calling `org-picklink'.")
+
 ;;;###autoload
 (defun org-picklink-store-link (&optional breadcrumbs)
   "Store id link of current headline.
@@ -81,26 +84,28 @@ description."
     (deactivate-mark)
     (org-with-point-at (or (org-get-at-bol 'org-hd-marker)
 		           (org-agenda-error))
-      (let* ((id (concat "id:" (org-id-get (point) t)))
-             (attach (org-attach-dir t))
+      (let* ((id (org-id-get (point) t))
+             (attach-dir (org-attach-dir t))
              (breadcrumbs
               (when (or breadcrumbs
                         org-picklink-enable-breadcrumbs)
                 (let ((s (org-format-outline-path
                           (org-get-outline-path)
-	                  (1- (frame-width))
-	                  nil org-picklink-breadcrumbs-separator)))
+                          (1- (frame-width))
+                          nil org-picklink-breadcrumbs-separator)))
                   (if (eq "" s) "" (concat s org-picklink-breadcrumbs-separator)))))
-             (desc (or selected-string
+             (item (or selected-string
                        (concat breadcrumbs
                                (org-entry-get (point) "ITEM"))))
              (link
               (cl-case org-picklink-link-type
-                (headline (list :link id :description desc :type "id"))
-                (attach (list :link attach :description (concat desc "(ATTACH)") :type "file")))))
+                (headline (list :link (concat "id:" id) :description item :type "id"))
+                (attach (list :link attach-dir :description (concat item "(ATTACH)") :type "file")))))
         (if (member link org-picklink-links)
-            (message "This link has been stored.")
-          (message "Store link: [[%s][%s]]" (concat (substring id 0 9) "...") desc)
+            (message "This link has been stored, ignore it!")
+          (message "Store link: [[%s][%s]]"
+                   (concat (substring (plist-get link :link) 0 9) "...")
+                   (plist-get link :description))
           (push link org-picklink-links))))
     (org-agenda-next-item 1)))
 
@@ -137,24 +142,27 @@ description."
   (setq org-picklink-enable-breadcrumbs nil)
   (org-picklink-mode -1)
   (org-agenda-quit)
-  (setq org-picklink-links
-        (reverse org-picklink-links))
-  ;; When a link is found at point, insert ", "
-  (when (save-excursion
-          (let* ((end (point))
-                 (begin (line-beginning-position))
-                 (string (buffer-substring-no-properties
-                          begin end)))
-            (and (string-match-p "]]$" string)
-                 (not (string-match-p ", *$" string)))))
-    (insert ", "))
-  (dolist (link org-picklink-links)
-    (org-insert-link nil (plist-get link :link) (plist-get link :description))
-    (pop org-picklink-links)
-    (when org-picklink-links
-      (cond ((org-in-item-p)
-             (call-interactively #'org-insert-item))
-            (t (insert " "))))))
+  (if (not (bufferp org-picklink-buffer))
+      (message "org-picklink-buffer is not a valid buffer")
+    (switch-to-buffer org-picklink-buffer)
+    (setq org-picklink-links
+          (reverse org-picklink-links))
+    ;; When a link is found at point, insert ", "
+    (when (save-excursion
+            (let* ((end (point))
+                   (begin (line-beginning-position))
+                   (string (buffer-substring-no-properties
+                            begin end)))
+              (and (string-match-p "]]$" string)
+                   (not (string-match-p ", *$" string)))))
+      (insert ", "))
+    (dolist (link org-picklink-links)
+      (org-insert-link nil (plist-get link :link) (plist-get link :description))
+      (pop org-picklink-links)
+      (when org-picklink-links
+        (cond ((org-in-item-p)
+               (call-interactively #'org-insert-item))
+              (t (insert " ")))))))
 
 ;;;###autoload
 (defun org-picklink-store-link-and-quit-window ()
@@ -177,8 +185,8 @@ This command only useful in org mode buffer."
   (interactive "P")
   (if (not (derived-mode-p 'org-mode))
       (message "org-picklink works only in org-mode!")
-    (let ((org-agenda-window-setup 'only-window)
-          (buffer (current-buffer))
+    (setq org-picklink-buffer (current-buffer))
+    (let ((org-agenda-window-setup 'current-window)
           (search-string
            (when mark-active
              (buffer-substring-no-properties
@@ -207,7 +215,7 @@ This command only useful in org mode buffer."
                  "`\\[org-picklink-toggle-breadcrumbs]':Breadcrumbs  "
                  "`\\[org-picklink-set-link-type]':Link Type "
                  "##"))
-               (buffer-name buffer)))))))
+               (buffer-name org-picklink-buffer)))))))
 
 (define-minor-mode org-picklink-mode
   "org picklink mode"
