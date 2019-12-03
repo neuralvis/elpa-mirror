@@ -3,7 +3,6 @@
 ;; copyright © 2017 chee
 ;; author: chee <chee@snake.dog>
 ;; keywords: lisp, helm, popup, frame
-;; Package-Version: 20180604.1005
 ;; version: 0.4.8
 ;; package-requires: ((emacs "24.4"))
 
