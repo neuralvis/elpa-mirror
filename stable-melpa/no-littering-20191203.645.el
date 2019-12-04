@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20191114.913
+;; Package-Version: 20191203.645
 
 ;; This file is not part of GNU Emacs.
 
@@ -323,6 +323,7 @@ directories."
     (setq keyfreq-file-lock                (var "keyfreq.lock"))
     (eval-after-load 'lookup
       `(make-directory ,(etc "lookup/") t))
+    (setq libbcel-oauth-store-filename     (var "libbcel-oauth-store.el.gpg"))
     (setq litable-list-file                (var "litable-list.el"))
     (setq logview-cache-filename           (var "logview-cache"))
     (setq logview-views-file               (etc "logview-views"))

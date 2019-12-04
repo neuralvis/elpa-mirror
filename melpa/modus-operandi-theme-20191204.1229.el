@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191204.1015
+;; Package-Version: 20191204.1229
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -863,9 +863,9 @@ between foreground and background is >= 7:1)."
    `(ivy-confirm-face ((,class (:foreground ,cyan))))
    `(ivy-current-match ((,class (:inherit modus-theme-special-mild :weight bold :underline t))))
    `(ivy-cursor ((,class (:inherit cursor))))
-   `(ivy-grep-info ((,class (:foreground ,green :weight bold))))
+   `(ivy-grep-info ((,class (:foreground ,cyan-alt))))
    `(ivy-grep-line-number ((,class (:inherit line-number))))
-   `(ivy-highlight-face ((,class (:inherit modus-theme-special-warm))))
+   `(ivy-highlight-face ((,class (:foreground ,magenta))))
    `(ivy-match-required-face ((,class (:inherit error))))
    `(ivy-minibuffer-match-face-1 ((,class (:inherit modus-theme-subtle-neutral))))
    `(ivy-minibuffer-match-face-2 ((,class (:inherit modus-theme-subtle-green))))
@@ -873,7 +873,7 @@ between foreground and background is >= 7:1)."
    `(ivy-minibuffer-match-face-4 ((,class (:inherit modus-theme-subtle-green))))
    `(ivy-minibuffer-match-highlight ((,class (:inherit modus-theme-subtle-blue :weight bold))))
    `(ivy-modified-buffer ((,class (:foreground ,yellow :slant ,modus-theme-slant))))
-   `(ivy-modified-buffer ((,class (:foreground ,yellow-alt :slant ,modus-theme-slant))))
+   `(ivy-modified-outside-buffer ((,class (:foreground ,yellow-alt :slant ,modus-theme-slant))))
    `(ivy-org ((,class (:foreground ,cyan-alt-other))))
    `(ivy-prompt-match ((,class (:inherit ivy-current-match))))
    `(ivy-remote ((,class (:foreground ,magenta))))
@@ -1168,7 +1168,7 @@ between foreground and background is >= 7:1)."
    `(org-upcoming-deadline ((,class (:foreground ,red-alt-other))))
    `(org-verbatim ((,class (:background ,bg-dim :foreground ,fg-special-warm))))
    `(org-verse ((,class (:inherit org-quote))))
-   `(org-warning ((,class (:inherit modus-theme-refine-red :weight bold))))
+   `(org-warning ((,class (:background ,bg-alt :foreground ,yellow-alt-other :weight bold))))
    ;;;; outline-mode
    `(outline-1 ((,class (:inherit org-level-1))))
    `(outline-2 ((,class (:inherit org-level-2))))
