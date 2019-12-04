@@ -1,2 +1,0 @@
-
-(focus . [(20191203 42) ((emacs (24 3)) (cl-lib (0 5))) "Dim the font color of text in surrounding sections" single ((:commit . "bf5fcff0d03502218b559a202f1410b4f65a1dcf") (:authors ("Lars Tveito" . "larstvei@ifi.uio.no")) (:maintainer "Lars Tveito" . "larstvei@ifi.uio.no") (:url . "http://github.com/larstvei/Focus"))])
