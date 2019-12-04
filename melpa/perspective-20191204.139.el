@@ -6,7 +6,7 @@
 
 ;; Author: Natalie Weizenbaum <nex342@gmail.com>
 ;; URL: http://github.com/nex3/perspective-el
-;; Package-Version: 20191202.2251
+;; Package-Version: 20191204.139
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
 ;; Version: 2.3
 ;; Created: 2008-03-05
@@ -1203,9 +1203,6 @@ visible in a perspective as windows, they will be saved as
     ;; after hook
     (run-hooks 'persp-state-after-save-hook)))
 
-(unless (fboundp 'thing-at-point--read-from-whole-string)
-  (fset 'thing-at-point--read-from-whole-string 'read-from-whole-string))
-
 ;;;###autoload
 (defun persp-state-load (file)
   "Restore the perspective state saved in FILE.
@@ -1228,8 +1225,7 @@ restored."
   ;; actually load
   (let ((tmp-persp-name (format "%04x%04x" (random (expt 16 4)) (random (expt 16 4))))
         (frame-count 0)
-        ;; TODO: probably should not use thing-at-point internals
-        (state-complete (thing-at-point--read-from-whole-string
+        (state-complete (read
                          (with-temp-buffer
                            (insert-file-contents-literally file)
                            (buffer-string)))))
