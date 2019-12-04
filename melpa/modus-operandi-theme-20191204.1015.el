@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191204.509
+;; Package-Version: 20191204.1015
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -192,11 +192,15 @@ between foreground and background is >= 7:1)."
 
       ;; conditional styles that evaluate user-facing customisation
       ;; options
-      (modus-theme-slant (if modus-operandi-theme-slanted-constructs
-                             'italic 'normal))
+      (modus-theme-slant
+       (if modus-operandi-theme-slanted-constructs
+           'italic
+         'normal))
 
-      (modus-theme-variable-pitch (if modus-operandi-theme-proportional-fonts
-                                      'variable-pitch 'default)))
+      (modus-theme-variable-pitch
+       (if modus-operandi-theme-proportional-fonts
+           'variable-pitch
+         'default)))
   (custom-theme-set-faces
    'modus-operandi
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -845,10 +849,10 @@ between foreground and background is >= 7:1)."
    `(info-index-match ((,class (:inherit match))))
    ;;;; isearch, occur, and the like
    `(isearch ((,class (:inherit modus-theme-intense-green :weight bold))))
-   `(isearch-fail ((,class (:inherit modus-theme-subtle-red))))
-   `(lazy-highlight ((,class (:inherit modus-theme-subtle-green))))
+   `(isearch-fail ((,class (:inherit modus-theme-subtle-red :weight bold))))
+   `(lazy-highlight ((,class (:inherit modus-theme-subtle-cyan))))
    `(match ((,class (:inherit modus-theme-intense-blue))))
-   `(query-replace ((,class (:inherit isearch))))
+   `(query-replace ((,class (:inherit modus-theme-refine-yellow :weight bold))))
    ;;;; info pages (help pages)
    `(info-header-node ((,class ((:weight bold)))))
    `(info-menu-star ((,class (:inherit default))))
