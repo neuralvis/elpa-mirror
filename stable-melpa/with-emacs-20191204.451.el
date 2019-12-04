@@ -5,7 +5,7 @@
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; Created: 2019/04/20
 ;; Version: 0.4.0
-;; Package-Version: 20191125.117
+;; Package-Version: 20191204.451
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/twlz0ne/with-emacs.el
 ;; Keywords: tools
@@ -218,7 +218,13 @@ returned list are in the same order as in TREE.
         (mapc (lambda (s)
                 ;; (message "s: [%S]" s) ;; debug
                 (when (string-match with-emacs-output-regexp s)
-                  (message (match-string 1 s))))
+                  (with-current-buffer (get-buffer "*Messages*")
+                    (let ((inhibit-read-only t)
+                          (msg (match-string 1 s)))
+                      (goto-char (point-max))
+                      (insert "\n")
+                      (insert msg)
+                      msg))))
               strs)
         ;; Return the result of the last expression as a string
         (with-emacs--extract-return-value ret)))))
@@ -279,7 +285,10 @@ a path of emacs, if it is t, use `with-emacs-executable-path'.
                             (t with-emacs-executable-path))
                       ,server))
            (error "No such server: %s" ,server)))
-       (server-eval-at ,server '(progn ,@(with-emacs--cl-args-body body)))))
+       (server-eval-at ,server
+                       '(condition-case err
+                            (progn ,@(with-emacs--cl-args-body body))
+                          (error err)))))
 
 (defvar with-emacs-partially-applied-functions '() "List of partially applied functions")
 

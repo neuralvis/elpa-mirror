@@ -5,7 +5,7 @@
 ;; Author: Felipe Lema <felipel@mortemale.org>
 ;; Homepage: https://launchpad.net/frecentf.el
 ;; Keywords: files maint
-;; Package-Version: 20191119.1346
+;; Package-Version: 20191204.312
 ;; Package-Requires: ((emacs "26.1") (frecency "0.1-pre") (persist "0.4"))
 ;; Version: 0.1
 
@@ -243,6 +243,7 @@ Mostly based off `recentf-mode'"
   (unless (and frecentf-mode (frecentf-enabled-p))
     (let ((hook-setup (if frecentf-mode 'add-hook 'remove-hook)))
       (dolist (hook '(find-file-hook
+		      after-save-hook
 		      write-file-functions))
         (apply hook-setup (list hook
 				'frecentf-track-opened-file)))
