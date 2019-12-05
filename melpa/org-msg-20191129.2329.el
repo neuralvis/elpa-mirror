@@ -6,8 +6,8 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20191105.2244
-;; Package-X-Original-Version: 2.2
+;; Package-Version: 20191129.2329
+;; Package-X-Original-Version: 2.3
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -289,7 +289,8 @@ Example:
   "Default CSS class for reply header tags."
   :type '(symbol))
 
-(defcustom org-msg-supported-mua '((message-user-agent . "gnus")
+(defcustom org-msg-supported-mua '((gnus-user-agent . "gnus")
+				   (message-user-agent . "gnus")
 				   (mu4e-user-agent . "mu4e"))
   "Supported Mail User Agents."
   :type '(alist :value-type string))
@@ -342,11 +343,16 @@ file."
 			       value)))))
 	(with-temp-buffer
 	  (save-excursion
-	    (insert html))
+	    (insert html)
+	    (quoted-printable-decode-region (point-min) (point-max)))
 	  ;; Remove everything before html tag
 	  (save-excursion
-	    (when (re-search-forward "^<html\\(.*?\\)>" nil t)
-	      (delete-region (point-min) (match-beginning 0))))
+	    (if (re-search-forward "^<html\\(.*?\\)>" nil t)
+		(delete-region (point-min) (match-beginning 0))
+	      ;; Handle malformed HTML
+	      (insert "<html><body>")
+	      (goto-char (point-max))
+	      (insert "</body></html>")))
 	  ;; Insert reply header after body tag
 	  (when (re-search-forward "<body\\(.*?\\)>" nil t)
 	    (goto-char (match-end 0))
@@ -652,7 +658,8 @@ absolute paths."
 	(if (not original)
 	    (assq-delete-all 'script (assq 'head reply))
 	  (org-msg-improve-reply-header original css)
-	  (push (assq (if org-html-html5-fancy 'article 'div) (assq 'body reply))
+	  (push (or (assq 'article (assq 'body reply))
+		    (assq 'div (assq 'body reply)))
 		(cddr (assq 'body original))))
 	(or original reply)))))
 
@@ -745,6 +752,13 @@ This function is used as an advice function of `org-html--todo'.
 	    (funcall orig-fun todo info)
 	  (funcall orig-fun todo))))))
 
+(defun org-msg-message-fetch-field (field-name)
+  "Return the value of the header field whose type is FIELD-NAME."
+  (save-excursion
+    (save-restriction
+      (message-narrow-to-headers)
+      (message-fetch-field field-name))))
+
 (defun org-msg-get-to-first-name ()
   "Return the first name of the recipient.
 It parses the 'To:' field of the current `org-msg-edit-mode'
@@ -762,14 +776,13 @@ automatically greet the right name, see `org-msg-greeting-fmt'."
 			 (format "[[mailto:%s][%s]]" mail first-name)
 		       first-name))))))
     (save-excursion
-      (let ((recipients (mail-extract-address-components
-			 (save-restriction
-			   (message-narrow-to-headers)
-			   (message-fetch-field "to"))
-			 t)))
-	(when org-msg-greeting-name-limit
-	  (setf recipients (seq-take recipients org-msg-greeting-name-limit)))
-	(mapconcat #'recipient2name recipients ", ")))))
+      (let ((to (org-msg-message-fetch-field "to")))
+	(if to
+	    (let ((recipients (mail-extract-address-components to t)))
+	      (when org-msg-greeting-name-limit
+		(setf recipients (seq-take recipients org-msg-greeting-name-limit)))
+	      (mapconcat #'recipient2name recipients ", "))
+	  "")))))
 
 (defun org-msg-header (reply-to)
   "Build the Org OPTIONS and PROPERTIES blocks.
@@ -799,36 +812,36 @@ a html mime part, it returns t, nil otherwise."
 If the current `message' buffer is a reply, the
 `org-msg-separator' string is inserted at the end of the editing
 area."
-  (message-goto-body)
-  (let ((new (not (and (message-fetch-field "to")
-		       (message-fetch-field "subject"))))
-	(with-original (not (= (point) (point-max))))
-	(reply-to))
-    (when (or new (org-msg-mua-call 'article-htmlp))
-      (unless new
-	(setq reply-to (org-msg-mua-call 'save-article-for-reply)))
-      (insert (org-msg-header reply-to))
-      (when org-msg-greeting-fmt
-	(insert (format org-msg-greeting-fmt
-			(if new
-			    ""
-			  (org-msg-get-to-first-name)))))
-      (save-excursion
-	(when with-original
-	  (save-excursion
-	    (insert "\n\n" org-msg-separator "\n")
-	    (delete-region (line-beginning-position)
-			   (1+ (line-end-position)))
+  (unless (eq major-mode 'org-msg-edit-mode)
+    (message-goto-body)
+    (let ((new (not (org-msg-message-fetch-field "subject")))
+	  (with-original (not (= (point) (point-max))))
+	  (reply-to))
+      (when (or new (org-msg-mua-call 'article-htmlp))
+	(unless new
+	  (setq reply-to (org-msg-mua-call 'save-article-for-reply)))
+	(insert (org-msg-header reply-to))
+	(when org-msg-greeting-fmt
+	  (insert (format org-msg-greeting-fmt
+			  (if new
+			      ""
+			    (org-msg-get-to-first-name)))))
+	(save-excursion
+	  (when with-original
 	    (save-excursion
-	      (while (re-search-forward "^>+ *" nil t)
-		(replace-match "")))
-	    (org-escape-code-in-region (point) (point-max))))
-	(when org-msg-signature
-	  (insert org-msg-signature))
-	(org-msg-edit-mode)))
-    (if new
-	(message-goto-to)
-      (org-msg-goto-body))))
+	      (insert "\n\n" org-msg-separator "\n")
+	      (delete-region (line-beginning-position)
+			     (1+ (line-end-position)))
+	      (save-excursion
+		(while (re-search-forward "^>+ *" nil t)
+		  (replace-match "")))
+	      (org-escape-code-in-region (point) (point-max))))
+	  (when org-msg-signature
+	    (insert org-msg-signature))
+	  (org-msg-edit-mode)))
+      (if (org-msg-message-fetch-field "to")
+	  (org-msg-goto-body)
+	(message-goto-to)))))
 
 (defun org-msg-ctrl-c-ctrl-c ()
   "Send message like `message-send-and-exit'.
