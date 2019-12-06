@@ -19,6 +19,7 @@ With =emacsshot= there are
 - =M-x emacsshot-snap-frame=
 - =M-x emacsshot-snap-window=
 - =M-x emacsshot-snap-window-include-modeline=
+- =M-x emacsshot-snap-mouse-drag=
 
 for creating a shot of Emacs.
 
@@ -32,13 +33,18 @@ There is also =M-x emacsshot-snap-window= which is for creating a
 snapshot of the current Emacs-window (i.e. the window which contains
 the active cursor.)
 
-Further there is function =emacsshot-snap-window-include-modeline=
+There is function =emacsshot-snap-window-include-modeline=
 which does the same as =emacsshot-snap-window= but also includes the
 modeline when taking the shot.
 
+There is function =emacsshot-snap-mouse-drag= which snaps the
+rectangle defined by a drag i.e. press button-1, keep pressed, move
+the mouse and release the button.
+
 The filenames are configurable.  Hint: =M-x customize-group
-emacsshot=.  Note that the file-suffix defines the image-format under
-which the file gets stored.
+emacsshot=.  Note that the file-suffix defines the image-format
+under which the file gets stored.  Note that the filenames may
+contain paths which allows some organization of the shots.
 
 It's possible to add a timestamp to the filename as postfix.  See
 =M-x customize-variable emacsshot-with-timestamp=.
@@ -54,6 +60,8 @@ Concretely the print-key could trigger the shot.  Evaluation of
 
 #+BEGIN_EXAMPLE
 (global-set-key [print] 'emacsshot-snap-frame)
+(global-set-key (kbd "C-M-S-<mouse-1>") 'emacsshot-snap-mouse-drag)
+
 #+END_EXAMPLE
 
 yields this behavior.
@@ -143,3 +151,4 @@ emacsshot only takes images of Emacs.
 
 | 201501071941 | New function to take snapshot of a window |
 | 201505162319 | Optionally add timestamp to save-filename |
+| 201912060235 | New function to take snapshot of a rectangle defined by a mouse-drag |

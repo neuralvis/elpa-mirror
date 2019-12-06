@@ -5,7 +5,6 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/ivy-todo
-;; Package-Version: 20171208.1609
 ;; Version: 1.00
 ;; Keywords: convenience
 ;; Package-Requires: ((ivy "0.8.0") (emacs "24.3"))
