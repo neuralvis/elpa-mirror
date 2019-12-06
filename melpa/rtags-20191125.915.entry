@@ -1,2 +1,0 @@
-
-(rtags . [(20191125 915) nil "A front-end for rtags" single ((:commit . "89e50dc99ba56c17e5d00f35a6a4aac28bd284c1") (:authors ("Jan Erik Hanssen" . "jhanssen@gmail.com") ("Anders Bakken" . "agbakken@gmail.com")) (:maintainer "Jan Erik Hanssen" . "jhanssen@gmail.com") (:url . "http://rtags.net"))])
