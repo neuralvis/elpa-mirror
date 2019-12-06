@@ -4,6 +4,7 @@
 
 ;; Author: C.T.Chen <chenct@7adybird.com>
 ;; URL: https://github.com/hex2010/emacs-ivy-xcdoc
+;; Package-Version: 20160917.1055
 ;; Version: 0.0.1
 ;; Package-Requires: ((ivy "0.8.0") (emacs "24.4"))
 ;; Keywords: ivy, xcode, xcdoc
