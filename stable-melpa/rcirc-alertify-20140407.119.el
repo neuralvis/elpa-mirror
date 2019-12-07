@@ -4,7 +4,6 @@
 
 ;; Author: Fabián Ezequiel Gallina <fgallina@gnu.org>
 ;; Keywords: comm, convenience
-;; Package-Version: 20140407.119
 ;; Version: 0.1
 ;; Package-Requires: ((alert "20140406.1353"))
 

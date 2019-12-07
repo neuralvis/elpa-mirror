@@ -4,7 +4,6 @@
 ;;
 ;; Author: Dimitri Fontaine <dim@tapoueh.org>
 ;; URL: http://tapoueh.org/emacs/rcirc-groups.html
-;; Package-Version: 20170731.2101
 ;; Version: 0.5
 ;; Created: 2009-06-27
 ;; Keywords: comm, convenience

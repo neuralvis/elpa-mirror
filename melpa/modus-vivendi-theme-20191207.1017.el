@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191206.944
+;; Package-Version: 20191207.1017
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -319,11 +319,11 @@ between foreground and background is >= 7:1)."
    `(auto-dim-other-buffers-face ((,class (:background ,bg-alt))))
    ;;;; avy
    `(avy-background-face ((,class (:background ,bg-dim :foreground ,fg-dim))))
-   `(avy-goto-char-timer-face ((,class (:background ,magenta-intense :foreground ,bg-main))))
-   `(avy-lead-face ((,class (:background ,bg-main :foreground ,yellow-intense :inverse-video t))))
-   `(avy-lead-face-0 ((,class (:background ,bg-main :foreground ,blue-intense :inverse-video t))))
-   `(avy-lead-face-1 ((,class (:background ,bg-main :foreground ,red-intense :inverse-video t))))
-   `(avy-lead-face-2 ((,class (:background ,bg-main :foreground ,green-intense :inverse-video t))))
+   `(avy-goto-char-timer-face ((,class (:inherit modus-theme-intense-yellow :weight bold))))
+   `(avy-lead-face ((,class (:inherit modus-theme-intense-magenta :weight bold))))
+   `(avy-lead-face-0 ((,class (:inherit modus-theme-intense-blue :weight bold))))
+   `(avy-lead-face-1 ((,class (:inherit modus-theme-intense-red :weight bold))))
+   `(avy-lead-face-2 ((,class (:inherit modus-theme-intense-green :weight bold))))
    ;;;; aw
    `(aw-background-face ((,class (:background ,bg-dim :foreground ,fg-dim))))
    `(aw-key-face ((,class (:background ,bg-main :foreground ,magenta-intense :weight bold))))
