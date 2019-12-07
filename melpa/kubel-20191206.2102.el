@@ -20,7 +20,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20191203.2220
+;; Package-Version: 20191206.2102
 ;; Author: Adrien Brochard
 ;; Keywords: kubernetes k8s tools processes
 ;; URL: https://github.com/abrochard/kubel
@@ -63,6 +63,8 @@
 ;; c => copy popup
 ;; k => delete pod
 ;; j => jab deployment to force rolling update
+;; f => set a substring filter for pod name
+;; r => see the rollout history for resource
 ;;
 
 ;;; Customize:
@@ -221,6 +223,33 @@ YAML is boolean to show resource as yaml"
       (kubel-yaml-editing-mode))
     (beginning-of-buffer)))
 
+(defun kubel--show-rollout-revision (type)
+  "Show a specific revision of a certain resource.
+
+TYPE is the resource type to prompt you to select a specific one."
+  (let* ((name (kubel--select-resource type))
+         (typename (format "%s/%s" type name))
+         (revision (car (split-string (kubel--select-rollout typename))))
+         (buffer-name (format "*kubel - rollout - %s - %s*" typename revision)))
+    (kubel--exec buffer-name nil
+                 (list "rollout" "history" typename (format "--revision=%s" revision)))
+    (beginning-of-buffer)))
+
+(defun kubel--list-rollout (typename)
+  "Return a list of revisions with format '%number   %cause'.
+
+TYPENAME is the resource type/name."
+  (let ((cmd (format "%s rollout history %s" (kubel--get-command-prefix) typename)))
+    (nthcdr 2 (split-string (shell-command-to-string cmd) "\n"))))
+
+(defun kubel--select-rollout (typename)
+  "Select a rollout version.
+
+TYPENAME is the resource type/name."
+  (let ((prompt (format "Select a rollout of %s: " typename))
+        (rollouts (kubel--list-rollout typename)))
+    (completing-read prompt rollouts)))
+
 ;; interactive
 (define-minor-mode kubel-yaml-editing-mode
   :init-value nil
@@ -370,16 +399,29 @@ ARG is the optional param to see yaml."
       (kubel--describe-resource "job" t)
     (kubel--describe-resource "job")))
 
+;; deprecated. will remove soon
+;; (defun kubel-exec-pod ()
+;;   "Kubectl exec into the pod under the cursor."
+;;   (interactive)
+;;   (let* ((pod (kubel--get-pod-under-cursor))
+;;          (containers (kubel--get-containers pod))
+;;          (container (if (equal (length containers) 1)
+;;                         (car containers)
+;;                       (completing-read "Select container: " containers))))
+;;     (eshell)
+;;     (insert (format "%s exec -it %s -c %s /bin/sh" (kubel--get-command-prefix) pod container))))
+
 (defun kubel-exec-pod ()
-  "Kubectl exec into the pod under the cursor."
+  "Setup a TRAMP to exec into the pod under the cursor."
   (interactive)
-  (let* ((pod (kubel--get-pod-under-cursor))
-         (containers (kubel--get-containers pod))
-         (container (if (equal (length containers) 1)
-                        (car containers)
-                      (completing-read "Select container: " containers))))
-    (eshell)
-    (insert (format "%s exec -it %s -c %s /bin/sh" (kubel--get-command-prefix) pod container))))
+  (setq tramp-methods (delete (assoc "kubectl" tramp-methods) tramp-methods)) ;; cleanup previous tramp method
+  (add-to-list 'tramp-methods
+               `("kubectl"
+                 (tramp-login-program      "kubectl")
+                 (tramp-login-args         (,(kubel--get-context-namespace) ("exec" "-it") ("-u" "%u") ("%h") ("sh")))
+                 (tramp-remote-shell       "sh")
+                 (tramp-remote-shell-args  ("-i" "-c")))) ;; add the current context/namespace to tramp methods
+  (find-file (format "/kubectl:%s:/" (kubel--get-pod-under-cursor))))
 
 (defun kubel-delete-pod ()
   "Kubectl delete pod under cursor."
@@ -409,6 +451,31 @@ FILTER is the filter string."
   (interactive "MFilter: ")
   (setq kubel-pod-filter filter)
   (kubel-mode))
+
+(defun kubel-rollout-history-deployment ()
+  "See rollout history of a deployment."
+  (interactive)
+  (kubel--show-rollout-revision "deployment"))
+
+(defun kubel-rollout-history-service ()
+  "See rollout history of a service."
+  (interactive)
+  (kubel--show-rollout-revision "service"))
+
+(defun kubel-rollout-history-job ()
+  "See rollout history of a job."
+  (interactive)
+  (kubel--show-rollout-revision "job"))
+
+(defun kubel-rollout-history-ingress ()
+  "See a rollout history of an ingress."
+  (interactive)
+  (kubel--show-rollout-revision "ingress"))
+
+(defun kubel-rollout-history-configmap ()
+  "See a rollout history of a configmap."
+  (interactive)
+  (kubel--show-rollout-revision "configmap"))
 
 ;; popups
 
@@ -446,6 +513,15 @@ FILTER is the filter string."
    ("i" "Ingress" kubel-describe-ingress)
    ("c" "Configmap" kubel-describe-configmaps)])
 
+(define-transient-command kubel-rollout-popup ()
+  "Kubel Rollout Menu"
+  ["Actions"
+   ("d" "Deployment" kubel-rollout-history-deployment)
+   ("s" "Service" kubel-rollout-history-service)
+   ("j" "Job" kubel-rollout-history-job)
+   ("i" "Ingress" kubel-rollout-history-ingress)
+   ("c" "Configmap" kubel-rollout-history-configmap)])
+
 (define-transient-command kubel-help-popup ()
   "Kubel Menu"
   ["Actions"
@@ -460,7 +536,8 @@ FILTER is the filter string."
    ("e" "Exec" kubel-exec-pod)
    ("k" "Delete" kubel-delete-popup)
    ("j" "Jab" kubel-jab-deployment)
-   ("f" "Filter" kubel-set-filter)])
+   ("f" "Filter" kubel-set-filter)
+   ("r" "Rollout" kubel-rollout-popup)])
 
 ;; mode map
 (defvar kubel-mode-map
@@ -478,6 +555,7 @@ FILTER is the filter string."
     (define-key map (kbd "k") 'kubel-delete-popup)
     (define-key map (kbd "j") 'kubel-jab-deployment)
     (define-key map (kbd "f") 'kubel-set-filter)
+    (define-key map (kbd "r") 'kubel-rollout-popup)
    map)
   "Keymap for `kubel-mode'.")
 
