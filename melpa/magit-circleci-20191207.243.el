@@ -20,7 +20,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20190814.1723
+;; Package-Version: 20191207.243
 ;; Author: Adrien Brochard
 ;; Keywords: circleci continuous integration magit vc tools
 ;; URL: https://github.com/abrochard/magit-circleci
@@ -231,7 +231,7 @@ BUILD is the build object."
 (defun magit-circleci--deactivate ()
   "Remove the circleci section and the transient."
   (remove-hook 'magit-status-sections-hook #'magit-circleci--section)
-  (transient-remove-suffix 'magit-dispatch "%"))
+  (transient-remove-suffix 'magit-dispatch "\""))
 
 ;;;###autoload
 (define-minor-mode magit-circleci-mode

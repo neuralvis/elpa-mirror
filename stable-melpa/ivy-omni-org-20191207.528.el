@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.2.1
-;; Package-Version: 20191112.2037
+;; Package-Version: 20191207.528
 ;; Package-Requires: ((emacs "25.1") (ivy "0.10") (dash "2.12"))
 ;; Keywords: outlines
 ;; URL: https://github.com/akirak/ivy-omni-org
@@ -38,6 +38,7 @@
 (require 'dash)
 (require 'cl-lib)
 (require 'seq)
+(require 'subr-x)
 
 (defgroup ivy-omni-org nil
   "Ivy interface to Org buffers, files, and bookmarks."
