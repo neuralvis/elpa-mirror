@@ -1,0 +1,2 @@
+
+(brazilian-holidays . [(20191207 151) ((emacs (26))) "Brazilian holidays" single ((:commit . "75bd75ca9cd3da0e08277ce3c7d139ce553c51cb") (:keywords "calendar" "holidays" "brazilian") (:authors ("Jaguaraquem A. Reinaldo" . "jaguar.adler@gmail.com")) (:maintainer "Jaguaraquem A. Reinaldo" . "jaguar.adler@gmail.com") (:url . "https://github.com/jadler/brazilian-holidays"))])
