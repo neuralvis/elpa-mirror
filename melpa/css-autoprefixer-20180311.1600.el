@@ -4,8 +4,7 @@
 ;;
 ;; Author: Kyung Mo Kweon<kkweon@gmail.com> and contributors
 ;; URL: https://github.com/kkweon/emacs-css-autoprefixer
-;; Package-Version: 20180311.1600
-;; Package-X-Original-Version: 20180310.839
+;; Package-Version: 20180310.839
 ;; Package-Requires: ((emacs "24"))
 ;; Version: 1.0
 ;; Keywords: convenience, usability, css
