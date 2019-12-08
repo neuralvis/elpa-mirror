@@ -1,0 +1,2 @@
+
+(magit . [(20191207 2321) ((emacs (25 1)) (async (20180527)) (dash (20180910)) (git-commit (20181104)) (transient (20190812)) (with-editor (20181103))) "A Git porcelain inside Emacs." tar ((:commit . "6401ba9343d4d25c8b77867b0301421bb1ecc980") (:keywords "git" "tools" "vc"))])
