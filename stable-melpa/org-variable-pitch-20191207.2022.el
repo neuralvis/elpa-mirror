@@ -4,7 +4,7 @@
 
 ;; Author: Göktuğ Kayaalp <self@gkayaalp.com>
 ;; Keywords: faces
-;; Package-Version: 20190914.2046
+;; Package-Version: 20191207.2022
 ;; Version: 1.1.0
 ;; URL: https://dev.gkayaalp.com/elisp/index.html#ovp
 ;; Package-Requires: ((emacs "25"))
@@ -86,6 +86,16 @@
   :group 'org-variable-pitch
   :type '(repeat symbol))
 
+(defcustom org-variable-pitch-fontify-headline-prefix nil
+  "Fontify the headline prefix.
+When non-nil, headline prefix will use the monospace face.
+Otherwise the headline will use the default `org-level-*' face.
+
+Note that this will drop all `org-level-*' face styles and only
+apply the monospace face to the headline prefix."
+  :group 'org-variable-pitch
+  :type 'boolean)
+
 (defface org-variable-pitch-face
   `((t . (:family ,org-variable-pitch-fixed-font)))
   "Face for initial space and list item bullets.
@@ -93,19 +103,24 @@ This face is used to keep them in monospace when using
 ‘org-variable-pitch-minor-mode’."
   :group 'org-variable-pitch)
 
-(defvar org-variable-pitch-font-lock-keywords
-  (let ((code '(0 (put-text-property
+(defvar org-variable-pitch-font-lock-keywords)
+(defvar org-variable-pitch-headline-font-lock-keywords)
+(let ((code '(0 (put-text-property
                    (match-beginning 0)
                    (match-end 0)
                    'face 'org-variable-pitch-face))))
+  (setq
+   org-variable-pitch-font-lock-keywords
     `((,(rx bol (1+ blank))
        ,code)
       (,(rx bol (0+ blank)
             (or (: (or (+ digit) letter) (in ".)"))
-                (: (in "-+")
-                   (opt blank "[" (in "-X ") "]"))
-                (: (1+ blank) "\*"))
+                (: (or (in "-+") (1+ blank "\*"))
+                   (opt blank "[" (in "-X ") "]")))
             blank)
+       ,code))
+    org-variable-pitch-headline-font-lock-keywords
+    `((,(rx bol (1+ "\*") blank)
        ,code))))
 
 
@@ -127,11 +142,14 @@ Keeps some elements in fixed pitch in order to keep layout."
                     org-variable-pitch--cookies)
             (message "‘%s’ is not a valid face, thus OVP skipped it"
                      (symbol-name face))))
-        (font-lock-add-keywords nil org-variable-pitch-font-lock-keywords))
+        (font-lock-add-keywords nil org-variable-pitch-font-lock-keywords)
+        (when org-variable-pitch-fontify-headline-prefix
+          (font-lock-add-keywords nil org-variable-pitch-headline-font-lock-keywords)))
     (variable-pitch-mode -1)
     (mapc #'face-remap-remove-relative org-variable-pitch--cookies)
     (setq org-variable-pitch--cookies nil)
-    (font-lock-remove-keywords nil org-variable-pitch-font-lock-keywords))
+    (font-lock-remove-keywords nil org-variable-pitch-font-lock-keywords)
+    (font-lock-remove-keywords nil org-variable-pitch-headline-font-lock-keywords))
   (font-lock-ensure))
 
 
