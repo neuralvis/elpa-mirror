@@ -2,7 +2,7 @@
 
 ;; Author: Philippe Vaucher <philippe.vaucher@gmail.com>
 ;; URL: https://github.com/Silex/elmacro
-;; Package-Version: 20190823.1308
+;; Package-Version: 20191208.1057
 ;; Keywords: macro, elisp, convenience
 ;; Version: 1.1.1
 ;; Package-Requires: ((s "1.11.0") (dash "2.13.0"))
@@ -91,6 +91,8 @@ This will be used as arguments for `replace-regexp-in-string'."
     (--each elmacro-processors
       (setq commands (funcall it commands)))
     commands))
+
+(defvar pp-escape-newlines)
 
 (defun elmacro-pp-to-string (object)
   "Like `pp-to-string', but make sure all options are set like desired.

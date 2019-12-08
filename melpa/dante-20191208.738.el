@@ -9,7 +9,7 @@
 ;; Author: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; Maintainer: Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>
 ;; URL: https://github.com/jyp/dante
-;; Package-Version: 20191004.1233
+;; Package-Version: 20191208.738
 ;; Created: October 2016
 ;; Keywords: haskell, tools
 ;; Package-Requires: ((dash "2.12.0") (emacs "25.1") (f "0.19.0") (flycheck "0.30") (company "0.9") (haskell-mode "13.14") (s "1.11.0") (lcr "1.0"))
@@ -555,6 +555,7 @@ Note that sub-sessions are not interleaved."
                             ("-fdefer-typed-holes" "Accept typed holes, so that completion/type-at continues to work then.")
                             ("-fdefer-type-errors" "Accept incorrectly typed programs, so that completion/type-at continues to work then. (However errors in dependencies won't be detected as such)")
                             ("-Wwarn=missing-home-modules" "Do not error-out if a module is missing in .cabal file")
+                            ("-fdiagnostics-color=never" "No color codes in error messages")
                             ("-fno-diagnostics-show-caret" "Cleaner error messages for GHC >=8.2 (ignored by earlier versions)")))))
 
 (defun dante-start ()
