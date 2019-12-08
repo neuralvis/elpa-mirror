@@ -2,7 +2,7 @@
 
 ;; Author: jixiuf  jixiuf@qq.com
 ;; Keywords: vterm terminals
-;; Package-Version: 20191205.1527
+;; Package-Version: 20191208.1542
 ;; Version: 0.0.3
 ;; URL: https://github.com/jixiuf/vterm-toggle
 ;; Package-Requires: ((emacs "25.1") (vterm "0.0.1"))
@@ -149,6 +149,18 @@ If the `tramp-methods' entry does not exist, return NIL."
   (let ((entry (assoc param (assoc method tramp-methods))))
     (when entry (cadr entry))))
 
+(when (version<= "26.3" emacs-version)
+  (with-eval-after-load 'tramp-sh
+    (defun tramp-get-sh-extra-args (shell)
+      "Find extra args for SHELL."
+      (let ((alist tramp-sh-extra-args)
+	        item extra-args)
+        (while (and alist (null extra-args))
+          (setq item (pop alist))
+          (when (string-match-p (car item) shell)
+	        (setq extra-args (cdr item))))
+        extra-args))))
+
 (defun vterm-toggle-show(&optional make-cd args)
   "Show the vterm buffer.
 Optional argument MAKE-CD whether insert a cd command.
@@ -235,8 +247,8 @@ Optional argument ARGS optional args."
                                    (buffer-substring-no-properties
                                     (point-min) (point-max)))) 0)
                        (> wait-ms 3000)) do
-                       (sleep-for 0.1)
-                       (setq wait-ms (+ wait-ms 100)))))
+                       (sleep-for 0.01)
+                       (setq wait-ms (+ wait-ms 10)))))
 
 ;;;###autoload
 (defun vterm-toggle-insert-cd()
