@@ -4,7 +4,7 @@
 
 ;; Author: Lars Tveito <larstvei@ifi.uio.no>
 ;; URL: http://github.com/larstvei/Focus
-;; Package-Version: 20191204.1554
+;; Package-Version: 20191209.1135
 ;; Created: 11th May 2015
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "24.3") (cl-lib "0.5"))
@@ -132,8 +132,8 @@ It sets the `focus-pre-overlay', `focus-min-overlay', and
           focus-mid-overlay  (make-overlay (point-min) (point-max))
           focus-post-overlay (make-overlay (point-max) (point-max))
           focus-buffer (current-buffer))
-    (overlay-put focus-mid-overlay 'face 'focus-focused-face)
-    (mapc (lambda (o) (overlay-put o 'face 'focus-unfocused-face))
+    (overlay-put focus-mid-overlay 'face 'focus-focused)
+    (mapc (lambda (o) (overlay-put o 'face 'focus-unfocused))
           (list focus-pre-overlay focus-post-overlay))
     (add-hook 'post-command-hook 'focus-move-focus nil t)
     (add-hook 'change-major-mode-hook 'focus-terminate nil t)))

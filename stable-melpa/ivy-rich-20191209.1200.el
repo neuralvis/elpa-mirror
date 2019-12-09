@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20191202.30
+;; Package-Version: 20191209.1200
 ;; Version: 0.1.3
 ;; Keywords: ivy
 
@@ -449,17 +449,14 @@ or /a/…/f.el."
 
 (defun ivy-rich-bookmark-type (candidate)
   (let ((filename (ivy-rich-bookmark-filename candidate)))
-    (cond ((null filename)
-	   (apply #'ivy-rich-bookmark-propertize-type (or (ivy-rich-bookmark-handler-props candidate)
-					'("NOFILE" 'warning))))
-	  ((file-remote-p filename)
-	   (ivy-rich-bookmark-propertize-type "REMOTE" 'mode-line-buffer-id))
-	  ((not (file-exists-p filename))
-	   (apply #'ivy-rich-bookmark-propertize-type (or (ivy-rich-bookmark-handler-props candidate)
-					'("NOTFOUND" 'error))))
-	  ((file-directory-p filename)
-	   (ivy-rich-bookmark-propertize-type "DIRED" 'warning))
-	  (t (ivy-rich-bookmark-propertize-type "FILE" 'success)))))
+    (apply #'ivy-rich-bookmark-propertize-type
+	   (cond ((null filename) (or (ivy-rich-bookmark-handler-props candidate)
+				      '("NOFILE" warning)))
+		 ((file-remote-p filename) '("REMOTE" mode-line-buffer-id))
+		 ((not (file-exists-p filename)) (or (ivy-rich-bookmark-handler-props candidate)
+						     '("NOTFOUND" error)))
+		 ((file-directory-p filename) '("DIRED" warning))
+		 (t '("FILE" success))))))
 
 (defun ivy-rich-bookmark-info (candidate)
   (let ((filename (ivy-rich-bookmark-filename candidate)))
