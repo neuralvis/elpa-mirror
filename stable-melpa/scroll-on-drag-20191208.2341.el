@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://github.com/ideasman42/emacs-scroll-on-drag
-;; Package-Version: 20191202.1445
+;; Package-Version: 20191208.2341
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
 
@@ -45,22 +45,22 @@
 (defcustom scroll-on-drag-delay 0.01
   "Idle time between scroll updates."
   :group 'scroll-on-drag
-  :type  'float)
+  :type 'float)
 
 (defcustom scroll-on-drag-motion-scale 0.25
   "Scroll speed multiplier."
   :group 'scroll-on-drag
-  :type  'float)
+  :type 'float)
 
 (defcustom scroll-on-drag-motion-accelerate 0.3
   "Non-linear scroll power (0.0 for linear speed, 1.0 for very fast acceleration)."
   :group 'scroll-on-drag
-  :type  'float)
+  :type 'float)
 
 (defcustom scroll-on-drag-smooth t
   "Use smooth (pixel) scrolling."
   :group 'scroll-on-drag
-  :type  'boolean)
+  :type 'boolean)
 
 (defcustom scroll-on-drag-pre-hook nil
   "List of functions to be called when scroll-on-drag starts."
@@ -127,7 +127,8 @@ Argument ALSO-MOVE-POINT When non-nil, move the POINT as well."
           (scroll-px (- scroll-px-next (* lines char-height)))
           (lines-remainder 0))
         (unless (zerop lines)
-          (setq lines-remainder (- (scroll-on-drag--scroll-by-lines window (- lines) also-move-point))) ;; flip
+          (setq lines-remainder
+            (- (scroll-on-drag--scroll-by-lines window (- lines) also-move-point))) ;; flip
           (unless (zerop lines-remainder)
             (setq scroll-px char-height)))
         (set-window-vscroll window (- char-height scroll-px) t)
@@ -147,7 +148,8 @@ Argument ALSO-MOVE-POINT When non-nil, move the POINT as well."
         (set-window-vscroll window scroll-px t)
         lines-remainder))
     ;; no lines scrolled.
-    (t 0)))
+    (t
+      0)))
 
 ;; End generic scrolling functions.
 
@@ -190,7 +192,12 @@ Returns true when scrolling took place, otherwise nil."
       (restore-x-pointer-shape (and (boundp 'x-pointer-shape) x-pointer-shape))
 
       ;; Restore indent (lost when scrolling).
-      (restore-indent (- (point) (save-excursion (back-to-indentation) (point))))
+      (restore-indent
+        (-
+          (point)
+          (save-excursion
+            (back-to-indentation)
+            (point))))
 
       (mouse-y-fn
         (cond
@@ -255,8 +262,7 @@ Returns true when scrolling took place, otherwise nil."
             (lambda (self-fn)
               (let ((lines delta))
                 (unless (zerop lines)
-                  (setq delta-px-accum
-                    (- delta-px-accum (* lines this-frame-char-height)))
+                  (setq delta-px-accum (- delta-px-accum (* lines this-frame-char-height)))
                   (let ((lines-remainder (scroll-on-drag--scroll-by-lines this-window lines t)))
                     (unless (zerop (- lines lines-remainder))
                       (let ((inhibit-redisplay nil))
@@ -337,11 +343,12 @@ Returns true when scrolling took place, otherwise nil."
               (lines-from-top
                 (count-lines
                   (window-start)
-                  (save-excursion (move-beginning-of-line nil) (point)))))
+                  (save-excursion
+                    (move-beginning-of-line nil)
+                    (point)))))
             (when (> scroll-margin lines-from-top)
               (forward-line (- scroll-margin lines-from-top))
-              (let
-                ((inhibit-redisplay nil))
+              (let ((inhibit-redisplay nil))
                 (run-hooks 'scroll-on-drag-redisplay-hook)
                 (redisplay)))))))
 
@@ -392,7 +399,8 @@ Returns true when scrolling took place, otherwise nil."
               (setq delta-prev delta)
               t)
             ;; Cancel...
-            (t nil)))))
+            (t
+              nil)))))
 
     (funcall scroll-snap-smooth-to-line-fn)
     (funcall timer-stop-fn)
@@ -408,7 +416,11 @@ Returns true when scrolling took place, otherwise nil."
       (right-char
         (min
           restore-indent
-          (- (save-excursion (move-end-of-line nil) (point)) (point)))))
+          (-
+            (save-excursion
+              (move-end-of-line nil)
+              (point))
+            (point)))))
 
     ;; Restore pointer.
     (when (boundp 'x-pointer-shape)
@@ -427,7 +439,11 @@ Returns true when scrolling took place, otherwise nil."
 (defmacro scroll-on-drag-with-fallback (&rest body)
   "A macro to scroll and perform a different action on click.
 Optional argument BODY Hello."
-  `(lambda () (interactive) (unless (scroll-on-drag-internal) ,@body)))
+  `
+  (lambda ()
+    (interactive)
+    (unless (scroll-on-drag)
+      ,@body)))
 
 (provide 'scroll-on-drag)
 

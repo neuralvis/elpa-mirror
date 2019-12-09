@@ -4,7 +4,7 @@
 
 ;; Author: Alexei Nunez <alexeirnunez@gmail.com>
 ;; URL: https://github.com/arnm/ob-mermaid
-;; Package-Version: 20180522.1659
+;; Package-Version: 20191208.2346
 ;; Keywords: lisp
 ;; Version: 0
 
@@ -46,13 +46,16 @@
   (let* ((out-file (or (cdr (assoc :file params))
                        (error "mermaid requires a \":file\" header argument")))
          (temp-file (org-babel-temp-file "mermaid-"))
-         (cmd (if (not ob-mermaid-cli-path)
-                  (error "`ob-mermaid-cli-path' is not set")
-                (concat (shell-quote-argument (expand-file-name ob-mermaid-cli-path))
-                        " -i " (org-babel-process-file-name temp-file)
-                        " -o " (org-babel-process-file-name out-file)))))
-    (unless (file-exists-p ob-mermaid-cli-path)
-      (error "could not find mermaid.cli executable at %s" ob-mermaid-cli-path))
+         (mmdc (or ob-mermaid-cli-path
+                   (executable-find "mmdc")
+                   (error "`ob-mermaid-cli-path' is not set and mmdc is not in `exec-path'")))
+         (cmd (concat (shell-quote-argument (expand-file-name mmdc))
+                      " -i " (org-babel-process-file-name temp-file)
+                      " -o " (org-babel-process-file-name out-file))))
+    (unless (file-executable-p mmdc)
+      ;; cannot happen with `executable-find', so we complain about
+      ;; `ob-mermaid-cli-path'
+      (error "Cannot find or execute %s, please check `ob-mermaid-cli-path'" mmdc))
     (with-temp-file temp-file (insert body))
     (message "%s" cmd)
     (org-babel-eval cmd "")
