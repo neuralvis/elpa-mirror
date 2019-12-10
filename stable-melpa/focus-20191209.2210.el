@@ -4,9 +4,9 @@
 
 ;; Author: Lars Tveito <larstvei@ifi.uio.no>
 ;; URL: http://github.com/larstvei/Focus
-;; Package-Version: 20191209.1135
+;; Package-Version: 20191209.2210
 ;; Created: 11th May 2015
-;; Version: 0.1.1
+;; Version: 1.0.0
 ;; Package-Requires: ((emacs "24.3") (cl-lib "0.5"))
 
 ;; This program is free software; you can redistribute it and/or modify
