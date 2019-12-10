@@ -4,7 +4,7 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Url: https://gitlab.petton.fr/DamienCassou/navigel
-;; Package-Version: 20190828.449
+;; Package-Version: 20191128.1952
 ;; Package-requires: ((emacs "25.1") (tablist "1.0"))
 ;; Version: 0.6.0
 
@@ -40,8 +40,11 @@
 
 (require 'tablist)
 (require 'seq)
+(require 'bookmark)
 
 
+;; Customization
+
 (defgroup navigel nil
   "Navigel."
   :group 'magit-extensions)
@@ -53,6 +56,10 @@
 (defcustom navigel-init-done-hook nil
   "Normal hook run after a navigel's tablist buffer has been initially populated."
   :type 'hook)
+
+(defcustom navigel-display-messages t
+  "Whether to display navigel's informative messages in the echo area."
+  :type 'boolean)
 
 
 ;; Private variables
@@ -103,6 +110,22 @@ Return non-nil if ENTITY is found, nil otherwise."
 (cl-generic-define-context-rewriter navigel-app (app)
   `(navigel-app (eql ,app)))
 
+(defun navigel--bookmark-jump (bookmark)
+  "Open a navigel buffer showing BOOKMARK."
+  (let ((entity (bookmark-prop-get bookmark 'navigel-entity))
+        (target (bookmark-prop-get bookmark 'navigel-target))
+        (navigel-app (bookmark-prop-get bookmark 'navigel-app)))
+    (navigel-open entity target)
+    (message "Current buffer at the end of navigel--bookmark-jump: %s" (current-buffer))))
+
+(defun navigel--message (&rest args)
+  "Display a message in the echo area.
+This function only has an effect when `navigel-display-messages'
+is true.  ARGS are the message format followed by any arguments
+it takes."
+  (when navigel-display-messages
+    (apply #'message args)))
+
 
 ;; Generic methods: Those methods are the one you may override.
 
@@ -124,6 +147,10 @@ overridden separately if necessary."
 
 (cl-defgeneric navigel-imenu-name (entity)
   "Return a string representing ENTITY for `imenu'."
+  (navigel-name entity))
+
+(cl-defgeneric navigel-bookmark-name (entity)
+  "Return a string representing ENTITY for `bookmark'."
   (navigel-name entity))
 
 (cl-defgeneric navigel-children (entity callback)
@@ -230,6 +257,18 @@ If non-nil, call CALLBACK with no parameter when done."
 If non-nil, call CALLBACK with no parameter when done."
   (navigel-async-mapc #'navigel-delete entities callback))
 
+(cl-defmethod navigel-make-bookmark ()
+  "Return a record to bookmark the current buffer.
+
+This function is to be used as value for
+`bookmark-make-record-function' in navigel buffers."
+  `(
+    ,(navigel-bookmark-name navigel-entity)
+    ((handler . ,#'navigel--bookmark-jump)
+     (navigel-entity . ,navigel-entity)
+     (navigel-target . ,(navigel-entity-at-point))
+     (navigel-app . ,navigel-app))))
+
 
 ;;; Public functions
 
@@ -292,9 +331,9 @@ refreshed."
   (let ((entity navigel-entity)
         ;; save navigel-app so we can rebind below
         (app navigel-app))
-    (message (if (equal (point-min) (point-max))
-                 "Populating…"
-               "Refreshing…"))
+    (navigel--message (if (equal (point-min) (point-max))
+                          "Populating…"
+                        "Refreshing…"))
     (navigel-children
      entity
      (lambda (children)
@@ -313,7 +352,7 @@ refreshed."
            (run-hooks 'navigel-changed-hook)
            (when callback
              (funcall callback))
-           (message "Ready!")))))))
+           (navigel--message "Ready!")))))))
 
 (defmacro navigel-method (app name args &rest body)
   "Define a method NAME with ARGS and BODY.
@@ -324,6 +363,8 @@ This method will only be active if `navigel-app' equals APP."
 
 
 ;;; Private functions
+
+(defvar bookmark-make-record-function)
 
 (defun navigel--list-children (entity &optional target)
   "Open a new buffer showing ENTITY's children.
@@ -352,13 +393,14 @@ is asked for a top level ENTITY."
       (setq-local imenu-extract-index-name-function
                   #'navigel--imenu-extract-index-name)
       (setq-local tabulated-list-format (navigel-tablist-format entity))
+      (setq-local bookmark-make-record-function #'navigel-make-bookmark)
       (tabulated-list-init-header)
       (navigel-refresh
        target
        (lambda ()
          (with-current-buffer buffer
-           (run-hooks 'navigel-init-done-hook))))
-      (switch-to-buffer buffer))))
+           (run-hooks 'navigel-init-done-hook)))))
+    (switch-to-buffer buffer)))
 
 (defun navigel--save-state ()
   "Return an object representing the state of the current buffer.
