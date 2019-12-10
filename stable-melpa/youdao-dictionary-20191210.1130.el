@@ -4,7 +4,7 @@
 
 ;; Author: Chunyang Xu <xuchunyang56@gmail.com>
 ;; URL: https://github.com/xuchunyang/youdao-dictionary.el
-;; Package-Version: 20191031.1404
+;; Package-Version: 20191210.1130
 ;; Package-Requires: ((popup "0.5.0") (pos-tip "0.4.6") (chinese-word-at-point "0.2") (names "0.5") (emacs "24"))
 ;; Version: 0.4
 ;; Created: 11 Jan 2015
@@ -53,6 +53,8 @@
 (require 'pos-tip)
 (require 'posframe nil t)
 (eval-when-compile (require 'names))
+
+(declare-function pdf-view-active-region-text "pdf-view" ())
 
 (defgroup youdao-dictionary nil
   "Youdao dictionary interface for Emacs."
@@ -200,14 +202,16 @@ i.e. `[语][计] dictionary' => 'dictionary'."
 
 (defun -region-or-word ()
   "Return word in region or word at point."
-  (if (use-region-p)
-      (buffer-substring-no-properties (region-beginning)
-                                      (region-end))
-    (thing-at-point (if use-chinese-word-segmentation
-                        'chinese-or-other-word
-                      'word)
-                    t)))
-
+  (if (derived-mode-p 'pdf-view-mode)
+      (mapconcat 'identity (pdf-view-active-region-text) "\n")
+    (if (use-region-p)
+        (buffer-substring-no-properties (region-beginning)
+                                        (region-end))
+      (thing-at-point (if use-chinese-word-segmentation
+                          'chinese-or-other-word
+                        'word)
+                      t))))
+  
 (defun -format-result (word)
   "Format request result of WORD."
   (let* ((json (-request word))

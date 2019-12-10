@@ -10,7 +10,7 @@
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 18 May 2017
 ;; Keywords: extensions convenience
-;; Package-Version: 20191013.2037
+;; Package-Version: 20191210.815
 ;; Package-X-Original-Version: 1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/joostkremers/nswbuff
@@ -119,7 +119,7 @@ width.  The possible choices are:
   :type '(number :tag "Seconds"))
 
 (defcustom nswbuff-recent-buffers-first t
-  "Show recent buffers first?
+  "Show recent buffers first.
 If non-nil the buffer list is sorted by how recently the buffers were
 used.  If nil, it is as a cyclic list with fixed order.  Note that
 other commands (switch-to-buffer) still change the order."
@@ -127,7 +127,9 @@ other commands (switch-to-buffer) still change the order."
   :type 'boolean)
 
 (defcustom nswbuff-separator " | "
-  "String used to separate buffer names in the status line."
+  "String used to separate buffer names in the status line.
+It is possible to include a newline character in order to obtain
+a vertical buffer display."
   :group 'nswbuff
   :type 'string)
 
@@ -146,15 +148,15 @@ other commands (switch-to-buffer) still change the order."
   :group 'nswbuff
   :type 'integer)
 
-(defface nswbuff-default-face '((t nil))
+(defface nswbuff-default-face '((t (:inherit default)))
   "Default face used for buffer names."
   :group 'nswbuff)
 
-(defface nswbuff-current-buffer-face '((t (:foreground "red" :bold t :underline t)))
+(defface nswbuff-current-buffer-face '((t (:inherit highlight)))
   "Face used to highlight the current buffer name."
   :group 'nswbuff)
 
-(defface nswbuff-separator-face '((t (:foreground "blue")))
+(defface nswbuff-separator-face '((t (:inherit font-lock-comment-face)))
   "Face used for separators."
   :group 'nswbuff)
 
@@ -280,7 +282,7 @@ Buffers matching this regular expression are highlighted with
   :group 'nswbuff
   :type 'string)
 
-(defface nswbuff-special-buffers-face '((t (:foreground "red" :bold nil :underline nil)))
+(defface nswbuff-special-buffers-face '((t (:inherit warning)))
   "Face for highlighting special buffers in the buffer list."
   :group 'nswbuff)
 
@@ -524,6 +526,7 @@ after the delay specified by `nswbuff-clear-delay'."
             (window-min-height 1)
             (cursor-in-non-selected-windows nil))
         (with-current-buffer (get-buffer-create nswbuff-status-buffer-name)
+          (setq cursor-type nil)
           (let ((window (or (get-buffer-window nswbuff-status-buffer-name)
                             (split-window-vertically -2))))
             ;; If we forget this we may end up with multiple status
