@@ -5,8 +5,8 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20191206.1733
-;; Version: 2.34.130
+;; Package-Version: 20191211.1039
+;; Version: 2.35.129
 
 ;; This file is not part of GNU Emacs.
 
@@ -74,8 +74,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defconst rtags-protocol-version 130)
-(defconst rtags-package-version "2.34")
+(defconst rtags-protocol-version 129)
+(defconst rtags-package-version "2.35")
 (defconst rtags-popup-available (require 'popup nil t))
 (defconst rtags-supported-major-modes '(c-mode c++-mode objc-mode) "Major modes RTags supports.")
 (defconst rtags-verbose-results-delimiter "------------------------------------------")
@@ -5402,7 +5402,7 @@ the user enter missing field manually."
         (insert "#!/bin/bash -x\n"
                 (format "FILE=\"rtags-%s.tar.bz2\"\n" rtags-package-version)
                 (format "URL=\"https://github.com/Andersbakken/rtags/releases/download/v%s/$FILE\"\n" rtags-package-version)
-                "ARGS=\"--progress -L -o $FILE\"\n"
+                "ARGS=\"-L -o $FILE\"\n"
                 "CMAKEARGS=" (combine-and-quote-strings (append (and rtags-install-cmake-args (list rtags-install-cmake-args))
                                                                 (if (listp cmakeargs) cmakeargs (list cmakeargs)))) "\n"
                 "[ -e \"$FILE\" ] && ARGS=\"$ARGS -C -\"\n"
