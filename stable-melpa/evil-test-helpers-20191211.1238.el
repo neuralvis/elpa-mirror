@@ -2,9 +2,9 @@
 
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
-;; Package-Requires: ((evil "1.2.14"))
-;; Package-Version: 20190104.1026
-;; Version: 1.2.14
+;; Package-Requires: ((evil "1.3.0-snapshot"))
+;; Package-Version: 20191211.1238
+;; Version: 1.3.0-snapshot
 
 ;; This file is NOT part of GNU Emacs.
 
