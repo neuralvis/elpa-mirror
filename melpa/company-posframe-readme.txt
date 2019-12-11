@@ -29,6 +29,7 @@ The below code let desktop.el not record the company-posframe-mode
 *** Work better with company-quickhelp
 #+BEGIN_EXAMPLE
 (require 'company-quickhelp)
+(require 'company-posframe)
 (require 'company-posframe-quickhelp)
 #+END_EXAMPLE
 
