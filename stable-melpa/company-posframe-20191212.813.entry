@@ -1,2 +1,0 @@
-
-(company-posframe . [(20191212 813) ((emacs (26 0)) (company (0 9 0)) (posframe (0 1 0)) (company-quickhelp (2 2 0))) "Use a posframe as company candidate menu" tar ((:commit . "6cdc38ab53e1c75a08c82975105f67d435b378e1") (:keywords "abbrev" "convenience" "matching") (:authors ("Clément Pit-Claudel, Feng Shu")) (:maintainer "Feng Shu" . "tumashu@163.com") (:url . "https://github.com/tumashu/company-posframe"))])
