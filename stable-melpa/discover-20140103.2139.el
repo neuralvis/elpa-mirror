@@ -4,7 +4,6 @@
 
 ;; Author: Mickey Petersen <mickey@fyeah.org>
 ;; Keywords:
-;; Package-Version: 20140103.2139
 ;; Version: 0.2
 ;; Package-Requires: ((makey "0.3"))
 

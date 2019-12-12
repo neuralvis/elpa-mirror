@@ -5,7 +5,6 @@
 ;; Author: Matúš Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20180401.2206
 ;; Created: 17th June 2014
 ;; Package-requires: ((dash "2.7.0") (dired-hacks-utils "0.0.1"))
 ;; Keywords: files
