@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/tarsius/moody
 
 ;; Package-Requires: ((emacs "25.3"))
-;; Package-Version: 20191105.2245
+;; Package-Version: 20191211.2031
 
 ;; This file is not part of GNU Emacs.
 
@@ -85,7 +85,10 @@
 
 (defcustom moody-mode-line-height
   (let ((font (face-font 'mode-line)))
-    (if font (* 2 (aref (font-info font) 2)) 30))
+    (if font
+        (ceiling (* (if (< emacs-major-version 27) 2 1.5)
+                    (aref (font-info font) 2)))
+      30))
   "When using `moody', height of the mode line in pixels.
 This should be an even number."
   :type 'integer
