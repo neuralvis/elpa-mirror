@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191212.1452
+;; Package-Version: 20191213.252
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -730,9 +730,9 @@ between foreground and background is >= 7:1)."
    `(gnus-group-news-low-empty ((,class (:foreground ,fg-alt))))
    `(gnus-header-content ((,class (:foreground ,fg-main))))
    `(gnus-header-from ((,class (:foreground ,fg-main))))
-   `(gnus-header-name ((,class (:foreground ,fg-dim :weight bold))))
+   `(gnus-header-name ((,class (:foreground ,fg-special-cold :weight bold))))
    `(gnus-header-newsgroup ((,class (:foreground ,blue))))
-   `(gnus-header-subject ((,class (:foreground ,fg-main))))
+   `(gnus-header-subject ((,class (:foreground ,magenta-alt-other))))
    `(gnus-server-agent ((,class (:foreground ,cyan :weight bold))))
    `(gnus-server-closed ((,class (:foreground ,magenta))))
    `(gnus-server-cloud ((,class (:foreground ,cyan-alt :weight bold))))
