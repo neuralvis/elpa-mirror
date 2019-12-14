@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191213.252
+;; Package-Version: 20191214.513
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -325,11 +325,11 @@ between foreground and background is >= 7:1)."
    `(avy-lead-face-0 ((,class (:inherit modus-theme-intense-blue :weight bold))))
    `(avy-lead-face-1 ((,class (:inherit modus-theme-intense-red :weight bold))))
    `(avy-lead-face-2 ((,class (:inherit modus-theme-intense-green :weight bold))))
-   ;;;; aw
-   `(aw-background-face ((,class (:background ,bg-dim :foreground ,fg-dim))))
-   `(aw-key-face ((,class (:background ,bg-main :foreground ,magenta-intense :weight bold))))
-   `(aw-leading-char-face ((,class (:background ,bg-main :foreground ,red-intense :weight bold))))
-   `(aw-minibuffer-leading-char-face ((,class (:background ,bg-main :foreground ,red-intense))))
+   ;;;; aw (ace-window)
+   `(aw-background-face ((,class (:background ,bg-alt))))
+   `(aw-key-face ((,class (:foreground ,blue-intense :weight bold))))
+   `(aw-leading-char-face ((,class (:height 1.5 :inherit modus-theme-intense-green :weight bold))))
+   `(aw-minibuffer-leading-char-face ((,class (:foreground ,magenta-active))))
    `(aw-mode-line-face ((,class (:weight bold))))
    ;;;; buttons, links, widgets
    `(button ((,class (:foreground ,blue-alt-other :underline t))))

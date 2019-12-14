@@ -4,7 +4,7 @@
 
 ;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 20191208.1850
+;; Package-Version: 20191214.649
 ;; Package-X-Original-Version: 3.0.2
 ;; Version: 3.0.2
 ;; Keywords: convenience, comm, paste
@@ -106,8 +106,8 @@ This uses `browse-url-generic' to open URLs."
      :lang-overrides ((emacs-lisp-mode . "clojure"))
      :success-lambda webpaste--providers-success-location-header)
 
-    ("dpaste.de"
-     :uri "https://dpaste.de/api/"
+    ("dpaste.org"
+     :uri "https://dpaste.org/api/"
      :post-data (("expires" . 86400))
      :post-field "content"
      :post-lang-field-name "lexer"
