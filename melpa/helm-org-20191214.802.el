@@ -4,7 +4,7 @@
 ;; Author:      Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; URL: https://github.com/emacs-helm/helm-org
-;; Package-Version: 20191204.1927
+;; Package-Version: 20191214.802
 ;; Package-Requires: ((helm "3.3") (emacs "24.4"))
 ;; Version: 1.0
 
@@ -114,6 +114,11 @@ NOTE: This will be slow on large org buffers."
   "Ignore autosave files when starting `helm-org-agenda-files-headings'."
   :type 'boolean
   :group 'helm-org)
+
+(defcustom helm-org-completion-styles '(helm)
+  "A list of styles suitable for `completion-styles'."
+  :group 'helm-org
+  :type '(repeat symbol))
 
 
 ;;; Help
@@ -238,7 +243,8 @@ Note: [1] A separator can be a comma, a colon i.e. [,:] or a space.
                                           .
                                           (lambda (candidates)
                                             (sort candidates
-                                                  #'helm-generic-sort-fn)))))
+                                                  #'helm-generic-sort-fn))))
+                          nil helm-org-completion-styles)
              :match-dynamic t
              :filtered-candidate-transformer
              #'helm-org-indent-headings
