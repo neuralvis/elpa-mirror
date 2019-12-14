@@ -5,7 +5,7 @@
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/flycheck-posframe
-;; Package-Version: 20190712.515
+;; Package-Version: 20191214.1109
 ;; Version: 0.6
 ;; Package-Requires: ((flycheck "0.24") (emacs "26") (posframe "0.3.0"))
 
@@ -200,7 +200,7 @@ Only the `foreground' is used in this face."
        :background-color (face-background 'flycheck-posframe-background-face nil t)
        :position (point)
        :internal-border-width flycheck-posframe-border-width
-       :internal-border-color (face-foreground'flycheck-posframe-border-face nil t)
+       :internal-border-color (face-foreground 'flycheck-posframe-border-face nil t)
        :poshandler poshandler))
     (dolist (hook flycheck-posframe-hide-posframe-hooks)
       (add-hook hook #'flycheck-posframe-hide-posframe nil t))))

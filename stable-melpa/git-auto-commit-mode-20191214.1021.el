@@ -5,7 +5,7 @@
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Created: Jan 9, 2012
 ;; Version: 4.5.0
-;; Package-Version: 20191211.539
+;; Package-Version: 20191214.1021
 ;; Keywords: vc
 ;; URL: http://projects.ryuslash.org/git-auto-commit-mode/
 
@@ -70,6 +70,13 @@ If non-nil a git push will be executed after each commit."
   :group 'git-auto-commit-mode
   :type 'string)
 
+(defcustom gac-add-additional-flag ""
+       "Flag to add to the git add command."
+       :tag "git add flag"
+       :group 'git-auto-commit-mode
+       :type 'string)
+
+
 (defcustom gac-debounce-interval nil
   "Debounce automatic commits to avoid hammering Git.
 
@@ -81,6 +88,21 @@ is subject to its limitations."
   :type '(choice (number :tag "Interval in seconds")
                  (const :tag "Off" nil)))
 (make-variable-buffer-local 'gac-debounce-interval)
+
+(defcustom gac-default-message nil
+  "Default message for automatic commits.
+
+It can be:
+- nil to use the default FILENAME
+- a string which is used
+- a function returning a string, called with FILENAME as
+  argument, in which case the result is used as commit message
+"
+  :tag "Default commit message"
+  :group 'git-auto-commit-mode
+  :type '(choice (string :tag "Commit message")
+                 (const :tag "Default: FILENAME" nil)
+                 (function :tag "Function")))
 
 (defun gac-relative-file-name (filename)
   "Find the path to FILENAME relative to the git directory."
@@ -130,7 +152,12 @@ STRING is the output line from PROC."
 Default to FILENAME."
   (let ((relative-filename (gac-relative-file-name filename)))
     (if (not gac-ask-for-summary-p)
-        relative-filename
+        (if gac-default-message
+            (if (functionp gac-default-message)
+                (funcall gac-default-message filename)
+              gac-default-message)
+          relative-filename)
+        (or gac-default-message relative-filename)
       (read-string "Summary: " nil nil relative-filename))))
 
 (defun gac-commit (buffer)
@@ -141,7 +168,7 @@ Default to FILENAME."
          (commit-msg (gac--commit-msg buffer-file))
          (default-directory (file-name-directory buffer-file)))
     (shell-command
-     (concat "git add " (shell-quote-argument filename)
+     (concat "git add " gac-add-additional-flag " " (shell-quote-argument filename)
              gac-shell-and
              "git commit -m " (shell-quote-argument commit-msg)))))
 
