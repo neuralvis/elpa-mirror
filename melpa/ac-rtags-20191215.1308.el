@@ -1,11 +1,11 @@
-;;; ac-rtags.el --- auto-complete back-end for RTags
+;;; ac-rtags.el --- auto-complete back-end for RTags -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2011-2017  Jan Erik Hanssen and Anders Bakken
 
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20181117.1949
+;; Package-Version: 20191215.1308
 ;; Package-Requires: ((auto-complete "1.4.0") (rtags "2.10"))
 
 ;; This file is not part of GNU Emacs.
