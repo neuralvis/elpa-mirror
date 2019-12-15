@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191214.1334
+;; Package-Version: 20191214.1921
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -541,15 +541,19 @@ between foreground and background is >= 7:1)."
    `(eldoc-box-body ((,class (:background ,bg-alt :foreground ,fg-main))))
    `(eldoc-box-border ((,class (:background ,fg-alt))))
    ;;;; elfeed
-   `(elfeed-search-date-face ((,class (:inherit default))))
-   `(elfeed-search-title-face ((,class (:inherit default))))
-   `(elfeed-search-unread-title-face ((,class (:inherit default :weight bold))))
-   `(elfeed-search-feed-face ((,class (:foreground ,blue))))
-   `(elfeed-search-tag-face ((,class (:foreground ,cyan))))
+   `(elfeed-log-date-face ((,class (:foreground ,blue))))
    `(elfeed-log-debug-level-face ((,class (:inherit modus-theme-intense-magenta))))
    `(elfeed-log-error-level-face ((,class (:inherit modus-theme-intense-red))))
-   `(elfeed-log-warn-level-face ((,class (:inherit modus-theme-subtle-yellow))))
    `(elfeed-log-info-level-face ((,class (:inherit modus-theme-subtle-cyan))))
+   `(elfeed-log-warn-level-face ((,class (:inherit modus-theme-subtle-yellow))))
+   `(elfeed-search-date-face ((,class (:foreground ,fg-special-cold))))
+   `(elfeed-search-feed-face ((,class (:foreground ,cyan))))
+   `(elfeed-search-filter-face ((,class (:foreground ,fg-special-cold))))
+   `(elfeed-search-last-update-face ((,class (:foreground ,fg-special-mild))))
+   `(elfeed-search-tag-face ((,class (:foreground ,fg-special-mild))))
+   `(elfeed-search-title-face ((,class (:foreground ,fg-main))))
+   `(elfeed-search-unread-count-face ((,class (:foreground ,fg-special-warm))))
+   `(elfeed-search-unread-title-face ((,class (:weight bold))))
    ;;;; emms
    `(emms-playlist-track-face ((,class (:foreground ,blue))))
    `(emms-playlist-selected-face ((,class (:foreground ,magenta :weight bold))))
@@ -600,6 +604,29 @@ between foreground and background is >= 7:1)."
    `(eshell-ls-symlink ((,class (:foreground ,cyan :underline t))))
    `(eshell-ls-unreadable ((,class (:background ,bg-inactive :foreground ,fg-inactive))))
    `(eshell-prompt ((,class (:foreground ,cyan-alt-other :weight bold))))
+   ;;;; evil-mode
+   `(evil-ex-commands ((,class (:foreground ,magenta-alt-other))))
+   `(evil-ex-info ((,class (:foreground ,cyan-alt-other))))
+   `(evil-ex-lazy-highlight ((,class (:inherit lazy-highlight))))
+   `(evil-ex-search ((,class (:inherit isearch))))
+   `(evil-ex-substitute-matches ((,class (:inherit modus-theme-refine-yellow :underline t))))
+   `(evil-ex-substitute-replacement ((,class (:inherit modus-theme-intense-green :weight bold))))
+   ;;;; evil-goggles
+   `(evil-goggles-change-face ((,class (:inherit modus-theme-refine-yellow))))
+   `(evil-goggles-commentary-face ((,class (:inherit modus-theme-subtle-neutral :slant ,modus-theme-slant))))
+   `(evil-goggles-default-face ((,class (:inherit modus-theme-subtle-neutral))))
+   `(evil-goggles-delete-face ((,class (:inherit modus-theme-refine-red))))
+   `(evil-goggles-fill-and-move-face ((,class (:inherit evil-goggles-default-face))))
+   `(evil-goggles-indent-face ((,class (:inherit evil-goggles-default-face))))
+   `(evil-goggles-join-face ((,class (:inherit modus-theme-subtle-green))))
+   `(evil-goggles-nerd-commenter-face ((,class (:inherit evil-goggles-commentary-face))))
+   `(evil-goggles-paste-face ((,class (:inherit modus-theme-subtle-cyan))))
+   `(evil-goggles-record-macro-face ((,class (:inherit modus-theme-special-cold))))
+   `(evil-goggles-replace-with-register-face ((,class (:inherit modus-theme-refine-magenta))))
+   `(evil-goggles-set-marker-face ((,class (:inherit modus-theme-intense-magenta))))
+   `(evil-goggles-shift-face ((,class (:inherit evil-goggles-default-face))))
+   `(evil-goggles-surround-face ((,class (:inherit evil-goggles-default-face))))
+   `(evil-goggles-yank-face ((,class (:inherit modus-theme-subtle-blue))))
    ;;;; eww
    `(eww-invalid-certificate ((,class (:inherit error))))
    `(eww-valid-certificate ((,class (:inherit success))))
