@@ -148,11 +148,13 @@ pyim 支持双拼输入模式，用户可以通过变量 `pyim-default-scheme' �
 
 *** 通过 pyim 来支持 rime 所有输入法
 
-pyim 使用 emacs 动态模块：[[https://github.com/merrickluo/liberime][liberime]]
-来支持 rime, 设置方式：
+1. 安裝配置 liberime 和 pyim, 方式见：[[https://github.com/merrickluo/liberime][liberime]].
+2. 将 liberime 的 page_size 设置为 100, 这样 pyim 一次可以获取 100
+   个候选词，然后自己处理分页。用户可以按 TAB 键切换到辅助输入
+   法来输入 100 以后的词条。
 
-1. 安裝 liberime, 见：[[https://github.com/merrickluo/liberime]] 。
-2. 创建文件： "~/.emacs.d/pyim/rime/default.custom.yaml", 内容为：
+   手动设置方式是： 在 `liberime-user-data-dir'/default.custom.yaml
+   文件中添加类似下面的内容：
 
    #+BEGIN_EXAMPLE
    patch:
@@ -161,38 +163,12 @@ pyim 使用 emacs 动态模块：[[https://github.com/merrickluo/liberime][liber
         "speller/auto_select_unique_candidate": false
    #+END_EXAMPLE
 
-   `liberime-get-context' 函数在默认情况下一次只能获取5个候选词，如
-   果想获取更多的候选词，就需要给 liberime 发送翻页命令字符，模拟翻
-   页操作，会让 pyim 代码的维护难度增加许多，所以 pyim 使用了一种简
-   单粗暴的方式来处理这个问题： 将 rime 的 page_size 设置为 50, 这
-   样，pyim 在不处理 rime 分页的情况下, 一次就可以获取 50 个候选词，
-   然后用自己方式来分页。用户可以按 TAB 键切换到辅助输入法来输入 50
-   以后的词条。
-
-   更改配置这种方式有点 hack, 如果 liberime 能设置 menu/page_size
-   就好了。
-
-3. 參考设置：
-   #+BEGIN_EXAMPLE
-   (use-package liberime
-     :load-path "/path/to/liberime-module/" ;liberime.so 或者 liberime.dll 所在的目录
-     :config
-     ;; 注意事项:
-     ;; 1. 文件路径需要用 `expand-file-name' 函数处理。
-     ;; 2. `librime-start' 的第一个参数说明 "rime 共享数据文件夹"
-     ;;     的位置，不同的平台其位置也各不相同，可以参考：
-     ;;     https://github.com/rime/home/wiki/RimeWithSchemata
-     (liberime-start (expand-file-name "/path/to/rime-data")
-                     (expand-file-name "~/.emacs.d/pyim/rime/"))
-     (liberime-select-schema "luna_pinyin_simp")
-     (setq pyim-default-scheme 'rime))
-   #+END_EXAMPLE
-4. 使用 rime 全拼输入法的用户，也可以使用 rime-quanpin scheme,
+3. 使用 rime 全拼输入法的用户，也可以使用 rime-quanpin scheme,
    这个 scheme 是专门针对 rime 全拼输入法定制的，支持全拼v快捷键。
    #+BEGIN_EXAMPLE
    (setq pyim-default-scheme 'rime-quanpin)
    #+END_EXAMPLE
-5. 如果通过 rime 使用微软双拼，可以用以下设置：
+4. 如果通过 rime 使用微软双拼，可以用以下设置：
    #+BEGIN_EXAMPLE
    (liberime-select-schema "double_pinyin_mspy")
    (setq pyim-default-scheme 'rime-microsoft-shuangpin)
