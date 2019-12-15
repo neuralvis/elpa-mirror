@@ -10,7 +10,7 @@
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: 4 Jan 2015
 ;; Version: 0.4.2
-;; Package-Version: 20191104.2208
+;; Package-Version: 20191215.1240
 ;; Keywords: reading, convenience, chill
 ;; URL: https://github.com/marcowahl/rope-read-mode
 ;; Package-Requires: ((emacs "24"))
@@ -103,6 +103,12 @@
   :group 'rope-read
   :type 'boolean)
 
+(defcustom rope-read-mode-lighter
+  " ⇌"
+  "Text in the mode line to indicate that the mode is on."
+  :group 'rope-read
+  :type 'string)
+
 
 ;; Variables
 
@@ -177,7 +183,7 @@ This mode can help to save eye movements.
 By reversing every other line the reader often just can dip the
 gaze at the end of a line to read on instead of doing the
 annoying search for the next line at the other side of the text."
-  :lighter " ⇌" :keymap rope-read-mode-map
+  :lighter rope-read-mode-lighter :keymap rope-read-mode-map
   (if rope-read-mode (rope-read-mode-enable) (rope-read-mode-disable)))
 
 (defun rope-read-mode-enable ()

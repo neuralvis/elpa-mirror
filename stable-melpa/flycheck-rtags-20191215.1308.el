@@ -1,10 +1,10 @@
-;;; flycheck-rtags.el --- RTags Flycheck integration.
+;;; flycheck-rtags.el --- RTags Flycheck integration -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2017 Christian Schwarzgruber
 
 ;; Author: Christian Schwarzgruber <c.schwarzgruber.cs@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20180619.824
+;; Package-Version: 20191215.1308
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "24") (flycheck "0.23") (rtags "2.10"))
 
@@ -107,7 +107,7 @@ CALLBACK is the callback function to call."
     (rtags-diagnostics)
     (funcall callback 'finished (flycheck-rtags--build-error checker buffer))))
 
-(defun flycheck-rtags--verify (checker)
+(defun flycheck-rtags--verify (_checker)
   "Verify the Flycheck RTags syntax CHECKER."
   (list
    (flycheck-verification-result-new

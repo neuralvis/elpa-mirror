@@ -1,11 +1,11 @@
-;;; helm-rtags.el --- A front-end for rtags
+;;; helm-rtags.el --- A front-end for rtags -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2011-2015  Jan Erik Hanssen and Anders Bakken
 
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20170813.411
+;; Package-Version: 20191215.1308
 ;; Version: 0.2
 ;; Package-Requires: ((helm "2.0") (rtags "2.10"))
 
