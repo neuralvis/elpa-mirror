@@ -1,2 +1,2 @@
 
-(shroud . [(20191214 1702) ((emacs (25)) (epg (1 0 0)) (s (1 6 0)) (bui (1 2 0)) (dash (2 15 0)) (dash-functional (2 15 0))) "Shroud secrets" tar ((:commit . "f06b31a29538fe472d033e980b7b4ee2fa60aa35") (:keywords "tools" "password") (:authors ("Amar Singh" . "nly@disroot.org")) (:maintainer "Amar Singh" . "nly@disroot.org") (:url . "https://github.com/o-nly/emacs-shroud"))])
+(shroud . [(20191214 1702) ((emacs (25)) (epg (1 0 0)) (s (1 6 0)) (bui (1 2 0)) (dash (2 15 0)) (dash-functional (2 15 0))) "Shroud secrets" tar ((:commit . "3c7a56e5e6c4e210166361b2b45e49e2ff2a0dc9") (:keywords "tools" "password") (:authors ("Amar Singh" . "nly@disroot.org")) (:maintainer "Amar Singh" . "nly@disroot.org") (:url . "https://github.com/o-nly/emacs-shroud"))])

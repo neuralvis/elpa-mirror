@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191214.1921
+;; Package-Version: 20191215.845
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -905,13 +905,13 @@ between foreground and background is >= 7:1)."
    `(info-menu-star ((,class (:inherit default))))
    `(info-node ((,class ((:weight bold)))))
    ;;;; ivy
-   `(ivy-action ((,class (:foreground ,magenta-alt))))
+   `(ivy-action ((,class (:foreground ,red-alt :weight bold))))
    `(ivy-completions-annotations ((,class (:foreground ,fg-special-cold :slant ,modus-theme-slant))))
    `(ivy-confirm-face ((,class (:foreground ,cyan))))
    `(ivy-current-match ((,class (:inherit modus-theme-special-mild :weight bold :underline t))))
    `(ivy-cursor ((,class (:inherit cursor))))
    `(ivy-grep-info ((,class (:foreground ,cyan-alt))))
-   `(ivy-grep-line-number ((,class (:inherit line-number))))
+   `(ivy-grep-line-number ((,class (:foreground ,fg-special-warm))))
    `(ivy-highlight-face ((,class (:foreground ,magenta))))
    `(ivy-match-required-face ((,class (:inherit error))))
    `(ivy-minibuffer-match-face-1 ((,class (:inherit modus-theme-subtle-neutral))))
@@ -929,8 +929,8 @@ between foreground and background is >= 7:1)."
    `(ivy-virtual ((,class (:foreground ,magenta-alt-other))))
    `(ivy-yanked-word ((,class (:inherit modus-theme-refine-blue))))
    ;;;; ivy-posframe
-   `(ivy-posframe ((,class (:background ,bg-alt :foreground ,fg-main))))
-   `(ivy-posframe-border ((,class (:inherit default :background ,fg-main))))
+   `(ivy-posframe ((,class (:background ,bg-dim :foreground ,fg-main))))
+   `(ivy-posframe-border ((,class (:background ,bg-active))))
    `(ivy-posframe-cursor ((,class (:inherit cursor))))
    ;;;; line numbers (display-line-numbers-mode and global variant)
    `(line-number ((,class (:background ,bg-alt :foreground ,fg-alt))))
