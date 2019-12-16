@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Package-Version: 20190821.449
+;; Package-Version: 20191215.1946
 ;; Version: 0.5
 ;; Package-Requires: ((emacs "24.3") (company "0.8.1") (rtags "2.10"))
 
@@ -36,7 +36,7 @@
 (require 'company-template)
 
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 (declare-function company-doc-buffer "ext:company")
 (declare-function company-manual-begin "ext:company")

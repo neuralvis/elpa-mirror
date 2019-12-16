@@ -4,7 +4,7 @@
 
 ;; Author: Damien Cassou <damien@cassou.me>
 ;; Keywords: multimedia
-;; Package-Version: 20191129.853
+;; Package-Version: 20191215.1307
 ;; Url: https://gitlab.petton.fr/mpdel/libmpdel
 ;; Package-requires: ((emacs "25.1"))
 ;; Version: 1.1.2
@@ -234,6 +234,10 @@ message from the server.")
 (cl-defmethod libmpdel-entity-name ((song libmpdel-song))
   "Return SONG's name."
   (libmpdel--song-name song))
+
+(cl-defmethod libmpdel-entity-name ((_entity (eql stored-playlists)))
+  "Return a string describing the `stored-playlists' entity."
+  "Stored playlists")
 
 (cl-defmethod libmpdel-entity-name ((_entity (eql artists)))
   "Return a string describing the `artists' entity."
