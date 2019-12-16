@@ -7,7 +7,7 @@
 ;;     Sebastian Wiesner <swiesner@lunaryorn.com>
 ;; Maintainer: Peter Fraenkel <pnf@podsnap.com>
 ;; URL: https://github.com/clojure-emacs/squiggly-clojure
-;; Package-Version: 20190611.2351
+;; Package-Version: 20191215.2227
 ;; Version: 1.8.0
 ;; Package-Requires: ((cider "0.22.0") (flycheck "32-cvs") (let-alist "1.0.1") (emacs "25"))
 
@@ -201,7 +201,9 @@ If injecting the dependencies is not preferred set `flycheck-clojure-inject-depe
   (when (and flycheck-clojure-inject-dependencies-at-jack-in
              (boundp 'cider-jack-in-dependencies))
     (cider-add-to-alist 'cider-jack-in-dependencies "acyclic/squiggly-clojure" flycheck-clojure-dep-version)
-    (cider-add-to-alist 'cider-jack-in-dependencies-exclusions "acyclic/squiggly-clojure" '("org.clojure/tools.reader"))))
+    ;; reader is needed by kibit and no longer provided via cider
+    ;;(cider-add-to-alist 'cider-jack-in-dependencies-exclusions "acyclic/squiggly-clojure" '("org.clojure/tools.reader"))
+    ))
 
 ;;;###autoload
 (defun flycheck-clojure-setup ()

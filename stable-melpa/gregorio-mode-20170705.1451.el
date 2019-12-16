@@ -5,7 +5,6 @@
 ;; Author: Fr. John Jenkins <jenkins@sspx.ng>
 ;; Created: 2015-10-25
 ;; Version: 1.0
-;; Package-Version: 20170705.1451
 ;; Keywords: gregorio,chant
 ;; URL: https://jsrjenkins.github.io/gregorio-mode/
 
