@@ -2,7 +2,7 @@
 
 ;; Author: Neil Okamoto <neil.okamoto+melpa@gmail.com>
 ;; Version: 0.3.0
-;; Package-Version: 20190714.146
+;; Package-Version: 20191217.511
 ;; Keywords: games
 ;; URL: https://github.com/gonewest818/adafruit-wisdom.el
 ;; Package-Requires: ((emacs "25") (request "0.3.1"))
@@ -55,10 +55,10 @@ Returns the parsed XML."
           (xml-parse-region (point-min) (point-max)))
       (with-temp-file cache
         (let ((resp (request adafruit-wisdom-quote-url
-                             :type "GET"
-                             :sync t
-                             :timeout 15
-                             :parser 'buffer-string)))
+                      :type "GET"
+                      :sync t
+                      :timeout 15
+                      :parser 'buffer-string)))
           (set-buffer-file-coding-system 'no-conversion)
           (insert (request-response-data resp))
           (xml-parse-region (point-min) (point-max)))))))

@@ -2,9 +2,9 @@
 
 ;; Copyright (c) 2019 Paul W. Rankin
 
-;; Author: Paul W. Rankin <hello@paulwrankin.com>
+;; Author: Paul W. Rankin <code@paulwrankin.com>
 ;; Keywords: convenience
-;; Package-Version: 20191128.2229
+;; Package-Version: 20191217.919
 ;; Version: 0.3.0
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://github.com/rnkn/side-notes
