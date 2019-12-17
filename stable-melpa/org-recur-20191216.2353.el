@@ -1,11 +1,11 @@
-;;; org-recur.el --- Recurring org-mode tasks. -*- lexical-binding: t; -*-
+;;; org-recur.el --- Recurring org-mode tasks -*- lexical-binding: t; -*-
 ;;
 ;; Filename:    org-recur.el
 ;; Description: Recurring org-mode tasks.
 ;; Author:      Marcin Swieczkowski <marcin.swieczkowski@gmail.com>
 ;; Created:     Fri Feb 15 2019
 ;; Version:     1.2
-;; Package-Version: 20191213.2309
+;; Package-Version: 20191216.2353
 ;; Package-Requires: ((emacs "24") (org "9.0"))
 ;; URL:         https://github.com/m-cat/org-recur
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -72,7 +72,11 @@
   :group 'org-recur)
 
 (defcustom org-recur-finish-archive nil
-  "Non-nil if calling `org-recur-finish' on a task without org-recur syntax should archive it."
+  "Non-nil if calling `org-recur-finish' on a task without org-recur syntax \
+should archive it.
+
+Note that this variable has no effect when `org-log-done' is t,
+in which case automatic archiving is disabled."
   :type 'boolean
   :group 'org-recur)
 
@@ -157,9 +161,11 @@ values of `org-recur-finish-done' and `org-recur-finish-archive'."
            (when org-recur-finish-done
              (org-todo 'done))
            (when org-recur-finish-archive
-             (org-archive-subtree))))))
+             (if (eq 'note org-log-done)
+                 (message "Warning: automatic archiving is disabled when org-log-done is t.")
+               (org-archive-subtree)))))))
 (defun org-recur--org-agenda-schedule (date finish)
-  "Schedule a task in `org-mode-agenda' according to the org-recur syntax in DATE.
+  "Schedule a task in `org-mode-agenda' according to org-recur syntax in DATE.
 When FINISH is t, optionally completes and archives the task, based on the
 values of `org-recur-finish-done' and `org-recur-finish-archive'."
   (let ((next-date (org-recur--get-next-date date)))
@@ -169,7 +175,9 @@ values of `org-recur-finish-done' and `org-recur-finish-archive'."
            (when org-recur-finish-done
              (org-agenda-todo 'done))
            (when org-recur-finish-archive
-             (org-agenda-archive))))))
+             (if (eq 'note org-log-done)
+                 (message "Warning: automatic archiving is disabled when org-log-done is t.")
+               (org-agenda-archive)))))))
 (defun org-recur--org-finish ()
   "Reschedule, or optionally complete and archive, a task in `org-mode' according to its recurrence string."
   (let ((heading (substring-no-properties (org-get-heading))))
@@ -258,8 +266,7 @@ To schedule a task to tomorrow:
 (defun org-recur-schedule-today ()
   "Schedule an `org-mode' task to the current date."
   (interactive)
-  (org-recur-schedule-date "|+0|")
-  )
+  (org-recur-schedule-date "|+0|"))
 
 (defvar org-recur-mode-map (make-sparse-keymap)
   "Keymap for org recur mode.")

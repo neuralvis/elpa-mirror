@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Chen Bin
 ;;
 ;; Version: 0.0.6
-;; Package-Version: 20191106.2344
+;; Package-Version: 20191217.8
 ;; Keywords: convenience
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/wucuo
@@ -90,6 +90,11 @@
     js2-function-param
     js2-object-property
     js2-object-property-access
+
+    ;; css
+    font-lock-builtin-face
+    css-selector
+    css-property
 
     ;; ReactJS
     rjsx-text
