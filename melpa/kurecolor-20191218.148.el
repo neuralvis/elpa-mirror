@@ -3,7 +3,7 @@
 ;;; Author: Jason Milkins <jasonm23@gmail.com>
 
 ;;; Version: 1.2.6
-;; Package-Version: 20180401.1221
+;; Package-Version: 20191218.148
 
 ;;; Commentary:
 ;;
@@ -98,7 +98,6 @@
 
 ;;; Code:
 
-(require 'cl)
 (require 's)
 
 (unless (>= (string-to-number (format "%i.%i" emacs-major-version emacs-minor-version)) 24.1)
