@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Free Software Foundation, Inc.
 
 ;; Version: 1.5
-;; Package-Version: 20191208.2129
+;; Package-Version: 20191217.1934
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -105,7 +105,8 @@ language-server/bin/php-language-server.php"))
                                 (java-mode . eglot--eclipse-jdt-contact)
                                 (dart-mode . ("dart_language_server"))
                                 (elixir-mode . ("language_server.sh"))
-                                (ada-mode . ("ada_language_server")))
+                                (ada-mode . ("ada_language_server"))
+                                (scala-mode . ("metals-emacs")))
   "How the command `eglot' guesses the server to start.
 An association list of (MAJOR-MODE . CONTACT) pairs.  MAJOR-MODE
 is a mode symbol, or a list of mode symbols.  The associated
