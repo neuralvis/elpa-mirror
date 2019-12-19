@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20191214.138
+;; Package-Version: 20191219.57
 ;; Version: 0.5.0
 ;; Keywords: convenience, tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -575,9 +575,6 @@ You can use `posframe-delete-all' to delete all posframes."
 
       ;; Force raise the current posframe.
       (raise-frame posframe--frame)
-
-      ;; Sometimes, if no this line, border can not be showed properly.
-      (redisplay)
 
       ;;Do not return anything.
       nil)))
