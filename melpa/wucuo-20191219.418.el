@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018 Chen Bin
 ;;
 ;; Version: 0.0.6
-;; Package-Version: 20191217.8
+;; Package-Version: 20191219.418
 ;; Keywords: convenience
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/wucuo
@@ -58,6 +58,11 @@
 
 (defcustom wucuo-debug nil
   "Output debug information when it's not nil."
+  :type 'boolean
+  :group 'wucuo)
+
+(defcustom wucuo-auto-turn-on-flyspell t
+  "Turn on `flyspell-mode' automatically after running `wucuo-start'."
   :type 'boolean
   :group 'wucuo)
 
@@ -327,7 +332,8 @@ If FORCE is t, the major mode's own predicate setup."
   (setq flyspell-generic-check-word-predicate
         #'wucuo-generic-check-word-predicate)
 
-  (flyspell-mode 1))
+  (when wucuo-auto-turn-on-flyspell
+    (flyspell-mode 1)))
 
 (provide 'wucuo)
 ;;; wucuo.el ends here
