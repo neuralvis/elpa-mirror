@@ -20,7 +20,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20191206.2138
+;; Package-Version: 20191219.1646
 ;; Author: Adrien Brochard
 ;; Keywords: kubernetes k8s tools processes
 ;; URL: https://github.com/abrochard/kubel
@@ -267,6 +267,8 @@ TYPENAME is the resource type/name."
   (let ((filename (format "/tmp/kubel/%s-%s.yaml"
                           (replace-regexp-in-string "\*\\| " "" (buffer-name))
                           (floor (float-time)))))
+    (unless  (file-exists-p "/tmp/kubel")
+      (make-directory "/tmp/kubel"))
     (write-region (point-min) (point-max) filename)
     (kubel--exec (format "*kubectl - apply - %s*" filename) nil (list "apply" "-f" filename))
     (message "Applied %s" filename)))
