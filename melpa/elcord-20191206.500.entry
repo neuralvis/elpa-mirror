@@ -1,2 +1,0 @@
-
-(elcord . [(20191206 500) ((emacs (25))) "Allows you to integrate Rich Presence from Discord" tar ((:commit . "1fcd1f52dbc52f5dd566a79501591b93db16cb1a") (:keywords "games") (:authors ("heatingdevice") ("Wilfredo Velázquez-Rodríguez" . "zulu.inuoe@gmail.com")) (:maintainer "heatingdevice") (:url . "https://github.com/Mstrodl/elcord"))])
