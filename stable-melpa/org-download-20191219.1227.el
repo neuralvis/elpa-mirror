@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
-;; Package-Version: 20191118.934
+;; Package-Version: 20191219.1227
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3") (async "1.2"))
 ;; Keywords: multimedia images screenshots download
@@ -380,6 +380,21 @@ It's inserted before the image link and is used to annotate it.")
   "[[file:%s]]\n"
   "Format of the file link to insert.")
 
+(defcustom org-download-link-format-function #'org-download-link-format-function-default
+  "Function that takes FILENAME and returns a org link."
+  :type 'function)
+
+(defun org-download-link-format-function-default (filename)
+  "The default function of `org-download-link-format-function'."
+  (if (and (>= (string-to-number org-version) 9.3)
+           (eq org-download-method 'attach))
+      (format "[[attachment:%s]]\n"
+              (org-link-escape
+               (file-relative-name filename (org-attach-dir))))
+    (format org-download-link-format
+            (org-link-escape
+             (funcall org-download-abbreviate-filename-function filename)))))
+
 (defun org-download-image (link)
   "Save image at address LINK to `org-download--dir'."
   (interactive "sUrl: ")
@@ -485,10 +500,7 @@ It's inserted before the image link and is used to annotate it.")
     (insert (if (= org-download-image-org-width 0)
                 ""
               (format "#+attr_org: :width %dpx\n" org-download-image-org-width)))
-    (insert
-     (format org-download-link-format
-             (org-link-escape
-              (funcall org-download-abbreviate-filename-function filename))))
+    (insert (funcall org-download-link-format-function filename))
     (org-download--display-inline-images)
     (setq str (buffer-substring-no-properties line-beg (point)))
     (when in-item-p

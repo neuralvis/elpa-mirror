@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/ace-link
-;; Package-Version: 20191218.942
+;; Package-Version: 20191219.1209
 ;; Version: 0.5.0
 ;; Package-Requires: ((avy "0.4.0"))
 ;; Keywords: convenience, links, avy
@@ -836,7 +836,7 @@ looks like manpages with a regular expression."
                (avy--style-fn avy-style)))))
     (ace-link--cider-inspector-action pt)))
 
-(declare-function 'cider-inspector-operate-on-point "ext:cider")
+(declare-function cider-inspector-operate-on-point "ext:cider-inspector")
 
 (defun ace-link--cider-inspector-collect ()
   "Collect the positions of visible links in the current
