@@ -4,7 +4,6 @@
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>
 ;; Version: 1.3
-;; Package-Version: 20160102.2009
 ;; Keywords: faces, matching
 ;; URL: http://nschum.de/src/emacs/highlight-symbol/
 ;; Compatibility: GNU Emacs 23.x, GNU Emacs 24.x, GNU Emacs 25.x
