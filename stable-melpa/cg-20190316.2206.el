@@ -4,7 +4,6 @@
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
 ;; Version: 0.3.1
-;; Package-Version: 20190316.2206
 ;; Package-Requires: ((emacs "24.3"))
 ;; Url: https://visl.sdu.dk/constraint_grammar.html
 ;; Keywords: languages
