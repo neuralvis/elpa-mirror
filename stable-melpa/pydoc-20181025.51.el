@@ -7,7 +7,6 @@
 ;; Contributions from Kyle Meyer
 ;; Created: 8 Mar 2015
 ;; Version: 0.2
-;; Package-Version: 20181025.51
 ;; Keywords: pydoc, python
 ;; Homepage: https://github.com/statmobile/pydoc
 

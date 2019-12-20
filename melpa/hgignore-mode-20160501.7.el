@@ -4,6 +4,7 @@
 
 ;; Author: Omair Majid <omair.majid@gmail.com>
 ;; URL: http://github.com/omajid/hgignore-mode
+;; Package-Version: 20160501.7
 ;; Keywords: convenience vc hg
 ;; Version: 0.1.20150329
 
