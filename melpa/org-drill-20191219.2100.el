@@ -5,7 +5,7 @@
 ;; Maintainer: Phillip Lord <phillip.lord@russet.org.uk>
 ;; Author: Paul Sexton <eeeickythump@gmail.com>
 ;; Version: 2.7
-;; Package-Version: 20190727.1930
+;; Package-Version: 20191219.2100
 ;; Package-Requires: ((emacs "25.3") (seq "2.14") (org "9.2.4") (persist "0.3"))
 ;; Keywords: games, outlines, multimedia
 
@@ -2054,6 +2054,13 @@ RESCHEDULE-FN is the function to reschedule."
            (ignore-errors
              (org-display-inline-images t))
            (org-cycle-hide-drawers 'all)
+           (org-remove-latex-fragment-image-overlays)
+           (save-excursion
+             (org-mark-subtree)
+             (let ((beg (region-beginning))
+                   (end (region-end)))
+               (org--latex-preview-region beg end))
+             (deactivate-mark))
            (org-drill-with-hidden-cloze-hints
             (funcall reschedule-fn session))))))
 
@@ -2073,7 +2080,7 @@ RESCHEDULE-FN is the function to reschedule."
 (defun org-drill--show-latex-fragments ()
   "Show latex fragment."
   (org-remove-latex-fragment-image-overlays)
-  (org-toggle-latex-fragment '(4)))
+  (org-toggle-latex-fragment '(16)))
 
 (defun org-drill-present-two-sided-card (session)
   (org-drill-with-hidden-comments
@@ -2414,7 +2421,7 @@ See `org-drill' for more details."
                  (rtn
                   (cond
                    ((null presentation-fn)
-                   (message "%s:%d: Unrecognised card type '%s', skipping..."
+                    (message "%s:%d: Unrecognised card type '%s', skipping..."
                              (buffer-name) (point) card-type)
                     (sit-for 0.5)
                     'skip)
@@ -2441,7 +2448,6 @@ See `org-drill' for more details."
              (apply-partially 'org-drill-card-tag-caller 3)
              tags)
             (cl-incf org-drill-cards-in-this-emacs)
-            (org-remove-latex-fragment-image-overlays)
             rtn))))))
 
 (defun org-drill-entries-pending-p (session)
