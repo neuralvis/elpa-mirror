@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191218.1553
+;; Package-Version: 20191221.455
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -1126,7 +1126,7 @@ between foreground and background is >= 7:1)."
    `(neo-vc-unlocked-changes-face ((,class (:inherit modus-theme-refine-blue))))
    `(neo-vc-up-to-date-face ((,class (:foreground ,fg-alt))))
    `(neo-vc-user-face ((,class (:foreground ,magenta))))
-   ;;;; org-mode
+   ;;;; org
    `(org-agenda-calendar-event ((,class (:foreground ,blue-alt))))
    `(org-agenda-calendar-sexp ((,class (:foreground ,cyan-alt))))
    `(org-agenda-clocking ((,class (:inherit modus-theme-special-cold))))
@@ -1207,7 +1207,6 @@ between foreground and background is >= 7:1)."
    `(org-mode-line-clock ((,class (:background ,bg-main :foreground ,fg-main))))
    `(org-mode-line-clock-overrun ((,class (:inherit modus-theme-intense-red))))
    `(org-priority ((,class (:foreground ,magenta))))
-   `(org-recur ((,class (:foreground ,magenta-active))))
    `(org-quote ((,class (:inherit org-block :foreground ,fg-special-cold))))
    `(org-scheduled ((,class (:foreground ,fg-special-cold))))
    `(org-scheduled-previously ((,class (:foreground ,fg-special-warm))))
@@ -1224,6 +1223,15 @@ between foreground and background is >= 7:1)."
    `(org-verbatim ((,class (:background ,bg-dim :foreground ,fg-special-warm))))
    `(org-verse ((,class (:inherit org-quote))))
    `(org-warning ((,class (:foreground ,blue-intense))))
+   ;;;; org-journal
+   `(org-journal-calendar-entry-face ((,class (:foreground ,yellow-alt-other :slant ,modus-theme-slant))))
+   `(org-journal-calendar-scheduled-face ((,class (:foreground ,red-alt-other :slant ,modus-theme-slant))))
+   `(org-journal-highlight ((,class (:foreground ,magenta-alt))))
+   ;;;; org-noter
+   `(org-noter-no-notes-exist-face ((,class (:foreground ,red-active :weight bold))))
+   `(org-noter-notes-exist-face ((,class (:foreground ,green-active :weight bold))))
+   ;;;; org-recur
+   `(org-recur ((,class (:foreground ,magenta-active))))
    ;;;; outline-mode
    `(outline-1 ((,class (:inherit org-level-1))))
    `(outline-2 ((,class (:inherit org-level-2))))
