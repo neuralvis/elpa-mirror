@@ -10,7 +10,8 @@
 ;; URL: https://github.com/flexibeast/pulseaudio-control
 ;; Keywords: multimedia, hardware, sound, PulseAudio
 ;; Version: 0.1
-;; Package-Version: 0.1
+;; Package-Version: 20190828.1136
+;; Package-X-Original-Version: 0.1
 
 ;;
 ;; This file is NOT part of GNU Emacs.
