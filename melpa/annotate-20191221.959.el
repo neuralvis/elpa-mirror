@@ -6,9 +6,9 @@
 ;; Author: Bastian Bechtold
 ;; Maintainer: Bastian Bechtold
 ;; URL: https://github.com/bastibe/annotate.el
-;; Package-Version: 20191220.1000
+;; Package-Version: 20191221.959
 ;; Created: 2015-06-10
-;; Version: 0.4.8
+;; Version: 0.5.0
 
 ;; This file is NOT part of GNU Emacs.
 

@@ -5,7 +5,7 @@
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; Created: 2019/04/20
 ;; Version: 0.4.0
-;; Package-Version: 20191204.451
+;; Package-Version: 20191219.1521
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/twlz0ne/with-emacs.el
 ;; Keywords: tools
@@ -153,7 +153,8 @@ returned list are in the same order as in TREE.
   (delete-region (point-min) (point-max))
 
   ;; Send input
-  (let ((print-escape-newlines t))
+  (let ((print-escape-newlines t)
+        (print-escape-control-characters t))
     (mapc (lambda (it)
             (insert (format "%S" it))
             (comint-send-input))
