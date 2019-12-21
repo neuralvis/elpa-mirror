@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191221.455
+;; Package-Version: 20191221.835
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -377,6 +377,29 @@ between foreground and background is >= 7:1)."
    `(completions-annotations ((,class (:inherit italic))))
    `(completions-common-part ((,class nil)))
    `(completions-first-difference ((,class (:inherit bold))))
+   ;;;; counsel
+   `(counsel-active-mode ((,class (:foreground ,magenta-alt-other))))
+   `(counsel-application-name ((,class (:foreground ,red-alt-other))))
+   `(counsel-key-binding ((,class (:foreground ,blue-alt-other :weight bold))))
+   `(counsel-outline-1 ((,class (:inherit outline-1))))
+   `(counsel-outline-2 ((,class (:inherit outline-2))))
+   `(counsel-outline-3 ((,class (:inherit outline-3))))
+   `(counsel-outline-4 ((,class (:inherit outline-4))))
+   `(counsel-outline-5 ((,class (:inherit outline-5))))
+   `(counsel-outline-6 ((,class (:inherit outline-6))))
+   `(counsel-outline-7 ((,class (:inherit outline-7))))
+   `(counsel-outline-8 ((,class (:inherit outline-8))))
+   `(counsel-outline-default ((,class (:foreground ,green-alt-other :weight bold))))
+   `(counsel-variable-documentation ((,class (:foreground ,yellow-alt-other :slant ,modus-theme-slant))))
+   ;;;; counsel-css
+   `(counsel-css-selector-depth-face-1 ((,class (:foreground ,blue))))
+   `(counsel-css-selector-depth-face-2 ((,class (:foreground ,cyan))))
+   `(counsel-css-selector-depth-face-3 ((,class (:foreground ,green))))
+   `(counsel-css-selector-depth-face-4 ((,class (:foreground ,yellow))))
+   `(counsel-css-selector-depth-face-5 ((,class (:foreground ,magenta))))
+   `(counsel-css-selector-depth-face-6 ((,class (:foreground ,red))))
+   ;;;; counsel-org-capture-string
+   `(counsel-org-capture-string-template-body-face ((,class (:foreground ,fg-special-cold))))
    ;;;; custom
    `(custom-changed ((,class (:inherit modus-theme-subtle-cyan))))
    `(custom-comment ((,class (:foreground ,fg-alt))))
