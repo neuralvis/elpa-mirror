@@ -4,6 +4,7 @@
 
 ;; Author: David Shepherd <davidshepherd7@gmail.com>
 ;; Version: 0.1
+;; Package-Version: 20191020.1441
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0") (markdown-mode "2.2") (s "1.11.0") (request "0.3.0"))
 ;; Keywords: tools
 ;; URL: https://github.com/davidshepherd7/anki-mode
