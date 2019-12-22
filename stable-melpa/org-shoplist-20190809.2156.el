@@ -4,6 +4,7 @@
 
 ;; Author: lordnik22
 ;; Version: 1.0.0
+;; Package-Version: 20190809.2156
 ;; Keywords: extensions matching
 ;; URL: https://github.com/lordnik22
 ;; Package-Requires: ((emacs "25"))
