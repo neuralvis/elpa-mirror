@@ -5,6 +5,7 @@
 ;; Author: Sébastien Roccaserra (format "<%s%s@%s.%s>" "s" "roccaserra" "yahoo" "com")
 ;; Created: 07 Dec 2009
 ;; Keywords: lua
+;; Package-Version: 20170129.154
 
 ;; This file is not part of GNU Emacs.
 

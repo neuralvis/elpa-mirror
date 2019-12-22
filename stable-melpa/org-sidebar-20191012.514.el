@@ -2,7 +2,6 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/org-sidebar
-;; Package-Version: 20191012.514
 ;; Version: 0.3-pre
 ;; Package-Requires: ((emacs "26.1") (s "1.10.0") (dash "2.13") (dash-functional "1.2.0") (org "9.0") (org-ql "0.2") (org-super-agenda "1.0"))
 ;; Keywords: hypermedia, outlines, Org, agenda
