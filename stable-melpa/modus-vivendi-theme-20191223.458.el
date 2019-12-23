@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191221.922
+;; Package-Version: 20191223.458
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -33,12 +33,15 @@
 ;; accessibility criterion per the guidelines of the Worldwide Web
 ;; Consortium's Working Group on Accessibility (WCAG AAA standard).
 ;;
-;; 2. Offer as close to full face coverage as possible.  The output of
-;; `list-faces-display' offers all we need.  Note though, that it is
-;; difficult to create theme styles without actually using the
-;; packages/interfaces that require them.  As such, the development of
-;; this theme will be incremental, gradually incorporating the
-;; customisations for packages I use or have been exposed to.
+;; 2. Offer as close to full face coverage as possible.  The list is
+;; already quite long, with more additions to follow.
+;;
+;; Note though, that it is difficult to create theme styles without
+;; actually using the packages/interfaces that require them.  The output
+;; of `list-faces-display' offers all we need to get started.  As such,
+;; the development of this theme will be incremental, gradually
+;; incorporating the customisations for packages I use or have been
+;; exposed to.
 
 ;;; Code:
 
@@ -405,6 +408,13 @@ between foreground and background is >= 7:1)."
    `(counsel-notmuch-subject-face ((,class (:foreground ,magenta-alt-other))))
    ;;;; counsel-org-capture-string
    `(counsel-org-capture-string-template-body-face ((,class (:foreground ,fg-special-cold))))
+   ;;;; cov
+   `(cov-coverage-not-run-face ((,class (:foreground ,red-intense))))
+   `(cov-coverage-run-face ((,class (:foreground ,green-intense))))
+   `(cov-heavy-face ((,class (:foreground ,magenta-intense))))
+   `(cov-light-face ((,class (:foreground ,blue-intense))))
+   `(cov-med-face ((,class (:foreground ,yellow-intense))))
+   `(cov-none-face ((,class (:foreground ,cyan-intense))))
    ;;;; custom
    `(custom-changed ((,class (:inherit modus-theme-subtle-cyan))))
    `(custom-comment ((,class (:foreground ,fg-alt))))
@@ -720,6 +730,18 @@ between foreground and background is >= 7:1)."
      ((,(append '((supports :underline (:style wave))) class)
        (:foreground ,red :underline (:style wave)))
       (,class (:foreground ,red :underline t))))
+   ;;;; geiser
+   `(geiser-font-lock-autodoc-current-arg ((,class (:foreground ,magenta))))
+   `(geiser-font-lock-autodoc-identifier ((,class (:foreground ,blue))))
+   `(geiser-font-lock-doc-button ((,class (:foreground ,cyan-alt :underline t))))
+   `(geiser-font-lock-doc-link ((,class (:inherit link))))
+   `(geiser-font-lock-error-link ((,class (:foreground ,red-alt :underline t))))
+   `(geiser-font-lock-image-button ((,class (:foreground ,green-alt :underline t))))
+   `(geiser-font-lock-repl-input ((,class (:weight bold))))
+   `(geiser-font-lock-repl-output ((,class (:foreground ,magenta-alt-other))))
+   `(geiser-font-lock-repl-prompt ((,class (:foreground ,cyan-alt-other))))
+   `(geiser-font-lock-xref-header ((,class (:weight bold))))
+   `(geiser-font-lock-xref-link ((,class (:inherit link))))
    ;;;; git-commit
    `(git-commit-comment-action ((,class (:foreground ,fg-special-mild))))
    `(git-commit-comment-branch-local ((,class (:foreground ,cyan))))

@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20191223.130
+;; Package-Version: 20191223.513
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
 
@@ -55,7 +55,20 @@
 (defvar-local undo-fu--respect t)
 
 
-;; Internal functions.
+;; Internal functions/macros.
+
+(defmacro undo-fu--with-message-suffix (suffix &rest body)
+  "Add text after the message output."
+  (declare (indent 1))
+  (let ((message-orig (cl-gensym "--message-suffix-")))
+    `
+    (cl-letf*
+      (
+        (,message-orig (symbol-function 'message))
+        ((symbol-function 'message)
+          (lambda (arg &rest args)
+            (apply ,message-orig (append (list (concat arg ,suffix)) args)))))
+      ,@body)))
 
 
 (defun undo-fu--next-step (list)
@@ -91,30 +104,11 @@ Argument LIST-TO-FIND count the steps up until this undo step.
 Argument COUNT-LIMIT don't count past his value.
 
 Returns the number of steps to reach this list or COUNT-LIMIT."
-
-  ;; Skip past undo steps, so we don't redo existing undo steps, see #2.
-  (let
-    (
-      (list-start pending-undo-list)
-      (list-start-test nil)
-      (count-limit-test count-limit))
-
-    (setq list-start-test (gethash list-start undo-equiv-table))
-    (while (and (listp list-start-test) (not (null list-start-test)))
-      (setq count-limit count-limit-test)
-      (setq count-limit-test
-        (+
-          count-limit
-          (undo-fu--count-step-to-other list-start list-start-test most-positive-fixnum)))
-      (setq list-start list-start-test)
-      (setq list-start-test (gethash list-start undo-equiv-table)))
-    ;; Finish undo-step offset.
-
-    (undo-fu--count-step-to-other
-      (if (or (eq list-start t) (member last-command '(undo undo-fu-only-undo)))
-        (undo-fu--next-step buffer-undo-list)
-        list-start)
-      list-to-find count-limit)))
+  (undo-fu--count-step-to-other
+    (if (or (eq pending-undo-list t) (member last-command '(undo undo-fu-only-undo)))
+      (undo-fu--next-step buffer-undo-list)
+      pending-undo-list)
+    list-to-find count-limit))
 
 
 ;; Public functions.
@@ -126,7 +120,10 @@ wraps the `undo' function."
   (interactive "*")
   (unless undo-fu--checkpoint
     (user-error "Redo end-point not found!"))
-  (undo-fu-only-redo (undo-fu--count-redo-available undo-fu--checkpoint most-positive-fixnum)))
+
+  (undo-fu--with-message-suffix
+    " All"
+    (undo-fu-only-redo (undo-fu--count-redo-available undo-fu--checkpoint most-positive-fixnum))))
 
 
 (defun undo-fu-only-redo (&optional arg)
@@ -196,7 +193,11 @@ Optional argument ARG The number of steps to redo."
               ;; 'undo-in-region' unsupported.
               (when transient-mark-mode
                 (deactivate-mark))
-              (undo steps)
+              (undo-fu--with-message-suffix
+                (if undo-fu--respect
+                  ""
+                  " (unconstrained)")
+                (undo steps))
               t)
             (error (message "%s" (error-message-string err))))))
       (when success
@@ -230,6 +231,15 @@ Optional argument ARG the number of steps to undo."
     (when (or undo-fu--checkpoint-is-blocking (not was-undo-or-redo))
       (setq undo-fu--checkpoint (cdr buffer-undo-list)))
 
+    ;; Allow crossing the boundary, if we press [keyboard-quit].
+    ;; This allows explicitly over-stepping the boundary, in cases where it's needed.
+    (when undo-fu--respect
+      (when (string-equal last-command 'keyboard-quit)
+        (setq undo-fu--respect nil)
+        (setq undo-fu--checkpoint-is-blocking nil)
+        (setq undo-fu--checkpoint nil)
+        (message "Undo end-point ignored!")))
+
     (let*
       ;; Swap in 'undo' for our own function name.
       ;; Without this undo won't stop once the first undo step is reached.
@@ -249,7 +259,12 @@ Optional argument ARG the number of steps to undo."
               ;; 'undo-in-region' unsupported.
               (when transient-mark-mode
                 (deactivate-mark))
-              (undo-only steps)
+
+              (undo-fu--with-message-suffix
+                (if undo-fu--respect
+                  ""
+                  " (unconstrained)")
+                (undo-only steps))
               t)
             (error (message "%s" (error-message-string err))))))
       (when success
