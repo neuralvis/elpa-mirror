@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191223.458
+;; Package-Version: 20191223.809
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -314,6 +314,12 @@ between foreground and background is >= 7:1)."
    `(anzu-mode-line-no-match ((,class (:foreground ,red-active :weight bold))))
    `(anzu-replace-highlight ((,class (:inherit modus-theme-refine-yellow :underline t))))
    `(anzu-replace-to ((,class (:inherit modus-theme-intense-green :weight bold))))
+   ;;;; apt-sources-list
+   `(apt-sources-list-components ((,class (:foreground ,cyan))))
+   `(apt-sources-list-options ((,class (:foreground ,yellow))))
+   `(apt-sources-list-suite ((,class (:foreground ,green))))
+   `(apt-sources-list-type ((,class (:foreground ,magenta))))
+   `(apt-sources-list-uri ((,class (:foreground ,blue))))
    ;;;; artbollocks-mode
    `(artbollocks-face ((,class (:background ,bg-alt :foreground ,magenta-alt-other :underline t))))
    `(artbollocks-lexical-illusions-face ((,class (:inherit modus-theme-refine-magenta :underline t))))

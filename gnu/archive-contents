@@ -2313,7 +2313,7 @@
 	("Mattias Engdegård" . "mattiase@acm.org"))
        (:keywords "lisp" "maint" "regexps"))])
  (yasnippet .
-	    [(0 13 0)
+	    [(0 14 0)
 	     ((cl-lib
 	       (0 5)))
 	     "Yet another snippet extension for Emacs" tar

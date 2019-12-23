@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20191223.513
+;; Package-Version: 20191223.753
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
 
@@ -67,7 +67,7 @@
         (,message-orig (symbol-function 'message))
         ((symbol-function 'message)
           (lambda (arg &rest args)
-            (apply ,message-orig (append (list (concat arg ,suffix)) args)))))
+            (apply ,message-orig (append (list (concat arg "%s")) args (list ,suffix))))))
       ,@body)))
 
 
