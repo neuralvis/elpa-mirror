@@ -4,8 +4,8 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((projectile "0.14.0") (treemacs "0.0"))
-;; Package-Version: 20190619.1516
-;; Package-X-Original-Version: 0
+;; Package-Version: 20191223.1047
+;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 ;;; Projectile integration for treemacs

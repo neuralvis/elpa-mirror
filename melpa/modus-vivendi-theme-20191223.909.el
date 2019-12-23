@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191223.809
+;; Package-Version: 20191223.909
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -232,7 +232,7 @@ between foreground and background is >= 7:1)."
    `(modus-theme-refine-blue ((,class (:background ,blue-refine-bg :foreground ,blue-refine-fg))))
    `(modus-theme-refine-magenta ((,class (:background ,magenta-refine-bg :foreground ,magenta-refine-fg))))
    `(modus-theme-refine-cyan ((,class (:background ,cyan-refine-bg :foreground ,cyan-refine-fg))))
-   ;;; special base values that are closer the grayscale than
+   ;;; special base values that are closer to the grayscale than
    ;;; the accents defined above
    `(modus-theme-special-cold ((,class (:background ,bg-special-cold :foreground ,fg-special-cold))))
    `(modus-theme-special-mild ((,class (:background ,bg-special-mild :foreground ,fg-special-mild))))
@@ -1297,6 +1297,21 @@ between foreground and background is >= 7:1)."
    `(outline-6 ((,class (:inherit org-level-6))))
    `(outline-7 ((,class (:inherit org-level-7))))
    `(outline-8 ((,class (:inherit org-level-8))))
+   ;;;; package (M-x list-packages)
+   `(package-description ((,class (:foreground ,fg-special-cold))))
+   `(package-help-section-name ((,class (:foreground ,magenta-alt-other :weight bold))))
+   `(package-name ((,class (:inherit link))))
+   `(package-status-avail-obso ((,class (:foreground ,red :weight bold))))
+   `(package-status-available ((,class (:foreground ,fg-special-mild))))
+   `(package-status-built-in ((,class (:foreground ,magenta))))
+   `(package-status-dependency ((,class (:foreground ,magenta-alt-other))))
+   `(package-status-disabled ((,class (:inherit modus-theme-subtle-red))))
+   `(package-status-external ((,class (:foreground ,cyan-alt-other))))
+   `(package-status-held ((,class (:foreground ,yellow-alt))))
+   `(package-status-incompat ((,class (:foreground ,yellow :weight bold))))
+   `(package-status-installed ((,class (:foreground ,fg-special-warm))))
+   `(package-status-new ((,class (:foreground ,green :weight bold))))
+   `(package-status-unsigned ((,class (:foreground ,red-alt :weight bold))))
    ;;;; paren-face
    `(parenthesis ((,class (:foreground ,fg-alt))))
    ;;;; pass
@@ -1501,6 +1516,16 @@ between foreground and background is >= 7:1)."
    `(undo-tree-visualizer-default-face ((,class (:foreground ,fg-alt))))
    `(undo-tree-visualizer-register-face ((,class (:foreground ,magenta-intense))))
    `(undo-tree-visualizer-unmodified-face ((,class (:foreground ,green-intense))))
+   ;;;; vc
+   `(vc-conflict-state ((,class (:foreground ,red-active :weight bold))))
+   `(vc-edited-state ((,class (:foreground ,green-active))))
+   `(vc-locally-added-state ((,class (:foreground ,cyan-active))))
+   `(vc-locked-state ((,class (:foreground ,magenta-active :weight bold))))
+   `(vc-missing-state ((,class (:foreground ,yellow-active :weight bold))))
+   `(vc-needs-update-state ((,class (:foreground ,blue-active :weight bold))))
+   `(vc-removed-state ((,class (:foreground ,red-active :weight bold))))
+   `(vc-state-base ((,class (:foreground ,fg-active))))
+   `(vc-up-to-date-state ((,class (:foreground ,fg-active))))
    ;;;; visual-regexp
    `(vr/group-0 ((,class (:inherit modus-theme-subtle-cyan))))
    `(vr/group-1 ((,class (:inherit modus-theme-subtle-yellow))))

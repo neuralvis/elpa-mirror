@@ -4,8 +4,8 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25.2") (treemacs "0.0") (pfuture "1.3" )(magit "2.90.0"))
-;; Package-Version: 20190731.540
-;; Package-X-Original-Version: 0
+;; Package-Version: 20191223.1047
+;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 ;;; Closing the gaps for filewatch- and git-modes in conjunction with magit.
