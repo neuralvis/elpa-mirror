@@ -1,0 +1,2 @@
+
+(atcoder-tools . [(20191223 1547) ((emacs (26)) (f (0 20)) (s (1 12))) "An atcoder-tools client" single ((:commit . "334c9ccb105b1dd22b1de89324cddef81b768369") (:keywords "extensions" "tools") (:authors ("Seong Yong-ju" . "sei40kr@gmail.com")) (:maintainer "Seong Yong-ju" . "sei40kr@gmail.com") (:url . "https://github.com/sei40kr/atcoder-tools"))])
