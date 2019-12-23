@@ -1,0 +1,2 @@
+
+(imake . [(20191222 2257) ((emacs (24 3))) "Simple, opinionated make target runner" single ((:commit . "4e0f3ada81f1462d4600b8875d8e246260fc20ca") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/tarsius/imake"))])

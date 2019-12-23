@@ -1,2 +1,0 @@
-
-(undo-fu . [(20191215 50) ((emacs (26 2))) "Undo helper with redo" single ((:commit . "be82f88630d1478be4897f11a0b6a8a0a19cff5f") (:authors ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Campbell Barton" . "ideasman42@gmail.com") (:url . "https://gitlab.com/ideasman42/emacs-undo-fu"))])
