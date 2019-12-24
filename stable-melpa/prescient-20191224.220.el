@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20191221.1840
+;; Package-Version: 20191224.220
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 4.0
@@ -232,7 +232,10 @@ Usually this variable is dynamically bound to another value while
   :global t
   :group 'prescient
   (if prescient-persist-mode
-      (add-hook 'kill-emacs-hook #'prescient--save)
+      (progn
+        (prescient-persist-mode -1)
+        (setq prescient-persist-mode t)
+        (add-hook 'kill-emacs-hook #'prescient--save))
     (remove-hook 'kill-emacs-hook #'prescient--save)))
 
 ;;;; Utility functions

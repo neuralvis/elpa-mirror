@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191223.1838
+;; Package-Version: 20191224.938
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -351,6 +351,32 @@ between foreground and background is >= 7:1)."
    `(widget-field ((,class (:background ,bg-alt :foreground ,fg-dim))))
    `(widget-inactive ((,class (:background ,bg-inactive :foreground ,fg-inactive))))
    `(widget-single-line-field ((,class (:inherit widget-field))))
+   ;;;; calendar
+   `(calendar-today ((,class (:underline t))))
+   `(calendar-weekday-header ((,class (:foreground ,blue-alt-other))))
+   `(calendar-weekend-header ((,class (:foreground ,fg-alt :slant ,modus-theme-slant))))
+   ;;;; calfw
+   `(cfw:face-annotation ((,class (:background ,bg-alt :foreground ,fg-alt))))
+   `(cfw:face-day-title ((,class (:background ,bg-alt :foreground ,fg-main))))
+   `(cfw:face-default-content ((,class (:foreground ,green-alt))))
+   `(cfw:face-default-day ((,class (:inherit cfw:face-day-title :weight bold))))
+   `(cfw:face-disable ((,class (:background ,bg-inactive :foreground ,fg-inactive))))
+   `(cfw:face-grid ((,class (:foreground ,fg-inactive))))
+   `(cfw:face-header ((,class (::foreground ,fg-main :weight bold))))
+   `(cfw:face-holiday ((,class (:background ,bg-alt :foreground ,magenta :weight bold))))
+   `(cfw:face-periods ((,class (:foreground ,cyan-alt-other))))
+   `(cfw:face-saturday ((,class (:background ,bg-alt :foreground ,magenta-alt :weight bold))))
+   `(cfw:face-select ((,class (:inherit modus-theme-intense-blue))))
+   `(cfw:face-sunday ((,class (:background ,bg-alt :foreground ,magenta-alt-other :weight bold))))
+   `(cfw:face-title ((,class (:inherit ,modus-theme-variable-pitch
+                                       :foreground ,fg-special-warm :weight bold
+                                       ,@(when modus-operandi-theme-scale-headings
+                                           (list :height modus-operandi-theme-scale-4))))))
+   `(cfw:face-today ((,class (:foreground ,blue :weight bold))))
+   `(cfw:face-today-title ((,class (:inherit modus-theme-special-mild :box t))))
+   `(cfw:face-toolbar ((,class (:background ,bg-active :foreground ,bg-active))))
+   `(cfw:face-toolbar-button-off ((,class (:background ,bg-alt :foreground ,cyan))))
+   `(cfw:face-toolbar-button-on ((,class (:background ,bg-main :foreground ,blue-intense :weight bold))))
    ;;;; column-enforce-mode
    `(column-enforce-face ((,class (:inherit modus-theme-refine-yellow))))
    ;;;; company-mode
@@ -450,6 +476,13 @@ between foreground and background is >= 7:1)."
    ;;;; define-word
    `(define-word-face-1 ((,class (:foreground ,yellow))))
    `(define-word-face-2 ((,class (:foreground ,fg-main))))
+   ;;;; disk-usage
+   `(disk-usage-children ((,class (:foreground ,yellow))))
+   `(disk-usage-inaccessible ((,class (:foreground ,red :weight bold))))
+   `(disk-usage-percent ((,class (:foreground ,green))))
+   `(disk-usage-size ((,class (:foreground ,cyan))))
+   `(disk-usage-symlink ((,class (:foreground ,blue :underline t))))
+   `(disk-usage-symlink-directory ((,class (:foreground ,blue-alt :weight bold))))
    ;;;; diff-hl
    `(diff-hl-change ((,class (:inherit modus-theme-intense-yellow))))
    `(diff-hl-delete ((,class (:inherit modus-theme-intense-red))))
@@ -477,16 +510,25 @@ between foreground and background is >= 7:1)."
    `(diff-refine-changed ((,class (:inherit modus-theme-intense-yellow))))
    `(diff-refine-removed ((,class (:inherit modus-theme-intense-red))))
    `(diff-removed ((,class (:inherit modus-theme-subtle-red))))
-   ;;;; dired (and extensions)
-   `(dgi-commit-message-face ((,class (:foreground ,fg-special-mild)))) ; dired-git-info
-   `(dired-async-failures ((,class (:foreground ,red-active :weight bold))))
-   `(dired-async-message ((,class (:foreground ,green-active :weight bold))))
-   `(dired-async-mode-message ((,class (:foreground ,cyan-active :weight bold))))
+   ;;;; dired
    `(dired-directory ((,class (:foreground ,blue :weight bold))))
    `(dired-flagged ((,class (:inherit modus-theme-intense-red))))
    `(dired-header ((,class (:foreground ,fg-main :weight bold))))
+   `(dired-ignored ((,class (:foreground ,fg-alt))))
+   `(dired-mark ((,class (:foreground ,magenta-alt :weight bold))))
    `(dired-marked ((,class (:inherit modus-theme-intense-magenta))))
+   `(dired-perm-write ((,class (:foreground ,fg-special-warm))))
+   `(dired-symlink ((,class (:foreground ,blue-alt :underline t))))
+   `(dired-warning ((,class (:foreground ,yellow :weight bold))))
+   ;;;; dired-async
+   `(dired-async-failures ((,class (:foreground ,red-active :weight bold))))
+   `(dired-async-message ((,class (:foreground ,green-active :weight bold))))
+   `(dired-async-mode-message ((,class (:foreground ,cyan-active :weight bold))))
+   ;;;; dired-git-info
+   `(dgi-commit-message-face ((,class (:foreground ,fg-special-mild))))
+   ;;;; dired-narrow
    `(dired-narrow-blink ((,class (:inherit modus-theme-subtle-cyan :weight bold))))
+   ;;;; dired-subtree
    ;; remove background from dired-subtree, else it breaks
    ;; dired-{flagged,marked} and any other face that sets a background
    ;; such as hl-line

@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20191221.1840
+;; Package-Version: 20191224.220
 ;; Created: 7 May 2018
 ;; Package-Requires: ((emacs "25.1") (prescient "4.0") (company "0.9.6"))
 ;; Version: 3.3
@@ -61,6 +61,8 @@ This is for use on `company-completion-finished-hook'.")
   :group 'prescient
   (if company-prescient-mode
       (progn
+        (company-prescient-mode -1)
+        (setq company-prescient-mode t)
         (add-to-list 'company-transformers #'company-prescient-transformer)
         (add-hook 'company-completion-finished-hook
                   #'company-prescient-completion-finished))
