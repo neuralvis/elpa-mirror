@@ -2,7 +2,7 @@
 
 ;; Author: Sebastian Wålinder <s.walinder@gmail.com>
 ;; URL: https://github.com/walseb/git-backup-ivy
-;; Package-Version: 20191222.2146
+;; Package-Version: 20191224.1254
 ;; Version: 1.0
 ;; Package-Requires: ((ivy "0.12.0") (git-backup "0.0.1") (emacs "24"))
 ;; Keywords: backup, convenience, files, tools, vc
@@ -39,7 +39,7 @@
   :group 'git-backup-ivy
   :type 'string)
 
-(defcustom git-backup-ivy-backup-path (concat user-emacs-directory ".git-backup")
+(defcustom git-backup-ivy-backup-path (expand-file-name (concat user-emacs-directory ".git-backup"))
   "The path where backups are stored."
   :group 'git-backup-ivy
   :type 'string)

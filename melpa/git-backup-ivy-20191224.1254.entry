@@ -1,0 +1,2 @@
+
+(git-backup-ivy . [(20191224 1254) ((ivy (0 12 0)) (git-backup (0 0 1)) (emacs (24))) "An ivy interface to git-backup" single ((:commit . "f91dbd9570fa4d31d2f868256fba6c573e3ade8e") (:keywords "backup" "convenience" "files" "tools" "vc") (:authors ("Sebastian Wålinder" . "s.walinder@gmail.com")) (:maintainer "Sebastian Wålinder" . "s.walinder@gmail.com") (:url . "https://github.com/walseb/git-backup-ivy"))])
