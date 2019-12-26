@@ -1,0 +1,2 @@
+
+(magit-popup . [(20191226 1331) ((emacs (24 4)) (dash (2 13 0))) "Define prefix-infix-suffix command combos" tar ((:commit . "832465c5022a18d8db7f85da22937ee02e155d8e") (:keywords "bindings") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/magit-popup"))])
