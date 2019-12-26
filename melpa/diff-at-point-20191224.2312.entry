@@ -1,2 +1,0 @@
-
-(diff-at-point . [(20191224 2312) ((emacs (26 2))) "Diff navigation" single ((:commit . "fd8315e30b2cbcb3d1fc1fee3a45f1b07e0b72f5") (:authors ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Campbell Barton" . "ideasman42@gmail.com") (:url . "https://gitlab.com/ideasman42/emacs-diff-at-point"))])

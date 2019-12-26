@@ -1,9 +1,9 @@
-;;; ameba.el --- An interface to Crystal Ameba linter. -*- lexical-binding: t; -*-
+;;; ameba.el --- An interface to Crystal Ameba linter  -*- lexical-binding: t; -*-
 
 ;; Copyright © 2018-2019 Vitalii Elenhaupt <velenhaupt@gmail.com>
 ;; Author: Vitalii Elenhaupt
 ;; URL: https://github.com/crystal-ameba/ameba.el
-;; Package-Version: 20190720.1845
+;; Package-Version: 20191226.1011
 ;; Keywords: convenience
 ;; Version: 0
 ;; Package-Requires: ((emacs "24.4"))

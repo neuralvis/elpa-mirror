@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-diff-at-point
-;; Package-Version: 20191224.2312
+;; Package-Version: 20191226.1105
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
 
@@ -215,7 +215,7 @@ otherwise return a point in the closest hunk."
   "Open a diff of the repository in the current frame.
 Jumping to the file & line.
 
-When SCROLL-RESET is t the view re-centers,
+When SCROLL-RESET is not nil the view re-centers,
 otherwise the offset from the window is kept."
   (interactive)
   (let*
@@ -271,7 +271,7 @@ otherwise the offset from the window is kept."
 (defun diff-at-point-goto-source-and-close (&optional scroll-reset)
   "Go to the source and close the current diff buffer.
 
-When SCROLL-RESET is t the view re-centers,
+When SCROLL-RESET is not nil the view re-centers,
 otherwise the offset from the window is kept."
   (interactive)
   (let*
