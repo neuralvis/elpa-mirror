@@ -4,7 +4,7 @@
 
 ;; Author: Jakob L. Kreuze <zerodaysfordays@sdf.lonestar.org>
 ;; Version: 0.1
-;; Package-Version: 20190804.2205
+;; Package-Version: 20191225.2120
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: languages
 ;; URL: https://git.sr.ht/~jakob/myrddin-mode
@@ -36,7 +36,7 @@
   :link '(url-link "https://git.sr.ht/~jakob/myrddin-mode")
   :group 'languages)
 
-(defcustom myrddin-indent-offset 8
+(defcustom myrddin-indent-offset 4
   "Indent Myrddin code by this number of spaces."
   :type 'integer
   :group 'myrddin
@@ -94,7 +94,20 @@
 (defconst myrddin-mode-constants
   '("true" "false" "void"))
 
-(defvar myrddin-mode-variable-declaration-regexp
+(defvar myrddin-mode-block-keywords
+  '("elif" "else" "for" "if" "match" "struct" "trait" "while"))
+
+(defconst myrddin-mode-identifier-rx
+  '(and (or alpha ?_)
+        (zero-or-more (or alnum ?_))))
+
+(defconst myrddin-mode-type-name-rx
+  '(and
+    (eval myrddin-mode-identifier-rx)
+    (optional (or (and ?[ (zero-or-more any) ?])
+                  ?#))))
+
+(defconst myrddin-mode-variable-declaration-regexp
   (rx
    (and (or "const" "var" "generic")
         (zero-or-more (or "extern" "pkglocal" "#noret"))
@@ -107,12 +120,16 @@
 
 (defvar myrddin-mode-type-specification-regexp
   (rx
-   (and (or ?: "->")
-        (zero-or-more whitespace)
-        (group (or alpha ?_)
-               (one-or-more (or alnum ?_))
-               (optional (or (and ?\[ (zero-or-more any) ?\])
-                             ?#))))))
+   (and (or (and "->"
+                 (zero-or-more whitespace))
+            (and (eval myrddin-mode-identifier-rx)
+                 (zero-or-more whitespace)
+                 ?:
+                 (zero-or-more whitespace)))
+        (group
+         symbol-start
+         (eval myrddin-mode-type-name-rx)
+         symbol-end))))
 
 (defvar myrddin-mode-label-regexp
   (rx (and ?: (or alpha ?_) (one-or-more (or alnum ?_)) symbol-end)))
@@ -121,7 +138,8 @@
   `((,(regexp-opt myrddin-mode-keywords 'symbols) . font-lock-keyword-face)
     (,(regexp-opt myrddin-mode-constants 'symbols) . font-lock-constant-face)
     (,myrddin-mode-label-regexp . font-lock-constant-face)
-    (,myrddin-mode-type-specification-regexp 1 font-lock-type-face)
+    (,(rx (or ?{ "const" "var" "generic")) ,myrddin-mode-type-specification-regexp
+     nil nil (1 font-lock-type-face))
     (,myrddin-mode-variable-declaration-regexp 1 font-lock-variable-name-face)))
 
 
@@ -129,38 +147,67 @@
 ;;; Indentation.
 ;;;
 
+(defun myrddin-mode--preceding-nonempty-line ()
+  "Return the text of and the indentation level of the closest
+preceding line that does not consist entirely of whitespace, or
+NIL if there is no preceding line."
+  (unless (bobp)
+    (save-excursion
+      (let (last-line)
+        (while (not (and last-line (plusp (length (string-trim last-line)))))
+          (previous-line)
+          (back-to-indentation)
+          (setf last-line (buffer-substring-no-properties
+                           (line-beginning-position)
+                           (line-end-position))))
+        (values last-line (/ (current-column) myrddin-indent-offset))))))
+
+
+(defun myrddin-mode--nearest-match-level ()
+  (save-excursion
+    (while (not (or (bobp) (looking-at "match")))
+      (previous-line)
+      (back-to-indentation))
+    (/ (current-column) myrddin-indent-offset)))
+
+(defun myrddin-mode--calculate-indent (prev-line prev-level)
+  (save-excursion
+    (back-to-indentation)
+    (cond
+     ;; Handle match arms by finding the indentation of the nearest match
+     ;; statement.
+     ((looking-at (rx ?|))
+      (* myrddin-indent-offset (myrddin-mode--nearest-match-level)))
+     ;; Deindent any lines beginning with a syntactic element for closing a
+     ;; block, unless it occurs immediately following the beginning of a block.
+     ((looking-at (rx (or "}" ";;" "elif" "else")))
+      (if (string-match-p
+           (rx (eval (cons 'or (cons "{" myrddin-mode-block-keywords))))
+           prev-line)
+          (* myrddin-indent-offset prev-level)
+        (max 0 (* myrddin-indent-offset (1- prev-level)))))
+     ;; Indent any lines immediately following a line containing a syntactic
+     ;; element for opening a block.
+     ((string-match-p
+       (rx (eval (cons 'or (append '("|" "{") myrddin-mode-block-keywords))))
+       prev-line)
+      (* myrddin-indent-offset (1+ prev-level)))
+     (t (* myrddin-indent-offset prev-level)))))
+
 (defun myrddin-mode-indent-line ()
   "Indent current line for Myrddin mode.
 Return the amount the indentation changed by."
   (interactive)
-  (let* ((prev-level (save-excursion
-                       (forward-line -1)
-                       (back-to-indentation)
-                       (/ (current-column) myrddin-indent-offset)))
-         (prev-line (save-excursion
-                      (forward-line -1)
-                      (back-to-indentation)
-                      (buffer-substring-no-properties
-                       (line-beginning-position)
-                       (line-end-position)))))
-    (let ((indent
-           (save-excursion
-             (back-to-indentation)
-             (cond
-              ((looking-at
-                (rx (or "}" ";;" "elif" "else")))
-               (max 0 (* myrddin-indent-offset (1- prev-level))))
-              ((string-match-p
-                (rx (or "{" "elif" "else" "for" "if" "match"
-                        "struct" "trait" "while"))
-                prev-line)
-               (* myrddin-indent-offset (1+ prev-level)))
-              (t (* myrddin-indent-offset prev-level))))))
-
-      (if (<= (current-column) (current-indentation))
-          (indent-line-to indent)
-        (save-excursion (indent-line-to indent)))
-      indent)))
+  (let ((prev-line (myrddin-mode--preceding-nonempty-line)))
+    (if prev-line
+        (cl-destructuring-bind (prev-line prev-level) prev-line
+            (let ((indent (myrddin-mode--calculate-indent prev-line prev-level)))
+              (when indent
+                (if (<= (current-column) (current-indentation))
+                    (indent-line-to indent)
+                  (save-excursion (indent-line-to indent))))))
+      ;; The first line in the file should begin on column 0.
+      (indent-line-to 0))))
 
 
 ;;;

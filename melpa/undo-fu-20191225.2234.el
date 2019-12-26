@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20191223.753
+;; Package-Version: 20191225.2234
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
 
@@ -57,8 +57,17 @@
 
 ;; Internal functions/macros.
 
+(defun undo-fu--checkpoint-disable ()
+  "Disable check to prevent crossing the initial boundary when redoing."
+  (setq undo-fu--respect nil)
+  (setq undo-fu--checkpoint-is-blocking nil)
+  (setq undo-fu--checkpoint nil))
+
+
 (defmacro undo-fu--with-message-suffix (suffix &rest body)
-  "Add text after the message output."
+  "Add text after the message output.
+Argument SUFFIX is the text to add at the end of the message.
+Optional argument BODY runs with the message suffix."
   (declare (indent 1))
   (let ((message-orig (cl-gensym "--message-suffix-")))
     `
@@ -150,8 +159,7 @@ Optional argument ARG The number of steps to redo."
     ;; This allows explicitly over-stepping the boundary, in cases where it's needed.
     (when undo-fu--respect
       (when (string-equal last-command 'keyboard-quit)
-        (setq undo-fu--respect nil)
-        (setq undo-fu--checkpoint-is-blocking nil)
+        (undo-fu--checkpoint-disable)
         (message "Redo end-point stepped over!")))
 
     (when undo-fu--respect
@@ -235,9 +243,7 @@ Optional argument ARG the number of steps to undo."
     ;; This allows explicitly over-stepping the boundary, in cases where it's needed.
     (when undo-fu--respect
       (when (string-equal last-command 'keyboard-quit)
-        (setq undo-fu--respect nil)
-        (setq undo-fu--checkpoint-is-blocking nil)
-        (setq undo-fu--checkpoint nil)
+        (undo-fu--checkpoint-disable)
         (message "Undo end-point ignored!")))
 
     (let*
