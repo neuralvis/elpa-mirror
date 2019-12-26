@@ -1,2 +1,2 @@
 
-(egison-mode . [(20191225 621) nil "Egison editing mode" tar ((:commit . "5385c2adb29cf42ad957471bc97935cea4c0ab96") (:authors ("Satoshi Egi" . "egisatoshi@gmail.com")) (:maintainer "Satoshi Egi" . "egisatoshi@gmail.com") (:url . "https://github.com/egisatoshi/egison3/blob/master/elisp/egison-mode.el"))])
+(egison-mode . [(20191225 621) nil "Egison editing mode" tar ((:commit . "3c57eac548aaa062d45bac7147e815808833e842") (:authors ("Satoshi Egi" . "egisatoshi@gmail.com")) (:maintainer "Satoshi Egi" . "egisatoshi@gmail.com") (:url . "https://github.com/egisatoshi/egison3/blob/master/elisp/egison-mode.el"))])
