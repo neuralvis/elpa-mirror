@@ -5,6 +5,7 @@
 
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/selected.el
+;; Package-Version: 20170222.834
 ;; Version: 1.01
 ;; Keywords: convenience
 ;; Package-Requires: ()

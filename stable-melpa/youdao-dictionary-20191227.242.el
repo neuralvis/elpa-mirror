@@ -4,7 +4,7 @@
 
 ;; Author: Chunyang Xu <xuchunyang56@gmail.com>
 ;; URL: https://github.com/xuchunyang/youdao-dictionary.el
-;; Package-Version: 20191214.336
+;; Package-Version: 20191227.242
 ;; Package-Requires: ((popup "0.5.0") (pos-tip "0.4.6") (chinese-word-at-point "0.2") (names "0.5") (emacs "24"))
 ;; Version: 0.4
 ;; Created: 11 Jan 2015
@@ -54,6 +54,8 @@
 (eval-when-compile (require 'names))
 
 (declare-function pdf-view-active-region-text "pdf-view" ())
+(declare-function pdf-view-active-region-p "pdf-view" ())
+(declare-function posframe-delete "posframe")
 
 (defgroup youdao-dictionary nil
   "Youdao dictionary interface for Emacs."
@@ -202,7 +204,8 @@ i.e. `[语][计] dictionary' => 'dictionary'."
 (defun -region-or-word ()
   "Return word in region or word at point."
   (if (derived-mode-p 'pdf-view-mode)
-      (mapconcat 'identity (pdf-view-active-region-text) "\n")
+      (if (pdf-view-active-region-p)
+          (mapconcat 'identity (pdf-view-active-region-text) "\n"))
     (if (use-region-p)
         (buffer-substring-no-properties (region-beginning)
                                         (region-end))
@@ -262,7 +265,7 @@ i.e. `[语][计] dictionary' => 'dictionary'."
               (mode)
               (insert (-format-result word))
               (goto-char (point-min))
-              (set (make-local-variable 'current-buffer-word) word)))
+              (set (make-local-variable 'youdao-dictionary-current-buffer-word) word)))
           (posframe-show buffer-name
                          :left-fringe 8
                          :right-fringe 8
@@ -276,7 +279,7 @@ i.e. `[语][计] dictionary' => 'dictionary'."
 (defun play-voice-of-current-word ()
   "Play voice of current word shown in *Youdao Dictionary*."
   (interactive)
-  (if (local-variable-if-set-p 'current-buffer-word)
+  (if (local-variable-if-set-p 'youdao-dictionary-current-buffer-word)
       (-play-voice current-buffer-word)))
 
 (define-derived-mode mode org-mode "Youdao-dictionary"
@@ -284,8 +287,8 @@ i.e. `[语][计] dictionary' => 'dictionary'."
 \\{youdao-dictionary-mode-map}"
   (read-only-mode 1)
   (define-key mode-map "q" 'quit-window)
-  (define-key mode-map "p" 'play-voice-of-current-word)
-  (define-key mode-map "y" 'play-voice-at-point))
+  (define-key mode-map "p" 'youdao-dictionary-play-voice-of-current-word)
+  (define-key mode-map "y" 'youdao-dictionary-play-voice-at-point))
 
 (defun -search-and-show-in-buffer (word)
   "Search WORD and show result in `youdao-dictionary-buffer-name' buffer."
@@ -296,7 +299,7 @@ i.e. `[语][计] dictionary' => 'dictionary'."
           (mode)
           (insert (-format-result word))
           (goto-char (point-min))
-          (set (make-local-variable 'current-buffer-word) word))
+          (set (make-local-variable 'youdao-dictionary-current-buffer-word) word))
         (unless (get-buffer-window (current-buffer))
           (switch-to-buffer-other-window buffer-name)))
     (message "Nothing to look up")))
