@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; Package-Requires: ((emacs "24.3"))
-;; Package-Version: 20191222.920
+;; Package-Version: 20191227.958
 ;; Version: 2.37.130
 
 ;; URL: https://github.com/Andersbakken/rtags
@@ -47,8 +47,6 @@
 (require 'compile)
 (require 'thingatpt)
 (require 'repeat)
-
-(defalias 'defun* 'cl-defun)
 
 ;; Make the byte-compiler happy.
 (declare-function flycheck-buffer "ext:flycheck")
@@ -1267,7 +1265,7 @@ to only call this when `rtags-socket-address' is defined.
                            (rtags--convert-output-buffer (cdr arg))))
         (t arg)))
 
-(defun* rtags-call-rc (&rest arguments
+(cl-defun rtags-call-rc (&rest arguments
                              &key (path (rtags-buffer-file-name))
                              unsaved
                              async ;; nil or a cons (process-filter . sentinel)
@@ -1550,7 +1548,7 @@ Uses `completing-read' to ask for the project."
       (and (not no-symbol-name) (rtags-current-symbol-name))
       (thing-at-point 'symbol)))
 
-(defun* rtags-symbol-info-internal (&rest foo
+(cl-defun rtags-symbol-info-internal (&rest foo
                                           &key
                                           (parents nil)
                                           (source-code nil)
@@ -1580,7 +1578,7 @@ Uses `completing-read' to ask for the project."
       (or (and (not piece) object)
           (cdr (assoc piece object))))))
 
-(defun* rtags-symbol-info (&rest args
+(cl-defun rtags-symbol-info (&rest args
                                  &key
                                  (location nil)
                                  (include-targets nil)
@@ -4773,7 +4771,7 @@ force means do it regardless of rtags-enable-unsaved-reparsing "
              (end (and start (+ start (cdr (assoc 'length argument))))))
         (and start (>= startpos start) (< startpos end))))))
 
-(defun* rtags-get-file-contents (&rest args
+(cl-defun rtags-get-file-contents (&rest args
                                        &key
                                        (file nil)
                                        (startLine nil)
