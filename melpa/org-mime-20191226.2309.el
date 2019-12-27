@@ -5,7 +5,7 @@
 ;; Author: Eric Schulte
 ;; Maintainer: Chen Bin (redguardtoo)
 ;; Keywords: mime, mail, email, html
-;; Package-Version: 20191106.1140
+;; Package-Version: 20191226.2309
 ;; Homepage: http://github.com/org-mime/org-mime
 ;; Version: 0.1.6
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
@@ -466,8 +466,7 @@ If SUBTREEP is t, curret org node is subtree."
          (plain (cdr exported))
          (export-opts (org-mime-get-export-options subtreep))
          patched-html)
-    (unless (featurep 'message) (require 'message))
-    (message-mail to subject headers nil)
+    (compose-mail to subject headers nil)
     (message-goto-body)
     (setq patched-html (with-temp-buffer
                          (insert html)

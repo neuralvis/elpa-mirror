@@ -3,15 +3,15 @@
 ;; Author: Spenser Truex <web@spensertruex.com>
 ;; Created: 2019-06-16
 ;; Version: 0.3.0
-;; Package-Version: 20191221.743
+;; Package-Version: 20191226.2327
 ;; Package-Requires: ((emacs "24.5"))
 ;; Keywords: lisp wp files convenience
 ;; URL: https://github.com/equwal/coleslaw/
 ;; Homepage: https://spensertruex.com/coleslaw
 ;; This file is not part of GNU Emacs, but you want to use  GNU Emacs to run it.
 ;; This file is very free software.
-;; License:
-;; Licensed with the GNU GPL v3 see:
+;; License: Unlicense
+;; Licensed with the Unlicense see:
 ;; <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:

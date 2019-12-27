@@ -4,6 +4,7 @@
 ;; Copyright (C) 2015 mikanfactory all rights reserved.
 ;; Created: :2015-03-01
 ;; Version: 0.0.1
+;; Package-Version: 20150804.1721
 ;; Keywords: markdown, memo
 ;; URL: http://github.com/mikanfactory/emacs-memolist
 ;; Package-Requires: ((markdown-mode "22.0") (ag "0.45"))

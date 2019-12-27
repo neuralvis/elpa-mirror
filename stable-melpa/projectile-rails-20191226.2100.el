@@ -4,8 +4,8 @@
 
 ;; Author:            Adam Sokolnicki <adam.sokolnicki@gmail.com>
 ;; URL:               https://github.com/asok/projectile-rails
-;; Package-Version: 20191102.819
-;; Version:           0.19.0
+;; Package-Version: 20191226.2100
+;; Version:           0.19.1
 ;; Keywords:          rails, projectile
 ;; Package-Requires:  ((emacs "24.3") (projectile "0.12.0") (inflections "1.1") (inf-ruby "2.2.6") (f "0.13.0") (rake "0.3.2"))
 
@@ -212,10 +212,12 @@
   :group 'projectile-rails
   :type 'boolean)
 
-(defcustom projectile-rails-keymap-prefix (kbd "C-c r")
+(defcustom projectile-rails-keymap-prefix nil
   "Keymap prefix for `projectile-rails-mode'."
   :group 'projectile-rails
   :type 'string)
+
+(make-obsolete-variable 'projectile-keymap-prefix "Use (define-key projectile-rails-mode-map (kbd ...) 'projectile-rails-command-map) instead." "0.20.0")
 
 (defcustom projectile-rails-server-mode-ansi-colors t
   "If not nil `projectile-rails-server-mode' will apply the ansi colors in its buffer."
@@ -912,8 +914,8 @@ The buffer for interacting with SQL client is created via `sql-product-interacti
      (sql-set-product-feature product :sqli-login '())
      (sql-set-product-feature product :sqli-options '())
      (sql-set-product-feature product :sqli-program (car commands))
-     (sql-set-product-feature product :sqli-comint-func (lambda (_ __)
-                                                          (sql-comint product (cdr commands))))
+     (sql-set-product-feature product :sqli-comint-func (lambda (_ __ &optional buf-name)
+                                                          (sql-comint product (cdr commands) buf-name)))
 
      (sql-product-interactive product)
 
@@ -1563,7 +1565,8 @@ If file does not exist and ASK in not nil it will ask user to proceed."
 
 (defvar projectile-rails-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map projectile-rails-keymap-prefix 'projectile-rails-command-map)
+    (when projectile-rails-keymap-prefix
+      (define-key map projectile-rails-keymap-prefix 'projectile-rails-command-map))
     map)
   "Keymap for `projectile-rails-mode'.")
 

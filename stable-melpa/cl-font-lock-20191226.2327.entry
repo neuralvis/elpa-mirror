@@ -1,0 +1,2 @@
+
+(cl-font-lock . [(20191226 2327) ((emacs (24 5))) "Pretty Common Lisp font locking" single ((:commit . "c73996d66932ec8812151d0354fc136340afc4f6") (:keywords "lisp" "wp" "files" "convenience") (:authors ("Spenser Truex" . "web@spensertruex.com")) (:maintainer "Spenser Truex" . "web@spensertruex.com") (:url . "https://github.com/equwal/coleslaw/"))])
