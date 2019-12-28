@@ -3,6 +3,7 @@
 ;;
 ;; Author: Vlad Piersec <vlad.piersec@gmail.com>
 ;; Version: 0.2
+;; Package-Version: 20190201.1848
 ;; Keywords: themes
 ;; URL: https://github.com/caisah/seti-theme
 ;;

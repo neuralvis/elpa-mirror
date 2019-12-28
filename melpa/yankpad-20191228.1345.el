@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/yankpad
-;; Package-Version: 20190904.1507
+;; Package-Version: 20191228.1345
 ;; Version: 2.30
 ;; Keywords: abbrev convenience
 ;; Package-Requires: ((emacs "25"))
@@ -219,8 +219,12 @@ If 'abbrev, the items will overwrite `local-abbrev-table'."
 (defun yankpad-set-category ()
   "Change the yankpad category."
   (interactive)
-  (setq yankpad-category
-        (completing-read "Category: " (yankpad--categories)))
+  (let ((categories (yankpad--categories)))
+    (cond ((equal (length categories) 0)
+           (user-error "Your yankpad file doesn't contain any categories"))
+          ((equal (length categories) 1)
+           (setq yankpad-category (car categories)))
+          (t (setq yankpad-category (completing-read "Category: " categories)))))
   (run-hooks 'yankpad-switched-category-hook))
 
 (defun yankpad-set-local-category (category)

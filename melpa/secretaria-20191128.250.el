@@ -5,7 +5,8 @@
 ;; Author: Jorge Araya Navarro <jorge@esavara.cr>
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "24.4") (alert "1.2") (s "1.12") (f "0.20.0") (org "9"))
-;; Package-Version: 0.2.12
+;; Package-Version: 20191128.250
+;; Package-X-Original-Version: 0.2.12
 ;; Homepage: https://gitlab.com/shackra/secretaria
 
 ;; This file is not part of GNU Emacs.
