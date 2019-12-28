@@ -1,0 +1,2 @@
+
+(unfill . [(20191227 2026) nil "Do the opposite of fill-paragraph or fill-region" single ((:commit . "845f84be2c867bd4b5877cefde3d08298f28c38d") (:keywords "convenience") (:authors ("Steve Purcell" . "steve@sanityinc.com")) (:maintainer "Steve Purcell" . "steve@sanityinc.com") (:url . "https://github.com/purcell/unfill"))])
