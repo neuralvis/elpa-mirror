@@ -4,7 +4,7 @@
 ;; Description: Easy on the eyes; focus on importance.
 ;; Author: Henry Newcomer <a.cliche.email@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20191211.1800
+;; Package-Version: 20191229.19
 ;; URL: https://github.com/HenryNewcomer/laguna-theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -103,7 +103,7 @@
     `laguna ;; you must use the same theme name here...
     `(default ((t (:foreground ,color-fg :background ,color-bg))))
     `(cursor  ((t (:foreground ,color-fg :background ,color-cursor-bg))))
-    `(face-spec-set column-enforce-face '((t (:foreground warning :bold t :underline t))))
+    `(face-spec-set column-enforce-face '((t (:foreground ,color-warning :bold t :underline t))))
     `(fringe  ((t (:background ,color-fringe))))
     `(highlight  ((t (:foreground ,color-region-fg :background ,color-region-bg))))
     `(highlight-numbers-number ((t (:foreground ,color-number :weight bold))))
