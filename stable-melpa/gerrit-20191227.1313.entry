@@ -1,2 +1,0 @@
-
-(gerrit . [(20191227 1313) ((emacs (25 1)) (hydra (0 15 0)) (magit (2 13 1)) (s (1 12 0))) "Gerrit integration" tar ((:commit . "a8e8cc6490d0c98934ca762305a540e04774d1e3") (:keywords "extensions") (:authors ("Thomas Hisch" . "t.hisch@gmail.com")) (:maintainer "Thomas Hisch" . "t.hisch@gmail.com") (:url . "https://github.com/thisch/gerrit.el"))])
