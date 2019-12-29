@@ -1,2 +1,2 @@
 
-(flyspell-correct-helm . [(20191223 1840) ((flyspell-correct (0 5 0)) (helm (1 9 0)) (emacs (24))) "Correcting words with flyspell via helm interface" single ((:commit . "c4d8378a756e97b59053c6c9ebfd74082750d734") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
+(flyspell-correct-helm . [(20191223 1840) ((flyspell-correct (0 5 0)) (helm (1 9 0)) (emacs (24))) "Correcting words with flyspell via helm interface" single ((:commit . "8c89e2e2fd97dccaf2973b90dca5ebb68b572f63") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])

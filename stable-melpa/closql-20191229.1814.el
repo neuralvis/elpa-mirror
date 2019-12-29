@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/closql
 ;; Package-Requires: ((emacs "25.1") (emacsql-sqlite "3.0.0"))
-;; Package-Version: 20191227.2158
+;; Package-Version: 20191229.1814
 ;; Keywords: extensions
 
 ;; This file is not part of GNU Emacs.
@@ -537,7 +537,7 @@ WHERE d.%s = i.%s AND d.%s = '%S';"
                 obj-id))))
 
 (defun closql--slot-tables (obj slot)
-  (let ((tbls (closql--slot-table obj slot)))
+  (let ((tbls (closql--slot-get obj slot :closql-table)))
     (unless (listp tbls)
       (error "%s isn't an indirect slot" slot))
     (pcase-let ((`(,d-tbl ,i-tbl) tbls))

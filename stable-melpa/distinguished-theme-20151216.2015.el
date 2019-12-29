@@ -4,7 +4,6 @@
 
 ;; Author: Kim Silkebækken <kim.silkebaekken@gmail.com>
 ;; URL: https://github.com/Lokaltog/distinguished-theme
-;; Package-Version: 20151216.2015
 ;; Version: 0.0.1
 
 ;; Permission is hereby granted, free of charge, to any person obtaining
