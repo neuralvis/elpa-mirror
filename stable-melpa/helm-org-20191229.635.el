@@ -4,7 +4,7 @@
 ;; Author:      Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; URL: https://github.com/emacs-helm/helm-org
-;; Package-Version: 20191214.802
+;; Package-Version: 20191229.635
 ;; Package-Requires: ((helm "3.3") (emacs "24.4"))
 ;; Version: 1.0
 
@@ -38,7 +38,7 @@
 (defvar helm-org--headers-cache nil)
 (defvar helm-org--buffer-tick nil)
 (defvar helm-org--force-refresh nil
-  "[INTERNAL] Force refreshing caches  when non nil.")
+  "[INTERNAL] Force refreshing caches when non nil.")
 
 ;; Menu
 ;;;###autoload
@@ -226,32 +226,35 @@ Note: [1] A separator can be a comma, a colon i.e. [,:] or a space.
   "Keymap for `helm-source-org-headings-for-files'.")
 
 (defun helm-org-build-sources (filenames &optional parents force-refresh)
-  (cl-loop for file in filenames
-           for name = (if (bufferp file)
-                          (buffer-name file)
-                        (helm-basename file))
-           collect
-           (helm-build-sync-source (format "Org headings (%s)" name)
-             :candidates (helm-dynamic-completion
-                          (helm-org--get-candidates-in-file
-                           file
-                           helm-org-headings-fontify
-                           t
-                           parents force-refresh)
-                          'stringp
-                          nil '(metadata (display-sort-function
-                                          .
-                                          (lambda (candidates)
-                                            (sort candidates
-                                                  #'helm-generic-sort-fn))))
-                          nil helm-org-completion-styles)
-             :match-dynamic t
-             :filtered-candidate-transformer
-             #'helm-org-indent-headings
-             :action 'helm-org-headings-actions
-             :help-message 'helm-org-headings-help-message
-             :keymap helm-org-headings-map
-             :group 'helm-org)))
+  (unwind-protect
+      (cl-loop for file in filenames
+               for name = (if (bufferp file)
+                              (buffer-name file)
+                            (helm-basename file))
+               collect
+               (helm-build-sync-source (format "Org headings (%s)" name)
+                 :candidates (helm-dynamic-completion
+                              (helm-org--get-candidates-in-file
+                               file
+                               helm-org-headings-fontify
+                               t
+                               parents (or force-refresh
+                                           helm-org--force-refresh))
+                              'stringp
+                              nil '(metadata (display-sort-function
+                                              .
+                                              (lambda (candidates)
+                                                (sort candidates
+                                                      #'helm-generic-sort-fn))))
+                              nil helm-org-completion-styles)
+                 :match-dynamic t
+                 :filtered-candidate-transformer
+                 #'helm-org-indent-headings
+                 :action 'helm-org-headings-actions
+                 :help-message 'helm-org-headings-help-message
+                 :keymap helm-org-headings-map
+                 :group 'helm-org))
+    (setq helm-org--force-refresh nil)))
 
 (defun helm-org--get-candidates-in-file (filename &optional fontify nofname parents force-refresh)
   "Get candidates for org FILENAME.
@@ -438,25 +441,19 @@ will be refiled."
               helm-org-ignore-autosaves
               (y-or-n-p (format "%s have auto save data, continue? "
                                 (mapconcat #'identity autosaves ", "))))
-      (unwind-protect
-          (helm :sources (helm-org-build-sources
-                          files nil (or arg helm-org--force-refresh))
-                :truncate-lines helm-org-truncate-lines
-                :buffer "*helm org headings*")
-        (setq helm-org--force-refresh nil)))))
+      (helm :sources (helm-org-build-sources files nil arg)
+            :truncate-lines helm-org-truncate-lines
+            :buffer "*helm org headings*"))))
 
 ;;;###autoload
 (defun helm-org-in-buffer-headings (&optional arg)
   "Preconfigured helm for org buffer headings."
   (interactive "P")
   (let ((files (list (current-buffer))))
-    (unwind-protect
-        (helm :sources (helm-org-build-sources
-                        files nil (or arg helm-org--force-refresh))
-              :preselect (helm-org-in-buffer-preselect)
-              :truncate-lines helm-org-truncate-lines
-              :buffer "*helm org inbuffer*")
-      (setq helm-org--force-refresh nil))))
+    (helm :sources (helm-org-build-sources files nil arg)
+          :preselect (helm-org-in-buffer-preselect)
+          :truncate-lines helm-org-truncate-lines
+          :buffer "*helm org inbuffer*")))
 
 ;;;###autoload
 (defun helm-org-parent-headings (&optional arg)
@@ -466,12 +463,9 @@ will be refiled."
   (let ((helm-org-headings-min-depth 1)
         (helm-org-headings-max-depth  50)
         (files (list (current-buffer))))
-    (unwind-protect
-        (helm :sources (helm-org-build-sources
-                        files t (or arg helm-org--force-refresh))
-              :truncate-lines helm-org-truncate-lines
-              :buffer "*helm org parent headings*")
-      (setq helm-org--force-refresh nil))))
+    (helm :sources (helm-org-build-sources files t arg)
+          :truncate-lines helm-org-truncate-lines
+          :buffer "*helm org parent headings*")))
 
 ;;;###autoload
 (defun helm-org-capture-templates ()
