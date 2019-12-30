@@ -4,7 +4,6 @@
 
 ;; Author: wolray <wolray@foxmail.com>
 ;; Version: 4.1
-;; Package-Version: 20191224.250
 ;; URL: https://github.com/wolray/symbol-overlay/
 ;; Keywords: faces, matching
 ;; Package-Requires: ((emacs "24.3") (seq "2.2"))
