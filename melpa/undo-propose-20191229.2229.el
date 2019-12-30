@@ -3,7 +3,7 @@
 ;; Author: Jack Kamm
 ;; Maintainer: Jack Kamm
 ;; Version: 3.0.0
-;; Package-Version: 20191110.2327
+;; Package-Version: 20191229.2229
 ;; Package-Requires: ((emacs "24.3"))
 ;; Homepage: https://github.com/jackkamm/undo-propose.el
 ;; Keywords: convenience, files, undo, redo, history
@@ -202,6 +202,8 @@ buffer contents are copied."
   "View differences between ‘undo-propose’ buffer and its parent using `ediff'."
   (interactive)
   (ediff-buffers undo-propose-parent (current-buffer)))
+
+(defvar-local undo-propose-marker-map nil)
 
 (defun undo-propose-copy-markers ()
   "Copy markers registered in `undo-propose-marker-list'."

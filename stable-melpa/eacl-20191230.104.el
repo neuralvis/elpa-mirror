@@ -3,11 +3,11 @@
 ;; Copyright (C) 2017, 2018 Chen Bin
 ;;
 ;; Version: 2.0.2
-;; Package-Version: 20191227.415
+;; Package-Version: 20191230.104
 
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/eacl
-;; Package-Requires: ((emacs "24.3") (ivy "0.9.1"))
+;; Package-Requires: ((emacs "24.4") (ivy "0.9.1"))
 ;; Keywords: abbrev, convenience, matching
 
 ;; This file is not part of GNU Emacs.

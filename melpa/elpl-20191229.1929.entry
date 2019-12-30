@@ -1,2 +1,2 @@
 
-(elpl . [(20191229 1929) ((emacs (24 4))) "Emacs Lisp REPL" single ((:commit . "19cf3eb2e5afc042ac77905c70d445a703fe891e") (:keywords "lisp" "tool") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/elpl"))])
+(elpl . [(20191229 1929) ((emacs (24 4))) "Emacs Lisp REPL" single ((:commit . "48ecee2aa7b3d085a3deff809fb3ae31ae4ef9dd") (:keywords "lisp" "tool") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/elpl"))])
