@@ -5,6 +5,7 @@
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 13 Jun 2018
 ;; Version: 0.9.0
+;; Package-Version: 20180830.418
 ;; Keywords: files, convenience
 ;; Homepage: https://github.com/emacs-php/dist-file-mode.el
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5") (s "1.9.0"))
