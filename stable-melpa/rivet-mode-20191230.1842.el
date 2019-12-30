@@ -3,8 +3,8 @@
 ;; Author: Jade Michael Thornton
 ;; Copyright (c) 2019 Jade Michael Thornton
 ;; Package-Requires: ((emacs "24") (web-mode "16"))
-;; Package-Version: 20191201.136
-;; URL: https://gitlab.com/thornjad/rivet
+;; Package-Version: 20191230.1842
+;; URL: https://gitlab.com/thornjad/rivet-mode
 ;; Version: 4.0.2
 ;;
 ;; This file is not part of GNU Emacs

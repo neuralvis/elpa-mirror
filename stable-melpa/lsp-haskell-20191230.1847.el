@@ -1,7 +1,7 @@
 ;;; lsp-haskell.el --- Haskell support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20190602.825
+;; Package-Version: 20191230.1847
 ;; Package-Requires: ((lsp-mode "3.0") (haskell-mode "1.0"))
 ;; Keywords: haskell
 ;; URL: https://github.com/emacs-lsp/lsp-haskell
@@ -189,7 +189,8 @@ These are assembled from the customizable variables
      :major-modes '(haskell-mode)
      :server-id 'hie
      ;; :multi-root t
-     :initialization-options 'lsp-haskell--make-init-options)))
+     ;; :initialization-options 'lsp-haskell--make-init-options
+     )))
 
 (defun lsp-haskell--hie-command ()
   (funcall lsp-haskell-process-wrapper-function (lsp--haskell-hie-command)))

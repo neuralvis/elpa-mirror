@@ -1,2 +1,2 @@
 
-(ivy-rtags . [(20191222 920) ((ivy (0 7 0)) (rtags (2 10))) "RTags completion back-end for ivy" single ((:commit . "c15ee631a40d71086731afd35785a65cc5ba6dbc") (:authors ("Jan Erik Hanssen" . "jhanssen@gmail.com") ("Anders Bakken" . "agbakken@gmail.com")) (:maintainer "Jan Erik Hanssen" . "jhanssen@gmail.com") (:url . "https://github.com/Andersbakken/rtags"))])
+(ivy-rtags . [(20191222 920) ((ivy (0 7 0)) (rtags (2 10))) "RTags completion back-end for ivy" single ((:commit . "5719ec94c4a10351619094e87cf31f9640e2c001") (:authors ("Jan Erik Hanssen" . "jhanssen@gmail.com") ("Anders Bakken" . "agbakken@gmail.com")) (:maintainer "Jan Erik Hanssen" . "jhanssen@gmail.com") (:url . "https://github.com/Andersbakken/rtags"))])
