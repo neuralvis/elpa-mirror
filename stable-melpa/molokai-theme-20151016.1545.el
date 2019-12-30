@@ -5,7 +5,6 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/alloy-d/color-theme-molokai
-;; Package-Version: 20151016.1545
 ;; Version: 0.01
 
 ;; This program is free software; you can redistribute it and/or modify

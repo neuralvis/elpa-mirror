@@ -4,7 +4,6 @@
 
 ;; Author:: drymer <drymer [ AT ] autistici.org>
 ;; Package-Requires: ((emacs "25.1"))
-;; Package-Version: 20180527.743
 ;; Version: 0.1
 
 ;; Keywords:: languages terminals
@@ -261,5 +260,3 @@ omitted, nil or positive.  If ARG is `toggle', toggle
 (provide 'molecule)
 
 ;;; molecule ends here
-
-;;; molecule.el ends here

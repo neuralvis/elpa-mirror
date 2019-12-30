@@ -1,0 +1,2 @@
+
+(magit-todos . [(20191230 750) ((emacs (25 2)) (async (1 9 2)) (dash (2 13 0)) (f (0 17 2)) (hl-todo (1 9 0)) (magit (2 13 0)) (pcre2el (1 8)) (s (1 12 0))) "Show source file TODOs in Magit" single ((:commit . "b60520a6b167b3236e0155e06f4d6fc11fd3c2c8") (:keywords "magit" "vc") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "http://github.com/alphapapa/magit-todos"))])
