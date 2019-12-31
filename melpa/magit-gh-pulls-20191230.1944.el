@@ -4,7 +4,7 @@
 
 ;; Author: Yann Hodique <yann.hodique@gmail.com>
 ;; Keywords: git tools
-;; Package-Version: 20191230.628
+;; Package-Version: 20191230.1944
 ;; Version: 0.5.3
 ;; URL: https://github.com/sigma/magit-gh-pulls
 ;; Package-Requires: ((emacs "24.4") (gh "0.9.1") (magit "2.12.0") (pcache "0.2.3") (s "1.6.1"))
@@ -574,7 +574,7 @@ option, or inferred from remotes."
 
 (magit-define-section-jumper magit-jump-to-pulls "Pull Requests" pulls)
 
-(if (eq (lookup-key magit-status-mode-map "j") 'magit-status-jump)
+(if (eq (lookup-key magit-status-mode-map (kbd "j")) 'magit-status-jump)
     (transient-append-suffix 'magit-status-jump
       #'magit-jump-to-unpushed-to-pushremote
       '("q " "Pull Requests" magit-jump-to-pulls))
