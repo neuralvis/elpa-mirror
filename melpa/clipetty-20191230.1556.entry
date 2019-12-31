@@ -1,0 +1,2 @@
+
+(clipetty . [(20191230 1556) ((emacs (25 1))) "Send every kill from a TTY frame to the system clipboard" single ((:commit . "ad0f90a742d895d21684b481cceef833b13c8e06") (:keywords "terminals" "convenience") (:authors ("Mike Hamrick" . "mikeh@muppetlabs.com")) (:maintainer "Mike Hamrick" . "mikeh@muppetlabs.com") (:url . "https://github.com/spudlyo/clipetty"))])

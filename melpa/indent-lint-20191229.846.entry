@@ -1,0 +1,2 @@
+
+(indent-lint . [(20191229 846) ((emacs (24 4))) "Indentation checker" single ((:commit . "e76b127241635677a4cb2d457d5c4c74ca93ee92") (:keywords "tools") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/indent-lint.el"))])
