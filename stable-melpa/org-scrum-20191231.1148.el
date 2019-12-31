@@ -4,9 +4,9 @@
 
 ;; Author: Ian Martins <ianxm@jhu.edu>
 ;; URL: https://github.com/ianxm/emacs-scrum
-;; Package-Version: 20191203.1403
+;; Package-Version: 20191231.1148
 ;; Version: 0.0.7
-;; Package-Requires: ((emacs "24.5") (org "8.2") (gnuplot "0.6") (seq "2.20"))
+;; Package-Requires: ((emacs "24.5") (org "8.2") (gnuplot "0.6") seq)
 
 ;; This file is not part of GNU Emacs.
 

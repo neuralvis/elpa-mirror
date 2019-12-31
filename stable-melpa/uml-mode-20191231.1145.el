@@ -4,10 +4,10 @@
 
 ;; Author: Ian Martins <ianxm@jhu.edu>
 ;; URL: http://github.com/ianxm/emacs-uml
-;; Package-Version: 20191111.1523
+;; Package-Version: 20191231.1145
 ;; Version: 0.0.3
 ;; Keywords: docs
-;; Package-Requires: ((emacs "24.4") (seq "2.20"))
+;; Package-Requires: ((emacs "24.4") seq)
 
 ;; This file is not part of GNU Emacs.
 
