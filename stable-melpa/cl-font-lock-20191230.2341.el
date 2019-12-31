@@ -3,11 +3,11 @@
 ;; Author: Spenser Truex <web@spensertruex.com>
 ;; Created: 2019-06-16
 ;; Version: 0.3.0
-;; Package-Version: 20191229.1934
+;; Package-Version: 20191230.2341
 ;; Package-Requires: ((emacs "24.5"))
 ;; Keywords: lisp wp files convenience
-;; URL: https://github.com/equwal/coleslaw/
-;; Homepage: https://spensertruex.com/coleslaw
+;; URL: https://github.com/equwal/cl-font-lock
+;; Homepage: https://github.com/equwal/cl-font-lock 
 ;; This file is not part of GNU Emacs, but you want to use  GNU Emacs to run it.
 ;; This file is very free software.
 
