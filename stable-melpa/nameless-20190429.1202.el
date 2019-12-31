@@ -4,7 +4,6 @@
 
 ;; Author: Artur Malabarba <emacs@endlessparentheses.com>
 ;; URL: https://github.com/Malabarba/nameless
-;; Package-Version: 20190429.1202
 ;; Keywords: convenience, lisp
 ;; Version: 1.0.2
 ;; Package-Requires: ((emacs "24.4"))

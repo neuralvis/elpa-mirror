@@ -4,7 +4,7 @@
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/kostafey/popup-switcher
-;; Package-Version: 20190917.1634
+;; Package-Version: 20191231.1631
 ;; Keywords: popup, switch, buffers, functions
 ;; Version: 0.2.14
 ;; Package-Requires: ((cl-lib "0.3")(popup "0.5.3"))
@@ -89,6 +89,12 @@ item, which opens `dired-mode' for current directory."
   :type 'boolean
   :group 'popup-switcher)
 
+(defcustom psw-highlight-previous-buffer nil
+  "When t highlight previous buffer for `psw-switch-buffer' fn list.
+Highlight current buffer for `psw-switch-buffer' when nil (by default)."
+  :type 'boolean
+  :group 'popup-switcher)
+
 (defun psw-window-line-number ()
   (save-excursion
     (goto-char (window-start))
@@ -135,11 +141,13 @@ POSITION - if set, overrides `psw-popup-position' value."
 (cl-defun psw-popup-menu (&key
                           item-names-list
                           fallback
-                          (position nil))
+                          (position nil)
+                          (initial-index nil))
   "Popup selection menu.
 ITEM-NAMES-LIST - list of item names to select.
 FALLBACK - popup loop unexpected key handler.
-POSITION - if set, overrides `psw-popup-position' var value."
+POSITION - if set, overrides `psw-popup-position' var value.
+INITIAL-INDEX - if non-nil, provides an initial selected  menu item."
   (if (equal (length item-names-list) 0)
       (error "Popup menu items list is empty."))
   (let* ((menu-height (min psw-popup-menu-max-length
@@ -164,7 +172,8 @@ POSITION - if set, overrides `psw-popup-position' var value."
                                                   :margin-right 1
                                                   :around t
                                                   :isearch t
-                                                  :fallback fallback)))
+                                                  :fallback fallback
+                                                  :initial-index initial-index)))
               target-item-name)))
       (progn
         (when (and (buffer-modified-p)
@@ -223,11 +232,14 @@ POSITION - if set, overrides `psw-popup-position' var value."
                         item-name-getter
                         switcher
                         (fallback 'popup-menu-fallback)
-                        (position nil))
+                        (position nil)
+                        (initial-index nil))
   "Simplify create new popup switchers.
 ITEMS-LIST - the essence items list to select.
 ITEM-NAME-GETTER - function to convert each item to it's text representation.
-SWITCHER - function, that describes what do with the selected item."
+SWITCHER - function, that describes what do with the selected item.
+POSITION - if set, overrides `psw-popup-position' var value.
+INITIAL-INDEX - if non-nil, provides an initial selected  menu item."
   (run-hooks 'psw-before-menu-hook)
   (let ((item-names-list (mapcar
                           (lambda (x) (funcall
@@ -241,7 +253,8 @@ SWITCHER - function, that describes what do with the selected item."
               :target-item-name (psw-popup-menu
                                  :item-names-list item-names-list
                                  :fallback fallback
-                                 :position position))))
+                                 :position position
+                                 :initial-index initial-index))))
   (run-hooks 'psw-after-switch-hook))
 
 (cl-defun psw-is-temp-buffer (&optional buffer)
@@ -296,7 +309,8 @@ SWITCHER - function, that describes what do with the selected item."
                          (progn
                            (popup-delete menu)
                            (add-hook 'window-configuration-change-hook
-                                     'psw-restore-menu)))))))))
+                                     'psw-restore-menu)))))))
+   :initial-index (if psw-highlight-previous-buffer 1)))
 
 (defun psw-restore-menu ()
   "Restore menu after the current buffer killed."
@@ -329,17 +343,23 @@ SWITCHER - function, that describes what do with the selected item."
 (defun psw-switch-projectile-projects ()
   (interactive)
   (psw-switcher
-   :items-list projectile-known-projects
-   :item-name-getter 'projectile-project-name
-   :switcher (lambda (p-root)
-               (psw-switcher
-                :items-list (projectile-project-files
-                             (expand-file-name p-root))
-                :item-name-getter 'identity
-                :switcher (lambda (file)
-                            (find-file
-                             (expand-file-name file
-                                               p-root)))))))
+   :items-list (sort
+                (cl-mapcar 'cons
+                           (mapcar 'projectile-project-name
+                                   projectile-known-projects)
+                           projectile-known-projects)
+                (lambda (p1 p2) (string-lessp (car p1) (car p2))))
+   :item-name-getter 'car
+   :switcher (lambda (p)
+               (let ((p-root (cdr p)))
+                 (psw-switcher
+                  :items-list (projectile-project-files
+                               (expand-file-name p-root))
+                  :item-name-getter 'identity
+                  :switcher (lambda (file)
+                              (find-file
+                               (expand-file-name file
+                                                 p-root))))))))
 
 ;;;###autoload
 (defun psw-navigate-files (&optional start-path)
