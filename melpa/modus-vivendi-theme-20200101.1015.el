@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20191228.1538
+;; Package-Version: 20200101.1015
 ;; Version: 0.3.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces, theme, accessibility
@@ -718,6 +718,9 @@ between foreground and background is >= 7:1)."
    `(erc-prompt-face ((,class (:foreground ,cyan-alt-other :weight bold))))
    `(erc-timestamp-face ((,class (:foreground ,fg-special-cold :weight bold))))
    `(erc-underline-face ((,class (:underline t))))
+   ;;;; ert
+   `(ert-test-result-expected ((,class (:inherit modus-theme-intense-green))))
+   `(ert-test-result-unexpected ((,class (:inherit modus-theme-intense-red))))
    ;;;; eshell
    `(eshell-ls-archive ((,class (:foreground ,cyan-alt :weight bold))))
    `(eshell-ls-backup ((,class (:foreground ,yellow-alt))))
