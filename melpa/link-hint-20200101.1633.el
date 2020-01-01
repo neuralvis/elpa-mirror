@@ -2,7 +2,7 @@
 
 ;; Author: Fox Kiester <noct@posteo.net>
 ;; URL: https://github.com/noctuid/link-hint.el
-;; Package-Version: 20190721.1844
+;; Package-Version: 20200101.1633
 ;; Keywords: convenience url avy link links hyperlink
 ;; Package-Requires: ((avy "0.4.0") (emacs "24.1") (cl-lib "0.5"))
 ;; Version: 0.1
@@ -936,7 +936,8 @@ If the link TYPE does not satisfy the necessary predicates, return nil."
 
 (defun link-hint--process (links)
   "Select a link from LINKS using avy.
-If there is only one link in LINKS, return it."
+If there is only one link in LINKS and `avy-single-candidate-jump' is non-nil,
+return it."
   (let ((avy-background (if (boundp 'link-hint-avy-background)
                             link-hint-avy-background
                           avy-background))
@@ -945,7 +946,8 @@ If there is only one link in LINKS, return it."
                     avy-keys))
         ;; prevent window from shifting avy overlays out of view
         (scroll-margin 0))
-    (if (cdr links)
+    (if (or (cdr links)
+            (not avy-single-candidate-jump))
         (save-selected-window
           (let* ((avy-action #'identity)
                  (pos (avy--process
