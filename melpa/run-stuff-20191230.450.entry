@@ -1,2 +1,0 @@
-
-(run-stuff . [(20191230 450) ((emacs (24 4))) "context based command execution" single ((:commit . "7160a65427587a616d7d20e0ddb8b4404e56dfec") (:keywords "files" "lisp" "files" "convenience" "hypermedia") (:authors ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Campbell Barton" . "ideasman42@gmail.com") (:url . "https://github.com/ideasman42/emacs-run-stuff"))])

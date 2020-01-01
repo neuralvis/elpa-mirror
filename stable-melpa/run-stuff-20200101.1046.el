@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://github.com/ideasman42/emacs-run-stuff
-;; Package-Version: 20191230.450
+;; Package-Version: 20200101.1046
 ;; Version: 0.0.1
 ;; Keywords: files lisp files convenience hypermedia
 ;; Package-Requires: ((emacs "24.4"))
@@ -62,17 +62,20 @@
 (defcustom run-stuff-open-command "xdg-open"
   "Used to run open files with their default mime type."
   :group 'run-stuff
-  :safe #'stringp)
+  :safe #'stringp
+  :type 'string)
 
 (defcustom run-stuff-terminal-command "xterm"
   "Used to run commands in a terminal, the following text is to be executed."
   :group 'run-stuff
-  :safe #'stringp)
+  :safe #'stringp
+  :type 'string)
 
 (defcustom run-stuff-terminal-execute-arg "-e"
   "Passed to the terminal to execute a command."
   :group 'run-stuff
-  :safe #'stringp)
+  :safe #'stringp
+  :type 'string)
 
 
 (require 'subr-x)
@@ -84,12 +87,16 @@ if they end with LINE-TERMINATE-CHAR.
 Returns the line(s) as a string with no properties."
   (interactive)
   (save-excursion
-    (let*
+    (let
       (
         (start (line-beginning-position))
-        (end start)
         (iterate t)
-        (new-end))
+        ;; Use later.
+        (end nil)
+        (new-end nil)
+        (new-end-ws nil)
+        (end-ws nil))
+      (setq end start)
       (while iterate
         (setq new-end (line-end-position))
         ;; could be more efficient?
@@ -114,10 +121,13 @@ Returns the line(s) as a string with no properties."
 Argument LINE-TERMINATE-CHAR is used to wrap lines."
   (interactive)
   (save-excursion
-    (let*
+    (let
       (
         (prev (line-beginning-position))
-        (iterate t))
+        (iterate t)
+        ;; Use later.
+        (end-ws nil)
+        (above-new-end-ws nil))
       (while iterate
         ;; could be more efficient?
         (setq above-new-end-ws
