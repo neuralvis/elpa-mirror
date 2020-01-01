@@ -7,7 +7,7 @@
 ;; Created: 25 Dec 2019
 ;; Modified: 30 Dec 2029
 ;; Version: 0.1
-;; Package-Version: 20191230.1556
+;; Package-Version: 20191231.2046
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: terminals convenience
 ;; URL: https://github.com/spudlyo/clipetty
