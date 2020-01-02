@@ -1,2 +1,2 @@
 
-(evil-test-helpers . [(20191218 852) ((evil (1 13 0))) "unit test helpers for Evil" single ((:commit . "ef4f345b8bfa45f61448cb6dc747496d3b561dcc") (:authors ("Vegard Øye <vegard_oye at hotmail.com>")) (:maintainer "Vegard Øye <vegard_oye at hotmail.com>"))])
+(evil-test-helpers . [(20191218 852) ((evil (1 13 0))) "unit test helpers for Evil" single ((:commit . "40daccf17685ba4e59cf56563a8b0c4a386e109c") (:authors ("Vegard Øye <vegard_oye at hotmail.com>")) (:maintainer "Vegard Øye <vegard_oye at hotmail.com>"))])

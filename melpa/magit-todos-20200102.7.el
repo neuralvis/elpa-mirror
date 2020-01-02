@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/magit-todos
-;; Package-Version: 20191230.750
+;; Package-Version: 20200102.7
 ;; Version: 1.5-pre
 ;; Package-Requires: ((emacs "25.2") (async "1.9.2") (dash "2.13.0") (f "0.17.2") (hl-todo "1.9.0") (magit "2.13.0") (pcre2el "1.8") (s "1.12.0"))
 ;; Keywords: magit, vc
@@ -124,7 +124,7 @@ magit-status buffer.")
     (define-key map "jl" #'magit-todos-list)
     (define-key map "b" #'magit-todos-branch-list-toggle)
     (define-key map "B" #'magit-todos-branch-list-set-commit)
-    (define-key map (kbd "RET") #'magit-todos-list)
+    (define-key map [remap magit-visit-thing] #'magit-todos-list)
     map)
   "Keymap for `magit-todos' top-level section.")
 
