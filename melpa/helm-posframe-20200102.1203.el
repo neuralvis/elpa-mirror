@@ -5,7 +5,7 @@
 ;; Author: Feng Shu
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/helm-posframe
-;; Package-Version: 20191013.1027
+;; Package-Version: 20200102.1203
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, helm
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(helm "0.1"))
@@ -115,15 +115,8 @@ Argument BUFFER."
 
 (defun helm-posframe-cleanup ()
   "Cleanup helm-posframe."
-  (when (helm-posframe-workable-p)
+  (when (posframe-workable-p)
     (posframe-hide helm-posframe-buffer)))
-
-(defun helm-posframe-workable-p ()
-  "Test helm-posframe workable status."
-  (and (>= emacs-major-version 26)
-       (not (or noninteractive
-                emacs-basic-display
-                (not (display-graphic-p))))))
 
 ;;;###autoload
 (defun helm-posframe-enable ()
