@@ -2,10 +2,10 @@
 
 ;; Author: Masahiro Hayashi <mhayashi1120@gmail.com>
 ;; Keywords: docs
-;; Package-Version: 20190303.2227
+;; Package-Version: 20191231.751
 ;; URL: https://github.com/mhayashi1120/Emacs-langtool
 ;; Emacs: GNU Emacs 24 or later
-;; Version: 2.0.3
+;; Version: 2.0.4
 ;; Package-Requires: ((cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or
@@ -950,12 +950,11 @@ Ordinary no need to change this."
     (cond
      ((re-search-forward (eval-when-compile
                            (concat
-                            "^"
                             "Starting LanguageTool "
                             "\\([0-9.]+\\)\\(?:-SNAPSHOT\\)? "
                             ".+?"
                             "server on https?://\\([^:]+\\):\\([0-9]+\\)"
-                            "\.\.\."
+                            "\\.\\.\\."
                             "$"))
                          nil t))
      (t
@@ -972,7 +971,7 @@ Ordinary no need to change this."
       (save-excursion
         (while t
           (goto-char (point-min))
-          (when (re-search-forward "^Server started" nil t)
+          (when (re-search-forward "Server started" nil t)
             (cl-destructuring-bind (version host port)
                 (langtool-server--parse-initial-buffer)
               (when (version< version "4.0")
@@ -1170,7 +1169,7 @@ Ordinary no need to change this."
           (propertize ":run" 'face compilation-info-face))
     (setq langtool-mode-line-message
           (list " "
-                "LT"
+                "LT"                    ; LT <= LanguageTool shorthand
                 'langtool-mode-line-server-process
                 'langtool-mode-line-process))))
 

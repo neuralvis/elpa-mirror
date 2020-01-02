@@ -32,14 +32,17 @@ In the `*EBuku*' buffer, the following bindings are available:
 
 * `s' - Search for a bookmark (`ebuku-search').
 
+* `r' - Show recently-added bookmarks (`ebuku-search-on-recent').
+
 * `g' - Refresh the search results, based on last search (`ebuku-refresh').
 
 * `q' - Quit EBuku.
 
 ## Customisation
 
-The path to the `buku' executable, as well as the faces used by
-EBuku, can be customised via the `ebuku' customize-group.
+The path to the `buku' executable, the number of bookmarks shown by
+`ebuku-search-on-recent', and the faces used by EBuku, can be
+customised via the `ebuku' customize-group.
 
 ## TODO
 
@@ -71,5 +74,5 @@ including:
 ## License
 
 [GNU General Public License version
-3](http://www.gnu.org/licenses/gpl.html), or (at your option) any
+3](https://www.gnu.org/licenses/gpl.html), or (at your option) any
 later version.
