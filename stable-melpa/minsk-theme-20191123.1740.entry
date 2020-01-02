@@ -1,2 +1,0 @@
-
-(minsk-theme . [(20191123 1740) ((emacs (24))) "Minsk, a theme in deep muted greens" single ((:commit . "93d9bdb94276a0f3fc41c6edaaea4fa2c689f6d5") (:keywords "theme" "faces") (:authors ("Jean Lo" . "jlpaca@users.noreply.github.com")) (:maintainer "Jean Lo" . "jlpaca@users.noreply.github.com") (:url . "https://github.com/jlpaca/minsk-theme"))])
