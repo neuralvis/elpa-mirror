@@ -1,0 +1,2 @@
+
+(ghub . [(20200102 2204) ((emacs (25 1)) (let-alist (1 0 5)) (treepy (0 1 1))) "Minuscule client libraries for Git forge APIs." tar ((:commit . "a9c5ac44bc7691752e6bfea87ac75c7459ce88f3"))])
