@@ -1,10 +1,10 @@
 ;;; metrics-tracker.el --- Generate diagrams of personal metrics from diary entries  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2019 Ian Martins
+;; Copyright (C) 2019-2020 Ian Martins
 
 ;; Author: Ian Martins <ianxm@jhu.edu>
 ;; URL: https://github.com/ianxm/emacs-tracker
-;; Package-Version: 20191231.1301
+;; Package-Version: 20200104.1143
 ;; Version: 0.0.3
 ;; Keywords: docs
 ;; Package-Requires: ((emacs "24.4") seq)
@@ -92,9 +92,9 @@ Valid metrics entries look like \"DATE TIME METRICNAME VALUE\" where
 - METRICNAME is any string, whitespace included
 - VALUE is a decimal number like \"1\" or \"1.2\""
 
-  (let ((valid-formats '("\\([[:digit:]\-]+\\) *\\(?:[[:digit:]\:]+ ?[ap]?m?\\)? *\\([[:ascii:]]+\\) \\([[:digit:]\.]+\\)$"                            ; YYYY-MM-DD
-                         "^\\([[:alpha:]]+ [[:digit:]]+, [[:digit:]]+\\) *\\(?:[[:digit:]\:]+ ?[ap]?m?\\)? *\\([[:ascii:]]+\\) \\([[:digit:]\.]+\\)$"  ; MMM DD, YYYY
-                         "^\\([[:digit:]]+ [[:alpha:]]+ [[:digit:]]+\\) *\\(?:[[:digit:]\:]+ ?[ap]?m?\\)? *\\([[:ascii:]]+\\) \\([[:digit:]\.]+\\)$")) ; DD MMM YYYY
+  (let ((valid-formats '("^\\([[:digit:]\-]+\\) *\\(?:[[:digit:]\:]+ ?[ap]?m?\\)? *\\([[:ascii:]]+\\) \\([[:digit:]\.]+\\)$"                            ; YYYY-MM-DD
+                         "^\\([[:alpha:]]+ [[:digit:]]\\{1,2\\}, [[:digit:]]\\{4\\}\\) *\\(?:[[:digit:]\:]\\{1,8\\} ?[ap]?m?\\)? *\\([[:ascii:]]+\\) \\([[:digit:]\.]+\\)$"  ; MMM DD, YYYY
+                         "^\\([[:digit:]]\\{1,2\\} [[:alpha:]]+ [[:digit:]]\\{4\\}\\) *\\(?:[[:digit:]\:]\\{1,8\\} ?[ap]?m?\\)? *\\([[:ascii:]]+\\) \\([[:digit:]\.]+\\)$")) ; DD MMM YYYY
         metric-name metric-date metric-value foundp)
     (with-temp-buffer
       (insert-file-contents diary-file)

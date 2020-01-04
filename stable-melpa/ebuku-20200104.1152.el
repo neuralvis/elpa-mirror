@@ -1,12 +1,13 @@
+
 ;;; ebuku.el --- Interface to the Buku Web bookmark manager -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019  Alexis <flexibeast@gmail.com>
+;; Copyright (C) 2019-2020  Alexis <flexibeast@gmail.com>
 
 ;; Author: Alexis <flexibeast@gmail.com>
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2019-11-07
 ;; URL: https://github.com/flexibeast/ebuku
-;; Package-Version: 20200102.1020
+;; Package-Version: 20200104.1152
 ;; Keywords: bookmarks,buku,data,web,www
 ;; Version: 0
 ;; Package-Requires: ((emacs "24.3"))
@@ -45,7 +46,8 @@
 
 ;; ## Installation
 
-;; Put the `ebuku' folder in your load-path and do a `(load "ebuku")'.
+;; Install [EBuku from MELPA](https://melpa.org/#/ebuku), or put the
+;; `ebuku' folder in your load-path and do a `(load "ebuku")'.
 
 ;; ## Usage
 
