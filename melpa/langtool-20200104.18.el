@@ -2,10 +2,10 @@
 
 ;; Author: Masahiro Hayashi <mhayashi1120@gmail.com>
 ;; Keywords: docs
-;; Package-Version: 20191231.751
+;; Package-Version: 20200104.18
 ;; URL: https://github.com/mhayashi1120/Emacs-langtool
 ;; Emacs: GNU Emacs 24 or later
-;; Version: 2.0.4
+;; Version: 2.1.0
 ;; Package-Requires: ((cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or
@@ -33,6 +33,18 @@
 ;; Put this file into load-path'ed directory, and byte compile it if
 ;; desired. And put the following expression into your ~/.emacs.
 ;;
+;;     (require 'langtool)
+
+;; ## Settings (required):
+;;
+;; langtool.el have 3 types of client.
+
+;; 1. Command line
+;;
+;;  This setting should be set, if you use rest of clients, to get full of
+;;  completion support. And you should be set the variables before load
+;;  this library.
+;;
 ;;     (setq langtool-language-tool-jar "/path/to/languagetool-commandline.jar")
 ;;     (require 'langtool)
 ;;
@@ -42,22 +54,32 @@
 ;;           "/usr/share/languagetool:/usr/share/java/languagetool/*")
 ;;     (require 'langtool)
 ;;
-;; You can use HTTP server implementation which is now testing.  This
-;; is very fast, but has security risk if there is multiple user on a
-;; same host. You can set both of
-;; `langtool-language-tool-jar' and `langtool-language-tool-server-jar'
-;; the later is prior than the former.
-;; [Recommended] You should set `langtool-language-tool-jar' correctly
-;;    full of completion support like available languages.
+;; 2. HTTP server & client
+;;
+;;  You can use HTTP server implementation. This is very fast after listen server,
+;;  but has security risk if there are multiple user on a same host.
 ;;
 ;;     (setq langtool-language-tool-server-jar "/path/to/languagetool-server.jar")
-
+;;
 ;; You can change HTTP server port number like following.
 ;;
 ;;     (setq langtool-server-user-arguments '("-p" "8082"))
 
-;; These settings are optional:
+;; 3. HTTP client
+;;
+;; If you have running HTTP server instance on any machine:
+;;
+;;     (setq langtool-http-server-host "localhost"
+;;           langtool-http-server-port 8082)
+;;
+;; Now testing although, that running instance is working under HTTPSServer or via
+;; general ssl support (e.g. nginx) following may be working. Again, this is now
+;; testing, so please open issue when the ssl/tls connection is not working.
+;;
+;;     (setq langtool-http-server-stream-type 'tls)
 
+;; ## Optional settings
+;;
 ;; * Key binding if you desired.
 ;;
 ;;     (global-set-key "\C-x4w" 'langtool-check)
@@ -147,7 +169,7 @@
 ;; * check only docstring (emacs-lisp-mode)
 ;;    or using (derived-mode-p 'prog-mode) and only string and comment
 ;; * java encoding <-> elisp encoding (No enough information..)
-;; * change to --json argument to parse. 
+;; * change to --json argument to parse.
 
 ;;; Code:
 
@@ -243,10 +265,31 @@ No need to set this variable when `langtool-java-classpath' is set."
   :type 'file)
 
 (defcustom langtool-language-tool-server-jar nil
-  "LanguageTool server jar file. **This is now TESTING**.
+  "LanguageTool server jar file.
 Very fast, but do not use it if there is unreliable user on a same host."
   :group 'langtool
   :type 'file)
+
+(defcustom langtool-http-server-host nil
+  "Normally should be \"localhost\" . Do not set the untrusted host/network.
+Your post may not be encrypted application layer, so your privacy may be leaked.
+
+Please set `langtool-http-server-port' either.
+"
+  :group 'langtool
+  :type 'string)
+
+(defcustom langtool-http-server-port nil
+  "See `langtool-http-server-host' ."
+  :group 'langtool
+  :type 'number)
+
+(defcustom langtool-http-server-stream-type nil
+  "This is now testing and not enough tested yet. This value is passed to
+`open-network-stream' `:type' argument.
+Valid arguments are same to above except `nil'. This means `plain'."
+  :group 'langtool
+  :type 'symbol)
 
 (defcustom langtool-java-classpath nil
   "Custom classpath to use on special environment. (e.g. Arch Linux)
@@ -741,9 +784,13 @@ Ordinary no need to change this."
 ;;
 
 (defun langtool--checker-mode ()
+  ;; NOTE: This priority is order by light weight.
   (cond
+   ((and langtool-http-server-host
+         langtool-http-server-port)
+    'http-client)
    (langtool-language-tool-server-jar
-    'http)
+    'client-server)
    ((or langtool-language-tool-jar
         langtool-java-classpath
         langtool-bin)
@@ -919,11 +966,42 @@ Ordinary no need to change this."
         (setq errmsg "Buffer was dead")))
       (langtool--check-finish source errmsg))))
 
+;;;
+;;; Adapter for internal/external server
+;;;
+
+(defvar langtool-adapter--plist nil)
+
+(defun langtool-adapter-ensure-internal (process)
+  (setq langtool-adapter--plist
+        (cons 'internal
+              (list
+               'process process
+               'finalizer `(lambda () (langtool-server-ensure-stop ,process))
+               'host (process-get process 'langtool-server-host)
+               'port (process-get process 'langtool-server-port)))))
+
+(defun langtool-adapter-ensure-external ()
+  (setq langtool-adapter--plist
+        (cons 'external
+              (list
+               'host langtool-http-server-host
+               'port langtool-http-server-port
+               'stream-type langtool-http-server-stream-type))))
+
+(defun langtool-adapter-get (key)
+  (plist-get (cdr langtool-adapter--plist) key))
+
+(defun langtool-adapter-ensure-terminate ()
+  (when langtool-adapter--plist
+    (let ((finalizer (langtool-adapter-get 'finalizer)))
+      (when finalizer
+        (funcall finalizer)))
+    (setq langtool-adapter--plist nil)))
+
 ;;
 ;; LanguageTool HTTP Server <-> Client
 ;;
-
-(defvar langtool-server--process nil)
 
 (defun langtool-server--check-command ()
   (cond
@@ -935,14 +1013,16 @@ Ordinary no need to change this."
   (unless (file-readable-p langtool-language-tool-server-jar)
     (error "languagetool-server jar file is not readable")))
 
-(defun langtool-server-ensure-stop (&optional proc)
-  (setq proc (or proc langtool-server--process))
+(defun langtool-http-client-check-command ()
+  ;; Currently no need to check command. Just HTTP post.
+  )
+
+(defun langtool-server-ensure-stop (proc)
   (when (processp proc)
     (let ((buffer (process-buffer proc)))
       (delete-process proc)
       (when (buffer-live-p buffer)
-        (kill-buffer buffer))))
-  (setq langtool-server--process nil))
+        (kill-buffer buffer)))))
 
 (defun langtool-server--parse-initial-buffer ()
   (save-excursion
@@ -998,9 +1078,11 @@ Ordinary no need to change this."
 
 (defun langtool-server--ensure-running ()
   (langtool-server--check-command)
-  (unless (and (processp langtool-server--process)
-               (eq (process-status langtool-server--process) 'run))
-    (setq langtool-server--process nil)
+  (unless (let ((proc (langtool-adapter-get 'process)))
+            (and  (processp proc)
+                  (eq (process-status proc) 'run)))
+    ;; Force terminate previous server process if exists.
+    (langtool-adapter-ensure-terminate)
     (let* ((bin langtool-java-bin)
            (args '()))
       ;; jar Default setting is "HTTPSServer" .
@@ -1020,8 +1102,8 @@ Ordinary no need to change this."
                     args)))
         (langtool-server--rendezvous proc buffer)
         (set-process-sentinel proc 'langtool-server--process-sentinel)
-        (setq langtool-server--process proc))))
-  langtool-server--process)
+        (langtool-adapter-ensure-internal proc)
+        proc))))
 
 (defun langtool-client--parse-response-body/json ()
   (let* ((json (json-read))
@@ -1111,16 +1193,16 @@ Ordinary no need to change this."
       (setq query-string (url-build-query-string query))
       query-string)))
 
-(defun langtool-client--http-post (server data)
-  (let* ((host (process-get server 'langtool-server-host))
-         (port (process-get server 'langtool-server-port))
+(defun langtool-client--http-post (data)
+  (let* ((host (langtool-adapter-get 'host))
+         (port (langtool-adapter-get 'port))
          (buffer (langtool--process-create-client-buffer))
          (url-path "/v2/check")
          (client (let ((coding-system-for-write 'binary)
                        (coding-system-for-read 'utf-8-unix))
                    (open-network-stream
                     "LangtoolHttpClient" buffer host port
-                    :type 'plain))))
+                    :type (or (langtool-adapter-get 'stream-type) 'plain)))))
     (process-send-string
      client
      (concat
@@ -1135,7 +1217,7 @@ Ordinary no need to change this."
 
 (defun langtool-client--invoke-process (file begin finish &optional lang)
   (let* ((data (langtool-client--make-post-data  file begin finish lang))
-         (proc (langtool-client--http-post langtool-server--process data)))
+         (proc (langtool-client--http-post data)))
     (set-process-sentinel proc 'langtool-client--process-sentinel)
     (set-process-filter proc 'langtool-client--process-filter)
     (process-put proc 'langtool-source-buffer (current-buffer))
@@ -1155,14 +1237,22 @@ Ordinary no need to change this."
   (let (proc)
     (cl-ecase (langtool--checker-mode)
       ('commandline
+       ;; Ensure adapter is closed. That has been constructed other checker-mode.
+       (langtool-adapter-ensure-terminate)
        (setq proc (langtool-command--invoke-process file begin finish lang)))
-      ('http
+      ('client-server
        (langtool-server--ensure-running)
        (setq langtool-mode-line-server-process
              (propertize ":server" 'face compilation-info-face))
        (add-hook 'langtool-server--process-exit-hook
                  (lambda ()
                    (setq langtool-mode-line-server-process nil)))
+       (setq proc (langtool-client--invoke-process file begin finish lang)))
+      ('http-client
+       (langtool-adapter-ensure-terminate)
+       ;; Construct new adapter each check.
+       ;; Since maybe change customize variable in a Emacs session.
+       (langtool-adapter-ensure-external)
        (setq proc (langtool-client--invoke-process file begin finish lang))))
     (setq langtool-buffer-process proc)
     (setq langtool-mode-line-process
@@ -1192,8 +1282,10 @@ Ordinary no need to change this."
   (cl-ecase (langtool--checker-mode)
     ('commandline
      (langtool-command--check-command))
-    ('http
-     (langtool-server--check-command))))
+    ('client-server
+     (langtool-server--check-command))
+    ('http-client
+     (langtool-http-client-check-command))))
 
 ;;FIXME
 ;; https://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html
@@ -1637,7 +1729,7 @@ Restrict to selection when region is activated.
 (defun langtool-server-stop ()
   "Terminate LanguageTool HTTP server."
   (interactive)
-  (langtool-server-ensure-stop)
+  (langtool-adapter-ensure-terminate)
   (message "Server is terminated."))
 
 (defun langtool-toggle-debug ()

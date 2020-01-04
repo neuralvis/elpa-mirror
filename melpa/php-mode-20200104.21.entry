@@ -1,0 +1,2 @@
+
+(php-mode . [(20200104 21) ((emacs (24 3))) "Major mode for editing PHP code" tar ((:commit . "167b35749dbf700543d4a540d098c015af58df2b") (:keywords "languages" "php") (:authors ("Eric James Michael Ritz")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-php/php-mode"))])
