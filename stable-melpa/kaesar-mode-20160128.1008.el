@@ -2,7 +2,6 @@
 
 ;; Author: Masahiro Hayashi <mhayashi1120@gmail.com>
 ;; Keywords: data, convenience
-;; Package-Version: 20160128.1008
 ;; URL: https://github.com/mhayashi1120/Emacs-kaesar
 ;; Emacs: GNU Emacs 22 or later
 ;; Version: 0.9.1
