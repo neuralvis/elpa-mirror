@@ -4,7 +4,7 @@
 
 ;; Author: Seong Yong-ju <sei40kr@gmail.com>
 ;; Keywords: extensions, tools
-;; Package-Version: 20191223.1547
+;; Package-Version: 20200104.624
 ;; URL: https://github.com/sei40kr/atcoder-tools
 ;; Package-Requires: ((emacs "26") (f "0.20") (s "1.12"))
 ;; Version: 0.3.2
@@ -42,6 +42,11 @@
   :type '(choice (const gcc)
                  (const clang)))
 
+(defcustom atcoder-tools-c++-compiler 'gcc
+  "The compiler to use to compile C++ code. Possible values are `gcc' and `clang'."
+  :type '(choice (const gcc)
+                 (const clang)))
+
 (defcustom atcoder-tools-rust-use-rustup t
   "If non-nil, Rustup is used to compile Rust code."
   :type 'bool)
@@ -56,6 +61,9 @@
     (c++-gcc . ((cmd-templates . ("g++ -std=gnu++1y -O2 -o %e %s"
                                   "atcoder-tools test -e %e -d %d"))
                 (remove-exec . t)))
+    (c++-clang . ((cmd-templates . ("clang++ -std=c++14 -stdlib=libc++ -O2 -o %e %s"
+                                    "atcoder-tools test -e %e -d %d"))
+                  (remove-exec . t)))
     (rust-rustc . ((cmd-templates . ("rustc -Oo %e %s" "env RUST_BACKTRACE=1 atcoder-tools test -e %e -d %d"))
                    (remove-exec . t)))
     (rust-rustup . ((cmd-templates . ("rustup run --install 1.15.1 rustc -Oo %e %s" "env RUST_BACKTRACE=1 atcoder-tools test -e %e -d %d"))
@@ -74,7 +82,11 @@
                 ('clang 'c-clang)
                 (_ (error "Invalid atcoder-tools-c-compiler value: %S"
                           atcoder-tools-c-compiler))))
-     ('c++-mode 'c++-gcc)
+     ('c++-mode (pcase atcoder-tools-c-compiler
+                  ('gcc 'c++-gcc)
+                  ('clang 'c++-clang)
+                  (_ (error "Invalid atcoder-tools-c++-compiler value: %S"
+                            atcoder-tools-c++-compiler))))
      ('rust-mode (if atcoder-tools-rust-use-rustup 'rust-rustup 'rust-rustc))
      (_ (error "No run configuration found for %S" mode)))
    atcoder-tools--run-config-alist))

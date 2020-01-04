@@ -4,9 +4,9 @@
 
 ;; Author: Zhu Zihao <all_but_last@163.com>
 ;; URL: https://github.com/cireu/fuz.el
-;; Package-Version: 20191024.1133
-;; Version: 1.3.0
-;; Package-Requires: ((emacs "25.1") (fuz "1.3.0") (helm "3.2"))
+;; Package-Version: 20200104.524
+;; Version: 1.4.0
+;; Package-Requires: ((emacs "25.1") (fuz "1.4.0") (helm "3.6"))
 ;; Keywords: convenience
 
 ;; This file is NOT part of GNU Emacs.
@@ -33,11 +33,14 @@
 
 ;;; Code:
 
+(require 'cl-lib)
 (require 'inline)
+(require 'minibuffer)
 (require 'fuz)
 (require 'fuz-extra)
 (require 'helm)
 (require 'helm-command)
+(require 'helm-mode)
 
 (eval-when-compile
   (require 'pcase)
@@ -68,7 +71,6 @@ slower but return better result than clangd's."
 
 (defvar helm-fuz-old-fuzzy-sort-fn nil)
 (defvar helm-fuz-old-fuzzy-highlight-match-fn nil)
-(defvar helm-fuz-old-M-x-fuzzy-sort-fn nil)
 
 ;;; Utils
 
@@ -127,7 +129,7 @@ USE-REAL? and BASENAME? will be passed to `helm-fuz--get-cand-str' to get the
 real candidate string."
   (let* ((realstr (helm-fuz--get-cand-str cand use-real? basename?))
          (len (length realstr)))
-    ;; FIXME: Short pattern may have higher score matching longer pattern
+    ;; NOTE: Short pattern may have higher score matching longer pattern
     ;; than exactly matching itself
     ;; e.g. "ielm" will prefer [iel]m-[m]enu than [ielm]
     (if (string= realstr pattern)
@@ -180,21 +182,9 @@ Sign: (-> (Listof Cand) Any (Listof Cand))"
 
 Sign: (-> (Listof Cand) Any (Listof Cand))"
   (helm-fuz-fuzzy-matching-sort-fn-1! helm-pattern
-                                     cands
-                                     #'helm-fuz--get-single-cand-score-data
-                                     t))
-
-
-
-(defun helm-fuz-M-x-fuzzy-sort-fn! (cands _source)
-  "Sorting function for `helm-M-x'.
-
-Sign: (-> (Listof Cand) Any (Listof Cand))"
-  (helm-fuz-fuzzy-matching-sort-fn-1! helm-pattern
-                                     cands
-                                     (lambda (pat cand)
-                                       (helm-fuz--get-single-cand-score-data pat cand t))
-                                     t))
+                                      cands
+                                      #'helm-fuz--get-single-cand-score-data
+                                      t))
 
 (defun helm-fuz-fuzzy-highlight-match! (cand)
   "Highlight the fuzzy matched part of CAND.
@@ -212,6 +202,44 @@ Sign: (-> Cand Cand)"
           (cons (funcall highlighter display) real))
         (_
          (funcall highlighter cand))))))
+
+;;; Completion Style
+
+(defalias 'helm-fuz-completion-try-completion
+  #'helm-flex-completion-try-completion
+  "`try-completion' function for `helm-fuz' completion style.
+
+See also `helm-flex-completion-try-completion'.")
+
+(defun helm-fuz-completion-all-completions (string table pred point)
+  "`all-completions' function for `helm-fuz' completion style.
+
+See also `helm-flex-completion-all-completions'."
+  (unless (string-match-p " " string)
+    (cl-multiple-value-bind (all _pattern prefix _suffix _carbounds)
+        (helm-completion--flex-all-completions
+         string table pred point
+         #'helm-completion--flex-transform-pattern)
+      (when all
+        (nconc
+         (mapcar
+          (lambda (cand)
+            (pcase-let ((`[,_ ,scr] (helm-fuz--get-single-cand-score-data
+                                     string cand t)))
+              (propertize cand 'completion-score scr)))
+          all)
+         (length prefix))))))
+
+;; Setup `completion-styles-alist'
+(cl-pushnew '(helm-fuz
+              helm-fuz-completion-try-completion
+              helm-fuz-completion-all-completions
+              "\
+Helm flex completion style.
+
+Use `fuz' to calcuate the fuzzy score for better result.")
+            completion-styles-alist
+            :test #'equal)
 
 ;;; Find Files Fuzzy
 
@@ -267,7 +295,6 @@ Sign: (-> (-> (Listof Cand) Any (Listof Cand)) (Listof Cand) Any (Listof Cand))"
                                              cands
                                              #'helm-fuz--get-ff-cand-score-data))))
 
-
 ;;; Minor Mode
 
 ;;;###autoload
@@ -281,29 +308,29 @@ Sign: (-> (-> (Listof Cand) Any (Listof Cand)) (Listof Cand) Any (Listof Cand))"
       (progn
         (setq helm-fuz-old-fuzzy-sort-fn helm-fuzzy-sort-fn
               helm-fuzzy-sort-fn #'helm-fuz-fuzzy-matching-sort-fn!)
-        (setq helm-fuz-old-fuzzy-highlight-match-fn helm-fuzzy-matching-highlight-fn
-              helm-fuzzy-matching-highlight-fn #'helm-fuz-fuzzy-highlight-match!)
-        (setq helm-fuz-old-M-x-fuzzy-sort-fn helm-M-x-default-sort-fn
-              helm-M-x-default-sort-fn #'helm-fuz-M-x-fuzzy-sort-fn!)
+        ;; FIXME: Deal with invalid UTF-8 string.
+        ;; (setq helm-fuz-old-fuzzy-highlight-match-fn helm-fuzzy-matching-highlight-fn
+        ;;       helm-fuzzy-matching-highlight-fn #'helm-fuz-fuzzy-highlight-match!)
 
         (advice-add 'helm-ff-sort-candidates
                     :around
                     #'helm-fuz-fuzzy-ff-sort-candidate-advice!)
         (advice-add 'helm-ff-filter-candidate-one-by-one
                     :around
-                    #'helm-fuz--ff-filter-candidate-one-by-one-advice!))
+                    #'helm-fuz--ff-filter-candidate-one-by-one-advice!)
+
+        (add-to-list 'completion-styles 'helm-fuz t #'eq))
     (progn
       (setq helm-fuzzy-sort-fn (or helm-fuz-old-fuzzy-sort-fn
                                    #'helm-fuzzy-matching-default-sort-fn))
-      (setq helm-fuzzy-matching-highlight-fn (or helm-fuz-old-fuzzy-highlight-match-fn
-                                                 #'helm-fuzzy-default-highlight-match))
-      (setq helm-M-x-default-sort-fn (or helm-fuz-old-M-x-fuzzy-sort-fn
-                                         #'helm-M-x-fuzzy-sort-candidates))
-
+      ;; (setq helm-fuzzy-matching-highlight-fn (or helm-fuz-old-fuzzy-highlight-match-fn
+      ;;                                            #'helm-fuzzy-default-highlight-match))
       (advice-remove 'helm-ff-sort-candidates
                      #'helm-fuz-fuzzy-ff-sort-candidate-advice!)
       (advice-remove 'helm-ff-filter-candidate-one-by-one
-                     #'helm-fuz--ff-filter-candidate-one-by-one-advice!))))
+                     #'helm-fuz--ff-filter-candidate-one-by-one-advice!)
+
+      (cl-callf2 delq 'helm-fuz completion-styles))))
 
 (provide 'helm-fuz)
 
