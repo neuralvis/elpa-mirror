@@ -1,0 +1,2 @@
+
+(nord-theme . [(20200105 1437) ((emacs (24))) "An arctic, north-bluish clean and elegant theme" single ((:commit . "a2b903861b95dbf4353a2e6615a606f6886f73c2") (:authors ("Arctic Ice Studio" . "development@arcticicestudio.com")) (:maintainer "Arctic Ice Studio" . "development@arcticicestudio.com") (:url . "https://github.com/arcticicestudio/nord-emacs"))])
