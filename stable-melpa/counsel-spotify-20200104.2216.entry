@@ -1,0 +1,2 @@
+
+(counsel-spotify . [(20200104 2216) ((emacs (25)) (ivy (0 9 0))) "Control Spotify search and select music with Ivy." single ((:commit . "e673b7adbaff423f14613f90ec2ed00b0f242792") (:authors ("Lautaro García <https://github.com/Lautaro-Garcia>")) (:maintainer "Lautaro García <https://github.com/Lautaro-Garcia>"))])

@@ -4,7 +4,7 @@
 ;; Author: Lautaro García <https://github.com/Lautaro-Garcia>
 ;; Package: counsel-spotify
 ;; Package-Requires: ((emacs "25") (ivy "0.9.0"))
-;; Package-Version: 20190406.2025
+;; Package-Version: 20200104.2216
 ;; Version: 0.1
 
 ;; This file is not part of GNU Emacs.
@@ -51,6 +51,13 @@
   "Spotify application client secret."
   :type 'string :group 'counsel-spotify)
 
+
+(defcustom counsel-spotify-service-name "spotify"
+  "Name of the DBUS service used by the client we talk to.
+
+The official Spotify client uses `spotify', but one can also use
+alternative clients such as mopidy or spotifyd."
+  :type 'string :group 'counsel-spotify)
 
 ;;;;;;;;;;;;;
 ;; Helpers ;;
@@ -172,7 +179,7 @@
 
 (cl-defun counsel-spotify-call-spotify-via-dbus (method &rest args)
   (apply #'dbus-call-method `(:session
-                              "org.mpris.MediaPlayer2.spotify"
+                              ,(format "org.mpris.MediaPlayer2.%s" counsel-spotify-service-name)
                               "/org/mpris/MediaPlayer2" "org.mpris.MediaPlayer2.Player"
                               ,method
                               ,@args)))
