@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20200104.1936
+;; Package-Version: 20200106.903
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -585,7 +585,7 @@ Consult the existing formatters for examples of BODY."
              (not (null (symbol-value 'flow-minor-mode))))
         "flow"
       "babel"))
-   ((js2-jsx-mode jsx-mode rjsx-mode) "babel")
+   ((js2-jsx-mode jsx-mode rjsx-mode react-mode) "babel")
    ((typescript-mode typescript-tsx-mode) "typescript")
    (json-mode "json")
    (vue-mode "vue")

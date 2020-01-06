@@ -1,2 +1,0 @@
-
-(kubernetes . [(20200104 353) ((emacs (25 1)) (dash (2 12 0)) (magit (2 8 0)) (magit-popup (2 13 0))) "Magit-like porcelain for Kubernetes." tar ((:commit . "80a2cce82df5821e160b96c680fb50566ae5248c") (:authors ("Chris Barrett" . "chris+emacs@walrus.cool")) (:maintainer "Chris Barrett" . "chris+emacs@walrus.cool"))])

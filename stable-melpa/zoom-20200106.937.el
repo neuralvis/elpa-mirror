@@ -1,6 +1,6 @@
 ;;; zoom.el --- Fixed and automatic balanced window layout
 
-;; Copyright (c) 2019 Andrea Cardaci <cyrus.and@gmail.com>
+;; Copyright (c) 2020 Andrea Cardaci <cyrus.and@gmail.com>
 ;;
 ;; Permission is hereby granted, free of charge, to any person obtaining a copy
 ;; of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 
 ;; Author: Andrea Cardaci <cyrus.and@gmail.com>
 ;; Version: 0.2.2
-;; Package-Version: 20190523.1300
+;; Package-Version: 20200106.937
 ;; URL: https://github.com/cyrus-and/zoom
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: frames
@@ -186,13 +186,14 @@ Argument IGNORED is ignored."
       ;; zoom the previously selected window if a mouse tracking is in progress
       ;; of if the minibuffer is selected (according to the user preference)
       (with-selected-window
-          (if (or (equal (selected-window) zoom--last-window)
-                  (and zoom-minibuffer-preserve-layout (window-minibuffer-p))
-                  track-mouse)
-              zoom--last-window
-            ;; XXX this can't be simply omitted because it's needed to address
-            ;; the case where a window changes buffer from/to a ignored buffer
-            (selected-window))
+          zoom--last-window
+          ;; (if (or (equal (selected-window) zoom--last-window)
+          ;;         (and zoom-minibuffer-preserve-layout (window-minibuffer-p))
+          ;;         track-mouse)
+          ;;     zoom--last-window
+          ;;   ;; XXX this can't be simply omitted because it's needed to address
+          ;;   ;; the case where a window changes buffer from/to a ignored buffer
+          ;;   (selected-window))
         ;; update the currently zoomed window
         (setq zoom--last-window (selected-window))
         (zoom--update)))))
@@ -278,14 +279,18 @@ resized horizontally or vertically."
     (window-resize nil delta horizontal)))
 
 (defun zoom--fix-scroll ()
-  "Fix the horizontal scrolling if needed."
+  "Fix the horizontal scrolling if needed and optionally recenters the point vertically."
   ;; scroll all the way to the left border
   (scroll-right (window-hscroll))
   ;; if the window is not wide enough to contain the point scroll to center
   ;; unless lines are not truncated
   (when (and truncate-lines
              (> (current-column) (- (window-body-width) hscroll-margin)))
-    (scroll-left (- (current-column) (/ (window-body-width) 2)))))
+    (scroll-left (- (current-column) (/ (window-body-width) 2))))
+
+  ;; TODO add option
+  ;; recenter the point horizontally
+  (recenter))
 
 (provide 'zoom)
 
