@@ -25,7 +25,6 @@
 
 ;; Author: Yuuki Arisawa <yuuki.ari@gmail.com>
 ;; URL: https://github.com/uk-ar/el-spy
-;; Package-Version: 20131226.2008
 ;; Created: 24 Sep 20
 ;; Version: 0.1
 ;; Keywords: test
@@ -144,5 +143,8 @@
 ;;   (call-interactively 'test1);; error
 ;;  )
 (provide 'el-spy)
+
+;;; el-spy.el ends here
+'el-spy)
 
 ;;; el-spy.el ends here

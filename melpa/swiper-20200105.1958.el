@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20191128.1126
+;; Package-Version: 20200105.1958
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (ivy "0.13.0"))
 ;; Keywords: matching
@@ -746,7 +746,9 @@ line numbers.  For the buffer, use `ivy--regex' instead."
                              re)))
                   (cond
                     ((string= re "$")
-                     "^$")
+                     (if (eq (ivy-state-caller ivy-last) 'swiper)
+                         "^ $"
+                       "^$"))
                     ((zerop ivy--subexps)
                      (prog1 (format "^ ?\\(%s\\)" re)
                        (setq ivy--subexps 1)))
