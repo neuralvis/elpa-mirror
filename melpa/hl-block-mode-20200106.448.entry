@@ -1,0 +1,2 @@
+
+(hl-block-mode . [(20200106 448) ((emacs (26 0))) "highlighting nested blocks" single ((:commit . "646c8cb8938b22b34f7c75a8644680a3f75f6bf5") (:authors ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Campbell Barton" . "ideasman42@gmail.com") (:url . "https://github.com/ideasman42/emacs-hl-block-mode"))])

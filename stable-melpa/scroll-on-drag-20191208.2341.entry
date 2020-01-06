@@ -1,2 +1,0 @@
-
-(scroll-on-drag . [(20191208 2341) ((emacs (26 2))) "Interactive scrolling" single ((:commit . "31a96ca6fa4b9a991a19e9af59dbab8253b584aa") (:authors ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Campbell Barton" . "ideasman42@gmail.com") (:url . "https://github.com/ideasman42/emacs-scroll-on-drag"))])
