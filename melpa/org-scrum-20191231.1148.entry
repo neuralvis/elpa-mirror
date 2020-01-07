@@ -1,2 +1,0 @@
-
-(org-scrum . [(20191231 1148) ((emacs (24 5)) (org (8 2)) (gnuplot (0 6)) (seq (0))) "org mode extensions for scrum planning and reporting" single ((:commit . "6bd959ad5e986ce29b030e74b30308881c69f0c1") (:authors ("Ian Martins" . "ianxm@jhu.edu")) (:maintainer "Ian Martins" . "ianxm@jhu.edu") (:url . "https://github.com/ianxm/emacs-scrum"))])
