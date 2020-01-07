@@ -4,6 +4,7 @@
 
 ;; Author: Hiroaki Otsu <ootsuhiroaki@gmail.com>
 ;; Keywords: gnus
+;; Package-Version: 20140610.731
 ;; URL: https://github.com/aki2o/gnus-x-gm-raw
 ;; Version: 0.0.1
 ;; Package-Requires: ((log4e "0.2.0") (yaxception "0.1"))
