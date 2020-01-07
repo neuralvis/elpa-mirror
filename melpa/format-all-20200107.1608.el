@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20200106.903
+;; Package-Version: 20200107.1608
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -60,6 +60,7 @@
 ;; - R (styler)
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
+;; - Scala (scalafmt)
 ;; - Shell script (shfmt)
 ;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
@@ -377,18 +378,18 @@ Consult the existing formatters for examples of BODY."
             (when (format-all--buffer-extension-p "pyi") "--pyi")
             "-")))
 
+(define-format-all-formatter brittany
+  (:executable "brittany")
+  (:install "stack install brittany")
+  (:modes haskell-mode literate-haskell-mode)
+  (:format (format-all--buffer-easy executable)))
+
 (define-format-all-formatter buildifier
   (:executable "buildifier")
   (:install
    (macos "brew install buildifier")
    "go get github.com/bazelbuild/buildtools/buildifier")
   (:modes bazel-mode)
-  (:format (format-all--buffer-easy executable)))
-
-(define-format-all-formatter brittany
-  (:executable "brittany")
-  (:install "stack install brittany")
-  (:modes haskell-mode literate-haskell-mode)
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter clang-format
@@ -640,6 +641,12 @@ Consult the existing formatters for examples of BODY."
   (:install "cargo install rustfmt")
   (:modes rust-mode rustic-mode)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter scalafmt
+  (:executable "scalafmt")
+  (:install (macos "brew install --HEAD olafurpg/scalafmt/scalafmt"))
+  (:modes scala-mode)
+  (:format (format-all--buffer-easy executable "--stdin" "--non-interactive")))
 
 (define-format-all-formatter shfmt
   (:executable "shfmt")

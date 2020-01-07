@@ -8,8 +8,7 @@
 ;;         Aldric Giacomoni <trevoke@gmail.com>
 ;; Keywords: org-mode, org, kanban, tools
 ;; Package-Requires: ((s) (dash "2.13.0") (emacs "24.4") (org "9.1"))
-;; Package-Version: 20191003.1455
-;; Package-X-Original-Version: 0.4.21
+;; Package-Version: 0.4.21
 ;; Homepage: http://github.com/gizmomogwai/org-kanban
 
 ;;; Commentary:

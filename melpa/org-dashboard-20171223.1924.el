@@ -4,7 +4,6 @@
 
 ;; Author: Massimiliano Mirra <hyperstruct@gmail.com>
 ;; Version: 1.0
-;; Package-Version: 20171223.1924
 ;; Maintainer: Massimiliano Mirra <hyperstruct@gmail.com>
 ;; Keywords: outlines, calendar
 ;; URL: http://github.com/bard/org-dashboard
