@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((treemacs "0.0") (emacs "25.2") (cl-lib "0.5"))
-;; Package-Version: 20191223.1047
+;; Package-Version: 20200108.553
 ;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -128,6 +128,7 @@ This will make sure the icons' background colors will align with hl-line mode."
   :global     t
   (if treemacs-icons-dired-mode
       (progn
+        (treemacs--setup-icon-background-colors)
         (add-hook 'dired-after-readin-hook #'treemacs-icons-dired--display)
         (add-hook 'dired-mode-hook #'treemacs--select-icon-set)
         (add-hook 'dired-mode-hook #'treemacs-icons-dired--enable-highlight-correction)

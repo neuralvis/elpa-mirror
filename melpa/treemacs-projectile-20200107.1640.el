@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25.2") (projectile "0.14.0") (treemacs "0.0"))
-;; Package-Version: 20200103.1907
+;; Package-Version: 20200107.1640
 ;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -80,7 +80,7 @@ the current dir."
   (let ((file-buffer (get-file-buffer path))
         (kill? nil))
     (unless file-buffer
-      (setf file-buffer (create-file-buffer path)
+      (setf file-buffer (find-file-noselect path)
             kill? t))
     (with-current-buffer file-buffer
       (projectile-find-file-hook-function))
