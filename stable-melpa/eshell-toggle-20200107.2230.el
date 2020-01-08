@@ -5,7 +5,7 @@
 ;; Author: Dmitry Cherkassov <dcherkassov@gmail.com>
 ;; Maintainer: Dmitry Cherkassov <dcherkassov@gmail.com>
 ;; URL: https://github.com/4da/eshell-toggle
-;; Package-Version: 20190526.1452
+;; Package-Version: 20200107.2230
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "25.1")(dash "2.11.0"))
 ;; Keywords: processes
@@ -178,6 +178,7 @@
   (rename-buffer buf-name)
   (setq eshell-toggle--toggle-buffer-p t))
 
+;;;###autoload
 (defun eshell-toggle ()
   "Show eshell at the bottom of current window cd to current buffer's path.
 If eshell-toggle'd buffer is already visible in frame for current buffer or current window is (toggled) eshell itself then hide it."
