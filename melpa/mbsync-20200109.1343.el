@@ -4,7 +4,7 @@
 
 ;; Author: Dimitri Fontaine <dim@tapoueh.org>
 ;; Version: 0.1.2
-;; Package-Version: 20191002.751
+;; Package-Version: 20200109.1343
 ;; URL: https://github.com/dimitri/mbsync-el
 
 ;; This file is NOT part of GNU Emacs.
@@ -113,7 +113,7 @@ Arguments PROC, STRING as in `set-process-filter'."
     (save-excursion
       (let ((inhibit-read-only t))
 	(goto-char (point-max))
-	(insert string)
+	(insert (replace-regexp-in-string "" "\n" string))
 
 	;; accept certificates
 	(goto-char mbsync-process-filter-pos)

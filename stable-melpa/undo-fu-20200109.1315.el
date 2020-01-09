@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200103.1445
+;; Package-Version: 20200109.1315
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -309,6 +309,14 @@ Optional argument ARG the number of steps to undo."
         (when undo-fu--respect
           (setq undo-fu--checkpoint-is-blocking nil)))))
   (setq this-command 'undo-fu-only-undo))
+
+;; Evil Mode
+;;
+;; Don't let these commands repeat.
+(when (fboundp 'evil-declare-not-repeat)
+  (evil-declare-not-repeat 'undo-fu-only-undo)
+  (evil-declare-not-repeat 'undo-fu-only-redo)
+  (evil-declare-not-repeat 'undo-fu-only-redo-all))
 
 (provide 'undo-fu)
 
