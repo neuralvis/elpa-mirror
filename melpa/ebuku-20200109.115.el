@@ -7,7 +7,7 @@
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2019-11-07
 ;; URL: https://github.com/flexibeast/ebuku
-;; Package-Version: 20200105.201
+;; Package-Version: 20200109.115
 ;; Keywords: bookmarks,buku,data,web,www
 ;; Version: 0
 ;; Package-Requires: ((emacs "24.3"))
@@ -355,8 +355,9 @@ Argument EVENT is the event received from that process."
     (if (ebuku--call-buku `("--print" "-1"))
         (progn
           (goto-char (point-min))
-          (re-search-forward "^\\([[:digit:]]+\\)\\.")
-          (match-string 1))
+          (if (re-search-forward "^\\([[:digit:]]+\\)\\." nil t)
+              (match-string 1)
+            "0"))
       (error "Failed to get bookmark count"))))
 
 (defun ebuku--search-helper (type prompt &optional term exclude)

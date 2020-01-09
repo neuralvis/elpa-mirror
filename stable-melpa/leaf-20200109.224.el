@@ -5,8 +5,8 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; Keywords: lisp settings
-;; Package-Version: 20200108.2245
-;; Version: 3.6.9
+;; Package-Version: 20200109.224
+;; Version: 3.7.0
 ;; URL: https://github.com/conao3/leaf.el
 ;; Package-Requires: ((emacs "24.4"))
 
@@ -76,6 +76,7 @@ Same as `list' but this macro does not evaluate any arguments."
    :leaf-autoload     `(,@(when (car leaf--value) (mapcar (lambda (elm) `(unless (fboundp ',(car elm)) (autoload #',(car elm) ,(cdr elm) nil t))) (reverse leaf--autoload))) ,@leaf--body)
 
    :doc               `(,@leaf--body)
+   :tag               `(,@leaf--body)
    :file              `(,@leaf--body)
    :url               `(,@leaf--body)
 
@@ -259,12 +260,6 @@ Sort by `leaf-sort-leaf--values-plist' in this order.")
                         (push fn fns) `((',sym #',fn))))))
                   leaf--value))
        `(,val ,(delq nil (mapcar (lambda (elm) (when (symbolp elm) elm)) fns)))))
-
-    ((memq leaf--key (list
-                      :disabled :if :when :unless
-                      :doc :file :url :preface :init :config
-                      :leaf-autoload :leaf-defer :leaf-protect))
-     leaf--value)
 
     (t
      leaf--value))
