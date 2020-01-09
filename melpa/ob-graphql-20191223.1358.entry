@@ -1,2 +1,0 @@
-
-(ob-graphql . [(20191223 1358) ((emacs (24 4)) (graphql-mode (20191024 1221)) (request (20191211 2051))) "Org-Babel execution backend for GraphQL source blocks" single ((:commit . "c62d6a2ea2c162772d5e255715cff7b35fe660d5") (:authors ("Jeremy Dormitzer" . "jeremy.dormitzer@gmail.com")) (:maintainer "Jeremy Dormitzer" . "jeremy.dormitzer@gmail.com") (:url . "https://github.com/jdormit/ob-graphql"))])
