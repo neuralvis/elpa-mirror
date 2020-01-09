@@ -4,7 +4,7 @@
 
 ;; Author: Alf Lervåg
 ;; Keywords: literate programming, reproducible research
-;; Package-Version: 20191119.924
+;; Package-Version: 20200109.730
 ;; Homepage: https://github.com/alf/ob-restclient.el
 ;; Version: 0.02
 ;; Package-Requires: ((restclient "0"))
@@ -64,7 +64,7 @@ This function is called by `org-babel-execute-src-block'"
           (let ((key (car p))
                 (value (cdr p)))
             (when (eql key :var)
-              (insert (format ":%s = %s\n" (car value) (cdr value))))))
+              (insert (format ":%s = <<\n%s\n#\n" (car value) (cdr value))))))
         (insert body)
 	(goto-char (point-min))
 	(delete-trailing-whitespace)
