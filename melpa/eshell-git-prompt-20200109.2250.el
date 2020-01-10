@@ -4,7 +4,7 @@
 
 ;; Author: Chunyang Xu <mail@xuchunyang.me>
 ;; URL: https://github.com/xuchunyang/eshell-git-prompt
-;; Package-Version: 20200103.1444
+;; Package-Version: 20200109.2250
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5") (dash "2.11.0"))
 ;; Keywords: eshell git
 ;; Version: 0.1.2
@@ -458,11 +458,10 @@ It looks like:
 
 (defun eshell-git-prompt-powerline ()
   (let ((segment-separator "\xe0b0")
-        (plusminus         "\x00b1")
         (branch            "\xe0a0")
         (detached          "\x27a6")
         (cross             "\x2718")
-        dir git git-bg)
+        dir git git-face)
     (setq dir
           (propertize
            (concat

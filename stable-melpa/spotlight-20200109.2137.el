@@ -4,7 +4,7 @@
 
 ;; Author: Ben Maughan <benmaughan@gmail.com>
 ;; URL: http://www.pragmaticemacs.com
-;; Package-Version: 20150929.755
+;; Package-Version: 20200109.2137
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.1") (swiper "0.6.0") (counsel "0.6.0"))
 ;; Keywords: search, external
@@ -110,6 +110,8 @@
 (defvar spotlight-file-filter-flag nil
   "Flag to record if filename filtering is requested.")
 
+(ivy-configure 'spotlight :more-chars spotlight-min-chars)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; functions                                                              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -141,17 +143,16 @@
 ;; Function to be called by ivy to run mdfind
 (defun ivy-mdfind-function (string &rest _unused)
   "Issue mdfind for STRING."
-  (if (< (length string) spotlight-min-chars)
-      (counsel-more-chars spotlight-min-chars)
-    (spotlight-async-command
-     (concat "mdfind -onlyin "
-             (shell-quote-argument
-              (expand-file-name spotlight-user-base-dir))
-             " "
-             (shell-quote-argument string)
-             " > "
-             (expand-file-name spotlight-tmp-file)))
-    '("" "working...")))
+  (or (ivy-more-chars)
+      (progn (spotlight-async-command
+              (concat "mdfind -onlyin "
+                      (shell-quote-argument
+                       (expand-file-name spotlight-user-base-dir))
+                      " "
+                      (shell-quote-argument string)
+                      " > "
+                      (expand-file-name spotlight-tmp-file)))
+             '("" "working..."))))
 
 ;; Modified version of counsel--async-command from counsel.el
 (defun spotlight-async-command (cmd)
@@ -267,7 +268,8 @@ base directory to search below, otherwise it will use
                           ;;else open file
                           (progn (setq spotlight-file-filter-flag nil)
                                  (find-file x)
-                                 (swiper ivy-text)))))))
+                                 (swiper ivy-text))))
+              :caller 'spotlight)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spotlight-fast                                                         ;;
