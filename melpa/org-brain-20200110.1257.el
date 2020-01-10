@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200108.2021
+;; Package-Version: 20200110.1257
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2") (org-ql "0.3.2"))
 ;; Version: 0.9
@@ -750,7 +750,7 @@ For PREDICATE, REQUIRE-MATCH, INITIAL-INPUT, HIST, DEF and INHERIT-INPUT-METOD s
                        (write-region "" nil entry-path))
                      (if (or (not org-brain-include-file-entries)
                              (equal (length id) 2)
-                             (not (equal (car id) entry-path)))
+                             (not (equal (car id) entry-file)))
                          ;; Create new headline entry in file
                          (org-with-point-at (org-brain-entry-marker entry-file)
                            (if (and (not org-brain-include-file-entries)

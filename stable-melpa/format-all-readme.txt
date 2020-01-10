@@ -26,6 +26,7 @@ Supported languages:
 - Elm (elm-format)
 - Emacs Lisp (emacs)
 - Fish Shell (fish_indent)
+- Fortran 90 (fprettify)
 - Go (gofmt)
 - GraphQL (prettier)
 - Haskell (brittany)

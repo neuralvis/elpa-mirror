@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20200107.1608
+;; Package-Version: 20200110.1222
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -40,6 +40,7 @@
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (emacs)
 ;; - Fish Shell (fish_indent)
+;; - Fortran 90 (fprettify)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
 ;; - Haskell (brittany)
@@ -481,6 +482,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install fish OR port install fish"))
   (:modes fish-mode)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter fprettify
+  (:executable "fprettify")
+  (:install "pip install fprettify")
+  (:modes f90-mode)
+  (:format (format-all--buffer-easy executable "--silent")))
 
 (define-format-all-formatter gofmt
   (:executable "gofmt")

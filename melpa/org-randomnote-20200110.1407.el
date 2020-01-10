@@ -4,7 +4,7 @@
 
 ;; Author: Michael Fogleman <michaelwfogleman@gmail.com>
 ;; URL: http://github.com/mwfogleman/org-randomnote
-;; Package-Version: 20190403.1633
+;; Package-Version: 20200110.1407
 ;; Version: 0.1.0
 ;; Package-Requires: ((f "0.19.0") (dash "2.12.0") org)
 
@@ -45,23 +45,20 @@
   "Configure the behavior that org-randomnote uses to open a random note.  Set to `default' or `indirect-buffer'.")
 
 (defun org-randomnote--get-randomnote-candidates ()
-  "Remove empty files from `org-randomnote-candidates'."
-  (-remove 'f-empty? org-randomnote-candidates))
+  (if (eq org-randomnote-candidates 'current-buffer)
+      (list buffer-file-name)
 
-(defun org-randomnote--random (seq)
-  "Given an input sequence SEQ, return a random output."
-  (let* ((cnt (length seq))
-	 (nmbr (random cnt)))
-    (nth nmbr seq)))
+    ;; Remove empty files from `org-randomnote-candidates'.
+    (-remove 'f-empty? org-randomnote-candidates)))
 
 (defun org-randomnote--get-random-file ()
   "Select a random file from `org-randomnote-candidates'."
-  (org-randomnote--random (org-randomnote--get-randomnote-candidates)))
+  (seq-random-elt (org-randomnote--get-randomnote-candidates)))
 
 (defun org-randomnote--get-random-subtree (f match)
   "Get a random subtree satisfying Org match within an Org file F."
   (find-file f)
-  (org-randomnote--random (org-map-entries (lambda () (line-number-at-pos)) match 'file)))
+  (seq-random-elt (org-map-entries (lambda () (line-number-at-pos)) match 'file)))
 
 (defun org-randomnote--go-to-random-header (f match)
   "Given an Org file F, go to a random header satisfying Org match within that file."
