@@ -3,7 +3,7 @@
 ;; Authors: Chris Rayner (dchrisrayner@gmail.com)
 ;; Created: May 23 2011
 ;; Keywords: processes, tools, comint, shell, repl
-;; Package-Version: 20191027.2130
+;; Package-Version: 20200110.359
 ;; URL: https://github.com/riscy/shx-for-emacs
 ;; Package-Requires: ((emacs "24.4"))
 ;; Version: 1.3.0
@@ -187,7 +187,7 @@ In normal circumstances this input is additionally filtered by
         ((>= (length (shx--current-input)) shx-max-input)
          (message "Input line exceeds `shx-max-input'."))
         (t (shx--propertize-prompt)
-           (comint-send-input nil t))))
+           (comint-send-input))))
 
 (defun shx-filter-input (process input)
   "Before sending to PROCESS, filter the INPUT.

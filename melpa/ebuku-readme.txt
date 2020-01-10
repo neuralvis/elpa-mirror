@@ -1,5 +1,5 @@
-EBuku provides a basic interface to the
-[Buku](https://github.com/jarun/Buku) Web bookmark manager.
+Ebuku provides a basic interface to the
+[buku](https://github.com/jarun/buku) Web bookmark manager.
 
 ## Table of Contents
 
@@ -12,14 +12,14 @@ EBuku provides a basic interface to the
 
 ## Installation
 
-Install [EBuku from MELPA](https://melpa.org/#/ebuku), or put the
+Install [Ebuku from MELPA](https://melpa.org/#/ebuku), or put the
 `ebuku' folder in your load-path and do a `(load "ebuku")'.
 
 ## Usage
 
-Create an EBuku buffer with `M-x ebuku'.
+Create an Ebuku buffer with `M-x ebuku'.
 
-In the `*EBuku*' buffer, the following bindings are available:
+In the `*Ebuku*' buffer, the following bindings are available:
 
 * `s' - Search for a bookmark (`ebuku-search').
 
@@ -47,7 +47,7 @@ In the `*EBuku*' buffer, the following bindings are available:
   bookmark, edit that bookmark; otherwise, ask for the index of the
   bookmark to edit.
 
-* `q' - Quit EBuku.
+* `q' - Quit Ebuku.
 
 ## Customisation
 
@@ -61,11 +61,11 @@ The `ebuku' customize-group can be used to customise:
 
 * the maximum number of bookmarks to show; and
 
-* the faces used by EBuku.
+* the faces used by Ebuku.
 
 ## TODO
 
-* One should be able to edit bookmarks directly in the `*EBuku*'
+* One should be able to edit bookmarks directly in the `*Ebuku*'
   buffer, à la `wdired'.  Much of the infrastructure to support this
   is already in place, but there are still important details yet to
   be implemented.
@@ -74,7 +74,7 @@ The `ebuku' customize-group can be used to customise:
 
 ## Issues / bugs
 
-If you discover an issue or bug in EBuku not already
+If you discover an issue or bug in Ebuku not already
 noted:
 
 * as a TODO item, or
@@ -88,7 +88,7 @@ including:
 * which version of Emacs you're running on which operating system,
   and
 
-* how you installed EBuku.
+* how you installed Ebuku.
 
 ## License
 
