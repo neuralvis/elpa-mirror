@@ -1,2 +1,0 @@
-
-(org-tanglesync . [(20200108 2248) ((emacs (24 4))) "Syncing org src blocks with tangled external files" single ((:commit . "531479391e88a3cb0c50e3c851e60f52c138efec") (:keywords "outlines") (:authors ("Mehmet Tekman")) (:maintainer "Mehmet Tekman") (:url . "https://github.com/mtekman/org-tanglesync.el"))])
