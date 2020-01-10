@@ -5,7 +5,7 @@
 ;; Author: Jeff Gran <jeff@jeffgran.com>
 ;;	Author: Ryan C. Thompson
 ;; URL: https://github.com/jeffgran/elscreen-buffer-group
-;; Package-Version: 20190621.225
+;; Package-Version: 20200109.2338
 ;; Created: 7 Nov 2012
 ;; Keywords: buffer
 ;; Version: 1.0.1
@@ -231,7 +231,7 @@ Basically we hack in here and add another predicate to whatever predicates are a
 if any, so that this only matches/returns buffers in the current elscreen."
   (lexical-let ((string (ad-get-arg 0))
                 (pred (ad-get-arg 1)))
-    (when (not (member this-command 'elscreen-buffer-group-skip-commands))
+    (when (not (member this-command elscreen-buffer-group-skip-commands))
       (ad-set-arg 1 (lambda (buffer-dot-name)
                       (and (if pred (funcall pred buffer-dot-name) t)
                            (member (cdr buffer-dot-name) (elscreen-buffer-group-get-ordered-buffer-list)))))))

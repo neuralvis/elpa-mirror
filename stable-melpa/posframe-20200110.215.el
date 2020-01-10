@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20191219.57
+;; Package-Version: 20200110.215
 ;; Version: 0.5.0
 ;; Keywords: convenience, tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -585,8 +585,8 @@ You can use `posframe-delete-all' to delete all posframes."
       (cdr posframe--last-font-height-info)
     (let* ((font (when (and (integerp position)
                             (not (= position 1)))
-                   (font-at (if (and (= position (point-max)))
-                                (- position 1)
+                   (font-at (if (>= position (point-max))
+                                (- (point-max) 1)
                               position))))
            (height (when (integerp position)
                      (if (or (= position 1) (not (fontp font)))

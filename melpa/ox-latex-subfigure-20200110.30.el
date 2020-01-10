@@ -4,7 +4,7 @@
 
 ;; Author: Quang Linh LE <linktohack@gmail.com>
 ;; URL: http://github.com/linktohack/ox-latex-subfigure
-;; Package-Version: 20191208.1616
+;; Package-Version: 20200110.30
 ;; Version: 0.0.2
 ;; Keywords: convenience ox latex subfigure org org-mode
 ;; Package-Requires: ((emacs "24"))
@@ -69,15 +69,17 @@ LIMIT is limit."
         (option "")
         (centering "")
         (caption "")
+        (multicolumn "")
         fig cap)
     (beginning-of-line)
-    (while (not (looking-at "^\\\\end{table}"))
+    (while (not (looking-at "^\\\\end{table\\*?}"))
       (let ((row (thing-at-point 'line t)))
         (kill-whole-line)
         (cond
          ;; \begin{table}[option], \end{table}
-         ((string-match "^\\\\begin{table}\\(\\[.*\\]\\)?" row)
-          (setq option (or (match-string 1 row) "")))
+         ((string-match "^\\\\begin{table\\(\\*\\)?}\\(\\[.*\\]\\)?" row)
+          (setq multicolumn (or (match-string 1 row) ""))
+          (setq option (or (match-string 2 row) "")))
          ;; \centering
          ((string-match "^\\\\centering" row)
           (setq centering "\\centering\n"))
@@ -140,7 +142,7 @@ LIMIT is limit."
             (setq striped-row (replace-regexp-in-string "\\\\\\\\\n$" "" row))
             (setq cap (append cap (split-string striped-row " & "))))))))
     (kill-whole-line)
-    (insert (format "\\begin{figure}%s\n%s%s" option
+    (insert (format "\\begin{figure%s}%s\n%s%s" multicolumn option
                     (if (member 'subfigure org-latex-caption-above) caption "")
                     centering))
     (dotimes (i (length fig))
@@ -157,11 +159,12 @@ LIMIT is limit."
           (when (and (> limit 0)
                      (< i (1- (length fig)))
                      (= (mod (1+ i) limit) 0))
-            (insert (format "\\end{figure}\n
-\\begin{figure}%s
-%s\\ContinuedFloat\n" option centering))))))
-    (insert (format "%s\\end{figure}\n"
-                    (if (member 'subfigure org-latex-caption-above) "" caption)))))
+            (insert (format "\\end{figure%s}\n
+\\begin{figure%s}%s
+%s\\ContinuedFloat\n" multicolumn multicolumn option centering))))))
+    (insert (format "%s\\end{figure%s}\n"
+                    (if (member 'subfigure org-latex-caption-above) "" caption)
+		    multicolumn))))
 
 (add-hook 'org-export-filter-table-functions
           'ox-latex-subfigure-org-export-table-to-subfigure)
