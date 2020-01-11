@@ -4,7 +4,7 @@
 
 ;; Author: Justin Talbott
 ;; URL: https://github.com/waymondo/frog-jump-buffer
-;; Package-Version: 20190810.1749
+;; Package-Version: 20200111.1725
 ;; Version: 0.1.4
 ;; Package-Requires: ((emacs "24") (avy "0.4.0") (dash "2.4.0") (frog-menu "0.2.8"))
 ;; License: GNU General Public License version 3, or (at your option) any later version
@@ -50,6 +50,10 @@
   "Fast buffer switching interface."
   :group 'convenience
   :prefix "frog-jump-buffer-")
+
+(defcustom frog-jump-buffer-sort '(lambda(one two) t)
+  "User defined sorting function" 
+  :type 'function)
 
 (defcustom frog-jump-buffer-ignore-buffers '("\\` ")
   "This is a list of regexps of buffer names to ignore or buffer-matching filter functions to use."
@@ -275,7 +279,7 @@ If FILTER-FUNCTION is present, filter the `buffer-list' with it."
          (buffer-names (-take frog-jump-buffer-max-buffers (frog-jump-buffer-buffer-names)))
          (actions (frog-jump-buffer-actions))
          (prompt (frog-jump-buffer-prompt))
-         (res (frog-menu-read prompt buffer-names actions)))
+         (res (frog-menu-read prompt (cl-sort buffer-names frog-jump-buffer-sort) actions)))
     (unless res
       (error "Quit"))
     (frog-jump-buffer-handle-result res)))
