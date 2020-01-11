@@ -1,2 +1,0 @@
-
-(ebuku . [(20200110 426) ((emacs (24 3))) "Interface to the buku Web bookmark manager" single ((:commit . "795f8eb38b2aae508ea321a789588b8375dc4301") (:keywords "bookmarks" "buku" "data" "web" "www") (:authors ("Alexis" . "flexibeast@gmail.com")) (:maintainer "Alexis" . "flexibeast@gmail.com") (:url . "https://github.com/flexibeast/ebuku"))])

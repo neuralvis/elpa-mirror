@@ -6,7 +6,7 @@
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2019-11-07
 ;; URL: https://github.com/flexibeast/ebuku
-;; Package-Version: 20200110.426
+;; Package-Version: 20200111.439
 ;; Keywords: bookmarks,buku,data,web,www
 ;; Version: 0
 ;; Package-Requires: ((emacs "24.3"))
@@ -82,6 +82,15 @@
 
 ;; * `q' - Quit Ebuku.
 
+;; ### Completion
+
+;; The `ebuku-gather-bookmarks' function can be used to generate a
+;; list of the bookmarks in the buku database, which can then be
+;; utilised by completion frameworks such as Ivy or Helm. The format
+;; of list entries is specified via the
+;; `ebuku-gather-bookmarks-format' variable, and the list is cached in
+;; the `ebuku-bookmarks' variable.
+
 ;; ## Customisation
 
 ;; The `ebuku' customize-group can be used to customise:
@@ -154,6 +163,22 @@ Specify `\\='all' for all bookmarks; `\\='recent' for recent additions; or
   :type '(radio (const :tag "All bookmarks" all)
                 (const :tag "Recent additions" recent)
                 (const :tag "No bookmarks" nil))
+  :group 'ebuku)
+
+(defcustom ebuku-gather-bookmarks-format "1"
+  "Format of bookmarks to be returned by `ebuku-gather-bookmarks'.
+
+The format is a string accepted by buku's '--format' option."
+  :type '(radio (const :tag "Only URL" "1")
+                (const :tag "Only URL; no index" "10")
+                (const :tag "URL and tags" "2")
+                (const :tag "URL and tags; no index" "20")
+                (const :tag "Only title" "3")
+                (const :tag "Only title; no index" "30")
+                (const :tag "URL, title and tags" "4")
+                (const :tag "URL, title and tags; no index" "40")
+                (const :tag "Title and tags" "5")
+                (const :tag "Title and tags; no index" "50"))
   :group 'ebuku)
 
 (defcustom ebuku-mode-hook nil
@@ -523,6 +548,18 @@ Argument EXCLUDE is a string: keywords to exclude from search results."
 
 
 ;;
+;; User-facing variables.
+;;
+
+(defvar ebuku-bookmarks '()
+  "Cache of bookmarks in the buku database.
+
+This cache is populated by the `ebuku-gather-bookmarks' function,
+with each entry having the format specified by the
+`ebuku-gather-bookmarks-format' variable.")
+
+
+;;
 ;; User-facing functions.
 ;;
 
@@ -593,6 +630,19 @@ otherwise, ask for the index of the bookmark to edit."
                       (message "Bookmark updated."))
                   (error "Failed to update bookmark")))))
         (error (concat "Failed to get bookmark data for index " index))))))
+
+(defun ebuku-gather-bookmarks ()
+  "Return a list of all available bookmarks.
+
+This function is intended for use by completion frameworks, such
+as Ivy or Helm.
+
+The format of each entry in the list is determined by the variable
+`ebuku-gather-bookmarks-format'."
+  (interactive)
+  (with-temp-buffer
+    (ebuku--call-buku `("--print" "--format" ,ebuku-gather-bookmarks-format))
+    (setq ebuku-bookmarks (cdr (split-string (buffer-string) "\n")))))
 
 (defun ebuku-next-bookmark ()
   "Move point to the next bookmark URL."
