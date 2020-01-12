@@ -1,0 +1,2 @@
+
+(kurecolor . [(20200112 341) ((emacs (24 1)) (s (1 0))) "color editing goodies for Emacs" single ((:commit . "193610ff10a9d57b503ac7530417948592e2643e") (:authors ("Jason Milkins" . "jasonm23@gmail.com")) (:maintainer "Jason Milkins" . "jasonm23@gmail.com"))])

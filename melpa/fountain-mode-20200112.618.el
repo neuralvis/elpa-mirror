@@ -1,12 +1,12 @@
 ;;; fountain-mode.el --- Major mode for screenwriting in Fountain markup -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2014-2019 Free Software Foundation, Inc.
-;; Copyright (c) 2019 Paul W. Rankin
+;; Copyright (c) 2019-2020 Paul W. Rankin
 
 ;; Author: Paul W. Rankin <code@paulwrankin.com>
 ;; Keywords: wp, text
-;; Package-Version: 20191217.914
-;; Version: 2.8.3
+;; Package-Version: 20200112.618
+;; Version: 2.8.4
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://fountain-mode.org
 ;; git: https://github.com/rnkn/fountain-mode
@@ -35,6 +35,10 @@
 
 ;; For more information on the fountain markup format, visit
 ;; <https://fountain.io>.
+
+;; **n.b. Exporting is depreciated and will be removed in the next major
+;; release. Several external tools are available that better export
+;; Fountain files.**
 
 ;; Screenshot: <https://f002.backblazeb2.com/file/pwr-share/fountain-mode.png>
 
@@ -2358,8 +2362,14 @@ The car sets `left-margin' and cdr `fill-column'."
 
 ;;; Exporting
 
+(defconst fountain-export-warning
+  "Exporting is depreciated and will be removed in the next major
+release. Several external tools are available that better export
+Fountain files.")
+
 (defgroup fountain-export ()
-  "Options for exporting Fountain files."
+  (concat "Options for exporting Fountain files.\n\n"
+          fountain-export-warning)
   :prefix "fountain-export-"
   :group 'fountain)
 
@@ -3028,7 +3038,8 @@ otherwise kill destination buffer."
           (run-hooks hook))
       ;; If export failed, kill DEST-BUFFER.
       (unless complete
-        (kill-buffer dest-buffer)))))
+        (kill-buffer dest-buffer))
+      (user-error fountain-export-warning))))
 
 (defun fountain-export-default ()
   "Call function defined in `fountain-export-default-function'."
