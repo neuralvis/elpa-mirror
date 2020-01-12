@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20191031.2214
+;; Package-Version: 20200112.1114
 ;; Keywords: tools
 ;; Version: 0.9
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -795,7 +795,7 @@ Returns a copy of REGEXP with properties set."
 (defun deadgrep--buffer-name (search-term directory)
   ;; TODO: Handle buffers already existing with this name.
   (format "*deadgrep %s %s*"
-          search-term
+          (s-truncate 30 search-term)
           (abbreviate-file-name directory)))
 
 (defun deadgrep--buffers ()

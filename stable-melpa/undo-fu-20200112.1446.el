@@ -5,8 +5,8 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200110.2355
-;; Version: 0.1
+;; Package-Version: 20200112.1446
+;; Version: 0.2
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -58,6 +58,8 @@ causing undo-fu to work with reduced functionality when a selection exists."
 
 ;; First undo step in the chain, don't redo past this.
 (defvar-local undo-fu--checkpoint nil)
+;; Checkpoint the 'undo-equiv-table' for linear redo-only behavior.
+(defvar-local undo-fu--checkpoint-equiv-table nil)
 ;; We have reached the checkpoint, don't redo.
 (defvar-local undo-fu--checkpoint-is-blocking nil)
 ;; Apply undo/redo constraints to stop redo from undoing or
@@ -75,7 +77,8 @@ causing undo-fu to work with reduced functionality when a selection exists."
   (setq undo-fu--respect nil)
   (setq undo-fu--in-region nil)
   (setq undo-fu--checkpoint-is-blocking nil)
-  (setq undo-fu--checkpoint nil))
+  (setq undo-fu--checkpoint nil)
+  (setq undo-fu--checkpoint-equiv-table nil))
 
 
 (defmacro undo-fu--with-message-suffix (suffix &rest body)
@@ -200,6 +203,23 @@ Optional argument ARG The number of steps to redo."
         "Redo end-point hit (%s to step over it)"
         (substitute-command-keys "\\[keyboard-quit]")))
 
+    (when undo-fu--respect
+      ;; Implement "linear" undo.
+      ;; So undo/redo chains before the undo checkpoint never redo an undo step.
+      ;;
+      ;; Without this, redo is still usable, it's just that after undo,redo,undo, ...
+      ;; the redo action will undo, which isn't so useful.
+      ;; This makes redo-only the reverse of undo-only.
+
+      (when (not (eq t pending-undo-list))
+        ;; Skip to the last matching redo step before the checkpoint.
+        (let ((list pending-undo-list))
+          (while
+            (and
+              (setq list (gethash list undo-equiv-table))
+              (null (gethash list undo-fu--checkpoint-equiv-table)))
+            (setq pending-undo-list list)))))
+
     (let*
       (
         ;; Important to clamp before assigning 'last-command'
@@ -262,7 +282,8 @@ Optional argument ARG the number of steps to undo."
         (setq undo-fu--respect t)))
 
     (when (or undo-fu--checkpoint-is-blocking (not was-undo-or-redo))
-      (setq undo-fu--checkpoint (cdr buffer-undo-list)))
+      (setq undo-fu--checkpoint (cdr buffer-undo-list))
+      (setq undo-fu--checkpoint-equiv-table (copy-hash-table undo-equiv-table)))
 
     (when (region-active-p)
       (if undo-fu-allow-undo-in-region
@@ -313,10 +334,13 @@ Optional argument ARG the number of steps to undo."
 ;; Evil Mode (setup if in use)
 ;;
 ;; Don't let these commands repeat.
-(with-eval-after-load 'evil
-  (evil-declare-not-repeat 'undo-fu-only-undo)
-  (evil-declare-not-repeat 'undo-fu-only-redo)
-  (evil-declare-not-repeat 'undo-fu-only-redo-all))
+(eval-after-load
+  'evil
+  '
+  (progn
+    (evil-declare-not-repeat 'undo-fu-only-undo)
+    (evil-declare-not-repeat 'undo-fu-only-redo)
+    (evil-declare-not-repeat 'undo-fu-only-redo-all)))
 
 (provide 'undo-fu)
 
