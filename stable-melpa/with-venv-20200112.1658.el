@@ -2,7 +2,7 @@
 
 ;; Author: 10sr <8.slashes [at] gmail [dot] com>
 ;; URL: https://github.com/10sr/with-venv-el
-;; Package-Version: 20200112.1440
+;; Package-Version: 20200112.1658
 ;; Version: 0.0.1
 ;; Keywords: processes python venv
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24.4"))
@@ -110,7 +110,7 @@ To force search venv again, run `with-venv-find-venv-dir' manually.
 ")
 
 (defvar-local with-venv-found-type nil
-  "Current `with-venv' found state.
+  "`with-venv' directory type of current buffer.
 
 Used by `with-venv-info-mode'.")
 
@@ -262,13 +262,13 @@ ORIG-FUNC is the target function, and ARGS is the argument when it is called."
                              with-venv--venv-dir-found)
                     "-"
                   (or with-venv-found-type
-                      "N/A")))))
+                      "?")))))
     (format " W/V[%s]"
             type)))
 
 ;;;###autoload
 (define-minor-mode with-venv-info-mode
-  "Minor-mode to show current `with-venv' activated directory."
+  "Minor-mode to show info about current `with-venv' activated directory."
   :lighter (:eval (with-venv-info-lighter))
   nil)
 
