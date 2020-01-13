@@ -5,8 +5,8 @@
 
 ;; Author: Paul W. Rankin <code@paulwrankin.com>
 ;; Keywords: wp, text
-;; Package-Version: 20200112.618
-;; Version: 2.8.4
+;; Package-Version: 20200113.428
+;; Version: 2.8.5
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://fountain-mode.org
 ;; git: https://github.com/rnkn/fountain-mode
@@ -943,7 +943,7 @@ scene heading regular expression."
          ;; Group 2: match scene heading without scene number
          "^\\(?2:"
          ;; Group 3: match INT/EXT
-         "\\(?3:" (regexp-opt fountain-scene-heading-prefix-list) ".?\s+\\)"
+         "\\(?3:" (regexp-opt fountain-scene-heading-prefix-list) "\\.?\s+\\)"
          ;; Group 4: match location
          "\\(?4:.+?\\)?"
          ;; Group 5: match suffix separator
@@ -1021,6 +1021,9 @@ buffers."
               '(fountain-completion-at-point))
   (setq-local font-lock-extra-managed-props
               '(line-prefix wrap-prefix invisible))
+  ;; This should be temporary. Feels better to ensure appropriate
+  ;; case-fold within each function.
+  (setq case-fold-search t)
   (setq font-lock-multiline 'undecided)
   (setq font-lock-defaults '(fountain-init-font-lock))
   (add-to-invisibility-spec (cons 'outline t))

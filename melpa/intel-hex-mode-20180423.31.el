@@ -20,6 +20,7 @@
 ;; Authors: Rubens Ramos <rubensr AT users.sourceforge.net>
 ;; Maintainer: Michael Schuldt <mbschuldt@gmail.com>
 ;; URL: https://github.com/mschuldt/intel-hex-mode
+;; Package-Version: 20180423.31
 ;; Created: 08 Oct 2008
 ;; Version: 0.1.3
 ;; Keywords: tools hex
