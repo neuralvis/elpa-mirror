@@ -3,7 +3,7 @@
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 ;; Package-Requires: ((evil "1.13.0"))
-;; Package-Version: 20191218.852
+;; Package-Version: 20200113.1232
 ;; Version: 1.13.0
 
 ;; This file is NOT part of GNU Emacs.

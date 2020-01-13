@@ -1,0 +1,2 @@
+
+(mac-pseudo-daemon . [(20200113 1302) ((cl-lib (0 1))) "Daemon mode that plays nice with Mac OS." single ((:commit . "b4a4b3002ca8763cbac991556858e8fa309a1e9d") (:keywords "convenience" "osx" "mac") (:authors ("Ryan C. Thompson")) (:maintainer "Ryan C. Thompson") (:url . "https://github.com/DarwinAwardWinner/osx-pseudo-daemon"))])
