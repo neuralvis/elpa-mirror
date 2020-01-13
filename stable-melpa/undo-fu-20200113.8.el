@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200112.2322
+;; Package-Version: 20200113.8
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -58,6 +58,8 @@ causing undo-fu to work with reduced functionality when a selection exists."
 
 ;; First undo step in the chain, don't redo past this.
 (defvar-local undo-fu--checkpoint nil)
+;; The length of 'undo-fu--checkpoint' (lazy initialize).
+(defvar-local undo-fu--checkpoint-length nil)
 ;; We have reached the checkpoint, don't redo.
 (defvar-local undo-fu--checkpoint-is-blocking nil)
 ;; Apply undo/redo constraints to stop redo from undoing or
@@ -75,7 +77,8 @@ causing undo-fu to work with reduced functionality when a selection exists."
   (setq undo-fu--respect nil)
   (setq undo-fu--in-region nil)
   (setq undo-fu--checkpoint-is-blocking nil)
-  (setq undo-fu--checkpoint nil))
+  (setq undo-fu--checkpoint nil)
+  (setq undo-fu--checkpoint-length nil))
 
 
 (defmacro undo-fu--with-message-suffix (suffix &rest body)
@@ -188,10 +191,9 @@ Optional argument ARG The number of steps to redo."
 
     ;; Ensure the undo checkpoint is usable.
     (when undo-fu--respect
-      (when was-undo-or-redo
-        (when (eq last-command 'undo)
-          (undo-fu--checkpoint-disable)
-          (message "Redo 'undo' called, not 'undo-fu-only-undo', checkpoint disabled!"))))
+      (when (eq last-command 'undo)
+        (undo-fu--checkpoint-disable)
+        (message "Redo 'undo' called, not 'undo-fu-only-undo', checkpoint disabled!")))
 
     (when undo-fu--respect
       (unless
@@ -223,15 +225,16 @@ Optional argument ARG The number of steps to redo."
           ;; any (unlikely) issues here would error.
           (not (null undo-fu--checkpoint)))
 
+        ;; Lazy initialize checkpoint length, avoids calculating for every redo.
+        (unless undo-fu--checkpoint-length
+          (setq undo-fu--checkpoint-length (length undo-fu--checkpoint)))
+
         ;; Skip to the last matching redo step before the checkpoint.
-        (let
-          (
-            (list pending-undo-list)
-            (checkpoint-length (length undo-fu--checkpoint)))
+        (let ((list pending-undo-list))
           (while
             (and
               (setq list (gethash list undo-equiv-table))
-              (eq (last list checkpoint-length) undo-fu--checkpoint))
+              (eq (last list undo-fu--checkpoint-length) undo-fu--checkpoint))
             (setq pending-undo-list list)))))
 
     (let*
@@ -296,7 +299,8 @@ Optional argument ARG the number of steps to undo."
         (setq undo-fu--respect t)))
 
     (when (or undo-fu--checkpoint-is-blocking (not was-undo-or-redo))
-      (setq undo-fu--checkpoint (cdr buffer-undo-list)))
+      (setq undo-fu--checkpoint (cdr buffer-undo-list))
+      (setq undo-fu--checkpoint-length nil))
 
     (when (region-active-p)
       (if undo-fu-allow-undo-in-region

@@ -1,0 +1,2 @@
+
+(extempore-mode . [(20200113 29) ((emacs (24 4))) "Emacs major mode for Extempore source files" single ((:commit . "817faf4f342fd2aac23ea19e711cf8d55dec83cd") (:keywords "extempore") (:authors ("Ben Swift" . "ben@benswift.me")) (:maintainer "Ben Swift" . "ben@benswift.me") (:url . "http://github.com/extemporelang/extempore-emacs-mode"))])

@@ -1,7 +1,7 @@
 ;;; extempore-mode.el --- Emacs major mode for Extempore source files
 ;; Author: Ben Swift <ben@benswift.me>
 ;; Keywords: Extempore
-;; Package-Version: 20200112.2200
+;; Package-Version: 20200113.29
 ;; Version: 1.0
 ;; Keywords: lisp, extempore
 ;; URL: http://github.com/extemporelang/extempore-emacs-mode
@@ -164,7 +164,7 @@
     ("val" ;; bind-lib-val
      "(bind-lib-val\\s-+\\(\\S-+\\)\\s-+\\(\\S-+\\)\\_>" 2)
     ("func"
-     "(bind-func\\s-+\\(static\\s-+\\)?\\(\\S-+\\)\\_>" 1)
+     "(bind-func\\s-+\\(static\\s-+\\)?\\(\\S-+\\)\\_>" 2)
     ("func" ;; bind-lib-func
      "(bind-lib-func\\s-+\\(\\S-+\\)\\s-+\\(\\S-+\\)\\_>" 2))
   "Imenu generic expression for Extempore mode.  See `imenu-generic-expression'.")
