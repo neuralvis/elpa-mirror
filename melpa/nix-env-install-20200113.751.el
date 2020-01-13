@@ -4,7 +4,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20191223.1651
+;; Package-Version: 20200113.751
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: processes tools
 ;; URL: https://github.com/akirak/nix-env-install
@@ -336,7 +336,9 @@ where the key is the form and the value is nil."
                       (list "nix-env"
                             "-f" (expand-file-name "default.nix" tmpdir)
                             "-i")
-                      (mapcar (lambda (it) (list "-A" it))
+                      (mapcar (lambda (it) (list "-A"
+                                                 ;; Quote explicitly to support packages including dots, e.g. mermaid.cli
+                                                 (format "\"%s\"" it)))
                               (cl-etypecase packages
                                 (list packages)
                                 (string (list packages)))))

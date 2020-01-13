@@ -1,2 +1,0 @@
-
-(nix-env-install . [(20191223 1651) ((emacs (25 1))) "Install packages using nix-env" single ((:commit . "f362590216e8a86ff85b3f444695f8e1dd1b2bcc") (:keywords "processes" "tools") (:authors ("Akira Komamura" . "akira.komamura@gmail.com")) (:maintainer "Akira Komamura" . "akira.komamura@gmail.com") (:url . "https://github.com/akirak/nix-env-install"))])

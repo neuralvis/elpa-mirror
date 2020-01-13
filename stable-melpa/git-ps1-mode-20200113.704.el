@@ -1,8 +1,8 @@
-;;; git-ps1-mode.el --- Global minor-mode to print __git_ps1
+;;; git-ps1-mode.el --- Global minor-mode to print __git_ps1 in mode-line
 
 ;; Author: 10sr <8slashes+el [at] gmail [dot] com>
 ;; URL: https://github.com/10sr/git-ps1-mode-el
-;; Package-Version: 20181115.349
+;; Package-Version: 20200113.704
 ;; Version: 0.2.2
 ;; Keywords: utility mode-line git
 
