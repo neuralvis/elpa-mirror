@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200110.1257
+;; Package-Version: 20200114.914
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2") (org-ql "0.3.2"))
 ;; Version: 0.9
@@ -64,10 +64,22 @@ will be considered org-brain entries."
   :group 'org-brain
   :type '(string))
 
-(defcustom org-brain-ignored-resource-links '("fuzzy" "radio" "brain" "brain-child" "brain-parent" "brain-friend")
+(defcustom org-brain-ignored-resource-links '("fuzzy" "radio" "brain-child" "brain-parent" "brain-friend")
   "`org-link-types' which shouldn't be shown as resources in `org-brain-visualize'."
   :group 'org-brain
   :type '(repeat string))
+
+(defcustom org-brain-backlink nil
+  "If backlink resource should be added when creating a brain org-link.
+This only works when completing the link via `org-insert-link'.
+Example: If you create a brain-link in A to B, setting this
+variable to non-nil would also create A as a resource in B.
+
+If this variable is a string it will be added as a prefix in the backlink.
+Example: \"<--\" would add \"<--A\" in the example above."
+  :group 'org-brain
+  :type '(restricted-sexp :match-alternatives
+           (integerp 't 'nil)))
 
 (make-obsolete-variable 'org-brain-suggest-stored-link-as-resource
                         "org-brain-suggest-stored-link-as-resource isn't needed because of `org-insert-link-global'."
@@ -2803,7 +2815,19 @@ LINK-TYPE will be \"brain\" by default."
           ((string-equal link-type org-brain-parent-link-name)
            (org-brain-add-relationship choice entry))
           ((string-equal link-type org-brain-friend-link-name)
-           (org-brain--internal-add-friendship entry choice)))
+           (org-brain--internal-add-friendship entry choice))
+          ((and org-brain-backlink (string-equal link-type "brain"))
+           (if entry
+               (org-brain-add-resource
+                (concat "brain:" (org-brain-entry-identifier entry))
+                (concat (and (stringp org-brain-backlink) org-brain-backlink)
+                        (org-brain-title entry))
+                nil choice)
+             (org-brain-add-resource
+              (concat "file:" (buffer-file-name))
+              (concat (and (stringp org-brain-backlink) org-brain-backlink)
+                      (file-name-base))
+              nil choice))))
     (concat link-type ":" (if (org-brain-filep choice) choice (nth 2 choice)))))
 
 (defun org-brain-link-store ()
