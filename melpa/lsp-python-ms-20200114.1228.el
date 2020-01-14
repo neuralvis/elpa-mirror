@@ -3,7 +3,7 @@
 ;; Author: Charl Botha
 ;; Maintainer: Andrew Christianson, Vincent Zhang
 ;; Version: 0.6.0
-;; Package-Version: 20200106.1738
+;; Package-Version: 20200114.1228
 ;; Package-Requires: ((emacs "25.1") (cl-lib "0.6.1") (lsp-mode "6.0"))
 ;; Homepage: https://github.com/andrew-christianson/lsp-python-ms
 ;; Keywords: languages tools
@@ -86,7 +86,7 @@ set as `python3' to let ms-pyls use python 3 environments."
   :type 'string
   :group 'lsp-python-ms)
 
-(defcustom lsp-python-ms-executable (f-join lsp-python-ms-dir
+(defcustom lsp-python-ms-executable (concat lsp-python-ms-dir
                                             "Microsoft.Python.LanguageServer"
                                             (if (eq system-type 'windows-nt) ".exe" ""))
   "Path to the Microsoft Python LanguageServer binary."
