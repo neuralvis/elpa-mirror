@@ -1,2 +1,0 @@
-
-(lusty-explorer . [(20200113 2009) nil "Dynamic filesystem explorer and buffer switcher" single ((:commit . "90877173ae7dfcdc0b531712a6e8c9136179e465") (:keywords "convenience" "files" "matching" "tools") (:url . "https://github.com/sjbach/lusty-emacs"))])
