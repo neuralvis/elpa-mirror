@@ -4,7 +4,6 @@
 
 ;; Author: Dong Weiming
 ;; URL: http://github.com/dongweiming/plim-mode
-;; Package-Version: 20140813.13
 ;; Version: 1.0
 ;; Keywords: markup, language
 
