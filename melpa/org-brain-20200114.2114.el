@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200114.914
+;; Package-Version: 20200114.2114
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2") (org-ql "0.3.2"))
 ;; Version: 0.9
@@ -2824,7 +2824,9 @@ LINK-TYPE will be \"brain\" by default."
                         (org-brain-title entry))
                 nil choice)
              (org-brain-add-resource
-              (concat "file:" (buffer-file-name))
+              (concat "file:" (file-relative-name
+                               (buffer-file-name)
+                               (file-name-directory (org-brain-entry-path choice))))
               (concat (and (stringp org-brain-backlink) org-brain-backlink)
                       (file-name-base))
               nil choice))))
