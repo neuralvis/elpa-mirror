@@ -1,10 +1,10 @@
-;;; instapaper.el --- add URLs to instapaper from emacs
+;; instapaper.el --- add URLs to instapaper from emacs
 ;; Copyright (C) 2011 Jason F. McBrayer
 
 ;; Author: Jason F. McBrayer <jmcbray@carcosa.net>
 ;; Last update: 2011-02-17
-;; Version: 0.9.5
-;; Package-Version: 20130104.1421
+;; Version: 0.8
+;; Package-Version: 20110419.1355
 ;; URL: htts://bitbucket.org/jfm/emacs-instapaper
 ;; Contributors:
 
@@ -36,7 +36,7 @@
 ;; M-x customize-group instapaper
 ;;
 ;; Recommended keybindings:
-;; (define-key global-map "\C-ci" 'instapaper-add-at-point)
+;; (define-key global-map "\C-ci" instapaper-add-at-point)
 ;; (define-key identica-mode-map "i" 'instapaper-add-at-point)
 ;; (define-key w3m-mode-map "i" 'instapaper-add-from-w3m)
 ;;
@@ -61,11 +61,13 @@
 (require 'browse-url)
 
 (defvar instapaper-api-base "https://www.instapaper.com/api/"
-  "Base URL for all instapaper API functions
-Generally, you shouldn't change this, unless your environment is notably
-strange (e.g., no https).")
+  "Base URL for all instapaper API functions")
+(defvar instapaper-auth-url (concat instapaper-api-base "authenticate")
+  "URL for method for validating an instapaper username and password")
+(defvar instapaper-add-url (concat instapaper-api-base "add")
+  "URL for method for adding a URL to instapaper")
 
-(defconst instapaper-version "0.9.5"
+(defconst instapaper-version "0.9"
   "Version of instapaper.el")
 
 (defcustom instapaper-username ""
@@ -91,8 +93,7 @@ strange (e.g., no https).")
                                    (if title (concat "title="
                                                      (url-hexify-string title) "&") nil)
                                    (if selection (concat "selection="
-                                                         (url-hexify-string selection)) nil)))
-         (instapaper-add-url (concat instapaper-api-base "add")))
+                                                         (url-hexify-string selection)) nil))))
     (message "url-request-data: %s" url-request-data)
     (if (>= emacs-major-version 24)
         (url-retrieve instapaper-add-url 'instapaper-add-callback (list url title selection) t)
