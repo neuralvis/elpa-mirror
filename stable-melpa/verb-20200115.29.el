@@ -6,7 +6,7 @@
 ;; Maintainer: Federico Tedin <federicotedin@gmail.com>
 ;; Homepage: https://github.com/federicotdn/verb
 ;; Keywords: tools
-;; Package-Version: 20200113.1943
+;; Package-Version: 20200115.29
 ;; Package-X-Original-Version: 1.0.0
 ;; Package-Requires: ((emacs "26"))
 
@@ -133,7 +133,7 @@ the HTTP requests made."
 See also: `url-max-redirections'."
   :type 'integer)
 
-(defcustom verb-show-headers-buffer nil
+(defcustom verb-auto-show-headers-buffer nil
   "Automatically show headers buffer after receiving an HTTP response.
 Value nil means never show the headers buffer.
 Value `when-empty' means automatically show the headers buffer only
@@ -177,6 +177,15 @@ If nil, never prettify JSON files automatically."
   :type '(choice (integer :tag "Max bytes")
 		 (const :tag "Off" nil)))
 
+(defcustom verb-post-response-hook nil
+  "Hook run after receiving an HTTP response.
+The hook is run with the response body buffer as the current buffer.
+The appropiate major mode will have already been activated, and
+`verb-response-body-mode' as well.  The buffer will contain the
+response's decoded contents.  The buffer-local `verb-http-response'
+variable will be set to the corresponding `verb-response' object."
+  :type 'hook)
+
 (defface verb-http-keyword '((t :inherit font-lock-constant-face
 				:weight bold))
   "Face for highlighting HTTP methods.")
@@ -207,7 +216,8 @@ Request templates are defined without HTTP methods, paths or hosts.")
 
 (defvar-local verb-http-response nil
   "HTTP response for this response buffer (`verb-response' object).
-The body contents of the response are in the buffer itself.")
+The decoded body contents of the response are included in the buffer
+itself.")
 (put 'verb-http-response 'permanent-local t)
 
 (defvar-local verb--response-headers-buffer nil
@@ -219,6 +229,12 @@ This variable is only set on buffers showing HTTP response bodies.")
 When Verb evaluates Lisp code tags, a tag may produce a buffer as a
 result. If the buffer-local value of this variable is non-nil for that
 buffer, Verb will kill it after it has finished reading its contents.")
+
+(defvar verb-last nil
+  "Stores the last received HTTP response (`verb-response' object).
+This variable is shared across any buffers using Verb mode.  Consider
+using this variable inside code tags if you wish to use results from
+previous requests on new requests.")
 
 (defvar verb--response-buffers nil
   "List of currently live HTTP response buffers.
@@ -349,11 +365,15 @@ HEADER and VALUE must be nonempty strings."
 	     :type float
 	     :documentation
 	     "Time taken for response to be received, in seconds.")
+   (body :initarg :body
+	 :initform nil
+	 :type (or null string)
+	 :documentation "Response body.")
    (body-bytes :initarg :body-bytes
 	       :initform 0
 	       :type integer
 	       :documentation
-	       "Number of bytes in response buffer, without headers."))
+	       "Number of bytes in response body."))
   "Represents an HTTP response to a request.")
 
 (define-minor-mode verb-response-body-mode
@@ -366,8 +386,8 @@ HEADER and VALUE must be nonempty strings."
       (progn
 	(setq header-line-format
 	      (verb--response-header-line-string verb-http-response))
-	(when verb-show-headers-buffer
-	  (if (eq verb-show-headers-buffer 'when-empty)
+	(when verb-auto-show-headers-buffer
+	  (if (eq verb-auto-show-headers-buffer 'when-empty)
 	      (when (zerop (oref verb-http-response body-bytes))
 		(verb-toggle-show-headers))
 	    (verb-toggle-show-headers))))
@@ -469,24 +489,6 @@ Return nil of the heading has no text contents."
       (condition-case nil
 	  (verb-request-spec-from-string text)
 	(verb-empty-spec nil)))))
-
-(defun verb-request-spec-validate (rs)
-  "Run validations on request spec RS.
-If a validation does not pass, signal with `user-error'."
-  (unless (oref rs method)
-    (user-error "%s" (concat "No HTTP method specified\n"
-			     "Make sure you specify a concrete HTTP "
-			     "method (i.e. not " verb--template-keyword
-			     ") in the heading hierarchy")))
-  (let ((url (oref rs url)))
-    (unless url
-      (user-error "%s" (concat "No URL specified\nMake sure you specify "
-			       "a nonempty URL in the heading hierarchy")))
-    (unless (url-host url)
-      (user-error "%s" (concat "URL has no host defined\n"
-			       "Make sure you specify a host "
-			       "(e.g. \"https://github.com\") in the "
-			       "heading hierarchy")))))
 
 (defun verb--request-spec-from-hierarchy ()
   "Return a request spec generated from the headings hierarchy.
@@ -605,6 +607,13 @@ Set the buffer's `verb-kill-this-buffer' variable to t."
 	(insert key ": " value "\n")))
     (unless (zerop (buffer-size))
       (backward-delete-char 1))))
+
+(defun verb-headers-to-string (headers)
+  "Return HTTP HEADERS as a multiline string.
+HEADERS must be a (KEY . VALUE) alist."
+  (with-temp-buffer
+    (verb--insert-header-contents headers)
+    (buffer-string)))
 
 (defun verb-toggle-show-headers ()
   "Show or hide the HTTP response's headers on a separate buffer."
@@ -801,7 +810,7 @@ view the HTTP response in a user-friendly way."
   ;; No errors, continue to read response
   (let ((elapsed (- (time-to-seconds) start))
 	(original-buffer (current-buffer))
-	status-line headers content-type charset coding-system bytes
+	status-line headers content-type charset coding-system body-bytes
 	binary-handler text-handler)
 
     (widen)
@@ -843,7 +852,7 @@ view the HTTP response in a user-friendly way."
     (delete-region (point-min) (point))
 
     ;; Record body size in bytes
-    (setq bytes (buffer-size))
+    (setq body-bytes (buffer-size))
 
     ;; Current buffer should be unibyte
     (when enable-multibyte-characters
@@ -857,7 +866,9 @@ view the HTTP response in a user-friendly way."
 			   :request rs
 			   :status status-line
 			   :duration elapsed
-			   :body-bytes bytes)))
+			   :body-bytes body-bytes))
+      ;; Update global last response variable
+      (setq verb-last verb-http-response))
 
     (if binary-handler
 	;; Response content is a binary format:
@@ -891,6 +902,13 @@ view the HTTP response in a user-friendly way."
     (kill-buffer original-buffer)
 
     (with-current-buffer response-buf
+      ;; Now that the response content has been processed, update
+      ;; `verb-http-response's body slot
+      (oset verb-http-response
+	    body
+	    (unless (zerop (oref verb-http-response body-bytes))
+	      (buffer-string)))
+
       (when text-handler
 	(set-buffer-file-coding-system coding-system)
 
@@ -902,7 +920,10 @@ view the HTTP response in a user-friendly way."
 	  (switch-to-buffer-other-window (current-buffer))
 	(switch-to-buffer (current-buffer)))
 
-      (verb-response-body-mode))))
+      (verb-response-body-mode)
+
+      ;; Run post response hook
+      (run-hooks 'verb-post-response-hook))))
 
 (defun verb--prepare-http-headers (headers)
   "Prepare alist HEADERS of HTTP headers to use them on a request.
@@ -985,6 +1006,24 @@ If the response buffers have response headers buffers, kill those as well."
       (with-current-buffer buf
 	(verb-kill-response-buffer-and-window t))))
   (setq verb--response-buffers nil))
+
+(cl-defmethod verb-request-spec-validate ((rs verb-request-spec))
+  "Run validations on request spec RS.
+If a validation does not pass, signal with `user-error'."
+  (unless (oref rs method)
+    (user-error "%s" (concat "No HTTP method specified\n"
+			     "Make sure you specify a concrete HTTP "
+			     "method (i.e. not " verb--template-keyword
+			     ") in the heading hierarchy")))
+  (let ((url (oref rs url)))
+    (unless url
+      (user-error "%s" (concat "No URL specified\nMake sure you specify "
+			       "a nonempty URL in the heading hierarchy")))
+    (unless (url-host url)
+      (user-error "%s" (concat "URL has no host defined\n"
+			       "Make sure you specify a host "
+			       "(e.g. \"https://github.com\") in the "
+			       "heading hierarchy")))))
 
 (cl-defmethod verb--request-spec-send ((rs verb-request-spec) where)
   "Send the HTTP request described by RS.
@@ -1346,7 +1385,9 @@ If METHOD could not be matched with `verb--http-methods-regexp',
 signal an error."
   (let (method url headers body)
     (with-temp-buffer
-      (insert text)
+      ;; Expand Lisp code tags before parsing request
+      ;; After that, insert it into the buffer
+      (insert (verb--eval-lisp-code-in text))
       (goto-char (point-min))
       ;; Skip initial blank lines and comments
       (while (and (re-search-forward (concat "^\\(\\s-*"
@@ -1383,8 +1424,8 @@ signal an error."
       ;; Stop as soon as we find a blank line or a non-matching line
       (while (re-search-forward "^\\s-*\\([[:alnum:]-]+\\)\\s-*:\\s-?\\(.*\\)$"
 				(line-end-position) t)
-	(push (cons (verb--eval-lisp-code-in (match-string 1))
-		    (verb--eval-lisp-code-in (match-string 2)))
+	(push (cons (match-string 1)
+		    (match-string 2))
 	      headers)
 	(unless (eobp) (forward-char)))
       (setq headers (nreverse headers))
@@ -1402,10 +1443,9 @@ signal an error."
       ;; Return a `verb-request-spec'
       (verb-request-spec :method method
 			 :url (unless (string-empty-p url)
-				(verb--clean-url
-				 (verb--eval-lisp-code-in url)))
+				(verb--clean-url url))
 			 :headers headers
-			 :body (verb--eval-lisp-code-in body)))))
+			 :body body))))
 
 (provide 'verb)
 ;;; verb.el ends here
