@@ -1,2 +1,0 @@
-
-(async-await . [(20200117 558) ((emacs (25 1)) (promise (1 0))) "Async/Await" single ((:commit . "ef77db2368d4244ef894afa4dc24542d8b7e6187") (:keywords "async" "await" "convenience") (:authors ("chuntaro" . "chuntaro@sakura-games.jp")) (:maintainer "chuntaro" . "chuntaro@sakura-games.jp") (:url . "https://github.com/chuntaro/emacs-async-await"))])
