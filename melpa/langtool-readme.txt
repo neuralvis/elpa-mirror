@@ -21,10 +21,17 @@ langtool.el have 3 types of client.
     (setq langtool-language-tool-jar "/path/to/languagetool-commandline.jar")
     (require 'langtool)
 
-Alternatively, you can set the classpath where LanguageTool's jars reside:
+Alternatively, you can set the classpath where LanguageTool's jars reside
+(e.g. ArchLinux):
 
     (setq langtool-java-classpath
           "/usr/share/languagetool:/usr/share/java/languagetool/*")
+    (require 'langtool)
+
+
+You can set a script that hold java setting (e.g. Gentoo):
+
+    (setq langtool-bin "/path/to/your/langtool")
     (require 'langtool)
 
 2. HTTP server & client
@@ -40,7 +47,7 @@ You can change HTTP server port number like following.
 
 3. HTTP client
 
-If you have running HTTP server instance on any machine:
+If you have running HTTP LanguageTool server instance on any machine:
 
     (setq langtool-http-server-host "localhost"
           langtool-http-server-port 8082)

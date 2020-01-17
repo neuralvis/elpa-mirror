@@ -1,0 +1,2 @@
+
+(counsel . [(20200116 1619) ((emacs (24 5)) (swiper (0 13 0))) "Various completion functions using Ivy" single ((:commit . "3fa1677993190ec9b5b637c9dface34fb67ae77f") (:keywords "convenience" "matching" "tools") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/swiper"))])
