@@ -4,6 +4,7 @@
 
 ;; Author: Sam Halliday <Sam.Halliday@gmail.com>
 ;; Keywords: faces
+;; Package-Version: 20171227.1845
 ;; URL: https://gitlab.com/fommil/emacs-darcula-theme
 
 ;; This program is free software; you can redistribute it and/or modify
