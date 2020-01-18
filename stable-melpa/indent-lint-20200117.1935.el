@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 1.0.3
-;; Package-Version: 20200117.1732
+;; Version: 1.0.5
+;; Package-Version: 20200117.1935
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "26.1") (async-await "1.0") (async "1.9.4"))
 ;; URL: https://github.com/conao3/indent-lint.el
@@ -67,6 +67,17 @@ Function will be called with 2 variables; `(,raw-buffer ,indent-buffer)."
                                        (buffer-file-name))))
   "Path to indent-lint root.")
 
+
+;;; hooks
+
+(defun indent-lint--before-indent-emacs-lisp-mode ()
+  "Before-Indent function before indnet buffer at `emacs-lisp-mode'."
+  (ignore-errors
+    (eval-buffer)))
+
+
+;;; funcitons
+
 (defun indent-lint--output-debug-info (state err)
   "Output debug info form ERR with STATE."
   (let ((file (locate-user-emacs-file "flycheck-indent.debug")))
@@ -117,27 +128,33 @@ Function will be called with 2 variables; `(,raw-buffer ,indent-buffer)."
 
 (defun indent-lint--promise-indent (buf src-file dest-file)
   "Return promise to save BUF to SRC-FILE and save DEST-FILE indented."
-  (with-temp-file src-file
-    (insert (with-current-buffer buf (buffer-string))))
-  (promise-then
-   (promise:async-start
-    `(lambda ()
-       (progn
-         (setq user-emacs-directory ,user-emacs-directory)
-         (setq package-user-dir ,package-user-dir)
-         (package-initialize)
-         (with-temp-file ,dest-file
-           (insert-file-contents ,src-file)
-           (funcall #',(with-current-buffer buf major-mode))
-           (dolist (cell ',(indent-lint--buffer-local-variable buf))
-             (condition-case _err
-                 (set (car cell) (cdr cell))
-               (setting-constant nil)))
-           (indent-region (point-min) (point-max))))))
-   (lambda (res)
-     (promise-resolve res))
-   (lambda (reason)
-     (promise-reject `(fail-indent ,reason)))))
+  (with-current-buffer buf
+    (let ((mode major-mode)
+          (contents (buffer-string)))
+      (with-temp-file src-file
+        (insert contents))
+      (promise-then
+       (promise:async-start
+        `(lambda ()
+           (progn
+             (setq user-emacs-directory ,user-emacs-directory)
+             (setq package-user-dir ,package-user-dir)
+             (package-initialize)
+             (with-temp-file ,dest-file
+               (insert-file-contents ,src-file)
+               (funcall #',mode)
+               (dolist (cell ',(indent-lint--buffer-local-variable buf))
+                 (condition-case _err
+                     (set (car cell) (cdr cell))
+                   (setting-constant nil)))
+               ,(when-let (fn (symbol-function
+                               (intern (format "indent-lint--before-indent-%s" mode))))
+                  `(funcall #',fn))
+               (indent-region (point-min) (point-max))))))
+       (lambda (res)
+         (promise-resolve res))
+       (lambda (reason)
+         (promise-reject `(fail-indent ,reason)))))))
 
 (defun indent-lint--promise-diff (buf src-file dest-file)
   "Return promise to diff SRC-FILE and DEST-FILE named BUF."
@@ -179,6 +196,9 @@ Function will be called with 2 variables; `(,raw-buffer ,indent-buffer)."
              (promise-reject `(fail-diff ,code ,output)))
             (t
              (promise-reject `(fail-diff-unknown ,code ,output))))))))))
+
+
+;;; main
 
 ;;;###autoload
 (async-defun indent-lint (&optional buf)
@@ -246,32 +266,39 @@ Status code:
   1 - Found indentation errors and diff output
   2 - Diff program exit with errors
   3 - Error when create indent file in clean Emacs
+  100 - Timeout while invoke indent-lint
 
 Usage:
   - Import code from file and guess `major-mode' from file extension.
-      cask {EMACS} -Q --batch -l indent-lint.el -f indent-lint-batch sample.el"
+      cask {EMACS} -Q --batch -l indent-lint.el -f indent-lint-batch sample.el
+
+  - Lint multi file is supported.
+      cask {EMACS} -Q --batch -l indent-lint.el -f indent-lint-batch sample1.el sample2.el"
   (unless noninteractive
     (error "`indent-lint-batch' can be used only with --batch"))
   (require 'package)
-  (let* ((indent-lint-verbose nil)
-         (filepath (nth 0 command-line-args-left))
-         (buf (find-file-noselect filepath 'nowarn))
-         (res (_value (promise-wait indent-lint-batch-timeout
-                                    (indent-lint buf)))))
-    (seq-let (state value) res
-      (cond
-       ((eq :fullfilled state)
-        (seq-let (code buf) value
-          (princ (with-current-buffer buf
-                   (let ((inhibit-read-only t))
-                     (goto-char (point-max))
-                     (delete-region (line-beginning-position -1) (point))
-                     (buffer-string))))
-          (kill-emacs code)))
-       ((eq :rejected state)
-        (indent-lint--output-debug-info :rejected value))
-       ((eq :timeouted state)
-        (indent-lint--output-debug-info :timeouted value))))))
+  (let ((indent-lint-verbose nil)
+        code)
+    (dolist (filepath command-line-args-left)
+      (let* ((buf (find-file-noselect filepath 'nowarn))
+             (res (_value (promise-wait indent-lint-batch-timeout
+                            (indent-lint buf)))))
+        (seq-let (state value) res
+          (cond
+           ((eq :fullfilled state)
+            (seq-let (code buf) value
+              (princ (with-current-buffer buf
+                       (let ((inhibit-read-only t))
+                         (goto-char (point-max))
+                         (delete-region (line-beginning-position -1) (point))
+                         (buffer-string))))))
+           ((eq :rejected state)
+            (indent-lint--output-debug-info :rejected value)
+            (setq code (car value)))
+           ((eq :timeouted state)
+            (indent-lint--output-debug-info :timeouted value)
+            (setq code 100))))))
+    (kill-emacs (or code 0))))
 
 (provide 'indent-lint)
 

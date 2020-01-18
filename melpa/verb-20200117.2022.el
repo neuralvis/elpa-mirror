@@ -6,7 +6,7 @@
 ;; Maintainer: Federico Tedin <federicotedin@gmail.com>
 ;; Homepage: https://github.com/federicotdn/verb
 ;; Keywords: tools
-;; Package-Version: 20200117.7
+;; Package-Version: 20200117.2022
 ;; Package-X-Original-Version: 1.3.0
 ;; Package-Requires: ((emacs "26"))
 
@@ -1371,13 +1371,11 @@ As a special case, if S is the empty string, return the empty string."
       (save-match-data
 	(eval (car (read-from-string (format "(progn %s)" s))) t)))))
 
-(defun verb--eval-lisp-code-in (s)
-  "Evalue and replace Lisp code within code tags in S.
+(defun verb--eval-lisp-code-in-buffer (buf)
+  "Evalue and replace Lisp code within code tags in buffer BUF.
 Code tags are delimited with `verb-code-tag-delimiters'."
-  (when s
-    (with-temp-buffer
-      (insert s)
-      (goto-char (point-min))
+  (when buf
+    (with-current-buffer buf
       (while (re-search-forward (concat (car verb-code-tag-delimiters)
 					"\\(.*?\\)"
 					(cdr verb-code-tag-delimiters))
@@ -1393,8 +1391,16 @@ Code tags are delimited with `verb-code-tag-delimiters'."
 	    (when (buffer-local-value 'verb-kill-this-buffer result)
 	      (kill-buffer result)))
 	   (t
-	    (replace-match (format "%s" result))))))
-      (buffer-string))))
+	    (replace-match (format "%s" result)))))))))
+
+(defun verb--eval-lisp-code-in-string (s)
+  "Like `verb--eval-lisp-code-in-buffer', but in a string S.
+Return a modified string."
+  (with-temp-buffer
+    (insert s)
+    (goto-char (point-min))
+    (verb--eval-lisp-code-in-buffer (current-buffer))
+    (buffer-string)))
 
 (defun verb--clean-url (url)
   "Return a correctly encoded URL struct to use with `url-retrieve'.
@@ -1461,9 +1467,7 @@ If METHOD could not be matched with `verb--http-methods-regexp',
 signal an error."
   (let (method url headers body)
     (with-temp-buffer
-      ;; Expand Lisp code tags before parsing request
-      ;; After that, insert it into the buffer
-      (insert (verb--eval-lisp-code-in text))
+      (insert text)
       (goto-char (point-min))
 
       ;; Skip initial blank lines and comments
@@ -1479,14 +1483,22 @@ signal an error."
 	;; Signal `verb-empty-spec' if so
 	(signal 'verb-empty-spec nil))
 
-      ;; Read HTTP method and URL
-      (let ((case-fold-search t))
-	(when (re-search-forward (concat "^\\s-*\\("
-					 (verb--http-methods-regexp)
-					 "\\)\\s-*\\(.*\\)$")
-				 (line-end-position) t)
-	  (setq method (upcase (match-string 1))
-		url (match-string 2))))
+      ;; Read HTTP method and URL line
+      ;; First, expand any code tags on it (if any)
+      (let ((case-fold-search t)
+	    (line (verb--eval-lisp-code-in-string
+		   (buffer-substring-no-properties (point)
+						   (line-end-position)))))
+	(when (string-match (concat "^\\s-*\\("
+				    (verb--http-methods-regexp)
+				    "\\)\\s-*\\(.*\\)$")
+			    line)
+	  (setq method (upcase (match-string 1 line))
+		url (match-string 2 line))))
+
+      ;; We've processed the URL line, move to the end of it
+      (end-of-line)
+
       (if method
 	  (when (string= method verb--template-keyword)
 	    (setq method nil))
@@ -1496,6 +1508,7 @@ signal an error."
 			    "(matching is case insensitive)")
 		    (mapconcat #'identity verb--http-methods ", ")
 		    verb--template-keyword))
+
       ;; Skip newline after URL line
       (unless (eobp) (forward-char))
 
@@ -1511,9 +1524,15 @@ signal an error."
 	      (value (match-string 2)))
 	  (unless (string-prefix-p verb--comment-character
 				   (string-trim-left line))
-	    (push (cons (string-trim key) (string-trim value)) headers)))
+	    (push (cons (string-trim key)
+			(string-trim (verb--eval-lisp-code-in-string value)))
+		  headers)))
 	(unless (eobp) (forward-char)))
       (setq headers (nreverse headers))
+
+      ;; Expand code tags in the rest of the buffer (if any)
+      (save-excursion
+	(verb--eval-lisp-code-in-buffer (current-buffer)))
 
       ;; Allow a blank like to separate headers and body (not
       ;; required)

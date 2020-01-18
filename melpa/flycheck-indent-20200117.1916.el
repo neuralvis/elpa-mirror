@@ -4,7 +4,7 @@
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20200101.921
+;; Package-Version: 20200117.1916
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "24.4") (indent-lint "0.0.1") (flycheck "31"))
 ;; URL: https://github.com/conao3/indent-lint.el
@@ -48,10 +48,6 @@
    '(progn
       (package-initialize)
       (require 'indent-lint)
-      (setq indent-lint-before-indent-fn
-            (lambda (raw-buffer _indent-buffer)
-              (ignore-errors
-                (eval-buffer raw-buffer))))
       (indent-lint-batch))))
 
 (flycheck-define-checker indent-elisp

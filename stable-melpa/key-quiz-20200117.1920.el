@@ -1,11 +1,11 @@
 ;;; key-quiz.el --- Emacs Keys Quiz  -*- lexical-binding: t -*-
 
-;; Copyright (c) 2019 Federico Tedin
+;; Copyright (c) 2020 Federico Tedin
 
 ;; Author: Federico Tedin <federicotedin@gmail.com>
 ;; Homepage: https://github.com/federicotdn/key-quiz
 ;; Keywords: games
-;; Package-Version: 20190721.1357
+;; Package-Version: 20200117.1920
 ;; Package-X-Original-Version: 0.1
 ;; Package-Requires: ((emacs "26"))
 
