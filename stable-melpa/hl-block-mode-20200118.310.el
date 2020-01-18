@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://github.com/ideasman42/emacs-hl-block-mode
-;; Package-Version: 20200106.448
+;; Package-Version: 20200118.310
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.0"))
 
@@ -165,8 +165,8 @@ Inverse of `color-values'."
 (define-minor-mode hl-block-mode
   "Highlight block under the cursor."
   :global nil
-  :lighter
-  hl-block-mode-lighter
+  :lighter hl-block-mode-lighter
+
   (cond
     (hl-block-mode
       (jit-lock-unregister 'hl-block-mode-enable)

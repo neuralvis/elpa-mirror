@@ -3,7 +3,7 @@
 
 ;; Author : Rich Alesi <https://github.com/ralesi>
 ;; Version: 0.9.8.6
-;; Package-Version: 20190412.624
+;; Package-Version: 20200118.101
 ;; Keywords: files, convenience, dired
 ;; Homepage: https://github.com/ralesi/ranger
 ;; Package-Requires: ((emacs "24.4"))
@@ -500,6 +500,8 @@ Selective hiding of specific attributes can be controlled by MASK."
     (define-key map "!"                'dired-do-shell-command)
     (define-key map "D"                'dired-do-delete)
     (define-key map "R"                'dired-do-rename)
+    (define-key map "+"                'mkdir)
+    (define-key map "="                'dired-diff)
 
     ;; navigation
     (define-key map "-"                'ranger-up-directory)
