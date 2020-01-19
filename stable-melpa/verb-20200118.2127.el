@@ -6,7 +6,7 @@
 ;; Maintainer: Federico Tedin <federicotedin@gmail.com>
 ;; Homepage: https://github.com/federicotdn/verb
 ;; Keywords: tools
-;; Package-Version: 20200117.2022
+;; Package-Version: 20200118.2127
 ;; Package-X-Original-Version: 1.3.0
 ;; Package-Requires: ((emacs "26"))
 
@@ -241,18 +241,15 @@ previous requests on new requests.")
 (defvar verb--vars nil
   "List of variables set with `verb-var'.")
 
-(defvar verb--response-buffers nil
-  "List of currently live HTTP response buffers.
-This variable is used by `verb--auto-kill-response-buffers' to
-automatically kill all response buffers.")
-
 (defvar verb--debug-enable nil
   "If non-nil, enable logging debug messages with `verb--debug'.")
 
 (defvar verb-mode-prefix-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-r") #'verb-send-request-on-point-other-window)
+    (define-key map (kbd "C-s") #'verb-send-request-on-point-other-window)
+    (define-key map (kbd "C-r") #'verb-send-request-on-point-other-window-stay)
     (define-key map (kbd "C-f") #'verb-send-request-on-point)
+    (define-key map (kbd "C-k") #'verb-kill-all-response-buffers)
     (define-key map (kbd "C-e") #'verb-export-request-on-point)
     (define-key map (kbd "C-u") #'verb-export-request-on-point-curl)
     (define-key map (kbd "C-v") #'verb-set-var)
@@ -388,7 +385,8 @@ HEADER and VALUE must be nonempty strings."
   :lighter " Verb[Body]"
   :group 'verb
   :keymap `((,(kbd "C-c C-r C-r") . verb-toggle-show-headers)
-	    (,(kbd "C-c C-r C-k") . verb-kill-response-buffer-and-window))
+	    (,(kbd "C-c C-r C-k") . verb-kill-response-buffer-and-window)
+	    (,(kbd "C-c C-r C-f") . verb-re-send-request))
   (if verb-response-body-mode
       (progn
 	(setq header-line-format
@@ -405,6 +403,11 @@ HEADER and VALUE must be nonempty strings."
   (if (string-empty-p s)
       nil
     s))
+
+(defun verb--buffer-string-no-properties ()
+  "Return the contents of the current buffer as a string.
+Do not include text properties."
+  (buffer-substring-no-properties (point-min) (point-max)))
 
 (defun verb--back-to-heading ()
   "Move to the previous heading.
@@ -540,16 +543,30 @@ window.
 If the response buffer has a corresponding headers buffer, kill it and
 delete any window displaying it."
   (interactive)
-  (when verb--response-headers-buffer
-    (when-let ((w (get-buffer-window verb--response-headers-buffer)))
-      (ignore-errors
-	(delete-window w)))
-    (when (buffer-live-p verb--response-headers-buffer)
-      (kill-buffer verb--response-headers-buffer)))
-  (kill-buffer (current-buffer))
-  (unless keep-window
-    (ignore-errors
-      (delete-window))))
+  (let ((response-buf (current-buffer)))
+    (when verb--response-headers-buffer
+      (when-let ((w (get-buffer-window verb--response-headers-buffer)))
+	(ignore-errors
+	  (delete-window w)))
+      (when (buffer-live-p verb--response-headers-buffer)
+	(kill-buffer verb--response-headers-buffer)))
+    (unless keep-window
+      (when-let ((w (get-buffer-window response-buf)))
+	(ignore-errors
+	  (delete-window))))
+    (kill-buffer response-buf)))
+
+(defun verb-re-send-request ()
+  "Re-send request for the response shown on current buffer.
+If the user chose to show the current response buffer on another
+window, show the new one on another window as well.  Return the buffer
+where the response will be loaded in.
+
+If you use this command frequently, consider setting
+`verb-auto-kill-response-buffers' to t.  This will help avoiding
+having many response buffers open."
+  (interactive)
+  (verb--request-spec-send (oref verb-http-response request) nil))
 
 (defun verb-kill-buffer-and-window ()
   "Delete selected window and kill its current buffer.
@@ -625,13 +642,6 @@ Set the buffer's `verb-kill-this-buffer' variable to t."
     (unless (zerop (buffer-size))
       (backward-delete-char 1))))
 
-(defun verb-headers-to-string (headers)
-  "Return HTTP HEADERS as a multiline string.
-HEADERS must be a (KEY . VALUE) alist."
-  (with-temp-buffer
-    (verb--insert-header-contents headers)
-    (buffer-string)))
-
 (defun verb-toggle-show-headers ()
   "Show or hide the HTTP response's headers on a separate buffer."
   (interactive)
@@ -663,10 +673,17 @@ HEADERS must be a (KEY . VALUE) alist."
 
 (defun verb-send-request-on-point-other-window ()
   "Send the request specified by the selected heading's text contents.
-Show the results on another window (use
+Show the results on another window and switch to it (use
 `verb-send-request-on-point')."
   (interactive)
   (verb-send-request-on-point 'other-window))
+
+(defun verb-send-request-on-point-other-window-stay ()
+  "Send the request specified by the selected heading's text contents.
+Show the results on another window, but don't switch to it (use
+`verb-send-request-on-point')."
+  (interactive)
+  (verb-send-request-on-point 'stay-window))
 
 (defun verb-send-request-on-point (&optional where)
   "Send the request specified by the selected heading's text contents.
@@ -674,11 +691,22 @@ The contents of all parent headings are used as well; see
 `verb--request-spec-from-hierarchy' to see how this is done.
 
 If WHERE is `other-window', show the results of the request on another
-window.  If WHERE has any other value, show the results of the request
-in the current window."
+window and select it.  If WHERE is `show-window', show the results of
+the request on another window, but keep the current one selected.  If
+WHERE has any other value, show the results of the request in the
+current window.  WHERE defaults to nil."
   (interactive)
   (verb--request-spec-send (verb--request-spec-from-hierarchy)
-			      where))
+			   where))
+
+(defun verb-kill-all-response-buffers (&optional keep-windows)
+  "Kill all response buffers, and delete their windows.
+If KEEP-WINDOWS is non-nil, do not delete their respective windows."
+  (interactive)
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (when verb-http-response
+	(verb-kill-response-buffer-and-window keep-windows)))))
 
 (defun verb-export-request-on-point (&optional name)
   "Export the request specification on point.
@@ -775,7 +803,7 @@ is non-nil, do not display a message on the minibuffer."
        (insert "-X TRACE"))
       ("CONNECT"
        (user-error "%s" "CONNECT method not supported in curl format")))
-    (kill-new (buffer-string))
+    (kill-new (verb--buffer-string-no-properties))
     (unless no-message
       (message "Curl command copied to the kill ring"))
     ;; Return the generated command
@@ -983,7 +1011,7 @@ view the HTTP response in a user-friendly way."
       (oset verb-http-response
 	    body
 	    (unless (zerop (oref verb-http-response body-bytes))
-	      (buffer-string)))
+	      (verb--buffer-string-no-properties)))
 
       (when text-handler
 	(set-buffer-file-coding-system coding-system)
@@ -992,10 +1020,13 @@ view the HTTP response in a user-friendly way."
 	(goto-char (point-min))
 	(funcall text-handler))
 
-      (if (eq where 'other-window)
-	  (switch-to-buffer-other-window (current-buffer))
-	(switch-to-buffer (current-buffer)))
+      (pcase where
+	('other-window (switch-to-buffer-other-window (current-buffer)))
+	('stay-window (save-selected-window
+			(switch-to-buffer-other-window (current-buffer))))
+	(_ (switch-to-buffer (current-buffer)))))
 
+    (with-current-buffer response-buf
       (verb-response-body-mode)
 
       ;; Run post response hook
@@ -1074,15 +1105,6 @@ For more information, see `verb-advice-url'."
     (advice-remove 'url-http-handle-authentication
 		   #'verb--http-handle-authentication)))
 
-(defun verb--auto-kill-response-buffers ()
-  "Kill all live HTTP response buffers.
-If the response buffers have response headers buffers, kill those as well."
-  (dolist (buf verb--response-buffers)
-    (when (buffer-live-p buf)
-      (with-current-buffer buf
-	(verb-kill-response-buffer-and-window t))))
-  (setq verb--response-buffers nil))
-
 (cl-defmethod verb-request-spec-validate ((rs verb-request-spec))
   "Run validations on request spec RS.
 If a validation does not pass, signal with `user-error'."
@@ -1109,7 +1131,7 @@ be loaded into."
   ;; If auto kill buffers is enabled, kill all previous response
   ;; buffers now
   (when verb-auto-kill-response-buffers
-    (verb--auto-kill-response-buffers))
+    (verb-kill-all-response-buffers t))
 
   (let* ((url (oref rs url))
 	 (url-request-method (verb--to-ascii (oref rs method)))
@@ -1123,10 +1145,6 @@ be loaded into."
 						   (cdr content-type)))
 	 (response-buf (generate-new-buffer "*HTTP Response*"))
 	 timeout-timer)
-    ;; Add response buffer to global list
-    (when verb-auto-kill-response-buffers
-      (push response-buf verb--response-buffers))
-
     ;; Start the timeout warning timer
     (when verb-show-timeout-warning
       (setq timeout-timer (run-with-timer verb-show-timeout-warning nil
@@ -1167,7 +1185,7 @@ be loaded into."
 	     (oref rs method)
 	     (verb-request-spec-url-string rs))
 
-    ;;Return the response buffer
+    ;; Return the response buffer
     response-buf))
 
 (cl-defmethod verb-request-spec-to-string ((rs verb-request-spec))
@@ -1181,7 +1199,7 @@ This string should be able to be used with
       (insert (car key-value) ": " (cdr key-value) "\n"))
     (when-let ((body (oref rs body)))
       (insert "\n" body))
-    (buffer-string)))
+    (verb--buffer-string-no-properties)))
 
 (defun verb--timeout-warn (buffer rs)
   "Warn the user about a possible network timeout for request RS.
@@ -1400,7 +1418,7 @@ Return a modified string."
     (insert s)
     (goto-char (point-min))
     (verb--eval-lisp-code-in-buffer (current-buffer))
-    (buffer-string)))
+    (verb--buffer-string-no-properties)))
 
 (defun verb--clean-url (url)
   "Return a correctly encoded URL struct to use with `url-retrieve'.
@@ -1442,9 +1460,9 @@ and fragment component of a URL with no host or schema defined."
 
 The text format for defining requests is:
 
-[COMMENTS]
+[COMMENTS]...
 METHOD [URL | PARTIAL-URL]
-[HEADERS]
+[HEADERS]...
 
 [BODY]
 
@@ -1456,8 +1474,9 @@ URL can be the empty string, or a URL with an \"http\" or \"https\"
 schema.
 PARTIAL-URL can be the empty string, or the path + query string +
 fragment part of a URL.
-HEADERS and BODY can be separated by a blank line, which will be
-ignored.  Each line of HEADERS must be in the form of KEY: VALUE.
+Each line of HEADERS must be in the form of KEY: VALUE.
+BODY can contain arbitrary text.  Note that there must be a blank
+line between HEADERS and BODY.
 
 As a special case, if the text specification consists exclusively of
 comments and/or whitespace, or is the empty string, signal
@@ -1512,21 +1531,25 @@ signal an error."
       ;; Skip newline after URL line
       (unless (eobp) (forward-char))
 
-      ;; Search for HTTP headers
-      ;; Stop as soon as we find a blank line or a non-matching line
-      ;; Accept lines starting with '#' and skip them
-      (while (re-search-forward (concat "^\\s-*"
-					verb--comment-character
-					"?\\s-*\\([[:alnum:]-]+\\)\\s-*:\\s-?\\(.*\\)$")
-				(line-end-position) t)
-	(let ((line (match-string 0))
-	      (key (match-string 1))
-	      (value (match-string 2)))
+      ;; Search for HTTP headers, stop as soon as we find a blank line
+      (while (re-search-forward "^\\(.+\\)$" (line-end-position) t)
+	(let ((line (match-string 1)))
+	  ;; Process line if it doesn't start with '#'
 	  (unless (string-prefix-p verb--comment-character
 				   (string-trim-left line))
-	    (push (cons (string-trim key)
-			(string-trim (verb--eval-lisp-code-in-string value)))
-		  headers)))
+	    ;; Check if line matches KEY: VALUE after evaluating any
+	    ;; present code tags
+	    (setq line (verb--eval-lisp-code-in-string line))
+	    (if (string-match "^\\s-*\\([[:alnum:]-]+\\)\\s-*:\\s-?\\(.*\\)$"
+			      line)
+		;; Line matches, trim KEY and VALUE and store them
+		(push (cons (string-trim (match-string 1 line))
+			    (string-trim (match-string 2 line)))
+		      headers)
+	      (user-error (concat "Invalid HTTP header: \"%s\"\n"
+				  "Make sure there's a blank line between"
+				  " the headers and the request body")
+			  line))))
 	(unless (eobp) (forward-char)))
       (setq headers (nreverse headers))
 
@@ -1534,10 +1557,8 @@ signal an error."
       (save-excursion
 	(verb--eval-lisp-code-in-buffer (current-buffer)))
 
-      ;; Allow a blank like to separate headers and body (not
-      ;; required)
-      (when (re-search-forward "^$" (line-end-position) t)
-	(unless (eobp) (forward-char)))
+      ;; Skip blank line after headers
+      (unless (eobp) (forward-char))
 
       ;; The rest of the buffer is the request body
       (let ((rest (buffer-substring (point) (point-max))))

@@ -4,7 +4,6 @@
 ;; Author: Johan Claesson <johanclaesson@bredband.net>
 ;; Maintainer: Johan Claesson <johanclaesson@bredband.net>
 ;; URL: https://github.com/johanclaesson/picpocket
-;; Package-Version: 20180914.1819
 ;; Version: 40
 ;; Keywords: multimedia
 ;; Package-Requires: ((emacs "24.4"))
