@@ -12,7 +12,7 @@
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; Package-Requires: ((emacs "25.1") (dash "20180910") (transient "20190812") (with-editor "20181103"))
-;; Package-Version: 20200111.1558
+;; Package-Version: 20200119.656
 ;; Keywords: git tools vc
 ;; Homepage: https://github.com/magit/magit
 
@@ -782,8 +782,9 @@ With a numeric prefix ARG, go forward ARG comments."
                   nil nil nil 'git-commit-read-ident-history)))
         (save-match-data
           (if (string-match "\\`\\([^<]+\\) *<\\([^>]+\\)>\\'" str)
-              (list (string-trim (match-string 1 str))
-                    (string-trim (match-string 2 str)))
+              (mapcar #'string-trim
+                      (list (match-string 1 str)
+                            (match-string 2 str)))
             (user-error "Invalid input"))))
     (list (read-string "Name: ")
           (read-string "Email: "))))
