@@ -1,7 +1,7 @@
 ;;; extempore-mode.el --- Emacs major mode for Extempore source files
 ;; Author: Ben Swift <ben@benswift.me>
 ;; Keywords: Extempore
-;; Package-Version: 20200113.29
+;; Package-Version: 20200119.102
 ;; Version: 1.0
 ;; Keywords: lisp, extempore
 ;; URL: http://github.com/extemporelang/extempore-emacs-mode
@@ -152,7 +152,7 @@
   '(("scheme"
      "(\\(define\\|macro\\|define-macro\\)\\s-+(?\\(\\S-+\\)\\_>" 2)
     ("instrument"
-     "(bind-\\(instrument\\|sampler\\)\\s-+\\(\\S-+\\)\\_>" 2)
+     "(make-instrument\\s-+\\(\\S-+\\)\\_>" 1)
     ("lib" ;; bind-lib
      "(bind-lib\\s-+\\S-+\\s-+\\(\\S-+\\)\\_>" 1)
     ("type"

@@ -6,8 +6,8 @@
 ;; Maintainer: Federico Tedin <federicotedin@gmail.com>
 ;; Homepage: https://github.com/federicotdn/verb
 ;; Keywords: tools
-;; Package-Version: 20200118.2127
-;; Package-X-Original-Version: 1.3.0
+;; Package-Version: 20200119.230
+;; Package-X-Original-Version: 1.4.0
 ;; Package-Requires: ((emacs "26"))
 
 ;; verb is free software; you can redistribute it and/or modify it
@@ -240,9 +240,6 @@ previous requests on new requests.")
 
 (defvar verb--vars nil
   "List of variables set with `verb-var'.")
-
-(defvar verb--debug-enable nil
-  "If non-nil, enable logging debug messages with `verb--debug'.")
 
 (defvar verb-mode-prefix-map
   (let ((map (make-sparse-keymap)))
@@ -694,7 +691,10 @@ If WHERE is `other-window', show the results of the request on another
 window and select it.  If WHERE is `show-window', show the results of
 the request on another window, but keep the current one selected.  If
 WHERE has any other value, show the results of the request in the
-current window.  WHERE defaults to nil."
+current window.  WHERE defaults to nil.
+
+The `verb-post-response-hook' hook is called after a response has been
+received."
   (interactive)
   (verb--request-spec-send (verb--request-spec-from-hierarchy)
 			   where))
@@ -866,12 +866,6 @@ present, return (nil . nil)."
 		(match-string 1 value)))
       (cons nil nil))))
 
-(defun verb--debug (&rest args)
-  "Log ARGS in the debugging buffer using `format'."
-  (when verb--debug-enable
-    (with-current-buffer (get-buffer-create "*verb-debug*")
-      (insert (apply #'format args) "\n"))))
-
 (defun verb--get-handler (content-type handlers-list)
   "Get a handler from HANDLERS-LIST for a specific CONTENT-TYPE.
 CONTENT-TYPE must be the value returned by `verb--headers-content-type'."
@@ -907,7 +901,6 @@ view the HTTP response in a user-friendly way."
 			  (cadr error-info)))
       (kill-buffer (current-buffer))
       (kill-buffer response-buf)
-      (verb--debug "Connection error (from status plist): %s" http-error)
       (user-error "Failed to connect to host %s (port: %s)"
 		  (url-host url) (url-port url))))
 
@@ -936,7 +929,6 @@ view the HTTP response in a user-friendly way."
 
     ;; Read Content-Type and charset
     (setq content-type (verb--headers-content-type headers))
-    (verb--debug "Content-Type: %s" content-type)
 
     ;; Try to get a buffer handler function for this content type
     ;; Binary handlers have priority over text handlers
