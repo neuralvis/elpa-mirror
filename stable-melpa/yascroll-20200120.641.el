@@ -4,7 +4,7 @@
 
 ;; Author: Tomohiro Matsuyama <m2ym.pub@gmail.com>
 ;; Keywords: convenience
-;; Package-Version: 20200120.454
+;; Package-Version: 20200120.641
 ;; Package-Requires: ((cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -226,7 +226,7 @@ not be displayed."
 (defun yascroll:choose-scroll-bar ()
   "Choose scroll bar by fringe position."
   (when (memq window-system yascroll:enabled-window-systems)
-    (cl-destructuring-bind (left-width right-width outside-margins &optional _)
+    (cl-destructuring-bind (left-width right-width outside-margins &rest _)
         (window-fringes)
       (cl-loop for scroll-bar in (yascroll:listify yascroll:scroll-bar)
                if (or (eq scroll-bar 'text-area)
