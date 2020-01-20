@@ -5,7 +5,7 @@
 ;; Filename: centaur-tabs.el
 ;; Description: Provide an out of box configuration to use highly customizable tabs.
 ;; URL: https://github.com/ema2159/centaur-tabs
-;; Package-Version: 20200103.1548
+;; Package-Version: 20200119.2059
 ;; Author: Emmanuel Bustos <ema2159@gmail.com>
 ;; Maintainer: Emmanuel Bustos <ema2159@gmail.com>
 ;; Created: 2019-21-19 22:14:34
@@ -259,17 +259,17 @@ There are two options:
 		 (const :tag "Put bar as an overline" over)))
 
 (defcustom centaur-tabs-set-close-button t
-  "When non nil, display a clickable x button for closing the tabs."
+  "When non nil, display a clickable close button on the right side of the tabs."
   :group 'centaur-tabs
   :type 'boolean)
 
 (defcustom centaur-tabs-set-left-close-button nil
-  "When non nil, display a clickable x button for closing the tabs."
+  "When non nil, display a clickable close button on the left side of the tabs."
   :group 'centaur-tabs
   :type 'boolean)
 
 (defcustom centaur-tabs-close-button (make-string 1 #x00D7)
-  "When non nil, display a clickable x button for closing the tabs."
+  "Display appearance of the close buttons, if enabled."
   :group 'centaur-tabs
   :type 'string)
 
@@ -279,7 +279,17 @@ There are two options:
   :type 'boolean)
 
 (defcustom centaur-tabs-modified-marker (make-string 1 #x23FA)
-  "When non nil, display a marker when the buffer is modified."
+  "Display appearance of the modified marker, if enabled."
+  :group 'centaur-tabs
+  :type 'string)
+
+(defcustom centaur-tabs-left-edge-margin " "
+  "Text to display at the left edge of the tabs, or nil for no added margin."
+  :group 'centaur-tabs
+  :type 'string)
+
+(defcustom centaur-tabs-right-edge-margin " "
+  "Text to display at the right edge of the tabs, or nil for no added margin."
   :group 'centaur-tabs
   :type 'string)
 
@@ -795,6 +805,15 @@ Call `centaur-tabs-tab-label-function' to obtain a label for TAB."
      (centaur-tabs-separator-render centaur-tabs-style-left face)
      bar
 
+     ;; left margin
+     (if centaur-tabs-left-edge-margin
+	 (propertize
+	  centaur-tabs-left-edge-margin
+	  'face face
+	  'centaur-tabs-tab tab
+	  'pointer centaur-tabs-mouse-pointer
+	  'local-map centaur-tabs-default-map))
+
      ;; left close button
      (if centaur-tabs-set-left-close-button
 	 (propertize
@@ -858,12 +877,15 @@ Call `centaur-tabs-tab-label-function' to obtain a label for TAB."
 	    'local-map centaur-tabs-default-map)
 	 ""))
 
-     (propertize
-      " "
-      'face face
-      'centaur-tabs-tab tab
-      'pointer centaur-tabs-mouse-pointer
-      'local-map centaur-tabs-default-map)
+     ;; right margin
+     (if centaur-tabs-right-edge-margin
+	 (propertize
+	  centaur-tabs-right-edge-margin
+	  'face face
+	  'centaur-tabs-tab tab
+	  'pointer centaur-tabs-mouse-pointer
+	  'local-map centaur-tabs-default-map))
+
      (centaur-tabs-separator-render centaur-tabs-style-right face))))
 
 (defsubst centaur-tabs-button-tab (button)
