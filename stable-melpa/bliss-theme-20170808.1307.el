@@ -2,6 +2,7 @@
 ;;
 ;;; Author: Jason Milkins
 ;;; Version: 20141116
+;; Package-Version: 20170808.1307
 ;;; Sublime Text Theme Author: Saad Quadri
 ;;; Url: https://github.com/emacsfodder/tmtheme-to-deftheme
 ;;; Package-Requires: ((emacs "24.0"))
