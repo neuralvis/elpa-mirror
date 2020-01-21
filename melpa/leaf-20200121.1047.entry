@@ -1,2 +1,0 @@
-
-(leaf . [(20200121 1047) ((emacs (24 4))) "Simplify your init.el configuration, extended use-package" single ((:commit . "62cd5ca0ce061c729d599e4e735e6d3687f29338") (:keywords "lisp" "settings") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/leaf.el"))])

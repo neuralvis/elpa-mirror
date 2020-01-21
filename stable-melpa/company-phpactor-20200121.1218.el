@@ -1,12 +1,12 @@
 ;;; company-phpactor.el --- company-mode backend for Phpactor -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Friends of Emacs-PHP development
+;; Copyright (C) 2020  Friends of Emacs-PHP development
 
 ;; Author: Martin Tang <martin.tang365@gmail.com>
 ;;         Mikael Kermorgant <mikael@kgtech.fi>
 ;; Created: 18 Apr 2018
 ;; Version: 0.1.0
-;; Package-Version: 20190823.1219
+;; Package-Version: 20200121.1218
 ;; Keywords: tools, php
 ;; Package-Requires: ((emacs "24.3") (company "0.9.6") (phpactor "0.1.0"))
 ;; URL: https://github.com/emacs-php/phpactor.el
