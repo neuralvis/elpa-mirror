@@ -1,2 +1,2 @@
 
-(thrift . [(20180905 1050) ((emacs (24))) "major mode for fbthrift and Apache Thrift files" single ((:commit . "ed6ae58b298b317b875b04fa0ca6a058254e9fc4") (:keywords "languages"))])
+(thrift . [(20180905 1050) ((emacs (24))) "major mode for fbthrift and Apache Thrift files" single ((:commit . "11f23ab23b10534b7b2f7e978a7fb66167496a25") (:keywords "languages"))])
