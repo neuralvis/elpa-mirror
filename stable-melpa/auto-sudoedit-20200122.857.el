@@ -2,7 +2,7 @@
 
 ;; Author: ncaq <ncaq@ncaq.net>
 ;; Version: 0.0.0
-;; Package-Version: 20190821.209
+;; Package-Version: 20200122.857
 ;; Package-Requires: ((emacs "24.4")(f "0.19.0"))
 ;; URL: https://github.com/ncaq/auto-sudoedit
 
@@ -26,7 +26,7 @@
 
 (defun auto-sudoedit-sudoedit (s)
   "Open sudoedit.  Argument S is path."
-  (interactive (auto-sudoedit-current-path))
+  (interactive (list (auto-sudoedit-current-path)))
   (find-file (auto-sudoedit-tramp-path s)))
 
 (defun auto-sudoedit-should-activate (curr-path)
