@@ -6,7 +6,7 @@
 ;; Maintainer: Federico Tedin <federicotedin@gmail.com>
 ;; Homepage: https://github.com/federicotdn/verb
 ;; Keywords: tools
-;; Package-Version: 20200121.2147
+;; Package-Version: 20200122.119
 ;; Package-X-Original-Version: 2.0.0
 ;; Package-Requires: ((emacs "26"))
 
@@ -310,7 +310,7 @@ comfortably.")
      (,(concat "^\\(" (verb--http-methods-regexp) "\\)\\s-+.+$")
       (1 'verb-http-keyword))
      ;; Content-type: application/json
-     ("^\\([[:alnum:]-]+:\\)\\s-?.*$"
+     ("^\\([[:alnum:]-]+:\\).*$"
       (1 'verb-header))
      ;; "something": 123
      ("\\s-\\(\"[[:graph:]]+?\"\\)\\s-*:."
@@ -335,8 +335,6 @@ more details on how to use it."
   :lighter " Verb"
   :group 'verb
   (when verb-mode
-    (unless (derived-mode-p 'org-mode)
-      (message "%s" "Warning: Verb is only useful on Org mode buffers"))
     (verb--setup-font-lock-keywords)
     (verb--log nil 'I
 	       "Verb mode enabled in buffer: %s"
@@ -354,7 +352,7 @@ more details on how to use it."
   "Major mode for displaying an HTTP response's headers."
   (font-lock-add-keywords
    nil '(;; Key: Value
-	 ("^\\([[:alnum:]-]+:\\)\\s-.+$"
+	 ("^\\([[:alnum:]-]+:\\).*$"
 	  (1 'verb-header)))))
 
 (define-derived-mode verb-log-mode special-mode "Verb[Log]"

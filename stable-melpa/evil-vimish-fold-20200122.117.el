@@ -5,7 +5,7 @@
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/evil-vimish-fold
-;; Package-Version: 20171030.1151
+;; Package-Version: 20200122.117
 ;; Version: 0.3
 ;; Package-Requires: ((emacs "24.4") (evil "1.0.0") (vimish-fold "0.2.0"))
 
@@ -38,6 +38,13 @@
 (require 'evil)
 (require 'vimish-fold)
 (require 'cl-lib)
+
+(defvar evil-vimish-fold-target-modes '(prog-mode)
+  "Major modes in which `evil-vimish-fold-mode' should be activated.
+This is used by `global-evil-vimish-fold-mode'.")
+
+(defvar evil-vimish-fold-mode-lighter " zf"
+  "Mode lighter for evil-vimish-fold Mode.")
 
 (evil-define-operator evil-vimish-fold/create (beg end)
   "Create a fold from the current region.
@@ -84,8 +91,7 @@ See also `evil-create-fold'."
 ;;;###autoload
 (define-minor-mode evil-vimish-fold-mode
   "Evil-vimish-fold-mode."
-  :global t
-  :lighter " zf"
+  :lighter evil-vimish-fold-mode-lighter
   :keymap (let ((map (make-sparse-keymap)))
             (evil-define-key 'normal map "zj" 'evil-vimish-fold/next-fold)
             (evil-define-key 'motion map "zj" 'evil-vimish-fold/next-fold)
@@ -96,7 +102,7 @@ See also `evil-create-fold'."
             (evil-define-key 'motion map "zf" 'evil-vimish-fold/create)
             (evil-define-key 'motion map "zF" 'evil-vimish-fold/create-line)
             map)
-  (vimish-fold-global-mode (if evil-vimish-fold-mode 1 -1))
+  (vimish-fold-mode (if evil-vimish-fold-mode 1 -1))
   (if evil-vimish-fold-mode
       (add-to-list 'evil-fold-list
                    `((vimish-fold-mode)
@@ -110,6 +116,20 @@ See also `evil-create-fold'."
     (setq evil-fold-list (cl-remove-if
                           #'(lambda (e) (eq (caar e) 'vimish-fold-mode))
                           evil-fold-list))))
+;;;###autoload
+(define-globalized-minor-mode global-evil-vimish-fold-mode
+  evil-vimish-fold-mode turn-on-evil-vimish-fold-mode)
+
+;;;###autoload
+(defun turn-on-evil-vimish-fold-mode ()
+  (when (apply 'derived-mode-p evil-vimish-fold-target-modes)
+    (evil-vimish-fold-mode 1)))
+
+;;;###autoload
+(defun turn-off-evil-vimish-fold-mode ()
+  "Turn off `evil-vimish-fold-mode'."
+  (interactive)
+  (evil-vimish-fold-mode -1))
 
 (provide 'evil-vimish-fold)
 
