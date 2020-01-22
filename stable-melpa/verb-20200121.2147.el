@@ -6,9 +6,11 @@
 ;; Maintainer: Federico Tedin <federicotedin@gmail.com>
 ;; Homepage: https://github.com/federicotdn/verb
 ;; Keywords: tools
-;; Package-Version: 20200119.1652
-;; Package-X-Original-Version: 1.4.1
+;; Package-Version: 20200121.2147
+;; Package-X-Original-Version: 2.0.0
 ;; Package-Requires: ((emacs "26"))
+
+;; This file is NOT part of GNU Emacs.
 
 ;; verb is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
@@ -30,7 +32,7 @@
 ;; details.
 
 ;;; Code:
-(require 'outline)
+(require 'org)
 (require 'eieio)
 (require 'subr-x)
 (require 'url)
@@ -40,7 +42,7 @@
 (require 'js)
 
 (defgroup verb nil
-  "A new HTTP client for Emacs."
+  "An HTTP client for Emacs that extends Org mode."
   :prefix "verb-"
   :group 'tools)
 
@@ -192,15 +194,30 @@ response's decoded contents.  The buffer-local `verb-http-response'
 variable will be set to the corresponding `verb-response' object."
   :type 'hook)
 
+(defcustom verb-tag "verb"
+  "Tag used to mark headings that contain HTTP request specs.
+Headings that do not contain this tag will be ignored when building
+requests from heading hierarchies.
+
+If set to t, consider all headings to contain HTTP request specs.
+
+You can set this variable file-locally to use different tags on
+different files, like so:
+
+# -*- verb-tag: \"foo\" -*-
+
+Note that if a heading has a tag, then all its subheadings inherit
+that tag as well.  This can be changed via the
+`org-use-tag-inheritance' variable."
+  :type '(choice (string :tag "verb")
+		 (const :tag "All" t)))
+
 (defface verb-http-keyword '((t :inherit font-lock-constant-face
 				:weight bold))
   "Face for highlighting HTTP methods.")
 
 (defface verb-header '((t :inherit font-lock-constant-face))
   "Face for highlighting HTTP headers.")
-
-(defface verb-comment '((t :inherit font-lock-comment-face))
-  "Face for highlighting comments.")
 
 (defface verb-code-tag '((t :inherit italic))
   "Face for highlighting Lisp code tags.")
@@ -218,7 +235,8 @@ variable will be set to the corresponding `verb-response' object."
   "Face for highlighting E entries in the log buffer.")
 
 (defconst verb--comment-character "#"
-  "Character to use to mark commented lines.")
+  "Character to use to mark commented lines.
+Should be set to the same character Org uses to comment lines.")
 
 (defconst verb--http-methods '("GET" "POST" "DELETE" "PUT"
 			       "OPTIONS" "HEAD" "PATCH"
@@ -238,7 +256,10 @@ E = Error.")
 (defvar-local verb-http-response nil
   "HTTP response for this response buffer (`verb-response' object).
 The decoded body contents of the response are included in the buffer
-itself.")
+itself.
+
+In a response buffer, before the response has been received, this
+variable will be set to t.")
 (put 'verb-http-response 'permanent-local t)
 
 (defvar-local verb--response-headers-buffer nil
@@ -263,6 +284,7 @@ previous requests on new requests.")
 (defvar verb--requests-count 0
   "Number of HTTP requests sent in the past.")
 
+;;;###autoload
 (defvar verb-mode-prefix-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-s") #'verb-send-request-on-point-other-window)
@@ -273,15 +295,9 @@ previous requests on new requests.")
     (define-key map (kbd "C-u") #'verb-export-request-on-point-curl)
     (define-key map (kbd "C-v") #'verb-set-var)
     map)
-  "Prefix map for `verb-mode'.")
-
-(defvar verb-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c C-r") verb-mode-prefix-map)
-    (define-key map (kbd "TAB") #'verb-cycle)
-    (define-key map (kbd "<C-return>") #'verb-insert-heading)
-    map)
-  "Keymap for `verb-mode'.")
+  "Prefix map for `verb-mode'.
+Bind this map to an easy-to-reach key in Org mode in order to use Verb
+comfortably.")
 
 (defun verb--setup-font-lock-keywords ()
   "Configure font lock keywords for `verb-mode'."
@@ -294,11 +310,8 @@ previous requests on new requests.")
      (,(concat "^\\(" (verb--http-methods-regexp) "\\)\\s-+.+$")
       (1 'verb-http-keyword))
      ;; Content-type: application/json
-     ("^\\([[:alnum:]-]+:\\)\\s-.+$"
+     ("^\\([[:alnum:]-]+:\\)\\s-?.*$"
       (1 'verb-header))
-     ;; # This is a comment
-     (,(concat "^\\s-*" verb--comment-character ".*$")
-      (0 'verb-comment))
      ;; "something": 123
      ("\\s-\\(\"[[:graph:]]+?\"\\)\\s-*:."
       (1 'verb-json-key))
@@ -309,24 +322,27 @@ previous requests on new requests.")
 	       (cdr verb-code-tag-delimiters)
 	       "\\).*$")
       (1 'verb-code-tag))))
-  (setq font-lock-keywords-case-fold-search t)
-  (font-lock-ensure)
-  ;; `outline-4' is just `font-lock-comment-face', avoid using that
-  ;; one in heading fonts.
-  (setq-local outline-font-lock-faces
-	      [outline-1 outline-2 outline-3 outline-5
-			 outline-6 outline-7 outline-8]))
+  (font-lock-flush))
 
 ;;;###autoload
-(define-derived-mode verb-mode outline-mode "Verb"
-  "Major mode for organizing and making HTTP requests from Emacs.
+(define-minor-mode verb-mode
+  "Minor mode for organizing and making HTTP requests from Emacs.
+This mode acts as an extension to Org mode.  Make sure you enable it
+on buffers using Org as their major mode.
+
 See the documentation in URL `https://github.com/federicotdn/verb' for
 more details on how to use it."
-  (setq-local comment-start verb--comment-character)
-  (verb--setup-font-lock-keywords))
-
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.verb\\'" . verb-mode))
+  :lighter " Verb"
+  :group 'verb
+  (when verb-mode
+    (unless (derived-mode-p 'org-mode)
+      (message "%s" "Warning: Verb is only useful on Org mode buffers"))
+    (verb--setup-font-lock-keywords)
+    (verb--log nil 'I
+	       "Verb mode enabled in buffer: %s"
+	       (buffer-name))
+    (verb--log nil 'I "Org version: %s, GNU Emacs version: %s"
+	       (org-version) emacs-version)))
 
 (defvar verb-response-headers-mode-map
   (let ((map (make-sparse-keymap)))
@@ -379,16 +395,15 @@ message is logged.  To turn off logging, set `verb-enable-log' to nil."
   (member m verb--http-methods))
 
 (defun verb--http-headers-p (h)
-  "Return non-nil if H is an alist of (HEADER . VALUE) elements.
-HEADER and VALUE must be nonempty strings."
+  "Return non-nil if H is an alist of (KEY . VALUE) elements.
+KEY and VALUE must be strings.  KEY must not be the empty string."
   (when (consp h)
     (catch 'end
       (dolist (elem h)
 	(unless (and (consp elem)
 		     (stringp (car elem))
 		     (stringp (cdr elem))
-		     (< 0 (length (car elem)))
-		     (< 0 (length (cdr elem))))
+		     (not (string-empty-p (car elem))))
 	  (throw 'end nil)))
       t)))
 
@@ -487,6 +502,11 @@ If `verb-enable-log' is nil, do not log anything."
 	(when (> (line-number-at-pos) (1+ line))
 	  (newline))))))
 
+(defun verb--ensure-verb-mode ()
+  "Ensure `verb-mode' is enabled in the current buffer."
+  (unless verb-mode
+    (verb-mode)))
+
 (defun verb--nonempty-string (s)
   "Return S. If S is the empty string, return nil."
   (if (string-empty-p s)
@@ -503,91 +523,55 @@ Do not include text properties."
 Or, move to beggining of this line if it's a heading.  If there are no
 headings, move to the beggining of buffer.  Return t if a heading was
 found."
-  (if (ignore-errors (outline-back-to-heading t))
+  (if (ignore-errors (org-back-to-heading t))
       t
     (goto-char (point-min))
     nil))
-
-(defun verb--section-end ()
-  "Skip forward to before the next heading.
-If there is no next heading, skip to the end of the buffer."
-  (outline-next-preface))
 
 (defun verb--up-heading ()
   "Move to the parent heading, if there is one.
 Return t if there was a heading to move towards to and nil otherwise."
   (let ((p (point)))
     (ignore-errors
-      (outline-up-heading 1 t)
+      (org-up-heading-all 1)
       (not (= p (point))))))
 
-(defun verb--outline-level ()
-  "Return the outline level.
-Level zero indicates that no headings exist."
-  (save-match-data
-    (save-excursion
-      (if (verb--back-to-heading)
-	  (funcall outline-level)
-	0))))
-
-(defun verb--heading-has-content-p ()
-  "Return non-nil if the heading is followed by text contents."
-  (save-match-data
-    (save-excursion
-      (if (verb--back-to-heading)
-	  ;; A heading was found
-	  (let ((line (line-number-at-pos)))
-	    (verb--section-end)
-	    (> (line-number-at-pos) line))
-	;; Buffer has no headings
-	(< 0 (buffer-size))))))
-
-(defun verb-insert-heading ()
-  "Insert a new heading under the current one.
-The new heading will have the same level as the current heading on
-point.  If not currently on a heading, signal an error."
-  (interactive)
-  (unless (outline-on-heading-p)
-    (user-error "%s" "Not currently on a heading"))
-  (let ((line (buffer-substring (line-beginning-position)
-				(line-end-position)))
-	(level (verb--outline-level))
-	(searching t))
-    (while (and searching (outline-next-heading))
-      (when (<= (verb--outline-level) level)
-	(setq searching nil)))
-    (when searching
-      (newline))
-    (insert (progn
-	      (string-match outline-regexp line)
-	      (match-string 0 line))
-	    " ")
-    (unless searching
-      (insert "\n")
-      (forward-line -1)
-      (end-of-line))))
+(defun verb--heading-tags ()
+  "Return all (inherited) tags from current heading."
+  (verb--back-to-heading)
+  (when-let ((tags (org-entry-get (point) "ALLTAGS" t)))
+    (split-string (string-trim tags ":" ":") ":")))
 
 (defun verb--heading-contents ()
-  "Return the heading's text contents.
-Return nil if `verb--heading-has-content-p' returns nil."
-  (when (verb--heading-has-content-p)
-    (let ((start (save-excursion
-		   (when (verb--back-to-heading)
+  "Return the current heading's text contents.
+If no headings exist, return the contents of the entire buffer."
+  (if (verb--back-to-heading)
+      (let ((start (save-excursion
 		     (end-of-line)
-		     (forward-char))
-		   (point)))
-	  (end (save-excursion (verb--section-end) (point))))
-      (buffer-substring-no-properties start end))))
+		     (unless (eobp) (forward-char))
+		     (point)))
+	    (end (save-excursion
+		   (goto-char (org-entry-end-position))
+		   (when (and (org-at-heading-p)
+			      (not (eobp)))
+		     (backward-char))
+		   (point))))
+	(if (<= start end)
+	    (buffer-substring-no-properties start end)
+	  ""))
+    (verb--buffer-string-no-properties)))
 
 (defun verb--request-spec-from-heading ()
   "Return a request spec generated from the heading's text contents.
-Return nil of the heading has no text contents."
-  (let ((text (verb--heading-contents)))
-    (unless (or (null text)
-		(string-empty-p (string-trim text)))
-      (condition-case nil
-	  (verb-request-spec-from-string text)
-	(verb-empty-spec nil)))))
+Return nil if the heading has no text contents, or if the heading does
+not have the tag `verb-tag'."
+  (when (or (member verb-tag (verb--heading-tags))
+	    (eq verb-tag t))
+    (let ((text (verb--heading-contents)))
+      (unless (string-empty-p text)
+	(condition-case nil
+	    (verb-request-spec-from-string text)
+	  (verb-empty-spec nil))))))
 
 (defun verb--request-spec-from-hierarchy ()
   "Return a request spec generated from the headings hierarchy.
@@ -598,7 +582,7 @@ override them in inverse order according to the rules described in
 `verb-request-spec-override'."
   (let (specs done final-spec)
     (save-excursion
-      ;; Go up through the Outline tree taking a request specification
+      ;; Go up through the headings tree taking a request specification
       ;; from each level
       (while (not done)
 	(let ((spec (verb--request-spec-from-heading)))
@@ -612,11 +596,12 @@ override them in inverse order according to the rules described in
 	      ;; Override spec 1 with spec 2, and the result with spec
 	      ;; 3, then with 4, etc.
 	      (setq final-spec (verb-request-spec-override final-spec
-							    spec))))
+							   spec))))
 	  (verb-request-spec-validate final-spec)
 	  final-spec)
-      (user-error "%s" (concat "No request specification found\nTry "
-			       "writing: get https://<hostname>/<path>")))))
+      (user-error (concat "No request specifications found\n"
+			  "Remember to tag your headlines with :%s:")
+		  verb-tag))))
 
 (defun verb--split-window ()
   "Split selected window by its longest side."
@@ -665,35 +650,6 @@ Delete the window only if it isn't the only window in the frame."
   (ignore-errors
     (delete-window)))
 
-(defun verb--heading-invisible-p ()
-  "Return non-nil if the contents of the current heading are invisible."
-  (save-excursion
-    (end-of-line)
-    (outline-invisible-p)))
-
-(defun verb-cycle ()
-  "Cycle the current heading's visibility, like in Org mode.
-If point is not on a heading, emulate a TAB key press."
-  (interactive)
-  (if (outline-on-heading-p)
-      (let ((level (save-excursion
-		     (beginning-of-line)
-		     (outline-level)))
-	    (next-invisible (save-excursion
-			      (and (outline-next-heading)
-				   (verb--heading-invisible-p))))
-	    (next-level (save-excursion
-			  (and (outline-next-heading)
-			       (outline-level)))))
-	(cond
-	 ((verb--heading-invisible-p)
-	  (outline-toggle-children))
-	 ((and next-level (> next-level level) next-invisible)
-	  (outline-show-subtree))
-	 (t
-	  (outline-hide-subtree))))
-    (call-interactively (global-key-binding "\t"))))
-
 (defmacro verb-var (&optional var)
   "Ensure VAR has a value and return it.
 If VAR is unbound, use `read-string' to set its value first."
@@ -710,6 +666,7 @@ been set once with `verb-var'."
   (interactive (list (completing-read "Variable: "
 				      (mapcar #'symbol-name verb--vars)
 				      nil t)))
+  (verb--ensure-verb-mode)
   (set (intern var) (read-string (format "Set value for %s: " var))))
 
 (defun verb-read-file (file)
@@ -760,6 +717,7 @@ Set the buffer's `verb-kill-this-buffer' variable to t."
 	(verb--insert-header-contents headers)
 	(fit-window-to-buffer)))))
 
+;;;###autoload
 (defun verb-send-request-on-point-other-window ()
   "Send the request specified by the selected heading's text contents.
 Show the results on another window and switch to it (use
@@ -767,6 +725,7 @@ Show the results on another window and switch to it (use
   (interactive)
   (verb-send-request-on-point 'other-window))
 
+;;;###autoload
 (defun verb-send-request-on-point-other-window-stay ()
   "Send the request specified by the selected heading's text contents.
 Show the results on another window, but don't switch to it (use
@@ -774,6 +733,7 @@ Show the results on another window, but don't switch to it (use
   (interactive)
   (verb-send-request-on-point 'stay-window))
 
+;;;###autoload
 (defun verb-send-request-on-point (&optional where)
   "Send the request specified by the selected heading's text contents.
 The contents of all parent headings are used as well; see
@@ -788,18 +748,22 @@ current window.  WHERE defaults to nil.
 The `verb-post-response-hook' hook is called after a response has been
 received."
   (interactive)
+  (verb--ensure-verb-mode)
   (verb--request-spec-send (verb--request-spec-from-hierarchy)
 			   where))
 
+;;;###autoload
 (defun verb-kill-all-response-buffers (&optional keep-windows)
   "Kill all response buffers, and delete their windows.
 If KEEP-WINDOWS is non-nil, do not delete their respective windows."
   (interactive)
+  (verb--ensure-verb-mode)
   (dolist (buf (buffer-list))
     (with-current-buffer buf
       (when verb-http-response
 	(verb-kill-response-buffer-and-window keep-windows)))))
 
+;;;###autoload
 (defun verb-export-request-on-point (&optional name)
   "Export the request specification on point.
 Interactively, prompt the user for an export function, and call that
@@ -810,6 +774,7 @@ Lisp, use the export function under NAME.
 No HTTP request will be sent, unless the export function does this
 explicitly.  Lisp code tags will be evaluated before exporting."
   (interactive)
+  (verb--ensure-verb-mode)
   (let ((rs (verb--request-spec-from-hierarchy))
 	(exporter (or name
 		      (completing-read "Export function: "
@@ -819,18 +784,21 @@ explicitly.  Lisp code tags will be evaluated before exporting."
       (funcall fn rs)
       (verb--log nil 'I "Exported request to %s format." exporter))))
 
+;;;###autoload
 (defun verb-export-request-on-point-verb ()
   "Export request on point to verb format.
 See `verb--export-to-verb' for more information."
   (interactive)
   (verb-export-request-on-point "verb"))
 
+;;;###autoload
 (defun verb-export-request-on-point-human ()
   "Export request on point to a human-readable format.
 See `verb--export-to-human' for more information."
   (interactive)
   (verb-export-request-on-point "human"))
 
+;;;###autoload
 (defun verb-export-request-on-point-curl ()
   "Export request on point to curl format.
 See `verb--export-to-curl' for more information."
@@ -936,12 +904,13 @@ is non-nil, do not display a message on the minibuffer."
   (when (< (oref verb-http-response body-bytes)
 	   (or verb-json-max-pretty-print-size 0))
     (unwind-protect
-	(let ((json-pretty-print-max-secs 0))
-	  (buffer-disable-undo)
-	  (json-pretty-print-buffer)
-	  ;; "Use" `json-pretty-print-max-secs' here to avoid byte-compiler warning in
-	  ;; Emacs 26
-	  json-pretty-print-max-secs)
+	(unless (zerop (buffer-size))
+	  (let ((json-pretty-print-max-secs 0))
+	    (buffer-disable-undo)
+	    (json-pretty-print-buffer)
+	    ;; "Use" `json-pretty-print-max-secs' here to avoid byte-compiler warning in
+	    ;; Emacs 26
+	    json-pretty-print-max-secs))
       (buffer-enable-undo))
     (goto-char (point-min))))
 
@@ -1216,6 +1185,15 @@ If a validation does not pass, signal with `user-error'."
 			       "(e.g. \"https://github.com\") in the "
 			       "heading hierarchy")))))
 
+(defun verb--generate-response-buffer ()
+  "Return a new buffer ready to be used as response buffer."
+  (with-current-buffer (generate-new-buffer "*HTTP Response*")
+    ;; Set `verb-http-response's value to something other than nil
+    ;; so that `verb-kill-all-response-buffers' can find it even if
+    ;; no response was ever received.
+    (setq verb-http-response t)
+    (current-buffer)))
+
 (cl-defmethod verb--request-spec-send ((rs verb-request-spec) where)
   "Send the HTTP request described by RS.
 Show the results according to parameter WHERE (see
@@ -1236,7 +1214,7 @@ be loaded into."
 			url-request-extra-headers))
 	 (url-request-data (verb--encode-http-body (oref rs body)
 						   (cdr content-type)))
-	 (response-buf (generate-new-buffer "*HTTP Response*"))
+	 (response-buf (verb--generate-response-buffer))
 	 (num (setq verb--requests-count (1+ verb--requests-count)))
 	 timeout-timer)
     ;; Start the timeout warning timer
@@ -1476,10 +1454,11 @@ Neither request specification is modified, a new one is returned."
   "Return a regexp to match an HTTP method.
 HTTP methods are defined in `verb--http-methods'.
 Additionally, allow matching `verb--template-keyword'."
-  (mapconcat #'identity
-	     (append verb--http-methods
-		     (list verb--template-keyword))
-	     "\\|"))
+  (let ((terms (append verb--http-methods
+		       (mapcar #'downcase verb--http-methods)
+		       (list verb--template-keyword
+			     (downcase verb--template-keyword)))))
+    (mapconcat #'identity terms "\\|")))
 
 (defun verb--eval-string (s)
   "Eval S as Lisp code and return the result.
@@ -1557,44 +1536,63 @@ and fragment component of a URL with no host or schema defined."
   "Request specification has no contents.")
 
 (defun verb-request-spec-from-string (text)
-  "Create a request spec from a string representation, TEXT.
+  "Create and return a request specification from string TEXT.
 
-The text format for defining requests is:
+The text format for request specifications is the following:
 
-[COMMENTS]...
-METHOD [URL | PARTIAL-URL]
-[HEADERS]...
+[COMMENT]...
+METHOD [URL]
+[HEADER]...
 
 [BODY]
 
-COMMENTS must be lines starting with `verb--comment-character'.
-Adding comments is optional.
+Each COMMENT must be a blank line, or a line starting with
+`verb--comment-character' or \":\" (see Org headline property
+syntax).  All comments will be ignored.
+
 METHOD must be a method matched by `verb--http-methods-regexp' (that
 is, an HTTP method or the value of `verb--template-keyword').
+Matching is case-insensitive.
+
 URL can be the empty string, or a URL with an \"http\" or \"https\"
 schema.
 PARTIAL-URL can be the empty string, or the path + query string +
 fragment part of a URL.
-Each line of HEADERS must be in the form of KEY: VALUE.
+
+URL must be a full URL, or a part of it.  If present, the schema must
+be \"http\" or \"https\".  If the schema is not present, the URL will
+be interpreted as a path, plus (if present) query string and fragment.
+Therefore, using just \"example.org\" (note no schema present) as URL
+will result in a URL with its path set to \"example.org\", not its
+host.
+
+Each HEADER must be in the form of KEY: VALUE. KEY must be a nonempty
+string, VALUE can be the nonempty string.
+
 BODY can contain arbitrary text.  Note that there must be a blank
-line between HEADERS and BODY.
+line between the HEADER list and BODY.
 
 As a special case, if the text specification consists exclusively of
 comments and/or whitespace, or is the empty string, signal
 `verb-empty-spec'.
 
-If METHOD could not be matched with `verb--http-methods-regexp',
+If TEXT does not conform to the request specification text format,
 signal an error."
   (let (method url headers body)
     (with-temp-buffer
       (insert text)
       (goto-char (point-min))
 
-      ;; Skip initial blank lines and comments
-      (while (and (re-search-forward (concat "^\\(\\s-*"
-					     verb--comment-character
-					     ".*\\)?$")
-				     (line-end-position) t)
+      ;; Skip initial blank lines, comments and properties
+      (while (and (re-search-forward
+		   (concat "^\\s-*\\(\\("
+			   ;; Headline properties
+			   ":"
+			   "\\|"
+			   ;; Comments
+			   verb--comment-character
+			   "\\).*\\)?$")
+		   (line-end-position) t)
 		  (not (eobp)))
 	(forward-char))
       ;; Check if the entire specification was just comments or empty
@@ -1609,12 +1607,19 @@ signal an error."
 	    (line (verb--eval-lisp-code-in-string
 		   (buffer-substring-no-properties (point)
 						   (line-end-position)))))
-	(when (string-match (concat "^\\s-*\\("
-				    (verb--http-methods-regexp)
-				    "\\)\\s-*\\(.*\\)$")
-			    line)
-	  (setq method (upcase (match-string 1 line))
-		url (match-string 2 line))))
+	(if (string-match (concat "^\\s-*\\("
+				  (verb--http-methods-regexp)
+				  "\\)\\s-+\\(.+\\)$")
+			  line)
+	    ;; Matched method + URL, store them
+	    (setq method (upcase (match-string 1 line))
+		  url (match-string 2 line))
+	  (when (string-match (concat "^\\s-*\\("
+				      (verb--http-methods-regexp)
+				      "\\)\\s-*$")
+			      line)
+	    ;; Matched method only, store it
+	    (setq method (upcase (match-string 1 line))))))
 
       ;; We've processed the URL line, move to the end of it
       (end-of-line)
@@ -1622,8 +1627,7 @@ signal an error."
       (if method
 	  (when (string= method verb--template-keyword)
 	    (setq method nil))
-	(user-error (concat "Could not read a valid HTTP method, "
-			    "valid HTTP methods are: %s\n"
+	(user-error (concat "Could not read a valid HTTP method (%s)\n"
 			    "Additionally, you can also specify %s "
 			    "(matching is case insensitive)")
 		    (mapconcat #'identity verb--http-methods ", ")
@@ -1641,7 +1645,7 @@ signal an error."
 	    ;; Check if line matches KEY: VALUE after evaluating any
 	    ;; present code tags
 	    (setq line (verb--eval-lisp-code-in-string line))
-	    (if (string-match "^\\s-*\\([[:alnum:]-]+\\)\\s-*:\\s-?\\(.*\\)$"
+	    (if (string-match "^\\s-*\\([[:alnum:]-]+\\)\\s-*:\\(.*\\)$"
 			      line)
 		;; Line matches, trim KEY and VALUE and store them
 		(push (cons (string-trim (match-string 1 line))
@@ -1670,7 +1674,7 @@ signal an error."
 	  (setq body rest)))
       ;; Return a `verb-request-spec'
       (verb-request-spec :method method
-			 :url (unless (string-empty-p url)
+			 :url (unless (string-empty-p (or url ""))
 				(verb--clean-url url))
 			 :headers headers
 			 :body body))))
