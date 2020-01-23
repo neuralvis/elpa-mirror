@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200123.1444
+;; Package-Version: 20200123.1545
 ;; Version: 0.4.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -1103,7 +1103,7 @@ between foreground and background is >= 7:1)."
    ;;;; info
    `(Info-quoted ((,class (:foreground ,magenta)))) ; the capitalisation is canonical
    `(info-header-node ((,class (:foreground ,fg-special-warm))))
-   `(info-header-xref ((,class (:foreground ,blue-alt))))
+   `(info-header-xref ((,class (:foreground ,blue-active))))
    `(info-index-match ((,class (:inherit match))))
    `(info-menu-star ((,class (:foreground ,fg-main))))
    `(info-node ((,class ((:weight bold)))))
