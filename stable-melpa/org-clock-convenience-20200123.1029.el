@@ -2,7 +2,7 @@
 
 ;; Author: Derek Feichtinger <dfeich.gmail.com>
 ;; Keywords: org
-;; Package-Version: 20190130.1610
+;; Package-Version: 20200123.1029
 ;; Package-Requires: ((cl-lib "0.5") (org "8") (emacs "24.3"))
 ;; Homepage: https://github.com/dfeich/org-clock-convenience
 ;; Version: 1.2
@@ -218,9 +218,16 @@ associated org agenda file."
 									   org-clock-convenience-tr-re
 									   org-clock-convenience-tr-fields))))
       (org-clock-convenience-goto-agenda-tr-field timefield)
-      (let ((inhibit-read-only t))
+      (let* ((inhibit-read-only t)
+             (props (text-properties-at (point))))
 	(delete-char (length updated-time))
-	(insert (propertize updated-time 'face 'secondary-selection))))
+	(insert (propertize updated-time
+                            'face 'secondary-selection
+                            'org-redo-cmd (plist-get props 'org-redo-cmd)
+                            'org-agenda-type (plist-get props 'org-agenda-type)
+                            'org-last-args (plist-get props 'org-last-args)
+                            'org-series-cmd (plist-get props 'org-series-cmd)
+                            'org-series-redo-cmd (plist-get props 'org-series-redo-cmd)))))
     (goto-char pos)
     )
   )

@@ -1,2 +1,0 @@
-
-(futhark-mode . [(20200120 1644) ((emacs (24 3)) (cl-lib (0 5))) "major mode for editing Futhark source files" tar ((:commit . "72ca7a54ab0293b654b9d1d673e07f057f6aaa9a") (:keywords "languages") (:url . "https://github.com/diku-dk/futhark-mode"))])
