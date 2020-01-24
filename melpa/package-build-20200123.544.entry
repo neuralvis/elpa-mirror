@@ -1,2 +1,0 @@
-
-(package-build . [(20200123 544) ((cl-lib (0 5)) (emacs (24 1))) "Tools for assembling a package archive" tar ((:commit . "c67180d0f116e7203ea19b2aa0f25bbf6d6307e8") (:keywords "tools") (:authors ("Donald Ephraim Curtis" . "dcurtis@milkbox.net")) (:maintainer "Donald Ephraim Curtis" . "dcurtis@milkbox.net"))])

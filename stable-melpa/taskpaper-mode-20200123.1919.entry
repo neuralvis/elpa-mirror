@@ -1,0 +1,2 @@
+
+(taskpaper-mode . [(20200123 1919) nil "Major mode for working with TaskPaper files" single ((:commit . "9df02a1debd3384219189c8d8556e331dc58de75") (:keywords "outlines" "notetaking" "task management" "productivity" "taskpaper") (:authors ("Dmitry Safronov" . "saf.dmitry@gmail.com")) (:maintainer "Dmitry Safronov" . "saf.dmitry@gmail.com") (:url . "https://github.com/saf-dmitry/taskpaper-mode"))])
