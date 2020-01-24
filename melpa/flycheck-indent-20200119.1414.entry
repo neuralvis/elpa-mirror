@@ -1,2 +1,0 @@
-
-(flycheck-indent . [(20200119 1414) ((emacs (25 1)) (indent-lint (1 0 0)) (flycheck (31))) "Indent-lint frontend for flycheck" single ((:commit . "3460eef0e2d7d5a64ebcdd9ac4fc2508750b220e") (:keywords "tools") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/indent-lint.el"))])
