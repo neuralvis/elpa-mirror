@@ -4,7 +4,6 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: tile tiling window manager dynamic frames
-;; Package-Version: 20161225.357
 ;; URL: https://github.com/IvanMalison/tile
 ;; Package-Requires: ((emacs "25.1") (s "1.9.0") (dash "2.12.0") (stream "2.2.3"))
 ;; Version: 0.0.0

@@ -1,2 +1,0 @@
-
-(logview . [(20200119 2239) ((emacs (24 4)) (datetime (0 6 1)) (extmap (1 0))) "Major mode for viewing log files" single ((:commit . "41c759a20cb26418c97807e09d034381070d0311") (:keywords "files" "tools") (:authors ("Paul Pogonyshev" . "pogonyshev@gmail.com")) (:maintainer "Paul Pogonyshev" . "pogonyshev@gmail.com") (:url . "https://github.com/doublep/logview"))])
