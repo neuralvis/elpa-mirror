@@ -11,7 +11,7 @@
 ;; Author: Chris Done <chrisdone@fpcomplete.com>
 ;; Maintainer: Chris Done <chrisdone@fpcomplete.com>
 ;; URL: https://github.com/commercialhaskell/intero
-;; Package-Version: 20191103.1239
+;; Package-Version: 20200125.848
 ;; Created: 3rd June 2016
 ;; Version: 0.1.13
 ;; Keywords: haskell, tools
@@ -1887,7 +1887,7 @@ type as arguments."
                  (lambda (flag)
                    (intero-async-call
                     'backend
-                    (append ":set " flag)))
+                    (concat ":set " flag)))
                  (intero-ghci-output-flags))
                (replace-regexp-in-string
                 "\n$" ""
@@ -2333,7 +2333,7 @@ Uses the default stack config file, or STACK-YAML file if given."
       (set-process-query-on-exit-flag process nil)
       (mapc
        (lambda (flag)
-         (process-send-string process (append ":set " flag "\n")))
+         (process-send-string process (concat ":set " flag "\n")))
        (intero-ghci-output-flags))
       (process-send-string process ":set -fdefer-type-errors\n")
       (process-send-string process ":set -fdiagnostics-color=never\n")
@@ -2669,8 +2669,8 @@ For debugging purposes, try running the following in your terminal:
 (defun intero-ghci-output-flags ()
   "Get the appropriate ghci output flags for the current GHC version"
   (with-current-buffer (intero-buffer 'backend)
-    (let ((current-version (mapcar #'string-to-number (split-string intero-ghc-version "\\."))))
-    (if (intero-version>= '(8 4 1) current-version)
+    (let ((current-version (mapcar #'string-to-number (split-string (intero-ghc-version) "\\."))))
+    (if (intero-version>= current-version '(8 4 1))
         '("-fno-code" "-fwrite-interface")
         '("-fobject-code")))))
 
