@@ -4,7 +4,6 @@
 ;;
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; URL: https://github.com/purcell/less-css-mode
-;; Package-Version: 20161001.453
 ;; Keywords: less css mode
 ;; Version: DEV
 ;;

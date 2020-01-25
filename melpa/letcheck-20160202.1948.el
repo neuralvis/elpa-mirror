@@ -6,7 +6,6 @@
 ;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
 ;; Created: 22 Jan 2013
 ;; Version: 0.4
-;; Package-Version: 20160202.1948
 ;; Keywords: convenience
 ;; URL: https://github.com/Fuco1/letcheck
 
