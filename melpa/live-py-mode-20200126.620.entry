@@ -1,2 +1,0 @@
-
-(live-py-mode . [(20200126 620) ((emacs (24 3))) "Live Coding in Python" tar ((:commit . "a2081115251ed24505a141d8939ffcfb64325a06") (:keywords "live" "coding") (:authors ("Don Kirkby http://donkirkby.github.io")) (:maintainer "Don Kirkby http://donkirkby.github.io") (:url . "http://donkirkby.github.io/live-py-plugin/"))])

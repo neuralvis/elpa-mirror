@@ -4,7 +4,7 @@
 ;;         Christian Schwarzgruber
 
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20200111.919
+;; Package-Version: 20200126.1647
 ;; Version: 2.1.0
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -158,6 +158,20 @@ to be done manually by calling `org-journal-invalidate-cache'."
           (const :tag "Weekly" weekly)
           (const :tag "Monthly" monthly)
           (const :tag "Yearly" yearly)))
+
+(defcustom org-journal-start-on-weekday 1
+  "What day of the week to start a weekly journal.
+
+When `org-journal-file-type' is set to 'weekly, start the week on
+this day.  Default is Monday."
+  :type '(choice
+	  (const :tag "Sunday" 0)
+	  (const :tag "Monday" 1)
+	  (const :tag "Tuesday" 2)
+	  (const :tag "Wednesday" 3)
+	  (const :tag "Thursday" 4)
+	  (const :tag "Friday" 5)
+	  (const :tag "Saturday" 6)))
 
 (defcustom org-journal-dir "~/Documents/journal/"
   "Directory containing journal entries.
@@ -433,11 +447,22 @@ the first date of the year."
     (`daily time)
     ;; Round to the monday of the current week, e.g. 20181231 is the first week of 2019
     (`weekly
-     (let ((date
-            (calendar-gregorian-from-absolute
-             (calendar-iso-to-absolute
-              (mapcar 'string-to-number
-                      (split-string (format-time-string "%V 1 %G" time) " "))))))
+     (let* ((absolute-monday
+	     (calendar-iso-to-absolute
+	      (mapcar 'string-to-number
+		      (split-string (format-time-string "%V 1 %G" time) " "))))
+	    (absolute-now
+	     (calendar-absolute-from-gregorian
+	      (mapcar 'string-to-number
+		      (split-string (format-time-string "%m %d %Y" time) " "))))
+	    (target-date
+	     (+ absolute-monday
+		(- org-journal-start-on-weekday 1)))
+	    (date
+             (calendar-gregorian-from-absolute
+              (if (> target-date absolute-now)
+		  (- target-date 7)
+		target-date))))
        (encode-time 0 0 0 (nth 1 date) (nth 0 date) (nth 2 date))))
     ;; Round to the first day of the month, e.g. 20190301
     (`monthly
