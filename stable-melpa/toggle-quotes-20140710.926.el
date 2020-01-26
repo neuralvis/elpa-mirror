@@ -4,6 +4,7 @@
 
 ;; Author: Jim Tian <tianjin.sc@gmail.com>
 ;; URL: https://github.com/toctan/toggle-quotes.el
+;; Package-Version: 20140710.926
 ;; Version: 0.1.0
 ;; Keywords: convenience, quotes
 

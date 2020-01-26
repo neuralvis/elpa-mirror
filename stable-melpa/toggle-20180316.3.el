@@ -5,6 +5,7 @@
 ;; Author: Ryan Davis <ryand-ruby@zenspider.com>
 ;; Version 1.3.1
 ;; Keywords: files, extensions, convenience
+;; Package-Version: 20180316.3
 ;; Created: 2006-03-22
 ;; Compatibility: Emacs 22, 21?
 ;; URL(en): http://seattlerb.rubyforge.org/
@@ -162,3 +163,5 @@ match is found, switches to that buffer."
       (message (concat "Match not found for " (buffer-file-name))))))
 
 (provide 'toggle)
+
+;;; toggle.el ends here
