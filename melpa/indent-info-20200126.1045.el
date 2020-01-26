@@ -5,7 +5,7 @@
 
 ;; Author: Terje Larsen <terlar@gmail.com>
 ;; URL: https://github.com/terlar/indent-info.el
-;; Package-Version: 20200126.938
+;; Package-Version: 20200126.1045
 ;; Keywords: convenience, tools
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "24.3"))
@@ -45,7 +45,7 @@
 
 (defcustom indent-info-insert-target 'mode-line-position
   "Target list for insertion of the indentation information."
-  :type 'symbol
+  :type 'variable
   :group 'indent-info)
 
 (defcustom indent-info-insert-position 'before

@@ -1,2 +1,0 @@
-
-(indent-info . [(20200126 938) ((emacs (24 3))) "Show indentation information in status bar" single ((:commit . "17ef047dde7e1e343ce79da5e5b3a2f0a0ac65ef") (:keywords "convenience" "tools") (:authors ("Terje Larsen" . "terlar@gmail.com")) (:maintainer "Terje Larsen" . "terlar@gmail.com") (:url . "https://github.com/terlar/indent-info.el"))])
