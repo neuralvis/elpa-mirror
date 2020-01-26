@@ -7,7 +7,7 @@
 ;; Description: Grammarly API interface.
 ;; Keyword: grammar api interface english
 ;; Version: 0.1.2
-;; Package-Version: 20200105.125
+;; Package-Version: 20200126.420
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6") (s "1.12.0") (request "0.3.0") (websocket "1.6"))
 ;; URL: https://github.com/jcs-elpa/grammarly
 
@@ -79,20 +79,14 @@
     ("id" . 0))
   "Grammarly request package definition.")
 
-(defcustom grammarly-on-message-function-list '()
-  "List of callback function when execute on message."
-  :type 'list
-  :group 'grammarly)
+(defvar grammarly-on-message-function-list '()
+  "List of callback function when execute on message.")
 
-(defcustom grammarly-on-open-function-list '()
-  "List of callback function when execute on open."
-  :type 'list
-  :group 'grammarly)
+(defvar grammarly-on-open-function-list '()
+  "List of callback function when execute on open.")
 
-(defcustom grammarly-on-close-function-list '()
-  "List of callback function when execute on close."
-  :type 'list
-  :group 'grammarly)
+(defvar grammarly-on-close-function-list '()
+  "List of callback function when execute on close.")
 
 (defvar grammarly--text ""
   "Current text that are going to check for.")

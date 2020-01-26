@@ -1,7 +1,7 @@
 ;;; extempore-mode.el --- Emacs major mode for Extempore source files
 ;; Author: Ben Swift <ben@benswift.me>
 ;; Keywords: Extempore
-;; Package-Version: 20200119.102
+;; Package-Version: 20200126.401
 ;; Version: 1.0
 ;; Keywords: lisp, extempore
 ;; URL: http://github.com/extemporelang/extempore-emacs-mode
@@ -1076,7 +1076,10 @@ If there is a process already running in `*extempore*', switch to that buffer.
                          extempore-path "")
                      "extempore") nil
              (split-string-and-unquote program-args))
-      (inferior-extempore-mode)))
+      (inferior-extempore-mode)
+	  ;; so as to not annoy evil users
+	  (when (fboundp 'evil-force-normal-state)
+		(evil-force-normal-state))))
   (setq extempore-buffer "*extempore*"))
 
 (defun extempore-stop ()
