@@ -1,0 +1,2 @@
+
+(horizon-theme . [(20200123 1735) ((emacs (24 3))) "A beautifully warm dual theme" single ((:commit . "b3644b00c5c39d18ccf41826cc01f2b516b9b460") (:url . "https://github.com/aodhneine/horizon-theme.el"))])
