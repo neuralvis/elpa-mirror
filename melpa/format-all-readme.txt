@@ -43,6 +43,7 @@ Supported languages:
 - Perl (perltidy)
 - PHP (prettier plugin-php)
 - Protocol Buffers (clang-format)
+- PureScript (purty)
 - Python (black)
 - R (styler)
 - Ruby (rufo)
