@@ -6,7 +6,6 @@
 
 ;; Author: rubikitch <rubikitch@ruby-lang.org>
 ;; Keywords: languages
-;; Package-Version: 20140201.2342
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/download/archive-region.el
 
 ;; This file is free software; you can redistribute it and/or modify
