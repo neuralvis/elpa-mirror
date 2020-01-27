@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20200111.1418
+;; Package-Version: 20200127.131
 ;; Version: 0.1.3
 ;; Keywords: ivy
 
@@ -396,7 +396,7 @@ or /a/…/f.el."
 ;; Supports for `counsel-M-x', `counsel-describe-function', `counsel-describe-variable'
 (defun ivy-rich-counsel-function-docstring (candidate)
   (let ((doc (replace-regexp-in-string
-              ":\\(\\(before\\|after\\)\\(-\\(whilte\\|until\\)\\)?\\|around\\|override\\|\\(filter-\\(args\\|return\\)\\)\\) advice:[ ]*‘.+?’[\r\n]+"
+              ":\\(\\(before\\|after\\)\\(-\\(while\\|until\\)\\)?\\|around\\|override\\|\\(filter-\\(args\\|return\\)\\)\\) advice:[ ]*‘.+?’[\r\n]+"
               ""
               (or (ignore-errors (documentation (intern-soft candidate))) ""))))
     (if (string-match "^\\(.+\\)\\([\r\n]\\)?" doc)

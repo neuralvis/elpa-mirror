@@ -4,7 +4,7 @@
 ;;
 ;; Author:     Rustem Muslimov <r.muslimov@gmail.com>
 ;; Version:    0.13.0
-;; Package-Version: 20190213.1929
+;; Package-Version: 20200127.145
 ;; Keywords:   github, gitlab, bitbucket, gist, stash, phabricator, sourcehut
 ;; Package-Requires: ((f "0.17.2") (s "1.9.0") (cl-lib "0.5"))
 
@@ -409,8 +409,7 @@ Currently the same as for github."
        (if (eq (char-before point-end) ?\n) (- point-end 1) point-end))))
 
    ;; We're inside of file-attached buffer without region
-   (buffer-file-name
-    (browse-at-remote--file-url (buffer-file-name) (point)))
+   (buffer-file-name (browse-at-remote--file-url (buffer-file-name)))
 
    (t (error "Sorry, I'm not sure what to do with this."))))
 
