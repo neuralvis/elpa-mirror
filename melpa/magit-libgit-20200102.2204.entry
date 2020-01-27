@@ -1,2 +1,2 @@
 
-(magit-libgit . [(20200102 2204) ((emacs (26 1)) (magit (0)) (libgit (0))) "Libgit functionality" single ((:commit . "04933c61a7b85f84e890e8f97146f05ea424983d") (:keywords "git" "tools" "vc") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/magit"))])
+(magit-libgit . [(20200102 2204) ((emacs (26 1)) (magit (0)) (libgit (0))) "Libgit functionality" single ((:commit . "e5e475c61ce568a7e20ed8f795fa343a93632871") (:keywords "git" "tools" "vc") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/magit"))])
