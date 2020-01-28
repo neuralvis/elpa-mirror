@@ -4,7 +4,7 @@
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
 ;; Version: 0.4.2
-;; Package-Version: 20191121.840
+;; Package-Version: 20200128.1208
 ;; Package-Requires: ((emacs "24.3"))
 ;; URL: https://github.com/unhammer/org-mru-clock
 ;; Keywords: convenience, calendar
@@ -137,7 +137,7 @@ agenda files, or you can use your own file filter."
 (defun org-mru-clock-exclude-done-and-archived ()
   "Example function for `org-mru-clock-predicate', excluding DONE and :ARCHIVE:."
   (not (or (org-entry-is-done-p)
-           (member org-archive-tag (org-get-tags-at)))))
+           (member org-archive-tag (org-get-tags)))))
 
 (defun org-mru-clock-take (n l)
   "Take N elements from list L."
@@ -284,9 +284,26 @@ e.g.
 
 will capture anything that starts with a number followed by space
 with the \"a\" template, and anything else with the \"b\"
-template.  The first matching regex is used."
+template.  The first matching regex is used.
+
+If you only use the key \"a\" for tasks captured with
+org-mru-clock, you may want to add it to
+`org-capture-templates-contexts' with `org-mru-clock-capturing',
+e.g.
+
+ (setq org-capture-templates-contexts
+       '((\"a\" (org-mru-clock-capturing)))"
   :group 'org-mru-clock
   :type '(alist :key-type string :value-type string))
+
+(defvar org-mru-clock--capturing nil
+  "This is true while we are capturing a new task.")
+
+(defun org-mru-clock-capturing ()
+  "Return non-nil iff we are capturing a new task.
+For use as an `org-capture-templates-contexts' for the templates
+in your `org-mru-clock-capture-if-no-match'."
+  org-mru-clock--capturing)
 
 (defun org-mru-clock--capture (initial)
   "Create a new task from the text entered.
@@ -299,7 +316,8 @@ that as the %i capture text."
              do
              (when (string-match-p (car c) initial)
                (setq matched t)
-               (let ((org-capture-initial initial))
+               (let ((org-capture-initial initial)
+                     (org-mru-clock--capturing t))
                  (org-capture nil (cdr c)))))
     (unless matched
       (error "`org-mru-clock--capture' called, but `org-mru-clock-capture-if-no-match' is nil"))))

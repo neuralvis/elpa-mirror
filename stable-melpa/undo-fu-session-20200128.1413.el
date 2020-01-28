@@ -6,7 +6,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu-session
-;; Package-Version: 20200128.641
+;; Package-Version: 20200128.1413
 ;; Keywords: convenience
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.1"))
@@ -59,7 +59,10 @@
   :type 'boolean)
 
 (defcustom undo-fu-session-incompatible-files '()
-  "List of regexps or functions for matching file names to ignore for undo session."
+  "List of REGEXP or FUNCTION for matching files to ignore for undo session.
+
+The REGEXP match the filename only (without the directory component),
+while a FUNCTION receives the full path."
   :group 'undo-fu-session
   :type '(repeat (choice regexp function)))
 
@@ -292,12 +295,15 @@ Argument PENDING-LIST an `pending-undo-list'. compatible list."
 (defun undo-fu-session--match-file-name (filename test-files)
   "Return t if FILENAME match any item in TEST-FILES."
   (catch 'found
-    (dolist (matcher test-files)
-      (when
-        (if (stringp matcher)
-          (string-match-p matcher filename)
-          (funcall matcher filename))
-        (throw 'found t)))))
+    (let ((filename-only (file-name-nondirectory filename)))
+      (dolist (matcher test-files)
+        (when
+          (cond
+            ((stringp matcher)
+              (string-match-p matcher filename-only))
+            (t
+              (funcall matcher filename)))
+          (throw 'found t))))))
 
 (defun undo-fu-session--recover-buffer-p (buffer)
   "Return t if undo data of BUFFER should be recovered."
