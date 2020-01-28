@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 1.1.0
-;; Package-Version: 20200124.1736
+;; Version: 1.1.2
+;; Package-Version: 20200128.1555
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "25.1") (async-await "1.0") (async "1.9.4"))
 ;; URL: https://github.com/conao3/indent-lint.el
@@ -43,6 +43,11 @@
 Function will be called with 2 variables; `(,raw-buffer ,indent-buffer)."
   :group 'indent-lint
   :type 'function)
+
+(defcustom indent-lint-popup t
+  "If non-nil, popup diff buffer."
+  :group 'indent-lint
+  :type 'boolean)
 
 (defcustom indent-lint-verbose t
   "If non-nil, output diff verbose."
@@ -218,7 +223,8 @@ Function will be called with 2 variables; `(,raw-buffer ,indent-buffer)."
                        (current-time-string)))
               (special-mode)
               (diff-mode)
-              (display-buffer output-buf)
+              (when indent-lint-popup
+                (display-buffer output-buf))
               `(,code ,output-buf))))
       (error
        (pcase err
@@ -249,6 +255,14 @@ Function will be called with 2 variables; `(,raw-buffer ,indent-buffer)."
                      (insert output)
                      output-buf))))))))
 
+;;;###autoload
+(defun indent-lint-file (filepath)
+  "Return promise to run `indent-lint' for FILEPATH."
+  (if (not (file-readable-p filepath))
+      (promise-reject `(fail-file-readable ,filepath))
+    (let ((buf (find-file-noselect filepath)))
+      (indent-lint buf))))
+
 (defun indent-lint-batch ()
   "Run `indent-lint--sync' and output diff to standard output.
 Use this only with --batch, it won't work interactively.
@@ -270,6 +284,7 @@ Usage:
     (error "`indent-lint-batch' can be used only with --batch"))
   (require 'package)
   (let ((indent-lint-verbose nil)
+        (indent-lint-popup nil)
         (exitcode 0))
     (dolist (filepath command-line-args-left)
       (let* ((buf (find-file-noselect filepath 'nowarn))

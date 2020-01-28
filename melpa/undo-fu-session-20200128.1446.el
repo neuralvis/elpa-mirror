@@ -6,7 +6,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu-session
-;; Package-Version: 20200128.1413
+;; Package-Version: 20200128.1446
 ;; Keywords: convenience
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.1"))
