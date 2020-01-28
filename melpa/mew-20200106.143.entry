@@ -1,2 +1,2 @@
 
-(mew . [(20200106 143) nil "Messaging in the Emacs World" tar ((:commit . "59634471e9b626ad47f1237c0e935ec03f557bf8") (:authors ("Kazu Yamamoto" . "Kazu@Mew.org")) (:maintainer "Kazu Yamamoto" . "Kazu@Mew.org"))])
+(mew . [(20200106 143) nil "Messaging in the Emacs World" tar ((:commit . "ffd7cc167a327be18430a08da671a0838d0ecac2") (:authors ("Kazu Yamamoto" . "Kazu@Mew.org")) (:maintainer "Kazu Yamamoto" . "Kazu@Mew.org"))])
