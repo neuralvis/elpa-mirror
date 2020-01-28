@@ -1,2 +1,0 @@
-
-(undo-fu-session . [(20200127 1052) ((emacs (24 1))) "Persistent undo, available between sessions" single ((:commit . "0368c07614beb8bae797e322916af733124c2dd6") (:keywords "convenience") (:authors ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Campbell Barton" . "ideasman42@gmail.com") (:url . "https://gitlab.com/ideasman42/emacs-undo-fu-session"))])
