@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20191204.111
+;; Package-Version: 20200129.522
 ;; Version: 0.1.13
 ;; Package-Requires: ((emacs "25.1") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
@@ -75,7 +75,6 @@
   :group 'anaconda-mode
   :type 'integer)
 
-
 ;;; Compatibility
 
 ;; Functions from posframe which is an optional dependency
@@ -83,9 +82,7 @@
 (declare-function posframe-hide "posframe")
 (declare-function posframe-show "posframe")
 
-
 ;;; Server.
-
 (defvar anaconda-mode-server-version "0.1.13"
   "Server version needed to run `anaconda-mode'.")
 
@@ -500,7 +497,7 @@ number position, column number position and file path."
   (let ((url-request-method "POST")
         (url-request-data (anaconda-mode-jsonrpc-request command)))
     (url-retrieve
-     (format "http://localhost:%s" (anaconda-mode-port))
+     (format "http://%s:%s" anaconda-mode-localhost-address (anaconda-mode-port))
      (anaconda-mode-create-response-handler callback)
      nil
      t)))
