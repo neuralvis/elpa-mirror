@@ -4,7 +4,7 @@
 
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/anaconda-mode
-;; Package-Version: 20200129.522
+;; Package-Version: 20200129.1718
 ;; Version: 0.1.13
 ;; Package-Requires: ((emacs "25.1") (pythonic "0.1.0") (dash "2.6.0") (s "1.9") (f "0.16.2"))
 
@@ -549,7 +549,9 @@ number position, column number position and file path."
                       (let* ((error-structure (cdr (assoc 'error response)))
                              (error-message (cdr (assoc 'message error-structure)))
                              (error-data (cdr (assoc 'data error-structure)))
-                             (error-template (if error-data "%s: %s" "%s")))
+                             (error-template (concat (if error-data "%s: %s" "%s")
+                                                     " - see " anaconda-mode-process-buffer
+                                                     " for more information.")))
                         (apply 'message error-template (delq nil (list error-message error-data))))
                     (with-current-buffer anaconda-mode-request-buffer
                       (let ((result (cdr (assoc 'result response))))

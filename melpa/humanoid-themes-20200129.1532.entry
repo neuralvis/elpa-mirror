@@ -1,0 +1,2 @@
+
+(humanoid-themes . [(20200129 1532) ((emacs (24 3))) "Color themes with a dark and light variant" tar ((:commit . "eeaa0db460dde1dda544565841a67cbc59f1dea1") (:keywords "faces" "color" "theme") (:authors ("Thomas Friese")) (:maintainer "Thomas Friese") (:url . "https://github.com/humanoid-colors/emacs-humanoid-themes"))])
