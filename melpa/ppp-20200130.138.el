@@ -4,7 +4,7 @@
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Version: 1.1.4
-;; Package-Version: 20200129.2144
+;; Package-Version: 20200130.138
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/conao3/ppp.el
@@ -306,7 +306,7 @@ It should be either :debug, :warning, :error, or :emergency." pkg)
 Optional arguments LEVEL is pop level for backtrace."
   (let ((trace-str (format "(%s)" (with-output-to-string (backtrace))))
         trace)
-    (setq trace (cdr (read trace-str)))   ; drop `backtrace' symbol
+    (setq trace (cdr (ignore-errors (read trace-str))))   ; drop `backtrace' symbol
     (let (tmp)
       (dotimes (_i (or level 1))
         (while (listp (setq tmp (pop trace)))))
