@@ -4,10 +4,10 @@
 
 ;; Author: Leo Littlebook <Leo.Littlebook@gmail.com>
 ;; Keywords: outlines, files, convenience
-;; Package-Version: 20200126.647
+;; Package-Version: 20200131.621
 ;; Package-Requires: ((emacs "26.1") (dash "2.16.0") (f "0.20.0") (org "9.2.6") (avy "0.5.0"))
 ;; URL: https://github.com/cyberthal/treefactor
-;; Version: 3.2.0
+;; Version: 3.2.1
 
 ;;; Commentary:
 
@@ -54,6 +54,7 @@
 (defvar user-home-directory) ; Spacemacs variable
 (defvar isearch-string)
 (defvar dired-isearch-filenames)
+(defvar org-id-extra-files)
 
 ;; *** customization
 
@@ -79,7 +80,7 @@ Do not set to treefactor or it will cause an infinite loop."
 Do not set to treefactor or it will cause an infinite loop."
   :type 'string)
 
-;; **** Org Agenda
+;; **** Org search scope
 
 (defcustom treefactor-org-agenda-dir nil
   "Directory of variable `org-agenda-files'. Requires quotes and trailing slash."
@@ -691,7 +692,7 @@ else `user-home-directory'."
   (interactive)
 
   (setq org-agenda-files nil)
-  (setq org-agenda-text-search-extra-files nil))
+  (setq org-id-extra-files nil))
 
 ;; ***** Refresh
 
@@ -710,7 +711,7 @@ else `user-home-directory'."
   (setq org-agenda-files
         (directory-files-recursively treefactor-org-agenda-dir "org$"))
 
-  (setq org-agenda-text-search-extra-files
+  (setq org-id-extra-files
         (directory-files-recursively treefactor-org-id-extra-dir ".org$")))
 
 ;; ** Library

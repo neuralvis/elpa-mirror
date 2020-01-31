@@ -1,10 +1,10 @@
 ;;; org-working-set.el --- Manage a working-set of org-nodes  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019 Free Software Foundation, Inc.
+;; Copyright (C) 2019-2020 Free Software Foundation, Inc.
 
 ;; Author: Marc Ihm <1@2484.de>
 ;; URL: https://github.com/marcIhm/org-working-set
-;; Package-Version: 20200130.1643
+;; Package-Version: 20200131.428
 ;; Version: 1.2.0
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -157,7 +157,7 @@
 (defconst org-working-set--menu-buffer-name "*working-set of org-nodes*" "Name of buffer with list of working-set nodes.")
 
 ;; Version of this package
-(defvar org-working-set-version "1.0.4" "Version of `org-ẃorking-set', format is major.minor.bugfix, where \"major\" are incompatible changes and \"minor\" are new features.")
+(defvar org-working-set-version "1.2.0" "Version of `org-ẃorking-set', format is major.minor.bugfix, where \"major\" are incompatible changes and \"minor\" are new features.")
 
 ;; customizable options
 (defgroup org-working-set nil
@@ -218,7 +218,7 @@ Remark: Depending on your needs you might also find these packages
 interesting for providing somewhat similar functionality: org-now and
 org-mru-clock.
 
-This is version 1.0.4 of org-working-set.el.
+This is version 1.2.0 of org-working-set.el.
 
 The subcommands allow to:
 - Modify the list of nodes (e.g. add new nodes)
@@ -311,6 +311,7 @@ Optional argument SILENT does not issue final message."
 
            ((eq char ?l)
             (org-id-goto org-working-set-id)
+            (org-working-set--unfold-buffer)
             (org-end-of-meta-data t)
             "log of additions to working set")
 
@@ -326,21 +327,22 @@ Optional argument SILENT does not issue final message."
 
 (defun org-working-set--add-to-log (id name)
   "Add entry into working-set node."
-  (let (marker)
-    (unless (setq marker (org-id-find org-working-set-id 'marker))
-      (error "Could not find node for working-set history id %s" org-working-set-id))
+  (let ((bp (org-working-set--id-bp)))
     (save-excursion
-      (set-buffer (marker-buffer marker))
-      (goto-char (marker-position marker))
+      (set-buffer (car bp))
+      (goto-char (cdr bp))
       (org-end-of-meta-data t)
+      (when (org-at-heading-p)
+        (insert "\n\n")
+        (forward-line -2))
       (if (looking-at "^[[:blank:]]*$")
           (forward-line))
+      (insert "\n")
+      (forward-line -1)
+      (org-indent-line) ; works best on empty line
       (insert "- ")
       (org-insert-time-stamp nil nil t)
-      (insert (format " [[id:%s][%s]]\n" id name))
-      (forward-line -1)
-      (org-indent-line))
-    (move-marker marker nil)))
+      (insert (format "     [[id:%s][%s]]" id name)))))
 
 
 (defun org-working-set--circle-start ()

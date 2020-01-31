@@ -3,7 +3,7 @@
 
 ;; Author: Kenshi Muto <kmuto@kmuto.jp>
 ;; URL: https://github.com/kmuto/review-el
-;; Package-Version: 20191227.1255
+;; Package-Version: 20200131.122
 
 ;;; Commentary:
 
@@ -87,7 +87,7 @@
 
 (declare-function skk-mode "skk-mode")
 
-(defconst review-version "1.14"
+(defconst review-version "1.15"
   "編集モードバージョン")
 
 ;;;; Custom Variables
@@ -629,7 +629,7 @@ Key bindings:
       (save-restriction
 	(narrow-to-region (region-beginning) (region-end))
 	(goto-char (point-min))
-	(if (string-match "}" (buffer-substring (region-beginning) (region-end)))
+	(if (string-match "}" (buffer-string))
 	    (progn
               (insert "@<m>$")
               (goto-char (point-max))
