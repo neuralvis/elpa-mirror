@@ -5,7 +5,7 @@
 ;; Authors: Zachary Elliott <contact@zell.io>
 ;; Maintainer: Zachary Elliott <contact@zell.io>
 ;; URL: http://github.com/zellio/ansible-vault-mode
-;; Package-Version: 20191123.1919
+;; Package-Version: 20200130.2300
 ;; Created: 2016-09-25
 ;; Version: 0.4.0
 ;; Keywords: ansible, ansible-vault, tools
@@ -70,7 +70,7 @@ you for a password."
 (defvar ansible-vault--file-header "$ANSIBLE_VAULT;1.1;AES256"
   "`ansible-vault' file header for identification of encrypted buffers.
 
-This will probably change at somepoint in the future and break
+This will probably change at some point in the future and break
 everything and that will be sad.")
 
 (defvar ansible-vault--point 0
@@ -125,15 +125,15 @@ The command \"ansible-vault\" is called with the same arguments whether
 decrypting, encrypting a file, or encrypting a string.  This function
 generates the shell string for any such command.
 
-SUBCOMMAND is the \"ansible-vault\" sucommand to use.
+SUBCOMMAND is the \"ansible-vault\" subcommand to use.
 
-PASS-FILE is the path to the vault password file on disk"
+PASS-FILE is the path to the vault password file on disk."
   (concat (format "%s %s --output=-" ansible-vault-command subcommand) " "
           (when pass-file (format "--vault-password-file=%S" pass-file))))
 
 (defun ansible-vault--process-config-files ()
   "Attempts to discover if vault_password_file is defined in any
-known Ansible Vault configration file.
+known Ansible Vault configuration file.
 
 This function is patching over the fact that ansible-vault cannot
 handle multiple definitions for vault_password_file.  This means
@@ -162,9 +162,9 @@ commandline flag for it."
   "Attempts to locate an already configured password file.
 
 Ansible Vault has several locations to store the location of its password
-file.  This method searchs several of them in order of: the ENV var
+file.  This method searches several of them in order of: the ENV var
 ANSIBLE_VAULT_PASSWORD_FILE, the ansible vault configuration files, and the
-minor-mode configured vaule.  If that fails, it will prompt the user for
+minor-mode configured value.  If that fails, it will prompt the user for
 input."
   (interactive)
   (let ((env-val (getenv "ANSIBLE_VAULT_PASSWORD_FILE")))
@@ -174,10 +174,10 @@ input."
     ))
 
 (defun ansible-vault--request-password ()
-  "Requests vault password form the user.
+  "Requests vault password from the user.
 
-This method writes the password to disk temporarily.  The file is
-chowned to 0600."
+This method writes the password to disk temporarily.  The file's permission
+is set to 0600."
   (interactive)
   (unless ansible-vault--password
     (setq-local ansible-vault--password (read-passwd "Vault password: "))
@@ -206,7 +206,7 @@ chowned to 0600."
          (setenv ,env ,env-val)))))
 
 (defun ansible-vault--execute-on-region (command &optional start end buffer error-buffer)
-  "In place exection of a given COMMAND using `ansible-vault'.
+  "In place execution of a given COMMAND using `ansible-vault'.
 
 START defaults to `point-min'.
 END defaults to `point-max'.
@@ -289,7 +289,7 @@ ERROR-BUFFER defaults to `ansible-vault--error-buffer'."
 (defun ansible-vault--before-save-hook ()
   "`before-save-hook' for files managed by `ansible-vault-mode'.
 
-Saves the current position and encrpyts the file before writing
+Saves the current position and encrypts the file before writing
 to disk."
   (setq-local ansible-vault--point (point))
   (ansible-vault-encrypt-current-buffer))

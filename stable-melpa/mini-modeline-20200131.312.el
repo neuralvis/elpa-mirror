@@ -4,7 +4,7 @@
 
 ;; Author:  Kien Nguyen <kien.n.quang@gmail.com>
 ;; URL: https://github.com/kiennq/emacs-mini-modeline
-;; Package-Version: 20191006.1733
+;; Package-Version: 20200131.312
 ;; Version: 0.1
 ;; Keywords: convenience, tools
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))
@@ -150,21 +150,20 @@ When ARG is:
                 (when (or (memq arg '(force clear))
                           (mini-modeline--overduep mini-modeline--last-update
                                                    mini-modeline-update-interval))
-                  (let ((msg (or mini-modeline--msg-message (current-message))))
-                    (when msg
-                      ;; Clear echo area and start new timer for echo message
-                      ;; (mini-modeline--log "msg: %s\n" msg)
-                      ;; (mini-modeline--log "from: %s\n" mini-modeline--msg-message)
-                      (message nil)
-                      (setq mini-modeline--last-echoed (current-time))
-                      ;; we proritize the message from `message'
-                      ;; or the message when we're not in middle of a command running.
-                      (when (or mini-modeline--msg-message
-                                (eq mini-modeline--command-state 'begin))
-                        (setq mini-modeline--command-state 'exec)
-                        ;; Don't echo keystrokes when in middle of command
-                        (setq echo-keystrokes 0))
-                      (setq mini-modeline--msg msg)))
+                  (when-let ((msg (or mini-modeline--msg-message (current-message))))
+                    ;; Clear echo area and start new timer for echo message
+                    ;; (mini-modeline--log "msg: %s\n" msg)
+                    ;; (mini-modeline--log "from: %s\n" mini-modeline--msg-message)
+                    (message nil)
+                    (setq mini-modeline--last-echoed (current-time))
+                    ;; we proritize the message from `message'
+                    ;; or the message when we're not in middle of a command running.
+                    (when (or mini-modeline--msg-message
+                              (eq mini-modeline--command-state 'begin))
+                      (setq mini-modeline--command-state 'exec)
+                      ;; Don't echo keystrokes when in middle of command
+                      (setq echo-keystrokes 0))
+                    (setq mini-modeline--msg msg))
                   ;; Reset echo message when timeout and not in middle of command
                   (when (and mini-modeline--msg
                              (not (eq mini-modeline--command-state 'exec))
@@ -199,7 +198,7 @@ When ARG is:
 
 (defun mini-modeline-msg ()
   "Place holder to display echo area message."
-  mini-modeline--msg)
+  `(format "%s" mini-modeline--msg))
 
 (defsubst mini-modeline--lr-render (left right)
   "Render the LEFT and RIGHT part of mini-modeline."
@@ -250,7 +249,7 @@ Return value is (STRING . LINES)."
 (defmacro mini-modeline--wrap (func &rest body)
   "Add an advice around FUNC with name mini-modeline--%s.
 BODY will be supplied with orig-func and args."
-  (let* ((name (intern (format "mini-modeline--%s" func))))
+  (let ((name (intern (format "mini-modeline--%s" func))))
     `(advice-add #',func :around
                  (lambda (orig-func &rest args)
                    ,@body)
