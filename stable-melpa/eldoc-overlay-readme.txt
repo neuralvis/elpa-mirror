@@ -22,8 +22,5 @@ By default, the overlay is not used in the minibuffer, eldoc is shown in the mod
 in this case.  Set the option `eldoc-overlay-in-minibuffer-flag' non-nil if you want
 to enable overlay use in the minibuffer.
 
-The key used to toggle the mode can be customized by setting the `eldoc-overlay-key'
-option.
-
 Finally, see the documentation for `eldoc-overlay-backend' if you want to try
 a different overlay display package backend.

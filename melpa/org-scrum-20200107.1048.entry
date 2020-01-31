@@ -1,2 +1,0 @@
-
-(org-scrum . [(20200107 1048) ((emacs (24 5)) (org (8 2)) (seq (2 3)) (cl-lib (1 0))) "org mode extensions for scrum planning and reporting" single ((:commit . "227de5157d9dea4fb52527d3a30a61969731a040") (:authors ("Ian Martins" . "ianxm@jhu.edu")) (:maintainer "Ian Martins" . "ianxm@jhu.edu") (:url . "https://github.com/ianxm/emacs-scrum"))])
