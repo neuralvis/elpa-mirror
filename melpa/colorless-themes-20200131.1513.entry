@@ -1,0 +1,2 @@
+
+(colorless-themes . [(20200131 1513) nil "A macro to generate mostly colorless themes" single ((:commit . "5f95c9ce8e8b9de8359d345a4fb9ced45c6c390b") (:keywords "themes" "faces") (:authors ("Thomas Letan" . "contact@thomasletan.fr")) (:maintainer "Thomas Letan" . "contact@thomasletan.fr") (:url . "https://git.sr.ht/~lthms/colorless-themes.el"))])
