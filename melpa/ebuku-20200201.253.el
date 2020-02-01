@@ -2,12 +2,11 @@
 
 ;; Copyright (C) 2019-2020  Alexis <flexibeast@gmail.com>, Erik Sjöstrand <sjostrand.erik@gmail.com>
 
-;; Author: Alexis <flexibeast@gmail.com>
-;;         Erik Sjöstrand <sjostrand.erik@gmail.com>
+;; Author: Alexis <flexibeast@gmail.com>, Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2019-11-07
 ;; URL: https://github.com/flexibeast/ebuku
-;; Package-Version: 20200118.328
+;; Package-Version: 20200201.253
 ;; Keywords: bookmarks,buku,data,web,www
 ;; Version: 0
 ;; Package-Requires: ((emacs "25.1"))
@@ -101,7 +100,10 @@
 
 ;; * which bookmarks to show on startup;
 
-;; * the maximum number of bookmarks to show; and
+;; * the maximum number of bookmarks to show;
+
+;; * whether to automatically retrieve URL metadata when adding a
+;;   bookmark; and
 
 ;; * the faces used by Ebuku.
 
@@ -183,6 +185,11 @@ Specify `\\='all' for all bookmarks; `\\='recent' for recent additions; or
 
 Set this variable to 0 for no maximum."
   :type 'integer
+  :group 'ebuku)
+
+(defcustom ebuku-retrieve-url-metadata t
+  "Whether to automatically retrieve URL metadata when adding a bookmark."
+  :type 'boolean
   :group 'ebuku)
 
 
@@ -554,19 +561,45 @@ Each bookmark is an alist with the keys 'title 'url 'index 'tags 'comment.")
 (defun ebuku-add-bookmark ()
   "Add a bookmark to the buku database."
   (interactive)
-  (let ((title (read-from-minibuffer "Bookmark title? "))
-        (url (read-from-minibuffer "Bookmark URL? "))
-        (tags (read-from-minibuffer "Bookmark tag(s)? "))
-        (comment (read-from-minibuffer "Bookmark comment? ")))
-    (with-temp-buffer
-      (if (ebuku--call-buku `("--add" ,url
-                              "--title" ,title
-                              "--tag" ,tags
-                              "--comment" ,comment))
-          (progn
-            (ebuku-refresh)
-            (message "Bookmark added."))
-        (error "Failed to add bookmark")))))
+  (let ((url "")
+        (index "")
+        (title "")
+        (tags "")
+        (comment ""))
+    (setq url (read-from-minibuffer "Bookmark URL? "))
+    (if ebuku-retrieve-url-metadata
+        (with-temp-buffer
+          (if (ebuku--call-buku `("--add" ,url))
+              (progn
+                (goto-char (point-min))
+                (re-search-forward "^\\([[:digit:]]+\\)\\. \\(.+\\)$")
+                (setq index (match-string 1))
+                (setq title (match-string 2))
+                (if (re-search-forward "^\\s-+\\+ \\(.+\\)$" nil t)
+                    (setq comment (match-string 3))))
+            (error "Failed to add bookmark"))))
+    (setq title (read-from-minibuffer "Bookmark title? " title))
+    (setq tags (read-from-minibuffer "Bookmark tag(s)? " tags))
+    (setq comment (read-from-minibuffer "Bookmark comment? " comment))
+    (if ebuku-retrieve-url-metadata
+        (with-temp-buffer
+          (if (ebuku--call-buku `("--update" ,index
+                                  "--title" ,title
+                                  "--comment" ,comment
+                                  "--tag" ,tags))
+              (progn
+                (ebuku-refresh)
+                (message "Bookmark added."))
+            (error "Failed to modify bookmark metadata")))
+      (with-temp-buffer
+        (if (ebuku--call-buku `("--add" ,url
+                                "--title" ,title
+                                "--tag" ,tags
+                                "--comment" ,comment))
+            (progn
+              (ebuku-refresh)
+              (message "Bookmark added."))
+          (error "Failed to add bookmark"))))))
 
 (defun ebuku-delete-bookmark ()
   "Delete a bookmark from the buku database.
@@ -581,8 +614,8 @@ otherwise, ask for the index of the bookmark to delete."
       (if bookmark
           (let ((title (cdr (assoc 'title bookmark))))
             (if (y-or-n-p (concat "Delete bookmark \"" title "\"? "))
-                (ebuku--delete-bookmark-helper index))))
-      (error (concat "Failed to get bookmark data for index " index)))))
+                (ebuku--delete-bookmark-helper index)))
+        (error (concat "Failed to get bookmark data for index " index))))))
 
 (defun ebuku-edit-bookmark ()
   "Edit a bookmark in the buku database.
@@ -616,8 +649,8 @@ otherwise, ask for the index of the bookmark to edit."
                     (progn
                       (ebuku-refresh)
                       (message "Bookmark updated."))
-                  (error "Failed to update bookmark")))))
-        (error (concat "Failed to get bookmark data for index " index))))))
+                  (error "Failed to update bookmark"))))
+          (error (concat "Failed to get bookmark data for index " index)))))))
 
 (defun ebuku-gather-bookmarks (&optional type term exclude)
   "Return a list of bookmarks.

@@ -3,10 +3,10 @@
 ;; Copyright (C) 2015-2019 Free Software Foundation, Inc.
 ;; Author: Vitalie Spinu <spinuvit@gmail.com>
 ;; URL: https://github.com/vspinu/company-math
-;; Package-Version: 20190507.2006
+;; Package-Version: 20200131.2337
 ;; Keywords:  Unicode, symbols, completion
-;; Version: 1.3
-;; Package-Requires: ((company "0.8.0") (math-symbol-lists "1.2"))
+;; Version: 1.4
+;; Package-Requires: ((company "0.8.0") (math-symbol-lists "1.3"))
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
