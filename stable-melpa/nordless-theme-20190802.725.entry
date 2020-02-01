@@ -1,2 +1,2 @@
 
-(nordless-theme . [(20190802 725) ((colorless-themes (0 1))) "A colorless theme inspired by nord" single ((:commit . "5f95c9ce8e8b9de8359d345a4fb9ced45c6c390b") (:keywords "theme") (:authors ("Thomas Letan" . "contact@thomasletan.fr")) (:maintainer "Thomas Letan" . "contact@thomasletan.fr") (:url . "https://git.sr.ht/~lthms/colorles-themes.el"))])
+(nordless-theme . [(20190802 725) ((colorless-themes (0 1))) "A colorless theme inspired by nord" single ((:commit . "5359d6f731936945322e0c83595bb7716bfc7683") (:keywords "theme") (:authors ("Thomas Letan" . "contact@thomasletan.fr")) (:maintainer "Thomas Letan" . "contact@thomasletan.fr") (:url . "https://git.sr.ht/~lthms/colorles-themes.el"))])
