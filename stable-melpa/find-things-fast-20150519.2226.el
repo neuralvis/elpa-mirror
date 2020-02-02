@@ -6,6 +6,7 @@
 
 ;; Author: Elvio Toccalino and Elliot Glaysher and Phil Hagelberg and Doug Alcorn
 ;; URL:
+;; Package-Version: 20150519.2226
 ;; Version: 1.0
 ;; Created: 2010-02-19
 ;; Keywords: project, convenience
