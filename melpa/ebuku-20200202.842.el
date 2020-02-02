@@ -6,7 +6,7 @@
 ;; Maintainer: Alexis <flexibeast@gmail.com>
 ;; Created: 2019-11-07
 ;; URL: https://github.com/flexibeast/ebuku
-;; Package-Version: 20200201.253
+;; Package-Version: 20200202.842
 ;; Keywords: bookmarks,buku,data,web,www
 ;; Version: 0
 ;; Package-Requires: ((emacs "25.1"))
@@ -572,6 +572,11 @@ Each bookmark is an alist with the keys 'title 'url 'index 'tags 'comment.")
           (if (ebuku--call-buku `("--add" ,url))
               (progn
                 (goto-char (point-min))
+                (if (re-search-forward
+                     "already exists at index \\([[:digit:]]+\\)" nil t)
+                    (user-error (concat
+                                 "Bookmark already exists at index "
+                                 (match-string 1))))
                 (re-search-forward "^\\([[:digit:]]+\\)\\. \\(.+\\)$")
                 (setq index (match-string 1))
                 (setq title (match-string 2))
