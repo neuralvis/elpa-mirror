@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 1.1.6
-;; Package-Version: 20200201.1608
+;; Version: 1.2.0
+;; Package-Version: 20200202.308
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/conao3/ppp.el
@@ -41,7 +41,8 @@
 
 (defcustom ppp-indent-spec
   '((0 . (_ unwind-protect))
-    (1 . (_ lambda if condition-case not null car cdr goto-char 1+ 1-))
+    (1 . (_ lambda if condition-case not null car cdr 1+ 1-
+            goto-char goto-line))
     (2 . (_ closure defcustom))
     (3 . (_ macro)))
   "Special indent specification.
@@ -100,16 +101,16 @@ You can customize each variable like ppp-minimum-warning-level--{{pkg}}."
 (defvar-local ppp-buffer-using nil
   "If non-nil, curerntly using *ppp-debug* buffer.")
 
-(defmacro with-ppp--debug-working-buffer (form &rest body)
+(defmacro with-ppp--working-buffer-debug (form &rest body)
   "Insert FORM, execute BODY, return `buffer-string'.
 Unlike `with-ppp--working-buffer', use existing buffer instead of temp buffer."
   (declare (indent 1) (debug t))
   `(let ((bufname "*ppp-debug*")
          newbuf)
-     (with-current-buffer bufname
-       (when ppp-buffer-using
-         (setq newbuf (generate-new-buffer bufname))
-         (set-buffer newbuf))
+     (with-current-buffer
+         (if ppp-buffer-using
+             (get-buffer (setq newbuf (generate-new-buffer-name bufname)))
+           (get-buffer-create bufname))
        (erase-buffer)
        (unwind-protect
            (let ((ppp-buffer-using t))
@@ -169,14 +170,14 @@ See `ppp-plist' to get more info."
 
 ;;;###autoload
 (defmacro ppp-symbol-function-to-string (form)
-  "Output the pretty-printed representation of FORM suitable for list.
+  "Output the pretty-printed representation of FORM suitable for symbol-function.
 See `ppp-symbol-funciton' to get more info."
   `(with-output-to-string
-     (ppp-symbol-funciton ,form)))
+     (ppp-symbol-function ,form)))
 
 ;;;###autoload
 (defmacro ppp-symbol-value-to-string (form)
-  "Output the pretty-printed representation of FORM suitable for plist.
+  "Output the pretty-printed representation of FORM suitable for symbol-value.
 See `ppp-symbol-value' to get more info."
   `(with-output-to-string
      (ppp-symbol-value ,form)))
@@ -201,48 +202,62 @@ See `ppp-symbol-value' to get more info."
   (memq (char-before) '(?\s ?\t ?\n)))
 
 ;;;###autoload
+(defun ppp-buffer ()
+  "Prettify the current buffer with printed representation of a Lisp object.
+ppp version of `pp-buffer'."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (not (eobp))
+      ;; (message "%06d" (- (point-max) (point)))
+      (let* ((sexp (sexp-at-point))
+             (indent (or (car
+                          (cl-find-if
+                           (lambda (elm) (memq sexp (cdr elm)))
+                           ppp-indent-spec))
+                         (when (symbolp sexp)
+                           (plist-get (symbol-plist sexp)
+                                      'lisp-indent-function)))))
+        (cond
+         ((integerp indent)
+          (forward-sexp)
+          (when (not (eobp))
+            (condition-case _
+                (dotimes (_ indent)
+                  (skip-chars-forward " \t\n")
+                  (let ((child (ppp--delete-last-newline
+                                (ppp-sexp-to-string
+                                 (sexp-at-point)))))
+                    (delete-region (point) (progn (forward-sexp) (point)))
+                    (insert child)))
+              (scan-error nil)))
+          (insert "\n"))
+         ((ignore-errors (down-list) t)
+          (save-excursion
+            (backward-char)
+            (skip-chars-backward "'`#^")
+            (when (and (not (bobp)) (ppp--space-before-p))
+              (ppp--delete-spaces-at-point)
+              (insert "\n"))))
+         ((ignore-errors (up-list) t)
+          (skip-syntax-forward ")")
+          (ppp--delete-spaces-at-point)
+          (insert "\n"))
+         (t (goto-char (point-max)))))))
+  (let ((inhibit-message t))
+    (indent-region (point-min) (point-max)))
+
+  ;; with-ppp-working-buffer post process (could use ppp-buffer only)
+  (delete-trailing-whitespace)
+  (while (re-search-forward "^ *)" nil t)
+    (delete-region (line-end-position 0) (1- (point)))))
+
+;;;###autoload
 (defun ppp-sexp (form)
   "Output the pretty-printed representation of FORM suitable for objects."
   (prog1 nil
     (let ((str (with-ppp--working-buffer form
-                 ;; `pp-buffer'
-                 (while (not (eobp))
-                   ;; (message "%06d" (- (point-max) (point)))
-                   (let* ((sexp (sexp-at-point))
-                          (indent (or (car
-                                       (cl-find-if
-                                        (lambda (elm) (memq sexp (cdr elm)))
-                                        ppp-indent-spec))
-                                      (when (symbolp sexp)
-                                        (plist-get (symbol-plist sexp)
-                                                   'lisp-indent-function)))))
-                     (cond
-                      ((integerp indent)
-                       (forward-sexp)
-                       (condition-case _
-                         (dotimes (_ indent)
-                           (skip-chars-forward " \t\n")
-                           (let ((child (ppp--delete-last-newline
-                                         (ppp-sexp-to-string
-                                          (sexp-at-point)))))
-                             (delete-region (point) (progn (forward-sexp) (point)))
-                             (insert child)))
-                         (scan-error nil))
-                       (insert "\n"))
-                      ((ignore-errors (down-list) t)
-                       (save-excursion
-                         (backward-char)
-                         (skip-chars-backward "'`#^")
-                         (when (and (not (bobp)) (ppp--space-before-p))
-                           (ppp--delete-spaces-at-point)
-                           (insert "\n"))))
-                      ((ignore-errors (up-list) t)
-                       (skip-syntax-forward ")")
-                       (ppp--delete-spaces-at-point)
-                       (insert "\n"))
-                      (t (goto-char (point-max))))))
-                 (goto-char (point-min))
-                 (indent-sexp))))
+                 (ppp-buffer))))
       (princ str))))
 
 ;;;###autoload
@@ -281,16 +296,16 @@ Unlike `ppp-macroexpand', use `macroexpand-all' instead of `macroexpand-1'."
       (princ (concat str "\n")))))
 
 ;;;###autoload
-(defmacro ppp-symbol-funciton (fn)
-  "Output `symbol-function' for FN."
-  (let ((fn* (if (symbolp fn) fn (eval fn))))
-    `(ppp-sexp (symbol-function ',fn*))))
+(defmacro ppp-symbol-function (form)
+  "Output `symbol-function' for FORM."
+  (let ((form* (if (symbolp form) form (eval form))))
+    `(ppp-sexp (symbol-function ',form*))))
 
 ;;;###autoload
-(defmacro ppp-symbol-value (var)
-  "Output `symbol-value' for FN."
-  (let ((fn* (if (symbolp var) var (eval var))))
-    `(ppp-sexp (symbol-value ',fn*))))
+(defmacro ppp-symbol-value (form)
+  "Output `symbol-value' for FORM."
+  (let ((form* (if (symbolp form) form (eval form))))
+    `(ppp-sexp (symbol-value ',form*))))
 
 (defun ppp--define-warning-level-symbol (sym pkg)
   "Define SYM as variable if not defined for PKG."
