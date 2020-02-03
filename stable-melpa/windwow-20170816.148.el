@@ -4,6 +4,7 @@
 
 ;; Author: Viju Mathew <viju.jm@gmail.com>
 ;; Version: 0.1
+;; Package-Version: 20170816.148
 ;; Created: 12 May 2017
 ;; Package-Requires: ((dash "2.11.0") (cl-lib "0.6.1") (emacs "24"))
 ;; Keywords: frames
