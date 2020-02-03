@@ -1,0 +1,2 @@
+
+(wgrep-pt . [(20200128 109) ((wgrep (2 1 5))) "Writable pt buffer and apply the changes to files" single ((:commit . "e67e737184ee26483cf893d5fc4e9b7ead6e410f") (:keywords "grep" "edit" "extensions") (:authors ("Masahiro Hayashi <mhayashi1120@gmail.com>, Bailey Ling" . "bling@live.ca")) (:maintainer "Masahiro Hayashi <mhayashi1120@gmail.com>, Bailey Ling" . "bling@live.ca") (:url . "http://github.com/mhayashi1120/Emacs-wgrep/raw/master/wgrep-pt.el"))])

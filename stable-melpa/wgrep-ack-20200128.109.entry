@@ -1,0 +1,2 @@
+
+(wgrep-ack . [(20200128 109) ((wgrep (2 1 1))) "Writable ack-and-a-half buffer and apply the changes to files" single ((:commit . "e67e737184ee26483cf893d5fc4e9b7ead6e410f") (:keywords "grep" "edit" "extensions") (:authors ("Masahiro Hayashi" . "mhayashi1120@gmail.com")) (:maintainer "Masahiro Hayashi" . "mhayashi1120@gmail.com") (:url . "http://github.com/mhayashi1120/Emacs-wgrep/raw/master/wgrep-ack.el"))])

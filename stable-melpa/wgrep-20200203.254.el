@@ -1,11 +1,13 @@
 ;;; wgrep.el --- Writable grep buffer and apply the changes to files
 
+;; Copyright (C) 2010-2020 Masahiro Hayashi
+
 ;; Author: Masahiro Hayashi <mhayashi1120@gmail.com>
 ;; Keywords: grep edit extensions
-;; Package-Version: 20181229.40
+;; Package-Version: 20200203.254
 ;; URL: http://github.com/mhayashi1120/Emacs-wgrep/raw/master/wgrep.el
 ;; Emacs: GNU Emacs 25 or later
-;; Version: 2.3.0
+;; Version: 2.3.1
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -22,10 +24,15 @@
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
+;; Copyright (C) 2002-2009 Matsushita Akihisa <akihisa@mail.ne.jp>
+
 ;;; Commentary:
 
+;; ## Summary:
+
 ;; wgrep allows you to edit a grep buffer and apply those changes to
-;; the file buffer.
+;; the file buffer like `sed` interactively. No need to learn sed
+;; script, just learn Emacs.
 
 ;; ## Install:
 
@@ -62,14 +69,33 @@
 ;;
 ;;     (setq wgrep-enable-key "r")
 
-;; * To apply all changes wheather or not buffer is read-only.
+;; * To apply all changes regardless of whether or not buffer is read-only.
 ;;
 ;;     (setq wgrep-change-readonly-file t)
 
+;; ### Trivial features:
+
+;; - wdired.el like interface.
+;; - Support GNU grep `--context` (`-A` `-B` and `-C`) option.
+;; - Can handle too many files.
+;; - Can handle newline insertion in *grep* buffer.
+;; - Delete whole line include newline.
+
+;; ### Similar softwares:
+
+;; [GNU sed](https://www.gnu.org/software/sed/)
+;; [helm-ag](https://github.com/syohex/emacs-helm-ag) has a similar feature.
+
 ;; ## History:
 
-;; This program is a forked version. the original version can be downloaded from
-;; http://www.bookshelf.jp/elc/grep-edit.el
+;; This program was forked from Matsushita Akihisa's [grep-edit.el
+;; v2.11](http://www.bookshelf.jp/elc/grep-edit.el).  As this website is
+;; now inaccessible,
+;; [emacswiki.org's](https://www.emacswiki.org/emacs/grep-edit.el) copy
+;; may be consulted.
+
+;; Imported version can be downloaded from this orphan commit:
+;; https://github.com/mhayashi1120/Emacs-wgrep/tree/import-original-author/
 
 ;; Following added implementations and differences.
 ;; * Support GNU grep context option -A -B and -C
