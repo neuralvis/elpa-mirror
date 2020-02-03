@@ -2,7 +2,7 @@
 
 ;; Author: jixiuf  jixiuf@qq.com
 ;; Keywords: vterm terminals
-;; Package-Version: 20191209.928
+;; Package-Version: 20200203.1603
 ;; Version: 0.0.3
 ;; URL: https://github.com/jixiuf/vterm-toggle
 ;; Package-Requires: ((emacs "25.1") (vterm "0.0.1"))
@@ -51,13 +51,6 @@
   "Hooks when hide vterm buffer."
   :group 'vterm-toggle
   :type 'symbolp)
-
-(defcustom vterm-toggle-prompt-regexp
-  (concat "\\(?:^\\|\r\\)"
-	      "[^]#$%>\n]*#?[#$%➜⇒»☞@λ] *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*")
-  "Vterm prompt regexp."
-  :group 'vterm-toggle
-  :type 'string)
 
 (defcustom vterm-toggle-fullscreen-p t
   "Open vterm buffer fullscreen or not."
@@ -186,7 +179,11 @@ Optional argument ARGS optional args."
           (when (and (not (funcall vterm-toggle--vterm-buffer-p-function args))
                      (not (get-buffer-window shell-buffer)))
             (setq vterm-toggle--window-configration (current-window-configuration)))
-          (pop-to-buffer shell-buffer)
+          (if vterm-toggle-fullscreen-p
+              (progn
+                (delete-other-windows)
+                (switch-to-buffer shell-buffer))
+            (pop-to-buffer shell-buffer))
           (with-current-buffer shell-buffer
             (when (derived-mode-p 'vterm-mode)
               (setq vterm-toggle--cd-cmd cd-cmd)
@@ -199,11 +196,10 @@ Optional argument ARGS optional args."
               (when (and (not (equal vterm-dir dir))
                          (equal vterm-host cur-host)
                          make-cd
-                         (vterm-toggle--accept-cmd-p))
+                         (vterm--at-prompt-p))
                 (vterm-toggle-insert-cd)))
             (run-hooks 'vterm-toggle-show-hook))
-          (when vterm-toggle-fullscreen-p
-            (delete-other-windows)))
+          )
       (setq vterm-toggle--window-configration (current-window-configuration))
       (with-current-buffer (setq shell-buffer (vterm-toggle--new))
         (vterm-toggle--wait-prompt)
@@ -267,20 +263,6 @@ after you have toggle to the vterm buffer with `vterm-toggle'."
       (vterm)
     (vterm-other-window)))
 
-(defun vterm-toggle--skip-prompt ()
-  "Skip past the text matching regexp `vterm-toggle-prompt-regexp'.
-If this takes us past the end of the current line, don't skip at all."
-  (let ((eol (line-end-position)))
-    (when (and (looking-at vterm-toggle-prompt-regexp)
-	           (<= (match-end 0) eol))
-      (goto-char (match-end 0)))))
-
-(defun vterm-toggle--accept-cmd-p ()
-  "Check whether the vterm can accept user comand."
-  (save-excursion
-    (goto-char (point-at-bol))
-    (vterm-toggle--skip-prompt)))
-
 
 (defun vterm-toggle--get-buffer(&optional make-cd ignore-prompt-p args)
   "Get vterm buffer.
@@ -323,7 +305,7 @@ Optional argument ARGS optional args."
                   (setq vterm-host host))
               (setq vterm-host (system-name)))
             (when (and (or ignore-prompt-p
-                           (vterm-toggle--accept-cmd-p))
+                       (vterm--at-prompt-p))
                        (equal buffer-host vterm-host))
               (unless shell-buffer
                 (setq shell-buffer buf))))

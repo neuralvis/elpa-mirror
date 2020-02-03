@@ -4,8 +4,7 @@
 ;; Matthew K. Junker
 
 ;; Author: Matthew K. Junker <junker@alum.mit.edu>
-;; Package-Version: 20171020.1019
-;; Package-X-Original-Version: 20171020.51809
+;; Package-Version: 20171020.51809
 ;; Keywords: local, docs
 
 ;; This file is free software; you can redistribute it and/or modify

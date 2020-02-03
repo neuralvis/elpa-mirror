@@ -2,7 +2,6 @@
 
 ;; Author: Matt Russell <matt@mgrbyte.co.uk>
 ;; Version: 0.7
-;; Package-Version: 20170808.1345
 ;; Filename: abyss-theme.el
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: theme, dark, contrasting colours
