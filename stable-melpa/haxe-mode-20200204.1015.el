@@ -3,13 +3,13 @@
 ;; Author: Jens Peter Secher (original)
 ;; Maintainer: Jen-Chieh Shen <jcs090218@gmail.com>
 ;; URL: https://github.com/elpa-host/haxe-mode
-;; Package-Version: 20190703.619
+;; Package-Version: 20200204.1015
 ;; Version: 0.3.2
 
 ;;; Commentary:
 
 ;; ------------------------------------------------------------------------
-;; Copyright (C) 2019  Shen, Jen-Chieh
+;; Copyright (C) 2006-2007 Jens Peter Secher
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
