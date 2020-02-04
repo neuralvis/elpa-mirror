@@ -14,8 +14,15 @@ Usage:
 
   Step 2, Use Ctags to create tags file and enjoy.
 
-You can also turn on `company-ctags-support-etags' to support tags
+Tips:
+
+- Turn on `company-ctags-support-etags' to support tags
 file created by etags.  But it will increase initial loading time.
 
-Make sure `diff-command' is executable on Windows.  You might need install GNU Diff.
-It optional but highly recommended.  It can speed up tags file updating.
+- Set `company-ctags-extra-tags-files' to load extra tags files,
+
+  (setq company-ctags-extra-tags-files '("$HOME/TAGS" "/usr/include/TAGS"))
+
+- Make sure CLI program diff is executable on Windows.
+It's optional but highly recommended.  It can speed up tags file updating.
+This package uses diff through variable `diff-command'.
