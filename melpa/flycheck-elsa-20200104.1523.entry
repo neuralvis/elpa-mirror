@@ -1,2 +1,0 @@
-
-(flycheck-elsa . [(20200104 1523) ((emacs (25)) (seq (2 0))) "Flycheck for Elsa." tar ((:commit . "4796cdae375f51e8364660518c2948b8a90bcd40") (:keywords "convenience") (:authors ("Matúš Goljer" . "matus.goljer@gmail.com")) (:maintainer "Matúš Goljer" . "matus.goljer@gmail.com") (:url . "https://github.com/emacs-elsa/flycheck-elsa"))])
