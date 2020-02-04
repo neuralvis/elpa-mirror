@@ -1,0 +1,2 @@
+
+(flyspell-correct-helm . [(20200204 521) ((flyspell-correct (0 6 1)) (helm (1 9 0)) (emacs (24))) "Correcting words with flyspell via helm interface" single ((:commit . "c6b558714464f98ef512fc1c80a72e1f83a7b8fd") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
