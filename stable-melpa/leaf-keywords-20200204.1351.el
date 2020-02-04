@@ -5,8 +5,8 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; Keywords: lisp settings
-;; Package-Version: 20191123.1814
-;; Version: 1.3.2
+;; Package-Version: 20200204.1351
+;; Version: 1.3.3
 ;; URL: https://github.com/conao3/leaf-keywords.el
 ;; Package-Requires: ((emacs "24.4") (leaf "3.5.0"))
 
@@ -108,6 +108,9 @@
    :hydra      (progn
                  (leaf-register-autoload (cadr leaf--value) leaf--name)
                  `(,@(mapcar (lambda (elm) `(defhydra ,@elm)) (car leaf--value)) ,@leaf--body))
+   :transient  (progn
+                 ;; (leaf-register-autoload (cadr leaf--value) leaf--name)
+                 `(,@(mapcar (lambda (elm) `(define-transient-command ,@elm)) (car leaf--value)) ,@leaf--body))
    :combo      (progn
                  (leaf-register-autoload (cadr leaf--value) leaf--name)
                  `(,@(mapcar (lambda (elm) `(key-combo-define ,@elm)) (car leaf--value)) ,@leaf--body))
@@ -208,6 +211,23 @@
                       (progn (mapc (lambda (el) (setq fns (append fns (funcall fn el)))) elm) elm))
                      ((listp elm)
                       (progn (setq fns (append fns (funcall fn elm))) `(,elm)))))
+                  leaf--value))
+       `(,val ,fns)))
+
+    ((memq leaf--key '(:transient))
+     ;; TODO: parse transient argument and get functions
+     (let (val fns)
+       (setq val (mapcan
+                  (lambda (elm)
+                    (cond
+                     ((and (listp elm) (listp (car elm)))
+                      (progn
+                        ;; (mapc (lambda (el) (setq fns (append fns (funcall fn el)))) elm)
+                        elm))
+                     ((listp elm)
+                      (progn
+                        ;; (setq fns (append fns (funcall fn elm)))
+                        `(,elm)))))
                   leaf--value))
        `(,val ,fns)))
 
