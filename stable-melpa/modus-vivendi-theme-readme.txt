@@ -29,6 +29,7 @@ groups (there are implicitly supported packages as well, which
 inherit from font-lock or some basic group).  You are encouraged to
 notify me of any missing package or change you would like to see.
 
+    alert
     all-the-icons
     annotate
     anzu
@@ -37,6 +38,7 @@ notify me of any missing package or change you would like to see.
     auto-dim-other-buffers
     avy
     ace-window
+    breakpoint (provided by built-in gdb-mi.el)
     calendar
     calfw
     column-enforce-mode
@@ -50,6 +52,7 @@ notify me of any missing package or change you would like to see.
     counsel-org-capture-string
     cov
     custom (M-x customize)
+    dap-mode
     dashboard (emacs-dashboard)
     deadgrep
     define-word
@@ -122,7 +125,9 @@ notify me of any missing package or change you would like to see.
     org
     org-journal
     org-noter
+    org-pomodoro
     org-recur
+    origami
     outline-mode
     package (M-x list-packages)
     paren-face
