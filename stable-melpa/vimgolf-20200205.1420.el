@@ -4,12 +4,25 @@
 ;; Author: Tim Visher <tim.visher@gmail.com>
 ;; Maintainer: Tim Visher <tim.visher@gmail.com>
 ;; Created: 2011-11-02
-;; Version: 0.10.3-SNAPSHOT
-;; Package-Version: 20200203.1327
+;; Version: 0.10.4-SNAPSHOT
+;; Package-Version: 20200205.1420
 ;; Keywords: games vimgolf vim
 ;; URL: https://github.com/timvisher/vimgolf.el
 
 ;; This file is not part of GNU Emacs
+
+;; VimGolf In Emacs is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 3, or (at
+;; your option) any later version.
+;;
+;; VimGolf In Emacs is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License along
+;; with VimGolf In Emacs. If not, see http://www.gnu.org/licenses.
 
 ;;; Commentary:
 
@@ -32,10 +45,6 @@
 
 ;; I make no guarantees that vimgolf.el works with anything but the latest
 ;; version of Emacs.
-
-;;; License:
-
-;; [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)
 
 ;;; Contributors
 

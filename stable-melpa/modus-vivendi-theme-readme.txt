@@ -109,6 +109,8 @@ notify me of any missing package or change you would like to see.
     isearch, occur, etc.
     ivy
     ivy-posframe
+    jira (org-jira)
+    js2-mode
     keycast
     line numbers (`display-line-numbers-mode' and global variant)
     lsp-mode
