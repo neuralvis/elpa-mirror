@@ -3,7 +3,7 @@
 
 ;; Author: Daniel Berg
 ;; URL: https://github.com/srcery-colors/srcery-emacs
-;; Package-Version: 20200204.1839
+;; Package-Version: 20200205.1729
 
 ;; Version: 0.2.0
 ;; Keywords: faces
@@ -3319,7 +3319,7 @@
       (,srcery-256-class :foreground ,srcery-256-white)))
 
    ;;----------------------------------------------------------------------------
-   ;; c/c++
+   ;; lsp
    ;;----------------------------------------------------------------------------
 
    `(lsp-ui-doc-background
