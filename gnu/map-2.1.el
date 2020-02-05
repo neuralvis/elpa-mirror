@@ -1,10 +1,10 @@
 ;;; map.el --- Map manipulation functions  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015-2019 Free Software Foundation, Inc.
+;; Copyright (C) 2015-2020 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: convenience, map, hash-table, alist, array
-;; Version: 2.0
+;; Version: 2.1
 ;; Package-Requires: ((emacs "25"))
 ;; Package: map
 
@@ -56,8 +56,10 @@ evaluated and searched for in the map.  The match fails if for any KEY
 found in the map, the corresponding PAT doesn't match the value
 associated to the KEY.
 
-Each element can also be a SYMBOL, which is an abbreviation of a (KEY
-PAT) tuple of the form (\\='SYMBOL SYMBOL).
+Each element can also be a SYMBOL, which is an abbreviation of
+a (KEY PAT) tuple of the form (\\='SYMBOL SYMBOL).  When SYMBOL
+is a keyword, it is an abbreviation of the form (:SYMBOL SYMBOL),
+useful for binding plist values.
 
 Keys in ARGS not found in the map are ignored, and the match doesn't
 fail."
@@ -96,7 +98,7 @@ Returns the result of evaluating the form associated with MAP-VAR's type."
            (t (error "Unsupported map type `%S': %S"
                      (type-of ,map-var) ,map-var)))))
 
-(define-error 'map-not-inplace "Cannot modify map in-place: %S")
+(define-error 'map-not-inplace "Cannot modify map in-place")
 
 (defsubst map--plist-p (list)
   (and (consp list) (not (listp (car list)))))
@@ -141,7 +143,8 @@ In the base definition, MAP can be an alist, hash-table, or array."
   "Associate KEY with VALUE in MAP and return VALUE.
 If KEY is already present in MAP, replace the associated value
 with VALUE.
-When MAP is a list, test equality with TESTFN if non-nil, otherwise use `eql'.
+When MAP is a list, test equality with TESTFN if non-nil,
+otherwise use `eql'.
 
 MAP can be a list, hash-table or array."
   (declare (obsolete "use map-put! or (setf (map-elt ...) ...) instead" "27.1"))
@@ -287,7 +290,7 @@ The default implementation delegates to `map-length'."
   ;; so specifying `testfn' here is problematic: e.g. for hash-tables
   ;; we shouldn't use `gethash' unless `testfn' is the same as the map's own
   ;; test function!
-  "Return non-nil If and only if MAP contains KEY.
+  "Return non-nil if and only if MAP contains KEY.
 TESTFN is deprecated.  Its default depends on MAP.
 The default implementation delegates to `map-do'."
   (unless testfn (setq testfn #'equal))
@@ -325,7 +328,7 @@ The default implementation delegates to `map-apply'."
     nil))
 
 (cl-defgeneric map-every-p (pred map)
-  "Return non-nil if (PRED key val) is non-nil for all elements of the map MAP.
+  "Return non-nil if (PRED key val) is non-nil for all elements of MAP.
 The default implementation delegates to `map-apply'."
   ;; FIXME: Not sure if there's much benefit to defining it as defgeneric,
   ;; since as defined, I can't think of a map-type where we could provide an
@@ -338,7 +341,8 @@ The default implementation delegates to `map-apply'."
     t))
 
 (defun map-merge (type &rest maps)
-  "Merge into a map of type TYPE all the key/value pairs in MAPS."
+  "Merge into a map of type TYPE all the key/value pairs in MAPS.
+See `map-into' for all supported values of TYPE."
   (let ((result (map-into (pop maps) type)))
     (while maps
       ;; FIXME: When `type' is `list', we get an O(N^2) behavior.
@@ -354,7 +358,8 @@ The default implementation delegates to `map-apply'."
   "Merge into a map of type TYPE all the key/value pairs in MAPS.
 When two maps contain the same key (`eql'), call FUNCTION on the two
 values and use the value returned by it.
-MAP can be a list, hash-table or array."
+MAP can be a list, hash-table or array.
+See `map-into' for all supported values of TYPE."
   (let ((result (map-into (pop maps) type))
         (not-found (cons nil nil)))
     (while maps
@@ -393,13 +398,13 @@ If you want to insert an element without modifying MAP, use `map-insert'."
       (let ((oldmap map))
         (setf (alist-get key map key nil (or testfn #'equal)) value)
         (unless (eq oldmap map)
-          (signal 'map-not-inplace (list map)))))
+          (signal 'map-not-inplace (list oldmap)))))
     :hash-table (puthash key value map)
     ;; FIXME: If `key' is too large, should we signal `map-not-inplace'
     ;; and let `map-insert' grow the array?
     :array (aset map key value)))
 
-(define-error 'map-inplace "Can only modify map in place: %S")
+(define-error 'map-inplace "Can only modify map in place")
 
 (cl-defgeneric map-insert (map key value)
   "Return a new map like MAP except that it associates KEY with VALUE.
@@ -458,23 +463,37 @@ If you want to insert an element in place, use `map-put!'."
                      (funcall function index elt))
                    array))
 
-(cl-defmethod map-into (map (_type (eql hash-table)))
-  "Convert MAP into a hash-table."
-  ;; FIXME: Just knowing we want a hash-table is insufficient, since that
-  ;; doesn't tell us the test function to use with it!
-  (let ((ht (make-hash-table :size (map-length map)
-                             :test 'equal)))
+(defun map--into-hash (map keyword-args)
+  "Convert MAP into a hash-table.
+KEYWORD-ARGS are forwarded to `make-hash-table'."
+  (let ((ht (apply #'make-hash-table keyword-args)))
     (map-apply (lambda (key value)
-                 (setf (map-elt ht key) value))
+                 (setf (gethash key ht) value))
                map)
     ht))
+
+(cl-defmethod map-into (map (_type (eql hash-table)))
+  "Convert MAP into a hash-table."
+  (map--into-hash map (list :size (map-length map) :test 'equal)))
+
+(cl-defmethod map-into (map (type (head hash-table)))
+  "Convert MAP into a hash-table.
+TYPE is a list where the car is `hash-table' and the cdr are the
+keyword-args forwarded to `make-hash-table'.
+
+Example:
+    (map-into '((1 . 3)) '(hash-table :test eql))"
+  (map--into-hash map (cdr type)))
 
 (defun map--make-pcase-bindings (args)
   "Return a list of pcase bindings from ARGS to the elements of a map."
   (seq-map (lambda (elt)
-             (if (consp elt)
-                 `(app (pcase--flip map-elt ,(car elt)) ,(cadr elt))
-               `(app (pcase--flip map-elt ',elt) ,elt)))
+             (cond ((consp elt)
+                    `(app (pcase--flip map-elt ,(car elt)) ,(cadr elt)))
+                   ((keywordp elt)
+                    (let ((var (intern (substring (symbol-name elt) 1))))
+                      `(app (pcase--flip map-elt ,elt) ,var)))
+                   (t `(app (pcase--flip map-elt ',elt) ,elt))))
            args))
 
 (defun map--make-pcase-patterns (args)
