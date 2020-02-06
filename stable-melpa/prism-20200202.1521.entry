@@ -1,2 +1,0 @@
-
-(prism . [(20200202 1521) ((emacs (26 1)) (dash (2 14 1))) "Customizable, depth-based syntax coloring" single ((:commit . "4c6577a4da1b2bb41ae8a265ea7050f1eb7edfb7") (:keywords "faces" "lisp") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/prism.el"))])

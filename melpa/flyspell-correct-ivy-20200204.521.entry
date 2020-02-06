@@ -1,2 +1,2 @@
 
-(flyspell-correct-ivy . [(20200204 521) ((flyspell-correct (0 6 1)) (ivy (0 8 0)) (emacs (24))) "Correcting words with flyspell via ivy interface" single ((:commit . "c6b558714464f98ef512fc1c80a72e1f83a7b8fd") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
+(flyspell-correct-ivy . [(20200204 521) ((flyspell-correct (0 6 1)) (ivy (0 8 0)) (emacs (24))) "Correcting words with flyspell via ivy interface" single ((:commit . "d30176063707e20082bdd746b31b0eaa5c1397cd") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
