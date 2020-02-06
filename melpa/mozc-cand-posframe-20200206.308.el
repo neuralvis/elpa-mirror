@@ -2,7 +2,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20200121.1119
+;; Package-Version: 20200206.308
 ;; Package-Requires: ((emacs "26.1") (posframe "0.5.0") (mozc "20180101.800") (s "1.12"))
 ;; Keywords: i18n, tooltip
 ;; URL: https://github.com/akirak/mozc-posframe
@@ -144,9 +144,10 @@ CANDIDATES must be the candidates field in a response protobuf."
                              (= (mozc-protobuf-get candidate 'index) current-index))
                     (mozc-cand-posframe--make-item candidate)))
          (after-current (mapcar #'mozc-cand-posframe--make-item source))
-         (x-pixel-offset (- (car (window-text-pixel-size nil
-                                                         (overlay-start mozc-preedit-overlay)
-                                                         (overlay-end mozc-preedit-overlay)))))
+         (x-pixel-offset (+ (- (car (window-text-pixel-size nil
+                                                            (overlay-start mozc-preedit-overlay)
+                                                            (overlay-end mozc-preedit-overlay))))
+                            (line-number-display-width t)))
          (posframe-width (apply #'max (mapcar #'mozc-cand-posframe-candidate-width
                                               (append before-current
                                                       (when current

@@ -2,7 +2,7 @@
 
 ;; Author: Fox Kiester <noct@posteo.net>
 ;; URL: https://github.com/noctuid/link-hint.el
-;; Package-Version: 20200101.1633
+;; Package-Version: 20200205.2244
 ;; Keywords: convenience url avy link links hyperlink
 ;; Package-Requires: ((avy "0.4.0") (emacs "24.1") (cl-lib "0.5"))
 ;; Version: 0.1
@@ -106,7 +106,7 @@ example."
   :type 'regexp)
 
 (defcustom link-hint-maybe-file-regexp
-  (rx (or bol blank) (zero-or-one "~") "/" (1+ not-newline))
+  (rx (or bol blank) (zero-or-one (or "~" (seq (char alpha) ":"))) "/" (1+ not-newline))
   "Regexp used to determine what constitutes a potential file link."
   :group 'link-hint
   :type 'regexp)
