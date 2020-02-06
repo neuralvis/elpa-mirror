@@ -3,7 +3,7 @@
 ;; Author: Johannes Goslar
 ;; Created: 30 June 2016
 ;; Version: 0.1.2
-;; Package-Version: 20200205.1413
+;; Package-Version: 20200206.1211
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces
 ;; URL: https://github.com/ksjogo/proportional
@@ -81,6 +81,8 @@ which then is enabled when proportional is enabled."
         (set-fontset-font "fontset-default" 'symbol proportional-font)
         (set-face-font 'variable-pitch proportional-font)
 
+        (set-face-font 'fixed-pitch proportional-monospace-font)
+
         (proportional-which-key-fixer)
 
         (dolist (base proportional-monospace-after-advices)
@@ -118,8 +120,14 @@ which then is enabled when proportional is enabled."
   (proportional-which-key-fixer))
 
 (with-eval-after-load 'transient
+  (defadvice transient--show (after proportional)
+    (if-let ((buf (get-buffer transient--buffer-name)))
+        (with-current-buffer buf
+          (buffer-face-mode t)
+          (proportional-use-monospace))))
   (when proportional-mode
-    (setq transient-force-fixed-pitch t)))
+    (setq transient-force-fixed-pitch t)
+    (ad-enable-advice 'transient--show 'after 'proportional)))
 
 (with-eval-after-load 'hydra
   (defadvice lv-message (after proportional)

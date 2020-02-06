@@ -5,7 +5,7 @@
 ;; Author: Johannes Goslar
 ;; Created: 5 April 2016
 ;; Version: 1.1.0
-;; Package-Version: 20200113.1905
+;; Package-Version: 20200206.1213
 ;; Keywords: theme, zenburn
 ;; URL: https://github.com/ksjogo/labburn-theme
 
@@ -403,6 +403,7 @@ RED, GREEN, and BLUE should be numbers between 0.0 and 1.0, inclusive."
  `(diff-hl-delete ((,labburn-class (:foreground ,labburn-red+1 :background ,labburn-red-1))))
  `(diff-hl-insert ((,labburn-class (:foreground ,labburn-green+1 :background ,labburn-green-2))))
 ;;;;; dired
+ `(dired-header ((t (:foreground ,labburn-orange))))
  `(dired-directory ((t (:foreground ,labburn-orange))))
  `(dired-marked ((t (:foreground ,labburn-highlight))))
  `(dired-mark ((t (:foreground ,labburn-highlight))))

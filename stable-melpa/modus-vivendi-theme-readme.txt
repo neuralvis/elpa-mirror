@@ -111,6 +111,7 @@ notify me of any missing package or change you would like to see.
     ivy-posframe
     jira (org-jira)
     js2-mode
+    jupyter
     keycast
     line numbers (`display-line-numbers-mode' and global variant)
     lsp-mode

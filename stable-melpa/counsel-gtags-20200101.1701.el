@@ -5,7 +5,6 @@
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;;         Felipe Lema <felipelema@mortemale.org>
 ;; URL: https://github.com/FelipeLema/emacs-counsel-gtags
-;; Package-Version: 20200101.1701
 ;; Version: 0.01
 ;; Package-Requires: ((emacs "25.1") (counsel "0.8.0") (seq "1.0"))
 
