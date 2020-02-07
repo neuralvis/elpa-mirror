@@ -39,7 +39,7 @@ notify me of any missing package or change you would like to see.
     avy
     ace-window
     breakpoint (provided by built-in gdb-mi.el)
-    calendar
+    calendar and diary
     calfw
     column-enforce-mode
     company-mode

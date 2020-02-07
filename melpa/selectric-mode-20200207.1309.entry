@@ -1,0 +1,2 @@
+
+(selectric-mode . [(20200207 1309) nil "IBM Selectric mode for Emacs" tar ((:commit . "d4dc7fd1aa6c559789517c2dabe4484e4bca62f5") (:keywords "multimedia" "convenience" "typewriter" "selectric") (:authors ("Ricardo Bánffy" . "rbanffy@gmail.com")) (:maintainer "Ricardo Banffy" . "rbanffy@gmail.com") (:url . "https://github.com/rbanffy/selectric-mode"))])
