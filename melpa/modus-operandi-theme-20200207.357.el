@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200206.1931
+;; Package-Version: 20200207.357
 ;; Version: 0.5.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -84,6 +84,7 @@
 ;;     dashboard (emacs-dashboard)
 ;;     deadgrep
 ;;     define-word
+;;     deft
 ;;     disk-usage
 ;;     diff-hl
 ;;     diff-mode
@@ -723,6 +724,14 @@ between foreground and background is >= 7:1)."
    ;;;; define-word
    `(define-word-face-1 ((,class (:foreground ,yellow))))
    `(define-word-face-2 ((,class (:foreground ,fg-main))))
+   ;;;; deft
+   `(deft-filter-string-error-face ((,class (:inherit modus-theme-refine-red))))
+   `(deft-filter-string-face ((,class (:foreground ,green-intense))))
+   `(deft-header-face ((,class (:foreground ,fg-special-warm :weight bold))))
+   `(deft-separator-face ((,class (:foreground ,fg-alt))))
+   `(deft-summary-face ((,class (:foreground ,fg-alt :slant ,modus-theme-slant))))
+   `(deft-time-face ((,class (:foreground ,fg-special-cold))))
+   `(deft-title-face ((,class (:foreground ,fg-main :weight bold))))
    ;;;; disk-usage
    `(disk-usage-children ((,class (:foreground ,yellow))))
    `(disk-usage-inaccessible ((,class (:foreground ,red :weight bold))))

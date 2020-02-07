@@ -56,6 +56,7 @@ notify me of any missing package or change you would like to see.
     dashboard (emacs-dashboard)
     deadgrep
     define-word
+    deft
     disk-usage
     diff-hl
     diff-mode
