@@ -1,2 +1,2 @@
 
-(treemacs-persp . [(20200115 637) ((emacs (25 2)) (treemacs (0 0)) (persp-mode (2 9 7))) "Persp-mode integration for treemacs" single ((:commit . "b84897300a0af468e9691de3f0086c91e964bb4f") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])
+(treemacs-persp . [(20200115 637) ((emacs (25 2)) (treemacs (0 0)) (persp-mode (2 9 7))) "Persp-mode integration for treemacs" single ((:commit . "0c7c19837b23ac486ba89a72549bb667e2228f5a") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])
