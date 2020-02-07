@@ -1,2 +1,0 @@
-
-(flyspell-correct . [(20200204 2141) ((emacs (24))) "Correcting words with flyspell via custom interface" tar ((:commit . "d30176063707e20082bdd746b31b0eaa5c1397cd") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])
