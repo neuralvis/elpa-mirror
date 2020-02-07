@@ -1,0 +1,2 @@
+
+(pyim . [(20200206 2245) ((emacs (24 4)) (popup (0 1)) (async (1 6)) (xr (1 13)) (pyim-basedict (0 1))) "A Chinese input method support quanpin, shuangpin, wubi and cangjie." tar ((:commit . "ab8d1bbccdbb08058e2d6df6e35876f4bda458b1"))])

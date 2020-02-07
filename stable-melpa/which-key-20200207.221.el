@@ -5,7 +5,7 @@
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-which-key
-;; Package-Version: 20200119.2010
+;; Package-Version: 20200207.221
 ;; Version: 3.3.2
 ;; Keywords:
 ;; Package-Requires: ((emacs "24.4"))
@@ -1557,7 +1557,7 @@ no title exists."
             ((not (string-equal repl-res "")) repl-res)
             ((and (eq which-key-show-prefix 'echo) alternate)
              alternate)
-            ((and (member which-key-show-prefix '(bottom top))
+            ((and (member which-key-show-prefix '(bottom top mode-line))
                   (eq which-key-side-window-location 'bottom)
                   echo-keystrokes)
              (if alternate alternate
@@ -1673,6 +1673,16 @@ return the docstring."
   (let* ((orig-sym (intern original))
          (doc (when (commandp orig-sym)
                 (documentation orig-sym)))
+         (doc (when doc
+                (replace-regexp-in-string
+                 (concat "^\\(?::"
+                         (regexp-opt '("around" "override"
+                                       "after" "after-until" "after-while"
+                                       "before" "before-until" "before-while"
+                                       "filter-args" "filter-return"))
+                         " advice: [^\n]+\n"
+                         "\\)+\n")
+                 "" doc)))
          (docstring (when doc
                       (which-key--propertize (car (split-string doc "\n"))
                                              'face 'which-key-docstring-face))))
