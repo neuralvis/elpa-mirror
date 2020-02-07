@@ -165,6 +165,7 @@ notify me of any missing package or change you would like to see.
     which-function-mode
     which-key
     whitespace-mode
+    window-divider-mode
     writegood-mode
     xah-elisp-mode
     xterm-color (and ansi-colors)
