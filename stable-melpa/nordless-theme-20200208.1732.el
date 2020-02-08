@@ -13,15 +13,15 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program. If not, see <http://www.gnu.org/licenses/>.
+;; along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 ;; Author: Thomas Letan <contact@thomasletan.fr>
 ;; URL: https://git.sr.ht/~lthms/colorles-themes.el
-;; Package-Version: 20190802.725
+;; Package-Version: 20200208.1732
 ;; Version: 0.1
 ;; Package-Requires: ((colorless-themes "0.1"))
 ;; License: GPL-3
-;; Keywords: theme
+;; Keywords: faces theme
 
 ;;; Commentary:
 ;; This is a so-called colorless theme, derived thanks to the macro of the
