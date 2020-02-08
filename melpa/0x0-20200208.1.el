@@ -2,7 +2,7 @@
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 0.1.1
-;; Package-Version: 20200207.1657
+;; Package-Version: 20200208.1
 ;; Keywords: comm
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://git.sr.ht/~zge/nullpointer-emacs
@@ -29,6 +29,7 @@
 ;; https://liberapay.com/lachs0r/donate if you like the service.
 
 (require 'url)
+(require 'json)
 
 ;;; Code:
 
@@ -46,14 +47,40 @@
      :max-size ,(* 1024 1024 256))
     (ix
      :host "ix.io"
-     :query "f:1")
+     :query "f:1"
+     :no-tls t)
     (w1r3
      :host "w1r3.net"
      :query "upload")
     (sprunge
      :host "sprunge.us"
      :query "sprunge"
-     :no-tls t))
+     :no-tls t)
+    (sprunge
+     :host "sprunge.us"
+     :query "sprunge"
+     :no-tls t)
+    (you-die-if-you-work
+     :host "youdieifyou.work"
+     :path "upload.php"
+     :query "files[]"
+     :pomf t
+     :no-tls t)
+    (catbox
+     :host "catbox.moe"
+     :path "upload.php"
+     :query "files[]"
+     :pomf t)
+    (fiery
+     :host "safe.fiery.me"
+     :path "api/upload"
+     :query "files[]"
+     :pomf t)
+    (dmca-gripe
+     :host "dmca.gripe"
+     :path "api/upload"
+     :query "files[]"
+     :pomf t))
   "Alist of different 0x0-like services.
 
 The car is a symbol identifying the service, the cdr a plist,
@@ -70,6 +97,7 @@ with the following keys:
     :max-age	- on 0x0-like servers, maximal number of days
 				  a file is kept online (number, optional)
     :max-size	- file limit for this server (number, optional)
+    :pomf		- is pomf clone (bool, optional)
 
 This variable only describes servers, but doesn't set anything.
 See `0x0-default-host' if you want to change the server you use."
@@ -113,7 +141,11 @@ Operate on region between START and END."
                                    "%s=@-;filename=%s")
                                  (plist-get 0x0--server :query)
                                  0x0--filename)
-                         (plist-get 0x0--server :host))
+                         (format "%s://%s/%s"
+                                 (if (plist-get 0x0--server :no-tls)
+                                     "http" "https")
+                                 (plist-get 0x0--server :host)
+                                 (plist-get 0x0--server :path)))
     buf))
 
 (defun 0x0--use-url (start end)
@@ -136,7 +168,17 @@ Operate on region between START and END."
               (insert "\r\n--" boundary "--")
               (buffer-string))))
          (url-request-method "POST"))
-    (url-retrieve-synchronously (plist-get 0x0--server :host))))
+    (with-current-buffer
+        (url-retrieve-synchronously
+         (concat (if (plist-get 0x0--server :no-tls)
+                     "http" "https")
+                 "://" (plist-get 0x0--server :host)
+                 "/" (plist-get 0x0--server :path)))
+      (goto-char (point-min))
+      (save-match-data
+        (when (search-forward-regexp "^[[:space:]]*$" nil t)
+          (delete-region (point-min) (match-end 0))))
+      (current-buffer))))
 
 (defun 0x0--choose-service ()
   (if current-prefix-arg
@@ -145,6 +187,27 @@ Operate on region between START and END."
                                nil t nil nil
                                0x0-default-host))
     0x0-default-host))
+
+(defun 0x0--parse-plain ()
+  (save-match-data
+    (unless (search-forward-regexp
+             (concat "^" (regexp-opt '("http" "https"))
+                     "://" (regexp-quote (plist-get 0x0--server :host))
+                     ".*$")
+             nil t)
+      (error "Failed to upload/parse. See %s for more details"
+             (buffer-name)))))
+
+(defun 0x0--parse-pomf ()
+  (let ((data (json-read)))
+    (unless data
+      (error "Empty response. See %s for more details"
+             (buffer-name)))
+    (unless (eq t (cdr (assq 'success data)))
+      (error "Failed to upload (%d): \"%s\""
+             (cdr (assq 'errorcode data))
+             (cdr (assq 'description data))))
+    (cdr (assq 'url (aref (cdr (assq 'files data)) 0)))))
 
 ;;;###autoload
 (defun 0x0-upload (start end service)
@@ -168,20 +231,12 @@ If START and END are not specified, upload entire buffer."
           (timeout (0x0--calculate-timeout (- end start))))
       (with-current-buffer resp
         (goto-char (point-min))
-        (unless (search-forward-regexp
-                 (concat "^"
-                         (regexp-opt '("http" "https"))
-                         "://"
-                         (regexp-quote (plist-get 0x0--server :host)))
-                 nil t)
-          (error "Failed to upload/parse. See %s for more details"
-                 (buffer-name resp)))
-        (save-match-data
-          (when (search-forward-regexp "[[:space:]]*$" nil t)
-            (replace-match "")))
-        (kill-new (buffer-string))
-        (message (concat (format "Yanked `%s' into kill ring." (buffer-string) )
-                         (and timeout (format " Should last ~%2g days." timeout)))))
+        (let ((result (cond ((plist-get 0x0--server :pomf)
+                             (0x0--parse-pomf))
+                            (t (0x0--parse-plain)))))
+          (kill-new result)
+          (message (concat (format "Yanked `%s' into kill ring." result)
+                           (and timeout (format " Should last ~%2g days." timeout))))))
       (kill-buffer resp))))
 
 ;;;###autoload
