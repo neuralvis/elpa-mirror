@@ -2,7 +2,7 @@
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20200206.308
+;; Package-Version: 20200208.750
 ;; Package-Requires: ((emacs "26.1") (posframe "0.5.0") (mozc "20180101.800") (s "1.12"))
 ;; Keywords: i18n, tooltip
 ;; URL: https://github.com/akirak/mozc-posframe
@@ -76,6 +76,11 @@
                             (clear . mozc-cand-posframe-clear)
                             (update . mozc-cand-posframe-update)))
   (error "Posframe won't run on this Emacs session"))
+
+(defcustom mozc-cand-posframe-y-pixel-offset 0
+  "Vertical offset for the posframe."
+  :type 'integer
+  :group 'mozc-posframe)
 
 (defun mozc-cand-posframe-clean-up ()
   "Clean up the current-index candidate session."
@@ -191,7 +196,8 @@ CANDIDATES must be the candidates field in a response protobuf."
                    :background-color (face-background 'mozc-cand-posframe-normal-face nil t)
                    :poshandler 'posframe-poshandler-point-bottom-left-corner
                    :respect-mode-line (not (null modeline))
-                   :x-pixel-offset x-pixel-offset)))
+                   :x-pixel-offset x-pixel-offset
+                   :y-pixel-offset mozc-cand-posframe-y-pixel-offset)))
 
 (provide 'mozc-cand-posframe)
 ;;; mozc-cand-posframe.el ends here

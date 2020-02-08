@@ -1,2 +1,0 @@
-
-(mozc-cand-posframe . [(20200206 308) ((emacs (26 1)) (posframe (0 5 0)) (mozc (20180101 800)) (s (1 12))) "Posframe frontend for mozc.el" single ((:commit . "ff2407035cd25f2f43059f3f4e5dd9a4a84a7d0e") (:keywords "i18n" "tooltip") (:authors ("Akira Komamura" . "akira.komamura@gmail.com")) (:maintainer "Akira Komamura" . "akira.komamura@gmail.com") (:url . "https://github.com/akirak/mozc-posframe"))])

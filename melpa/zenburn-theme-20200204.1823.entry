@@ -1,2 +1,2 @@
 
-(zenburn-theme . [(20200204 1823) nil "A low contrast color theme for Emacs." single ((:commit . "7956c385d2fb4aee7ef3264059718aceb33b8d7f") (:authors ("Bozhidar Batsov" . "bozhidar@batsov.com")) (:maintainer "Bozhidar Batsov" . "bozhidar@batsov.com") (:url . "http://github.com/bbatsov/zenburn-emacs"))])
+(zenburn-theme . [(20200204 1823) nil "A low contrast color theme for Emacs." single ((:commit . "d144de4e2bad4fbbd600b6124f562cd27eb73c83") (:authors ("Bozhidar Batsov" . "bozhidar@batsov.com")) (:maintainer "Bozhidar Batsov" . "bozhidar@batsov.com") (:url . "http://github.com/bbatsov/zenburn-emacs"))])
