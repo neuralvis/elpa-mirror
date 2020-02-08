@@ -4,7 +4,7 @@
 
 ;; Author: Chen Bin <chenbin.sh@gmail.com>
 ;; URL: https://github.com/redguardtoo/company-ctags
-;; Package-Version: 20200204.1454
+;; Package-Version: 20200208.349
 ;; Version: 0.0.3
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "24.3") (company "0.9.0"))
@@ -58,6 +58,7 @@
 
 ;;; Code:
 
+(require 'find-file)
 (require 'company nil t)
 (require 'cl-lib)
 
