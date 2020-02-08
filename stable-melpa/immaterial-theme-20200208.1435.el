@@ -4,9 +4,9 @@
 
 ;; Author: Peter Gardfjäll
 ;; Keywords: themes
-;; Package-Version: 20200202.1943
+;; Package-Version: 20200208.1435
 ;; URL: https://github.com/petergardfjall/emacs-immaterial-theme
-;; Version: 0.3.7
+;; Version: 0.3.8
 ;; Package-Requires: ((emacs "25"))
 
 ;; Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -57,9 +57,9 @@ for constructing primary and secondary color schemes.")
   '(("background-primary"    . "#012027")
     ("background-on"         . "#01343f")
     ("background-off"        . "#001017")
-    ("foreground-primary"    . "#eeeeee")
-    ("foreground-secondary"  . "#dbdbdb")
-    ("foreground-tertiary"   . "#c8c8c8")
+    ("foreground-primary"    . "#dddddd")
+    ("foreground-secondary"  . "#c8c8c8")
+    ("foreground-tertiary"   . "#b0b0b0")
     ("primary"               . "#9fa8da")
     ("primary-light"         . "#d1d9ff")
     ("primary-dark"          . "#6f79a8")
@@ -69,7 +69,7 @@ for constructing primary and secondary color schemes.")
     ("error"                 . "#ff5555")
     ("warning"               . "#e86310")
     ("discrete"              . "#777777")
-    ("cursor"                . "#e86310"))
+    ("cursor"                . "#64d8cb"))
   "The default color palette to use for the theme.
 Values can be overridden via immaterial-color-override-alist).
 The palette was created using the https://material.io/tools/color/ tool.")

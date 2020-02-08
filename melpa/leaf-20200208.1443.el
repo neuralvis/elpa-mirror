@@ -5,8 +5,8 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; Keywords: lisp settings
-;; Package-Version: 20200121.1305
-;; Version: 3.7.3
+;; Package-Version: 20200208.1443
+;; Version: 3.7.4
 ;; URL: https://github.com/conao3/leaf.el
 ;; Package-Requires: ((emacs "24.4"))
 

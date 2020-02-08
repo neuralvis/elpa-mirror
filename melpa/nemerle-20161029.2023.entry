@@ -1,2 +1,2 @@
 
-(nemerle . [(20161029 2023) nil "major mode for editing nemerle programs" single ((:commit . "c306248d25d475fc31d8624b8e8a127f68e93d31") (:keywords "nemerle" "mode" "languages") (:authors ("Jacek Sliwerski (rzyjontko)" . "rzyj@o2.pl")) (:maintainer "Jacek Sliwerski (rzyjontko)" . "rzyj@o2.pl"))])
+(nemerle . [(20161029 2023) nil "major mode for editing nemerle programs" single ((:commit . "7c63573fe66897b089963e9831546e5de7787c5a") (:keywords "nemerle" "mode" "languages") (:authors ("Jacek Sliwerski (rzyjontko)" . "rzyj@o2.pl")) (:maintainer "Jacek Sliwerski (rzyjontko)" . "rzyj@o2.pl"))])

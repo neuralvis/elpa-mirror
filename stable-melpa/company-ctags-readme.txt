@@ -23,6 +23,10 @@ file created by etags.  But it will increase initial loading time.
 
   (setq company-ctags-extra-tags-files '("$HOME/TAGS" "/usr/include/TAGS"))
 
+- Set `company-ctags-fuzzy-match-p' to fuzzy match the candidates.
+  The input could match any part of the candidate instead of the beginning of
+  the candidate.
+
 - Make sure CLI program diff is executable on Windows.
 It's optional but highly recommended.  It can speed up tags file updating.
 This package uses diff through variable `diff-command'.
