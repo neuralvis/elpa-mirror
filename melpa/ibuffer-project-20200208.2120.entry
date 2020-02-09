@@ -1,0 +1,2 @@
+
+(ibuffer-project . [(20200208 2120) ((emacs (25 1))) "Group ibuffer's list by project" single ((:commit . "d741d0733d7a73ae0b1b5d222017d681ac0b0078") (:keywords "tools") (:authors ("Andrii Kolomoiets" . "andreyk.mad@gmail.com")) (:maintainer "Andrii Kolomoiets" . "andreyk.mad@gmail.com") (:url . "https://github.com/muffinmad/emacs-ibuffer-project"))])

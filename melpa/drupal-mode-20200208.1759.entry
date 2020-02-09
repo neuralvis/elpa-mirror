@@ -1,0 +1,2 @@
+
+(drupal-mode . [(20200208 1759) ((php-mode (1 5 0))) "Advanced minor mode for Drupal development" tar ((:commit . "e58d96723faaa3633f880b297478d2330b8c78e3") (:keywords "programming" "php" "drupal") (:authors ("Arne Jørgensen" . "arne@arnested.dk")) (:maintainer "Arne Jørgensen" . "arne@arnested.dk") (:url . "https://github.com/arnested/drupal-mode"))])

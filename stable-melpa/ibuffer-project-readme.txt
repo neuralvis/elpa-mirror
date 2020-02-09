@@ -8,7 +8,7 @@ To group buffers by project set `ibuffer-filter-groups' to result of
              (lambda ()
                (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))))
 
-This package also provides column with filename relative to project. If there are no
+This package also provides column with filename relative to project.  If there are no
 file in buffer then column will display `buffer-name' with `font-lock-comment-face' face.
 Add project-file-relative to `ibuffer-formats':
 
@@ -30,3 +30,7 @@ or:
                (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
                (unless (eq ibuffer-sorting-mode 'project-file-relative)
                  (ibuffer-do-sort-by-project-file-relative))))
+
+To avoid calling `project-current' each time, one can set `ibuffer-project-use-cache'.
+Project info per directory will be stored in the `ibuffer-project-cache' variable.
+Command `ibuffer-project-clear-cache' allows to clear project info cache.
