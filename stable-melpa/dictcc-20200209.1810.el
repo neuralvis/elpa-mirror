@@ -5,7 +5,7 @@
 ;;
 ;; Author: Marten Lienen <marten.lienen@gmail.com>
 ;; Version: 1.0.2
-;; Package-Version: 20200126.6
+;; Package-Version: 20200209.1810
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (ivy "0.10.0"))
 
@@ -32,6 +32,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(eval-when-compile (require 'subr-x))
 
 (defgroup dictcc ()
   "Look up translations on dict.cc."
