@@ -1,6 +1,6 @@
 ;;; colorless-themes.el --- A macro to generate mostly colorless themes
 
-;; Copyright (C) 2018–2019 Thomas Letan
+;; Copyright (C) 2018–2020 Thomas Letan
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 
 ;; Author: Thomas Letan <contact@thomasletan.fr>
 ;; URL: https://git.sr.ht/~lthms/colorless-themes.el
-;; Package-Version: 20200208.1732
+;; Package-Version: 20200209.1132
 ;; Version: 0.1
 ;; License: GPL-3
 ;; Keywords: faces themes, faces

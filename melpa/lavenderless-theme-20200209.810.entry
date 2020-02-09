@@ -1,0 +1,2 @@
+
+(lavenderless-theme . [(20200209 810) ((colorless-themes (0 1))) "A colorless theme inspired by Lavender" single ((:commit . "b81ed2dd6232fa3d7179baa4fd9d57808999997b") (:keywords "faces" "theme") (:authors ("Thomas Letan" . "contact@thomasletan.fr")) (:maintainer "Thomas Letan" . "contact@thomasletan.fr") (:url . "https://git.sr.ht/~lthms/colorless-themes.el"))])

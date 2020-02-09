@@ -1,10 +1,10 @@
 ;;; easy-jekyll.el --- Major mode managing jekyll blogs -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2019 by Masashı Mıyaura
+;; Copyright (C) 2017-2020 by Masashı Mıyaura
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-easy-jekyll
-;; Package-Version: 20200209.235
+;; Package-Version: 20200209.651
 ;; Version: 2.4.24
 ;; Package-Requires: ((emacs "25.1") (request "0.3.0"))
 
