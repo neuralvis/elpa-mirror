@@ -4,8 +4,8 @@
 
 ;; Author: Masashı Mıyaura
 ;; URL: https://github.com/masasam/emacs-easy-jekyll
-;; Package-Version: 20191215.1016
-;; Version: 2.3.24
+;; Package-Version: 20200209.235
+;; Version: 2.4.24
 ;; Package-Requires: ((emacs "25.1") (request "0.3.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -113,6 +113,11 @@
 
 (defcustom easy-jekyll-no-help nil
   "No help flg of `easy-jekyll'."
+  :group 'easy-jekyll
+  :type 'integer)
+
+(defcustom easy-jekyll-emacspeak nil
+  "Emacspeak flg of `easy-jekyll'."
   :group 'easy-jekyll
   :type 'integer)
 
@@ -370,6 +375,17 @@ Report an error if jekyll is not installed, or if `easy-jekyll-basedir' is unset
   (if (require 'magit nil t)
       (magit-status-internal easy-jekyll-basedir)
     (error "'magit' is not installed")))
+
+(defun easy-jekyll-emacspeak-filename ()
+  "Read filename with emacspeak."
+  (cl-declare (special emacspeak-speak-last-spoken-word-position))
+  (let ((filename (substring (thing-at-point 'line) easy-jekyll--forward-char -1))
+        (personality (dtk-get-style)))
+    (cond
+     (filename
+      (dtk-speak (propertize filename 'personality personality))
+      (setq emacspeak-speak-last-spoken-word-position (point)))
+     (t (emacspeak-speak-line)))))
 
 ;;;###autoload
 (defun easy-jekyll-image ()
@@ -1362,7 +1378,9 @@ default is one line."
   (interactive)
   (goto-char (point-min))
   (forward-line (- easy-jekyll--unmovable-line 1))
-  (forward-char easy-jekyll--forward-char))
+  (forward-char easy-jekyll--forward-char)
+  (when easy-jekyll-emacspeak
+    (easy-jekyll-emacspeak-filename)))
 
 (defun easy-jekyll-backward-word (&optional arg)
   "Easy-jekyll backward-word.
@@ -1386,7 +1404,9 @@ Optional prefix ARG says how many lines to move; default is one line."
 	      (not (if (and arg (< arg 0)) (bobp) (eobp))))
     (forward-char (if (and arg (< arg 0)) -1 1)))
   (beginning-of-line)
-  (forward-char easy-jekyll--forward-char))
+  (forward-char easy-jekyll--forward-char)
+  (when easy-jekyll-emacspeak
+    (easy-jekyll-emacspeak-filename)))
 
 (defun easy-jekyll-previous-line (arg)
   "Move up lines then position at filename.
@@ -1951,7 +1971,9 @@ output directories whose names match REGEXP."
 	       (beginning-of-line)
 	       (forward-char easy-jekyll--forward-char))
 	   (forward-char easy-jekyll--forward-char))
-	 (easy-jekyll-mode))))))
+	 (easy-jekyll-mode)
+	 (when easy-jekyll-emacspeak
+	   (easy-jekyll-emacspeak-filename)))))))
 
 ;;;###autoload
 (defun easy-jekyll ()
@@ -2025,7 +2047,9 @@ output directories whose names match REGEXP."
 	       (beginning-of-line)
 	       (forward-char easy-jekyll--forward-char))
 	   (forward-char easy-jekyll--forward-char))
-	 (easy-jekyll-mode))))))
+	 (easy-jekyll-mode)
+	 (when easy-jekyll-emacspeak
+	   (easy-jekyll-emacspeak-filename)))))))
 
 (provide 'easy-jekyll)
 

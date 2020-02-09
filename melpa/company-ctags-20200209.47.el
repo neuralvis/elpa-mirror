@@ -4,7 +4,7 @@
 
 ;; Author: Chen Bin <chenbin.sh@gmail.com>
 ;; URL: https://github.com/redguardtoo/company-ctags
-;; Package-Version: 20200208.1026
+;; Package-Version: 20200209.47
 ;; Version: 0.0.3
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "24.4") (company "0.9.0"))
@@ -54,6 +54,10 @@
 ;; - Set `company-ctags-fuzzy-match-p' to fuzzy match the candidates.
 ;;   The input could match any part of the candidate instead of the beginning of
 ;;   the candidate.
+;;
+;; - Use rusty-tags to generate tags file for Rust programming language.
+;;   Add below code into ~/.emacs,
+;;     (setq company-ctags-tags-file-name "rusty-tags.emacs")
 ;;
 ;; - Make sure CLI program diff is executable on Windows.
 ;; It's optional but highly recommended.  It can speed up tags file updating.
