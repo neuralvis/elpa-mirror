@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200209.2025
+;; Package-Version: 20200209.2339
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -230,7 +230,16 @@ Optional argument ARG The number of steps to redo."
         (steps
           (if (numberp arg)
             (if (and undo-fu--respect undo-fu--checkpoint)
-              (undo-fu--count-redo-available undo-fu--checkpoint arg was-undo)
+              (let ((steps-test (undo-fu--count-redo-available undo-fu--checkpoint arg was-undo)))
+
+                ;; Ensure the next steps is a redo action.
+                (when (zerop steps-test)
+                  (user-error
+                    "Redo step not found (%s to ignore)"
+                    (substitute-command-keys "\\[keyboard-quit]")))
+
+                steps-test)
+
               arg)
             1))
         (last-command
@@ -247,14 +256,6 @@ Optional argument ARG The number of steps to redo."
         (success
           (condition-case err
             (progn
-
-              ;; Ensure the next steps is a redo action.
-              (when undo-fu--respect
-                (when (zerop steps)
-                  (user-error
-                    "Redo step not found (%s to ignore)"
-                    (substitute-command-keys "\\[keyboard-quit]"))))
-
               (undo-fu--with-message-suffix
                 (if undo-fu--respect
                   ""

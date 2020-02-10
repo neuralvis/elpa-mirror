@@ -4,7 +4,7 @@
 ;;
 ;; Author: David Thompson
 ;; Keywords: hypermedia
-;; Package-Version: 20200108.1815
+;; Package-Version: 20200209.440
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6.1") (dash "2.12.0") (seq "1.9") (s "1.9"))
 ;; Version: 0.2
 ;; URL: https://github.com/dtk01/dtk.el
@@ -297,6 +297,17 @@ Optional argument MODULE specifies the module to use."
     (dtk-search-mode)
     (dtk-diatheke word-or-phrase dtk-module t nil t)
     ))
+
+(defun dtk-search-follow ()
+  "Populate the dtk buffer with the text corresponding to the citation at point."
+  (interactive)
+  ;; The most likely desired behavior is to open the dtk buffer
+  ;; alongside the dtk-search buffer and to keep the focus in
+  ;; dtk-search buffer
+  (dtk-clear-dtk-buffer)
+  (dtk-follow)
+  (switch-to-buffer-other-window dtk-search-buffer-name)
+  )
 
 ;;;
 ;;; dtk modules/books
@@ -1191,6 +1202,7 @@ Turning on dtk mode runs `text-mode-hook', then `dtk-mode-hook'."
 (defvar dtk-search-mode-map
   (let ((map (make-keymap)))
     (define-key map [return] 'dtk-preview-citation)
+    (define-key map "g" 'dtk-search-follow)
     map)
   "Keymap for dtk search buffer.")
 
@@ -1302,15 +1314,16 @@ chapter text property value and X does not return a true value."
   (dtk-back-until-verse-defined))
 
 (defun dtk-back-until-verse-defined ()
-  "If the verse text property is not defined at point, back up until at a position where the verse text property is defined."
+  "If the verse text property is not defined at point, back up to the first point, relative to the current point, at which the verse text property is defined."
   (interactive)
-  (if (not (get-text-property (point) 'verse))
-      (goto-char
-       (1- (previous-single-property-change
-	    (if (eobp)
-		(point)
-	      (1+ (point)))
-	    'verse)))))
+  (when (and (not (= (point) 1))
+	     (not (get-text-property (point) 'verse)))
+    (if (get-text-property (1- (point)) 'verse)
+	(goto-char (1- (point)))
+      (goto-char (1-
+		  (previous-single-property-change
+		   (point)
+		   'verse))))))
 
 (defun dtk-previous-verse-change ()
   "Move to the point at which the 'verse text property assumes a different value (relative to the 'verse text property at the current point). Return the point at which the 'verse text property changed or, if the property does not change prior to the current point, return NIL."
@@ -1340,7 +1353,7 @@ text property changes."
   (cond ((eobp)
 	 nil)
 	((not (get-text-property (point) 'chapter))
-	 (let ((changes-at-point (next-single-property-change (1+ (point)) 'chapter)))
+	 (let ((changes-at-point (next-single-property-change (point) 'chapter)))
 	   (if changes-at-point
 	       (goto-char changes-at-point))))))
 
