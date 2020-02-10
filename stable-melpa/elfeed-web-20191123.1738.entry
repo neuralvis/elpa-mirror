@@ -1,2 +1,2 @@
 
-(elfeed-web . [(20191123 1738) ((simple-httpd (1 5 1)) (elfeed (3 2 0)) (emacs (24 3))) "web interface to Elfeed" tar ((:commit . "5f9b88e401b2580edc16c51a7e5c6bb318724467"))])
+(elfeed-web . [(20191123 1738) ((simple-httpd (1 5 1)) (elfeed (3 2 0)) (emacs (24 3))) "web interface to Elfeed" tar ((:commit . "d0405e63863e54a01200740a6717ac875eceabc1"))])
