@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
-;; Package-Version: 20200127.1023
+;; Package-Version: 20200211.1541
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3") (async "1.2"))
 ;; Keywords: multimedia images screenshots download
@@ -146,6 +146,8 @@ will be used."
            "xclip -selection clipboard -t image/png -o > %s")
           ;; take an image that is already on the clipboard, for Windows
           (const :tag "imagemagick/convert" "convert clipboard: %s")
+          ; capture region, for Wayland
+          (const :tag "grim + slurp" "grim -g \"$(slurp)\" %s")
           (function :tag "Custom function")))
 
 (defcustom org-download-screenshot-file (expand-file-name "screenshot.png" temporary-file-directory)
