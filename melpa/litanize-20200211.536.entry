@@ -1,2 +1,0 @@
-
-(litanize . [(20200211 536) ((emacs (24 1)) (enlive (0 0 1)) (s (1 12 0))) "Generate \"Latour Litanies\"" single ((:commit . "924c96d05b946bdf02294dc97ce95d05b042faaf") (:keywords "tools" "latour litany" "alien phenomenology" "ontography" "metaphorism" "carpentry") (:authors ("nik gaffney" . "nik@fo.am")) (:maintainer "nik gaffney" . "nik@fo.am") (:url . "https://github.com/zzkt/litanizer"))])
