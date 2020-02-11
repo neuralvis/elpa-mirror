@@ -1,7 +1,16 @@
 This pacakage provides ibuffer filtering and sorting functions to group buffers
-by project or by `default-directory'
+by function or regexp applied to `default-directory'.  By default buffers are
+grouped by `project-current' or by `default-directory'.
 
-To group buffers by project set `ibuffer-filter-groups' to result of
+Buffer group and group type name is determined by function or regexp listed
+in `ibuffer-project-root-functions'.  E.g. by adding `file-remote-p' like this:
+
+   (add-to-list 'ibuffer-project-root-functions '(file-remote-p . "Remote"))
+
+remote buffers will be grouped by protocol and host.
+
+
+To group buffers set `ibuffer-filter-groups' to result of
 `ibuffer-project-generate-filter-groups' function:
 
    (add-hook 'ibuffer-hook
@@ -31,6 +40,6 @@ or:
                (unless (eq ibuffer-sorting-mode 'project-file-relative)
                  (ibuffer-do-sort-by-project-file-relative))))
 
-To avoid calling `project-current' each time, one can set `ibuffer-project-use-cache'.
-Project info per directory will be stored in the `ibuffer-project-cache' variable.
+To avoid calculating project root each time, one can set `ibuffer-project-use-cache'.
+Root info per directory will be stored in the `ibuffer-project-roots-cache' variable.
 Command `ibuffer-project-clear-cache' allows to clear project info cache.
