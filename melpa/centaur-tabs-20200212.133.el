@@ -5,7 +5,7 @@
 ;; Filename: centaur-tabs.el
 ;; Description: Provide an out of box configuration to use highly customizable tabs.
 ;; URL: https://github.com/ema2159/centaur-tabs
-;; Package-Version: 20200207.1659
+;; Package-Version: 20200212.133
 ;; Author: Emmanuel Bustos <ema2159@gmail.com>
 ;; Maintainer: Emmanuel Bustos <ema2159@gmail.com>
 ;; Created: 2019-21-19 22:14:34
@@ -725,13 +725,18 @@ If icon gray out option enabled, gray out icon if not SELECTED."
   (set-buffer-modified-p (buffer-modified-p))
   (centaur-tabs-set-template centaur-tabs-current-tabset nil)
   (centaur-tabs-display-update))
+(defvar centaur-tabs--idle nil)
 (defun centaur-tabs-after-modifying-buffer (_begin _end _length)
   "Function to be run after the buffer is changed.
 BEGIN, END and LENGTH are just standard arguments for after-changes-function
 hooked functions"
-  (set-buffer-modified-p (buffer-modified-p))
-  (centaur-tabs-set-template centaur-tabs-current-tabset nil)
-  (centaur-tabs-display-update))
+  (when (not centaur-tabs--idle)
+    (setq centaur-tabs--idle t)
+    (run-with-idle-timer 0.5 nil (lambda()
+                                 (setq centaur-tabs--idle nil)
+                                 (set-buffer-modified-p (buffer-modified-p))
+                                 (centaur-tabs-set-template centaur-tabs-current-tabset nil)
+                                 (centaur-tabs-display-update)))))
 
 (defun centaur-tabs-get-tab-from-event (event)
   "Given a mouse EVENT, extract the tab at the mouse point."
