@@ -60,8 +60,10 @@ notify me of any missing package or change you would like to see.
     disk-usage
     diff-hl
     diff-mode
+    dim-autoload
     dired
     dired-async
+    dired-git
     dired-git-info
     dired-narrow
     dired-subtree

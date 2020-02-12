@@ -4,8 +4,8 @@
 
 ;; Author: Nathaniel Flath <nflath@gmail.com>
 ;; URL: http://github.com/nflath/save-visited-files
-;; Package-Version: 20190927.2153
-;; Version: 1.5
+;; Package-Version: 20200212.414
+;; Version: 1.6
 
 ;;; Commentary:
 
@@ -30,6 +30,9 @@
 ;; off the saving of files, you need to run (turn-off-save-visited-files-mode)
 
 ;; Changelog:
+;; 1.6
+;;  * Fix bug to add hooks after loading files, otherwise it's
+;;    possible for your save file to be overwritten first.
 ;; 1.5
 ;;  * Fix bug where save-visited-files-restore would error if save-visited-files-location
 ;;    is nonexistent.
@@ -170,13 +173,13 @@ optionally open all files from such a list at startup."
   (if save-visited-files-mode
       ;; activate
       (progn
-        (add-hook 'auto-save-hook 'save-visited-files-save)
-        (add-hook 'kill-emacs-hook 'save-visited-files-save)
         (unless save-visited-files-already-restored
           (when save-visited-files-auto-restore
             (if after-init-time
                 (save-visited-files-restore)
               (add-hook 'after-init-hook 'save-visited-files-restore))))
+        (add-hook 'auto-save-hook 'save-visited-files-save)
+        (add-hook 'kill-emacs-hook 'save-visited-files-save)
         (message "Save visited files mode enabled"))
     ;; deactivate
     (progn
