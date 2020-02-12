@@ -1,13 +1,14 @@
 ;;; olivetti.el --- Minor mode for a nice writing environment -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2014-2019 Free Software Foundation, Inc.
-;; Copyright (c) 2019 Paul W. Rankin
+;; Copyright (c) 2014-2019 Paul W. Rankin
+;; Copyright (c) 2019 Free Software Foundation, Inc.
+;; Copyright (c) 2019-2020 Paul W. Rankin
 
 ;; Author: Paul W. Rankin <code@paulwrankin.com>
 ;; Keywords: wp, text
-;; Package-Version: 20200207.749
-;; Version: 1.9.1
-;; Package-Requires: ((emacs "25.3"))
+;; Package-Version: 20200212.1439
+;; Version: 1.9.2
+;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://gthub.com/rnkn/olivetti
 
 ;; This file is not part of GNU Emacs.
@@ -37,9 +38,9 @@
 ;;   keep the text comfortably in the middle of the window.
 ;; - Text body width can be the number of characters (an integer) or a fraction
 ;;   of the window width (a float between 0.0 and 1.0).
-;; - Interactively change body width with:
-;;   olivetti-shrink C-c { { { ...
-;;   olivetti-expand C-c } } } ...
+;; - Interactively change body width with:  
+;;   olivetti-shrink C-c { { { ...  
+;;   olivetti-expand C-c } } } ...  
 ;;   olivetti-set-width C-c \
 ;; - If olivetti-body-width is an integer, the text body width will scale with
 ;;   use of text-scale-mode, whereas if a fraction (float) then the text body
@@ -295,8 +296,6 @@ fraction of the window width."
   (olivetti-set-all-margins)
   (message "Text body width set to %s" olivetti-body-width))
 
-(require 'seq)
-
 (defun olivetti-expand (&optional arg)
   "Incrementally increase the value of `olivetti-body-width'.
 
@@ -311,10 +310,10 @@ If prefixed with ARG, incrementally decrease."
   (olivetti-set-all-margins)
   (message "Text body width set to %s" olivetti-body-width)
   (unless overriding-terminal-local-map
-    (let ((keys (seq-subseq (this-single-command-keys) 0 -1))
+    (let ((keys (substring (this-single-command-keys) 0 -1))
           (map (cdr olivetti-mode-map)))
-      (seq-do (lambda (k) (setq map (assq k map))) keys)
-      (set-transient-map (cdr map) t))))
+      (mapc (lambda (k) (setq map (assq k map))) keys)
+      (when (consp map) (set-transient-map (cdr map) t)))))
 
 (defun olivetti-shrink (&optional arg)
   "Incrementally decrease the value of `olivetti-body-width'.

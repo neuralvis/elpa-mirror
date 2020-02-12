@@ -5,7 +5,7 @@
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-which-key
-;; Package-Version: 20200212.248
+;; Package-Version: 20200212.1423
 ;; Version: 3.3.2
 ;; Keywords:
 ;; Package-Requires: ((emacs "24.4"))
@@ -1322,11 +1322,11 @@ width) in lines and characters respectively."
     (cond
      ((and alpha (not which-key-sort-uppercase-first))
       (if (string-equal da db)
-          (string-lessp a b)
+          (not (string-lessp a b))
         (string-lessp da db)))
      ((and alpha which-key-sort-uppercase-first)
       (if (string-equal da db)
-          (not (string-lessp a b))
+          (string-lessp a b)
         (string-lessp da db)))
      ((not which-key-sort-uppercase-first)
       (let ((aup (not (string-equal da a)))
