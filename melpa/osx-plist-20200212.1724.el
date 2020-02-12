@@ -6,9 +6,9 @@
 ;; Author: Theresa O'Connor <tess@oconnor.cx>
 ;; Maintainer: Neil Okamoto <neil.okamoto+melpa@gmail.com>
 ;; Keywords: convenience
-;; Package-Version: 20200209.2211
+;; Package-Version: 20200212.1724
 ;; Package-Requires: ((emacs "25.1"))
-;; URL: https://github.com/gonewest818/osx-plist.el
+;; URL: https://github.com/gonewest818/osx-plist
 ;; Version: 2.0.0
 
 ;; This file is free software; you can redistribute it and/or modify it
