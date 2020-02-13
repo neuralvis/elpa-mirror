@@ -41,6 +41,7 @@ notify me of any missing package or change you would like to see.
     breakpoint (provided by built-in gdb-mi.el)
     calendar and diary
     calfw
+    change-log and log-view (`vc-print-log' and `vc-print-root-log')
     column-enforce-mode
     company-mode
     company-posframe
