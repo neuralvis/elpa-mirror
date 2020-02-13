@@ -4,7 +4,7 @@
 ;;
 ;; Author: Muir Manders <muir+emacs@mnd.rs>
 ;; Version: 0.1.0
-;; Package-Version: 20200212.2237
+;; Package-Version: 20200213.102
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: theme dark nova pastel faces
 ;; URL: https://github.com/muirmanders/emacs-nova-theme
@@ -166,7 +166,7 @@ FACES is a list of faces of the form (name :attr value) such as:
   (font-lock-string-face :foreground constant)
   (font-lock-keyword-face :foreground global)
   (font-lock-builtin-face :foreground global)
-  (font-lock-variable-name-face :foreground fg)
+  (font-lock-variable-name-face :foreground variable)
   (font-lock-type-face :foreground type)
   (font-lock-warning-face :foreground yellow)
   (font-lock-comment-face :foreground trivial)
