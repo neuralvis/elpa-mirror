@@ -1,0 +1,2 @@
+
+(veri-kompass . [(20200213 922) ((emacs (25)) (cl-lib (0 5)) (org (8 2 0))) "verilog codebase navigation facility" single ((:commit . "a5ed25df1c6209c50819e61b6bf8c514231b4d2c") (:keywords "languages" "extensions" "verilog" "hardware" "rtl") (:maintainer nil . "andrea_corallo@yahoo.it") (:url . "https://gitlab.com/koral/veri-kompass"))])
