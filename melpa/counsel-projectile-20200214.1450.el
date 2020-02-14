@@ -4,7 +4,7 @@
 
 ;; Author: Eric Danan
 ;; URL: https://github.com/ericdanan/counsel-projectile
-;; Package-Version: 20200130.1029
+;; Package-Version: 20200214.1450
 ;; Keywords: project, convenience
 ;; Version: 0.3.1
 ;; Package-Requires: ((counsel "0.13.0") (projectile "2.0.0"))
@@ -1060,6 +1060,11 @@ The format is the same as in `org-capture-templates-contexts'."
                        (string   :tag "    name")))
   :group 'counsel-projectile)
 
+(defcustom counsel-projectile-org-capture-templates-first-p t
+  "Non-nil if `counsel-projectile-org-capture' should display templates from `counsel-projectile-org-capture-templates' before those from `org-capture-templates'."
+  :type 'boolean
+  :group 'counsel-projectile)
+
 (defvar counsel-projectile--org-capture-templates-backup nil
   "Stores a backup of `org-capture-templates'.")
 
@@ -1095,6 +1100,8 @@ capture."
                   org-capture-templates-contexts))
          (org-capture-templates
           (append
+           (unless counsel-projectile-org-capture-templates-first-p
+             org-capture-templates)
            (when root
              (cl-loop
               with replace-fun = `(lambda (string)
@@ -1119,7 +1126,8 @@ capture."
                                 collect x)
                        else
                        collect item)))
-           org-capture-templates)))
+           (when counsel-projectile-org-capture-templates-first-p
+             org-capture-templates))))
     (ivy-add-actions
      'counsel-org-capture
      counsel-projectile-org-capture-extra-actions)

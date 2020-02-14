@@ -5,10 +5,10 @@
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 5 Dec 2015
 ;; Version: 0.1.1
-;; Package-Version: 20180923.1140
+;; Package-Version: 20200214.1119
 ;; Keywords: tools php dependency manager
 ;; Homepage: https://github.com/zonuexe/composer.el
-;; Package-Requires: ((emacs "24") (s "1.9.0") (f "0.17") (request "0.2.0") (seq "1.9") (php-runtime "0.1.0"))
+;; Package-Requires: ((emacs "24") (cl-lib "0.5") (s "1.9.0") (f "0.17") (request "0.2.0") (seq "1.9") (php-runtime "0.1.0"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -44,6 +44,7 @@
 ;;; Code:
 (require 'php-runtime nil t)
 (require 'compile)
+(require 'cl-lib)
 (require 'json)
 (require 'seq)
 (require 's)
@@ -67,16 +68,16 @@
 (defvar composer-global-command nil
   "Execute composer global command when `composer-global-command' is t.")
 
-(defvar composer-recent-version "1.7.2"
+(defvar composer-recent-version "1.9.3"
   "Known latest version of `composer.phar'.")
 
 (defconst composer-installer-url "https://getcomposer.org/installer")
 
 (defconst composer-unsafe-phar-url
-  "https://getcomposer.org/download/1.7.2/composer.phar")
+  "https://getcomposer.org/download/1.9.3/composer.phar")
 
 (defconst composer-unsafe-phar-md5sum
-  "71a15787193c4bb77982e30057102d86")
+  "a9cabf0031eca63a220a2736435b6f25")
 
 ;;; Customize
 (defgroup composer nil
