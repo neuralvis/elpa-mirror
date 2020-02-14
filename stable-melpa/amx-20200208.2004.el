@@ -8,7 +8,7 @@
 ;;         Cornelius Mika <cornelius.mika@gmail.com>
 ;; Maintainer: Ryan C. Thompson <rct@thompsonclan.org>
 ;; URL: http://github.com/DarwinAwardWinner/amx/
-;; Package-Version: 20200101.1701
+;; Package-Version: 20200208.2004
 ;; Package-Requires: ((emacs "24.4") (s "0"))
 ;; Version: 3.2
 ;; Keywords: convenience, usability
@@ -472,18 +472,22 @@ minibuffer."
 ;;--------------------------------------------------------------------------------
 ;; Pluggable Backends
 
-(cl-defun amx-define-backend (&key name comp-fun get-text-fun
+(cl-defun amx-define-backend (&key name comp-fun
+                                   (get-text-fun 'amx-default-get-text)
                                    (exit-fun 'amx-default-exit-minibuffer)
                                    required-feature)
   (cl-assert
    (and (symbolp name) name
-        (functionp comp-fun)
-        (functionp get-text-fun)
-        (functionp exit-fun)
+        ;; Unfortunately we can't rely on these to be defined as
+        ;; functions since their respective packages may not be
+        ;; loaded.
+        (or (functionp comp-fun) (symbolp comp-fun))
+        (or (functionp get-text-fun) (symbolp get-text-fun))
+        (or (functionp exit-fun) (symbolp exit-fun))
         (symbolp required-feature))
    nil
-   "Invalid amx backend spec: (:name %S :comp-fun %S :get-text-fun %S :exit-fun %S)"
-   (list name comp-fun get-text-fun exit-fun))
+   "Invalid amx backend spec: (:name %S :comp-fun %S :get-text-fun %S :exit-fun %S :required-feature %S)"
+   (list name comp-fun get-text-fun exit-fun required-feature))
   (let ((backend
          (make-amx-backend :name name
                            :comp-fun comp-fun
@@ -566,6 +570,7 @@ May not work for things like ido and ivy."
             :history 'extended-command-history
             :initial-input initial-input
             :preselect def
+            :require-match t
             :caller 'amx-completing-read-ivy))
 
 (defun amx-ivy-get-text ()
@@ -578,14 +583,37 @@ May not work for things like ido and ivy."
  :get-text-fun 'amx-ivy-get-text
  :required-feature 'ivy)
 
+(cl-defun amx-completing-read-helm (choices &key initial-input predicate def)
+  "Amx backend for helm completion"
+  (require 'helm-config)
+  (require 'helm-mode)                  ; Provides `helm-comp-read-map'
+  (helm-comp-read (amx-prompt-with-prefix-arg) choices
+                  :initial-input initial-input
+                  :test predicate
+                  :default def
+                  :name "Helm M-x Completions"
+                  :buffer "Helm M-x Completions"
+                  :history extended-command-history
+                  :reverse-history t
+                  :must-match t
+                  :keymap (make-composed-keymap amx-map helm-comp-read-map)))
+
+(amx-define-backend
+ :name 'helm
+ :comp-fun 'amx-completing-read-helm
+ :get-text-fun 'amx-default-get-text
+ :exit-fun 'helm-confirm-and-exit-minibuffer
+ :required-feature 'helm)
+
 (cl-defun amx-completing-read-auto (choices &key initial-input predicate def)
-  "Automatically select between ivy, ido, and standard completion."
+  "Automatically select the appropriate completion system for M-x."
   (let ((backend
          (cond
           ((bound-and-true-p ivy-mode) 'ivy)
           ((or (bound-and-true-p ido-mode)
                (bound-and-true-p ido-ubiquitous-mode))
            'ido)
+          ((bound-and-true-p helm-mode) 'helm)
           (t 'standard))))
     (amx--debug-message "Auto-selected backend `%s'" backend)
     (condition-case err
@@ -647,6 +675,7 @@ By default, an appropriate method is selected based on whether
           (const :tag "Auto-select" auto)
           (const :tag "Ido" ido)
           (const :tag "Ivy" ivy)
+          (const :tag "Helm" helm)
           (const :tag "Standard" standard)
           (symbol :tag "Custom backend"))
   :set #'amx-set-backend)

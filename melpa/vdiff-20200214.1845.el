@@ -5,7 +5,7 @@
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-vdiff
-;; Package-Version: 20190227.303
+;; Package-Version: 20200214.1845
 ;; Version: 0.2.3
 ;; Keywords: diff
 ;; Package-Requires: ((emacs "24.4") (hydra "0.13.0"))
@@ -537,14 +537,16 @@ POST-REFRESH-FUNCTION is called when the process finishes."
       (with-current-buffer (car buffers)
         (write-region nil nil tmp-a nil 'quietly)
         ;; ensure tmp file ends in newline
-        (unless (= (char-before (point-max)) ?\n)
+        (when (or (= (point-min) (point-max))
+                  (/= (char-before (point-max)) ?\n))
           (message "vdiff: Warning %s does not end in a newline."
                    (if buffer-file-name buffer-file-name (buffer-name)))
           (write-region "\n" nil tmp-a t 'quietly)))
       (with-current-buffer (cadr buffers)
         (write-region nil nil tmp-b nil 'quietly)
         ;; ensure tmp file ends in newline
-        (unless (= (char-before (point-max)) ?\n)
+        (when (or (= (point-min) (point-max))
+                  (/= (char-before (point-max)) ?\n))
           (message "vdiff: Warning %s does not end in a newline."
                    (if buffer-file-name buffer-file-name (buffer-name)))
           (write-region "\n" nil tmp-b t 'quietly)))
@@ -552,7 +554,8 @@ POST-REFRESH-FUNCTION is called when the process finishes."
         (with-current-buffer (nth 2 buffers)
           (write-region nil nil tmp-c nil 'quietly)
           ;; ensure tmp file ends in newline
-          (unless (= (char-before (point-max)) ?\n)
+          (when (or (= (point-min) (point-max))
+                    (/= (char-before (point-max)) ?\n))
             (message "vdiff: Warning %s does not end in a newline."
                      (if buffer-file-name buffer-file-name (buffer-name)))
             (write-region "\n" nil tmp-c t 'quietly))))
@@ -1391,7 +1394,8 @@ immediately preceding line."
   (let ((end (when (number-or-marker-p end)
                (save-excursion
                  (goto-char end)
-                 (unless (= (char-before) ?\n)
+                 (when (and (char-before)
+                            (/= (char-before) ?\n))
                    (forward-line))
                  (point)))))
     (if (and end (< end max)) end max)))
@@ -1926,6 +1930,18 @@ arguments."
   (vdiff-buffers (find-file-noselect file-a)
                  (find-file-noselect file-b)
                  rotate on-quit))
+
+(defun vdiff-temp-files ()
+  "Start a vidff session for two new temp files.
+
+This might be useful if you want to paste compare text pasted
+from another source."
+  (interactive)
+  (let ((file-a (make-temp-file "vdiff-"))
+        (file-b (make-temp-file "vdiff-")))
+    (write-region "\n" nil file-a)
+    (write-region "\n" nil file-b)
+    (vdiff-files file-a file-b)))
 
 (defcustom vdiff-2way-layout-function 'vdiff-2way-layout-function-default
   "Function to layout windows in 2way diffs.
