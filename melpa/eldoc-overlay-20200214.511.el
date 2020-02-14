@@ -4,7 +4,7 @@
 ;; Author: Robert Weiner <rsw@gnu.org>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: documentation, eldoc, overlay
-;; Package-Version: 20200206.615
+;; Package-Version: 20200214.511
 ;; URL: https://github.com/stardiviner/eldoc-overlay
 ;; Created:  14th Jan 2017
 ;; Modified: 18th Dec 2017
@@ -68,7 +68,7 @@ Two backends are supported: `inline-docs' and `quick-peek'.")
 (defun eldoc-overlay-display (format-string &rest args)
   "Display eldoc for the minibuffer when there or call the function indexed by `eldoc-overlay-backend'."
   (unless (or (company-tooltip-visible-p)
-              (when (company-box--get-frame)
+              (when (and (featurep 'company-box) (company-box--get-frame))
                 (frame-visible-p (company-box--get-frame))))
     (if (and (minibufferp) (not eldoc-overlay-enable-in-minibuffer))
         (apply #'eldoc-minibuffer-message format-string args)
@@ -106,9 +106,6 @@ Two backends are supported: `inline-docs' and `quick-peek'.")
   (if eldoc-overlay-mode
       (eldoc-overlay-enable)
     (eldoc-overlay-disable)))
-
-;;;###autoload
-(add-hook 'eldoc-mode-hook #'eldoc-overlay-mode)
 
 ;;; ----------------------------------------------------------------------------
 

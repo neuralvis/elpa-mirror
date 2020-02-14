@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.4") (ivy "0.8.0"))
-;; Package-Version: 20200127.131
+;; Package-Version: 20200214.504
 ;; Version: 0.1.3
 ;; Keywords: ivy
 
@@ -412,9 +412,10 @@ or /a/…/f.el."
 
 ;; Supports for `counsel-recentf'
 (defun ivy-rich-file-last-modified-time (candidate)
-  (if (file-remote-p candidate)
-      "?"
-    (format-time-string "%Y-%m-%d %H:%M:%S" (nth 5 (file-attributes candidate)))))
+  (let ((candidate (expand-file-name candidate ivy--directory)))
+    (if (file-remote-p candidate)
+        "?"
+      (format-time-string "%Y-%m-%d %H:%M:%S" (nth 5 (file-attributes candidate))))))
 
 ;; Supports for `counsel-bookmark'
 (defun ivy-rich-bookmark-value (candidate key)
