@@ -1,4 +1,4 @@
-;;; nordless-theme.el --- A colorless theme inspired by nord
+;;; nordless-theme.el --- A mostly colorless version of nord-theme
 
 ;; Copyright (C) 2018–2020 Thomas Letan
 ;;
@@ -17,8 +17,8 @@
 
 ;; Author: Thomas Letan <contact@thomasletan.fr>
 ;; URL: https://git.sr.ht/~lthms/colorless-themes.el
-;; Package-Version: 20200209.1132
-;; Version: 0.1
+;; Package-Version: 20200213.2057
+;; Version: 0.2
 ;; Package-Requires: ((colorless-themes "0.1"))
 ;; License: GPL-3
 ;; Keywords: faces theme
@@ -34,6 +34,8 @@
 ;;; Code:
 (require 'colorless-themes)
 
+(deftheme nordless "A mostly colorless version of nord-theme")
+
 (colorless-themes-make nordless
                        "#2E3440"    ; bg
                        "#3B4252"    ; bg+
@@ -47,5 +49,11 @@
                        "#EBCB8B"    ; yellow
                        "#A3BE8C")   ; green
 
+;;;###autoload
+(when (and (boundp 'custom-theme-load-path) load-file-name)
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
+
+(provide-theme 'nordless)
 (provide 'nordless-theme)
 ;;; nordless-theme.el ends here

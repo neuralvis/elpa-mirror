@@ -1,4 +1,4 @@
-;;; lavenderless-theme.el --- A colorless theme inspired by Lavender
+;;; lavenderless-theme.el --- A mostly colorless version of lavender-theme
 
 ;; Copyright (C) 2019–2020 Thomas Letan
 ;;
@@ -17,8 +17,8 @@
 
 ;; Author: Thomas Letan <contact@thomasletan.fr>
 ;; URL: https://git.sr.ht/~lthms/colorless-themes.el
-;; Package-Version: 20200209.1132
-;; Version: 0.1
+;; Package-Version: 20200213.2057
+;; Version: 0.2
 ;; Package-Requires: ((colorless-themes "0.1"))
 ;; License: GPL-3
 ;; Keywords: faces theme
@@ -30,6 +30,8 @@
 
 ;;; Code:
 (require 'colorless-themes)
+
+(deftheme lavenderless "A mostly colorless version of lavender-theme")
 
 (colorless-themes-make lavenderless
                        "#29222E"    ; bg
@@ -44,5 +46,11 @@
                        "#F4DC97"    ; yellow
                        "#A6E22E")   ; green
 
+;;;###autoload
+(when (and (boundp 'custom-theme-load-path) load-file-name)
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
+
+(provide-theme 'lavenderless)
 (provide 'lavenderless-theme)
 ;;; lavenderless-theme.el ends here

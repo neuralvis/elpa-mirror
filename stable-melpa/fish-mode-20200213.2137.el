@@ -4,7 +4,7 @@
 
 ;; Author: Tony Wang <wwwjfy@gmail.com>
 ;; Keywords: Fish, shell
-;; Package-Version: 20200210.1815
+;; Package-Version: 20200213.2137
 ;; Package-Requires: ((emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -499,67 +499,65 @@ POSITIVE-RE and NEGATIVE-RE are regular expressions."
 
 (defun fish-get-normal-indent ()
   "Returns indentation level based on previous non-empty and non-comment line."
-  (let ((cur-indent 0)
-        (not-indented t))
-    (while (and not-indented
-                (not (bobp)))
+  (catch :indent
+    (cl-labels ((back-to-non-continued
+                 () (cl-loop do (forward-line -1)
+                             while (line-continued-p)))
+                (line-continued-p
+                 () (save-excursion
+                      (forward-line -1)
+                      (looking-at-p (rx (1+ nonl) "\\" eol)))))
+      (while (not (bobp))
+        (if (line-continued-p)
+            ;;  Line is continued: return indentation of previous
+            ;;  non-continued line.
+            (progn
+              (back-to-non-continued)
+              (throw :indent (+ (current-indentation) fish-indent-offset)))
+          ;; Line is not continued.  Get indentation from previous lines.
 
-      ;; move to previous line
-      (forward-line -1)
-
-      (cond
-       ;; found empty line, so just skip it
-       ((fish/at-empty-line?))
-
-       ;; found comment line, so just skip it
-       ((fish/at-comment-line?))
-
-       ;; found line that contains an open block
-       ;; so increase indentation level
-       ((fish/at-open-block?)
-        (setq cur-indent (+ (current-indentation)
-                            fish-indent-offset)
-              not-indented nil))
-
-       ;; found line that starts with 'else' or 'case'
-       ;; so increase indentation level
-       ((looking-at-p "[ \t]*\\(else\\|case\\)\\>")
-        (setq cur-indent (+ (current-indentation) fish-indent-offset)
-              not-indented nil))
-
-       ;; found a line that starts with 'end'
-       ;; so use this line indentation level
-       ((looking-at-p "[ \t]*end\\>")
-        (setq cur-indent (current-indentation)
-              not-indented nil))
-
-       ;; found a line that contains open 'end' term
-       ;; and doesn't start with 'end' (the order matters!)
-       ;; it means that this 'end' is indented to the right
-       ;; so we need to decrease indentation level
-       ((fish/at-open-end?)
-        (setq cur-indent (- (current-indentation)
-                            fish-indent-offset)
-              not-indented nil))
-
-       ;; After escaped newline.
-       ((looking-at-p (rx (1+ nonl) "\\" eol))
-        (setq cur-indent (+ (current-indentation) fish-indent-offset)
-              not-indented nil))
-
-       ;; Two lines back was escaped newline.
-       ((save-excursion
+          ;; NOTE: Move to previous line.  The rest of this loop
+          ;; refers to the previous line, not the one whose
+          ;; indentation is being returned.
           (forward-line -1)
-          (looking-at-p (rx (1+ nonl) "\\" eol)))
-        (setq cur-indent (- (current-indentation) fish-indent-offset)
-              not-indented nil))
 
-       ;; default case
-       ;; we just set current indentation level
-       (t
-        (setq cur-indent (current-indentation)
-              not-indented nil))))
-    cur-indent))
+          (cond
+           ((line-continued-p)
+            ;;  Return indentation of previous non-continued line.
+            (back-to-non-continued)
+            (throw :indent (current-indentation)))
+
+           ((fish/at-empty-line?)
+            ;; Return indentation of previous non-continued line.
+            (back-to-non-continued)
+            (throw :indent (current-indentation)))
+
+           ((fish/at-comment-line?)
+            ;;  Return current indentation.
+            (throw :indent (current-indentation)))
+
+           ((fish/at-open-block?)
+            ;; Return one-deeper level of indentation.
+            (throw :indent (+ (current-indentation) fish-indent-offset)))
+
+           ((looking-at-p "[ \t]*\\(else\\|case\\)\\>")
+            ;; Return one-deeper level of indentation.
+            (throw :indent (+ (current-indentation) fish-indent-offset)))
+
+           ((looking-at-p "[ \t]*end\\>")
+            ;; Closing block: return current indentation.
+            (throw :indent (current-indentation)))
+
+           ;; found a line that contains open 'end' term
+           ;; and doesn't start with 'end' (the order matters!)
+           ;; it means that this 'end' is indented to the right
+           ;; so we need to decrease indentation level
+           ((fish/at-open-end?)
+            (throw :indent (- (current-indentation) fish-indent-offset)))
+
+           (t
+            ;;  Return current indentation.
+            (throw :indent (current-indentation)))))))))
 
 (defun fish-get-end-indent ()
   "Returns indentation level based on matching block opening term."

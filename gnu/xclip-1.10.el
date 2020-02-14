@@ -1,11 +1,11 @@
 ;;; xclip.el --- Copy&paste GUI clipboard from text terminal  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2007-2019  Free Software Foundation, Inc.
+;; Copyright (C) 2007-2020  Free Software Foundation, Inc.
 
 ;; Author: Leo Liu <sdl.web@gmail.com>
 ;; Keywords: convenience, tools
 ;; Created: 2007-12-30
-;; Version: 1.9
+;; Version: 1.10
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -185,7 +185,12 @@ See also `x-set-selection'."
                   (replace-regexp-in-string "\\(.*\\)copy" "\\1paste"
                                             xclip-program 'fixedcase)
                   nil standard-output nil
-                  (if (memq type '(primary PRIMARY)) '("-p")))))
+                  ;; From wl-paste's doc:
+                  ;;   -n, --no-newline  Do not append a newline character
+                  ;;    after the pasted clipboard content. This option is
+                  ;;    automatically enabled for non-text content types and
+                  ;;    when using the --watch mode.
+                  "-n" (if (memq type '(primary PRIMARY)) '("-p")))))
         (`termux-clipboard-get
          (when (memq type '(clipboard CLIPBOARD))
            (call-process xclip-program nil standard-output nil)))
@@ -261,15 +266,18 @@ Emacs-NN and is then later run by Emacs>NN."
           nil))
 
       ;; BIG UGLY HACK!
-      ;; xterm.el has a defmethod to use some (poorly supported) escape
+      ;; term/xterm.el has a defmethod to use some (poorly supported) escape
       ;; sequences (code named OSC 52) for clipboard interaction, and enables
       ;; it by default.
-      ;; Problem is, that its defmethod takes precedence over our defmethod,
+      ;; Problem is that its defmethod takes precedence over our defmethod,
       ;; so we need to disable it in order to be called.
       (cl-defmethod gui-backend-set-selection :extra "xclip-override"
           (selection-symbol value
            &context (window-system nil)
-                    ((terminal-parameter nil 'xterm--set-selection) (eql t)))
+                    ((terminal-parameter nil 'xterm--set-selection) (eql t))
+                    ;; This extra test gives this method higher precedence
+                    ;; over the one in term/xterm.el.
+                    ((featurep 'term/xterm) (eql t)))
         ;; Disable this method which doesn't work anyway in 99% of the cases!
         (setf (terminal-parameter nil 'xterm--set-selection) nil)
         ;; Try again!
@@ -332,6 +340,19 @@ Emacs-NN and is then later run by Emacs>NN."
 
 ;;;; ChangeLog:
 
+;; 2020-02-13  Stefan Monnier  <monnier@iro.umontreal.ca>
+;; 
+;; 	* packages/xclip/xclip.el: Fix it when loaded before term/xterm.el
+;; 
+;; 	(gui-backend-set-selection): Make sure our override indeed takes
+;; 	precedence.
+;; 
+;; 2019-10-11  Stefan Monnier  <monnier@iro.umontreal.ca>
+;; 
+;; 	* xclip.el (xclip-get-selection): Tell wl-paste not to add a newline
+;; 
+;; 	Suggested by Nolan Wright <nolan@nolanwright.dev>.
+;; 
 ;; 2019-07-02  Stefan Monnier  <monnier@iro.umontreal.ca>
 ;; 
 ;; 	* packages/xclip/xclip.el: Tweak last patch
