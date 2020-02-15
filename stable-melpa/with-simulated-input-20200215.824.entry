@@ -1,2 +1,0 @@
-
-(with-simulated-input . [(20200215 824) ((emacs (24 4)) (seq (2 0)) (s (0))) "A macro to simulate user input non-interactively" single ((:commit . "a71ecf18f7409273ddc0274564c0ed9e6cd8c79e") (:keywords "lisp" "tools" "extensions") (:authors ("Ryan C. Thompson")) (:maintainer "Ryan C. Thompson"))])

@@ -1,0 +1,2 @@
+
+(all-the-icons-ibuffer . [(20200201 1511) ((emacs (24 4)) (all-the-icons (2 2 0))) "Display icons for all buffers in ibuffer" single ((:commit . "3d36903cb022cc2b759b0a4efbc30856c6bcb929") (:keywords "convenience" "icons" "ibuffer") (:authors ("Vincent Zhang" . "seagle0128@gmail.com")) (:maintainer "Vincent Zhang" . "seagle0128@gmail.com") (:url . "https://github.com/seagle0128/grip-mode"))])
