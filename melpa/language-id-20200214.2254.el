@@ -2,11 +2,11 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-language-id
-;; Package-Version: 20191208.1933
-;; Version: 0.3.0
+;; Package-Version: 20200214.2254
+;; Version: 0.4.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
-;; License: MIT
+;; SPDX-License-Identifier: ISC
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -31,6 +31,7 @@
 (defvar language-id--file-name-extension nil
   "Internal variable for file name extension during lookup.")
 
+;; <https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml>
 (defconst language-id--definitions
   '(
 
@@ -38,65 +39,47 @@
     ;; web-mode we can tell them apart by file name extension only.
     ;; This implies that unsaved temp buffers using TypeScript/TSX in
     ;; web-mode are classified as JavaScript/JSX.
-    ;;
-    ;; Also, GitHub Linguist currently conflates both TypeScript and
-    ;; TSX under the TypeScript language ID, whereas JavaScript and
-    ;; JSX have separate language IDs.
     ("TypeScript"
      typescript-mode
-     typescript-tsx-mode
      (web-mode
       (web-mode-content-type "javascript")
       (web-mode-engine "none")
-      (language-id--file-name-extension ".ts"))
+      (language-id--file-name-extension ".ts")))
+    ("TSX"
+     typescript-tsx-mode
      (web-mode
       (web-mode-content-type "jsx")
       (web-mode-engine "none")
       (language-id--file-name-extension ".tsx")))
 
-    ("Assembly"
-     asm-mode
-     nasm-mode)
-    ("C"
-     c-mode)
-    ("C++"
-     c++-mode)
-    ("Clojure"
-     clojure-mode
-     clojurec-mode
-     clojurescript-mode)
-    ("Crystal"
-     crystal-mode)
+    ("Assembly" asm-mode nasm-mode)
+    ("Bazel" bazel-mode)
+    ("BibTeX" bibtex-mode)
+    ("C" c-mode)
+    ("C++" c++-mode)
+    ("Clojure" clojure-mode clojurec-mode clojurescript-mode)
+    ("CMake" cmake-mode)
+    ("Crystal" crystal-mode)
     ("CSS"
      css-mode
      (web-mode (web-mode-content-type "css") (web-mode-engine "none")))
-    ("D"
-     d-mode)
-    ("Dart"
-     dart-mode)
+    ("D" d-mode)
+    ("Dart" dart-mode)
     ("Dhall" dhall-mode)
-    ("Elixir"
-     elixir-mode)
-    ("Elm"
-     elm-mode)
-    ("Emacs Lisp"
-     emacs-lisp-mode
-     lisp-interaction-mode)
-    ("Go"
-     go-mode)
-    ("GraphQL"
-     graphql-mode)
-    ("Haskell"
-     haskell-mode)
+    ("Dockerfile" dockerfile-mode)
+    ("Elixir" elixir-mode)
+    ("Elm" elm-mode)
+    ("Emacs Lisp" emacs-lisp-mode lisp-interaction-mode)
+    ("Fish" fish-mode)
+    ("Go" go-mode)
+    ("GraphQL" graphql-mode)
+    ("Haskell" haskell-mode)
     ("HCL" hcl-mode terraform-mode)
+    ("Terraform" terraform-mode)
     ("HTML"
-     html-helper-mode
-     html-mode
-     mhtml-mode
-     nxhtml-mode
+     html-helper-mode html-mode mhtml-mode nxhtml-mode
      (web-mode (web-mode-content-type "html") (web-mode-engine "none")))
-    ("Java"
-     java-mode)
+    ("Java" java-mode)
     ("JavaScript"
      (js-mode (flow-minor-mode nil))
      (js2-mode (flow-minor-mode nil))
@@ -106,57 +89,39 @@
      json-mode
      (web-mode (web-mode-content-type "json") (web-mode-engine "none")))
     ("JSX"
-     js2-jsx-mode
-     jsx-mode
-     rjsx-mode
+     js2-jsx-mode jsx-mode rjsx-mode react-mode
      (web-mode (web-mode-content-type "jsx") (web-mode-engine "none")))
-    ("Kotlin"
-     kotlin-mode)
-    ("Less"
-     less-css-mode)
-    ("Literate Haskell"
-     literate-haskell-mode)
-    ("Lua"
-     lua-mode)
-    ("Markdown"
-     gfm-mode
-     markdown-mode)
-    ("Objective-C"
-     objc-mode)
-    ("OCaml"
-     caml-mode
-     tuareg-mode)
-    ("Perl"
-     perl-mode)
-    ("PHP"
-     php-mode)
-    ("Protocol Buffer"
-     protobuf-mode)
-    ("Python"
-     python-mode)
-    ("Ruby"
-     enh-ruby-mode
-     ruby-mode)
-    ("Rust"
-     rust-mode)
-    ("SCSS"
-     scss-mode)
-    ("Shell"
-     sh-mode)
-    ("SQL"
-     sql-mode)
-    ("Swift"
-     swift-mode
-     swift3-mode)
+    ("Kotlin" kotlin-mode)
+    ("LaTeX" latex-mode)
+    ("Less" less-css-mode)
+    ("Literate Haskell" literate-haskell-mode)
+    ("Lua" lua-mode)
+    ("Markdown" gfm-mode markdown-mode)
+    ("Nix" nix-mode)
+    ("Objective-C" objc-mode)
+    ("OCaml" caml-mode tuareg-mode)
+    ("Perl" cperl-mode perl-mode)
+    ("PHP" php-mode)
+    ("Protocol Buffer" protobuf-mode)
+    ("PureScript" purescript-mode)
+    ("Python" python-mode)
+    ("R" ess-r-mode (ess-mode (ess-dialect "R")))
+    ("Ruby" enh-ruby-mode ruby-mode)
+    ("Rust" rust-mode rustic-mode)
+    ("Scala" scala-mode)
+    ("SCSS" scss-mode)
+    ("Shell" sh-mode)
+    ("Solidity" solidity-mode)
+    ("SQL" sql-mode)
+    ("Swift" swift-mode swift3-mode)
+    ("Verilog" verilog-mode)
     ("Vue"
      vue-mode
      (web-mode (web-mode-content-type "html") (web-mode-engine "vue")))
     ("XML"
-     nxml-mode
-     xml-mode
+     nxml-mode xml-mode
      (web-mode (web-mode-content-type "xml") (web-mode-engine "none")))
-    ("YAML"
-     yaml-mode))
+    ("YAML" yaml-mode))
   "Internal table of programming language definitions.")
 
 (defun language-id--mode-match-p (mode)

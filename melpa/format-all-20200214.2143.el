@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20200206.1440
+;; Package-Version: 20200214.2143
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
@@ -701,7 +701,9 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter styler
   (:executable "Rscript")
   (:install "Rscript -e 'install.packages(\"styler\")'")
-  (:modes ess-r-mode)
+  (:modes
+   ess-r-mode
+   (ess-mode (equal "R" (symbol-value 'ess-dialect))))
   (:format
    (format-all--buffer-easy
     executable "--vanilla"

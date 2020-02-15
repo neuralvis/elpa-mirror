@@ -8,7 +8,7 @@
 ;;         Cornelius Mika <cornelius.mika@gmail.com>
 ;; Maintainer: Ryan C. Thompson <rct@thompsonclan.org>
 ;; URL: http://github.com/DarwinAwardWinner/amx/
-;; Package-Version: 20200208.2004
+;; Package-Version: 20200214.1804
 ;; Package-Requires: ((emacs "24.4") (s "0"))
 ;; Version: 3.2
 ;; Keywords: convenience, usability
@@ -56,7 +56,9 @@
 (defvar ido-mode)
 (defvar ido-ubiquitous-mode)
 (defvar ido-completion-map)
+(defvar ido-setup-hook)
 (defvar ido-text)
+(defvar helm-comp-read-map)
 
 (defvar amx-command-count 0
   "Number of commands known to amx.")
@@ -582,6 +584,8 @@ May not work for things like ido and ivy."
  :comp-fun 'amx-completing-read-ivy
  :get-text-fun 'amx-ivy-get-text
  :required-feature 'ivy)
+
+(declare-function helm-comp-read "ext:helm-mode")
 
 (cl-defun amx-completing-read-helm (choices &key initial-input predicate def)
   "Amx backend for helm completion"

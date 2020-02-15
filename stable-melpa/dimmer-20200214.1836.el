@@ -5,7 +5,7 @@
 ;; Filename: dimmer.el
 ;; Author: Neil Okamoto
 ;; Version: 0.5.0-SNAPSHOT
-;; Package-Version: 20200211.747
+;; Package-Version: 20200214.1836
 ;; Package-Requires: ((emacs "25"))
 ;; URL: https://github.com/gonewest818/dimmer.el
 ;; Keywords: faces, editing
@@ -207,7 +207,7 @@ wrong, then try HSL or RGB instead."
   "Convenience settings for hydra users."
   (with-no-warnings
     (add-to-list
-     'dimmer-exclusion-regexp-list "^\\*LV\\*$")))
+     'dimmer-exclusion-regexp-list "^ \\*LV\\*$")))
 
 (defun dimmer-configure-which-key ()
   "Convenience settings for which-key-users."
