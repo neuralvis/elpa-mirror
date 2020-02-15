@@ -2,7 +2,7 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Package-Version: 20200215.33
+;; Package-Version: 20200215.809
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5") (language-id "0.4"))
 ;; Keywords: languages util
@@ -90,6 +90,8 @@
 ;; submit a pull request or ask for help in GitHub issues.
 ;;
 ;;; Code:
+
+(require 'language-id)
 
 (defvar format-all-debug nil
   "When non-nil, format-all writes debug info using `message'.")
