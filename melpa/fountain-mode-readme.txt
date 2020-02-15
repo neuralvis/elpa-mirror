@@ -3,8 +3,7 @@
 Fountain Mode is a scriptwriting program for GNU Emacs using the
 Fountain plain text markup format.
 
-For more information on the Fountain format, visit
-<https://fountain.io>.
+For more information on the Fountain format, visit <https://fountain.io>.
 
 ## Features ##
 
