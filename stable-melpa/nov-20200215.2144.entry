@@ -1,0 +1,2 @@
+
+(nov . [(20200215 2144) ((dash (2 12 0)) (esxml (0 3 3)) (emacs (24 4))) "Featureful EPUB reader mode" single ((:commit . "41e6a9cf142465633b7128a3b0e284ff6cb582d7") (:keywords "hypermedia" "multimedia" "epub") (:authors ("Vasilij Schneidermann" . "mail@vasilij.de")) (:maintainer "Vasilij Schneidermann" . "mail@vasilij.de") (:url . "https://github.com/wasamasa/nov.el"))])

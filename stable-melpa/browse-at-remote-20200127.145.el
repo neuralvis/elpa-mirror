@@ -4,6 +4,7 @@
 ;;
 ;; Author:     Rustem Muslimov <r.muslimov@gmail.com>
 ;; Version:    0.13.0
+;; Package-Version: 20200127.145
 ;; Keywords:   github, gitlab, bitbucket, gist, stash, phabricator, sourcehut
 ;; Package-Requires: ((f "0.17.2") (s "1.9.0") (cl-lib "0.5"))
 
