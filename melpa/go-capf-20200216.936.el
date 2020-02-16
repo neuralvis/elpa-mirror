@@ -2,7 +2,7 @@
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 1.0.0
-;; Package-Version: 20200215.2142
+;; Package-Version: 20200216.936
 ;; Keywords: languages, abbrev, convenience
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://git.sr.ht/~zge/go-capf
@@ -111,24 +111,26 @@
   (let ((sig (get-text-property 0 'go-capf-sig str)))
     (when sig (concat "\t : " sig))))
 
-(defun go-capf--exit-func (str status)
+(defun go-capf--exit-func (str _status)
   "Extract type of completed symbol from STR as annotation."
   (let ((type (get-text-property 0 'go-capf-type str))
-        (sig (get-text-property 0 'go-capf-sig str)))
-    (catch 'nothing
-      (when (memq status '(finished exact))
-        (cond ((and (string= type "type")
-                    (string= sig "struct"))
-               (insert "{}"))
-              ((and (string= type "var")
+        (sig (get-text-property 0 'go-capf-sig str))
+        pair)
+    (cond ((string= type "func")
+           (setq pair "()"))
+          ((or (and (string= type "var")
                     (string-match-p "\\`map\\[" sig))
-               (insert "[]"))
-              ((and (string= type "var")
-                    (string-match-p "\\`\\[]" sig))
-               (insert "[]"))
-              ((string= type "func")
-               (insert "()"))
-              (t (throw 'nothing nil)))
+               (and (string= type "var")
+                    (string-match-p "\\`\\[]" sig)))
+           (setq pair "[]"))
+          ((and (string= type "type")
+                (string= sig "struct"))
+           (setq pair "{}")))
+    (when pair
+      (unless (let* ((open (substring pair 0 1))
+                     (reg (regexp-quote open)))
+                (looking-at reg))
+        (insert pair)
         (forward-char -1)))))
 
 ;;;###autoload

@@ -172,5 +172,6 @@ notify me of any missing package or change you would like to see.
     window-divider-mode
     writegood-mode
     xah-elisp-mode
+    xref
     xterm-color (and ansi-colors)
     ztree
