@@ -1,10 +1,10 @@
 ;;; transmission.el --- Interface to a Transmission session -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014-2019  Mark Oteiza <mvoteiza@udel.edu>
+;; Copyright (C) 2014-2020  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 0.12.1
-;; Package-Version: 20190211.246
+;; Package-Version: 20200215.1350
 ;; Package-Requires: ((emacs "24.4") (let-alist "1.0.5"))
 ;; Keywords: comm, tools
 
@@ -269,30 +269,27 @@ caching built in or is otherwise slow."
   "Alist of possible Transmission torrent statuses.")
 
 (defconst transmission-draw-torrents-keys
-  '("id" "name" "status" "eta" "error"
-    "rateDownload" "rateUpload"
-    "percentDone" "sizeWhenDone"
-    "uploadRatio"))
+  ["id" "name" "status" "eta" "error"
+   "rateDownload" "rateUpload"
+   "percentDone" "sizeWhenDone"
+   "uploadRatio"])
 
 (defconst transmission-draw-files-keys
-  '("name" "files" "fileStats" "downloadDir"))
+  ["name" "files" "fileStats" "downloadDir"])
 
 (defconst transmission-draw-info-keys
-  '("name" "hashString" "magnetLink" "activityDate" "addedDate"
-    "dateCreated" "doneDate" "startDate" "peers" "pieces" "pieceCount"
-    "pieceSize" "trackerStats" "peersConnected" "peersGettingFromUs" "peersFrom"
-    "peersSendingToUs" "sizeWhenDone" "error" "errorString" "uploadRatio"
-    "downloadedEver" "corruptEver" "haveValid" "totalSize" "percentDone"
-    "seedRatioLimit" "seedRatioMode" "bandwidthPriority" "downloadDir"
-    "uploadLimit" "uploadLimited" "downloadLimit" "downloadLimited"
-    "honorsSessionLimits" "rateDownload" "rateUpload" "queuePosition"))
+  ["name" "hashString" "magnetLink" "activityDate" "addedDate"
+   "dateCreated" "doneDate" "startDate" "peers" "pieces" "pieceCount"
+   "pieceSize" "trackerStats" "peersConnected" "peersGettingFromUs" "peersFrom"
+   "peersSendingToUs" "sizeWhenDone" "error" "errorString" "uploadRatio"
+   "downloadedEver" "corruptEver" "haveValid" "totalSize" "percentDone"
+   "seedRatioLimit" "seedRatioMode" "bandwidthPriority" "downloadDir"
+   "uploadLimit" "uploadLimited" "downloadLimit" "downloadLimited"
+   "honorsSessionLimits" "rateDownload" "rateUpload" "queuePosition"])
 
 (defconst transmission-file-symbols
   '(:files-wanted :files-unwanted :priority-high :priority-low :priority-normal)
   "List of \"torrent-set\" method arguments for operating on files.")
-
-(defconst transmission-session-header "X-Transmission-Session-Id"
-  "The \"X-Transmission-Session-Id\" header key.")
 
 (defvar transmission-session-id nil
   "The \"X-Transmission-Session-Id\" header value.")
@@ -308,10 +305,6 @@ caching built in or is otherwise slow."
 
 (defvar-local transmission-torrent-id nil
   "The Transmission torrent ID integer.")
-
-(defvar-local transmission-refresh-function nil
-  "The name of the function used to redraw a buffer.
-Should accept the torrent ID as an argument, e.g. `transmission-torrent-id'.")
 
 (define-error 'transmission-conflict
   "Wrong or missing header \"X-Transmission-Session-Id\"")
@@ -375,7 +368,7 @@ update `transmission-session-id' and signal the error."
                    (signal 'transmission-failure (list result))))))
         ((or 301 404 405) (signal 'transmission-wrong-rpc-path (list status)))
         (401 (signal 'transmission-unauthorized (list status)))
-        (409 (when (search-forward (format "%s: " transmission-session-header))
+        (409 (when (search-forward "X-Transmission-Session-Id: ")
                (setq transmission-session-id (read buffer))
                (signal 'transmission-conflict (list status))))
         (421 (signal 'transmission-misdirected (list transmission-host)))))))
@@ -402,7 +395,7 @@ and port default to `transmission-host' and
   "Send to PROCESS an HTTP POST request containing CONTENT."
   (with-current-buffer (process-buffer process)
     (erase-buffer))
-  (let ((headers (list (cons transmission-session-header transmission-session-id)
+  (let ((headers (list (cons "X-Transmission-Session-Id" transmission-session-id)
                        (cons "Host" transmission-host) ; CVE-2018-5702
                        (cons "Content-length" (string-bytes content)))))
     (let ((auth (transmission--auth-string)))
@@ -689,7 +682,7 @@ Direction D should be a symbol, either \"up\" or \"down\"."
                 (prompt (concat "Set torrent's " (symbol-name d) "load limit ("
                                 (if throttle (format "%d kB/s" n) "disabled") "): ")))
            (transmission-throttle-torrent ids limit (read-number prompt))))
-       "torrent-get" `(:ids ,ids :fields (,str ,(concat str "ed")))))))
+       "torrent-get" `(:ids ,ids :fields [,str ,(concat str "ed")])))))
 
 (defun transmission-torrent-honors-speed-limits-p ()
   "Return non-nil if torrent honors session speed limits, otherwise nil."
@@ -789,13 +782,13 @@ NOW is a time, defaulting to `current-time'."
 
 (defun transmission-tracker-stats (id)
   "Return the \"trackerStats\" array for torrent id ID."
-  (let* ((arguments `(:ids ,id :fields ("trackerStats")))
+  (let* ((arguments `(:ids ,id :fields ["trackerStats"]))
          (response (transmission-request "torrent-get" arguments)))
     (cdr (assq 'trackerStats (elt (transmission-torrents response) 0)))))
 
 (defun transmission-unique-announce-urls ()
   "Return a list of unique announce URLs from all current torrents."
-  (let ((response (transmission-request "torrent-get" '(:fields ("trackers"))))
+  (let ((response (transmission-request "torrent-get" '(:fields ["trackers"])))
         torrents trackers res)
     (dotimes (i (length (setq torrents (transmission-torrents response))))
       (dotimes (j (length (setq trackers (cdr (assq 'trackers (aref torrents i))))))
@@ -1267,7 +1260,7 @@ When called with a prefix UNLINK, also unlink torrent data on disk."
                        (:json-false t) (_ :json-false))))
          (transmission-request-async nil "torrent-set"
                                      `(:ids ,ids :honorsSessionLimits ,honor))))
-     "torrent-get" `(:ids ,ids :fields ("honorsSessionLimits")))))
+     "torrent-get" `(:ids ,ids :fields ["honorsSessionLimits"]))))
 
 (defun transmission-toggle (ids)
   "Toggle selected torrent(s) between started and stopped."
@@ -1281,7 +1274,7 @@ When called with a prefix UNLINK, also unlink torrent data on disk."
               (method (and status
                            (if (zerop status) "torrent-start" "torrent-stop"))))
          (when method (transmission-request-async nil method (list :ids ids)))))
-     "torrent-get" (list :ids ids :fields '("status")))))
+     "torrent-get" (list :ids ids :fields ["status"]))))
 
 (defun transmission-trackers-add (ids urls)
   "Add announce URLs to selected torrent or torrents."
@@ -1513,9 +1506,9 @@ See `transmission-read-time' for details on time input."
           (input (read-shell-command prompt nil nil def t)))
      (if fap (list (if (string-empty-p input) (or (car def) "") input) fap)
        (user-error "File does not exist"))))
-  (let* ((args (nconc (split-string-and-unquote command) (list (expand-file-name file))))
-         (prog (car args)))
-    (apply #'start-process prog nil args)))
+  (let ((args (nconc (split-string-and-unquote command)
+                     (list (expand-file-name file)))))
+    (apply #'start-process (car args) nil args)))
 
 (defun transmission-copy-file (file newname &optional ok-if-already-exists)
   "Copy the file at point to another location.
@@ -1671,7 +1664,7 @@ Otherwise, with a prefix arg, mark files on the next ARG lines."
   "Initiate `transmission-turtle-poll-callback' timer function."
   (transmission-request-async
    transmission-turtle-poll-callback "session-get"
-   '(:fields ("alt-speed-enabled" "alt-speed-down" "alt-speed-up"))))
+   '(:fields ["alt-speed-enabled" "alt-speed-down" "alt-speed-up"])))
 
 (defvar transmission-turtle-mode-lighter nil
   "Lighter for `transmission-turtle-mode'.")
@@ -1931,7 +1924,7 @@ Each form in BODY is a column descriptor."
       (transmission-format-pieces-internal .pieces .pieceCount .pieceSize))))
 
 (defun transmission-draw-peers (id)
-  (let* ((arguments `(:ids ,id :fields ("peers")))
+  (let* ((arguments `(:ids ,id :fields ["peers"]))
          (response (transmission-request "torrent-get" arguments)))
     (setq transmission-torrent-vector (transmission-torrents response)))
   (transmission-do-entries (cdr (assq 'peers (elt transmission-torrent-vector 0)))
@@ -1944,19 +1937,26 @@ Each form in BODY is a column descriptor."
     (or (transmission-geoip-retrieve .address) ""))
   (tabulated-list-print))
 
-(defun transmission-draw ()
-  "Draw the buffer with new contents via `transmission-refresh-function'."
-  (with-silent-modifications
-    (funcall transmission-refresh-function transmission-torrent-id)))
+(defmacro define-transmission-refresher (name)
+  "Define a function `transmission-refresh-NAME' that refreshes a context buffer.
+The defined function takes no arguments and expects
+`transmission-draw-NAME' to exist.
+Window position, point, and mark are restored, and the timer
+object `transmission-timer' is run."
+  (declare (indent 1) (debug (symbolp)))
+  (let ((thing (symbol-name name)))
+    `(defun ,(intern (concat "transmission-refresh-" thing)) (_arg _noconfirm)
+       (transmission-with-saved-state
+         (run-hooks 'before-revert-hook)
+         (with-silent-modifications
+           (,(intern (concat "transmission-draw-" thing)) transmission-torrent-id))
+         (run-hooks 'after-revert-hook))
+       (transmission-timer-check))))
 
-(defun transmission-refresh (&optional _arg _noconfirm)
-  "Refresh the current buffer, restoring window position, point, and mark.
-Also run the timer for timer object `transmission-timer'."
-  (transmission-with-saved-state
-    (run-hooks 'before-revert-hook)
-    (transmission-draw)
-    (run-hooks 'after-revert-hook))
-  (transmission-timer-check))
+(define-transmission-refresher torrents)
+(define-transmission-refresher files)
+(define-transmission-refresher info)
+(define-transmission-refresher peers)
 
 (defmacro transmission-context (mode)
   "Switch to a context buffer of major mode MODE."
@@ -1979,7 +1979,7 @@ Also run the timer for timer object `transmission-timer'."
                    (revert-buffer)
                  (setq transmission-torrent-id id)
                  (setq transmission-marked-ids nil)
-                 (transmission-draw)
+                 (revert-buffer)
                  (goto-char (point-min)))))
            (pop-to-buffer-same-window buffer))))))
 
@@ -2007,7 +2007,7 @@ of column descriptors."
 The function is to be used as a `sort' predicate for `tabulated-list-format'.
 The definition is (lambda (a b) (TEST ...)) where the body
 is constructed from TEST, BODY and the `tabulated-list-id' tagged as `<>'."
-  (declare (indent 2))
+  (declare (indent 2) (debug (symbolp function-form body)))
   (let ((a (make-symbol "a"))
         (b (make-symbol "b")))
     (cl-labels
@@ -2064,9 +2064,8 @@ for explanation of the peer flags."
          ("Client" 20 t)
          ("Location" 0 t)])
   (tabulated-list-init-header)
-  (setq transmission-refresh-function #'transmission-draw-peers)
   (add-hook 'post-command-hook #'transmission-timer-check nil t)
-  (setq-local revert-buffer-function #'transmission-refresh))
+  (setq-local revert-buffer-function #'transmission-refresh-peers))
 
 (defun transmission-peers ()
   "Open a `transmission-peers-mode' buffer for torrent at point."
@@ -2131,9 +2130,8 @@ for explanation of the peer flags."
   :group 'transmission
   (setq buffer-undo-list t)
   (setq font-lock-defaults '(transmission-info-font-lock-keywords t))
-  (setq transmission-refresh-function #'transmission-draw-info)
   (add-hook 'post-command-hook #'transmission-timer-check nil t)
-  (setq-local revert-buffer-function #'transmission-refresh))
+  (setq-local revert-buffer-function #'transmission-refresh-info))
 
 (defun transmission-info ()
   "Open a `transmission-info-mode' buffer for torrent at point."
@@ -2209,9 +2207,8 @@ for explanation of the peer flags."
   (setq tabulated-list-padding 1)
   (transmission-tabulated-list-format)
   (setq-local file-name-at-point-functions #'transmission-files-file-at-point)
-  (setq transmission-refresh-function #'transmission-draw-files)
   (setq tabulated-list-printer #'transmission-print-torrent)
-  (setq-local revert-buffer-function #'transmission-refresh)
+  (setq-local revert-buffer-function #'transmission-refresh-files)
   (setq-local font-lock-defaults '(transmission-files-font-lock-keywords t))
   (add-hook 'post-command-hook #'transmission-timer-check nil t)
   (add-hook 'before-revert-hook #'transmission-tabulated-list-format nil t))
@@ -2317,9 +2314,8 @@ Transmission."
          ("Name" 0 t)])
   (setq tabulated-list-padding 1)
   (transmission-tabulated-list-format)
-  (setq transmission-refresh-function #'transmission-draw-torrents)
   (setq tabulated-list-printer #'transmission-print-torrent)
-  (setq-local revert-buffer-function #'transmission-refresh)
+  (setq-local revert-buffer-function #'transmission-refresh-torrents)
   (setq-local font-lock-defaults '(transmission-font-lock-keywords t))
   (add-hook 'post-command-hook #'transmission-timer-check nil t)
   (add-hook 'before-revert-hook #'transmission-tabulated-list-format nil t))
@@ -2338,7 +2334,7 @@ Transmission."
           (condition-case e
               (progn
                 (transmission-mode)
-                (transmission-draw)
+                (revert-buffer)
                 (goto-char (point-min)))
             (error
              (kill-buffer buffer)
