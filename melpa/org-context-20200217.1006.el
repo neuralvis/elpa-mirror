@@ -4,7 +4,7 @@
 
 ;; Author: Sylvain Rousseau <thisirs at gmail dot com>
 ;; URL: https://github.com/thisirs/org-context
-;; Package-Version: 20170107.1337
+;; Package-Version: 20200217.1006
 ;; Version: 0.1
 ;; Keywords: Org, capture, agenda, convenience
 
@@ -574,9 +574,11 @@ the new set of custom commands."
   (interactive "P")
   (if (< (prefix-numeric-value arg) 0)
       (progn (ad-deactivate 'org-capture)
-             (ad-deactivate 'org-agenda))
+             (ad-deactivate 'org-agenda)
+             (message "org-context is disabled"))
     (ad-activate 'org-capture)
-    (ad-activate 'org-agenda)))
+    (ad-activate 'org-agenda)
+    (message "org-context is enabled")))
 
 (provide 'org-context)
 

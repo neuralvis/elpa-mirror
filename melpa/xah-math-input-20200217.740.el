@@ -1,10 +1,10 @@
 ;;; xah-math-input.el --- a minor mode for inputting math and Unicode symbols. -*- coding: utf-8; lexical-binding: t; -*-
 
-;; Copyright © 2010-2018 by Xah Lee
+;; Copyright © 2010-2020 by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 2.7.20190206085801
-;; Package-Version: 20190206.1658
+;; Version: 2.7.20200216233900
+;; Package-Version: 20200217.740
 ;; Created: 08 Dec 2010
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: abbrev, convenience, unicode, math, LaTex
@@ -210,7 +210,6 @@
 
   ["N" "ℕ"]
   ["integer" "ℤ"]
-  ["int" "ℤ"]
   ["rational" "ℚ"]
   ["Q" "ℚ"]
   ["real" "ℝ"]
@@ -743,7 +742,7 @@
 (xah-math-input--add-cycle ["·" "。"])      ; MIDDLE DOT, IDEOGRAPHIC FULL STOP
 (xah-math-input--add-cycle [":" "："])    ; FULLWIDTH COLON
 (xah-math-input--add-cycle [";" "；"])
-(xah-math-input--add-cycle ["!" "！" "¡" "‼" "❕"])
+(xah-math-input--add-cycle ["!" "❗" "❕" "！"])
 (xah-math-input--add-cycle ["♩" "♪" "♫" "♬"])
 (xah-math-input--add-cycle ["🎶" "🎵" "🎼"])
 
