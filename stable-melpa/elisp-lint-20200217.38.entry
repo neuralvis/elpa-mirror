@@ -1,0 +1,2 @@
+
+(elisp-lint . [(20200217 38) ((emacs (24 4)) (dash (2 15 0)) (package-lint (0 11))) "Basic linting for Emacs Lisp" single ((:commit . "ca06e89c10083a32cdf1567c82579828b3037444") (:keywords "lisp" "maint" "tools") (:authors ("Nikolaj Schumacher <bugs * nschum de>,")) (:maintainer "Nikolaj Schumacher <bugs * nschum de>,") (:url . "http://github.com/gonewest818/elisp-lint/"))])
