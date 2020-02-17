@@ -1,0 +1,2 @@
+
+(dashboard . [(20200217 1153) ((emacs (25 3)) (page-break-lines (0 11))) "A startup screen extracted from Spacemacs" tar ((:commit . "7a4dd6be3787ee39a7adda13d88ea29d6caf704b") (:keywords "startup" "screen" "tools" "dashboard") (:authors ("Rakan Al-Hneiti")) (:maintainer "Rakan Al-Hneiti") (:url . "https://github.com/emacs-dashboard/emacs-dashboard"))])
