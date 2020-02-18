@@ -4,7 +4,7 @@
 ;; Author: Robert Weiner <rsw@gnu.org>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: documentation, eldoc, overlay
-;; Package-Version: 20200214.511
+;; Package-Version: 20200216.546
 ;; URL: https://github.com/stardiviner/eldoc-overlay
 ;; Created:  14th Jan 2017
 ;; Modified: 18th Dec 2017
@@ -78,8 +78,6 @@ Two backends are supported: `inline-docs' and `quick-peek'.")
                (funcall eldoc-documentation-function)))))
 
 (defun eldoc-overlay-enable ()
-  (unless eldoc-mode
-    (eldoc-mode 1)) ; make sure `eldoc-mode' enabled.
   (setq-local eldoc-message-function #'eldoc-overlay-display)
   (when (eq eldoc-overlay-backend 'quick-peek)
     (add-hook 'post-command-hook #'quick-peek-hide)))
@@ -101,7 +99,7 @@ Two backends are supported: `inline-docs' and `quick-peek'.")
   :require 'eldoc-overlay-mode
   :group 'eldoc-overlay
   :init-value nil
-  :global nil
+  :global t
   :lighter " ElDoc/overlay"
   (if eldoc-overlay-mode
       (eldoc-overlay-enable)
