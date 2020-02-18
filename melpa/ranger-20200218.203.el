@@ -3,7 +3,7 @@
 
 ;; Author : Rich Alesi <https://github.com/ralesi>
 ;; Version: 0.9.8.6
-;; Package-Version: 20200118.101
+;; Package-Version: 20200218.203
 ;; Keywords: files, convenience, dired
 ;; Homepage: https://github.com/ralesi/ranger
 ;; Package-Requires: ((emacs "24.4"))
@@ -240,6 +240,11 @@
   "Time in seconds to delay running footer functions."
   :group 'ranger
   :type 'float)
+
+(defcustom ranger-footer-format " %d %m%w%s %c %f %p"
+  "Format for footer display. "
+  :group 'ranger
+  :type 'string)
 
 (defcustom ranger-preview-delay 0.05
   "Time in seconds to delay running preview file functions."
@@ -562,7 +567,8 @@ Selective hiding of specific attributes can be controlled by MASK."
     ;; TODO remove from cut - dr
     (define-key map "pp"               'ranger-paste)
     (define-key map "po"               'ranger-paste-over)
-    ;; TODO paste link - pl
+    (define-key map "pl"               'ranger-paste-as-symlink)
+    (define-key map "pL"               'ranger-paste-as-relative-symlink)
     (define-key map "p?"               'ranger-show-copy-contents)
 
     ;; copy names and paths
@@ -1032,6 +1038,21 @@ Otherwise, with a prefix arg, mark files on the next ARG lines."
   (interactive "P")
   (ranger-update-copy-ring t append))
 
+(defun ranger--invent-new-name (target-file)
+  "Helper function for ranger-paste.
+Returns target file name with extra characters appended if necessary to avoid
+name clashes."
+  (ranger--message "New file would be: %s" target-file)
+  (let ((new-target target-file)
+        (suffix 1))
+    (while (file-exists-p new-target)
+      (setq new-target
+            (concat base-target "~"
+                    (number-to-string suffix)))
+      (setq suffix (1+ suffix))
+      (ranger--message "Renamed file would be: %s" new-target))
+    new-target))
+
 (defun ranger-paste (&optional overwrite)
   "Paste copied files from topmost copy ring."
   (interactive)
@@ -1045,24 +1066,16 @@ Otherwise, with a prefix arg, mark files on the next ARG lines."
                (let* ((from-name (file-name-nondirectory file))
                       (base-target
                        (concat (file-name-directory target)
-                               from-name))
-                      (new-target base-target)
-                      (suffix 1))
-                 (ranger--message "New file would be: %s" new-target)
-                 (while (file-exists-p new-target)
-                   (setq new-target
-                         (concat base-target "~"
-                                 (number-to-string suffix)))
-                   (setq suffix (+ 1 suffix))
-                   (ranger--message "Renamed file would be: %s" new-target))
+                               from-name)))
                  (if overwrite
                      (if move
                          (dired-rename-file file target overwrite)
                        (dired-copy-file file target overwrite))
-                   (if move
-                       (unless (string= base-target file)
-                         (dired-rename-file file new-target overwrite))
-                     (dired-copy-file file new-target overwrite))))
+                   (let ((new-target (ranger--invent-new-name base-target)))
+                     (if move
+                         (unless (string= base-target file)
+                           (dired-rename-file file new-target overwrite))
+                       (dired-copy-file file new-target overwrite)))))
                (setq filenum (+ filenum 1))))
     ;; show immediate changes in buffer
     (ranger-refresh)
@@ -1087,6 +1100,35 @@ Otherwise, with a prefix arg, mark files on the next ARG lines."
              (ranger--get-file-sizes fileset)
              (propertize (string-join fileset "\n") 'face 'font-lock-comment-face)
              )))
+
+(defun ranger-paste-as-symlink (&optional relative)
+  "Paste files from topmost copy ring as symbolic links."
+  (interactive)
+  (let* ((current (ring-ref ranger-copy-ring 0))
+         (fileset (cdr current))
+         (target (dired-current-directory))
+         (filenum 0))
+    (cl-loop for file in fileset do
+             (when (file-exists-p file)
+               (let* ((from-name (file-name-nondirectory file))
+                      (target (ranger--invent-new-name
+                               (concat (file-name-directory target)
+                                       from-name))))
+                 (if relative
+                     (dired-make-relative-symlink file target)
+                   (make-symbolic-link file target)))
+               (setq filenum (1+ filenum))))
+    ;; show immediate changes in buffer
+    (ranger-refresh)
+    (message "Pasted %d/%d item(s) as %s symlinks"
+             filenum
+             (length fileset)
+             (if relative "relative" "absolute"))))
+
+(defun ranger-paste-as-relative-symlink ()
+  "Paste files from topmost copy ring as relative symbolic links."
+  (interactive)
+  (ranger-paste-as-symlink t))
 
 
 ;;; copy names and paths
@@ -1854,8 +1896,6 @@ R   : ranger . el location
   (interactive "^p")
   (ranger-next-file (- 0 arg)))
 
-(defun ranger--footer-spec ())
-
 (defun ranger-show-size ()
   "Show directory size."
   (interactive)
@@ -1866,22 +1906,18 @@ R   : ranger . el location
   (ranger-update-current-file)
   (ranger-details-message-delayed))
 
-(defun ranger-details-message (&optional sizes)
+(defun ranger--footer-spec (&optional sizes)
   "Echo file details."
-  (when (dired-get-filename nil t)
     (let* ((entry (dired-get-filename nil t))
            ;; enable to troubleshoot speeds
            ;; (sizes t)
            (filename (file-name-nondirectory entry))
            (fattr (file-attributes entry))
-           (fwidth (frame-width))
            (file-size (if sizes (concat "File "
                                         (file-size-human-readable (nth 7 fattr))) "Press \'du\' for size info."))
            (dir-size (if sizes (concat "Dir " (ranger--get-file-sizes
                                                (ranger--get-file-listing
-                                                dired-directory)
-                                               ;; (list dired-directory)
-                                               ))
+                                                dired-directory)))
                        ""))
            (user (nth 2 fattr))
            (file-mount
@@ -1902,29 +1938,45 @@ R   : ranger . el location
            (filedir-size (if sizes (ranger--get-file-sizes
                                     (ranger--get-file-listing dired-directory))
                            ""))
-           (file-date (format-time-string "%Y-%m-%d %H:%m"
-                                          (nth 5 fattr)))
+           (file-date
+            (propertize
+             (format-time-string "%Y-%m-%d %H:%m"
+                                 (nth 5 fattr))
+             'face 'font-lock-warning-face))
            (file-perm (nth 8 fattr))
            (cur-pos (- (line-number-at-pos (point)) 1))
            (final-pos (- (line-number-at-pos (point-max)) 2))
            (position (format "%3d/%-3d"
                              cur-pos
                              final-pos))
-           (footer-spec (ranger--footer-spec))
-           (lhs (format
-                 " %s %s"
-                 (propertize file-date 'face 'font-lock-warning-face)
-                 file-perm))
-           (rhs (format
-                 "%s %s %s %s"
-                 file-size
-                 dir-size
-                 file-mount
-                 position
-                 ))
-           (fringe-gap (if (or (eq fringe-mode 0)
-                               (eq (cdr-safe fringe-mode) 0)
-                               (eq (car-safe fringe-mode) 0)) 1 0))
+           (space "&&&")
+           (footer-spec
+             `(
+              (?U . ,user)
+              (?c . ,dir-size)
+              (?d . ,file-date)
+              (?f . ,file-mount)
+              (?m . ,file-perm)
+              (?p . ,position)
+              (?s . ,file-size)
+              (?u . ,filedir-size)
+              (?w . ,space)
+              )))
+      footer-spec
+      ))
+
+(defun ranger-details-message (&optional sizes)
+  "Echo file details."
+  (when (and (dired-get-filename nil t) ranger-footer-format)
+    (let* ((fwidth (frame-width))
+           (spec (ranger--footer-spec sizes))
+           (footer (format-spec
+                    ranger-footer-format
+                    spec))
+           (parts (split-string footer "&&&"))
+           (lhs (nth 0 parts))
+           (rhs (and (> (length parts) 1) (nth 1 parts)))
+           (fringe-gap (if (eq fringe-mode 0) 4 2))
            (space (- fwidth
                      fringe-gap
                      (length lhs)))
@@ -2049,24 +2101,30 @@ slot)."
     (add-to-list 'ranger-parent-windows parent-window)))
 
 (defun ranger-next-parent ()
-  "Move up in parent directory"
+  "Move down in parent directory"
   (interactive)
-  (with-current-buffer (car ranger-parent-buffers)
-    (dired-next-line 1)
-    (let ((curfile (dired-get-filename nil t)))
-      (if (file-directory-p curfile)
-          (ranger-find-file curfile)
-        (dired-next-line -1)))))
+  (let ((parent (car ranger-parent-buffers)))
+    (if parent
+        (with-current-buffer parent
+          (dired-next-line 1)
+          (let ((curfile (dired-get-filename nil t)))
+            (if (file-directory-p curfile)
+                (ranger-find-file curfile)
+              (dired-next-line -1))))
+      (message "No parent directory."))))
 
 (defun ranger-prev-parent ()
   "Move up in parent directory"
   (interactive)
-  (with-current-buffer (car ranger-parent-buffers)
-    (dired-next-line -1)
-    (let ((curfile (dired-get-filename nil t)))
-      (if (file-directory-p curfile)
-          (ranger-find-file curfile)
-        (dired-next-line 1)))))
+  (let ((parent (car ranger-parent-buffers)))
+    (if parent
+        (with-current-buffer (car ranger-parent-buffers)
+          (dired-next-line -1)
+          (let ((curfile (dired-get-filename nil t)))
+            (if (file-directory-p curfile)
+                (ranger-find-file curfile)
+              (dired-next-line 1))))
+      (message "No parent directory."))))
 
 
 ;; window creation subroutines
@@ -2334,8 +2392,15 @@ fraction of the total frame size"
     (setq new-window (split-window current-window window-size side))
     ;; set parameters
     (set-window-parameter new-window 'window-slot slot)
-    ;; now set up the window
-    (window--display-buffer buffer new-window 'window alist)
+    (if (version< emacs-version "27")
+        (window--display-buffer buffer new-window 'window alist display-buffer-mark-dedicated)
+      ;; optional argument `display-buffer-mark-dedicated' was removed in emacs 27 development branch
+      ;; (as of 2019-01-14). This is a temporary fix to be re-evaluated once emacs
+      ;; 27 development reaches the pretest phase. (docstring to be re-evaluated
+      ;; as well)
+      (window--display-buffer buffer new-window 'window alist))
+    ;; (add-hook 'window-configuration-change-hook 'ranger-window-check)
+    ;; )
     ))
 
 (defun ranger-show-flags ()
