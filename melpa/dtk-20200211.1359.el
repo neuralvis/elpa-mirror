@@ -4,7 +4,6 @@
 ;;
 ;; Author: David Thompson
 ;; Keywords: hypermedia
-;; Package-Version: 20200211.1359
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.6.1") (dash "2.12.0") (seq "1.9") (s "1.9"))
 ;; Version: 0.2
 ;; URL: https://github.com/dtk01/dtk.el
