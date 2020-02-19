@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/grip-mode
 ;; Version: 1.1.0
-;; Package-Version: 20200219.1224
+;; Package-Version: 20200219.1713
 ;; Package-Requires: ((emacs "24.4") (ivy-rich "0.1.0") (all-the-icons "2.2.0"))
 ;; Keywords: convenience, icons, ivy
 
@@ -448,7 +448,7 @@ See `ivy-rich-display-transformers-list' for details."
             (all-the-icons-material "block" :height 1.0 :v-adjust -0.2 :face 'error))
            ((file-directory-p filename)
             (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust -0.05))
-           ((t (all-the-icons-icon-for-file (file-name-nondirectory filename) :height 0.9 :v-adjust -0.05)))))))
+           (t (all-the-icons-icon-for-file (file-name-nondirectory filename) :height 0.9 :v-adjust -0.05))))))
 
 (defvar all-the-icons-ivy-rich-display-transformers-old-list ivy-rich-display-transformers-list)
 
