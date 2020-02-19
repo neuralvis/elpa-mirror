@@ -1,0 +1,2 @@
+
+(parchment-theme . [(20200219 241) ((autothemer (0 2))) "Light theme inspired by Acme and Leuven" single ((:commit . "28620edea258aa5b3c1ff66ce03636271cf56ff2") (:authors ("Alex Griffin" . "a@ajgrf.com")) (:maintainer "Alex Griffin" . "a@ajgrf.com") (:url . "https://github.com/ajgrf/parchment"))])

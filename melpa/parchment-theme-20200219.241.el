@@ -2,7 +2,7 @@
 
 ;; Author: Alex Griffin <a@ajgrf.com>
 ;; URL: https://github.com/ajgrf/parchment
-;; Package-Version: 20200218.2036
+;; Package-Version: 20200219.241
 ;; Version: 0.4.0-pre
 ;; Package-Requires: ((autothemer "0.2"))
 
@@ -562,6 +562,15 @@ switch themes often.")
    (solaire-default-face       (:background off-bg))
    (solaire-fringe-face        (:foreground black :background pale-gray))
    (solaire-hl-line-face       (:background beige))
+   (swiper-line-face           (:foreground pale-yellow :background blue :weight 'bold))
+   (swiper-match-face-1        ())
+   (swiper-match-face-2        (:foreground black :background pale-magenta))
+   (swiper-match-face-3        (:foreground black :background pale-blue))
+   (swiper-match-face-4        (:foreground black :background yellow))
+   (swiper-background-match-face-1 ())
+   (swiper-background-match-face-2 (:background pale-magenta))
+   (swiper-background-match-face-3 (:background pale-blue))
+   (swiper-background-match-face-4 (:background yellow))
    (term-color-black           (:foreground black :background pale-gray))
    (term-color-red             (:foreground red :background pale-red))
    (term-color-green           (:foreground green :background pale-green))
@@ -619,11 +628,18 @@ switch themes often.")
       (face-remap-add-relative 'font-lock-function-name-face
                                `(:foreground ,cyan))))
 
+  (defun parchment-modify-shell-messages ()
+    "Change color of shell messages (to be called in a hook)."
+    (when (member 'parchment custom-enabled-themes)
+      (face-remap-add-relative 'font-lock-string-face
+                               `())))
+
   (when parchment-want-modify-tty-colors
     (add-hook 'tty-setup-hook #'parchment-modify-tty-colors))
 
   (when parchment-add-mode-hooks
-    (add-hook 'sgml-mode-hook 'parchment-modify-sgml-tags)))
+    (add-hook 'sgml-mode-hook 'parchment-modify-sgml-tags)
+    (add-hook 'shell-mode-hook 'parchment-modify-shell-messages)))
 
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path)

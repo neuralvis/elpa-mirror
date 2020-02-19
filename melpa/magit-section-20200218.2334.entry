@@ -1,0 +1,2 @@
+
+(magit-section . [(20200218 2334) ((emacs (25 1)) (dash (20180910))) "Sections for read-only buffers" tar ((:commit . "18651aaccee1115b1bb1778449a131be5a028142") (:keywords "tools") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/magit"))])

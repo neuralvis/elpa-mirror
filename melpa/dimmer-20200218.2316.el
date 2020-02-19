@@ -5,7 +5,7 @@
 ;; Filename: dimmer.el
 ;; Author: Neil Okamoto
 ;; Version: 0.5.0-SNAPSHOT
-;; Package-Version: 20200218.235
+;; Package-Version: 20200218.2316
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/gonewest818/dimmer.el
 ;; Keywords: faces, editing
@@ -55,6 +55,9 @@
 ;;
 ;; `dimmer-configure-hydra` is a convenience function for hydra users that
 ;; modifies the customizations so "*LV*" buffers are not dimmed.
+;;
+;; `dimmer-configure-org` is a convenience function for org users that
+;; modifies the customizations so org-mode buffers are not dimmed.
 ;;
 ;; `dimmer-configure-which-key` is a convenience function for which-key
 ;; users that modifies the customizations so which-key popups are not dimmed.
@@ -208,6 +211,12 @@ wrong, then try HSL or RGB instead."
   (with-no-warnings
     (add-to-list
      'dimmer-exclusion-regexp-list "^ \\*LV\\*$")))
+
+(defun dimmer-configure-org ()
+  "Convenience settings for org users."
+  (with-no-warnings
+    (add-to-list 'dimmer-exclusion-regexp-list "^\\*Org Select\\*$")
+    (add-to-list 'dimmer-exclusion-regexp-list "^ \\*Agenda Commands\\*$")))
 
 (defun dimmer-configure-which-key ()
   "Convenience settings for which-key-users."
