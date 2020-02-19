@@ -1,2 +1,2 @@
 
-(treemacs-evil . [(20200114 1715) ((evil (1 2 12)) (treemacs (0 0))) "Evil mode integration for treemacs" single ((:commit . "fc311234fac61f9dc92560871970a8f7ff342597") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])
+(treemacs-evil . [(20200114 1715) ((evil (1 2 12)) (treemacs (0 0))) "Evil mode integration for treemacs" single ((:commit . "7fd9f0308ba7ec4133e9aff934a7e1d58a980390") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/treemacs"))])
