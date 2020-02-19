@@ -75,6 +75,7 @@ notify me of any missing package or change you would like to see.
     ediff
     eldoc-box
     elfeed
+    enhanced-ruby-mode
     emms
     epa
     equake
