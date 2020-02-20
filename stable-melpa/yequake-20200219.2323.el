@@ -4,8 +4,8 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: http://github.com/alphapapa/yequake
-;; Package-Version: 20191121.1726
-;; Version: 0.1-pre
+;; Package-Version: 20200219.2323
+;; Version: 0.1
 ;; Package-Requires: ((emacs "25.2") (dash "2.14.1"))
 ;; Keywords: convenience, window-system, frames
 
