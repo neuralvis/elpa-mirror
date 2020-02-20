@@ -1,2 +1,2 @@
 
-(ninja-mode . [(20181024 1439) ((emacs (24))) "Major mode for editing .ninja files" single ((:commit . "9fd5d3e00bac970dcdb15010a7eef381c4a44c14"))])
+(ninja-mode . [(20181024 1439) ((emacs (24))) "Major mode for editing .ninja files" single ((:commit . "2ca4c711f77d9cb95e3698de70d07823f4baa256"))])

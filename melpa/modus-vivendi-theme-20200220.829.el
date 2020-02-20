@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200219.537
+;; Package-Version: 20200220.829
 ;; Version: 0.5.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -61,6 +61,7 @@
 ;;     all-the-icons
 ;;     annotate
 ;;     anzu
+;;     apropos
 ;;     apt-sources-list
 ;;     artbollocks-mode
 ;;     auto-dim-other-buffers
@@ -541,6 +542,14 @@ between foreground and background is >= 7:1)."
    `(anzu-mode-line-no-match ((,class (:foreground ,red-active :weight bold))))
    `(anzu-replace-highlight ((,class (:inherit modus-theme-refine-yellow :underline t))))
    `(anzu-replace-to ((,class (:inherit modus-theme-intense-green :weight bold))))
+   ;;;; apropos
+   `(apropos-function-button ((,class (:foreground ,magenta-alt-other :underline t))))
+   `(apropos-keybinding ((,class (:foreground ,cyan :weight bold))))
+   `(apropos-misc-button ((,class (:foreground ,cyan-alt-other :underline t))))
+   `(apropos-property ((,class (:foreground ,magenta-alt :weight ,modus-theme-bold))))
+   `(apropos-symbol ((,class (:foreground ,blue-nuanced :weight ,modus-theme-bold :underline t))))
+   `(apropos-user-option-button ((,class (:foreground ,green-alt-other :underline t))))
+   `(apropos-variable-button ((,class (:foreground ,blue :underline t))))
    ;;;; apt-sources-list
    `(apt-sources-list-components ((,class (:foreground ,cyan))))
    `(apt-sources-list-options ((,class (:foreground ,yellow))))

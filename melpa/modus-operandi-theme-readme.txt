@@ -33,6 +33,7 @@ notify me of any missing package or change you would like to see.
     all-the-icons
     annotate
     anzu
+    apropos
     apt-sources-list
     artbollocks-mode
     auto-dim-other-buffers
