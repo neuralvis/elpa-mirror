@@ -4,8 +4,8 @@
 
 ;; Author: Tomohiro Matsuyama <m2ym.pub@gmail.com>
 ;; Keywords: convenience
-;; Package-Version: 20200220.136
-;; Version: 0.1.6
+;; Package-Version: 20200220.552
+;; Version: 0.1.7
 ;; Package-Requires: ((emacs "26.1") (cl-lib "0.3"))
 ;; URL: https://github.com/emacsorphanage/yascroll
 
@@ -118,12 +118,13 @@ not be displayed."
   :group 'yascroll)
 
 (defcustom yascroll:enabled-window-systems
-  '(nil x w32 ns pc)
+  '(nil x w32 ns pc mac)
   "A list of window-system's where yascroll can work."
   :type '(repeat (choice (const :tag "Termcap" nil)
                          (const :tag "X window" x)
                          (const :tag "MS-Windows" w32)
                          (const :tag "Macintosh Cocoa" ns)
+                         (const :tag "Macintosh Emacs Port" mac)
                          (const :tag "MS-DOS" pc)))
   :group 'yascroll)
 
