@@ -1,2 +1,0 @@
-
-(zero-input . [(20200216 1042) ((emacs (24 3)) (s (1 2 0))) "Zero Chinese input method framework" single ((:commit . "48d908e54ebb27f446288dbf3b2a38ed1bcb83a2") (:url . "https://gitlab.emacsos.com/sylecn/zero-el"))])
