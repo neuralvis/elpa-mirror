@@ -17,7 +17,7 @@
 
 ;; Author: Thomas Letan <contact@thomasletan.fr>
 ;; URL: https://git.sr.ht/~lthms/colorless-themes.el
-;; Package-Version: 20200213.2057
+;; Package-Version: 20200221.1655
 ;; Package-Requires: ((emacs "24.1"))
 ;; Version: 0.2
 ;; License: GPL-3
@@ -254,7 +254,8 @@ ORANGE, YELLOW and GREEN are pretty self-explanatory."
       '(centaur-tabs-unselected-modified ((t (:background ,current-line :foreground ,fg))))
       '(centaur-tabs-selected ((t (:background ,bg :foreground ,fg))))
       '(centaur-tabs-selected-modified ((t (:background ,bg :foreground ,fg))))
-      '(centaur-tabs-active-bar-face ((t (:background ,docs)))))))
+      '(centaur-tabs-active-bar-face ((t (:background ,docs))))
+      '(focus-unfocused ((t (:foreground ,fade)))))))
 
 (defmacro colorless-themes-load-theme (theme)
   "Load the theme THEME."

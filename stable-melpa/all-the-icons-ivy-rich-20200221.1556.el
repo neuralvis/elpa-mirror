@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/grip-mode
 ;; Version: 1.1.0
-;; Package-Version: 20200219.1713
+;; Package-Version: 20200221.1556
 ;; Package-Requires: ((emacs "24.4") (ivy-rich "0.1.0") (all-the-icons "2.2.0"))
 ;; Keywords: convenience, icons, ivy
 
@@ -299,11 +299,10 @@ See `ivy-rich-display-transformers-list' for details."
 
 (defun all-the-icons-ivy-rich-align-icons ()
   "Setting tab size to 1, to insert tabs as delimiters."
-  (setq tab-width 1))
+  (setq-local tab-width 1))
 
 (defun all-the-icons-ivy-rich--format-icon (icon &optional format)
   "Format ICON with FORMAT."
-  (setq tab-width 1)
   (format (or format " %s") icon))
 
 (defun all-the-icons-ivy-rich-bookmark-name (candidate)

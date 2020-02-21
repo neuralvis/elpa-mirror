@@ -1,2 +1,0 @@
-
-(all-the-icons-ivy-rich . [(20200219 1713) ((emacs (24 4)) (ivy-rich (0 1 0)) (all-the-icons (2 2 0))) "Better experience with icons for ivy" single ((:commit . "aeb2b37764e726b4f8a64f4f022e66e9ce222882") (:keywords "convenience" "icons" "ivy") (:authors ("Vincent Zhang" . "seagle0128@gmail.com")) (:maintainer "Vincent Zhang" . "seagle0128@gmail.com") (:url . "https://github.com/seagle0128/grip-mode"))])

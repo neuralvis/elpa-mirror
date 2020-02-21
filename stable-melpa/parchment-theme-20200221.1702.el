@@ -2,7 +2,7 @@
 
 ;; Author: Alex Griffin <a@ajgrf.com>
 ;; URL: https://github.com/ajgrf/parchment
-;; Package-Version: 20200221.51
+;; Package-Version: 20200221.1702
 ;; Version: 0.4.0-pre
 ;; Package-Requires: ((autothemer "0.2"))
 
@@ -122,10 +122,13 @@ switch themes often.")
    (doom-modeline-evil-visual-state (:foreground brown :weight 'bold))
    (doom-modeline-evil-emacs-state (:foreground magenta :weight 'bold))
    (doom-modeline-project-dir  (:inherit 'doom-modeline-buffer-path))
-   (region                     (:background yellow))
+   (region                     (:background yellow :extend nil))
    (secondary-selection        (:background yellow))
    (show-paren-match           (:background pale-blue))
    (show-paren-mismatch        (:foreground pale-yellow :background red))
+   (tab-bar                    (:background beige))
+   (tab-bar-tab                (:background pale-yellow :weight 'bold :overline shadow))
+   (tab-bar-tab-inactive       ())
    (trailing-whitespace        (:foreground red :background pale-red))
    (whitespace-big-indent      (:foreground pale-red :background red))
    (whitespace-empty           (:inherit 'whitespace-indentation))
