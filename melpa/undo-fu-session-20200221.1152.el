@@ -6,7 +6,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu-session
-;; Package-Version: 20200128.2027
+;; Package-Version: 20200221.1152
 ;; Keywords: convenience
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.1"))
@@ -29,14 +29,26 @@
 ;; This extension provides a way to use undo steps of
 ;; individual file buffers persistently.
 ;;
-;; Write the following code to your .emacs:
+
+;;; Usage
+
 ;;
-;; (require 'undo-fu-session)
-;; (global-undo-fu-session-mode)
+;; Write the following code to your .emacs file:
 ;;
-;; Now you can record and recover undo-fu-session by typing
-;; C-x C-s (save-buffer) an C-x C-f (find-file).
-;; And then type C-/ (undo).
+;;   (require 'undo-fu-session)
+;;   (global-undo-fu-session-mode)
+;;
+;; Or with `use-package':
+;;
+;;   (use-package undo-fu-session)
+;;   (global-undo-fu-session-mode)
+;;
+;; If you prefer to enable this per-mode, you may do so using
+;; mode hooks instead of calling `global-undo-fu-session-mode'.
+;; The following example enables this for org-mode:
+;;
+;;   (add-hook 'org-mode-hook (lambda () (undo-fu-session-mode))
+;;
 
 ;;; Code:
 
