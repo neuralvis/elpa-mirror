@@ -1,13 +1,13 @@
 ;;; org-msg.el --- Org mode to send and reply to email in HTML. -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Jérémy Compostella
+;; Copyright (C) 2018-2020 Jérémy Compostella
 
 ;; Author: Jérémy Compostella <jeremy.compostella@gmail.com>
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20191129.2329
-;; Package-X-Original-Version: 2.3
+;; Package-Version: 20200221.25
+;; Package-X-Original-Version: 2.4
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -212,6 +212,7 @@ Example:
     (div reply-header ((padding . "3.0pt 0in 0in 0in")
 		       (border-top . "solid #e1e1e1 1.0pt")
 		       (margin-bottom . "20px")))
+    (span underline ((text-decoration . "underline")))
     (li nil (,@font ,line-height (margin-bottom . "0px")
 	     (margin-top . "2px")))
     (nil org-ul ((list-style-type . "square")))
@@ -690,8 +691,8 @@ This function is a hook for `message-send-hook'."
 	  (unless (file-exists-p file)
 	    (error "File '%s' does not exist" file)))
 	(setq org-msg-attachment attachments)
-	(message-goto-body)
-	(delete-region (point) (point-max))
+	(goto-char (org-msg-start))
+	(delete-region (org-msg-start) (point-max))
 	(mml-insert-part "text/html")
 	(insert (org-msg-xml-to-str mail))))))
 
@@ -896,7 +897,8 @@ d       Delete one attachment, you will be prompted for a file name."))
   "Return the point of the beginning of the message body."
   (save-excursion
     (message-goto-body)
-    (point)))
+    (search-forward "#+OPTIONS:" nil t)
+    (line-beginning-position)))
 
 (defun org-msg-end ()
   "Return the point of the end of the message body."

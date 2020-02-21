@@ -4,6 +4,7 @@
 
 ;; Author: Marc Ihm <1@2484.de>
 ;; URL: https://github.com/marcIhm/org-index
+;; Package-Version: 20190920.356
 ;; Version: 6.0.0
 ;; Package-Requires: ((emacs "24.4"))
 
