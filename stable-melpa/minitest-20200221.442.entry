@@ -1,0 +1,2 @@
+
+(minitest . [(20200221 442) ((dash (1 0 0))) "An Emacs mode for ruby minitest files" tar ((:commit . "a3368514867b5bf6ca90926607969c9d7e2a16aa") (:authors ("Arthur Neves")) (:maintainer "Arthur Neves") (:url . "https://github.com/arthurnn/minitest-emacs"))])

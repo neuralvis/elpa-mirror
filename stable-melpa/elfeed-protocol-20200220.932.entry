@@ -1,2 +1,0 @@
-
-(elfeed-protocol . [(20200220 932) ((emacs (24 4)) (elfeed (2 1 1)) (cl-lib (0 5))) "Provide fever/newsblur/owncloud/ttrss protocols for elfeed" tar ((:commit . "7b3a4e4ce3cea205eb554815ecd9475c7898a7e3") (:keywords "news") (:authors ("Xu Fasheng <fasheng[AT]fasheng.info>")) (:maintainer "Xu Fasheng <fasheng[AT]fasheng.info>") (:url . "https://github.com/fasheng/elfeed-protocol"))])
