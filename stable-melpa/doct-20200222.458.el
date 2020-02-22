@@ -4,7 +4,7 @@
 
 ;; Author: Nicholas Vollmer <progfolio@protonmail.com>
 ;; URL: https://github.com/progfolio/doct
-;; Package-Version: 20200222.127
+;; Package-Version: 20200222.458
 ;; Created: December 10, 2019
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "25.1"))
@@ -866,7 +866,7 @@ It may be:
 
   (doct ... :file \"/path/to/target.org\")
   ;;empty string defaults to `org-default-notes-file'
-  (doct ... :file"")
+  (doct ... :file \"\")
 
   - a function:
 

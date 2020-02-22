@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 1.2.0
-;; Package-Version: 20200202.308
+;; Version: 1.2.1
+;; Package-Version: 20200222.551
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/conao3/ppp.el
@@ -388,21 +388,21 @@ Note:
              (let ((inhibit-read-only t)
                    (msg (format ,format-raw ,@format-args-raw))
                    (scroll (equal (point) (point-max))))
-               (seq-let (caller caller-args) (ppp--get-caller 2)
-                 (save-excursion
-                   (goto-char (point-max))
-                   (insert
-                    (concat
-                     ,(and break "\n")
-                     (format
-                      ,(concat
-                        (format (cadr (assq level warning-levels))
-                                (format warning-type-format pkg))
-                        "%s %s\n%s")
-                      caller caller-args
-                      msg)))
-                   (unless (and (bolp) (eolp))
-                     (newline))))
+               (save-excursion
+                 (goto-char (point-max))
+                 (insert
+                  (concat
+                   ,(and break "\n")
+                   ,(format (cadr (assq level warning-levels))
+                           (format warning-type-format pkg))
+                   ;; (seq-let (caller caller-args) (ppp--get-caller 2)
+                   ;;   (prin1-to-string caller)
+                   ;;   " "
+                   ;;   (prin1-to-string caller-args))
+                   "\n"
+                   msg))
+                 (unless (and (bolp) (eolp))
+                   (newline)))
                (when scroll
                  (goto-char (point-max))
                  (set-window-point
