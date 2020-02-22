@@ -6,7 +6,7 @@
 
 ;; Author: film42
 ;; Version: 1.5.1
-;; Package-Version: 20200209.1352
+;; Package-Version: 20200222.1110
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/dracula/emacs
 
@@ -141,6 +141,9 @@
                (enh-ruby-op-face :foreground ,dracula-pink)
                (enh-ruby-regexp-delimiter-face :foreground ,dracula-yellow)
                (enh-ruby-string-delimiter-face :foreground ,dracula-yellow)
+               ;; flyspell
+               (flyspell-duplicate :foreground ,dracula-orange :weight bold :underline (:style wave))
+               (flyspell-incorrect :foreground ,dracula-red :weight bold :underline (:style wave))
                ;; font-latex
                (font-latex-bold-face :foreground ,dracula-purple)
                (font-latex-italic-face :foreground ,dracula-pink :slant italic)
@@ -199,6 +202,7 @@
                (helm-buffer-size :foreground ,dracula-fg :background ,dracula-bg)
                (helm-candidate-number :foreground ,dracula-bg :background ,dracula-fg)
                (helm-ff-directory :foreground ,dracula-green :background ,dracula-bg :weight bold)
+               (helm-ff-dotted-directory :foreground ,dracula-green :background ,dracula-bg :weight normal)
                (helm-ff-executable :foreground ,other-blue :background ,dracula-bg :weight normal)
                (helm-ff-file :foreground ,dracula-fg :background ,dracula-bg :weight normal)
                (helm-ff-invalid-symlink :foreground ,dracula-pink :background ,dracula-bg :weight bold)

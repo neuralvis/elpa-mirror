@@ -2,7 +2,7 @@
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 0.2.0
-;; Package-Version: 20200220.1853
+;; Package-Version: 20200222.948
 ;; Keywords: comm
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://git.sr.ht/~zge/nullpointer-emacs
@@ -53,10 +53,6 @@
     (w1r3
      :host "w1r3.net"
      :query "upload")
-    (sprunge
-     :host "sprunge.us"
-     :query "sprunge"
-     :no-tls t)
     (sprunge
      :host "sprunge.us"
      :query "sprunge"
