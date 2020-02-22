@@ -4,7 +4,7 @@
 
 ;; Author: Alon Tzarafi  <alontzarafi@gmail.com>
 ;; URL: https://github.com/AlonTzarafi/battle-haxe
-;; Package-Version: 20200212.129
+;; Package-Version: 20200222.56
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "25") (company "0.9.9") (helm "3.0") (async "1.9.3") (cl-lib "0.5") (dash "2.12.0") (dash-functional "1.2.0") (s "1.10.0") (f "0.19.0"))
 ;; Keywords: programming, languages, completion
@@ -214,9 +214,14 @@ Sends PREFIX to the function `battle-haxe-compute-candidates'"
                            (string= rest-hash (alist-get 'rest-hash current))
                            ;; ensure the saved line is in scope
                            (>= (- (point) (line-beginning-position)) (length line-str))
-                           ;; same initial part of line
-                           (eq 0 (cl-search line-str (alist-get 'line-str current))))))))
-      
+                           
+                           ;;---OLD:
+                           ;; ;; same initial part of line
+                           ;; (eq 0 (cl-search line-str (alist-get 'line-str current)))
+                           
+                           ;;---NEW:
+                           ;; same exact line
+                           (string=  line-str (alist-get 'line-str current)))))))
       (if use-cached
           ;; Approve a previous cached data
           (unless (alist-get 'approved battle-haxe-cached-completion-context)

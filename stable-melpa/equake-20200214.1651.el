@@ -16,7 +16,7 @@
 ;; Author: Benjamin Slade <slade@jnanam.net>
 ;; Maintainer: Benjamin Slade <slade@jnanam.net>
 ;; URL: https://gitlab.com/emacsomancer/equake
-;; Package-Version: 20200209.2001
+;; Package-Version: 20200214.1651
 ;; Package-X-Original-Version: 0.90
 ;; Version: 0.90
 ;; Package-Requires: ((emacs "25") (dash "2.14.1") (tco "20190309.55"))
@@ -206,7 +206,7 @@
             map))
 
 (setq equake-rash-installed
-      (and (not (equal "" (shell-command-to-string "command -v raco")))
+      (and (executable-find "raco")
            (not (equal " [none]" (shell-command-to-string "printf \"$(raco pkg show rash | tail -1)\"")))))
 
 (defvar equake-tab-list ()
