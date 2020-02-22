@@ -3,8 +3,8 @@
 ;; Copyright (C) 2012 Constantin Kulikov
 
 ;; Author: Constantin Kulikov (Bad_ptr) <zxnotdead@gmail.com>
-;; Version: 2.9.7
-;; Package-Version: 20190511.1402
+;; Version: 2.9.8
+;; Package-Version: 20200222.1106
 ;; Package-Requires: ()
 ;; Keywords: perspectives, session, workspace, persistence, windows, buffers, convenience
 ;; URL: https://github.com/Bad-ptr/persp-mode.el
@@ -76,6 +76,24 @@
 
 (require 'cl)
 (require 'easymenu)
+
+(declare-function golden-ratio-mode "ext:golden-ratio")
+(declare-function tabbar-buffer-list "ext:tabbar-mode")
+
+(declare-function tramp-dissect-file-name "tramp")
+(declare-function tramp-file-name-hop "tramp")
+(declare-function tramp-file-name-host "tramp")
+(declare-function tramp-file-name-localname "tramp")
+(declare-function tramp-file-name-method "tramp")
+(declare-function tramp-file-name-user "tramp")
+(declare-function tramp-tramp-file-p "tramp")
+
+(defvar ido-cur-item)
+(defvar ido-exit)
+(defvar ido-temp-list)
+(defvar ido-text)
+(defvar ido-text-init)
+(defvar tabbar-buffer-list-function)
 
 (defvar persp-mode nil)
 
@@ -529,16 +547,16 @@ the currently selected window will be switched to that buffer."
   :group 'persp-mode
   :type 'boolean)
 
+(define-obsolete-variable-alias
+  'persp-when-kill-switch-to-buffer-in-perspective
+  'persp-when-remove-buffer-switch-to-other-buffer
+  "persp-mode 2.9.7")
 (defcustom persp-when-remove-buffer-switch-to-other-buffer t
   "If t -- then after a buffer is removed all windows of the current
 perspective which showing that buffer will be switched to some previous buffer
 in the current perspective."
   :group 'persp-mode
   :type 'boolean)
-(define-obsolete-variable-alias
-  'persp-when-kill-switch-to-buffer-in-perspective
-  'persp-when-remove-buffer-switch-to-other-buffer
-  "persp-mode 2.9.7")
 
 (defcustom persp-remove-buffers-from-nil-persp-behaviour 'ask-to-rem-from-all
   "What to do when removing a buffer from the nil perspective."
@@ -565,13 +583,13 @@ the current perspective."
            :value nil)
     (function :tag "Run function" :value (lambda () t))))
 
+(define-obsolete-variable-alias 'persp-kill-foreign-buffer-action
+  'persp-kill-foreign-buffer-behaviour "persp-mode 2.9.6")
 (defcustom persp-kill-foreign-buffer-behaviour 'dont-ask-weak
   "What to do when manually killing a buffer that is not in
 the current perspective."
   :group 'persp-mode
   :type 'persp-kill-foreign-buffer-behaviour-choices)
-(define-obsolete-variable-alias 'persp-kill-foreign-buffer-action
-  'persp-kill-foreign-buffer-behaviour "persp-mode 2.9.6")
 
 (make-obsolete-variable
  'persp-kill-foreign-indirect-buffer-behaviour-override
@@ -610,7 +628,7 @@ functions returns a non nil value the buffer considered as 'filtered out'."
            (custom-set-default sym (mapcar #'byte-compile val))))
 
 (defcustom persp-buffer-list-restricted-filter-functions nil
-  "Additional filters for use inside pthe `persp-buffer-list-restricted'."
+  "Additional filters for use inside the `persp-buffer-list-restricted'."
   :group 'persp-mode
   :type 'hook
   :set #'(lambda (sym val)
@@ -1012,15 +1030,15 @@ the selected window to a wrong buffer.")
   :tag "Keys for reading multiple items"
   :type '(alist :key-type symbol :value-type key-sequence))
 
+(define-obsolete-variable-alias
+  'persp-toggle-read-persp-filter-keys 'persp-toggle-read-buffer-filter-keys
+  "persp-mode 2.9")
 (defcustom persp-toggle-read-buffer-filter-keys (kbd "C-x C-p")
   "Keysequence to toggle the buffer filtering during read-buffer."
   :group 'persp-mode
   :type 'key-sequence
   :set #'(lambda (sym val)
            (persp-set-toggle-read-buffer-filter-keys val)))
-(define-obsolete-variable-alias
-  'persp-toggle-read-persp-filter-keys 'persp-toggle-read-buffer-filter-keys
-  "persp-mode 2.9")
 
 
 ;; Perspective struct:
@@ -2215,11 +2233,12 @@ killed, but just removed from a perspective(s)."
         (setq blist
               (remove-if-not
                (apply-partially #'persp-string-match-p regexp)
-               blist))
+               (mapcar #'get-buffer blist)
+               :key #'buffer-name))
         (when (and blist
                    (or noask (y-or-n-p (format "Do %s on these buffers:\n%s?\n"
                                                func
-                                               (mapconcat 'identity blist ", ")))))
+                                               (mapconcat #'buffer-name blist ", ")))))
           (mapcar #'(lambda (b) (apply func b rest-args)) blist))))))
 
 

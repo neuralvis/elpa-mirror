@@ -4,7 +4,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: kiwix wikipedia
-;; Package-Version: 20191016.951
+;; Package-Version: 20200222.726
 ;; URL: https://github.com/stardiviner/kiwix.el
 ;; Created: 23th July 2016
 ;; Version: 1.0.0
@@ -48,7 +48,7 @@
   "Kiwix customization options."
   :group 'kiwix-mode)
 
-(defcustom kiwix-server-use-docker t
+(defcustom kiwix-server-use-docker nil
   "Using Docker container for kiwix-serve or not?"
   :type 'boolean
   :safe #'booleanp
@@ -97,6 +97,20 @@
     (concat (getenv "HOME") "/.www.kiwix.org/kiwix/" kiwix-default-data-profile-name))
   "Specify the default Kiwix data path."
   :type 'string
+  :safe #'stringp
+  :group 'kiwix-mode)
+
+(defcustom kiwix-default-library-path (file-name-directory
+                                       (concat kiwix-default-data-path "/data/library/library.xml"))
+  "Kiwix libraries path."
+  :type 'string
+  :safe #'stringp
+  :group 'kiwix-mode)
+
+(defcustom kiwix-default-completing-read 'ivy
+  "Kiwix default completion frontend. Currently Ivy ('ivy) and Helm ('helm) both supported."
+  :type 'symbol
+  :safe #'symbolp
   :group 'kiwix-mode)
 
 (defcustom kiwix-default-browser-function browse-url-browser-function
@@ -110,12 +124,18 @@
   "Extract library name from library file."
   (replace-regexp-in-string "\.zim" "" file))
 
-(defvar kiwix-libraries
+(defun kiwix-get-libraries ()
+  "Check out all available Kiwix libraries."
   (when (kiwix-dir-detect)
     (mapcar #'kiwix--get-library-name
-            (directory-files
-             (concat kiwix-default-data-path "/data/library/") nil ".*\.zim")))
+            (directory-files kiwix-default-library-path nil ".*\.zim"))))
+
+(defvar kiwix-libraries (kiwix-get-libraries)
   "A list of Kiwix libraries.")
+
+(defun kiwix-libraries-refresh ()
+  "A helper function to refresh available Kiwx libraries."
+  (setq kiwix-libraries (kiwix-get-libraries)))
 
 (defvar kiwix--selected-library nil
   "Global variable of currently select library used in anonymous function.
@@ -130,7 +150,7 @@ Like in function `kiwix-ajax-search-hints'.")
 
 (defun kiwix-select-library (&optional filter)
   "Select Kiwix library name."
-  (completing-read "Kiwix library: " kiwix-libraries nil nil filter))
+  (completing-read "Kiwix library: " kiwix-libraries nil t filter))
 
 (defcustom kiwix-default-library "wikipedia_en_all.zim"
   "The default kiwix library when library fragment in link not specified."
@@ -157,10 +177,10 @@ Like in function `kiwix-ajax-search-hints'.")
   (let ((library-option "--library ")
         (port (concat "--port=" kiwix-server-port " "))
         (daemon "--daemon ")
-        (library-path (concat kiwix-default-data-path "/data/library/library.xml")))
+        (library-path kiwix-default-library-path))
     (if kiwix-server-use-docker
         (async-shell-command
-         (concat "docker run -d "
+         (concat "docker container run -d "
                  "--name kiwix-serve "
                  "-v " (file-name-directory library-path) ":" "/data "
                  "kiwix/kiwix-serve"
@@ -190,20 +210,31 @@ Like in function `kiwix-ajax-search-hints'.")
          (browse-url-browser-function kiwix-default-browser-function))
     (browse-url url)))
 
+(defun kiwix-docker-check ()
+  "Make sure Docker image 'kiwix/kiwix-server' is available."
+  (let ((docker-image (replace-regexp-in-string
+                       "\n" ""
+                       (shell-command-to-string
+                        "docker image ls kiwix/kiwix-serve | sed -n '2p' | cut -d ' ' -f 1"))))
+    (string-equal docker-image "kiwix/kiwix-serve")))
+
 (defvar kiwix-server-available? nil
   "The kiwix-server current available?")
 
 (defun kiwix-ping-server ()
   "Ping Kiwix server to set `kiwix-server-available?' global state variable."
+  (if kiwix-server-use-docker
+      (kiwix-docker-check)
+    (async-shell-command "docker pull kiwix/kiwix-serve"))
   (let ((inhibit-message t))
     (request kiwix-server-url
-             :type "GET"
-             :sync t
-             :parser (lambda () (libxml-parse-html-region (point-min) (point-max)))
-             :success (function* (lambda (&key data &allow-other-keys)
-                                   (setq kiwix-server-available? t)))
-             :error (function* (lambda (&rest args &key error-thrown &allow-other-keys)
-                                 (setq kiwix-server-available? nil))))))
+      :type "GET"
+      :sync t
+      :parser (lambda () (libxml-parse-html-region (point-min) (point-max)))
+      :success (function* (lambda (&key data &allow-other-keys)
+                            (setq kiwix-server-available? t)))
+      :error (function* (lambda (&rest args &key error-thrown &allow-other-keys)
+                          (setq kiwix-server-available? nil))))))
 
 (defun kiwix-ajax-search-hints (input &optional selected-library)
   "Instantly AJAX request to get available Kiwix entry keywords
@@ -235,31 +266,43 @@ list and return a list result."
 Or When prefix argument `INTERACTIVELY' specified, then prompt
 for query string and library interactively."
   (interactive "P")
-  (kiwix-ping-server)
+  (unless (kiwix-ping-server)
+    (kiwix-launch-server))
   (if kiwix-server-available?
       (progn
-        (setq kiwix--selected-library (if (or kiwix-search-interactively interactively)
+        (setq kiwix--selected-library (if (and (or kiwix-search-interactively interactively)
+                                               (not kiwix-server-use-docker))
                                           (kiwix-select-library)
                                         (kiwix--get-library-name kiwix-default-library)))
         (let* ((library kiwix--selected-library)
-               (query (ivy-read "Kiwix related entries: "
-                                `(lambda (input)
-                                   (apply 'kiwix-ajax-search-hints
-                                          input `(,kiwix--selected-library)))
-                                :predicate nil
-                                :require-match nil
-                                :initial-input (if mark-active
-                                                   (buffer-substring
-                                                    (region-beginning) (region-end))
-                                                 (thing-at-point 'symbol))
-                                :preselect nil
-                                :def nil
-                                :history nil
-                                :keymap nil
-                                :update-fn 'auto
-                                :sort t
-                                :dynamic-collection t
-                                :caller 'ivy-done)))
+               (query (case kiwix-default-completing-read
+                        ('helm
+                         (helm :source (helm-build-async-source "kiwix-helm-search-hints"
+                                         :candidates-process
+                                         `(lambda (input)
+                                            (apply 'kiwix-ajax-search-hints
+                                                   input `(,kiwix--selected-library))))
+                               :input (word-at-point)
+                               :buffer "*helm kiwix completion candidates*"))
+                        ('ivy
+                         (ivy-read "Kiwix related entries: "
+                                   `(lambda (input)
+                                      (apply 'kiwix-ajax-search-hints
+                                             input `(,kiwix--selected-library)))
+                                   :predicate nil
+                                   :require-match nil
+                                   :initial-input (if mark-active
+                                                      (buffer-substring
+                                                       (region-beginning) (region-end))
+                                                    (thing-at-point 'symbol))
+                                   :preselect nil
+                                   :def nil
+                                   :history nil
+                                   :keymap nil
+                                   :update-fn 'auto
+                                   :sort t
+                                   :dynamic-collection t
+                                   :caller 'ivy-done)))))
           (message (format "library: %s, query: %s" library query))
           (if (or (null library)
                   (string-empty-p library)
