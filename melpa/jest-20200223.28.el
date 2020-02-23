@@ -1,7 +1,7 @@
 ;;; jest.el --- helpers to run jest -*- lexical-binding: t; -*-
 ;; Author: Edmund Miller <edmund.a.miller@gmail.com>
 ;; URL:  https://github.com/emiller88/emacs-jest/
-;; Package-Version: 20200114.108
+;; Package-Version: 20200223.28
 ;; Version: 0.1.0
 ;; Keywords: jest, javascript, testing
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0") (dash-functional "2.12.0") (magit-popup "2.12.0") (projectile "0.14.0") (s "1.12.0") (js2-mode "20180301") (cl-lib "0.6.1"))
@@ -318,12 +318,15 @@ With a prefix ARG, allow editing."
 
 ;; internal helpers
 
+(fmakunbound 'jest-mode)
+(makunbound 'jest-mode)
+
 (define-derived-mode jest-mode
   comint-mode "jest"
   "Major mode for jest sessions (derived from comint-mode)."
   (make-variable-buffer-local 'comint-prompt-read-only)
   (setq-default comint-prompt-read-only nil)
-  (compilation-setup))
+  (compilation-setup t))
 
 (cl-defun jest--run (&key args file func edit)
   "Run jest for the given arguments."
@@ -541,6 +544,27 @@ Example: ‘MyABCThingy.__repr__’ becomes ‘test_my_abc_thingy_repr’."
         (with-current-buffer it
           (save-buffer)))))
    (t nil)))
+
+(defcustom jest-compile-command 'jest-popup
+  "Command to run when compile and friends are called."
+  :group 'jest
+  :type 'function)
+
+(defcustom jest-repeat-compile-command 'jest-repeat
+  "Command to run when recompile and friends are called."
+  :group 'jest
+  :type 'function)
+
+;;;###autoload
+(define-minor-mode jest-minor-mode
+  "Minor mode to run jest-mode commands for compile and friends."
+  :lighter " Jest Minor"
+  :keymap (let ((jest-minor-mode-keymap (make-sparse-keymap)))
+            (define-key jest-minor-mode-keymap [remap compile] jest-compile-command)
+            (define-key jest-minor-mode-keymap [remap recompile] jest-repeat-compile-command)
+            (define-key jest-minor-mode-keymap [remap projectile-test-project] jest-compile-command)
+            (define-key jest-minor-mode-keymap (kbd "C-c ;") 'jest-file-dwim)
+            jest-minor-mode-keymap))
 
 (provide 'jest)
 ;;; jest.el ends here

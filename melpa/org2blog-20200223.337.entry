@@ -1,0 +1,2 @@
+
+(org2blog . [(20200223 337) ((htmlize (1 54)) (hydra (0 15 0)) (xml-rpc (1 6 12)) (metaweblog (1 1 1))) "Blog from Org mode to WordPress" tar ((:commit . "ef7dcf0ff285c596743b0b8332737e586fe3137d") (:homepage . "https://github.com/org2blog/org2blog") (:keywords "comm" "convenience" "outlines" "wp") (:maintainer "Grant Rettke" . "grant@wisdomandwonder.com") (:authors ("Puneeth Chaganti" . "punchagan+org2blog@gmail.com")))])
