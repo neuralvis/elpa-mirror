@@ -150,6 +150,7 @@ notify me of any missing package or change you would like to see.
     rainbow-blocks
     rainbow-delimiters
     regexp-builder (also known as `re-builder')
+    rmail
     ruler-mode
     shell-script-mode
     show-paren-mode
