@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25.2") (treemacs "0.0") (persp-mode "2.9.7") (dash "2.11.0"))
-;; Package-Version: 20200221.1603
+;; Package-Version: 20200223.1142
 ;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -56,10 +56,15 @@
 (defun treemacs-persp--on-perspective-switch (&rest _)
   "Hook running after the perspective was switched.
 Will select a workspace for the now active perspective, creating it if necessary."
-  (treemacs-without-following
-   (when (null (treemacs-get-local-buffer))
-     (treemacs-persp--ensure-workspace-exists (get-current-persp)))
-   (treemacs--change-buffer-on-scope-change)))
+  ;; runnig with a timer ensures that any other post-processing is finished after a perspective
+  ;; was run since commands like `spacemacs/helm-persp-switch-project' first create a perspective
+  ;; and only afterwards select the file to display
+  (run-with-timer
+   0.1 nil
+   (lambda ()
+     (treemacs-without-following
+      (treemacs-persp--ensure-workspace-exists (get-current-persp))
+      (treemacs--change-buffer-on-scope-change)))))
 
 (defun treemacs-persp--ensure-workspace-exists (persp)
   "Make sure a workspace exists for the given PERSP.
