@@ -29,6 +29,7 @@ groups (there are implicitly supported packages as well, which
 inherit from font-lock or some basic group).  You are encouraged to
 notify me of any missing package or change you would like to see.
 
+    ace-window
     alert
     all-the-icons
     annotate
@@ -38,7 +39,6 @@ notify me of any missing package or change you would like to see.
     artbollocks-mode
     auto-dim-other-buffers
     avy
-    ace-window
     breakpoint (provided by built-in gdb-mi.el)
     calendar and diary
     calfw
@@ -59,7 +59,6 @@ notify me of any missing package or change you would like to see.
     deadgrep
     define-word
     deft
-    disk-usage
     diff-hl
     diff-mode
     dim-autoload
@@ -70,14 +69,15 @@ notify me of any missing package or change you would like to see.
     dired-narrow
     dired-subtree
     diredfl
+    disk-usage
     doom-modeline
     easy-jekyll
     easy-kill
     ediff
     eldoc-box
     elfeed
-    enhanced-ruby-mode
     emms
+    enhanced-ruby-mode
     epa
     equake
     erc
@@ -89,13 +89,13 @@ notify me of any missing package or change you would like to see.
     eww
     eyebrowse
     fancy-dabbrev
-    focus
-    font-lock (generic syntax highlighting)
     flycheck
     flycheck-indicator
     flycheck-posframe
     flymake
     flyspell
+    focus
+    font-lock (generic syntax highlighting)
     fountain (fountain-mode)
     geiser
     git
@@ -104,12 +104,13 @@ notify me of any missing package or change you would like to see.
     git-timemachine
     gnus
     helm
-    hydra
     highlight-blocks
-    hl-line-mode
     hl-fill-column
+    hl-line-mode
+    hydra
     ido-mode
     iedit
+    imenu-list
     info
     info-colors
     isearch, occur, etc.
