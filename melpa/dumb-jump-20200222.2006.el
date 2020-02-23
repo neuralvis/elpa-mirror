@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2019 jack angers
 ;; Author: jack angers and contributors
 ;; Url: https://github.com/jacktasia/dumb-jump
-;; Package-Version: 20200211.2133
+;; Package-Version: 20200222.2006
 ;; Version: 0.5.3
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
@@ -2132,11 +2132,11 @@ current file."
          (issue (plist-get info :issue))
          (lang (plist-get info :lang))
          (result-count (length results)))
-    (cond
-     ((> fetch-time dumb-jump-max-find-time)
+    (when (> fetch-time dumb-jump-max-find-time)
       (dumb-jump-message
        "Took over %ss to find '%s'. Please install ag or rg, or add a .dumbjump file to '%s' with path exclusions"
        (number-to-string dumb-jump-max-find-time) look-for proj-root))
+    (cond
      ((eq issue 'nogrep)
       (dumb-jump-message "Please install ag, rg, git grep or grep!"))
      ((eq issue 'nosymbol)
