@@ -1,0 +1,2 @@
+
+(remind-bindings . [(20200216 2258) ((emacs (25 1)) (omni-quotes (0 5)) (popwin (1 0)) (map (2 0))) "Reminders for your init bindings" single ((:commit . "0f129b9ad5ad1bb4e32cb4e60c32a69f2757116a") (:keywords "outlines") (:authors ("Mehmet Tekman")) (:maintainer "Mehmet Tekman") (:url . "https://github.com/mtekman/remind-bindings.el"))])
