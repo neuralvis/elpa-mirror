@@ -1,11 +1,11 @@
 ;;; magit-annex.el --- Control git-annex from Magit  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2019 Kyle Meyer <kyle@kyleam.com>
+;; Copyright (C) 2013-2020 Kyle Meyer <kyle@kyleam.com>
 
 ;; Author: Kyle Meyer <kyle@kyleam.com>
 ;;         Rémi Vanicat <vanicat@debian.org>
 ;; URL: https://github.com/magit/magit-annex
-;; Package-Version: 20190421.241
+;; Package-Version: 20200224.1
 ;; Keywords: vc tools
 ;; Version: 1.7.1
 ;; Package-Requires: ((cl-lib "0.3") (magit "2.90.0"))
@@ -338,6 +338,9 @@ rather than \"git \" is used as the initial input."
   "Add the item at point to annex.
 With a prefix argument, prompt for FILE.
 \('git annex add')"
+  ;; NEEDSWORK: Use of `magit-annex-unlocked-files' doesn't make sense
+  ;; for v6+ repos.
+  ;;
   ;; Modified from `magit-stage'.
   (interactive
    (when current-prefix-arg
@@ -415,7 +418,16 @@ With a prefix argument, prompt for FILE.
 
 (defun magit-annex-unlocked-files ()
   "Return unlocked annex files."
-  (magit-git-items "diff-files" "-z" "--diff-filter=T" "--name-only"))
+  (with-temp-buffer
+    (let ((exit (magit-process-file
+                 magit-git-executable nil t nil
+                 "annex" "find" "--print0" "--unlocked")))
+      (if (zerop exit)
+          (split-string (buffer-string) "\0" t)
+        ;; `find --unlocked' isn't available until git-annex
+        ;; 7.20191009.  Fall back to the old approach that is
+        ;; compatible with v5 repos only.
+        (magit-git-items "diff-files" "-z" "--diff-filter=T" "--name-only")))))
 
 (defun magit-annex-get-all-auto ()
   "Run `git annex get --auto'."
