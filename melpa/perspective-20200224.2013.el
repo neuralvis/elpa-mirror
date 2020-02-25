@@ -6,7 +6,7 @@
 
 ;; Author: Natalie Weizenbaum <nex342@gmail.com>
 ;; URL: http://github.com/nex3/perspective-el
-;; Package-Version: 20200204.2020
+;; Package-Version: 20200224.2013
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
 ;; Version: 2.3
 ;; Created: 2008-03-05
@@ -138,6 +138,11 @@ After BODY is evaluated, frame parameters are reset to their original values."
 filtering in buffer display modes like ibuffer."
   (not (persp-is-current-buffer buf)))
 
+(defun persp-valid-name-p (name)
+  "Return T if NAME is a valid perspective name."
+  (and (not (null name))
+       (not (string= "" name))))
+
 (defmacro with-current-perspective (&rest body)
   "Operate on BODY when we are in a perspective."
   (declare (indent 0))
@@ -181,6 +186,12 @@ Run with the perspective to be destroyed as `persp-curr'.")
 (defvar persp-activated-hook nil
   "A hook that's run after a perspective has been activated.
 Run with the activated perspective active.")
+
+(defvar persp-before-rename-hook nil
+  "A hook run immediately before renaming a perspective.")
+
+(defvar persp-after-rename-hook nil
+  "A hook run immediately after renaming a perspective.")
 
 (defvar persp-state-before-save-hook nil
   "A hook run immediately before saving persp state to disk.")
@@ -539,7 +550,8 @@ perspective's local variables are set.
 If NORECORD is non-nil, do not update the
 `persp-last-switch-time' for the switched perspective."
   (interactive "i")
-  (if (null name) (setq name (persp-prompt (and (persp-last) (persp-name (persp-last))))))
+  (unless (persp-valid-name-p name)
+    (setq name (persp-prompt (and (persp-last) (persp-name (persp-last))))))
   (if (and (persp-curr) (equal name (persp-current-name))) name
     (let ((persp (gethash name (perspectives-hash))))
       (set-frame-parameter nil 'persp--last (persp-curr))
@@ -733,8 +745,12 @@ perspective and no others are killed."
 (defun persp-rename (name)
   "Rename the current perspective to NAME."
   (interactive "sNew name: ")
+  (unless (persp-valid-name-p name)
+    (persp-error "Invalid perspective name"))
   (if (gethash name (perspectives-hash))
       (persp-error "Perspective `%s' already exists" name)
+    ;; before hook
+    (run-hooks 'persp-before-rename-hook)
     ;; rename the perspective-specific *scratch* buffer
     (let* ((old-scratch-name (persp-scratch-buffer))
            (new-scratch-name (persp-scratch-buffer name))
@@ -746,7 +762,9 @@ perspective and no others are killed."
     (remhash (persp-current-name) (perspectives-hash))
     (puthash name (persp-curr) (perspectives-hash))
     (setf (persp-name (persp-curr)) name)
-    (persp-update-modestring)))
+    (persp-update-modestring)
+    ;; after hook
+    (run-hooks 'persp-after-rename-hook)))
 
 (cl-defun persp-all-get (name not-frame)
   "Returns the list of buffers for a perspective named NAME from any
@@ -914,6 +932,7 @@ named collections of buffers and window configurations."
         (ad-activate 'recursive-edit)
         (ad-activate 'exit-recursive-edit)
         (add-hook 'after-make-frame-functions 'persp-init-frame)
+        (add-hook 'delete-frame-functions 'persp-delete-frame)
         (add-hook 'ido-make-buffer-list-hook 'persp-set-ido-buffers)
         (setq read-buffer-function 'persp-read-buffer)
         (mapc 'persp-init-frame (frame-list))
@@ -921,6 +940,7 @@ named collections of buffers and window configurations."
 
         (run-hooks 'persp-mode-hook))
     (ad-deactivate-regexp "^persp-.*")
+    (remove-hook 'delete-frame-functions 'persp-delete-frame)
     (remove-hook 'after-make-frame-functions 'persp-init-frame)
     (remove-hook 'ido-make-buffer-list-hook 'persp-set-ido-buffers)
     (setq read-buffer-function nil)
@@ -957,6 +977,12 @@ By default, this uses the current frame."
      (make-persp :name persp-initial-frame-name :buffers (list (current-buffer))
        :window-configuration (current-window-configuration)
        :point-marker (point-marker)))))
+
+(defun persp-delete-frame (frame)
+  "Clean up perspectives in FRAME.
+By default this uses the current frame."
+  (with-selected-frame frame
+    (mapcar #'persp-kill (persp-names))))
 
 (defun persp-make-variable-persp-local (variable)
   "Make VARIABLE become perspective-local.
