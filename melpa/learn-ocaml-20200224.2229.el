@@ -4,7 +4,7 @@
 
 ;; Authors: (see the AUTHORS file distributed along the sources)
 ;; URL: https://github.com/pfitaxel/learn-ocaml.el
-;; Package-Version: 20200224.55
+;; Package-Version: 20200224.2229
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 1.0.0-git
 
@@ -572,6 +572,7 @@ Argument SECRET may be needed by the server."
   "Grade the current .ml buffer."
   (interactive)
   (learn-ocaml-setup nil)
+  (save-buffer)
   (learn-ocaml-grade-file-cmd
    :id learn-ocaml-exercise-id
    :file buffer-file-name
