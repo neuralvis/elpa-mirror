@@ -1,2 +1,2 @@
 
-(ormolu . [(20200207 2111) ((emacs (24)) (reformatter (0 4))) "Format Haskell source code using the \"ormolu\" program" single ((:commit . "3ba5807f56e8dfd053dca454b84ae49a697f38da") (:keywords "files" "tools") (:authors ("Vasiliy Yorkin" . "vasiliy.yorkin@gmail.com")) (:maintainer "Vasiliy Yorkin") (:url . "https://github.com/vyorkin/ormolu.el"))])
+(ormolu . [(20200207 2111) ((emacs (24)) (reformatter (0 4))) "Format Haskell source code using the \"ormolu\" program" single ((:commit . "f6f2ea12ae158a400525857a82eb05bf2b7e88f3") (:keywords "files" "tools") (:authors ("Vasiliy Yorkin" . "vasiliy.yorkin@gmail.com")) (:maintainer "Vasiliy Yorkin") (:url . "https://github.com/vyorkin/ormolu.el"))])
