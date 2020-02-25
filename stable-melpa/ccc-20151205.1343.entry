@@ -1,2 +1,2 @@
 
-(ccc . [(20151205 1343) nil "buffer local cursor color control library" single ((:commit . "a96ee4aa28b8b200f62209ed4c8b119884bec1a0") (:keywords "cursor") (:authors ("Masatake YAMATO" . "masata-y@is.aist-nara.ac.jp")) (:maintainer "SKK Development Team" . "skk@ring.gr.jp") (:url . "https://github.com/skk-dev/ddskk/blob/master/READMEs/README.ccc.org"))])
+(ccc . [(20151205 1343) nil "buffer local cursor color control library" single ((:commit . "9a0feb40c96d5e144faf76b01b14c2a4e765fc16") (:keywords "cursor") (:authors ("Masatake YAMATO" . "masata-y@is.aist-nara.ac.jp")) (:maintainer "SKK Development Team" . "skk@ring.gr.jp") (:url . "https://github.com/skk-dev/ddskk/blob/master/READMEs/README.ccc.org"))])
