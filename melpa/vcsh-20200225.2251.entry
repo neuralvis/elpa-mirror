@@ -1,0 +1,2 @@
+
+(vcsh . [(20200225 2251) ((emacs (25 1))) "vcsh integration" single ((:commit . "6df9722718c7f6482c315f01353f2fe6c769c793") (:keywords "vc" "files") (:authors ("Štěpán Němec" . "stepnem@gmail.com")) (:maintainer "Štěpán Němec" . "stepnem@gmail.com") (:url . "https://gitlab.com/stepnem/vcsh-el"))])

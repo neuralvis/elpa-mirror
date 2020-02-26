@@ -3,12 +3,12 @@
 ;; Author: Štěpán Němec <stepnem@gmail.com>
 ;; Created: 2019-07-15 00:46:28 Monday +0200
 ;; URL: https://gitlab.com/stepnem/vcsh-el
-;; Package-Version: 20191007.1102
+;; Package-Version: 20200225.2251
 ;; Keywords: vc, files
 ;; License: public domain
-;; Version: 0.4.2
-;; Tested-with: GNU Emacs 27
-;; Package-Requires: ((emacs "25"))
+;; Version: 0.4.3
+;; Tested-with: GNU Emacs 27, 28
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 
@@ -56,7 +56,9 @@ Otherwise use relative paths."
 (defun vcsh-repo-d ()
   "Return name of directory where vcsh repos are located."
   (or (getenv "VCSH_REPO_D")
-      (substitute-env-in-file-name "$XDG_CONFIG_HOME/vcsh/repo.d")))
+      (and (getenv "XDG_CONFIG_HOME")
+           (substitute-env-in-file-name "$XDG_CONFIG_HOME/vcsh/repo.d"))
+      (substitute-env-in-file-name "$HOME/.config/vcsh/repo.d")))
 
 (defun vcsh-repo-p (dir)
   "Return non-nil if DIR is a vcsh repository."
