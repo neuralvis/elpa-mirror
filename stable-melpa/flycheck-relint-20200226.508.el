@@ -4,7 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: lisp
-;; Package-Version: 20200222.439
+;; Package-Version: 20200226.508
 ;; Version: 0
 ;; URL: https://github.com/purcell/flycheck-relint
 ;; Package-Requires: ((emacs "26.1") (flycheck "0.22") (relint "1.13"))
@@ -87,7 +87,8 @@ Add `emacs-lisp-relint' to `flycheck-checkers' and set up the checker chain."
   (interactive)
   (add-to-list 'flycheck-checkers 'emacs-lisp-relint t)
   (flycheck-add-next-checker 'emacs-lisp-checkdoc 'emacs-lisp-relint t)
-  (flycheck-add-next-checker 'emacs-lisp-package 'emacs-lisp-relint t))
+  (when (flycheck-valid-checker-p 'emacs-lisp-package)
+    (flycheck-add-next-checker 'emacs-lisp-package 'emacs-lisp-relint t)))
 
 
 (provide 'flycheck-relint)

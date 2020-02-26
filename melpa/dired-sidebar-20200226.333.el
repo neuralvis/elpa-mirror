@@ -5,7 +5,7 @@
 ;; Author: James Nguyen <james@jojojames.com>
 ;; Maintainer: James Nguyen <james@jojojames.com>
 ;; URL: https://github.com/jojojames/dired-sidebar
-;; Package-Version: 20191024.116
+;; Package-Version: 20200226.333
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1") (dired-subtree "0.0.1"))
 ;; Keywords: dired, files, tools
@@ -547,7 +547,8 @@ With universal argument, use current directory."
     (let* ((old-buffer (dired-sidebar-buffer (selected-frame)))
            (file-to-show (dired-sidebar-get-file-to-show))
            (dir-to-show (or dir
-                            (when current-prefix-arg default-directory)
+                            (when current-prefix-arg
+                              (expand-file-name default-directory))
                             (dired-sidebar-get-dir-to-show)))
            (sidebar-buffer (dired-sidebar-get-or-create-buffer dir-to-show)))
       (dired-sidebar-show-sidebar sidebar-buffer)
