@@ -7,8 +7,7 @@
 ;;         Juliusz Chroboczek <jch@pps.univ-paris-diderot.fr>
 ;; Maintainer: Libor Čapák <capak@inputwish.com>
 ;; Keywords: vc
-;; Package-Version: 20170905.320
-;; Package-X-Original-Version: 20170409.1521
+;; Package-Version: 20170409.1521
 ;; Package-X-Original-Version: 20141122.1326
 ;; Version: 1.19
 ;; Package-Requires: ((emacs "24"))
