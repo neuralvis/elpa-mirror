@@ -1,0 +1,2 @@
+
+(webpaste . [(20200227 703) ((emacs (24 4)) (request (0 2 0)) (cl-lib (0 5))) "Paste to pastebin-like services" single ((:commit . "2d0f810aefb8c1348e88d836508b53ac0993bf55") (:keywords "convenience" "comm" "paste") (:authors ("Elis \"etu\" Hirwing")) (:maintainer "Elis \"etu\" Hirwing") (:url . "https://github.com/etu/webpaste.el"))])
