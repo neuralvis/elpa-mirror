@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200226.1340
+;; Package-Version: 20200227.821
 ;; Version: 0.5.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -1302,9 +1302,13 @@ between foreground and background is >= 7:1)."
    `(helm-non-file-buffer ((,class (:foreground ,fg-alt))))
    `(helm-prefarg ((,class (:foreground ,red-alt))))
    `(helm-resume-need-update ((,class (:inherit modus-theme-intense-red))))
-   `(helm-selection  ((,class (,@(and (>= emacs-major-version 27) '(:extend t))
-                                 :inherit modus-theme-intense-cyan :weight bold))))
+   `(helm-selection ((,class (,@(and (>= emacs-major-version 27) '(:extend t))
+                              :inherit modus-theme-intense-cyan :weight bold))))
+   `(helm-selection-line ((,class (,@(and (>= emacs-major-version 27) '(:extend t))
+                                   :inherit modus-theme-subtle-blue))))
    `(helm-separator ((,class (:foreground ,fg-special-mild))))
+   `(helm-time-zone-current ((,class (:foreground ,green))))
+   `(helm-time-zone-home ((,class (:foreground ,magenta))))
    `(helm-source-header ((,class (:inherit modus-theme-special-cold :weight bold
                                            ,@(when modus-operandi-theme-scale-headings
                                                (list :height modus-operandi-theme-scale-4))))))

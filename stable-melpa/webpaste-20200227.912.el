@@ -4,7 +4,7 @@
 
 ;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 20200227.703
+;; Package-Version: 20200227.912
 ;; Package-X-Original-Version: 3.0.2
 ;; Version: 3.0.2
 ;; Keywords: convenience, comm, paste
@@ -114,7 +114,7 @@ This uses `browse-url-generic' to open URLs."
      :lang-overrides ((emacs-lisp-mode . "clojure"))
      :success-lambda webpaste--providers-success-returned-string)
 
-    '("paste.mozilla.org"
+    ("paste.mozilla.org"
       :uri "https://paste.mozilla.org/api/"
       :post-data (("expires" . 86400))
       :post-field "content"
