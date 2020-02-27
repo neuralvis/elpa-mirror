@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018
 
 ;; URL: https://github.com/laishulu/emacs-tmux-pane
-;; Package-Version: 20200226.2009
+;; Package-Version: 20200227.33
 ;; Created: November 1, 2018
 ;; Keywords: convenience, terminals, tmux, window, pane, navigation, integration
 ;; Package-Requires: ((names "0.5") (emacs "24") (s "0"))
@@ -97,7 +97,7 @@
 
 (defun windmove-last ()
   (interactive)
-  (other-window -1))
+  (select-window (previous-window)))
 
 (defvar tmux-pane-mode-map
   (let ((map (make-sparse-keymap)))

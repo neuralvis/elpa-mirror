@@ -149,26 +149,14 @@ pyim 支持双拼输入模式，用户可以通过变量 `pyim-default-scheme' �
 *** 通过 pyim 来支持 rime 所有输入法
 
 1. 安裝配置 liberime 和 pyim, 方式见：[[https://github.com/merrickluo/liberime][liberime]].
-2. 将 liberime 的 page_size 设置为 100, 这样 pyim 一次可以获取 100
-   个候选词，然后自己处理分页。用户可以按 TAB 键切换到辅助输入
-   法来输入 100 以后的词条。
-
-   手动设置方式是： 在 `liberime-user-data-dir'/default.custom.yaml
-   文件中添加类似下面的内容：
-
-   #+BEGIN_EXAMPLE
-   patch:
-        "menu/page_size": 100
-        "speller/auto_select": false
-        "speller/auto_select_unique_candidate": false
-   #+END_EXAMPLE
-
-3. 使用 rime 全拼输入法的用户，也可以使用 rime-quanpin scheme,
+   注意，由于特殊的集成方式，pyim 通过变量 `pyim-liberime-search-limit' 来限制从 rime 获取
+   的词条数量，以提高输入法响应速度，用户可以根据自己设备的性能来灵活调整这个选项。
+2. 使用 rime 全拼输入法的用户，也可以使用 rime-quanpin scheme,
    这个 scheme 是专门针对 rime 全拼输入法定制的，支持全拼v快捷键。
    #+BEGIN_EXAMPLE
    (setq pyim-default-scheme 'rime-quanpin)
    #+END_EXAMPLE
-4. 如果通过 rime 使用微软双拼，可以用以下设置：
+3. 如果通过 rime 使用微软双拼，可以用以下设置：
    #+BEGIN_EXAMPLE
    (liberime-select-schema "double_pinyin_mspy")
    (setq pyim-default-scheme 'rime-microsoft-shuangpin)
