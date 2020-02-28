@@ -4,7 +4,7 @@
 
 ;; Author: Adolfo Villafiorita <adolfo.villafiorita@me.com>
 ;; Keywords: wp, files
-;; Package-Version: 20191017.1319
+;; Package-Version: 20200228.952
 
 ;; This code is NOT part of GNU Emacs and is distributed under the conditions
 ;; of the MIT License
@@ -51,6 +51,7 @@
 ;; For some more customization:
 
 ;;   (setq todotxt-default-file (expand-file-name "<<WHERE YOUR TODO FILE LIVES>>"))
+;;   (add-to-list 'auto-mode-alist '("todo\\.txt\\'" . todotxt-mode))
 ;;   (define-key global-map "\C-ct" 'todotxt-add-todo)
 ;;   (define-key global-map "\C-co" 'todotxt-open-file)
 

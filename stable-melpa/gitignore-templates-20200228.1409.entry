@@ -1,0 +1,2 @@
+
+(gitignore-templates . [(20200228 1409) ((emacs (24 3))) "Create .gitignore using GitHub or gitignore.io API" single ((:commit . "adf59dd504563652f19782d3612235e8b0ad25b1") (:keywords "tools") (:authors ("Xu Chunyang")) (:maintainer "Xu Chunyang") (:url . "https://github.com/xuchunyang/gitignore-templates.el"))])
