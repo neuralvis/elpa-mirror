@@ -104,6 +104,8 @@ notify me of any missing package or change you would like to see.
     git-timemachine
     gnus
     helm
+    helm-ls-git
+    helm-xref
     highlight-blocks
     hl-fill-column
     hl-line-mode

@@ -6,7 +6,7 @@
 
 ;; Author: film42
 ;; Version: 1.5.1
-;; Package-Version: 20200226.1844
+;; Package-Version: 20200228.1008
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/dracula/emacs
 
@@ -53,8 +53,9 @@
                (link :foreground ,dracula-cyan :underline t)
                (linum :slant italic :foreground ,bg4 :background ,dracula-bg)
                (line-number :slant italic :foreground ,bg4 :background ,dracula-bg)
+               (match :background ,dracula-yellow :foreground ,dracula-bg)
                (minibuffer-prompt :weight bold :foreground ,dracula-pink)
-               (region :background ,dracula-yellow :foreground ,dracula-bg :extend t)
+               (region :inherit match :extend t)
                (trailing-whitespace :foreground nil :background ,dracula-orange)
                (vertical-border :foreground ,bg2)
                (success :foreground ,dracula-green)
@@ -88,7 +89,7 @@
                (company-preview-search :foreground ,dracula-purple :background ,dracula-bg)
                (company-scrollbar-bg :background ,bg3)
                (company-scrollbar-fg :foreground ,dracula-pink)
-               (company-template-field :inherit region)
+               (company-template-field :inherit match)
                (company-tooltip :foreground ,fg2 :background ,dracula-bg :weight bold)
                (company-tooltip-annotation :foreground ,dracula-cyan)
                (company-tooltip-common :foreground ,fg3)
@@ -273,7 +274,7 @@
                (ido-incomplete-regexp :inherit font-lock-warning-face)
                (ido-indicator :foreground ,dracula-fg :background ,dracula-pink)
                ;; isearch
-               (isearch :weight bold :foreground ,dracula-orange :background ,bg3)
+               (isearch :inherit match :weight bold)
                (isearch-fail :foreground ,dracula-bg :background ,dracula-orange)
                ;; jde-java
                (jde-java-font-lock-constant-face :foreground ,dracula-cyan)
@@ -443,7 +444,7 @@
                (show-paren-match :background unspecified
                                  :foreground ,dracula-cyan
                                  :weight bold)
-               (show-paren-match-expression :inherit region)
+               (show-paren-match-expression :inherit match)
                (show-paren-mismatch :inherit font-lock-warning-face)
                ;; slime
                (slime-repl-inputed-output-face :foreground ,dracula-purple)
