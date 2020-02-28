@@ -2,7 +2,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Url: http://github.com/alphapapa/org-recent-headings
-;; Package-Version: 20190909.1618
+;; Package-Version: 20200228.215
 ;; Version: 0.2-pre
 ;; Package-Requires: ((emacs "26.1") (org "9.0.5") (dash "2.13.0") (dash-functional "1.2.0") (frecency "0.1") (s "1.12.0"))
 ;; Keywords: hypermedia, outlines, Org
@@ -486,7 +486,8 @@ Default function set in `org-recent-headings-show-entry-function'."
     (switch-to-buffer (marker-buffer marker))
     (widen)
     (goto-char marker)
-    (org-reveal)))
+    (org-reveal)
+    (org-show-entry)))
 
 (defun org-recent-headings--show-entry-indirect (real)
   "Show heading specified by REAL in an indirect buffer.
@@ -501,6 +502,7 @@ REAL is a plist with `:file', `:id', and `:regexp' entries.  If
         (widen)
         (goto-char marker)
         (org-reveal)
+        (org-show-entry)
         (org-tree-to-indirect-buffer)))))
 
 (defun org-recent-headings--entry-marker (entry)
