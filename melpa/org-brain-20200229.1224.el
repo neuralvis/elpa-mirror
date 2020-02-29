@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200229.1112
+;; Package-Version: 20200229.1224
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2") (org-ql "0.3.2"))
 ;; Version: 0.9
@@ -176,9 +176,9 @@ filenames will be shown instead, which is faster."
 
 (defcustom org-brain-scan-for-header-entries t
   "If org-brain should scan for header entries inside files.
-This can be really slow if there are a lot of long file entries, but no
-header entries. This only affects selection prompts and not functions
-like `org-brain-headline-to-file'"
+Useful if you don't tend to use header entries in your workflow,
+since scanning can be slow in long file entries.
+This only affects selection prompts and not functions like `org-brain-headline-to-file'."
   :group 'org-brain
   :type '(boolean))
 
@@ -727,13 +727,21 @@ In `org-brain-visualize' just return `org-brain--vis-entry'."
      (append
       (when org-brain-include-file-entries
         (list (cons file-entry-name file-relative)))
-      (if org-brain-scan-for-header-entries
-	  (org-ql-select file org-brain--ql-query
-	    :action `(cons (format ,org-brain-headline-entry-name-format-string
-				   ,file-entry-name
-				   (org-brain-headline-at))
-			   (org-entry-get nil "ID")))
-	nil)))))
+      (org-ql-select file org-brain--ql-query
+	:action `(cons (format ,org-brain-headline-entry-name-format-string
+			       ,file-entry-name
+			       (org-brain-headline-at))
+		       (org-entry-get nil "ID")))))))
+
+(defun org-brain--all-targets ()
+  "Get an alist with (name . entry-id) of all targets in org-brain.
+`org-brain-include-file-entries' and `org-brain-scan-for-header-entries'
+affect the fetched targets."
+  (if org-brain-scan-for-header-entries
+      (mapcan #'org-brain--file-targets
+              (org-brain-files))
+    (mapcar (lambda (x) (cons (org-brain-entry-name x) x))
+            (org-brain-files t))))
 
 (defun org-brain-choose-entries (prompt entries &optional predicate require-match initial-input hist def inherit-input-method)
   "PROMPT for one or more ENTRIES, separated by `org-brain-entry-separator'.
@@ -744,8 +752,7 @@ Very similar to `org-brain-choose-entry', but can return several entries.
 For PREDICATE, REQUIRE-MATCH, INITIAL-INPUT, HIST, DEF and INHERIT-INPUT-METOD see `completing-read'."
   (unless org-id-locations (org-id-locations-load))
   (let* ((targets (if (eq entries 'all)
-                      (mapcan #'org-brain--file-targets
-                              (org-brain-files))
+                      (org-brain--all-targets)
                     (mapcar (lambda (x)
                               (cons (org-brain-entry-name x)
                                     (if (org-brain-filep x)
@@ -1173,24 +1180,37 @@ PROPERTY could for instance be `org-brain-children-property-name'."
 ;;;; Buffer commands
 
 ;;;###autoload
-(defun org-brain-add-child (entry children)
+(defun org-brain-add-child (entry children &optional verbose)
   "Add external CHILDREN (a list of entries) to ENTRY.
 If called interactively use `org-brain-entry-at-pt' and let user choose entry.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY.
 If chosen CHILD entry doesn't exist, create it as a new file.
-Several children can be added, by using `org-brain-entry-separator'."
-  (interactive (list (org-brain-entry-at-pt)
-                     (org-brain-choose-entries "Add child: " 'all)))
+Several children can be added, by using `org-brain-entry-separator'.
+If VERBOSE is non-nil then display a message."
+  (interactive (list (if current-prefix-arg
+                         (car (org-brain-button-at-point))
+                       (org-brain-entry-at-pt))
+                     (org-brain-choose-entries "Add child: " 'all)
+                     t))
   (dolist (child-entry children)
-    (org-brain-add-relationship entry child-entry))
+    (org-brain-add-relationship entry child-entry)
+    (if verbose (message "Added '%s' as a child of '%s'."
+                         (org-brain-entry-name child-entry)
+                         (org-brain-entry-name entry))))
   (org-brain--revert-if-visualizing))
 
 ;;;###autoload
-(defun org-brain-add-child-headline (entry child-names)
+(defun org-brain-add-child-headline (entry child-names &optional verbose)
   "Create new internal child headline(s) to ENTRY named CHILD-NAMES.
 Several children can be created, by using `org-brain-entry-separator'.
-If called interactively use `org-brain-entry-at-pt' and prompt for children."
-  (interactive (list (org-brain-entry-at-pt)
-                     (read-string "Add child headline: ")))
+If called interactively use `org-brain-entry-at-pt' and prompt for children.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY.
+If VERBOSE is non-nil then display a message."
+  (interactive (list (if current-prefix-arg
+                         (car (org-brain-button-at-point))
+                       (org-brain-entry-at-pt))
+                     (read-string "Add child headline: ")
+                     t))
   (dolist (child-name (split-string child-names org-brain-entry-separator))
     (when (equal (length child-name) 0)
       (error "Child name must be at least 1 character"))
@@ -1213,19 +1233,27 @@ If called interactively use `org-brain-entry-at-pt' and prompt for children."
         (insert child-name)
         (org-id-get-create)
         (run-hooks 'org-brain-new-entry-hook)
-        (save-buffer))))
+        (save-buffer)))
+    (if verbose (message "Added '%s' as a child of '%s'."
+                         child-name
+                         (org-brain-entry-name entry))))
   (org-brain--revert-if-visualizing))
 
 (define-obsolete-function-alias 'org-brain-new-child 'org-brain-add-child-headline "0.5")
 
 ;;;###autoload
-(defun org-brain-remove-child (entry child)
+(defun org-brain-remove-child (entry child &optional verbose)
   "Remove CHILD from ENTRY.
-If called interactively use `org-brain-entry-at-point' and prompt for CHILD."
-  (interactive (let ((e (org-brain-entry-at-pt)))
+If called interactively use `org-brain-entry-at-point' and prompt for CHILD.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY.
+If VERBOSE is non-nil then display a message."
+  (interactive (let ((e (if current-prefix-arg
+                            (car (org-brain-button-at-point))
+                          (org-brain-entry-at-pt))))
                  (list e (org-brain-choose-entry "Remove child: "
                                                  (org-brain-children e)
-                                                 nil t))))
+                                                 nil t)
+                       t)))
   (if (member child (org-brain-local-children entry))
       (if (and (> (length (org-brain-parents child)) 1)
                (y-or-n-p
@@ -1238,28 +1266,44 @@ If called interactively use `org-brain-entry-at-point' and prompt for CHILD."
             (org-brain-remove-relationship entry (org-brain-change-local-parent child new-parent)))
         (org-brain-delete-entry child))
     (org-brain-remove-relationship entry child))
+  (if verbose (message "'%s' is no longer a child of '%s'."
+                       (org-brain-entry-name child)
+                       (org-brain-entry-name entry)))
   (org-brain--revert-if-visualizing))
 
 ;;;###autoload
-(defun org-brain-add-parent (entry parents)
+(defun org-brain-add-parent (entry parents &optional verbose)
   "Add external PARENTS (a list of entries) to ENTRY.
 If called interactively use `org-brain-entry-at-pt' and prompt for PARENT.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY.
+
 If chosen parent entry doesn't exist, create it as a new file.
-Several parents can be added, by using `org-brain-entry-separator'."
-  (interactive (list (org-brain-entry-at-pt)
-                     (org-brain-choose-entries "Add parent: " 'all)))
+Several parents can be added, by using `org-brain-entry-separator'.
+If VERBOSE is non-nil then display a message."
+  (interactive (list (if current-prefix-arg
+                         (car (org-brain-button-at-point))
+                       (org-brain-entry-at-pt))
+                     (org-brain-choose-entries "Add parent: " 'all)
+                     t))
   (dolist (parent parents)
-    (org-brain-add-relationship parent entry))
+    (org-brain-add-relationship parent entry)
+    (if verbose (message "Added '%s' as a parent of '%s'."
+                         (org-brain-entry-name parent)
+                         (org-brain-entry-name entry))))
   (org-brain--revert-if-visualizing))
 
 ;;;###autoload
-(defun org-brain-remove-parent (entry parent)
+(defun org-brain-remove-parent (entry parent &optional verbose)
   "Remove PARENT from ENTRY.
-If called interactively use `org-brain-entry-at-pt' and prompt for PARENT."
-  (interactive (let ((e (org-brain-entry-at-pt)))
+If called interactively use `org-brain-entry-at-pt' and prompt for PARENT.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY."
+  (interactive (let ((e (if current-prefix-arg
+                            (car (org-brain-button-at-point))
+                          (org-brain-entry-at-pt))))
                  (list e (org-brain-choose-entry "Remove parent: "
                                                  (org-brain-parents e)
-                                                 nil t))))
+                                                 nil t)
+                       t)))
   (if (member entry (org-brain-local-children parent))
       (if-let* ((linked-parents (org-brain--linked-property-entries entry org-brain-parents-property-name))
                 (new-parent (if (equal 1 (length linked-parents))
@@ -1271,6 +1315,9 @@ If called interactively use `org-brain-entry-at-pt' and prompt for PARENT."
         (error "%s is %s's only parent, it can't be removed"
                (org-brain-title parent) (org-brain-title entry)))
     (org-brain-remove-relationship parent entry))
+  (if verbose (message "'%s' is no longer a parent of '%s'."
+                       (org-brain-entry-name parent)
+                       (org-brain-entry-name entry)))
   (org-brain--revert-if-visualizing))
 
 (defun org-brain--internal-add-friendship (entry1 entry2 &optional oneway)
@@ -1297,27 +1344,41 @@ If ONEWAY is t, add ENTRY2 as friend of ENTRY1, but not the other way around."
   (org-save-all-org-buffers))
 
 ;;;###autoload
-(defun org-brain-add-friendship (entry friends)
+(defun org-brain-add-friendship (entry friends &optional verbose)
   "Add a new FRIENDS (a list of entries) to ENTRY.
 If called interactively use `org-brain-entry-at-pt' and prompt for FRIENDS.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY.
+
 If chosen friend entry doesn't exist, create it as a new file.
-Several friends can be added, by using `org-brain-entry-separator'."
-  (interactive (list (org-brain-entry-at-pt)
-                     (org-brain-choose-entries "Add friend: " 'all)))
+Several friends can be added, by using `org-brain-entry-separator'.
+If VERBOSE is non-nil then display a message."
+  (interactive (list (if current-prefix-arg
+                         (car (org-brain-button-at-point))
+                       (org-brain-entry-at-pt))
+                     (org-brain-choose-entries "Add friend: " 'all)
+                     t))
   (dolist (friend-entry friends)
-    (org-brain--internal-add-friendship entry friend-entry))
+    (org-brain--internal-add-friendship entry friend-entry)
+    (if verbose (message "'%s' and '%s' are now friends."
+                         (org-brain-entry-name entry)
+                         (org-brain-entry-name friend-entry))))
   (org-brain--revert-if-visualizing))
 
 ;;;###autoload
-(defun org-brain-remove-friendship (entry1 entry2 &optional oneway)
+(defun org-brain-remove-friendship (entry1 entry2 &optional oneway verbose)
   "Remove friendship between ENTRY1 and ENTRY2.
 If ONEWAY is t, then remove ENTRY2 as a friend of ENTRY1, but not vice versa.
 
-If run interactively, use `org-brain-entry-at-pt' as ENTRY1 and prompt for ENTRY2."
+If run interactively, use `org-brain-entry-at-pt' as ENTRY1 and prompt for ENTRY2.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY1.
+If VERBOSE is non-nil then display a message."
   (interactive
-   (let ((entry-at-pt (org-brain-entry-at-pt)))
+   (let ((entry-at-pt (if current-prefix-arg
+                          (car (org-brain-button-at-point))
+                        (org-brain-entry-at-pt))))
      (list entry-at-pt
-           (org-brain-choose-entry "Remove friend: " (org-brain-friends entry-at-pt) nil t))))
+           (org-brain-choose-entry "Remove friend: " (org-brain-friends entry-at-pt) nil t)
+           nil t)))
   (when (member entry2 (org-brain-friends entry1))
     (if (org-brain-filep entry1)
         ;; Entry1 = File
@@ -1336,8 +1397,12 @@ If run interactively, use `org-brain-entry-at-pt' as ENTRY1 and prompt for ENTRY
                                                   (org-brain-entry-identifier entry2))))
   (if oneway
       (org-brain--revert-if-visualizing)
-    (org-brain-remove-friendship entry2 entry1 t))
-  (org-save-all-org-buffers))
+    (org-brain-remove-friendship entry2 entry1 t verbose))
+  (org-save-all-org-buffers)
+  (if (and (not oneway) verbose)
+      (message "'%s' and '%s' are no longer friends."
+               (org-brain-entry-name entry1)
+               (org-brain-entry-name entry2))))
 
 ;;;###autoload
 (defun org-brain-goto (&optional entry goto-file-func)
@@ -1702,10 +1767,13 @@ Remove external relationships from ENTRY, in order to clean up the brain."
 (defun org-brain-pin (entry &optional status)
   "Change if ENTRY is pinned or not.
 If run interactively, get ENTRY from context.
+Using `\\[universal-argument]' will use `org-brain-button-at-point' as ENTRY.
 
 If STATUS is positive, pin the entry.  If negative, remove the pin.
 If STATUS is omitted, toggle between pinned / not pinned."
-  (interactive (list (org-brain-entry-at-pt)))
+  (interactive (list (if current-prefix-arg
+                         (car (org-brain-button-at-point))
+                       (org-brain-entry-at-pt))))
   (cond ((eq status nil)
          (if (member entry org-brain-pins)
              (org-brain-pin entry -1)
@@ -1715,13 +1783,13 @@ If STATUS is omitted, toggle between pinned / not pinned."
              (error "Entry is already pinned")
            (push entry org-brain-pins)
            (org-brain-save-data)
-           (message "Pin added.")))
+           (message "Pinned '%s'." (org-brain-entry-name entry))))
         ((< status 1)
          (if (member entry org-brain-pins)
              (progn
                (setq org-brain-pins (delete entry org-brain-pins))
                (org-brain-save-data)
-               (message "Pin removed."))
+               (message "Unpinned '%s'." (org-brain-entry-name entry)))
            (error "Entry isn't pinned"))))
   (org-brain--revert-if-visualizing))
 
@@ -2976,8 +3044,7 @@ ENTRY should be a string; an id in the case of an headline entry."
 
   (defun helm-brain--source ()
     (helm-build-sync-source "Brain"
-                            :candidates (mapcan #'org-brain--file-targets
-                                                (org-brain-files))
+                            :candidates (org-brain--all-targets)
                             :action 'helm-brain--actions))
 
   (defun helm-brain ()
@@ -2994,8 +3061,7 @@ Supports selecting multiple entries at once."
     "Use Ivy to choose among your org-brain entries.
 Provides actions for visualizing, adding/removing relations, etc."
     (interactive)
-    (let ((targets (mapcan #'org-brain--file-targets
-                           (org-brain-files))))
+    (let ((targets (org-brain--all-targets)))
       (ivy-read "Org-brain: "
                 targets
                 :require-match t

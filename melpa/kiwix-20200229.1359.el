@@ -4,7 +4,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: kiwix wikipedia
-;; Package-Version: 20200222.726
+;; Package-Version: 20200229.1359
 ;; URL: https://github.com/stardiviner/kiwix.el
 ;; Created: 23th July 2016
 ;; Version: 1.0.0
@@ -196,17 +196,7 @@ Like in function `kiwix-ajax-search-hints'.")
 (defun kiwix-query (query &optional selected-library)
   "Search `QUERY' in `LIBRARY' with Kiwix."
   (let* ((library (or selected-library (kiwix--get-library-name kiwix-default-library)))
-         (url (concat
-               kiwix-server-url "/" library "/A/"
-               ;; query need to be convert to URL encoding: "禅宗" https://zh.wikipedia.org/wiki/%E7%A6%85%E5%AE%97
-               (url-encode-url
-                ;; convert space to underline: "Beta distribution" "Beta_distribution"
-                (replace-regexp-in-string
-                 " " "_"
-                 ;; only capitalize the first word. like: "meta-circular interpreter" -> "Meta-circular interpreter"
-                 (kiwix-capitalize-first query)
-                 nil nil))
-               ".html"))
+         (url (concat kiwix-server-url "/search?content=" library "&pattern=" (url-hexify-string query)))
          (browse-url-browser-function kiwix-default-browser-function))
     (browse-url url)))
 
