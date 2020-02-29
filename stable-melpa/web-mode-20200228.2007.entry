@@ -1,0 +1,2 @@
+
+(web-mode . [(20200228 2007) ((emacs (23 1))) "major mode for editing web templates" single ((:commit . "59deb378499a91d4460a6ec4a3239a45968d2aaa") (:keywords "languages") (:authors ("François-Xavier Bois <fxbois AT Google Mail Service>")) (:maintainer "François-Xavier Bois") (:url . "http://web-mode.org"))])
