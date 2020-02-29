@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200225.833
+;; Package-Version: 20200229.1112
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2") (org-ql "0.3.2"))
 ;; Version: 0.9
@@ -171,6 +171,14 @@ on how this is implemented."
   "If file entries should show their title, when choosing entries from a list.
 This can potentially be slow.  If set to nil, the relative
 filenames will be shown instead, which is faster."
+  :group 'org-brain
+  :type '(boolean))
+
+(defcustom org-brain-scan-for-header-entries t
+  "If org-brain should scan for header entries inside files.
+This can be really slow if there are a lot of long file entries, but no
+header entries. This only affects selection prompts and not functions
+like `org-brain-headline-to-file'"
   :group 'org-brain
   :type '(boolean))
 
@@ -719,11 +727,13 @@ In `org-brain-visualize' just return `org-brain--vis-entry'."
      (append
       (when org-brain-include-file-entries
         (list (cons file-entry-name file-relative)))
-      (org-ql-select file org-brain--ql-query
-        :action `(cons (format ,org-brain-headline-entry-name-format-string
-                               ,file-entry-name
-                               (org-brain-headline-at))
-                       (org-entry-get nil "ID")))))))
+      (if org-brain-scan-for-header-entries
+	  (org-ql-select file org-brain--ql-query
+	    :action `(cons (format ,org-brain-headline-entry-name-format-string
+				   ,file-entry-name
+				   (org-brain-headline-at))
+			   (org-entry-get nil "ID")))
+	nil)))))
 
 (defun org-brain-choose-entries (prompt entries &optional predicate require-match initial-input hist def inherit-input-method)
   "PROMPT for one or more ENTRIES, separated by `org-brain-entry-separator'.
@@ -2197,6 +2207,18 @@ FACE is sent to `org-brain-display-face' and sets the face of the button."
      'aa2u-text t
      'face (org-brain-display-face entry face annotation))))
 
+(defun org-brain-jump-to-visualize-button (entry)
+  "If ENTRY has a visualize button in the current buffer, jump to its position."
+  (when (eq major-mode 'org-brain-visualize-mode)
+    (let ((start-pos (point))
+          (entry-id (org-brain-entry-identifier entry)))
+      (goto-char (point-min))
+      (search-forward "\n\n" nil t)
+      (while (and (or (ignore-errors (forward-button 1))
+                      (and (goto-char start-pos) nil))
+                  (not (equal (button-get (button-at (point)) 'id)
+                              entry-id)))))))
+
 (defun org-brain-insert-resource-button (resource &optional indent)
   "Insert a new line with a RESOURCE button, indented by INDENT spaces."
   (insert (make-string (or indent 0) ?\ ) "\n- ")
@@ -2410,8 +2432,10 @@ TWO-WAY will be t unless called with `\\[universal-argument\\]'."
 (defun org-brain--revert-if-visualizing ()
   "Revert buffer if in `org-brain-visualize-mode'."
   (when (eq major-mode 'org-brain-visualize-mode)
-    (org-brain-stop-wandering)
-    (revert-buffer)))
+    (let ((button-entry (car (ignore-errors (org-brain-button-at-point)))))
+      (org-brain-stop-wandering)
+      (revert-buffer)
+      (when button-entry (org-brain-jump-to-visualize-button button-entry)))))
 
 (define-derived-mode org-brain-visualize-mode
   special-mode  "Org-brain Visualize"
