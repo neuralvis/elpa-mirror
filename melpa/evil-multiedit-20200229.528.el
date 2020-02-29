@@ -7,7 +7,7 @@
 ;; Created: February 20, 2016
 ;; Modified: February 09, 2018
 ;; Version: 1.3.9
-;; Package-Version: 20200103.1006
+;; Package-Version: 20200229.528
 ;; Keywords: multiple cursors, editing, iedit
 ;; Homepage: https://github.com/hlissner/evil-multiedit
 ;; Package-Requires: ((emacs "24.4") (evil "1.2.12") (iedit "0.9") (cl-lib "0.5"))
@@ -571,19 +571,20 @@ state."
 (defun evil-multiedit--paste-replace (count)
   "Replace the selection with the yanked text."
   (interactive "P")
-  (evil-multiedit--delete-occurrences)
+  (evil-multiedit--delete-occurrences t)
   (evil-paste-before count))
 
-(defun evil-multiedit--delete-occurrences ()
-  "Delete occurrences."
+(defun evil-multiedit--delete-occurrences (&optional dont-kill)
+  "Delete occurrences. If DONT-KILL, don't add occurence to kill ring."
   (interactive "*")
   (iedit-barf-if-buffering)
   (when iedit-occurrences-overlays
     (save-excursion
-      (kill-new
-       (buffer-substring-no-properties
-        (overlay-start (car iedit-occurrences-overlays))
-        (overlay-end (car iedit-occurrences-overlays))))
+      (if (not dont-kill)
+        (kill-new
+          (buffer-substring-no-properties
+            (overlay-start (car iedit-occurrences-overlays))
+            (overlay-end (car iedit-occurrences-overlays)))))
       (dolist (occurrence iedit-occurrences-overlays)
         (delete-region (overlay-start occurrence) (overlay-end occurrence))))))
 
