@@ -8,7 +8,7 @@
 ;;         Dmitry Gutov <dgutov@yandex.ru>
 ;;         Kyle Hargraves <pd@krh.me>
 ;; URL: http://github.com/nonsequitur/inf-ruby
-;; Package-Version: 20190927.1649
+;; Package-Version: 20200228.2320
 ;; Created: 8 April 1998
 ;; Keywords: languages ruby
 ;; Version: 2.5.2
@@ -167,7 +167,7 @@ next one.")
 (make-variable-buffer-local 'inf-ruby-last-prompt)
 
 (defconst inf-ruby-error-regexp-alist
-  '(("SyntaxError: \\(?:compile error\n\\)?\\([^\(].*\\):\\([1-9][0-9]*\\):" 1 2)
+  '(("^SyntaxError: \\(?:compile error\n\\)?\\([^\(].*\\):\\([1-9][0-9]*\\):" 1 2)
     ("^\tfrom \\([^\(].*\\):\\([1-9][0-9]*\\)\\(:in `.*'\\)?$" 1 2)))
 
 ;;;###autoload
@@ -693,6 +693,9 @@ Returns the selected completion or nil."
 (defvar inf-ruby-orig-process-filter nil
   "Original process filter before switching to `inf-ruby-mode'.")
 
+(defvar inf-ruby-orig-error-regexp-alist nil
+  "Original `compilation-error-regexp-alist' before switching to `inf-ruby-mode.'")
+
 (defun inf-ruby-switch-from-compilation ()
   "Make the buffer writable and switch to `inf-ruby-mode'.
 Recommended for use when the program being executed enters
@@ -702,11 +705,14 @@ interactive mode, i.e. hits a debugger breakpoint."
   (buffer-enable-undo)
   (let ((mode major-mode)
         (arguments compilation-arguments)
-        (orig-mode-line-process mode-line-process))
+        (orig-mode-line-process mode-line-process)
+        (orig-error-alist compilation-error-regexp-alist))
     (inf-ruby-mode)
     (make-local-variable 'inf-ruby-orig-compilation-mode)
     (setq inf-ruby-orig-compilation-mode mode)
     (set (make-local-variable 'compilation-arguments) arguments)
+    (set (make-local-variable 'inf-ruby-orig-error-regexp-alist)
+         orig-error-alist)
     (when orig-mode-line-process
       (setq mode-line-process orig-mode-line-process)))
   (let ((proc (get-buffer-process (current-buffer))))
@@ -728,10 +734,12 @@ Otherwise, just toggle read-only status."
       (let ((orig-mode-line-process mode-line-process)
             (proc (get-buffer-process (current-buffer)))
             (arguments compilation-arguments)
-            (filter inf-ruby-orig-process-filter))
+            (filter inf-ruby-orig-process-filter)
+            (errors inf-ruby-orig-error-regexp-alist))
         (funcall inf-ruby-orig-compilation-mode)
         (setq mode-line-process orig-mode-line-process)
         (set (make-local-variable 'compilation-arguments) arguments)
+        (set (make-local-variable 'compilation-error-regexp-alist) errors)
         (when proc
           (set-process-filter proc filter)))
     (toggle-read-only)))
