@@ -1,2 +1,2 @@
 
-(php-mode . [(20200121 1613) ((emacs (24 3))) "Major mode for editing PHP code" tar ((:commit . "5580fe0e4aee6821f23fc92ea126c0abd202e91e") (:keywords "languages" "php") (:authors ("Eric James Michael Ritz")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-php/php-mode"))])
+(php-mode . [(20200121 1613) ((emacs (24 3))) "Major mode for editing PHP code" tar ((:commit . "431ea53cd8708170832a662e1af7c6ee93d82fd5") (:keywords "languages" "php") (:authors ("Eric James Michael Ritz")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-php/php-mode"))])

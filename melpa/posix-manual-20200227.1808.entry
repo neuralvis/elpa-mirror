@@ -1,2 +1,0 @@
-
-(posix-manual . [(20200227 1808) ((emacs (24))) "POSIX manual page lookup" tar ((:commit . "6a345eae8d7ee20ed376a6d88e7c89a5225120ec") (:keywords "languages" "util") (:authors ("Lassi Kortela" . "lassi@lassi.io")) (:maintainer "Lassi Kortela" . "lassi@lassi.io") (:url . "https://github.com/lassik/emacs-posix-manual"))])

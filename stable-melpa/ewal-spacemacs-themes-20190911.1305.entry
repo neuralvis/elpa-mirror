@@ -1,2 +1,2 @@
 
-(ewal-spacemacs-themes . [(20190911 1305) ((emacs (25)) (ewal (0 1)) (spacemacs-theme (0 1))) "Ride the rainbow spaceship" tar ((:commit . "0f7d32d3ef99f821cc7f53df7f8e83fad6c4ce3e") (:keywords "faces") (:authors ("Uros Perisic")) (:maintainer "Uros Perisic") (:url . "https://gitlab.com/jjzmajic/ewal"))])
+(ewal-spacemacs-themes . [(20190911 1305) ((emacs (25)) (ewal (0 1)) (spacemacs-theme (0 1))) "Ride the rainbow spaceship" tar ((:commit . "732a2f4abb480f9f5a3249af822d8eb1e90324e3") (:keywords "faces") (:authors ("Uros Perisic")) (:maintainer "Uros Perisic") (:url . "https://gitlab.com/jjzmajic/ewal"))])
