@@ -1,2 +1,0 @@
-
-(all-the-icons-dired . [(20200229 2225) ((emacs (24 4)) (all-the-icons (2 2 0))) "Shows icons for each file in dired mode" single ((:commit . "9d535651412a20105ba58c0fceb3a807891c3606") (:keywords "files" "icons" "dired") (:authors ("jtbm37")) (:maintainer "jtbm37"))])
