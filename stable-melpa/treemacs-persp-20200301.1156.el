@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25.2") (treemacs "0.0") (persp-mode "2.9.7") (dash "2.11.0"))
-;; Package-Version: 20200223.1142
+;; Package-Version: 20200301.1156
 ;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
@@ -42,8 +42,8 @@
 
 (cl-defmethod treemacs-scope->current-scope-name ((_ (subclass treemacs-persp-scope)) persp)
   (if (eq 'none persp)
-      "None"
-    (persp-name persp)))
+      "No Perspective"
+    (format "Perspective %s" (persp-name persp))))
 
 (cl-defmethod treemacs-scope->setup ((_ (subclass treemacs-persp-scope)))
   (add-hook 'persp-activated-functions #'treemacs-persp--on-perspective-switch)
@@ -63,15 +63,16 @@ Will select a workspace for the now active perspective, creating it if necessary
    0.1 nil
    (lambda ()
      (treemacs-without-following
-      (treemacs-persp--ensure-workspace-exists (get-current-persp))
+      (treemacs-persp--ensure-workspace-exists
+       ;; TODO(2020/03/01): simplify
+       (treemacs-scope->current-scope-name (treemacs-current-scope-type) (treemacs-current-scope)))
       (treemacs--change-buffer-on-scope-change)))))
 
-(defun treemacs-persp--ensure-workspace-exists (persp)
-  "Make sure a workspace exists for the given PERSP.
+(defun treemacs-persp--ensure-workspace-exists (persp-name)
+  "Make sure a workspace exists for the given PERSP-NAME.
 Matching happens by name. If no workspace can be found it will be created."
-  (let* ((name (persp-name persp))
-         (workspace (or (treemacs--select-workspace-by-name name)
-                        (treemacs-persp--create-workspace name))))
+  (let ((workspace (or (treemacs--select-workspace-by-name persp-name)
+                       (treemacs-persp--create-workspace persp-name))))
     (setf (treemacs-current-workspace) workspace)
     (treemacs--invalidate-buffer-project-cache)
     (run-hooks 'treemacs-switch-workspace-hook)
