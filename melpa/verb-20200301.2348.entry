@@ -1,0 +1,2 @@
+
+(verb . [(20200301 2348) ((emacs (26))) "Organize and send HTTP requests" tar ((:commit . "542a98712bf764ae7aecc9941ee45d99e857a021") (:keywords "tools") (:authors ("Federico Tedin" . "federicotedin@gmail.com")) (:maintainer "Federico Tedin" . "federicotedin@gmail.com") (:url . "https://github.com/federicotdn/verb"))])
