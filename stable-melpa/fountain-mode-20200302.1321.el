@@ -6,7 +6,7 @@
 
 ;; Author: William Rankin <code@william.bydasein.com>
 ;; Keywords: wp, text
-;; Package-Version: 20200302.940
+;; Package-Version: 20200302.1321
 ;; Version: 3.0.3
 ;; Package-Requires: ((emacs "24.5") (seq "2.20"))
 ;; URL: https://github.com/rnkn/fountain-mode
@@ -2847,7 +2847,7 @@ Export command profiles are defined in
 `fountain-export-command-profiles'."
   (interactive
    (list (let ((default (caar fountain-export-command-profiles)))
-           (completing-read-default
+           (completing-read
             (format "Export profile [default %s]: " default)
             (mapcar #'car fountain-export-command-profiles)
             nil t nil nil default))

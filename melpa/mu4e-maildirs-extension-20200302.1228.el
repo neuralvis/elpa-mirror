@@ -6,7 +6,7 @@
 
 ;; Filename: mu4e-maildirs-extension.el
 ;; Version: 0.1
-;; Package-Version: 20180606.812
+;; Package-Version: 20200302.1228
 ;; Author: Andreu Gil Pàmies <agpchil@gmail.com>
 ;; Created: 22-07-2013
 ;; Description: Show mu4e maildirs summary in mu4e-main-view with unread and
@@ -591,14 +591,12 @@ clicked."
                                           fmt)))
     (format-spec fmt (funcall mu4e-maildirs-extension-maildir-format-spec bm))))
 
-(defun mu4e-maildirs-extension-bm-update (bm)
+(defun mu4e-maildirs-extension-bm-update (bm-point)
   "Update bookmark BM entry at MARKER in mu4e main view."
-  (let* ((data (plist-get bm :data))
-         (title (mu4e-bookmark-name data)))
-    (goto-char (point-min))
-    (when (search-forward title nil t)
-      (delete-region (point) (point-at-eol))
-      (insert (funcall mu4e-maildirs-extension-propertize-bm-func bm)))))
+  (when (cdr bm-point)
+    (goto-char (cdr bm-point))
+    (delete-region (point) (point-at-eol))
+    (insert (funcall mu4e-maildirs-extension-propertize-bm-func (car bm-point)))))
 
 (defun mu4e-maildirs-extension-insert-maildir (m)
   "Insert maildir entry into mu4e main view."
@@ -723,7 +721,12 @@ clicked."
     (mu4e-maildirs-extension-with-buffer
       (when mu4e-maildirs-extension-use-bookmarks
         (mapc #'mu4e-maildirs-extension-bm-update
-              (mu4e-maildirs-extension-load-bookmarks)))
+              (let (beg bm-points-alist)
+                (dolist (bm (mu4e-maildirs-extension-load-bookmarks))
+                  (goto-char (if beg beg (point-min)))
+                  (setq beg (search-forward (mu4e-bookmark-name (plist-get bm :data)) nil t))
+                  (push (cons bm beg) bm-points-alist))
+                bm-points-alist)))
      (goto-char (point-max))
      (cond ((and mu4e-maildirs-extension-start-point
                  mu4e-maildirs-extension-end-point)

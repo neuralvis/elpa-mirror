@@ -1,2 +1,2 @@
 
-(ivy-clipmenu . [(20200217 1656) ((emacs (26 1)) (f (0 20 0)) (s (1 12 0)) (dash (2 16 0)) (ivy (0 13 0))) "Ivy client for clipmenu" single ((:commit . "305ff456e700621e96b552f8e4857a7edc664518") (:authors ("William Carroll" . "wpcarro@gmail.com")) (:maintainer "William Carroll" . "wpcarro@gmail.com") (:url . "https://github.com/wpcarro/ivy-clipmenu.el"))])
+(ivy-clipmenu . [(20200217 1656) ((emacs (26 1)) (f (0 20 0)) (s (1 12 0)) (dash (2 16 0)) (ivy (0 13 0))) "Ivy client for clipmenu" single ((:commit . "53be53196d46a462b9d741c7a6983af8b526d7b1") (:authors ("William Carroll" . "wpcarro@gmail.com")) (:maintainer "William Carroll" . "wpcarro@gmail.com") (:url . "https://github.com/wpcarro/ivy-clipmenu.el"))])

@@ -2,7 +2,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/org-sidebar
-;; Package-Version: 20191012.514
+;; Package-Version: 20200302.1229
 ;; Version: 0.3-pre
 ;; Package-Requires: ((emacs "26.1") (s "1.10.0") (dash "2.13") (dash-functional "1.2.0") (org "9.0") (org-ql "0.2") (org-super-agenda "1.0"))
 ;; Keywords: hypermedia, outlines, Org, agenda
@@ -79,12 +79,10 @@
 
 (defvar org-sidebar-map
   (let ((map (make-sparse-keymap))
-        (mappings '(
-                    "RET" org-sidebar-jump
+        (mappings '("RET" org-sidebar-jump
                     "<mouse-1>" org-sidebar-jump
                     "g" org-sidebar-refresh
-                    "q" bury-buffer
-                    )))
+                    "q" bury-buffer)))
     (cl-loop for (key fn) on mappings by #'cddr
              do (define-key map (kbd key) fn))
     map)
@@ -253,7 +251,7 @@ BUFFERS-FILES: A list of buffers and/or files to search.
 NARROW: When non-nil, don't widen buffers before searching.
 
 GROUP-PROPERTY: One of the following symbols: `category',
-`parent', `priority', `todo'.
+`parent', `priority', `todo', `ts'.
 
 SORT: One or a list of `org-ql' sorting functions, like `date' or
 `priority'."
@@ -261,8 +259,7 @@ SORT: One or a list of `org-ql' sorting functions, like `date' or
                  (unless (or (equal current-prefix-arg '(4))
                              (derived-mode-p 'org-mode))
                    (user-error "Not an Org buffer: %s" (buffer-name)))
-                 (list :query (read-minibuffer "Query: ")
-                       :buffers-files (if (equal current-prefix-arg '(4))
+                 (list :buffers-files (if (equal current-prefix-arg '(4))
                                           (--if-let (read-from-minibuffer "Buffers/Files (blank for current buffer): ")
                                               (pcase it
                                                 ("" (list (current-buffer)))
@@ -270,6 +267,7 @@ SORT: One or a list of `org-ql' sorting functions, like `date' or
                                                 (_ (s-split (rx (1+ space)) it)))
                                             (list (current-buffer)))
                                         (list (current-buffer)))
+                       :query (read-minibuffer "Query: ")
                        :narrow (not (eq current-prefix-arg '(4)))
                        :group-property (when (equal current-prefix-arg '(4))
                                          (pcase (completing-read "Group by: "
@@ -277,7 +275,8 @@ SORT: One or a list of `org-ql' sorting functions, like `date' or
                                                                        "category"
                                                                        "parent"
                                                                        "priority"
-                                                                       "todo-keyword"))
+                                                                       "todo-keyword"
+                                                                       "ts"))
                                            ("Don't group" nil)
                                            (property (intern property))))
                        :sort (when (equal current-prefix-arg '(4))
@@ -291,20 +290,22 @@ SORT: One or a list of `org-ql' sorting functions, like `date' or
                                  ("Don't sort" nil)
                                  (sort (intern sort)))))))
   (org-sidebar
-   :sidebars (make-org-sidebar
-              :items (org-ql-query
-                       :select 'element-with-markers
-                       :from buffers-files
-                       :where query
-                       :narrow narrow
-                       :order-by sort)
-              :name (prin1-to-string query)
-              :super-groups (list (pcase group-property
-                                    ('nil nil)
-                                    ('category '(:auto-category))
-                                    ('parent '(:auto-parent))
-                                    ('priority '(:auto-priority))
-                                    ('todo-keyword '(:auto-todo)))))
+   :fns (lambda (&rest _ignore)
+          (make-org-sidebar
+           :items (org-ql-query
+                    :select 'element-with-markers
+                    :from buffers-files
+                    :where query
+                    :narrow narrow
+                    :order-by sort)
+           :name (prin1-to-string query)
+           :super-groups (list (pcase group-property
+                                 ('nil nil)
+                                 ('category '(:auto-category))
+                                 ('parent '(:auto-parent))
+                                 ('priority '(:auto-priority))
+                                 ('todo-keyword '(:auto-todo))
+                                 ('ts '(:auto-ts))))))
    :group group-property))
 
 (defun org-sidebar-refresh ()
@@ -459,8 +460,7 @@ If no items are found, return nil."
 
 (defvar org-sidebar-tree-map
   (let ((map (make-sparse-keymap))
-        (mappings '(
-                    "<return>" org-sidebar-tree-jump
+        (mappings '("<return>" org-sidebar-tree-jump
                     "<mouse-1>" org-sidebar-tree-jump-mouse
                     "<double-mouse-1>" org-sidebar-tree-jump-mouse
                     "<triple-mouse-1>" org-sidebar-tree-jump-mouse
@@ -474,8 +474,7 @@ If no items are found, return nil."
                     ;; all three of these, but it seems to be on my Org.
                     "<S-tab>" org-sidebar-tree-cycle-global
                     "<S-iso-lefttab>" org-sidebar-tree-cycle-global
-                    "<backtab>" org-sidebar-tree-cycle-global
-                    )))
+                    "<backtab>" org-sidebar-tree-cycle-global)))
     (set-keymap-parent map org-mode-map)
     (cl-loop for (key fn) on mappings by #'cddr
              do (define-key map (kbd key) fn))
