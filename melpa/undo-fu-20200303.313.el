@@ -5,8 +5,8 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200302.2221
-;; Version: 0.2
+;; Package-Version: 20200303.313
+;; Version: 0.3
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -75,7 +75,7 @@ Instead, explicitly call `undo-fu-disable-checkpoint'."
 ;; Only use when `undo-fu-allow-undo-in-region' is true.
 (defvar-local undo-fu--in-region nil)
 ;; Track the last undo/redo direction.
-;; Use in conjunction with `undo-fu--was-undo-or-redo'.
+;; Use in conjunction with `undo-fu--was-undo-or-redo' to ensure the value isn't stale.
 (defvar-local undo-fu--was-redo nil)
 
 ;; ---------------------------------------------------------------------------
@@ -140,7 +140,7 @@ Returns the number of steps to reach this list or COUNT-LIMIT."
   "Count the number of redo steps until a previously stored step.
 
 Argument LIST-TO-FIND count the steps up until this undo step.
-Argument COUNT-LIMIT don't count past his value.
+Argument COUNT-LIMIT don't count past this value.
 Argument WAS-UNDO when non-nil,
 prevents the `pending-undo-list' from being used.
 
@@ -177,7 +177,6 @@ to perform unconstrained undo/redo actions."
     (message "Undo checkpoint disabled for next undo action!"))
 
   (undo-fu--checkpoint-disable))
-
 
 ;;;###autoload
 (defun undo-fu-only-redo-all ()
@@ -230,7 +229,7 @@ Optional argument ARG The number of steps to redo."
     ;; This allows explicitly over-stepping the boundary,
     ;; in cases when users want to bypass this constraint.
     (when undo-fu--respect
-      (when (string-equal last-command undo-fu-quit-command)
+      (when (member last-command (list undo-fu-quit-command 'undo-fu-disable-checkpoint))
         (undo-fu--checkpoint-disable)
         (message "Redo checkpoint stepped over!")))
 
@@ -364,7 +363,7 @@ Optional argument ARG the number of steps to undo."
     ;; This allows explicitly over-stepping the boundary,
     ;; in cases when users want to bypass this constraint.
     (when undo-fu--respect
-      (when (string-equal last-command undo-fu-quit-command)
+      (when (member last-command (list undo-fu-quit-command 'undo-fu-disable-checkpoint))
         (undo-fu--checkpoint-disable)
         (message "Undo checkpoint ignored!")))
 

@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20200123.1753
+;; Package-Version: 20200303.25
 
 ;; This file is not part of GNU Emacs.
 
@@ -322,14 +322,16 @@ directories."
       `(make-directory ,(var "jabber/history/") t))
     (setq keyfreq-file                     (var "keyfreq.el"))
     (setq keyfreq-file-lock                (var "keyfreq.lock"))
-    (eval-after-load 'lookup
-      `(make-directory ,(etc "lookup/") t))
     (setq libbcel-oauth-store-filename     (var "libbcel-oauth-store.el.gpg"))
     (setq litable-list-file                (var "litable-list.el"))
     (setq logview-cache-filename           (var "logview-cache"))
     (setq logview-views-file               (etc "logview-views"))
+    (eval-after-load 'lookup
+      `(make-directory ,(etc "lookup/") t))
     (setq lookup-init-directory            (etc "lookup/"))
     (setq lsp-python-ms-dir                (var "lsp-python-ms/"))
+    (eval-after-load 'lsp-mode
+      `(make-directory ,(var "lsp/") t))
     (setq lsp-server-install-dir           (var "lsp/server/"))
     (setq lsp-session-file                 (var "lsp/session.el"))
     (setq lsp-java-workspace-dir           (var "lsp-java/workspace/"))
@@ -381,6 +383,7 @@ directories."
     (setq transient-values-file            (etc "transient/values.el"))
     (setq treemacs-persist-file            (var "treemacs/persist.org"))
     (setq treemacs-last-error-persist-file (var "treemacs/persist-last-error.org"))
+    (setq undo-fu-session-directory        (var "undo-fu-session/"))
     (setq undo-tree-history-directory-alist (list (cons "." (var "undo-tree-hist/"))))
     (setq user-emacs-ensime-directory      (var "ensime/"))
     (setq vimish-fold-dir                  (var "vimish-fold/"))
