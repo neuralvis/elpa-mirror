@@ -5,7 +5,7 @@
 ;; Filename: dimmer.el
 ;; Author: Neil Okamoto
 ;; Version: 0.4.2
-;; Package-Version: 20200301.2224
+;; Package-Version: 20200302.2032
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/gonewest818/dimmer.el
 ;; Keywords: faces, editing
@@ -59,6 +59,9 @@
 ;;
 ;; `dimmer-configure-hydra' is a convenience function for hydra users to
 ;; ensure  "*LV*" buffers are not dimmed.
+;;
+;; `dimmer-configure-magit' is a convenience function for magit users to
+;; ensure transients are not dimmed.
 ;;
 ;; `dimmer-configure-org' is a convenience function for org users to
 ;; ensure org-mode buffers are not dimmed.
@@ -228,6 +231,12 @@ company-box pops up a list of completion."
   "Convenience settings for hydra users."
   (add-to-list
    'dimmer-exclusion-regexp-list "^ \\*LV\\*$"))
+
+;;;###autoload
+(defun dimmer-configure-magit ()
+  "Convenience settings for magit users."
+  (add-to-list
+   'dimmer-exclusion-regexp-list "^ \\*transient\\*$"))
 
 ;;;###autoload
 (defun dimmer-configure-org ()

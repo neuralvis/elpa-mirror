@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200229.2346
+;; Package-Version: 20200302.2221
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -74,6 +74,9 @@ Instead, explicitly call `undo-fu-disable-checkpoint'."
 ;; Initiated an undo-in region (don't use `undo-only').
 ;; Only use when `undo-fu-allow-undo-in-region' is true.
 (defvar-local undo-fu--in-region nil)
+;; Track the last undo/redo direction.
+;; Use in conjunction with `undo-fu--was-undo-or-redo'.
+(defvar-local undo-fu--was-redo nil)
 
 ;; ---------------------------------------------------------------------------
 ;; Internal Functions/Macros
@@ -148,13 +151,12 @@ Returns the number of steps to reach this list or COUNT-LIMIT."
       pending-undo-list)
     list-to-find count-limit))
 
-(defun undo-fu--was-undo ()
-  "Return t when the last command was undo."
-  (not (null (member last-command '(undo undo-fu-only-undo)))))
-
-(defun undo-fu--was-redo ()
-  "Return t when the last command was redo."
-  (not (null (member last-command '(undo-fu-only-redo)))))
+(defun undo-fu--was-undo-or-redo ()
+  "Return t when the last destructive action was undo or redo."
+  (let ((undo-list buffer-undo-list))
+    (while (and (consp undo-list) (eq (car undo-list) nil))
+      (setq undo-list (cdr undo-list)))
+    (not (null (gethash undo-list undo-equiv-table)))))
 
 ;; ---------------------------------------------------------------------------
 ;; Public Functions
@@ -167,19 +169,15 @@ This command is needed when `undo-fu-ignore-keyboard-quit' is t,
 since in this case `keyboard-quit' cannot be used
 to perform unconstrained undo/redo actions."
   (interactive)
-  (let ((was-undo-or-redo (or (undo-fu--was-undo) (undo-fu--was-redo))))
-    ;; Display an appropriate message.
-    (if was-undo-or-redo
-      (if (and undo-fu--respect undo-fu--checkpoint)
-        (message "Undo checkpoint cleared!")
-        (message "Undo checkpoint already cleared!"))
-      (message "Undo checkpoint disabled for next undo action!"))
+  ;; Display an appropriate message.
+  (if (undo-fu--was-undo-or-redo)
+    (if (and undo-fu--respect undo-fu--checkpoint)
+      (message "Undo checkpoint cleared!")
+      (message "Undo checkpoint already cleared!"))
+    (message "Undo checkpoint disabled for next undo action!"))
 
-    (undo-fu--checkpoint-disable)
+  (undo-fu--checkpoint-disable))
 
-    (when was-undo-or-redo
-      (setq this-command last-command)
-      (setq real-this-command real-last-command))))
 
 ;;;###autoload
 (defun undo-fu-only-redo-all ()
@@ -203,9 +201,9 @@ Optional argument ARG The number of steps to redo."
 
   (let*
     ( ;; Assign for convenience.
-      (was-undo (undo-fu--was-undo))
-      (was-redo (undo-fu--was-redo))
-      (was-undo-or-redo (or was-undo was-redo))
+      (was-undo-or-redo (undo-fu--was-undo-or-redo))
+      (was-redo (and was-undo-or-redo undo-fu--was-redo))
+      (was-undo (and was-undo-or-redo (null was-redo)))
       (undo-fu-quit-command
         (if undo-fu-ignore-keyboard-quit
           'undo-fu-disable-checkpoint
@@ -264,13 +262,19 @@ Optional argument ARG The number of steps to redo."
               (eq (last list undo-fu--checkpoint-length) undo-fu--checkpoint))
             (setq pending-undo-list list)))))
 
+    (when undo-fu--respect
+      (when (or (null was-undo-or-redo) (null undo-fu--checkpoint))
+        (user-error
+          "Redo without undo step (%s to ignore)"
+          (substitute-command-keys (format "\\[%s]" (symbol-name undo-fu-quit-command))))))
+
     (let*
       (
         ;; It's important to clamp the number of steps before assigning
         ;; 'last-command' since it's used when checking the available steps.
         (steps
           (if (numberp arg)
-            (if (and undo-fu--respect undo-fu--checkpoint)
+            (if undo-fu--respect
               (let ((steps-test (undo-fu--count-redo-available undo-fu--checkpoint arg was-undo)))
 
                 ;; Ensure the next steps is a redo action.
@@ -291,6 +295,11 @@ Optional argument ARG The number of steps to redo."
             (was-redo
               ;; Checked by the undo function.
               'undo)
+            ((string-equal last-command 'keyboard-quit)
+              ;; This case needs to be explicitly detected.
+              ;; If we undo until there is no undo information left,
+              ;; then press `keyboard-quit' and redo, it fails without this case.
+              'ignore)
             (t
               ;; No change.
               last-command)))
@@ -308,6 +317,9 @@ Optional argument ARG The number of steps to redo."
                 (message "%s" (error-message-string err))
                 nil)))))
 
+      (when success
+        (setq undo-fu--was-redo t))
+
       (setq this-command 'undo-fu-only-redo)
       success)))
 
@@ -322,9 +334,7 @@ Optional argument ARG the number of steps to undo."
 
   (let*
     ( ;; Assign for convenience.
-      (was-undo (undo-fu--was-undo))
-      (was-redo (undo-fu--was-redo))
-      (was-undo-or-redo (or was-undo was-redo))
+      (was-undo-or-redo (undo-fu--was-undo-or-redo))
       (undo-fu-quit-command
         (if undo-fu-ignore-keyboard-quit
           'undo-fu-disable-checkpoint
@@ -387,6 +397,9 @@ Optional argument ARG the number of steps to undo."
                 (message "%s" (error-message-string err))
                 nil)))))
 
+      (when success
+        (setq undo-fu--was-redo nil))
+
       (setq this-command 'undo-fu-only-undo)
       success)))
 
@@ -398,6 +411,7 @@ Optional argument ARG the number of steps to undo."
   'evil
   '
   (progn
+    (evil-declare-not-repeat 'undo-fu-disable-checkpoint)
     (evil-declare-not-repeat 'undo-fu-only-undo)
     (evil-declare-not-repeat 'undo-fu-only-redo)
     (evil-declare-not-repeat 'undo-fu-only-redo-all)))
