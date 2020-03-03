@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.5.0
-;; Package-Version: 20200229.1547
+;; Package-Version: 20200303.932
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -1812,9 +1812,11 @@ Return the created process."
 
 (defun rust-before-save-hook ()
   (when rust-format-on-save
-    (condition-case nil
+    (condition-case e
         (rust-format-buffer)
-      (error nil))))
+      (error (format "rust-before-save-hook: %S %S"
+                     (car e)
+                     (cdr e))))))
 
 (defun rust-after-save-hook ()
   (when rust-format-on-save

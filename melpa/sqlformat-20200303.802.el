@@ -4,7 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: languages
-;; Package-Version: 20190420.2256
+;; Package-Version: 20200303.802
 ;; URL: https://github.com/purcell/sqlformat
 ;; Package-Requires: ((emacs "24") (reformatter "0.3"))
 ;; Version: 0
@@ -30,8 +30,15 @@
 ;; Install the "sqlparse" (Python) package to get "sqlformat", or
 ;; "pgformatter" to get "pg_format".
 
-;; Customise the `sqlformat-command' variable as desired, then call
-;; `sqlformat', `sqlformat-buffer' or `sqlformat-region' as convenient.
+;; Customise the `sqlformat-command' variable as desired. For example,
+;; to use "pgformatter" (i.e., the `pg_format` command) with
+;; two-character indent and no statement grouping,
+
+;;     (setq sqlformat-command 'pgformatter)
+;;     (setq sqlformat-args '("-s2" "-g"))
+
+;; Then call `sqlformat', `sqlformat-buffer' or `sqlformat-region' as
+;; convenient.
 
 ;; Enable `sqlformat-on-save-mode' in SQL buffers like this:
 
