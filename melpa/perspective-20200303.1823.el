@@ -1,12 +1,12 @@
 ;;; perspective.el --- switch between named "perspectives" of the editor  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2008-2018 Natalie Weizenbaum <nex342@gmail.com>
+;; Copyright (C) 2008-2020 Natalie Weizenbaum <nex342@gmail.com>
 ;;
 ;; Licensed under the same terms as Emacs and under the MIT license.
 
 ;; Author: Natalie Weizenbaum <nex342@gmail.com>
 ;; URL: http://github.com/nex3/perspective-el
-;; Package-Version: 20200301.1858
+;; Package-Version: 20200303.1823
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
 ;; Version: 2.4
 ;; Created: 2008-03-05
@@ -878,7 +878,6 @@ See also `persp-add-buffer'."
          (frame (window-frame window))
          (old-buffer (window-buffer window)))
     ad-do-it
-
     (let ((buffer (window-buffer window)))
       (with-selected-frame frame
         (unless (persp-is-current-buffer buffer)

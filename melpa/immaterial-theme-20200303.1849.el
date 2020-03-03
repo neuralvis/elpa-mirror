@@ -4,9 +4,9 @@
 
 ;; Author: Peter Gardfjäll
 ;; Keywords: themes
-;; Package-Version: 20200217.1302
+;; Package-Version: 20200303.1849
 ;; URL: https://github.com/petergardfjall/emacs-immaterial-theme
-;; Version: 0.3.10
+;; Version: 0.4.0
 ;; Package-Requires: ((emacs "25"))
 
 ;; Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -56,7 +56,7 @@ for constructing primary and secondary color schemes.")
 (defconst immaterial-color-alist
   '(("background-primary"    . "#012027")
     ("background-on"         . "#01343f")
-    ("background-off"        . "#001017")
+    ("background-off"        . "#001b21")
     ("foreground-primary"    . "#dddddd")
     ("foreground-secondary"  . "#c8c8c8")
     ("foreground-tertiary"   . "#b0b0b0")
@@ -69,7 +69,11 @@ for constructing primary and secondary color schemes.")
     ("error"                 . "#ff5555")
     ("warning"               . "#ff9800")
     ("discrete"              . "#777777")
-    ("cursor"                . "#64d8cb"))
+    ("cursor"                . "#64d8cb")
+    ("modeline-active-fg"    . "#ffffff")
+    ("modeline-active-bg"    . "#005662")
+    ("modeline-inactive-fg"  . "#777777")
+    ("modeline-inactive-bg"  . "#001017"))
   "The default color palette to use for the theme.
 Values can be overridden via immaterial-color-override-alist).
 The palette was created using the https://material.io/tools/color/ tool.")
@@ -108,7 +112,13 @@ over the default ones defined in immaterial-color-alist."
       (negation   (immaterial-color "warning"))
       (warning    (immaterial-color "warning"))
       (error      (immaterial-color "error"))
-      (cursor     (immaterial-color "cursor")))
+      (cursor     (immaterial-color "cursor"))
+
+      (modeline-active-bg (immaterial-color "modeline-active-bg"))
+      (modeline-active-fg (immaterial-color "modeline-active-fg"))
+      (modeline-inactive-bg (immaterial-color "modeline-inactive-bg"))
+      (modeline-inactive-fg (immaterial-color "modeline-inactive-fg")))
+
   (custom-theme-set-faces
    'immaterial
    `(default ((,class (:background ,bg-prim :foreground ,fg1))))
@@ -149,9 +159,9 @@ over the default ones defined in immaterial-color-alist."
    ;;
    ;; Buttons and links
    ;;
-   `(button ((,class (:foreground ,sec :weight bold :underline t))))
-   `(link ((,class (:foreground ,sec :weight bold :underline t))))
-   `(link-visited ((,class (:foreground ,sec :weight bold :underline t))))
+   `(button ((,class (:foreground ,str :weight bold :underline t))))
+   `(link ((,class (:foreground ,str :weight bold :underline t))))
+   `(link-visited ((,class (:foreground ,str :weight bold :underline t))))
 
    ;;
    ;; region selection
@@ -179,23 +189,23 @@ over the default ones defined in immaterial-color-alist."
    ;; mode-line
    ;;
    ;; mode-line of the active buffer (e.g. in case of split window)
-   `(mode-line ((,class (:background ,bg-on :foreground ,fg1))))
+   `(mode-line ((,class (:background ,modeline-active-bg :foreground ,modeline-active-fg))))
    ;; mode-line of the inactive buffer (e.g. in case of split window)
-   `(mode-line-inactive  ((,class (:background ,bg-off :foreground ,discrete))))
+   `(mode-line-inactive  ((,class (:background ,modeline-inactive-bg :foreground ,modeline-inactive-fg))))
    `(mode-line-buffer-id ((,class (:weight bold))))
 
    ;;
    ;; powerline
    ;;
    ;; for active buffer in the frame
-   `(powerline-active1 ((,class (:background ,bg-on :foreground ,fg1))))
-   `(powerline-active2 ((,class (:background ,bg-on :foreground ,fg1))))
+   `(powerline-active1 ((,class (:background ,modeline-active-bg :foreground ,modeline-active-fg))))
+   `(powerline-active2 ((,class (:background ,modeline-active-bg :foreground ,modeline-active-fg))))
    ;; for inactive buffers in the frame
-   `(powerline-inactive1 ((,class (:background ,bg-off :foreground ,discrete))))
-   `(powerline-inactive2 ((,class (:background ,bg-off :foreground ,discrete))))
+   `(powerline-inactive1 ((,class (:background ,modeline-inactive-bg :foreground ,modeline-inactive-fg))))
+   `(powerline-inactive2 ((,class (:background ,modeline-inactive-bg :foreground ,modeline-inactive-fg))))
 
    ;; the vertical line that separates windows in a frame
-   `(vertical-border ((,class (:foreground ,bg-off))))
+   `(vertical-border ((,class (:foreground ,discrete))))
    `(minibuffer-prompt ((,class (:bold t :foreground ,prim))))
    `(default-italic ((,class (:italic t))))
    `(link ((,class (:foreground ,prim-dark :underline t))))
@@ -374,6 +384,19 @@ This function is intended to be added as a `minibuffer-exit-hook`."
 ;; Change minibuffer background color when it becomes active (e.g. find-file).
 (add-hook 'minibuffer-setup-hook #'immaterial-minibuffer-active-fn)
 (add-hook 'minibuffer-exit-hook #'immaterial-minibuffer-inactive-fn)
+
+(defun immaterial-set-treemacs-bg-fn ()
+  (with-current-buffer (treemacs-get-local-buffer)
+    (setq-local face-remapping-alist
+		`((default . (:background ,(immaterial-color "background-off")))
+		  (fringe  . (:background ,(immaterial-color "background-off")))))
+    ;; (setq-local left-fringe-width 0)
+    ;; (setq-local right-fringe-width 0)
+    ;; (setq-local left-margin-width 1)
+    ;; (setq-local right-margin-width 1)))
+    ))
+
+(add-hook 'treemacs-mode-hook #'immaterial-set-treemacs-bg-fn)
 
 ;;;###autoload
 (when load-file-name
