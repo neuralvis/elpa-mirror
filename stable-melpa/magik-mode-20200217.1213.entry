@@ -1,2 +1,0 @@
-
-(magik-mode . [(20200217 1213) nil "mode for editing Magik + some utils." tar ((:commit . "c42d7c084c1b928815cd665d1e42ea29b280853e") (:keywords "languages") (:url . "http://github.com/roadrunner1776/magik"))])

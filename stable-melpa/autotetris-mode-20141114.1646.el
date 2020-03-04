@@ -4,7 +4,6 @@
 
 ;; Author: Christopher Wellons <wellons@nullprogram.com>
 ;; URL: https://github.com/skeeto/autotetris-mode
-;; Package-Version: 20141114.1646
 ;; Package-Requires: ((cl-lib "0.5"))
 
 ;;; Commentary:
