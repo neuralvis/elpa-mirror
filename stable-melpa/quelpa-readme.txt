@@ -6,4 +6,4 @@ https://github.com/quelpa/quelpa/blob/master/README.org
 
 Requirements:
 
-Emacs 24.3.1
+Emacs 25.1

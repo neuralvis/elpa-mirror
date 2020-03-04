@@ -1,0 +1,2 @@
+
+(quelpa . [(20200304 207) ((emacs (25 1))) "Emacs Lisp packages built directly from source" tar ((:commit . "7a64793ddd53a95c2588340ae1c602b08b087c9e") (:keywords "tools" "package" "management" "build" "source" "elpa") (:authors ("steckerhalter")) (:maintainer "steckerhalter") (:url . "https://github.com/quelpa/quelpa"))])
