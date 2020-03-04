@@ -10,7 +10,7 @@
 ;; Maintainer: Marco Wahl <marcowahlsoft@gmail.com>
 ;; Created: [2019-01-06]
 ;; Version: 0.2.2
-;; Package-Version: 20200124.2002
+;; Package-Version: 20200303.2201
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: reading, outlines
 ;; URL: https://gitlab.com/marcowahl/org-pretty-tags
@@ -31,6 +31,13 @@
 
 ;;; Commentary:
 
+;; Display text or image surrogates for Org mode tags.
+;; 
+;; See images at https://gitlab.com/marcowahl/org-pretty-tags.
+;;
+;; In Org mode only a small set of characters is allowed in tags.  A
+;; wider range of symbols might increase readability and joy.
+;;
 ;; In an Org mode buffer:
 ;; 
 ;; - Toggle the mode with {M-x org-pretty-tags-mode RET}.

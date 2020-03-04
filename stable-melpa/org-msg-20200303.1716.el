@@ -6,8 +6,8 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20200221.25
-;; Package-X-Original-Version: 2.4
+;; Package-Version: 20200303.1716
+;; Package-X-Original-Version: 2.5
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -137,6 +137,9 @@
 (defvar org-msg-attachment '()
   "Temporary variable to pass the list of attachment.")
 
+(defvar org-msg-text-plain nil
+  "Temporary variable to pass the text/plain version of the email.")
+
 (defvar org-msg-export-in-progress nil
   "Internal use only.
 It is used by function advice.")
@@ -145,13 +148,16 @@ It is used by function advice.")
   "String separating the reply area and the original mail."
   :type '(string))
 
-(defcustom org-msg-options "html-postamble:nil toc:nil"
+(defcustom org-msg-options "html-postamble:nil toc:nil author:nil email:nil"
   "Org Mode #+OPTIONS."
   :type '(string))
 
 (defcustom org-msg-startup nil
   "Org Mode #+STARTUP."
   :type '(string))
+
+(defcustom org-msg-text-plain-alternative nil
+  "Include an ASCII export as a text/plain alternative.")
 
 (defcustom org-msg-greeting-fmt nil
   "Mail greeting format.
@@ -563,24 +569,45 @@ is the XML tree and CSS the style."
 (defun org-msg-html-buffer-to-xml (&optional base)
   "Return the XML tree of the current HTML buffer.
 BASE is the path used to convert the IMG SRC relative paths to
-absolute paths."
-  (cl-flet ((make-img-abs (xml)
-	     (when (eq (car xml) 'img)
-	       (let ((src (assq 'src (cadr xml))))
-		 (unless (url-type (url-generic-parse-url (cdr src)))
-		   (when src
-		     (unless (file-name-absolute-p (cdr src))
-		       (let ((file (concat base (cdr src))))
-			 (if (file-exists-p file)
-			     (setcdr src (concat base (cdr src)))
-			   (unless (y-or-n-p (format "'%s' Image is missing,\
+absolute paths.  Base is also used to locate SVG objects tag file
+and include the SVG content into the email XML tree."
+  (let ((dirs (list base (temporary-file-directory))))
+    (cl-flet* ((get-file-path (file)
+		(let ((paths (mapcar* 'concat dirs
+				      (make-list (length dirs) file))))
+		  (car (delete-if-not 'file-exists-p paths))))
+	       (make-img-abs (xml)
+		(when (eq (car xml) 'img)
+		  (let ((src (assq 'src (cadr xml))))
+		    (unless (url-type (url-generic-parse-url (cdr src)))
+		      (when src
+			(unless (file-name-absolute-p (cdr src))
+			  (let* ((file (cdr src))
+				 (path (get-file-path file)))
+			    (if path
+				(setcdr src path)
+			      (unless (y-or-n-p (format "'%s' Image is missing,\
  do you want to continue ?" file))
-			     (error "'%s' Image is missing" file)))))))))))
-    (let ((xml (libxml-parse-html-region (point-min) (point-max))))
-      (when base
-	(org-msg-xml-walk xml #'make-img-abs))
-      (assq-delete-all 'title (assq 'head xml))
-      xml)))
+				(error "'%s' Image is missing" file))))))))))
+	       (inline-svg (xml)
+		(when (and (eq (car xml) 'object)
+			   (string= (cdr (assq 'type (cadr xml)))
+				    "image/svg+xml"))
+		  (let ((file (get-file-path (assoc-default 'data (cadr xml)))))
+		    (when file
+		      (let ((svg (with-temp-buffer
+				   (insert-file file)
+				   (when (search-forward "<svg " nil t)
+				     (libxml-parse-xml-region (match-beginning 0)
+							      (point-max))))))
+			(setcar xml (car svg))
+			(setcdr xml (cdr svg))))))))
+      (let ((xml (libxml-parse-html-region (point-min) (point-max))))
+	(when base
+	  (org-msg-xml-walk xml #'make-img-abs)
+	  (org-msg-xml-walk xml #'inline-svg))
+	(assq-delete-all 'title (assq 'head xml))
+	xml))))
 
 (defun org-msg-load-html-file (file)
   "Return the XML tree of a HTML FILE."
@@ -604,6 +631,15 @@ absolute paths."
 	  (let ((xml (org-msg-html-buffer-to-xml base)))
 	    (kill-buffer)
 	    xml))))))
+
+(defun org-msg-org-to-text-plain ()
+  "Transform the current Org-Msg buffer into a text plain form."
+  (save-window-excursion
+    (let ((str (buffer-substring-no-properties (org-msg-start) (org-msg-end))))
+      (with-temp-buffer
+	(insert str)
+	(with-current-buffer (org-ascii-export-as-ascii)
+	  (buffer-string))))))
 
 (defun org-msg-load-css ()
   "Load the CSS definition according to `org-msg-enforce-css'."
@@ -691,6 +727,8 @@ This function is a hook for `message-send-hook'."
 	  (unless (file-exists-p file)
 	    (error "File '%s' does not exist" file)))
 	(setq org-msg-attachment attachments)
+	(when org-msg-text-plain-alternative
+	  (setq org-msg-text-plain (org-msg-org-to-text-plain)))
 	(goto-char (org-msg-start))
 	(delete-region (org-msg-start) (point-max))
 	(mml-insert-part "text/html")
@@ -719,9 +757,16 @@ variable set by `org-msg-prepare-to-send'."
 	(push (list 'part `(type . ,type) `(filename . ,file)
 		    '(disposition . "attachment"))
 	      newparts)))
-      (nconc (list 'multipart (cons 'type "mixed"))
-      	     (if (eq (car cont) 'multipart) (list cont) cont)
-      	     newparts)))
+    (let ((alternative (if (eq (car cont) 'multipart) (list cont) cont)))
+      (when org-msg-text-plain-alternative
+	(setf alternative (push `(part (type . "text/plain")
+				       (disposition . "inline")
+				       (contents . ,org-msg-text-plain))
+				alternative)))
+      (append `(multipart (type . "mixed")
+			  (multipart (type . "alternative")
+				     ,@alternative))
+	      newparts))))
 
 (defun org-msg-html--todo (orig-fun todo &optional info)
   "Format todo keywords into HTML.
@@ -833,9 +878,10 @@ area."
 	      (insert "\n\n" org-msg-separator "\n")
 	      (delete-region (line-beginning-position)
 			     (1+ (line-end-position)))
-	      (save-excursion
-		(while (re-search-forward "^>+ *" nil t)
-		  (replace-match "")))
+	      (dolist (rep '(("^>+ *" . "") ("___+" . "---")))
+		(save-excursion
+		  (while (re-search-forward (car rep) nil t)
+		    (replace-match (cdr rep)))))
 	      (org-escape-code-in-region (point) (point-max))))
 	  (when org-msg-signature
 	    (insert org-msg-signature))
