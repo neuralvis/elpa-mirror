@@ -1,2 +1,0 @@
-
-(immaterial-theme . [(20200303 1849) ((emacs (25))) "A flexible theme based on material design principles" single ((:commit . "6c2a351d023f8aa7596103afb918f42fc4cbcccd") (:keywords "themes") (:authors ("Peter Gardfjäll")) (:maintainer "Peter Gardfjäll") (:url . "https://github.com/petergardfjall/emacs-immaterial-theme"))])

@@ -1,2 +1,0 @@
-
-(compdef . [(20200222 338) ((emacs (24 4))) "A local completion definer." single ((:commit . "79639b90e537058ab4de1961cee63a26c4ca2a10") (:keywords "convenience") (:authors ("Uros Perisic")) (:maintainer "Uros Perisic") (:url . "https://gitlab.com/jjzmajic/compdef"))])
