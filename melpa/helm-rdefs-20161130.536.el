@@ -3,6 +3,7 @@
 ;; Copyright (C) 2016 by Hiroshi Saito
 
 ;; Version: 1.0.1
+;; Package-Version: 20161130.536
 ;; Author: Hiroshi Saito <monodie@gmail.com>
 ;; URL: https://github.com/saidie/helm-rdefs
 ;; Package-Requires: ((emacs "24") (helm "1.6.4"))
