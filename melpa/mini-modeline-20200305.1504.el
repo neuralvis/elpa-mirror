@@ -4,7 +4,7 @@
 
 ;; Author:  Kien Nguyen <kien.n.quang@gmail.com>
 ;; URL: https://github.com/kiennq/emacs-mini-modeline
-;; Package-Version: 20200305.619
+;; Package-Version: 20200305.1504
 ;; Version: 0.1
 ;; Keywords: convenience, tools
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))
@@ -204,7 +204,7 @@ When ARG is:
 
 (defun mini-modeline-msg ()
   "Place holder to display echo area message."
-  `(format "%s" mini-modeline--msg))
+  (replace-regexp-in-string "%" "%%" mini-modeline--msg))
 
 (defsubst mini-modeline--lr-render (left right)
   "Render the LEFT and RIGHT part of mini-modeline."
