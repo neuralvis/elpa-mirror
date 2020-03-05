@@ -4,7 +4,7 @@
 
 ;; Author: Kevin Brubeck Unhammer <unhammer@fsfe.org>
 ;; Version: 0.3.1
-;; Package-Version: 20190316.2206
+;; Package-Version: 20200305.1845
 ;; Package-Requires: ((emacs "24.3"))
 ;; Url: https://visl.sdu.dk/constraint_grammar.html
 ;; Keywords: languages
@@ -377,7 +377,7 @@ CG-mode provides the following specific keyboard key bindings:
          nil				; KEYWORDS-ONLY
          'case-fold ; some keywords (e.g. x vs X) are case-sensitive,
                                         ; but that doesn't matter for highlighting
-         ((?/ . "w") (?~ . "w") (?. . "w") (?- . "w") (?_ . "w"))
+         ((?/ . "w") (?~ . "w") (?. . "w") (?- . "w") (?_ . "w") (?& . "w"))
          nil ;	  beginning-of-line		; SYNTAX-BEGIN
          (font-lock-syntactic-keywords . cg-font-lock-syntactic-keywords)
          (font-lock-syntactic-face-function . cg-font-lock-syntactic-face-function)))

@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20200303.25
+;; Package-Version: 20200305.939
 
 ;; This file is not part of GNU Emacs.
 
@@ -215,6 +215,7 @@ This variable has to be set before `no-littering' is loaded.")
     (setq diary-file                       (var "diary"))
     (setq epkg-repository                  (var "epkgs/"))
     (setq eshell-directory-name            (var "eshell/"))
+    (setq eudc-options-file                (etc "eudc-options.el"))
     (eval-after-load 'eww
       `(make-directory ,(var "eww/") t))
     (setq eww-bookmarks-directory          (var "eww/"))
