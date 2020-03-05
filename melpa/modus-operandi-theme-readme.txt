@@ -115,6 +115,7 @@ notify me of any missing package or change you would like to see.
     imenu-list
     info
     info-colors
+    interaction-log
     isearch, occur, etc.
     ivy
     ivy-posframe
