@@ -4,7 +4,7 @@
 
 ;; Author:  Kien Nguyen <kien.n.quang@gmail.com>
 ;; URL: https://github.com/kiennq/emacs-mini-modeline
-;; Package-Version: 20200131.312
+;; Package-Version: 20200305.619
 ;; Version: 0.1
 ;; Keywords: convenience, tools
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))
@@ -93,6 +93,12 @@ Will be set if `mini-modeline-enhance-visual' is t."
   "Frame to display mini-modeline on.
 Nil means current selected frame."
   :type 'sexp
+  :group 'mini-modeline)
+
+(defcustom mini-modeline-right-padding 3
+  "Padding to use in the right side.
+Set this to the minimal value that doesn't cause truncation."
+  :type 'integer
   :group 'mini-modeline)
 
 (defvar mini-modeline--last-echoed nil)
@@ -204,7 +210,10 @@ When ARG is:
   "Render the LEFT and RIGHT part of mini-modeline."
   (let* ((left (or left ""))
          (right (or right ""))
-         (available-width (max (- (frame-width mini-modeline-frame) (string-width left) 3) 0))
+         (available-width (max (- (frame-width mini-modeline-frame)
+                                  (string-width left)
+                                  mini-modeline-right-padding)
+                               0))
          (required-width (string-width right)))
     (if (< available-width required-width)
         (if mini-modeline-truncate-p
@@ -212,7 +221,9 @@ When ARG is:
              (format (format "%%s %%%1$d.%1$ds" available-width) left right)
              0)
           (cons
-           (format (format "%%%1$d.%1$ds\n%%s" (- (frame-width mini-modeline-frame) 3)) right left)
+           (format (format "%%%1$d.%1$ds\n%%s" (- (frame-width mini-modeline-frame)
+                                                  mini-modeline-right-padding))
+                   right left)
            1))
       (cons (format (format "%%s %%%ds" available-width) left right) 0))))
 
