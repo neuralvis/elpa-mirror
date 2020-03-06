@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2019 jack angers
 ;; Author: jack angers and contributors
 ;; Url: https://github.com/jacktasia/dumb-jump
-;; Package-Version: 20200222.2006
+;; Package-Version: 20200306.513
 ;; Version: 0.5.3
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
@@ -1930,7 +1930,7 @@ to keep looking for another root."
 
 (defun dumb-jump-get-language-from-mode ()
   "Extract the language from the 'major-mode' name.  Currently just everything before '-mode'."
-  (let* ((lookup '(sh "shell" cperl "perl" matlab "matlab"))
+  (let* ((lookup '(sh "shell" cperl "perl" matlab "matlab" octave "matlab"))
         (m (dumb-jump-get-mode-base-name))
         (result (plist-get lookup (intern m))))
     result))
