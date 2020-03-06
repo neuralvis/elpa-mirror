@@ -95,6 +95,7 @@ notify me of any missing package or change you would like to see.
     flycheck-posframe
     flymake
     flyspell
+    flyspell-correct
     focus
     font-lock (generic syntax highlighting)
     fountain (fountain-mode)
@@ -108,8 +109,10 @@ notify me of any missing package or change you would like to see.
     helm-ls-git
     helm-xref
     highlight-blocks
+    highlight-numbers
     hl-fill-column
     hl-line-mode
+    hl-todo
     hydra
     ido-mode
     iedit
@@ -135,6 +138,7 @@ notify me of any missing package or change you would like to see.
     mood-line
     mu4e
     mu4e-conversation
+    multiple-cursors
     neotree
     org
     org-journal
@@ -166,6 +170,7 @@ notify me of any missing package or change you would like to see.
     suggest
     swiper
     sx
+    symbol-overlay
     telephone-line
     term
     transient (pop-up windows like Magit's)
@@ -173,6 +178,8 @@ notify me of any missing package or change you would like to see.
     undo-tree
     vc (built-in mode line status for version control)
     visual-regexp
+    volatile-highlights
+    web-mode
     wgrep
     which-function-mode
     which-key
@@ -182,4 +189,5 @@ notify me of any missing package or change you would like to see.
     xah-elisp-mode
     xref
     xterm-color (and ansi-colors)
+    yaml-mode
     ztree
