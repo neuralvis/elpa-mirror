@@ -5,9 +5,9 @@
 ;; Authors: Zachary Elliott <contact@zell.io>
 ;; Maintainer: Zachary Elliott <contact@zell.io>
 ;; URL: http://github.com/zellio/ansible-vault-mode
-;; Package-Version: 20200130.2300
+;; Package-Version: 20200305.2240
 ;; Created: 2016-09-25
-;; Version: 0.4.0
+;; Version: 0.4.1
 ;; Keywords: ansible, ansible-vault, tools
 ;; Package-Requires: ((emacs "24.3") (seq "2.20"))
 
@@ -38,7 +38,7 @@
 
 (require 'seq)
 
-(defconst ansible-vault-version "0.4.0"
+(defconst ansible-vault-version "0.4.1"
   "`ansible-vault' version.")
 
 (defgroup ansible-vault nil
@@ -354,9 +354,11 @@ Ensures deletion of ansible-vault generated password files."
     (remove-hook 'before-save-hook 'ansible-vault--before-save-hook t)
     (remove-hook 'kill-buffer-hook 'ansible-vault--kill-buffer-hook t)
 
-    ;; Re-encrypt the current buffer
-    (if (not (ansible-vault--is-vault-file))
-        (ansible-vault-encrypt-current-buffer))
+    ;; Only re-encrypt the buffer if buffer is changed; otherwise revert
+    ;; to on-disk contents.
+    (if (and (buffer-modified-p) (not (ansible-vault--is-vault-file)))
+        (ansible-vault-encrypt-current-buffer)
+      (revert-buffer nil t nil))
 
     ;; Clean up password state
     (ansible-vault--flush-password)
