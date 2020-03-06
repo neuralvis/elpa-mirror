@@ -109,6 +109,7 @@ notify me of any missing package or change you would like to see.
     helm-ls-git
     helm-xref
     highlight-blocks
+    highlight-defined
     highlight-numbers
     hl-fill-column
     hl-line-mode
@@ -157,6 +158,7 @@ notify me of any missing package or change you would like to see.
     proced
     prodigy
     rainbow-blocks
+    rainbow-identifiers
     rainbow-delimiters
     regexp-builder (also known as `re-builder')
     rmail

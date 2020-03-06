@@ -1,0 +1,2 @@
+
+(hungry-delete . [(20200306 1619) nil "hungry delete minor mode" single ((:commit . "16d5e6cc52ee8226e59fd7dd7991ff8cbe7ea964") (:authors ("Nathaniel Flath" . "flat0103@gmail.com")) (:maintainer "Nathaniel Flath" . "flat0103@gmail.com") (:url . "http://github.com/nflath/hungry-delete"))])
