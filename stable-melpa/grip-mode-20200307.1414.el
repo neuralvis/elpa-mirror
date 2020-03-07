@@ -5,7 +5,7 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/grip-mode
 ;; Version: 2.2.1
-;; Package-Version: 20200217.1151
+;; Package-Version: 20200307.1414
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience, markdown, preview
 
@@ -99,7 +99,7 @@ option."
 (defun grip--browse-url (url)
   "Ask the browser to load URL.
 
-Use default browser unless `xwidget' is avaliable."
+Use default browser unless `xwidget' is available."
   (if (and grip-preview-use-webkit
            (featurep 'xwidget-internal))
       (progn
