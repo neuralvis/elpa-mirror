@@ -1,2 +1,0 @@
-
-(all-the-icons-ivy-rich . [(20200301 656) ((emacs (24 4)) (ivy-rich (0 1 0)) (all-the-icons (2 2 0))) "Better experience with icons for ivy" single ((:commit . "b3dda7af490e606b85e1e0cd9806988ce301dac5") (:keywords "convenience" "icons" "ivy") (:authors ("Vincent Zhang" . "seagle0128@gmail.com")) (:maintainer "Vincent Zhang" . "seagle0128@gmail.com") (:url . "https://github.com/seagle0128/all-the-icons-ivy-rich"))])
