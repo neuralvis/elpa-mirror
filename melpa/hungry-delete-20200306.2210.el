@@ -4,7 +4,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
-;; Package-Version: 20200306.1619
+;; Package-Version: 20200306.2210
 ;; Version: 1.1.6
 
 ;; This file is not part of GNU Emacs.
@@ -122,7 +122,7 @@ KILLFLAG is set if N was explicitly specified."
 	;; If a prefix argument has been given, delete n characters.
 	(current-prefix-arg (delete-char n killflag))
 	;; Otherwise, call hungry-delete-forward-impl.
-	(t (hungry-delete-forward-impl))))
+	(t (hungry-delete-forward-impl)))))
 
 
 
