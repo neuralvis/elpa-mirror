@@ -96,6 +96,7 @@ notify me of any missing package or change you would like to see.
     flymake
     flyspell
     flyspell-correct
+    frog-menu
     focus
     font-lock (generic syntax highlighting)
     fountain (fountain-mode)
