@@ -2,6 +2,7 @@
 
 ;; Author: Jean Lo <jlpaca@users.noreply.github.com>
 ;; Version: 0.2
+;; Package-Version: 20200306.1220
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: theme, faces
 ;; URL: https://github.com/jlpaca/minsk-theme

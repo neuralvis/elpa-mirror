@@ -4,7 +4,7 @@
 
 ;; Author:  Kien Nguyen <kien.n.quang@gmail.com>
 ;; URL: https://github.com/kiennq/emacs-mini-modeline
-;; Package-Version: 20200307.1841
+;; Package-Version: 20200308.730
 ;; Version: 0.1
 ;; Keywords: convenience, tools
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))
@@ -46,7 +46,7 @@
 ;; Forward declaration for evil-mode-line-tag
 (defvar evil-mode-line-tag)
 
-(defcustom mini-modeline-l-format '(:eval (mini-modeline-msg))
+(defcustom mini-modeline-l-format nil
   "Left part of mini-modeline, same format with `mode-line-format'."
   :type `(repeat symbol)
   :group 'mini-modeline)
@@ -144,8 +144,8 @@ Set this to the minimal value that doesn't cause truncation."
   "Set buffer background for current buffer."
   (when mini-modeline-color
     (make-local-variable 'face-remapping-alist)
-    (add-to-list 'face-remapping-alist
-                 `(default (:background ,mini-modeline-color)))))
+    (setf (alist-get 'default face-remapping-alist)
+          `((:background ,mini-modeline-color)))))
 
 (defun mini-modeline--log (&rest args)
   "Log message into message buffer with ARGS as same parameters in `message'."
@@ -202,7 +202,9 @@ When ARG is:
                       (setq mini-modeline--cache nil)
                     (setq mini-modeline--cache
                           (mini-modeline--multi-lr-render
-                           (string-trim (format-mode-line mini-modeline-l-format))
+                           (string-trim (if mini-modeline--msg
+                                            (format-mode-line '(:eval (mini-modeline-msg)))
+                                          (format-mode-line mini-modeline-l-format)))
                            (string-trim (format-mode-line mini-modeline-r-format))))
                     (setq mini-modeline--last-update (current-time)))
 
@@ -288,10 +290,20 @@ BODY will be supplied with orig-func and args."
   (setq mini-modeline--command-state 'end
         echo-keystrokes mini-modeline--echo-keystrokes))
 
+(defvar mini-modeline--orig-resize-mini-windows resize-mini-windows)
+(defsubst mini-modeline--enter-minibuffer ()
+  "`minibuffer-setup-hook' of mini-modeline."
+  (when mini-modeline-enhance-visual
+    (mini-modeline--set-buffer-background))
+  (setq resize-mini-windows mini-modeline--orig-resize-mini-windows))
+
+(defsubst mini-modeline--exit-minibuffer ()
+  "`minibuffer-exit-hook' of mini-modeline."
+  (setq resize-mini-windows nil))
+
 (declare-function anzu--cons-mode-line "ext:anzu")
 (declare-function anzu--reset-mode-line "ext:anzu")
 
-(defvar mini-modeline--orig-resize-mini-windows resize-mini-windows)
 (defvar mini-modeline--timer nil)
 
 (defun mini-modeline--enable ()
@@ -308,7 +320,7 @@ BODY will be supplied with orig-func and args."
          (if (display-graphic-p)
              (setq mode-line-format " ")
            (setq mode-line-format nil))
-         (if (and (minibufferp) mini-modeline-enhance-visual)
+         (if (and (minibufferp buf) mini-modeline-enhance-visual)
              (mini-modeline--set-buffer-background)))))
    (buffer-list))
   ;; Make the modeline in GUI a thin bar.
@@ -321,9 +333,10 @@ BODY will be supplied with orig-func and args."
   (redisplay)
   ;; (add-hook 'pre-redisplay-functions #'mini-modeline-display)
   (setq mini-modeline--timer (run-with-timer 0 0.1 #'mini-modeline-display))
-  (when mini-modeline-enhance-visual
-    (add-hook 'minibuffer-setup-hook #'mini-modeline--set-buffer-background))
   (advice-add #'message :around #'mini-modeline--reroute-msg)
+
+  (add-hook 'minibuffer-setup-hook #'mini-modeline--enter-minibuffer)
+  (add-hook 'minibuffer-exit-hook #'mini-modeline--exit-minibuffer)
   (add-hook 'pre-command-hook #'mini-modeline--pre-cmd)
   (add-hook 'post-command-hook #'mini-modeline--post-cmd)
 
@@ -373,9 +386,10 @@ BODY will be supplied with orig-func and args."
   ;; (remove-hook 'pre-redisplay-functions #'mini-modeline-display)
   (when (timerp (cancel-timer mini-modeline--timer)))
   (mini-modeline-display 'clear)
-  (when mini-modeline-enhance-visual
-    (remove-hook 'minibuffer-setup-hook #'mini-modeline--set-buffer-background))
   (advice-remove #'message #'mini-modeline--reroute-msg)
+
+  (remove-hook 'minibuffer-setup-hook #'mini-modeline--enter-minibuffer)
+  (remove-hook 'minibuffer-exit-hook #'mini-modeline--exit-minibuffer)
   (remove-hook 'pre-command-hook #'mini-modeline--pre-cmd)
   (remove-hook 'post-command-hook #'mini-modeline--post-cmd)
 
