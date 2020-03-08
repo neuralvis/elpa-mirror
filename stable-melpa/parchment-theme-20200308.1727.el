@@ -2,7 +2,7 @@
 
 ;; Author: Alex Griffin <a@ajgrf.com>
 ;; URL: https://github.com/ajgrf/parchment
-;; Package-Version: 20200221.1702
+;; Package-Version: 20200308.1727
 ;; Version: 0.4.0-pre
 ;; Package-Requires: ((autothemer "0.2"))
 
@@ -170,6 +170,7 @@ switch themes often.")
    (diff-refine-removed        (:inherit 'diff-removed :box (:line-width -1)))
    (diff-removed               (:foreground red :background pale-red))
    (js2-function-call          ())
+   (js2-function-param         ())
    (ledger-font-pending-face   (:foreground magenta :slant 'italic))
    (ledger-font-posting-date-face (:foreground blue))
    (ledger-occur-xact-face     (:background beige))
@@ -402,6 +403,17 @@ switch themes often.")
    (geiser-font-lock-repl-output ())
    (geiser-font-lock-repl-prompt (:foreground blue :weight 'bold))
    (geiser-font-lock-xref-link (:inherit 'link))
+   (gnus-cite-1                (:foreground blue :slant 'italic))
+   (gnus-cite-2                (:foreground green :slant 'italic))
+   (gnus-cite-3                (:foreground brown :slant 'italic))
+   (gnus-cite-4                (:foreground blue :slant 'italic))
+   (gnus-cite-5                (:foreground green :slant 'italic))
+   (gnus-cite-6                (:foreground brown :slant 'italic))
+   (gnus-cite-7                (:foreground magenta :slant 'italic))
+   (gnus-cite-8                (:foreground blue :slant 'italic))
+   (gnus-cite-9                (:foreground green :slant 'italic))
+   (gnus-cite-10               (:foreground brown :slant 'italic))
+   (gnus-cite-11               (:foreground magenta :slant 'italic))
    (gnus-header-content        ())
    (gnus-header-from           ())
    (gnus-header-name           (:foreground cyan))
