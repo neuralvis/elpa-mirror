@@ -6,8 +6,7 @@
 ;; Keywords: navigation convenience backward forward
 ;; Homepage: https://gitlab.com/vancan1ty/emacs-backward-forward/tree/master
 ;; Version: 0.1
-;; Package-Version: 20161229.550
-;; Package-X-Original-Version: 20161221.1
+;; Package-Version: 20161221.1
 ;; Package-Requires: ((emacs "24.5"))
 
 ;; This file is free software; you can redistribute it and/or modify

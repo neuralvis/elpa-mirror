@@ -9,7 +9,6 @@
 
 ;; Created: Wed Sep  7 19:38:05 2011 (+0800)
 ;; Version: 0.1
-;; Package-Version: 20130720.1516
 ;; Last-Updated: Mon Apr  1 16:59:52 2013 (+0800)
 ;;           By: Le Wang
 ;;     Update #: 135

@@ -4,7 +4,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
-;; Package-Version: 20200306.2210
+;; Package-Version: 20200307.2000
 ;; Version: 1.1.6
 
 ;; This file is not part of GNU Emacs.
@@ -110,7 +110,7 @@ KILLFLAG is set if N was explicitly specified."
   (interactive "p\nP")
   (unless (integerp n)
     (signal 'wrong-type-argument (list 'integerp n)))
-  (if cua--rectangle (delete-forward-char n killflag)
+  (if rectangle-mark-mode (delete-forward-char n killflag)
   (cond ((and
           (use-region-p)
 	      delete-active-region
@@ -148,7 +148,7 @@ arg, and KILLFLAG is set if N is explicitly specified."
   (interactive "p\nP")
   (unless (integerp n)
     (signal 'wrong-type-argument (list 'integerp n)))
-  (if cua--rectangle (delete-backward-char n killflag)
+  (if rectangle-mark-mode (delete-backward-char n killflag)
     (cond ((and
             (use-region-p)
             delete-active-region
