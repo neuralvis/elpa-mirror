@@ -1,2 +1,0 @@
-
-(pamparam . [(20200306 916) ((emacs (24 3)) (lispy (0 26 0)) (worf (0 1 0)) (hydra (0 13 4))) "Simple and fast flashcards." tar ((:commit . "f5ce8337e6b6663571da4532dcc1e5a221b3e4a6") (:keywords "outlines" "hypermedia" "flashcards" "memory") (:authors ("Oleh Krehel" . "ohwoeowho@gmail.com")) (:maintainer "Oleh Krehel" . "ohwoeowho@gmail.com") (:url . "https://github.com/abo-abo/pamparam"))])

@@ -4,7 +4,7 @@
 
 ;; Author: Eric Dallo
 ;; Version: 0.1.0
-;; Package-Version: 20200219.2259
+;; Package-Version: 20200309.1550
 ;; Package-Requires: ((emacs "24.5"))
 ;; Keywords: hover, flutter, mobile, tools
 ;; URL: https://github.com/ericdallo/hover.el
@@ -209,7 +209,7 @@ args."
     (let ((flutter-command-path (concat (file-name-as-directory hover-flutter-sdk-path) "bin")))
       (setenv "PATH" (concat flutter-command-path ":" (getenv "PATH")))))
   (when hover-hot-reload-on-save
-    (add-hook 'after-save-hook 'hover--hot-reload)))
+    (add-hook 'after-save-hook #'hover--hot-reload)))
 
 (provide 'hover)
 ;;; hover.el ends here

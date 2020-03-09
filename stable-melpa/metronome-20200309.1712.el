@@ -3,7 +3,7 @@
 ;; Copyright (C) 2020 Jonathan Gregory
 
 ;; Version: 0.1
-;; Package-Version: 20200308.1422
+;; Package-Version: 20200309.1712
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://gitlab.com/jagrg/metronome
 ;; Author: Jonathan Gregory <jgrg at autistici dot org>
@@ -385,6 +385,8 @@ With a prefix ARG, prompt for a new tempo."
   (interactive "P")
   (if metronome-display-timer
       (metronome-pause)
+    (unless metronome-paused-p
+      (metronome-pause))
     (call-interactively #'metronome arg)
     (with-current-buffer
         (get-buffer-create metronome-buffer-name)

@@ -3,7 +3,7 @@
 ;; Author: Johannes Goslar
 ;; Created: 30 June 2016
 ;; Version: 0.1.2
-;; Package-Version: 20200206.1211
+;; Package-Version: 20200309.1556
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces
 ;; URL: https://github.com/ksjogo/proportional
@@ -30,13 +30,13 @@
   :group 'environment)
 
 (defcustom proportional-font
-  "DejaVu Sans Light-13:style=ExtraLight"
+  "DejaVu Sans Light-16:style=ExtraLight"
   "Default proportional-font to activate."
   :group 'proportional
   :type 'string)
 
 (defcustom proportional-monospace-font
-  "DejaVu Sans Mono-13"
+  "DejaVu Sans Mono-16"
   "Default proportional-font to activate."
   :group 'proportional
   :type 'string)
@@ -49,16 +49,10 @@
     magit-popup-mode-hook
     magit-log-mode-hook
     which-key-init-buffer-hook
+    lv-window-hook
     vterm-mode-hook
     mu4e-headers-mode-hook)
   "The list of hooks which shall be monospaced even when proportional mode is on."
-  :group 'proportional
-  :type '(repeat symbol))
-
-(defcustom proportional-monospace-after-advices
-  '(lv-message)
-  "The list of functions which have an advice named `proportional',
-which then is enabled when proportional is enabled."
   :group 'proportional
   :type '(repeat symbol))
 
@@ -85,9 +79,6 @@ which then is enabled when proportional is enabled."
 
         (proportional-which-key-fixer)
 
-        (dolist (base proportional-monospace-after-advices)
-          (ad-enable-advice base 'after 'proportional))
-
         (dolist (hook proportional-monospace-hooks)
           (add-hook hook 'proportional-use-monospace)))
 
@@ -98,9 +89,6 @@ which then is enabled when proportional is enabled."
       (set-face-font 'variable-pitch proportional-monospace-font)
 
       (proportional-which-key-fixer)
-
-      (dolist (base proportional-monospace-after-advices)
-        (ad-disable-advice base 'after 'proportional))
 
       (dolist (hook proportional-monospace-hooks)
         (remove-hook hook 'proportional-use-monospace)))))
@@ -128,15 +116,6 @@ which then is enabled when proportional is enabled."
   (when proportional-mode
     (setq transient-force-fixed-pitch t)
     (ad-enable-advice 'transient--show 'after 'proportional)))
-
-(with-eval-after-load 'hydra
-  (defadvice lv-message (after proportional)
-    (if-let ((buf (get-buffer " *LV*")))
-        (with-current-buffer buf
-          (buffer-face-mode t)
-          (proportional-use-monospace))))
-  (when proportional-mode
-    (ad-enable-advice 'lv-message 'after 'proportional)))
 
 (provide 'proportional)
 ;;; proportional.el ends here

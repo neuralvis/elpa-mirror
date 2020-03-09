@@ -1,10 +1,10 @@
 ;;; xah-css-mode.el --- Major mode for editing CSS code. -*- coding: utf-8; lexical-binding: t; -*-
 
-;; Copyright © 2013-2019 by Xah Lee
+;; Copyright © 2013-2020 by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 2.10.20190705004948
-;; Package-Version: 20190705.750
+;; Version: 2.11.20200309092113
+;; Package-Version: 20200309.1750
 ;; Created: 18 April 2013
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: languages, convenience, css, color
@@ -512,6 +512,8 @@ Version 2016-10-02"
 "word-wrap"
 "z-index"
 
+"overflow-wrap"
+
 ) )
 
 (defvar xah-css-pseudo-selector-names nil "List of CSS pseudo selector names.")
@@ -654,6 +656,7 @@ Version 2016-10-02"
 "repeat"
 "repeat-x"
 "repeat-y"
+"revert"
 "rgb"
 "rgba"
 "ridge"
@@ -699,6 +702,7 @@ Version 2016-10-02"
 "translateZ"
 "transparent"
 "underline"
+"unset"
 "uppercase"
 "url"
 "visible"
