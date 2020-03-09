@@ -5,7 +5,7 @@
 ;; Author: Roland Walker <walker@pobox.com>
 ;; Homepage: http://github.com/rolandwalker/button-lock
 ;; URL: http://raw.githubusercontent.com/rolandwalker/button-lock/master/wiki-nav.el
-;; Package-Version: 20150223.1354
+;; Package-Version: 20200309.1323
 ;; Version: 1.0.2
 ;; Last-Updated: 23 Feb 2015
 ;; EmacsWiki: WikiNavMode
@@ -318,8 +318,8 @@
 
 ;;; requirements
 
-;; for callf, intersection
-(require 'cl)
+;; for cl-callf, cl-incf, cl-intersection
+(require 'cl-lib)
 
 (require 'font-lock)
 (require 'nav-flash nil t)
@@ -675,7 +675,7 @@ is pushed onto `global-mark-ring'.
 
 When CONSECUTIVES is set to 'allow-dupes, it is possible to push
 an exact duplicate of the current topmost mark onto `global-mark-ring'."
-  (callf or location (point))
+  (cl-callf or location (point))
   (back-button-push-mark location nomsg activate)
   (when (or (eq consecutives 'allow-dupes)
             (not (equal (mark-marker)
@@ -731,8 +731,8 @@ Returns `point-min' if the point is at the minimum."
                  (not (eq (aref (buffer-name) 0) ?\s))           ; overlaps with exclude-pattern
                  (not (memq major-mode button-lock-exclude-modes))
                  (not (memq major-mode wiki-nav-exclude-modes))
-                 (not (intersection (button-lock-parent-modes) button-lock-exclude-modes))
-                 (not (intersection (button-lock-parent-modes) wiki-nav-exclude-modes))
+                 (not (cl-intersection (button-lock-parent-modes) button-lock-exclude-modes))
+                 (not (cl-intersection (button-lock-parent-modes) wiki-nav-exclude-modes))
                  (not (string-match-p wiki-nav-buffer-name-exclude-pattern (buffer-name buf)))
                  (catch 'success
                    (dolist (filt wiki-nav-buffer-exclude-functions)
@@ -751,7 +751,7 @@ Returns `point-min' if the point is at the minimum."
   "Use `button-lock-mode' to set up wiki-nav links in a buffer.
 
 If called with negative ARG, remove the links."
-  (callf or arg 1)
+  (cl-callf or arg 1)
   (when (and (>= arg 0)
              (or (not (boundp 'button-lock-mode))
                  (not button-lock-mode)))
@@ -780,13 +780,13 @@ If called with negative ARG, remove the links."
   "Return an alist of all wiki-nav links in BUFFER (defaults to current buffer).
 
 The return value is an alist of cells in the form (\"text\" buffer . start-pos)."
-  (callf or buffer (current-buffer))
+  (cl-callf or buffer (current-buffer))
   (with-current-buffer buffer
     (when wiki-nav-mode
       (let ((font-lock-fontify-buffer-function 'font-lock-default-fontify-buffer)
             (pos nil)
             (links nil))
-        (font-lock-fontify-buffer)
+        (font-lock-ensure)
         (setq pos (next-single-property-change (point-min) 'wiki-nav))
         (while (and pos
                     (< pos (point-max)))
@@ -795,10 +795,10 @@ The return value is an alist of cells in the form (\"text\" buffer . start-pos).
               (while (and pos
                           (< pos (point-max))
                           (get-text-property pos 'wiki-nav))
-                (callf next-single-property-change pos 'wiki-nav))
+                (cl-callf next-single-property-change pos 'wiki-nav))
               (when (not (get-text-property pos 'wiki-nav))
                 (push (cons (buffer-substring-no-properties start pos) (cons buffer start)) links))))
-          (callf next-single-property-change pos 'wiki-nav))
+          (cl-callf next-single-property-change pos 'wiki-nav))
         links))))
 
 (defun wiki-nav-links-all-buffers ()
@@ -811,7 +811,7 @@ seconds to complete."
         (l-alist nil))
     (dolist (buf (buffer-list))
       (unless wiki-nav-less-feedback
-        (progress-reporter-update reporter (incf counter)))
+        (progress-reporter-update reporter (cl-incf counter)))
       (push (wiki-nav-links buf) l-alist))
     (progress-reporter-done reporter)
     (delq nil (wiki-nav-alist-flatten l-alist))))
@@ -1069,7 +1069,7 @@ mode."
    buffers excluded by `button-lock-buffer-name-exclude-pattern'
 
 If called with a negative ARG, deactivate `wiki-nav-mode' in the buffer."
-  (callf or arg 1)
+  (cl-callf or arg 1)
   (when (or (< arg 0)
             (wiki-nav-buffer-included-p (current-buffer)))
     (wiki-nav-mode arg)))
@@ -1101,7 +1101,7 @@ previous defined wiki-nav link."
 
       ;; This is slow, but otherwise links get missed.  There
       ;; must be a better way.
-      (font-lock-fontify-buffer)
+      (font-lock-ensure)
 
       (when (and arg
                  (< arg 0))
@@ -1188,7 +1188,6 @@ buffers."
 ;; mangle-whitespace: t
 ;; require-final-newline: t
 ;; coding: utf-8
-;; byte-compile-warnings: (not cl-functions redefine)
 ;; End:
 ;;
 
