@@ -28,7 +28,7 @@ Other potentially useful functions include:
   receives an alist with the same format as `geolocation-location.'
 
 - `geolocation-scan-wifi' which scans asynchronously for nearby wifi
-  access points using available system utilites, and invokes a callback
+  access points using available system utilities, and invokes a callback
   with the wifi data.  The callback receives a list of alists containing:
   - `bssid' - mac address that uniquely identifies the AP
   - `signal' - relative signal strength, or RSSI

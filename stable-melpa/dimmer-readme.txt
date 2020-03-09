@@ -28,6 +28,9 @@ a company-box popup is displayed.
 `dimmer-configure-helm' is a convenience function for helm users to
 ensure helm buffers are not dimmed.
 
+`dimmer-configure-gnus' is a convenience function for gnus users to
+ensure article buffers are not dimmed.
+
 `dimmer-configure-hydra' is a convenience function for hydra users to
 ensure  "*LV*" buffers are not dimmed.
 
