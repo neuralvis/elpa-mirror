@@ -1,2 +1,2 @@
 
-(blitzmax-mode . [(20200211 2205) ((emacs (24 1))) "A major mode for editing BlitzMax source code" single ((:commit . "237eb743b49459d400327a49f6b776289a364b5b") (:keywords "languages" "blitzmax") (:authors ("Phil Newton")) (:maintainer "Phil Newton") (:url . "https://www.sodaware.net/dev/tools/blitzmax-mode/"))])
+(blitzmax-mode . [(20200211 2205) ((emacs (24 1))) "A major mode for editing BlitzMax source code" single ((:commit . "4814c35007035f0e26e0fadc50fffc4ab6d298ad") (:keywords "languages" "blitzmax") (:authors ("Phil Newton")) (:maintainer "Phil Newton") (:url . "https://www.sodaware.net/dev/tools/blitzmax-mode/"))])
