@@ -6,7 +6,7 @@
 ;; Contributors: Lee Hinman
 ;; Maintainer: Chunyang Xu <mail@xuchunyang.me>
 ;; URL: https://github.com/zwild/eshell-prompt-extras
-;; Package-Version: 20191104.1230
+;; Package-Version: 20200310.809
 ;; Version: 1.0
 ;; Created: 2014-08-16
 ;; Keywords: eshell, prompt
@@ -439,8 +439,10 @@ uncommitted changes, nil otherwise."
      (epe-colorize-with-face
       (concat (epe-remote-user) "@" (epe-remote-host) " ")
       'epe-remote-face))
-   (when (and epe-show-python-info (bound-and-true-p venv-current-name))
-     (epe-colorize-with-face (concat "(" venv-current-name ") ") 'epe-venv-face))
+   (let ((env-current-name (or (bound-and-true-p venv-current-name)
+                               (bound-and-true-p conda-env-current-name))))
+     (when (and epe-show-python-info (bound-and-true-p env-current-name))
+       (epe-colorize-with-face (concat "(" env-current-name ") ") 'epe-venv-face)))
    (let ((f (cond ((eq epe-path-style 'fish) 'epe-fish-path)
                   ((eq epe-path-style 'single) 'epe-abbrev-dir-name)
                   ((eq epe-path-style 'full) 'abbreviate-file-name))))
