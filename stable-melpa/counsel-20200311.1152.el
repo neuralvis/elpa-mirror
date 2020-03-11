@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20200310.2012
+;; Package-Version: 20200311.1152
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -2959,6 +2959,13 @@ Works for `counsel-git-grep', `counsel-ag', etc."
     (ivy-quit-and-run
       (funcall (ivy-state-caller ivy-last) input new-dir))))
 
+(defun counsel--grep-smart-case-flag ()
+  (if (ivy--case-fold-p ivy-text)
+      " -i "
+    (if (string-match-p "\\`pt" counsel-ag-base-command)
+        " -S "
+      " -s ")))
+
 (defun counsel-grep-like-occur (cmd-template)
   (unless (eq major-mode 'ivy-occur-grep-mode)
     (ivy-occur-grep-mode)
@@ -2973,9 +2980,7 @@ Works for `counsel-git-grep', `counsel-ag', etc."
                    (regex (counsel--grep-regex (cdr command-args)))
                    (switches (concat (car command-args)
                                      (counsel--ag-extra-switches regex)
-                                     (if (ivy--case-fold-p ivy-text)
-                                         " -i "
-                                       " -s "))))
+                                     (counsel--grep-smart-case-flag))))
               (format cmd-template
                       (concat
                        switches
