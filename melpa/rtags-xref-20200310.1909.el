@@ -5,7 +5,7 @@
 ;; Author: Jörg Walter
 ;; Maintainer: RTags Team
 ;; URL: https://github.com/Andersbakken/rtags
-;; Package-Version: 20200308.1722
+;; Package-Version: 20200310.1909
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "25.1") (rtags "2.37"))
 
@@ -49,7 +49,7 @@
 (require 'xref)
 (require 'rtags)
 
-(cl-defgeneric rtags-xref-backend-identifier-at-point ((_backend (eql rtags)))
+(cl-defmethod xref-backend-identifier-at-point ((_backend (eql rtags)))
   "Return the relevant identifier at point."
   (let ((thing (thing-at-point 'symbol)))
     (and thing (propertize (substring-no-properties thing)

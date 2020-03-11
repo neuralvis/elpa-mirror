@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20200308.2048
+;; Package-Version: 20200310.2012
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -165,7 +165,7 @@ descriptions.")
                      cmd
                      (plist-put plist number str)))))
 
-(defvar counsel-async-split-string-re-alist '((t . "\n"))
+(defvar counsel-async-split-string-re-alist '((t . "[\r\n]"))
   "Store the regexp for splitting shell command output.")
 
 (defvar counsel-async-ignore-re-alist nil
@@ -3035,8 +3035,8 @@ This uses `counsel-ag' with `counsel-ack-base-command' replacing
 ;;** `counsel-rg'
 (defcustom counsel-rg-base-command
   (if (memq system-type '(ms-dos windows-nt))
-      "rg --with-filename --no-heading --line-number --path-separator / --color never %s ."
-    "rg --with-filename --no-heading --line-number --color never %s")
+      "rg -M 120 --with-filename --no-heading --line-number --color never %s --path-separator /."
+    "rg -M 120 --with-filename --no-heading --line-number --color never %s")
   "Alternative to `counsel-ag-base-command' using ripgrep.
 
 Note: don't use single quotes for the regex."
