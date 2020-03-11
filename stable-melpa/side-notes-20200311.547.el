@@ -1,11 +1,11 @@
 ;;; side-notes.el --- Easy access to a directory notes file  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2019 Paul W. Rankin
+;; Copyright (c) 2019-2020  Paul William Rankin
 
-;; Author: Paul W. Rankin <code@paulwrankin.com>
+;; Author: William Rankin <code@william.bydasein.com>
 ;; Keywords: convenience
-;; Package-Version: 20191217.919
-;; Version: 0.3.0
+;; Package-Version: 20200311.547
+;; Version: 0.3.1
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://github.com/rnkn/side-notes
 
@@ -31,17 +31,25 @@
 ;; Quickly display your quick side notes in quick side window.
 
 ;; Side notes live in a file in the current directory or any parent
-;; directory thereof. The filename to look for is defined by custom option
-;; side-notes-file, which defaults to "notes.txt".
+;; directory thereof and is displayed in a side window with
+;; side-notes-toggle-notes. The filename to look for is defined by user
+;; option side-notes-file, which defaults to "notes.txt".
+
+;; To really mix things up, there's the optional
+;; side-notes-secondary-file, which, when non-nil, will display a
+;; separate notes file in a lower side window when the command
+;; side-notes-toggle-notes is prefixed with an argument (C-u).
 
 ;; For more info, see (info "(elisp) Side Windows")
 
 ;; ## Installation ##
 
-;; Add something like the following to your init file:
+;; Install from [MELPA stable] then add something like the following to
+;; your init file:
 
-;; (define-key (current-global-map) (kbd "M-s n") #'side-notes-toggle-notes)
+;;     (define-key (current-global-map) (kbd "M-s n") #'side-notes-toggle-notes)
 
+;; [melpa stable]: https://stable.melpa.org/#/side-notes
 
 ;;; Code:
 
@@ -154,3 +162,10 @@ the notes buffer."
 
 (provide 'side-notes)
 ;;; side-notes.el ends here
+
+;; Local Variables:
+;; coding: utf-8-unix
+;; fill-column: 80
+;; require-final-newline: t
+;; sentence-end-double-space: nil
+;; End:
