@@ -1,13 +1,13 @@
 ;;; ace-window.el --- Quickly switch windows. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015  Free Software Foundation, Inc.
+;; Copyright (C) 2015-2020  Free Software Foundation, Inc.
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; Maintainer: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/ace-window
-;; Package-Version: 20200310.2025
-;; Version: 0.9.0
-;; Package-Requires: ((avy "0.2.0"))
+;; Package-Version: 20200311.1025
+;; Version: 0.10.0
+;; Package-Requires: ((avy "0.5.0"))
 ;; Keywords: window, location
 
 ;; This file is part of GNU Emacs.
