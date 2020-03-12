@@ -4,7 +4,6 @@
 
 ;; Author: Shea Levy
 ;; URL: https://github.com/shlevy/nix-buffer/tree/master/
-;; Package-Version: 20180212.1518
 ;; Version: 3.1.1
 ;; Package-Requires: ((f "0.17.3") (emacs "24.4"))
 

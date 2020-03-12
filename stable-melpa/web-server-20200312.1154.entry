@@ -1,0 +1,2 @@
+
+(web-server . [(20200312 1154) ((emacs (24 3))) "Emacs Web Server" tar ((:commit . "c90d5ad3ff7300a4cad05cb6d83f6f462cd594aa") (:keywords "http" "server" "network") (:authors ("Eric Schulte" . "schulte.eric@gmail.com")) (:maintainer "Eric Schulte" . "schulte.eric@gmail.com") (:url . "https://github.com/eschulte/emacs-web-server"))])

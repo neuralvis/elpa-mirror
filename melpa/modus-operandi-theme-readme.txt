@@ -98,6 +98,7 @@ notify me of any missing package or change you would like to see.
     flyspell-correct
     frog-menu
     focus
+    fold-this
     font-lock (generic syntax highlighting)
     fountain (fountain-mode)
     geiser
@@ -149,6 +150,7 @@ notify me of any missing package or change you would like to see.
     org-recur
     origami
     outline-mode
+    outline-minor-faces
     package (M-x list-packages)
     paren-face
     pass
