@@ -2,6 +2,7 @@
 
 ;; Author: Andrey Kotlarski <m00naticus@gmail.com>
 ;; URL: https://github.com/m00natic/anti-zenburn-theme
+;; Package-Version: 20180712.1838
 ;; Version: 2.5.1
 
 ;; This program is free software; you can redistribute it and/or modify
