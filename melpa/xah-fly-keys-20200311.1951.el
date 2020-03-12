@@ -3,8 +3,8 @@
 ;; Copyright © 2013-2020, by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 10.12.20200305171033
-;; Package-Version: 20200311.1947
+;; Version: 10.13.20200311125055
+;; Package-Version: 20200311.1951
 ;; Created: 10 Sep 2013
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: convenience, emulations, vim, ergoemacs
@@ -2065,7 +2065,7 @@ This command select between any bracket chars, not the inner text of a bracket. 
  the selected char is “c”, not “a(b)c”.
 
 URL `http://ergoemacs.org/emacs/modernization_mark-word.html'
-Version 2018-10-11"
+Version 2020-03-11"
   (interactive)
   (let (
         ($skipChars "^'\"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）〘〙")
