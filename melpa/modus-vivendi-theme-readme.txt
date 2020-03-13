@@ -45,6 +45,7 @@ notify me of any missing package or change you would like to see.
     calendar and diary
     calfw
     change-log and log-view (`vc-print-log' and `vc-print-root-log')
+    cider
     column-enforce-mode
     company-mode
     company-posframe
@@ -170,6 +171,7 @@ notify me of any missing package or change you would like to see.
     regexp-builder (also known as `re-builder')
     rmail
     ruler-mode
+    sesman
     shell-script-mode
     show-paren-mode
     smart-mode-line
