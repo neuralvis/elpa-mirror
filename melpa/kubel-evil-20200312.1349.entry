@@ -1,2 +1,2 @@
 
-(kubel-evil . [(20200312 1349) ((kubel (1 0)) (evil (1 0)) (emacs (25 3))) "extension for kubel to provide evil keybindings" single ((:commit . "acddda31a81940578480ad4bb0b73e7671dec70f") (:keywords "kubernetes" "k8s" "tools" "processes" "evil" "keybindings") (:authors ("Marcel Patzwahl")) (:maintainer "Marcel Patzwahl") (:url . "https://github.com/abrochard/kubel"))])
+(kubel-evil . [(20200312 1349) ((kubel (1 0)) (evil (1 0)) (emacs (25 3))) "extension for kubel to provide evil keybindings" single ((:commit . "8f65b87f3436e4505651b86c66a0a38d9195cd48") (:keywords "kubernetes" "k8s" "tools" "processes" "evil" "keybindings") (:authors ("Marcel Patzwahl")) (:maintainer "Marcel Patzwahl") (:url . "https://github.com/abrochard/kubel"))])
