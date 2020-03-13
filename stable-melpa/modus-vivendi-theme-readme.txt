@@ -41,7 +41,6 @@ notify me of any missing package or change you would like to see.
     avy
     breakpoint (provided by built-in gdb-mi.el)
     buffer-expose
-    bufler
     calendar and diary
     calfw
     change-log and log-view (`vc-print-log' and `vc-print-root-log')
