@@ -4,7 +4,7 @@
 
 ;; Author: Nicholas Vollmer <progfolio@protonmail.com>
 ;; URL: https://github.com/progfolio/doct
-;; Package-Version: 20200312.2241
+;; Package-Version: 20200313.459
 ;; Created: December 10, 2019
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "25.1"))
@@ -75,6 +75,9 @@ Its value is not stored between invocations to doct.")
 
 (defvar doct--current-plist nil
   "The plist of the current declaration being processed by doct.")
+
+(defvar doct--expansion-syntax-regexp "%doct(\\(.*?\\))"
+  "The regular expression for matching keyword in %doct(KEYWORD) template strings.")
 
 (defvar doct-entry-types '(entry item checkitem table-line plain)
   "The allowed template entry types.")
@@ -158,12 +161,12 @@ Its value is not stored between invocations to doct.")
   "Find first non-nil occurrence of one of KEYWORDS in PLIST.
 If PLIST is nil, `doct--current-plist' is used.
 Return (KEYWORD VAL)."
-  (let ((target-list (or plist doct--current-plist)))
+  (let ((target (or plist doct--current-plist)))
     (seq-some (lambda (keyword)
-                (when-let ((val (plist-get target-list keyword)))
+                (when-let ((val (plist-get target keyword)))
                   (when (member keyword keywords)
                     `(,keyword ,val))))
-              (seq-filter #'keywordp target-list))))
+              (seq-filter #'keywordp target))))
 
 (defun doct--plist-p (list)
   "Non-null if and only if LIST is a plist."
@@ -236,7 +239,6 @@ For example: '((1) ((2 3) (4)) (((5)))) returns: '((1) (2) (3) (4) (5))"
       (push element acc)))
   acc)
 
-
 ;;; Acessors
 ;;;; Children
 (defun doct--child-list-p (object)
@@ -253,7 +255,7 @@ For example: '((1) ((2 3) (4)) (((5)))) returns: '((1) (2) (3) (4) (5))"
 (defun doct--keys (&optional group)
   "Type check and return declaration's :keys.
 If GROUP is non-nil, make sure there is no :keys value."
-  (let ((keys (plist-member doct--current-plist :keys))
+  (let ((keys      (plist-member doct--current-plist :keys))
         (inherited (plist-member doct--current-plist :doct-keys)))
     (when (and group keys)
       (signal 'doct-group-keys `(,doct--current)))
@@ -272,9 +274,9 @@ If GROUP is non-nil, make sure there is no :keys value."
                 `(,doct-entry-types (:type ,type) ,doct--current)))))
 
 ;;;; Target
-(defun doct--target-file (file-target)
-  "Convert declaration's :file FILE-TARGET and extensions to capture template syntax."
-  (doct--type-check :file file-target '(stringp functionp doct--variable-p))
+(defun doct--target-file (value)
+  "Convert declaration's :file VALUE and extensions to capture template syntax."
+  (doct--type-check :file value '(stringp functionp doct--variable-p))
   (let (type target)
     (pcase (doct--first-in doct-file-extension-keywords)
       (`(:olp ,path) (doct--type-check :olp path '(doct--list-of-strings-p))
@@ -299,7 +301,7 @@ If GROUP is non-nil, make sure there is no :keys value."
        (push extension target)
        (push keyword type)))
     (push :file type)
-    (push file-target target)
+    (push value target)
     `(,(intern (mapconcat (lambda (keyword)
                             (substring (symbol-name keyword) 1))
                           (delq nil type) "+"))
@@ -328,7 +330,7 @@ If non-nil, DECLARATION is the declaration containing STRING."
     (insert string)
     (goto-char (point-min))
     (save-match-data
-      (while (re-search-forward "%doct(\\(.*?\\))" nil :no-error)
+      (while (re-search-forward doct--expansion-syntax-regexp nil :no-error)
         (let* ((keyword (intern (concat ":" (match-string 1))))
                (val (doct-get keyword)))
           (unless (or (stringp val) (null val))
@@ -362,6 +364,73 @@ If non-nil, DECLARATION is the declaration containing STRING."
     (doct--type-check :template template '(stringp) declaration)
     template))
 
+(defun doct--type-check-template-entry-type (string)
+  "Check template STRING to make sure it matches entry type."
+  ;;if string is empty, default templates are used.
+  (unless (string-empty-p string)
+    (pcase (doct--entry-type)
+      ('entry
+       (unless (string-prefix-p "*" (string-trim string))
+         (lwarn 'doct :warning ":template %s in declaration:\n%s
+is not a valid Org entry
+Are you missing the leading '*'?"
+                string doct--current)))
+      ('table-line
+       (unless (string-empty-p (with-temp-buffer
+                                 (insert string)
+                                 (goto-char (point-min))
+                                 (save-match-data
+                                   (flush-lines "\\(?:[[:space:]]*|\\)"))
+                                 (buffer-string)))
+         (lwarn 'doct :warning ":template %s in declaration:\n%s
+contains an invalid table-line
+Are you missing the leading pipe?"
+                string doct--current))))))
+
+(defun doct--maybe-warn-template (strings)
+  "Warn if `doct--should-warn-p' and STRINGS's %doct(KEYWORD) keyword is undeclared."
+  (when (doct--warning-enabled-p)
+    (let (undeclared
+          not-string
+          entry-type-mismatches
+          template)
+      ;;@ENHANCEMENT: ensure keyword's value is a string?
+      (dolist (string strings)
+        (when (doct--expansion-syntax-p string)
+          (with-temp-buffer
+            (insert string)
+            (goto-char (point-min))
+            (save-match-data
+              (while (re-search-forward doct--expansion-syntax-regexp nil :no-error)
+                (let* ((match   (match-string 1))
+                       (keyword (intern (concat ":" match)))
+                       (custom  (plist-get doct--current-plist :custom))
+                       (member  (or (plist-member custom keyword)
+                                    (plist-member doct--current-plist keyword)))
+                       (value   (cadr member)))
+                  (unless member (push (symbol-name keyword) undeclared))
+                  (unless (or (stringp value) (null value))
+                    (push (symbol-name keyword) not-string))
+                  (replace-match (format "%s" value) nil t)
+                  (setq string (buffer-string)))))))
+        (push string template))
+      (doct--type-check-template-entry-type (string-join template "\n"))
+      (when (or undeclared not-string entry-type-mismatches)
+        (apply #'lwarn
+               (delq nil `(doct
+                           :warning
+                           ,(concat "%%doct(KEYWORD): "
+                                    (when undeclared "%s undeclared during conversion\n")
+                                    (when not-string "%s did not evaluate to a string\n")
+                                    (when entry-type-mismatches
+                                      "%s does not meet entry type requirements\n")
+                                    "in declaration:\n%s")
+                           ,(when undeclared (string-join (nreverse undeclared) ", "))
+                           ,(when not-string (string-join (nreverse not-string) ", "))
+                           ,(when entry-type-mismatches
+                              (string-join (nreverse entry-type-mismatches) ", "))
+                           ,doct--current)))))))
+
 (defun doct--template ()
   "Convert declaration's :template to Org capture template."
   (pcase (doct--first-in doct-template-keywords)
@@ -369,17 +438,22 @@ If non-nil, DECLARATION is the declaration containing STRING."
      (doct--type-check :template-file file '(stringp doct--variable-p))
      `(file ,file))
     (`(:template ,template)
-     ;;simple values: nil string, list of strings with no expansion syntax
+     ;;simple values: string, list of strings with no expansion syntax
      (pcase template
        ((and (pred stringp)
              (guard (not (doct--expansion-syntax-p template))))
+        (doct--type-check-template-entry-type template)
         template)
        ((and (pred doct--list-of-strings-p)
              (guard (not (seq-some #'doct--expansion-syntax-p template))))
+        (doct--type-check-template-entry-type (string-join template "\n"))
         (string-join template "\n"))
        (deferred
-         (doct--type-check :template deferred '(functionp stringp doct--list-of-strings-p
-                                                          doct--variable-p))
+         (doct--type-check :template deferred
+                           '(functionp stringp doct--list-of-strings-p doct--variable-p))
+         (unless (or (functionp deferred) (doct--variable-p deferred))
+           (doct--maybe-warn-template
+            (if (doct--list-of-strings-p deferred) deferred `(,deferred))))
          '(function doct--fill-template))))))
 
 ;;;; Additional Options
@@ -403,66 +477,45 @@ should be set to week or month, any other values use default datetree type."
 
 (defun doct--additional-options ()
   "Convert declaration's additional options to Org capture syntax."
-  (let (additional-options)
-    (dolist (keyword doct-option-keywords additional-options)
-      (when-let ((key-val (plist-member doct--current-plist keyword)))
-        (doct--validate-option key-val)
-        (setq additional-options (plist-put additional-options
-                                            (car key-val) (cadr key-val)))))))
+  (let (options)
+    (dolist (keyword doct-option-keywords options)
+      (when-let ((pair (plist-member doct--current-plist keyword)))
+        (doct--validate-option pair)
+        (setq options (plist-put options (car pair) (cadr pair)))))))
 
 (defun doct--custom-properties ()
   "Return a copy of declaration's :custom plist with unrecognized keywords added."
   (let ((keywords (delete-dups (seq-filter #'keywordp doct--current-plist)))
-        custom-properties)
+        custom)
     (dolist (keyword keywords)
       (unless (member keyword doct-recognized-keywords)
-        (setq custom-properties
-              (plist-put custom-properties keyword (doct--get keyword)))))
+        (setq custom (plist-put custom keyword (doct--get keyword)))))
     (if-let ((explicit (doct--get :custom)))
         (progn (doct--type-check :custom explicit '(doct--plist-p))
-               (append explicit custom-properties))
-      custom-properties)))
+               (append explicit custom))
+      custom)))
 
 ;;; External Variables
 ;;;;Hooks
-(defun doct--run-hook (hook-keyword)
-  "Run declaration's HOOK-KEYWORD function."
+(defun doct--run-hook (keyword)
+  "Run declaration's KEYWORD function."
   (let ((declaration (cdr (plist-get org-capture-plist :doct))))
     (when (string= (or (plist-get declaration :doct-keys)
                        (plist-get declaration :keys))
                    (plist-get org-capture-plist :key))
-      (when-let ((hook-fn (plist-get declaration hook-keyword)))
-        (funcall hook-fn)))))
+      (when-let ((fn (plist-get declaration keyword)))
+        (funcall fn)))))
 
-(defun doct-run-capture-mode-hook ()
-  "Run declaration's :hook function."
-  (doct--run-hook :hook))
-
-(defun doct-run-after-finalize-hook ()
-  "Run declaration's :after-finalze function."
-  (doct--run-hook :after-finalize))
-
-(defun doct-run-before-finalize-hook ()
-  "Run declaration's :before-finalze function."
-  (doct--run-hook :before-finalize))
-
-(defun doct-run-prepare-finalize-hook ()
-  "Run declaration's :prepare-finalze function."
-  (doct--run-hook :prepare-finalize))
-
-(defun doct--add-hooks ()
-  "Type check and add declaration's hooks."
-  (dolist (keyword doct-hook-keywords)
-    (when-let ((fn (doct--get keyword)))
-      (doct--type-check keyword fn '(functionp doct--variable-p))
-      (pcase keyword
-        (:hook (add-to-list 'org-capture-mode-hook #'doct-run-capture-mode-hook))
-        (:after-finalize
-         (add-to-list 'org-capture-after-finalize-hook #'doct-run-after-finalize-hook))
-        (:before-finalize
-         (add-to-list 'org-capture-before-finalize-hook #'doct-run-before-finalize-hook))
-        (:prepare-finalize
-         (add-to-list 'org-capture-prepare-finalize-hook #'doct-run-prepare-finalize-hook))))))
+;;install hook functinos
+(dolist (keyword doct-hook-keywords)
+  (let* ((name (substring (symbol-name keyword) 1))
+         (fn (eval `(defun ,(intern (concat "doct-run-" name)) ()
+                      ,(concat "Run declaration's" name "function.")
+                      (doct--run-hook ,keyword))))
+         (hook (intern (concat "org-capture-" (if (string= name "hook")
+                                                  "mode"
+                                                name) "-hook"))))
+    (add-to-list hook fn)))
 
 ;;;; Contexts
 (defun doct--convert-constraint-keyword (keyword)
@@ -489,10 +542,10 @@ should be set to week or month, any other values use default datetree type."
 (defmacro doct--conditional-constraint (condition value)
   "Return a lambda which wraps VALUE in the appropraite CONDITION form.
 CONDITION is either when or unless."
-  (let ((condition-form (if (functionp value)
-                            `(,value)
-                          value)))
-    `(lambda () (,condition ,condition-form t))))
+  (let ((form (if (functionp value)
+                  `(,value)
+                value)))
+    `(lambda () (,condition ,form t))))
 
 (defun doct--constraint-rule-list (constraint value)
   "Create a rule list for declaration's CONSTRAINT with VALUE."
@@ -516,20 +569,20 @@ CONDITION is either when or unless."
 (defun doct--add-contexts ()
   "Add `org-capture-template-contexts' for current declaration."
   (when-let ((contexts (doct--get :contexts)))
-    (let ((template-keys (doct--keys))
-          rules)
-      ;;allow a single context rule or a list of context rules
+    (let ((keys (doct--keys))
+          definitions)
+      ;;allow a single, or list, of context definitions
       (dolist (context (if (seq-every-p #'listp contexts) contexts `(,contexts)))
-        (if-let ((first-found (doct--first-in doct-context-keywords context)))
-            (let* ((constraint (car first-found))
-                   (value (cadr first-found))
-                   (context-keys (plist-get context :keys))
-                   (rule-list (doct--constraint-rule-list constraint value))
-                   (rule (delq nil `(,template-keys ,context-keys ,rule-list))))
-              (push rule rules))
+        (if-let ((first (doct--first-in doct-context-keywords context)))
+            (let* ((constraint (car first))
+                   (value (cadr first))
+                   (substitute (plist-get context :keys))
+                   (rules (doct--constraint-rule-list constraint value))
+                   (definition (delq nil `(,keys ,substitute ,rules))))
+              (push definition definitions))
           (signal 'doct-wrong-type-argument `(,@doct-context-keywords nil ,doct--current))))
-      (dolist (rule (nreverse rules))
-        (add-to-list 'org-capture-templates-contexts rule)))))
+      (dolist (definition (nreverse definitions))
+        (add-to-list 'org-capture-templates-contexts definition)))))
 
 ;;; Conversion
 (defun doct--inherit (parent child)
@@ -597,7 +650,10 @@ For a full description of the PROPERTIES plist see `doct'."
                                        children
                                      `(,children))))
           (doct--add-contexts)
-          (doct--add-hooks))
+          (dolist (keyword doct-hook-keywords)
+            (when-let (member (plist-member doct--current-plist keyword))
+              (doct--type-check keyword (cadr member)
+                                '(functionp doct--variable-p null)))))
         (unless group
           (setq entry (doct--compose-entry keys name children)))
         (if children
