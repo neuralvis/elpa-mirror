@@ -40,6 +40,7 @@ notify me of any missing package or change you would like to see.
     auto-dim-other-buffers
     avy
     breakpoint (provided by built-in gdb-mi.el)
+    bm
     buffer-expose
     calendar and diary
     calfw
@@ -109,6 +110,7 @@ notify me of any missing package or change you would like to see.
     gnus
     helm
     helm-ls-git
+    helm-switch-shell
     helm-xref
     highlight-blocks
     highlight-defined
@@ -129,12 +131,14 @@ notify me of any missing package or change you would like to see.
     jira (org-jira)
     js2-mode
     jupyter
+    kaocha-runner
     keycast
     line numbers (`display-line-numbers-mode' and global variant)
     lsp-mode
     lsp-ui
     magit
     markdown-mode
+    markup-faces (`adoc-mode')
     mentor
     messages
     modeline
@@ -176,6 +180,7 @@ notify me of any missing package or change you would like to see.
     swiper
     sx
     symbol-overlay
+    syslog-mode
     telephone-line
     term
     transient (pop-up windows like Magit's)
