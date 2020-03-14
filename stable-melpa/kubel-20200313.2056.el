@@ -22,7 +22,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20200313.1552
+;; Package-Version: 20200313.2056
 ;; Author: Adrien Brochard
 ;; Keywords: kubernetes k8s tools processes
 ;; URL: https://github.com/abrochard/kubel
@@ -201,7 +201,7 @@ VERSION should be a list of (major-version minor-version patch)."
   "Return a list with a tabulated list format and \"tabulated-list-entries\"."
   (let*  ((body (shell-command-to-string (concat (kubel--get-command-prefix) " get " kubel-resource)))
 	      (entrylist (kubel--parse-body body)))
-    (when (s-starts-with? "No resources found" body)
+    (when (string-prefix-p "No resources found" body)
 	  (message "No resources found"))  ;; TODO exception here
     (list (kubel--get-list-format entrylist) (kubel--get-list-entries entrylist))))
 
@@ -407,6 +407,8 @@ TYPENAME is the resource type/name."
 
 ;; interactive
 (define-minor-mode kubel-yaml-editing-mode
+  "Kubel Yaml editing mode.
+Use C-c C-c to kubectl apply the current yaml buffer."
   :init-value nil
   :keymap (let ((map (make-sparse-keymap)))
             (define-key map (kbd "C-c C-c") 'kubel-apply)
@@ -694,7 +696,7 @@ RESET is to be called if the search is nil after the first attempt."
    ("f" "Filter" kubel-set-filter)
    ("M-n" "Next highlight" kubel-jump-to-next-highlight)
    ("M-p" "Previous highlight" kubel-jump-to-previous-highlight)
-   ("r" "Rollout" kubel-rollout-popup)
+   ("r" "Rollout" kubel-rollout-history)
    ("E" "Quick edit" kubel-quick-edit)
    ;; based on current view
    ("p" "Port forward" kubel-port-forward-pod)
