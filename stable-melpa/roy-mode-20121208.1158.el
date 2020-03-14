@@ -1,7 +1,6 @@
 ;;; roy-mode.el --- Roy major mode
 
 ;; Version: 0.1.0
-;; Package-Version: 20121208.1158
 ;; URL: https://github.com/folone/roy-mode
 
 ;; Copyright (C) 2011  Free Software Foundation, Inc.
