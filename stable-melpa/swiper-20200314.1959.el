@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20200309.2017
+;; Package-Version: 20200314.1959
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (ivy "0.13.0"))
 ;; Keywords: matching
@@ -1573,7 +1573,7 @@ When not running `swiper-isearch' already, start it."
           (mapconcat
            #'identity
            (swiper--isearch-format
-            ivy--index ivy--length ivy--old-cands
+            ivy--index ivy--length (or ivy--old-cands ivy--all-candidates)
             re
             (ivy-state-current ivy-last)
             (ivy-state-buffer ivy-last))

@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20200311.1550
+;; Package-Version: 20200314.2005
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -2618,6 +2618,34 @@ INITIAL-INPUT can be given as the initial minibuffer input."
   :unwind-fn #'counsel-delete-process
   :exit-codes '(1 "Nothing found"))
 
+;;** `counsel-tracker'
+(defun counsel-tracker-function (input)
+  "Call the \"tracker\" shell command with INPUT."
+  (or
+   (ivy-more-chars)
+   (progn
+     (counsel--async-command
+      (format
+       "tracker sparql -q \"SELECT ?url WHERE { ?s a nfo:FileDataObject ; nie:url ?url . FILTER (STRSTARTS (?url, 'file://$HOME/')) . FILTER regex(?url, '%s') }\" | tail -n +2 | head -n -1"
+       (counsel--elisp-to-pcre (funcall ivy--regex-function input))))
+     '("" "working..."))))
+
+(defun counsel-tracker-transformer (str)
+  (if (string-match "file:///" str)
+      (decode-coding-string (url-unhex-string (substring str 9)) 'utf-8)
+    str))
+
+;;;###autoload
+(defun counsel-tracker ()
+  (interactive)
+  (ivy-read "Tracker: " 'counsel-tracker-function
+            :dynamic-collection t
+            :action (lambda (s) (find-file (counsel-tracker-transformer s)))
+            :caller 'counsel-tracker))
+
+(ivy-configure 'counsel-tracker
+  :display-transformer-fn #'counsel-tracker-transformer)
+
 ;;** `counsel-fzf'
 (defvar counsel-fzf-cmd "fzf -f \"%s\""
   "Command for `counsel-fzf'.")
@@ -3040,7 +3068,7 @@ This uses `counsel-ag' with `counsel-ack-base-command' replacing
 ;;** `counsel-rg'
 (defcustom counsel-rg-base-command
   (if (memq system-type '(ms-dos windows-nt))
-      "rg -M 120 --with-filename --no-heading --line-number --color never %s --path-separator /."
+      "rg -M 120 --with-filename --no-heading --line-number --color never %s --path-separator / ."
     "rg -M 120 --with-filename --no-heading --line-number --color never %s")
   "Alternative to `counsel-ag-base-command' using ripgrep.
 
@@ -3516,6 +3544,14 @@ otherwise continue prompting for tags."
   "If non-nil, display priorities in matched `org-mode' headlines."
   :type 'boolean)
 
+(defcustom counsel-org-headline-display-comment nil
+  "If non-nil, display COMMENT string in matched `org-mode' headlines."
+  :type 'boolean)
+
+(defcustom counsel-org-headline-display-statistics nil
+  "If non-nil, display statistics cookie in matched `org-mode' headlines."
+  :type 'boolean)
+
 (declare-function org-get-heading "org")
 (declare-function org-goto-marker-or-bmk "org")
 (declare-function outline-next-heading "outline")
@@ -3635,11 +3671,12 @@ version.  Argument values are based on the
 `counsel-org-headline-display-*' user options."
   (nbutlast (mapcar #'not (list counsel-org-headline-display-tags
                                 counsel-org-headline-display-todo
-                                counsel-org-headline-display-priority))
+                                counsel-org-headline-display-priority
+                                counsel-org-headline-display-comment))
             (if (if (fboundp 'func-arity)
                     (< (cdr (func-arity #'org-get-heading)) 3)
                   (version< org-version "9.1.1"))
-                1 0)))
+                2 0)))
 
 ;;** `counsel-org-file'
 (declare-function org-attach-dir "org-attach")
@@ -3857,7 +3894,28 @@ This variable has no effect unless
               :history 'counsel-org-agenda-headlines-history
               :caller 'counsel-org-agenda-headlines)))
 
-;;* Misc. Emacs
+;;** `counsel-org-link'
+(declare-function org-insert-link "ol")
+(declare-function org-id-get-create "org-id")
+
+(defun counsel-org-link-action (x)
+  "Insert a link to X."
+  (let ((id (save-excursion
+              (goto-char (cdr x))
+              (org-id-get-create))))
+    (org-insert-link nil (concat "id:" id) (car x))))
+
+;;;###autoload
+(defun counsel-org-link ()
+  "Insert a link to an headline with completion."
+  (interactive)
+  (ivy-read "Link: " (counsel-outline-candidates
+                      '(:outline-title counsel-outline-title-org ))
+            :action #'counsel-org-link-action
+            :history 'counsel-org-link-history
+            :caller 'counsel-org-link))
+
+;; Misc. Emacs
 ;;** `counsel-mark-ring'
 (defface counsel--mark-ring-highlight
   '((t (:inherit highlight)))
@@ -4794,6 +4852,8 @@ TREEP is used to expand internal nodes."
     (counsel-imenu)))
 
 ;;** `counsel-outline'
+(declare-function org-trim "org-macs")
+
 (defcustom counsel-outline-face-style nil
   "Determines how to style outline headings during completion.
 
@@ -4853,7 +4913,11 @@ Intended as a value for the `:outline-title' setting in
   "Return title of current outline heading.
 Like `counsel-outline-title' (which see), but for `org-mode'
 buffers."
-  (apply #'org-get-heading (counsel--org-get-heading-args)))
+  (let ((statistics-re "\\[[0-9]*\\(?:%\\|/[0-9]*\\)\\]")
+        (heading (apply #'org-get-heading (counsel--org-get-heading-args))))
+    (if counsel-org-headline-display-statistics
+        heading
+      (org-trim (replace-regexp-in-string statistics-re " " heading)))))
 
 (defun counsel-outline-title-markdown ()
   "Return title of current outline heading.
