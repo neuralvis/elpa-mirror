@@ -3,6 +3,7 @@
 ;;
 ;; Author: Kevin Kehl <kevin.kehl@gmail.com>
 ;; URL: http://github.com/Galooshi/emacs-import-js/
+;; Package-Version: 20180709.1833
 ;; Package-Requires: ((grizzl "0.1.0") (emacs "24"))
 ;; Version: 1.0.0
 ;; Keywords: javascript

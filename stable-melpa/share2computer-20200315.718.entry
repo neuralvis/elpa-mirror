@@ -1,0 +1,2 @@
+
+(share2computer . [(20200315 718) ((emacs (25 1))) "Elisp helper of android ShareToComputer" single ((:commit . "8ad4a60f0070a4f0611a0ab88a00218b30732c81") (:keywords "convenience" "comm") (:authors ("Feng Shu" . "tumashu@163.com")) (:maintainer "Feng Shu" . "tumashu@163.com") (:url . "https://github.com/tumashu/share2computer"))])

@@ -1,0 +1,2 @@
+
+(fira-code-mode . [(20200305 1816) ((emacs (24 4))) "Minor mode for Fira Code ligatures using prettify-symbols" single ((:commit . "bc491ca6c0ca1a2b46d2dd069a82a14f027cd90d") (:keywords "faces" "ligatures" "fonts" "programming-ligatures") (:authors ("Jonathan Ming" . "jming422@gmail.com")) (:maintainer "Jonathan Ming" . "jming422@gmail.com") (:url . "https://github.com/jming422/fira-code-mode"))])
