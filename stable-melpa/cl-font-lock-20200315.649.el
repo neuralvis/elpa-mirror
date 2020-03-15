@@ -1,9 +1,10 @@
 ;;; cl-font-lock.el --- Pretty Common Lisp font locking -*- lexical-binding: t; -*-
-;; Copyright (C) 2019 Spenser Truex
-;; Author: Spenser Truex <web@spensertruex.com>
+;; Copyright (C) 2019 Yue Daian
+;; Author: Yue Daian
+;; Maintainer: Spenser Truex <web@spensertruex.com>
 ;; Created: 2019-06-16
 ;; Version: 0.3.0
-;; Package-Version: 20191230.2341
+;; Package-Version: 20200315.649
 ;; Package-Requires: ((emacs "24.5"))
 ;; Keywords: lisp wp files convenience
 ;; URL: https://github.com/equwal/cl-font-lock

@@ -4,7 +4,7 @@
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Maintainer: stardiviner <numbchild@gmail.com>
 ;; Keywords: kiwix wikipedia
-;; Package-Version: 20200301.307
+;; Package-Version: 20200315.332
 ;; URL: https://github.com/stardiviner/kiwix.el
 ;; Created: 23th July 2016
 ;; Version: 1.0.0
@@ -157,6 +157,7 @@ Like in function `kiwix-ajax-search-hints'.")
 
 (defun kiwix-select-library (&optional filter)
   "Select Kiwix library name."
+  (kiwix-libraries-refresh)
   (completing-read "Kiwix library: " kiwix-libraries nil t filter))
 
 (defcustom kiwix-default-library "wikipedia_en_all.zim"
@@ -190,8 +191,8 @@ Like in function `kiwix-ajax-search-hints'.")
          (concat "docker container run -d "
                  "--name kiwix-serve "
                  "-v " (file-name-directory library-path) ":" "/data "
-                 "kiwix/kiwix-serve"
-                 (kiwix-select-library)))
+                 "kiwix/kiwix-serve "
+                 "--library library.xml"))
       (async-shell-command
        (concat kiwix-server-command
                library-option port daemon (shell-quote-argument library-path))))))
@@ -274,10 +275,7 @@ for query string and library interactively."
     (kiwix-launch-server))
   (if kiwix-server-available?
       (progn
-        (setq kiwix--selected-library (if (and (or kiwix-search-interactively interactively)
-                                               (not kiwix-server-use-docker))
-                                          (kiwix-select-library)
-                                        (kiwix--get-library-name kiwix-default-library)))
+        (setq kiwix--selected-library (kiwix-select-library))
         (let* ((library kiwix--selected-library)
                (query (case kiwix-default-completing-read
                         ('helm
