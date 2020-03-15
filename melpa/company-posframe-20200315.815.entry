@@ -1,0 +1,2 @@
+
+(company-posframe . [(20200315 815) ((emacs (26 0)) (company (0 9 0)) (posframe (0 1 0))) "Use a posframe as company candidate menu" tar ((:commit . "37a1f136f61bed4050dbeb182767c7e51cb73e1b") (:keywords "abbrev" "convenience" "matching") (:authors ("Clément Pit-Claudel, Feng Shu, Lars Andersen" . "expez@expez.com")) (:maintainer "Feng Shu" . "tumashu@163.com") (:url . "https://github.com/tumashu/company-posframe"))])

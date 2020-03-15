@@ -3,6 +3,7 @@
 ;; Author: Joe Wielgosz <joew@cola.iges.org>
 ;; Created: 2 Oct 2003
 ;; Keywords: GrADS script major-mode
+;; Package-Version: 20151202.1006
 ;; Version: 0.1
 
 ;; Copyright (C) Joe Wielgosz <joew@cola.iges.org>
