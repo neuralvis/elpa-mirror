@@ -4,7 +4,7 @@
 
 ;; Author: Mihai Olteanu <mihai_olteanu@fastmail.fm>
 ;; Version: 1.1
-;; Package-Version: 20200207.1316
+;; Package-Version: 20200316.910
 ;; Package-Requires: ((emacs "26.1") (request "0.3.0") (anaphora "1.0.4") (memoize "1.1") (elquery "0.1.0") (s "1.12.0"))
 ;; Keywords: multimedia, api
 ;; URL: https://github.com/mihaiolteanu/lastfm.el/
@@ -73,18 +73,27 @@ README_api.md if `lastfm-enable-doc-generation' is t.")
 (defconst lastfm--url "http://ws.audioscrobbler.com/2.0/"
   "The URL for the last.fm API version 2.")
 
-(defconst lastfm--config-file
-  (let ((f (concat (xdg-config-home) "/.lastfmrc")))
-    (or (file-exists-p f)
-        (with-temp-file f
-          (insert "(CONFIG
+(defconst lastfm--config-file-name "/.lastfmrc"
+  "Name of the user config file holding the lastfm username and
+  API key, among others.")
+
+(defconst lastfm--config-file-path nil
+  "Complete path of the user config file holding the lastfm
+  username and API key, among others.")
+
+(defun lastfm--config-file ()
+  "Return the config file or create it if it doesn't exits."
+  (unless lastfm--config-file-path
+    (let ((f (concat (xdg-config-home)
+                     lastfm--config-file-name)))
+      (or (file-exists-p f)
+          (with-temp-file f
+            (insert "(CONFIG
   :API-KEY \"\"
   :SHARED-SECRET \"\"
   :USERNAME \"\")")))
-    f)
-  "The user config file for this library.
-The file is generated when the library is loaded the first time,
-if it doesn't already exists.")
+      (setf lastfm--config-file-path f)))
+  lastfm--config-file-path)
 
 ;; The values of these configs are taken from the user config file.
 (defconst lastfm--api-key nil)
