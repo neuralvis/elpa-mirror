@@ -1,0 +1,2 @@
+
+(separedit . [(20200306 1655) ((emacs (24 4)) (dash (2 0)) (edit-indirect (0 1 5))) "Code block in comment or docstring" single ((:commit . "82462b2dfb348ae6428f76b0debd50536d67ca64") (:keywords "tools" "languages" "docs") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/separedit.el"))])

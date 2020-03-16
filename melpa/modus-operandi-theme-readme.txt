@@ -153,6 +153,7 @@ notify me of any missing package or change you would like to see.
     org-noter
     org-pomodoro
     org-recur
+    org-roam
     origami
     outline-mode
     outline-minor-faces
