@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017-2018 Sebastien Chapuis, 2018 Yuan Fu
 
 ;; Version: 1.8
-;; Package-Version: 20191102.1433
+;; Package-Version: 20200316.1619
 
 ;; Author: Sebastien Chapuis <sebastien@chapu.is>
 ;; Maintainer: Yuan Fu <casouri@gmail.com>
@@ -251,7 +251,7 @@ WINDOW nil means use selected window."
   (let* ((pos (pos-visible-in-window-p point window t))
          (x (car pos))
          (y (cadr pos))
-         (edges (window-body-pixel-edges window)))
+         (edges (window-edges window nil nil t)))
     (cons (+ x (car edges))
           (+ y (cadr edges)))))
 

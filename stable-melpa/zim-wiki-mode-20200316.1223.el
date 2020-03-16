@@ -1,7 +1,7 @@
 ;;; zim-wiki-mode.el --- Zim Desktop Wiki edit mode          -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/WillForan/zim-wiki-mode
-;; Package-Version: 20191208.2241
+;; Package-Version: 20200316.1223
 ;; Author: Will Foran <willforan+zim-wiki-mode@gmail.com>
 ;; Keywords: outlines
 ;; Package-Requires: ((emacs "25") (helm-ag "0.58") (helm-projectile "0.14.0") (dokuwiki-mode "0.1.1") (link-hint "0.1") (pretty-hydra "0.2.2"))
