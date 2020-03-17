@@ -5,7 +5,7 @@
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; Created: 2019/04/06
 ;; Version: 0.2.0
-;; Package-Version: 20200306.1655
+;; Package-Version: 20200317.635
 ;; Package-Requires: ((emacs "24.4") (dash "2.0") (edit-indirect "0.1.5"))
 ;; URL: https://github.com/twlz0ne/separedit.el
 ;; Keywords: tools languages docs
@@ -21,7 +21,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -59,7 +59,7 @@
 
 ;; ## Edit comment
 
-;; `separedit` use **continuity** as basis for determing whether it is a comment **block** or **line**.
+;; `separedit` use **continuity** as basis for determning whether it is a comment **block** or **line**.
 ;; Continuous means that there is no barrier (e.g. code or blank line) between the end of previous line and the beginning of next line, for example:
 
 ;;     /*
@@ -113,7 +113,7 @@
 
 ;; `separedit` also support for editing code block directly in comment or string:
 
-;;     source buffer     ->    eidt buffer
+;;     source buffer     ->    edit buffer
 
 ;;     ",--- elisp
 ;;      | (foo \"bar\")        (foo "bar")
@@ -151,6 +151,7 @@
 
 (declare-function org-edit-special "org")
 (declare-function markdown-edit-code-block "markdown-mode")
+(declare-function gfm-edit-code-block "gfm-mode")
 
 (defcustom separedit-default-mode 'fundamental-mode
   "Default mode for editing comment or docstring file."
@@ -184,7 +185,7 @@ Taken from `markdown-code-lang-modes'."
   :type 'alist)
 
 (defcustom separedit-not-support-docstring-modes
-  '(c-mode c++-mode java-mode js-mode rust-mode)
+  '(c-mode c++-mode java-mode js-mode rust-mode rustic-mode)
   "A list of modes not support docstring."
   :group 'separedit
   :type 'list)
@@ -200,7 +201,8 @@ Taken from `markdown-code-lang-modes'."
                           objc-mode
                           php-mode
                           swift-mode))
-    (("//+!" "//+" "\\*+") . rust-mode)
+    (("//+!" "//+" "\\*+") . (rust-mode
+                              rustic-mode))
     (("--")            . (applescript-mode haskell-mode lua-mode))
     (("//+")           . (pascal-mode fsharp-mode))
     ((";+")            . (emacs-lisp-mode
@@ -224,6 +226,7 @@ Taken from `markdown-code-lang-modes'."
                                objc-mode
                                php-mode
                                rust-mode
+                               rustic-mode
                                swift-mode))
     (("{-" "-}")       . haskell-mode)
     (("{" "}")         . pascal-mode)
@@ -306,17 +309,17 @@ Force enable if FORCE-P is not nil."
 FORMAT-STRING and ARGS is the same as for `message'."
   (when separedit-debug-p
     (if noninteractive
-        (apply 'message format-string args)
+        (apply #'message format-string args)
       (with-current-buffer (get-buffer-create "*comment-log*")
         (outline-mode)
         (buffer-disable-undo)
         (let ((inhibit-read-only t))
           (goto-char (point-max))
-          (insert (apply 'format (cons format-string args))
+          (insert (apply #'format (cons format-string args))
                   "\n"))))))
 
 (defun separedit--end-of-previous-line (&optional pos)
-  "Move cursor to the end of prevous line of the given point POS.
+  "Move cursor to the end of previous line of the given point POS.
 
 Return nil if reached the beginning of the buffer."
   (when pos
@@ -356,7 +359,7 @@ Return nil if reached the end of the buffer."
              (symbol-function mode))
         mode)))
 
-;;; Docstring funcitons
+;;; Docstring functions
 
 (defcustom separedit-string-quotes-alist
   '((python-mode     . ("\"\"\"" "'''" "\"" "'"))
@@ -428,7 +431,7 @@ If MODE is nil, use ‘major-mode’."
       (if (symbolp (car def))
           (separedit--comment-delimiter-regexp (car def))
         (concat "^\s*\\(?:"
-                (mapconcat 'identity (car def) "\\|")
+                (mapconcat #'identity (car def) "\\|")
                 "\\)\s?")))))
 
 (defun separedit--point-at-comment-exclusive-one-line ()
@@ -657,15 +660,17 @@ Search process will skip characters COMMENT-DELIMITER at beginning of each line.
   "Return CODE-INFO with ‘:end’ added.
 
 Search process will skip characters COMMENT-DELIMITER at beginning of each line."
-  (save-excursion
-    (let ((regexp (concat comment-delimiter
-                          (plist-get
-                           (plist-get code-info :regexps)
-                           :footer))))
-      (when (re-search-forward regexp nil t)
-        (separedit--end-of-previous-line)
-        (plist-put code-info
-                   :end (point-at-eol))))))
+  (when (and code-info (plist-get code-info :beginning))
+    (save-excursion
+      (goto-char (plist-get code-info :beginning))
+      (let ((regexp (concat comment-delimiter
+                            (plist-get
+                             (plist-get code-info :regexps)
+                             :footer))))
+        (when (re-search-forward regexp nil t)
+          (separedit--end-of-previous-line)
+          (plist-put code-info
+                     :end (point-at-eol)))))))
 
 (defun separedit-get-lang-mode (lang)
   "Return major mode that should be used for LANG.
@@ -709,8 +714,9 @@ Block info example:
       :in-str-p nil)
 
 :regexps        not nil means point at a code block.
-:in-str-p       not nil means point at a string block otherwish a comment block."
-  (let* ((strp (separedit--point-at-string))
+:in-str-p       not nil means point at a string block otherwise a comment block."
+  (let* ((pos (point))
+         (strp (separedit--point-at-string))
          (comment-or-string-region
           (if strp
               (let ((region (separedit--string-region)))
@@ -718,24 +724,24 @@ Block info example:
                             (separedit--string-beginning)))
                 region)
             (when (or (derived-mode-p 'prog-mode)
-                      (memq major-mode '(markdown-mode org-mode)))
+                      (memq major-mode '(gfm-mode markdown-mode org-mode)))
               (separedit--comment-region)))))
     (save-restriction
       (when comment-or-string-region
-        (apply 'narrow-to-region comment-or-string-region))
+        (apply #'narrow-to-region comment-or-string-region))
       (let* ((delimiter (unless strp (separedit--comment-delimiter-regexp)))
              (code-info (separedit--code-block-end
                          (separedit--code-block-beginning delimiter)
                          delimiter)))
-        (if (and (plist-get code-info :beginning) (plist-get code-info :end))
+        (if (and code-info
+                 (<= (plist-get code-info :beginning) pos)
+                 (<= pos (plist-get code-info :end)))
             (plist-put code-info :in-str-p strp)
           (if comment-or-string-region
-              (plist-put
-               (plist-put
-                (plist-put code-info :beginning (point-min))
-                :end (point-max))
-               :in-str-p strp)
-            (user-error "Not inside a code block")))))))
+              (list :beginning (point-min)
+                    :end (point-max)
+                    :in-str-p strp)
+            (user-error "Not inside a edit block")))))))
 
 ;;; separedit-mode
 
@@ -770,6 +776,8 @@ It will override by the key that `separedit' binding in source buffer.")
                #'separedit)
               (`markdown-mode
                #'markdown-edit-code-block)
+              (`gfm-mode
+               #'gfm-edit-code-block)
               (`org-mode
                #'org-edit-special)))
       (let ((km (copy-keymap edit-indirect-mode-map)))
@@ -896,7 +904,7 @@ QUOTES-CHAR should be \" or '."
             (throw 'break nil)))))))
 
 (defun separedit--restore-escape (quotes-char)
-  "Restore escape when finished edting docstring.
+  "Restore escape when finished editing docstring.
 
 QUOTES-CHAR should be \" or '."
   (goto-char (point-min))
@@ -938,6 +946,7 @@ If you just want to check `major-mode', use `derived-mode-p'."
                            (or (separedit--derived-mode-p sym 'prog-mode)
                                (memq sym
                                      '(text-mode
+                                       gfm-mode
                                        markdown-mode
                                        org-mode
                                        separedit-mode
