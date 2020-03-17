@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017-2018 Sebastien Chapuis, 2018 Yuan Fu
 
 ;; Version: 1.8
-;; Package-Version: 20200316.1619
+;; Package-Version: 20200316.1956
 
 ;; Author: Sebastien Chapuis <sebastien@chapu.is>
 ;; Maintainer: Yuan Fu <casouri@gmail.com>
@@ -250,9 +250,11 @@ The coordinate is relative to the native frame.
 WINDOW nil means use selected window."
   (let* ((pos (pos-visible-in-window-p point window t))
          (x (car pos))
+         (en (frame-char-width))
          (y (cadr pos))
          (edges (window-edges window nil nil t)))
-    (cons (+ x (car edges))
+    ;; HACK: for unknown reasons we need to add en to x position
+    (cons (+ x (car edges) en)
           (+ y (cadr edges)))))
 
 (defun eldoc-box--default-at-point-position-function-1 (width height)
