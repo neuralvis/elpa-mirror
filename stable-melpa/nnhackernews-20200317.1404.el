@@ -4,7 +4,7 @@
 
 ;; Authors: dickmao <github id: dickmao>
 ;; Version: 0.1.0
-;; Package-Version: 20200310.855
+;; Package-Version: 20200317.1404
 ;; Keywords: news
 ;; URL: https://github.com/dickmao/nnhackernews
 ;; Package-Requires: ((emacs "25.2") (request "20190819") (dash "20190401") (dash-functional "20180107") (anaphora "20180618"))
@@ -644,7 +644,9 @@ Otherwise *Group* buffer annoyingly overrepresents unread."
         (nnhackernews--rescore gnus-newsgroup-name t)))))
 
 (defun nnhackernews--mark-scored-as-read (group)
-  "If a root article (story) is scored in GROUP, that means we've already read it."
+  "If a root article (story) is scored in GROUP, that means we've already read it.
+This seems redundant with `nnhackernews--score-unread' but might be faster on startup?
+See 15195cc."
   (nnhackernews--with-group group
     (let ((preface (format "nnhackernews--mark-scored-as-read: %s not rescoring " group))
           (extant (nnhackernews-extant-summary-buffer gnus-newsgroup-name))
@@ -1498,25 +1500,26 @@ Written by John Wiegley (https://github.com/jwiegley/dot-emacs).")
 (defun nnhackernews-gather-threads-by-references (threads)
   "Gather THREADS by root reference, and don't be incomprehensible or buggy.
 The built-in `gnus-gather-threads-by-references' is both."
-  (let ((threads-by-ref (gnus-make-hashtable))
-	result)
-    (cl-flet ((special-case
-	       (thread)
-	       (let ((header (cl-first thread)))
-		 (if (stringp header)
-		     thread
-		   (list (mail-header-subject header) thread))))
-	      (has-refs
-	       (thread)
-	       (let ((header (cl-first thread)))
-		 (gnus-split-references (mail-header-references header)))))
-      (dolist (thread (seq-filter (lambda (thread) (not (has-refs thread))) threads))
+  (cl-flet ((special-case
+	     (thread)
+	     (let ((header (cl-first thread)))
+	       (if (stringp header)
+		   thread
+		 (list (mail-header-subject header) thread))))
+	    (has-refs
+	     (thread)
+	     (let ((header (cl-first thread)))
+	       (gnus-split-references (mail-header-references header)))))
+    (let ((threads-by-ref (gnus-make-hashtable))
+	  (separated (-separate #'has-refs threads))
+	  result)
+      (dolist (thread (cl-second separated))
 	(let* ((header (cl-first thread))
 	       (id (mail-header-id header))
 	       (thread-special (special-case thread)))
 	  (push thread-special result)
 	  (nnhackernews--sethash id thread-special threads-by-ref)))
-      (dolist (thread (seq-filter #'has-refs threads))
+      (dolist (thread (cl-first separated))
 	(let* ((header (cl-first thread))
 	       (refs (gnus-split-references (mail-header-references header)))
 	       (ref-thread (cl-some (lambda (ref)
@@ -1608,15 +1611,15 @@ The built-in `gnus-gather-threads-by-references' is both."
                                      ,nnhackernews--group-job
                                      ,nnhackernews--group-stories)))))
       '(gnus-after-getting-new-news-hook))
-;; (add-hook 'gnus-started-hook
-;;           (lambda () (mapc (lambda (group)
-;;                              (nnhackernews--mark-scored-as-read group))
-;;                            `(,nnhackernews--group-ask
-;;                              ,nnhackernews--group-show
-;;                              ,nnhackernews--group-job
-;;                              ,nnhackernews--group-stories)))
-;;           t)
-
+;; Without this, I get Y's the first time around.  See 15195cc.
+(add-hook 'gnus-started-hook
+          (lambda () (mapc (lambda (group)
+                             (nnhackernews--mark-scored-as-read group))
+                           `(,nnhackernews--group-ask
+                             ,nnhackernews--group-show
+                             ,nnhackernews--group-job
+                             ,nnhackernews--group-stories)))
+          t)
 
 ;; "Can't figure out hook that can remove itself (quine conundrum)"
 (add-function :around (symbol-function 'gnus-summary-exit)
