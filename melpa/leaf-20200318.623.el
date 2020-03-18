@@ -5,14 +5,10 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; Keywords: lisp settings
-;; Package-Version: 20200317.1649
-;; Version: 3.7.7
+;; Package-Version: 20200318.623
+;; Version: 4.0.0
 ;; URL: https://github.com/conao3/leaf.el
 ;; Package-Requires: ((emacs "24.4"))
-
-;;   Above declared this package requires Emacs-24, but it's for warning
-;;   suppression, and will actually work from Emacs-23.
-;;   But :advice, :advice-remove are not work Emacs-24.3 or lower.
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the Affero GNU General Public License as
@@ -32,18 +28,18 @@
 
 ;; Provides macros that allow you to declaratively configure settings typical
 ;; of an Elisp package with various keywords.
-;;
+
 ;; By separating the settings of a package and combining many 'leaves' of a
-;; package's settings, you could make a 'Yggdrasill' on top of your Emacs.
-;;
+;; package's settings, you could make a 'Yggdrasill' on your Emacs.
+
 ;; A leaf can consist of multiple packages, in which case you can disable all
 ;; dependent child packages by disabling one parent's package.
-;;
+
 ;; It also has a key management system and package management uses the
 ;; package.el.  With minimal external dependencies and careful implementation,
-;; this package is guaranteed to be fully functional from Emacs-23, now, and
+;; this package is guaranteed to be fully functional from Emacs-24.4, now, and
 ;; in future Emacs.
-;;
+
 ;; More information is [[https://github.com/conao3/leaf.el][here]]
 
 
@@ -90,7 +86,6 @@ Same as `list' but this macro does not evaluate any arguments."
    :unless            (when leaf--body `((unless ,@(if (= 1 (length leaf--value)) leaf--value `((and ,@leaf--value))) ,@leaf--body)))
    :if                (when leaf--body `((if     ,@(if (= 1 (length leaf--value)) leaf--value `((and ,@leaf--value))) (progn ,@leaf--body))))
 
-   :ensure            `(,@(mapcar (lambda (elm) `(leaf-handler-package ,leaf--name ,(car elm) ,(cdr elm))) leaf--value) ,@leaf--body)
    :package           `(,@(mapcar (lambda (elm) `(leaf-handler-package ,leaf--name ,(car elm) ,(cdr elm))) leaf--value) ,@leaf--body)
 
    :after             (when leaf--body (let ((ret `(progn ,@leaf--body)))
@@ -182,7 +177,7 @@ Sort by `leaf-sort-leaf--values-plist' in this order.")
              (delete-dups (delq nil (leaf-flatten leaf--value)))))
 
     ((memq leaf--key (list
-                      :ensure :package
+                      :package
                       :hook :mode :interpreter :magic :magic-fallback :defun
                       :pl-setq :pl-pre-setq :pl-setq-default :pl-custom
                       :auth-custom :auth-pre-setq :auth-setq :auth-setq-default
@@ -195,7 +190,7 @@ Sort by `leaf-sort-leaf--values-plist' in this order.")
                (cond
                 ((leaf-pairp elm)
                  (if (eq t (car elm)) `(,leaf--name . ,(cdr elm)) elm))
-                ((memq leaf--key '(:ensure :package))
+                ((memq leaf--key '(:package))
                  (if (equal '(t) elm) `(,leaf--name . nil) `(,@elm . nil)))
                 ((memq leaf--key '(:hook :mode :interpreter :magic :magic-fallback :defun))
                  `(,@elm . ,leaf--name))
@@ -284,7 +279,7 @@ Sort by `leaf-sort-leaf--values-plist' in this order.")
 
 (defvar leaf-verify
   '(((memq leaf--key (list
-                      :ensure :package
+                      :package
                       :hook :defun
                       :pl-setq :pl-pre-setq :pl-setq-default :pl-custom
                       :auth-custom :auth-pre-setq :auth-setq :auth-setq-default
@@ -342,6 +337,11 @@ To stop this function, specify ':leaf-defer nil'"
   :type 'sexp
   :group 'leaf)
 
+(defcustom leaf-alias-keyword-alist '((:ensure . :package))
+  "The alias keyword.  KEY is treated as an alias for VALUE."
+  :type 'sexp
+  :group 'leaf)
+
 (defcustom leaf-expand-minimally nil
   "If non-nil, make the expanded code as minimal as possible.
 If non-nil, disabled keywords of `leaf-expand-minimally-suppress-keywords'."
@@ -354,7 +354,7 @@ If non-nil, disabled keywords of `leaf-expand-minimally-suppress-keywords'."
   :group 'leaf)
 
 (defcustom leaf-options-ensure-default-pin nil
-  "Set the default pin with :ensure.
+  "Set the default pin with :package.
 'nil is using package manager default.
 This feature is not yet implemented."
   :type 'sexp
@@ -462,6 +462,19 @@ The elements of LIST are not copied, just the list structure itself."
         (prog1 (nreverse res) (setcdr res list)))
     (car list)))
 
+(defun leaf-insert-after (value list index)
+  "Insert VALUE into LIST after INDEX."
+  (push value (cdr (nthcdr index list)))
+  list)
+
+(defun leaf-insert-after-value (value list target &optional searchfn)
+  "Insert VALUE into LIST after TARGET search with SEARCHFN."
+  (let ((len (length list))
+        (part (funcall (or searchfn #'memq) target list)))
+    (if (not part)
+        (leaf-error "%s is not found in given list; %s" target list)
+      (leaf-insert-after value list (- len (length part))))))
+
 (defun leaf-safe-mapcar (fn seq)
   "Apply FN to each element of SEQ, and make a list of the results.
 The result is a list just as long as SEQUENCE.
@@ -496,6 +509,19 @@ Unlike `butlast', it works well with dotlist (last cdr is non-nil list)."
   (declare (indent 1))
   (or (and (plist-member plist key) (plist-get plist key)) default))
 
+;;; General alist functions
+
+;; for Emacs < 25.1
+(defun leaf-alist-get (key alist &optional default _remove testfn)
+  "Find the first element of ALIST whose `car' equals KEY and return its `cdr'.
+If KEY is not found in ALIST, return DEFAULT.
+Equality with KEY is tested by TESTFN, defaulting to `eq'.
+see `alist-get'."
+  (let ((x (if (not testfn)
+               (assq key alist)
+             (assoc key alist testfn))))
+    (if x (cdr x) default)))
+
 ;;; et cetera
 
 (defun leaf-sym-or-keyword (keyword)
@@ -515,7 +541,17 @@ Unlike `butlast', it works well with dotlist (last cdr is non-nil list)."
 (defun leaf-available-keywords ()
   "Return current available `leaf' keywords list."
   (interactive)
-  (let ((ret (leaf-plist-keys leaf-keywords)))
+  (let* ((keywords (leaf-plist-keys leaf-keywords))
+         (alias-from (delete-dups (mapcar #'car leaf-alias-keyword-alist)))
+         (alias-alist (mapcar (lambda (elm) (assq elm leaf-alias-keyword-alist)) alias-from))
+         (ret (progn
+                (dolist (elm alias-alist)
+                  (let ((from (car elm))
+                        (to   (cdr elm)))
+                    (if (not (memq to keywords))
+                       (leaf-error "`leaf-alias-keyword-alist' is broken.  %s is missing from leaf-keywords; %s" to keywords)
+                     (leaf-insert-after-value from keywords to))))
+                keywords)))
     (if (called-interactively-p 'interactive)
         (message (prin1-to-string ret))
       ret)))
@@ -855,6 +891,19 @@ FN also accept list of FN."
 
 ;;; General list functions for leaf
 
+(defun leaf-apply-keyword-alias (plist)
+  "Apply keyword alias for PLIST."
+  (let* ((keywords (leaf-plist-keys plist))
+         (alias-from (delete-dups (mapcar #'car leaf-alias-keyword-alist)))
+         (alias-alist (mapcar (lambda (elm) (assq elm leaf-alias-keyword-alist)) alias-from)))
+    (dolist (elm alias-alist)
+      (let ((from (car elm))
+            (to   (cdr elm)))
+        (when (memq from keywords)
+         (setcar (memq from plist) to)
+         (setq plist (leaf-apply-keyword-alias plist)))))
+    plist))
+
 (defun leaf-append-defaults (plist)
   "Append leaf default values to PLIST and return it."
   (append (when leaf-expand-minimally
@@ -936,7 +985,7 @@ EXAMPLE:
   => (:disabled (t)
       :config (message \"a\"))"
   (let ((retplist))
-    (dolist (key (leaf-plist-keys leaf-keywords))
+    (dolist (key (leaf-available-keywords))
       (when (plist-member plist key)
         (setq retplist `(,@retplist ,key ,(plist-get plist key)))
         (plist-put plist key nil)))
@@ -1067,9 +1116,10 @@ NOTE:
   "Symplify your `.emacs' configuration for package NAME with ARGS."
   (declare (indent defun))
   (let* ((leaf--autoload)
-         (args* (leaf-sort-values-plist
-                 (leaf-normalize-plist
-                  (leaf-append-defaults args) 'merge 'eval))))
+         (args* (leaf-apply-keyword-alias
+                 (leaf-sort-values-plist
+                  (leaf-normalize-plist
+                   (leaf-append-defaults args) 'merge 'eval)))))
     `(prog1 ',name
        ,@(leaf-process-keywords name args* args*))))
 

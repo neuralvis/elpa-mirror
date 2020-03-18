@@ -5,7 +5,7 @@
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; Created: 2019/04/06
 ;; Version: 0.2.0
-;; Package-Version: 20200317.635
+;; Package-Version: 20200318.619
 ;; Package-Requires: ((emacs "24.4") (dash "2.0") (edit-indirect "0.1.5"))
 ;; URL: https://github.com/twlz0ne/separedit.el
 ;; Keywords: tools languages docs
@@ -210,7 +210,7 @@ Taken from `markdown-code-lang-modes'."
                           common-lisp
                           racket-mode
                           scheme-mode))
-    (("#+")            . (python-mode ruby-mode)))
+    (("#+")            . (nix-mode python-mode ruby-mode)))
   "Alist of comment delimiter regexp."
   :group 'separedit
   :type 'alist)
@@ -223,6 +223,7 @@ Taken from `markdown-code-lang-modes'."
                                go-mode
                                java-mode
                                js-mode
+                               nix-mode
                                objc-mode
                                php-mode
                                rust-mode
@@ -364,6 +365,7 @@ Return nil if reached the end of the buffer."
 (defcustom separedit-string-quotes-alist
   '((python-mode     . ("\"\"\"" "'''" "\"" "'"))
     (js-mode         . ("\"" "'"))
+    (nix-mode        . ("''" "\""))
     (separedit-double-quote-string-mode . t)
     (separedit-single-quote-string-mode . ("'"))
     (t               . ("\"")))
