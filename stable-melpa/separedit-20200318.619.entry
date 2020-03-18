@@ -1,2 +1,2 @@
 
-(separedit . [(20200318 619) ((emacs (24 4)) (dash (2 0)) (edit-indirect (0 1 5))) "Code block in comment or docstring" single ((:commit . "2d948b26845d3a8ed8cd2f2c74f8f951a08654f9") (:keywords "tools" "languages" "docs") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/separedit.el"))])
+(separedit . [(20200318 619) ((emacs (24 4)) (dash (2 0)) (edit-indirect (0 1 5))) "Code block in comment or docstring" single ((:commit . "21f657f94789bbd633d9e3ba0b5b26710ac1d2e6") (:keywords "tools" "languages" "docs") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/separedit.el"))])

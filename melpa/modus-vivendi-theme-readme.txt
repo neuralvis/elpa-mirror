@@ -44,6 +44,7 @@ notify me of any missing package or change you would like to see.
     buffer-expose
     calendar and diary
     calfw
+    centaur-tabs
     change-log and log-view (`vc-print-log' and `vc-print-root-log')
     cider
     column-enforce-mode

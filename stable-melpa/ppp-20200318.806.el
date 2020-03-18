@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 1.2.4
-;; Package-Version: 20200313.437
+;; Version: 2.0.0
+;; Package-Version: 20200318.806
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/conao3/ppp.el
@@ -68,16 +68,13 @@ Duplicate LEVEL is accepted."
   :group 'ppp
   :type 'string)
 
-(defcustom ppp-minimum-warning-level-base :warning
+(defcustom ppp-minimum-warning-level-alist '((t . :warning))
   "Minimum level for `ppp-debug'.
-It should be either :debug, :warning, :error, or :emergency.
-Every minimul-earning-level variable initialized by this variable.
-You can customize each variable like ppp-minimum-warning-level--{{pkg}}."
+The key is package symbol.
+The value should be either :debug, :warning, :error, or :emergency.
+The value its key is t, is default minimum-warning-level value."
   :group 'ppp
-  :type '(choice (const :tag ":debug"     :debug)
-                 (const :tag ":warning"   :warning)
-                 (const :tag ":error"     :error)
-                 (const :tag ":emergency" :emergency)))
+  :type 'sexp)
 
 
 ;;; Helpers
@@ -332,16 +329,6 @@ Unlike `ppp-macroexpand', use `macroexpand-all' instead of `macroexpand-1'."
              (cdr elm))))
    alist))
 
-(defun ppp--define-warning-level-symbol (sym pkg)
-  "Define SYM as variable if not defined for PKG."
-  (unless (boundp sym)
-    (eval
-     `(defcustom ,sym ppp-minimum-warning-level-base
-        ,(format "Minimum level for debugging %s.
-It should be either :debug, :warning, :error, or :emergency." pkg)
-        :group 'ppp
-        :type 'symbol))))
-
 (defun ppp--get-caller (&optional level)
   "Get caller function and arguments from backtrace.
 Optional arguments LEVEL is pop level for backtrace."
@@ -400,14 +387,13 @@ Note:
            (buffer          (or (alist-get :buffer prop)
                                 (format ppp-debug-buffer-template pkg)))
            (popup           (alist-get :popup prop))
-           (break           (alist-get :break prop))
-           (min-level       (intern
-                             (format "ppp-minimum-warning-level--%s" pkg))))
-      (ppp--define-warning-level-symbol min-level pkg)
+           (break           (alist-get :break prop)))
       `(with-current-buffer (get-buffer-create ,buffer)
          (special-mode)
          (emacs-lisp-mode)
-         (when (<= (warning-numeric-level ,min-level)
+         (when (<= (warning-numeric-level
+                    ,(alist-get pkg ppp-minimum-warning-level-alist
+                                (alist-get t ppp-minimum-warning-level-alist)))
                    (warning-numeric-level ,level))
            (prog1 t
              (let ((inhibit-read-only t)

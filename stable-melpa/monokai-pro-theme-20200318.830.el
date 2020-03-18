@@ -5,7 +5,7 @@
 ;; Author: Kaleb Elwert <kaleb@coded.io>
 ;; Maintainer: Kaleb Elwert <kaleb@coded.io>
 ;; Version: 0.1
-;; Package-Version: 20191115.714
+;; Package-Version: 20200318.830
 ;; URL: https://github.com/belak/emacs-monokai-pro-theme
 
 ;;; Commentary:
@@ -191,6 +191,13 @@
 ;;;; flyspell-mode
    (flyspell-duplicate                           :underline (:style wave :color orange))
    (flyspell-incorrect                           :underline (:style wave :color red))
+
+;;;; git-gutter-mode
+   (git-gutter:added                             :foreground green)
+   (git-gutter:deleted                           :foreground red)
+   (git-gutter:modified                          :foreground purple)
+   (git-gutter:separator                         :foreground blue)
+   (git-gutter:unchanged                         :background yellow)
 
 ;;;; hl-line-mode
    (hl-line                                      :background bg+1)
