@@ -1,2 +1,0 @@
-
-(org-bullets . [(20200317 1636) nil "Show bullets in org-mode as UTF-8 characters" single ((:commit . "b98464165cfa1e41301bfe256a98eef1c264c57b") (:authors ("sabof")) (:maintainer "D. Williams" . "d.williams@posteo.net") (:url . "https://github.com/integral-dw/org-bullets"))])
