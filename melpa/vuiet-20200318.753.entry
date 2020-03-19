@@ -1,0 +1,2 @@
+
+(vuiet . [(20200318 753) ((emacs (26 1)) (lastfm (1 1)) (versuri (1 0)) (s (1 12 0)) (bind-key (2 4)) (mpv (0 1 0))) "Discover and play music" single ((:commit . "a0333ceb48551f91a7ee6841d5022169dd3462e6") (:keywords "multimedia") (:authors ("Mihai Olteanu" . "mihai_olteanu@fastmail.fm")) (:maintainer "Mihai Olteanu" . "mihai_olteanu@fastmail.fm") (:url . "https://github.com/mihaiolteanu/vuiet"))])

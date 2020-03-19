@@ -118,6 +118,7 @@ notify me of any missing package or change you would like to see.
     highlight-blocks
     highlight-defined
     highlight-numbers
+    highlight-thing
     hl-fill-column
     hl-line-mode
     hl-todo
@@ -156,6 +157,7 @@ notify me of any missing package or change you would like to see.
     org-pomodoro
     org-recur
     org-roam
+    org-superstar
     origami
     outline-mode
     outline-minor-faces
