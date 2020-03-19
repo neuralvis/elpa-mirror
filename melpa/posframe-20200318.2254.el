@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20200316.37
+;; Package-Version: 20200318.2254
 ;; Version: 0.6.0
 ;; Keywords: convenience, tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -596,19 +596,11 @@ You can use `posframe-delete-all' to delete all posframes."
             (cons position height))
       height)))
 
-(defvar posframe--previous-frame nil)
-
 (defun posframe--redirect-posframe-focus ()
-  "Redirect focus from the posframe to the previous frame. This prevents the
+  "Redirect focus from the posframe to the parent frame. This prevents the
 posframe from catching keyboard input if the window manager selects it."
-  (interactive)
-  (if (eq (selected-frame) posframe--frame)
-      (when posframe--previous-frame
-        (redirect-frame-focus posframe--frame posframe--previous-frame))
-    (progn
-      (setf posframe--previous-frame (selected-frame))
-      (when posframe--frame
-        (redirect-frame-focus posframe--frame posframe--previous-frame)))))
+  (when (eq (selected-frame) posframe--frame)
+    (redirect-frame-focus posframe--frame (frame-parent))))
 
 (add-hook 'focus-in-hook #'posframe--redirect-posframe-focus)
 
