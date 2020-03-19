@@ -37,6 +37,7 @@ notify me of any missing package or change you would like to see.
     apropos
     apt-sources-list
     artbollocks-mode
+    auctex and TeX
     auto-dim-other-buffers
     avy
     breakpoint (provided by built-in gdb-mi.el)
