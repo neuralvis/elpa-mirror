@@ -8,6 +8,7 @@ Features:
 * Cycle through all position registers in both directions.
 * Clear current register.
 * Store point in unused register (range configurable).
+* Clear all registers in the unused registers range.
 
 Installation:
 

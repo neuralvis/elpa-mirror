@@ -1,2 +1,0 @@
-
-(register-quicknav . [(20200315 2127) ((emacs (24 3))) "Quickly jump to next/previous register" single ((:commit . "892b368b23ee177c9ad6848d0baf28ce43ea156d") (:keywords "convenience") (:authors ("tastytea" . "tastytea@tastytea.de")) (:maintainer "tastytea" . "tastytea@tastytea.de") (:url . "https://schlomp.space/tastytea/register-quicknav"))])
