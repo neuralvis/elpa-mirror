@@ -5,8 +5,8 @@
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/flycheck-clang-analyzer
-;; Package-Version: 20190724.542
-;; Version: 0.6
+;; Package-Version: 20200320.428
+;; Version: 0.7
 ;; Package-Requires: ((flycheck "0.24") (emacs "24.4"))
 
 ;; This file is not part of GNU Emacs.
@@ -255,14 +255,14 @@ Add `clang-analyzer' to `flycheck-checkers'."
   (interactive)
   ;; append to list and chain after existing checkers
   (add-to-list 'flycheck-checkers 'clang-analyzer t)
-  (with-eval-after-load 'lsp-ui-flycheck
-    (flycheck-add-next-checker 'lsp-ui '(warning . clang-analyzer)))
-  (with-eval-after-load 'flycheck-irony
-    (flycheck-add-next-checker 'irony '(warning . clang-analyzer)))
-  (with-eval-after-load 'flycheck-rtags
-    (flycheck-add-next-checker 'rtags '(warning . clang-analyzer)))
-  (with-eval-after-load 'flycheck
-    (flycheck-add-next-checker 'c/c++-clang '(warning . clang-analyzer))))
+  (dolist (feature-checker '((lsp-mode . lsp)
+                             (lsp-ui-flycheck . lsp-ui)
+                             (flycheck-irony . irony)
+                             (flycheck-rtags . rtags)
+                             (flycheck . c/c++-clang)))
+    (with-eval-after-load (car feature-checker)
+      (when (flycheck-valid-checker-p (cdr feature-checker))
+        (flycheck-add-next-checker (cdr feature-checker) '(warning . clang-analyzer))))))
 
 (provide 'flycheck-clang-analyzer)
 
