@@ -1,2 +1,2 @@
 
-(cdb . [(20200314 1557) nil "constant database (cdb) reader for Emacs Lisp" single ((:commit . "5a0f6f7aedcc42eca77225a81e27378ba2fe9ee9") (:keywords "cdb") (:authors ("Yusuke Shinyama <yusuke at cs . nyu . edu>")) (:maintainer "SKK Development Team" . "skk@ring.gr.jp"))])
+(cdb . [(20200314 1557) nil "constant database (cdb) reader for Emacs Lisp" single ((:commit . "2d6867c65026ec5846a611256c4f63488111633d") (:keywords "cdb") (:authors ("Yusuke Shinyama <yusuke at cs . nyu . edu>")) (:maintainer "SKK Development Team" . "skk@ring.gr.jp"))])

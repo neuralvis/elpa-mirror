@@ -4,10 +4,10 @@
 
 ;; Author: Sergio Gil <sgilperez@gmail.com>
 ;; Version: 0.1
-;; Package-Version: 20190821.1527
+;; Package-Version: 20200319.1911
 ;; Keywords: languages
 ;; URL: https://github.com/porras/evil-ruby-text-objects
-;; Package-Requires: ((emacs "25") (evil "1.2.0"))
+;; Package-Requires: ((emacs "25.1") (evil "1.2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 (require 'evil)
 (require 'eieio)
+(require 'cl-lib)
 
 ;; these are the external functions, from the bundled ruby-mode, and from
 ;; enh-ruby-mode (only in case it's installed) which are used from this package.
