@@ -2,8 +2,8 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-language-id
-;; Package-Version: 20200214.2254
-;; Version: 0.4.0
+;; Package-Version: 20200320.838
+;; Version: 0.4.1
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: ISC
@@ -35,6 +35,13 @@
 (defconst language-id--definitions
   '(
 
+    ;; JSON needs to come before JavaScript. Since json-mode is
+    ;; derived from javascript-mode, having JavaScript before JSON
+    ;; would cause JSON to be detected as JavaScript.
+    ("JSON"
+     json-mode
+     (web-mode (web-mode-content-type "json") (web-mode-engine "none")))
+
     ;; TypeScript/TSX need to come before JavaScript/JSX because in
     ;; web-mode we can tell them apart by file name extension only.
     ;; This implies that unsaved temp buffers using TypeScript/TSX in
@@ -51,6 +58,8 @@
       (web-mode-content-type "jsx")
       (web-mode-engine "none")
       (language-id--file-name-extension ".tsx")))
+
+    ;; The rest of the definitions are in alphabetical order.
 
     ("Assembly" asm-mode nasm-mode)
     ("Bazel" bazel-mode)
@@ -80,14 +89,14 @@
      html-helper-mode html-mode mhtml-mode nxhtml-mode
      (web-mode (web-mode-content-type "html") (web-mode-engine "none")))
     ("Java" java-mode)
+    ("JSON"
+     json-mode
+     (web-mode (web-mode-content-type "json") (web-mode-engine "none")))
     ("JavaScript"
      (js-mode (flow-minor-mode nil))
      (js2-mode (flow-minor-mode nil))
      (js3-mode (flow-minor-mode nil))
      (web-mode (web-mode-content-type "javascript") (web-mode-engine "none")))
-    ("JSON"
-     json-mode
-     (web-mode (web-mode-content-type "json") (web-mode-engine "none")))
     ("JSX"
      js2-jsx-mode jsx-mode rjsx-mode react-mode
      (web-mode (web-mode-content-type "jsx") (web-mode-engine "none")))

@@ -1,7 +1,7 @@
 ;;; clojure-mode.el --- Major mode for Clojure code -*- lexical-binding: t; -*-
 
-;; Copyright © 2007-2019 Jeffrey Chu, Lennart Staflin, Phil Hagelberg
-;; Copyright © 2013-2019 Bozhidar Batsov, Artur Malabarba
+;; Copyright © 2007-2020 Jeffrey Chu, Lennart Staflin, Phil Hagelberg
+;; Copyright © 2013-2020 Bozhidar Batsov, Artur Malabarba
 ;;
 ;; Authors: Jeffrey Chu <jochu0@gmail.com>
 ;;       Lennart Staflin <lenst@lysator.liu.se>
@@ -9,9 +9,9 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20191112.1948
+;; Package-Version: 20200320.955
 ;; Keywords: languages clojure clojurescript lisp
-;; Version: 5.11.0
+;; Version: 5.12.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is not part of GNU Emacs.
@@ -1889,6 +1889,11 @@ content) are considered part of the preceding sexp."
       (zero-or-one (any ":'")) ;; (in-ns 'foo) or (ns+ :user)
       (group (one-or-more (not (any "()\"" whitespace))) symbol-end)))
 
+(make-obsolete-variable 'clojure-namespace-name-regex 'clojure-namespace-regexp "5.12.0")
+
+(defconst clojure-namespace-regexp
+  (rx line-start "(" (? "clojure.core/") (or "in-ns" "ns" "ns+")))
+
 (defcustom clojure-cache-ns nil
   "Whether to cache the results of `clojure-find-ns'.
 
@@ -1912,9 +1917,16 @@ DIRECTION is `forward' or `backward'."
                 #'search-forward-regexp
               #'search-backward-regexp)))
     (while (and (not candidate)
-                (funcall fn clojure-namespace-name-regex nil t))
-      (unless (or (clojure--in-string-p) (clojure--in-comment-p))
-        (setq candidate (match-string-no-properties 4))))
+                (funcall fn clojure-namespace-regexp nil t))
+      (let ((end (match-end 0)))
+        (save-excursion
+          (save-match-data
+            (goto-char end)
+            (clojure-forward-logical-sexp)
+            (when (and (looking-back clojure--sym-regexp end 'greedy)
+                       (not (clojure--in-string-p))
+                       (not (clojure--in-comment-p)))
+              (setq candidate (match-string-no-properties 0)))))))
     candidate))
 
 (defun clojure-find-ns ()
@@ -1983,7 +1995,7 @@ Returns a list pair, e.g. (\"defn\" \"abc\") or (\"deftest\" \"some-test\")."
 \"Non-logical\" sexp are ^metadata and #reader.macros."
   (comment-normalize-vars)
   (comment-forward (point-max))
-  (looking-at-p "\\^\\|#:?:?[[:alpha:]]"))
+  (looking-at-p "\\(?:#?\\^\\)\\|#:?:?[[:alpha:]]"))
 
 (defun clojure-forward-logical-sexp (&optional n)
   "Move forward N logical sexps.
