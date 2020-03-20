@@ -1,11 +1,11 @@
-;;; init-open-recentf.el --- Open recentf immediately after Emacs is started -*- coding: utf-8 ; lexical-binding: t -*-
+;;; init-open-recentf.el --- Invoke a command immediately after startup -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015 USAMI Kenta
+;; Copyright (C) 2020 USAMI Kenta
 
 ;; Author: USAMI Kenta <tadsan@zonu.me>
 ;; Created: 26 Oct 2015
 ;; Version: 0.0.1
-;; Package-Version: 20161206.1445
+;; Package-Version: 20200320.1636
 ;; Homepage: https://github.com/zonuexe/init-open-recentf.el
 ;; Keywords: files recentf after-init-hook
 ;; Package-Requires: ((emacs "24.4"))
@@ -54,6 +54,11 @@
 (require 'cl-lib)
 (require 'recentf)
 
+(eval-when-compile
+  (declare-function anything-recentf "anything.el" () t)
+  (declare-function counsel-recentf "counsel.el" () t)
+  (declare-function helm-recentf "helm-for-files.el" () t))
+
 (defgroup init-open-recentf nil
   "init-open-recentf"
   :group 'initialization)
@@ -91,7 +96,7 @@
     found-files))
 
 (defun init-open-recentf-interface ()
-  ""
+  "Return the symbol of the detected Emacs user interface mode."
   (or init-open-recentf-interface
       (cond
        ((and (boundp 'helm-mode) helm-mode) 'helm)
@@ -111,7 +116,7 @@
       ((anything) (anything-recentf))
       ((default) (recentf-open-files)))))
 
-(defun init-open-recentf-open (&rest dummy-args)
+(defun init-open-recentf-open (&rest _dummy-args)
   "If files are opened, does nothing.  Open recentf otherwise.
 `DUMMY-ARGS' is ignored."
   (prog2

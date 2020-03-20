@@ -4,7 +4,7 @@
 
 ;; Author: Nicholas Vollmer <progfolio@protonmail.com>
 ;; URL: https://github.com/progfolio/doct
-;; Package-Version: 20200318.103
+;; Package-Version: 20200320.1828
 ;; Created: December 10, 2019
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "25.1"))
@@ -1121,7 +1121,7 @@ returns:
 
 Normally template \"Four\" would throw an error because its :keys are not a string."
 
-  (let* ((entries (mapcar #'doct--maybe-convert-declaration declarations)))
+  (let* ((entries (mapcar #'doct--maybe-convert-declaration (copy-tree declarations))))
     (unwind-protect
         (progn
           (run-hook-with-args 'doct-after-conversion-functions entries)

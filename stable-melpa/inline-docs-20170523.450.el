@@ -2,7 +2,6 @@
 
 ;; Author: stardiviner <numbchild@gmail.com>
 ;; Keywords: inline docs overlay
-;; Package-Version: 20170523.450
 ;; URL: https://github.com/stardiviner/inline-docs.el
 ;; Created: 20th Jan 2017
 ;; Version: 1.0.1

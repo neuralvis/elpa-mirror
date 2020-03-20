@@ -180,6 +180,7 @@ notify me of any missing package or change you would like to see.
     sesman
     shell-script-mode
     show-paren-mode
+    skewer-mode
     smart-mode-line
     smartparens
     smerge
