@@ -15,4 +15,3 @@ The following might work but aren't fully tested:
 - i3
 
 Compatibility is only guaranteed with use of an X desktop session.
-

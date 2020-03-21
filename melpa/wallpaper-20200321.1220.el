@@ -4,7 +4,7 @@
 
 ;; Author: Farlado <farlado@sdf.org>
 ;; URL: https://github.com/farlado/emacs-wallpaper
-;; Package-Version: 20200321.1157
+;; Package-Version: 20200321.1220
 ;; Keywords: unix, wallpaper, extensions
 ;; Version: 1.1.3
 ;; Package-Requires: ((emacs "25.1"))
@@ -45,8 +45,8 @@
 ;; - i3
 ;;
 ;; Compatibility is only guaranteed with use of an X desktop session.
-
 
+
 ;;; Code:
 
 (unless (executable-find "feh")
