@@ -1,0 +1,2 @@
+
+(ivy-emoji . [(20200316 2351) ((emacs (26 1)) (ivy (0 13 0))) "Insert emojis with ivy" single ((:commit . "c3af95a4776231b4e8e6712df90dd6dc3276bd51") (:keywords "emoji" "ivy" "convenience") (:authors ("Gabriele Bozzola" . "sbozzolator@gmail.com")) (:maintainer "Gabriele Bozzola" . "sbozzolator@gmail.com") (:url . "https://github.com/sbozzolo/ivy-emoji.git"))])
