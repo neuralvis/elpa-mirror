@@ -4,7 +4,7 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-smeargle
-;; Package-Version: 20161212.2358
+;; Package-Version: 20200321.151
 ;; Version: 0.03
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -132,7 +132,7 @@
             (forward-line (- end-line start-line))
             (setq curline end-line)
             (let ((ov (make-overlay start (point))))
-              (overlay-put ov 'face `(:background ,color))
+              (overlay-put ov 'face `(:background ,color :extend t))
               (overlay-put ov 'smeargle t))))))))
 
 (defun smeargle--blame-command (repo-type)
@@ -180,7 +180,7 @@
            (smeargle--highlight update-info curbuf colors)
            (kill-buffer proc-buf)))))))
 
-(defsubst smergle--process-buffer (bufname)
+(defsubst smeargle--process-buffer (bufname)
   (get-buffer-create (format " *smeargle-%s*" bufname)))
 
 (defsubst smeargle--repo-type ()
@@ -205,7 +205,7 @@
     (unless repo-type
       (user-error "Here is not 'git' or 'mercurial' repository"))
     (smeargle--start-blame-process
-     repo-type (smergle--process-buffer (buffer-file-name))
+     repo-type (smeargle--process-buffer (buffer-file-name))
      (or update-type 'by-time))))
 
 ;;;###autoload

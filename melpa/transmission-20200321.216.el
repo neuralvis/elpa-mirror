@@ -4,7 +4,7 @@
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 0.12.1
-;; Package-Version: 20200215.1350
+;; Package-Version: 20200321.216
 ;; Package-Requires: ((emacs "24.4") (let-alist "1.0.5"))
 ;; Keywords: comm, tools
 
@@ -338,7 +338,7 @@ caching built in or is otherwise slow."
 (defun transmission--move-to-content ()
   "Move the point to beginning of content after the headers."
   (setf (point) (point-min))
-  (re-search-forward "\r?\n\r?\n" nil t))
+  (re-search-forward "^\r?\n" nil t))
 
 (defun transmission--content-finished-p ()
   "Return non-nil if all of the content has arrived."
@@ -356,8 +356,8 @@ A 409 response from a Transmission session includes the
 update `transmission-session-id' and signal the error."
   (save-excursion
     (goto-char (point-min))
-    (skip-chars-forward "HTTP/")
-    (skip-chars-forward "[0-9].")
+    (forward-char 5) ; skip "HTTP/"
+    (skip-chars-forward "0-9.")
     (let* ((buffer (current-buffer))
            (status (read buffer)))
       (pcase status
@@ -778,7 +778,7 @@ NOW is a time, defaulting to `current-time'."
 (defun transmission-tracker-url-p (str)
   "Return non-nil if STR is not just a number."
   (let ((match (string-match "[^[:blank:]]" str)))
-    (when match (null (< ?0 (aref str match) ?9)))))
+    (when match (null (<= ?0 (aref str match) ?9)))))
 
 (defun transmission-tracker-stats (id)
   "Return the \"trackerStats\" array for torrent id ID."

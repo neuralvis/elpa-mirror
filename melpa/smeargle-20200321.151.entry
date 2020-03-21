@@ -1,0 +1,2 @@
+
+(smeargle . [(20200321 151) ((emacs (24 3))) "Highlighting region by last updated time" single ((:commit . "b851442b58cfe692aee99493cb0c08d63b4f9c94") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Syohei YOSHIDA" . "syohex@gmail.com") (:url . "https://github.com/syohex/emacs-smeargle"))])
