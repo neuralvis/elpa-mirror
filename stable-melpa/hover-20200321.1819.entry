@@ -1,0 +1,2 @@
+
+(hover . [(20200321 1819) ((emacs (24 5))) "Package to use hover with flutter" single ((:commit . "cf1cd543f68525732e0a9178c96a5f83a3cabc7f") (:keywords "hover" "flutter" "mobile" "tools") (:authors ("Eric Dallo")) (:maintainer "Eric Dallo") (:url . "https://github.com/ericdallo/hover.el"))])

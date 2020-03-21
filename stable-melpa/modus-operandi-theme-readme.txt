@@ -176,6 +176,7 @@ notify me of any missing package or change you would like to see.
     regexp-builder (also known as `re-builder')
     rmail
     ruler-mode
+    sallet
     selectrum
     sesman
     shell-script-mode

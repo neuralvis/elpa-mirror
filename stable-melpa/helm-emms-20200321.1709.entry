@@ -1,0 +1,2 @@
+
+(helm-emms . [(20200321 1709) ((helm (1 5)) (emms (0 0)) (cl-lib (0 5)) (emacs (24 1))) "Emms for Helm." single ((:commit . "b76694eb58ddc5d3715a56047b2acfed459e8f19") (:url . "https://github.com/emacs-helm/helm-emms"))])
