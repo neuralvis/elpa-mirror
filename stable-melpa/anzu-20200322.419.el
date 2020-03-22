@@ -1,10 +1,11 @@
 ;;; anzu.el --- Show number of matches in mode-line while searching -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016 by Syohei YOSHIDA
+;; Copyright (C) 2016-2020 Syohei YOSHIDA and Neil Okamoto
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
-;; URL: https://github.com/syohex/emacs-anzu
-;; Package-Version: 20200320.2215
+;; Maintainer: Neil Okamoto <neil.okamoto+melpa@gmail.com>
+;; URL: https://github.com/emacsorphanage/anzu
+;; Package-Version: 20200322.419
 ;; Version: 0.62
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -380,7 +381,7 @@
 
 ;; Return highlighted count
 (defun anzu--count-and-highlight-matched (buf str replace-beg replace-end
-                                          use-regexp overlay-limit case-sensitive)
+                                              use-regexp overlay-limit case-sensitive)
   (anzu--cleanup-markers)
   (when (not use-regexp)
     (setq str (regexp-quote str)))
@@ -870,5 +871,6 @@
 (provide 'anzu)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
+;; fill-column: 85
 ;; End:
 ;;; anzu.el ends here
