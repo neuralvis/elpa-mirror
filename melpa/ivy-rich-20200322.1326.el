@@ -4,7 +4,7 @@
 
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.5") (ivy "0.8.0"))
-;; Package-Version: 20200322.829
+;; Package-Version: 20200322.1326
 ;; Version: 0.1.6
 ;; Keywords: ivy
 
@@ -147,11 +147,6 @@ without duplicating definitions.
 
 Note that you may need to disable and enable the `ivy-rich-mode'
 again to make this variable take effect.")
-(define-obsolete-variable-alias
-  'ivy-rich--display-transformers-list
-  'ivy-rich-display-transformers-list
-  "0.1.2"
-  "Used `ivy-rich-display-transformers-list' instead.")
 
 ;; Common Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defalias 'ivy-rich-candidate 'identity)

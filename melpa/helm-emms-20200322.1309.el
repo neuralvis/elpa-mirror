@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012 ~ 2014 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; Version: 1.3
-;; Package-Version: 20200321.1709
+;; Package-Version: 20200322.1309
 ;; Package-Requires: ((helm "1.5") (emms "0.0") (cl-lib "0.5") (emacs "24.1"))
 
 ;; X-URL: https://github.com/emacs-helm/helm-emms
@@ -123,7 +123,8 @@ Use `emms-streams-built-in-list' entries as default."
     :action '(("Play" . emms-play-url)
               ("Add new stream (C-u play)" . helm-emms-add-new-stream)
               ("Delete stream(s)" . helm-emms-delete-stream))
-    :filtered-candidate-transformer 'helm-adaptive-sort))
+    :filtered-candidate-transformer 'helm-adaptive-sort
+    :group 'helm-emms))
 
 (defun helm-emms-add-new-stream (_candidate)
   "Action to add a new stream to `helm-emms-streams-list'."
@@ -188,7 +189,8 @@ Use `emms-streams-built-in-list' entries as default."
                       do (helm-emms-add-directory-to-playlist dir))))) 
       ("Open dired in file's directory" . (lambda (directory)
                                             (helm-open-dired directory))))
-    :filtered-candidate-transformer '(helm-emms-dired-transformer helm-adaptive-sort)))
+    :filtered-candidate-transformer '(helm-emms-dired-transformer helm-adaptive-sort)
+    :group 'helm-emms))
 
 (defun helm-emms-walk-directory (dir)
   "The default function to recursively find directories in music directory."
@@ -337,7 +339,8 @@ Returns nil when no music files are found."
                    (helm-emms-add-files-to-playlist
                     (helm-marked-candidates))))
               ("Delete tracks from playlist"
-               . helm-emms-delete-tracks))))
+               . helm-emms-delete-tracks))
+    :group 'helm-emms))
 
 (defun helm-emms-goto-track (candidate)
   (let ((track (emms-track 'file (expand-file-name candidate))))
