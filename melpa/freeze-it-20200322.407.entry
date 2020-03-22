@@ -1,2 +1,0 @@
-
-(freeze-it . [(20200322 407) ((emacs (24 5))) "Minor mode to make your previous writing read-only" single ((:commit . "6cfe9915670532443c068d58c89466d7d83e6f39") (:keywords "wp" "text") (:authors ("William Rankin" . "code@william.bydasein.com")) (:maintainer "William Rankin" . "code@william.bydasein.com") (:url . "https://github.com/rnkn/freeze-it"))])

@@ -1,0 +1,2 @@
+
+(amread-mode . [(20200322 843) ((emacs (24 3)) (cl-lib (0 6 1))) "A minor mode helper user speed-reading" single ((:commit . "76ebe8d56b4d19f2bf75f54479f0e7ecc9cbaac9") (:keywords "wp") (:url . "https://github.com/stardiviner/amread-mode"))])
