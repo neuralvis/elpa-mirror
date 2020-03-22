@@ -1,0 +1,2 @@
+
+(company-native-complete . [(20200315 2144) ((emacs (25 1)) (company (0 9 0)) (native-complete (0 1 0))) "Company completion using native-complete" single ((:commit . "47fa8283f5bc06d46ef2e08cc9f149d4cb1c3681") (:authors ("Troy Hinckley" . "troy.hinckley@gmail.com")) (:maintainer "Troy Hinckley" . "troy.hinckley@gmail.com") (:url . "https://github.com/CeleritasCelery/emacs-native-shell-complete"))])

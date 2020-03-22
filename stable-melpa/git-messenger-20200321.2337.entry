@@ -1,0 +1,2 @@
+
+(git-messenger . [(20200321 2337) ((emacs (24 3)) (popup (0 5 3))) "Popup last commit of current line" single ((:commit . "f9249b1224c2246e5f1f38bbbcace0761ea1e267") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Neil Okamoto") (:url . "https://github.com/emacsorphanage/git-messenger"))])
