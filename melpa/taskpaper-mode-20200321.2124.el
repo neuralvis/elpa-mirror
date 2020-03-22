@@ -5,7 +5,7 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20200319.1738
+;; Package-Version: 20200321.2124
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -699,7 +699,7 @@ Group 3 matches the optional tag value without enclosing parentheses.")
    "\\("
    "\\<file:\\(?:\\\\ \\|[^ \0\n]\\)+"
    "\\|"
-   "\\(?:[.]\\{1,2\\}\\|~\\|[a-zA-Z]:\\)?[/]\\(?:\\\\ \\|[^ \0\n]\\)*"
+   "\\(?:~\\|[.]\\{1,2\\}\\|[a-zA-Z]:\\)?[/]\\(?:\\\\ \\|[^ \0\n]\\)+"
    "\\)")
   "Regular expression for file path.")
 
