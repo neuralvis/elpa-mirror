@@ -1,2 +1,0 @@
-
-(nnhackernews . [(20200317 1404) ((emacs (25 2)) (request (20190819)) (dash (20190401)) (dash-functional (20180107)) (anaphora (20180618))) "Gnus backend for Hacker News" single ((:commit . "c9b301e8b0e4d750ca7e41f946f8423ec35ace15") (:keywords "news") (:url . "https://github.com/dickmao/nnhackernews"))])
