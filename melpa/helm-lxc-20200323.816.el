@@ -4,7 +4,7 @@
 
 ;; Author: montag451
 ;; URL: https://github.com/montag451/helm-lxc
-;; Package-Version: 20200321.1825
+;; Package-Version: 20200323.816
 ;; Keywords: helm, lxc, convenience
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "25") (cl-lib "0.5") (helm "2.9.4") (lxc-tramp "0.2.0"))
@@ -313,7 +313,6 @@ and CLEAR-CACHE arguments."
          (use-ssh (and helm-lxc-attach-with-ssh ip))
          (attach-method (or (and use-ssh "ssh") "lxc"))
          (attach-user (or (and use-ssh helm-lxc-attach-ssh-user)
-                          (and (not host) user-login-name)
                           "root"))
          (attach-host (or (and use-ssh ip) name))
          (default-directory (concat

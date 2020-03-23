@@ -175,6 +175,8 @@ notify me of any missing package or change you would like to see.
     rainbow-identifiers
     rainbow-delimiters
     regexp-builder (also known as `re-builder')
+    rg
+    ripgrep
     rmail
     ruler-mode
     sallet
