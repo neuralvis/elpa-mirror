@@ -162,6 +162,7 @@ notify me of any missing package or change you would like to see.
     outline-mode
     outline-minor-faces
     package (M-x list-packages)
+    paradox
     paren-face
     pass
     persp-mode

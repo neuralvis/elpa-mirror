@@ -1,0 +1,2 @@
+
+(dired-k . [(20200322 2035) ((emacs (24 3))) "Highlight dired by size, date, git status" tar ((:commit . "701b3a51e83a14726ef0c89c6cd423d4c80a3c39") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Neil Okamoto" . "neil.okamoto+melpa@gmail.com") (:url . "https://github.com/emacsorphanage/dired-k"))])

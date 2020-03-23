@@ -1,2 +1,0 @@
-
-(ivy-todo . [(20200321 2153) ((ivy (0 8 0)) (emacs (25))) "Manage org-mode TODOs with ivy" single ((:commit . "d5a1537297a622dfdcdb2c6e24d410e59a49df83") (:keywords "convenience") (:authors ("Erik Sjöstrand" . "sjostrand.erik@gmail.com")) (:maintainer "Erik Sjöstrand" . "sjostrand.erik@gmail.com") (:url . "http://github.com/Kungsgeten/ivy-todo"))])
