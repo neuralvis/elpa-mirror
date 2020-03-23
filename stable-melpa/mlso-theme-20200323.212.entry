@@ -1,0 +1,2 @@
+
+(mlso-theme . [(20200323 212) ((emacs (24))) "A dark, medium contrast theme" single ((:commit . "8b8c8c4f336898a0b6f2eb44b462c93f31c355dd") (:authors ("github.com/Mulling")) (:maintainer "github.com/Mulling") (:url . "https://github.com/Mulling/mlso-theme"))])

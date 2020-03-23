@@ -1,0 +1,2 @@
+
+(msgpack . [(20200323 515) ((emacs (25 1))) "Read and write MessagePack object" single ((:commit . "e2a0d76d1087bc8178c9f27222cb9b93e2e815ec") (:keywords "lisp") (:authors ("Xu Chunyang")) (:maintainer "Xu Chunyang") (:url . "https://github.com/xuchunyang/msgpack.el"))])
