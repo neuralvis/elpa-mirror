@@ -1,0 +1,2 @@
+
+(npm . [(20200322 1137) ((emacs (25 1)) (transient (0 1 0))) "Run your npm workflows" single ((:commit . "4e36e6b34d6ba9ad13f6995240b604fe7df142ce") (:keywords "tools") (:authors ("Shane Kennedy")) (:maintainer "Shane Kennedy") (:url . "https://github.com/shaneikennedy/npm.el"))])
