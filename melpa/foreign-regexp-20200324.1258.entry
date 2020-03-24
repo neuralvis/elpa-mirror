@@ -1,0 +1,2 @@
+
+(foreign-regexp . [(20200324 1258) nil "search and replace by foreign regexp." tar ((:commit . "cc8c784b12e6abd093f4afc9b23cf18bfbb488c6") (:keywords "convenience" "emulations" "matching" "tools" "unix" "wp") (:authors ("K-talo Miyazaki <Keitaro dot Miyazaki at gmail dot com>")) (:maintainer "K-talo Miyazaki <Keitaro dot Miyazaki at gmail dot com>"))])

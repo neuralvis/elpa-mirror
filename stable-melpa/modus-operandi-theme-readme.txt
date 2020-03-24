@@ -17,6 +17,7 @@ are disabled by default:
     modus-operandi-theme-proportional-fonts
     modus-operandi-theme-scale-headings
     modus-operandi-theme-visible-fringes
+    modus-operandi-theme-distinct-org-blocks
 
 The default scale is as follows (it can be customised as well):
 

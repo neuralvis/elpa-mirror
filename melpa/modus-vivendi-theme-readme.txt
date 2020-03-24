@@ -17,6 +17,7 @@ are disabled by default:
     modus-vivendi-theme-proportional-fonts
     modus-vivendi-theme-scale-headings
     modus-vivendi-theme-visible-fringes
+    modus-vivendi-theme-distinct-org-blocks
 
 The default scale is as follows (it can be customised as well):
 
