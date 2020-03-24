@@ -101,6 +101,7 @@ notify me of any missing package or change you would like to see.
     flymake
     flyspell
     flyspell-correct
+    freeze-it
     frog-menu
     focus
     fold-this
@@ -118,6 +119,7 @@ notify me of any missing package or change you would like to see.
     helm-xref
     highlight-blocks
     highlight-defined
+    highlight-escape-sequences (`hes-mode')
     highlight-numbers
     highlight-thing
     hl-fill-column
@@ -185,6 +187,7 @@ notify me of any missing package or change you would like to see.
     sesman
     shell-script-mode
     show-paren-mode
+    side-notes
     skewer-mode
     smart-mode-line
     smartparens

@@ -2,7 +2,7 @@
 
 ;; Author: wouter bolsterlee <wouter@bolsterl.ee>
 ;; Keywords: languages
-;; Package-Version: 20190817.1754
+;; Package-Version: 20200324.930
 ;; URL: https://github.com/wbolster/emacs-python-black
 ;; Package-Requires: ((emacs "25") (dash "2.16.0") (reformatter "0.3"))
 ;; Version: 1.0.0
@@ -65,7 +65,7 @@ DISPLAY-ERRORS is non-nil, shows a buffer if the formatting fails."
                       (python-nav-end-of-statement)
                       (line-end-position)))
                (non-empty? (not (= beg end))))
-    (python-black-region beg (1+ end) display-errors)))
+    (python-black-region beg (min (point-max) (1+ end)) display-errors)))
 
 ;;;###autoload
 (defun python-black-partial-dwim (&optional display-errors)

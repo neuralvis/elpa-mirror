@@ -4,7 +4,7 @@
 
 ;; Author: Mihai Olteanu <mihai_olteanu@fastmail.fm>
 ;; Version: 1.0
-;; Package-Version: 20200321.740
+;; Package-Version: 20200324.827
 ;; Package-Requires: ((emacs "26.1") (lastfm "1.1") (versuri "1.0") (s "1.12.0") (bind-key "2.4") (mpv "0.1.0"))
 ;; Keywords: multimedia
 ;; URL: https://github.com/mihaiolteanu/vuiet
@@ -501,7 +501,7 @@ with the same generator."
                    (run-at-time vuiet-scrobble-timeout nil
                                 #'vuiet--scrobble-track item)
                    (setq-default mode-line-misc-info
-                                 (format "%s - %s        "  artist name))
+                    (list (format "%s - %s        "  artist name)))
                    (vuiet--play-track item)))
     (cons (cl-case (type-of (car item))
             ;; A list of '(("artist1" "song1") ("artist2" "song2") ...)
@@ -560,14 +560,23 @@ artist or the given list of artists."
 
 (defun vuiet-play-artist-similar (artists)
   "Play tracks from artists similar to ARTISTS.
+
+If called directly, ARTISTS is a list of strings of the form
+'(artist1 artist2 etc.)
+
+If called interactively, multiple artists can be provided in the
+minibuffer if they are sepparated by commas.
+
 Random tracks from random artists similar to one of the ARTISTS
-are played.
-The number of similar artists taken into account is equal to
-VUIET-ARTIST-SIMILAR-LIMIT and the number of tracks is equal to
-VUIET-ARTIST-TRACKS-LIMIT."
+are played.  The number of similar artists taken into account is
+equal to VUIET-ARTIST-SIMILAR-LIMIT and the number of tracks is
+equal to VUIET-ARTIST-TRACKS-LIMIT."
   (interactive "sArtist(s): ")
   (vuiet-play (vuiet--artists-similar-tracks
-               (mapcar #'s-trim (s-split "," artists)))))
+               (if (stringp artists)
+                   ;; The function was called interactively.
+                   (mapcar #'s-trim (s-split "," artists))
+                 artists))))
 
 (defun vuiet-play-playing-artist-similar ()
   "Play tracks from artists similar to the playing artist.
@@ -597,14 +606,23 @@ the list of TAGS."
 
 (defun vuiet-play-tag-similar (tags)
   "Play tracks from artists similar to TAGS.
+
+If called directly, TAGS is a list of strings of the form '(tag1
+tag2 etc.)
+
+If called interactively, multiple tags can be provided in the
+minibuffer if they are sepparated by commas.
+
 Random tracks from random artists that have tags equal to one of
-the TAGS are played.
-The number of artists with the given tag taken into account is
-equal to VUIET-TAG-ARTISTS-LIMIT while the number of tracks is
-equal to VUIET-ARTIST-TRACKS-LIMIT."
+the TAGS are played.  The number of artists with the given tag
+taken into account is equal to VUIET-TAG-ARTISTS-LIMIT while the
+number of tracks is equal to VUIET-ARTIST-TRACKS-LIMIT."
   (interactive "sTag(s): ")
   (vuiet-play (vuiet--tags-similar-tracks
-               (mapcar #'s-trim (s-split "," tags)))))
+               (if (stringp tags)
+                   ;; The function was called interactively.
+                   (mapcar #'s-trim (s-split "," tags))
+                 tags))))
 
 (defun vuiet-play-playing-tags-similar ()
   "Play tracks from artists with similar tags as the current tags.
