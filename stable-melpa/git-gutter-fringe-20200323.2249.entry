@@ -1,0 +1,2 @@
+
+(git-gutter-fringe . [(20200323 2249) ((git-gutter (0 88)) (fringe-helper (0 1 1)) (cl-lib (0 5)) (emacs (24))) "Fringe version of git-gutter.el" single ((:commit . "b7cf082716f3b6c2b666b53576b2f43f18b2fd04") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Neil Okamoto" . "neil.okamoto+melpa@gmail.com") (:url . "https://github.com/emacsorphanage/git-gutter-fringe"))])
