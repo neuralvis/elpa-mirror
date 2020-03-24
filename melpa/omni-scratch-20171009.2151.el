@@ -5,7 +5,6 @@
 ;; Author: Adrien Becchis <adriean.khisbe@live.fr>
 ;; Created:  2014-07-27
 ;; Version: 0.6.0
-;; Package-Version: 20171009.2151
 ;; Keywords: convenience, languages, tools
 ;; Url: https://github.com/AdrieanKhisbe/omni-scratch.el
 
