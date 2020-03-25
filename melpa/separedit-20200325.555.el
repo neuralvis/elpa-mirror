@@ -5,7 +5,7 @@
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; Created: 2019/04/06
 ;; Version: 0.2.0
-;; Package-Version: 20200324.1231
+;; Package-Version: 20200325.555
 ;; Package-Requires: ((emacs "24.4") (dash "2.0") (edit-indirect "0.1.5"))
 ;; URL: https://github.com/twlz0ne/separedit.el
 ;; Keywords: tools languages docs
@@ -185,7 +185,7 @@ Taken from `markdown-code-lang-modes'."
   :type 'alist)
 
 (defcustom separedit-not-support-docstring-modes
-  '(c-mode c++-mode java-mode js-mode rust-mode rustic-mode)
+  '(c-mode c++-mode java-mode js-mode rust-mode rustic-mode typescript-mode)
   "A list of modes not support docstring."
   :group 'separedit
   :type 'list)
@@ -200,7 +200,8 @@ Taken from `markdown-code-lang-modes'."
                           js-mode
                           objc-mode
                           php-mode
-                          swift-mode))
+                          swift-mode
+                          typescript-mode))
     (("//+!" "//+" "\\*+") . (rust-mode
                               rustic-mode))
     (("--")            . (applescript-mode haskell-mode lua-mode))
@@ -228,7 +229,8 @@ Taken from `markdown-code-lang-modes'."
                                php-mode
                                rust-mode
                                rustic-mode
-                               swift-mode))
+                               swift-mode
+                               typescript-mode))
     (("{-" "-}")       . haskell-mode)
     (("{" "}")         . pascal-mode)
     (("(\\*" "\\*)")       . (applescript-mode fsharp-mode ocaml-mode))
@@ -385,8 +387,9 @@ Return nil if reached the end of the buffer."
 
 (defcustom separedit-string-quotes-alist
   '((python-mode     . ("\"\"\"" "'''" "\"" "'"))
-    (js-mode         . ("\"" "'"))
+    (js-mode         . ("\"" "'" "`"))
     (nix-mode        . ("''" "\""))
+    (typescript-mode . ("\"" "'" "`"))
     (separedit-double-quote-string-mode . t)
     (separedit-single-quote-string-mode . ("'"))
     (t               . ("\"")))

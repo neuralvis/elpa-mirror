@@ -1,23 +1,13 @@
 ;;; bifocal.el --- Split-screen scrolling for comint-mode buffers -*- lexical-binding: t -*-
 
-;; Authors: Chris Rayner (dchrisrayner @ gmail)
+;; Authors: Chris Rayner (dchrisrayner@gmail.com)
 ;; Created: May 23 2011
 ;; Keywords: frames, processes
-;; Package-Version: 20190623.2236
+;; Package-Version: 20200325.539
 ;; URL: https://github.com/riscy/bifocal-mode
+;; SPDX-License-Identifier: GPL-3.0-or-later
 ;; Package-Requires: ((emacs "24.4"))
-;; Version: 0.0.5
-
-;; This file is free software; you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free Software
-;; Foundation; either version 3, or (at your option) any later version.
-
-;; This file is distributed in the hope that it will be useful, but WITHOUT ANY
-;; WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-;; A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License along with
-;; this file.  If not, see <https://www.gnu.org/licenses/>.
+;; Version: 0.0.6
 
 ;;; Commentary:
 
@@ -165,8 +155,10 @@ the head window.  If HOME is non-nil, scroll to the top."
   (bifocal--unset-dedicated-windows)
   (bifocal--unset-scroll-options)
   (when (bifocal--find-head)
-    ;; removing head instead of tail keeps the cursor in place
-    (delete-window bifocal--head))
+    ;; removing the tail always maintains window size, but could move the point:
+    (let ((pt (save-window-excursion (select-window bifocal--tail) (point))))
+      (delete-window bifocal--tail)
+      (goto-char pt)))
   (setq-local bifocal--head nil)
   (setq-local bifocal--tail nil))
 
@@ -181,6 +173,7 @@ Return nil if the head window is not identifiable."
 
 (defun bifocal--last-line-p ()
   "Whether POINT is on the last line of the buffer."
+  (declare (side-effect-free t))
   (let ((inhibit-field-text-motion t))
     (eq (point-max) (point-at-eol))))
 
@@ -205,6 +198,7 @@ If HOME is non-nil, go to `point-min' instead."
   "Confirm the relative position of two windows viewing one buffer.
 That is, START-WINDOW is selected, moving in direction DIR (via
 'windmove') selects END-WINDOW, and both view the same buffer."
+  (declare (side-effect-free t))
   (and (eq (selected-window) start-window)
        (let ((dir-window (windmove-find-other-window dir)))
          (and (eq dir-window end-window)
@@ -212,10 +206,12 @@ That is, START-WINDOW is selected, moving in direction DIR (via
 
 (defun bifocal--point-on-head-p ()
   "Whether the point is on the head window."
+  (declare (side-effect-free t))
   (bifocal--oriented-p bifocal--head 'down bifocal--tail))
 
 (defun bifocal--point-on-tail-p ()
   "Whether the point is on the tail window."
+  (declare (side-effect-free t))
   (bifocal--oriented-p bifocal--tail 'up bifocal--head))
 
 (defun bifocal--recenter-on-last-line ()
@@ -247,6 +243,7 @@ That is, START-WINDOW is selected, moving in direction DIR (via
 
 (defun bifocal--splittable-p ()
   "Whether the current window is able to be split."
+  (declare (side-effect-free t))
   (and (bifocal--last-line-p)
        (not (bifocal--top-p))
        (or (bifocal--find-head)
@@ -254,6 +251,7 @@ That is, START-WINDOW is selected, moving in direction DIR (via
 
 (defun bifocal--top-p ()
   "Whether `point-min' is visible in this window."
+  (declare (side-effect-free t))
   (save-excursion
     (move-to-window-line 0)
     (eq (point-at-bol) (point-min))))

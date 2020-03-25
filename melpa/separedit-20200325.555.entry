@@ -1,0 +1,2 @@
+
+(separedit . [(20200325 555) ((emacs (24 4)) (dash (2 0)) (edit-indirect (0 1 5))) "Edit comment/string/docstring/code block in separate buffer" single ((:commit . "bec896a0aac7738e4d2eb2077abd494e9404dcb9") (:keywords "tools" "languages" "docs") (:authors ("Gong Qijian" . "gongqijian@gmail.com")) (:maintainer "Gong Qijian" . "gongqijian@gmail.com") (:url . "https://github.com/twlz0ne/separedit.el"))])
