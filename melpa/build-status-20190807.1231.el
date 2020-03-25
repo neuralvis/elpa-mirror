@@ -3,6 +3,7 @@
 ;; Copyright (C) 2017 Skye Shaw
 ;; Author: Skye Shaw <skye.shaw@gmail.com>
 ;; Version: 0.0.3 (unreleased)
+;; Package-Version: 20190807.1231
 ;; Keywords: mode-line, ci, circleci, travis-ci
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; URL: http://github.com/sshaw/build-status

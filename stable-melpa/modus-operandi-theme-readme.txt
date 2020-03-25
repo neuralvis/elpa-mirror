@@ -60,6 +60,7 @@ notify me of any missing package or change you would like to see.
     counsel-notmuch
     counsel-org-capture-string
     cov
+    csv-mode
     custom (M-x customize)
     dap-mode
     dashboard (emacs-dashboard)
@@ -78,11 +79,13 @@ notify me of any missing package or change you would like to see.
     diredfl
     disk-usage
     doom-modeline
+    dynamic-ruler
     easy-jekyll
     easy-kill
     ediff
     eldoc-box
     elfeed
+    elfeed-score
     emms
     enhanced-ruby-mode
     epa
@@ -113,6 +116,7 @@ notify me of any missing package or change you would like to see.
     git-gutter (and variants)
     git-lens
     git-timemachine
+    git-walktree
     gnus
     helm
     helm-ls-git
@@ -162,6 +166,7 @@ notify me of any missing package or change you would like to see.
     org-recur
     org-roam
     org-superstar
+    org-treescope
     origami
     outline-mode
     outline-minor-faces
