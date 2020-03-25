@@ -5,8 +5,8 @@
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>,
 ;; Maintainer: Neil Okamoto <neil.okamoto+melpa@gmail.com>
-;; Version: 0.4.0-SNAPSHOT
-;; Package-Version: 20200324.1909
+;; Version: 0.5.0-SNAPSHOT
+;; Package-Version: 20200324.2033
 ;; Keywords: lisp, maint, tools
 ;; Package-Requires: ((emacs "24.4") (dash "2.15.0") (package-lint "0.11"))
 ;; URL: http://github.com/gonewest818/elisp-lint/
@@ -48,7 +48,9 @@
 ;;
 ;;; Change Log:
 ;;
-;; * Version 0.4-SNAPSHOT (available in MELPA)
+;; * Version 0.5-SNAPSHOT (MELPA)
+;;    - no changes yet
+;; * Version 0.4 (MELPA Stable, March 2020)
 ;;    - Provide a summary report of all tests [#20]
 ;;    - Integrate 'package-lint' [#19]
 ;;    - Remove 'package-format', as 'package-lint' covers the same territory
@@ -57,7 +59,7 @@
 ;;    - Make 'fill-column' checker ignore the package requires header
 ;;    - Add dependency on 'dash.el'
 ;;    - Colorized output
-;; * Version 0.3 (MELPA Stable, as of December 2019)
+;; * Version 0.3 (December 2019)
 ;;    - Emacs 23 support is deprecated [#13]
 ;;    - Adopt CircleCI and drop Travis CI [#9] [#14]
 ;;    - Add 'check-declare' validator [#16]

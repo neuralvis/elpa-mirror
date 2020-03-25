@@ -2,7 +2,7 @@
 
 ;; Author: Abdulla Bubshait
 ;; URL: https://github.com/darkstego/wakib-keys/
-;; Package-Version: 20190910.1011
+;; Package-Version: 20200324.2049
 ;; Created: 6 April 2018
 ;; Keywords: convenience, keybindings, keys
 ;; License: GPL v3
@@ -400,7 +400,7 @@ Then add C-d and C-e to KEYMAP"
     ("C-n" . wakib-new-empty-buffer)
     ("C-o" . find-file)
     ("C-S-o" . revert-buffer)
-    ("C-w" . kill-this-buffer)
+    ("C-w" . kill-current-buffer)
     ("C-q" . save-buffers-kill-terminal)
     ("C-<next>" . next-buffer)
     ("C-<prior>" . previous-buffer)
