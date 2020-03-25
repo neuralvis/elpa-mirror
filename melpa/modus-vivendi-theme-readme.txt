@@ -194,6 +194,7 @@ notify me of any missing package or change you would like to see.
     smartparens
     smerge
     speedbar
+    stripes
     suggest
     swiper
     sx
