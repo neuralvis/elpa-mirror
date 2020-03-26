@@ -5,7 +5,7 @@
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; Maintainer: Neil Okamoto <neil.okamoto+melpa@gmail.com>
 ;; URL: https://github.com/emacsorphanage/git-gutter
-;; Package-Version: 20200323.1821
+;; Package-Version: 20200326.13
 ;; Version: 0.90
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -375,12 +375,12 @@ gutter information of other windows."
                (setq git-gutter:enabled t)))
            (kill-buffer proc-buf)))))))
 
-(defsubst git-gutter:gutter-sperator ()
+(defsubst git-gutter:gutter-seperator ()
   (when git-gutter:separator-sign
     (propertize git-gutter:separator-sign 'face 'git-gutter:separator)))
 
 (defun git-gutter:before-string (sign)
-  (let ((gutter-sep (concat sign (git-gutter:gutter-sperator))))
+  (let ((gutter-sep (concat sign (git-gutter:gutter-seperator))))
     (propertize " " 'display `((margin left-margin) ,gutter-sep))))
 
 (defun git-gutter:propertized-sign (type)

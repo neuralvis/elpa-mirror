@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: org-mode todo tools outlines
-;; Package-Version: 20180601.242
+;; Package-Version: 20200326.214
 ;; URL: https://github.com/IvanMalison/org-projectile
 ;; Version: 0.0.1
 ;; Package-Requires: ((org "9.0.0") (emacs "24"))
@@ -99,11 +99,11 @@
        (list 'function (lambda ()
                          (occ-capture-goto-marker context))))
       (org-capture-put :target-entry-p (occ-target-entry-p strategy context))
-      (org-capture-place-template))))
+      (org-capture-place-template 't))))
 
 (defun occ-capture-goto-marker (context)
   (let ((marker (occ-get-capture-marker context)))
-    (switch-to-buffer (marker-buffer marker))
+    (set-buffer (marker-buffer marker))
     (goto-char (marker-position marker))))
 
 (defmethod occ-get-capture-marker ((context occ-context))
