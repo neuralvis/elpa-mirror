@@ -1,2 +1,2 @@
 
-(pest-mode . [(20200321 504) ((emacs (26 3))) "Major mode for editing Pest files" single ((:commit . "e71e2f2730e926ee936ff7be15d912de27547e9e") (:keywords "languages") (:authors ("ksqsf" . "i@ksqsf.moe")) (:maintainer "ksqsf" . "i@ksqsf.moe") (:url . "https://github.com/ksqsf/pest-mode"))])
+(pest-mode . [(20200321 504) ((emacs (26 3))) "Major mode for editing Pest files" single ((:commit . "4ae88a9c81d499bbe99978ff0216b645fed70023") (:keywords "languages") (:authors ("ksqsf" . "i@ksqsf.moe")) (:maintainer "ksqsf" . "i@ksqsf.moe") (:url . "https://github.com/ksqsf/pest-mode"))])

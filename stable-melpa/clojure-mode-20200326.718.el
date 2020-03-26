@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20200322.1315
+;; Package-Version: 20200326.718
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.12.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
@@ -2684,19 +2684,35 @@ lists up."
     (insert sexp)
     (clojure--replace-sexps-with-bindings-and-indent)))
 
+(defun clojure-collect-ns-aliases (ns-form)
+  "Collect all namespace aliases in NS-FORM."
+  (with-temp-buffer
+    (delay-mode-hooks
+      (clojure-mode)
+      (insert ns-form)
+      (goto-char (point-min))
+      (let ((end (point-max))
+            (rgx (rx ":as" (+ space)
+                     (group-n 1 (+ (not (in " ,]\n"))))))
+            (res ()))
+        (while (re-search-forward rgx end 'noerror)
+          (unless (or (clojure--in-string-p) (clojure--in-comment-p))
+            (push (match-string-no-properties 1) res)))
+        res))))
+
 (defun clojure--rename-ns-alias-internal (current-alias new-alias)
   "Rename a namespace alias CURRENT-ALIAS to NEW-ALIAS."
   (clojure--find-ns-in-direction 'backward)
-  (let ((rgx (concat ":as +" current-alias))
+  (let ((rgx (concat ":as +" (regexp-quote current-alias) "\\_>"))
         (bound (save-excursion (forward-list 1) (point))))
     (when (search-forward-regexp rgx bound t)
       (replace-match (concat ":as " new-alias))
       (save-excursion
-        (while (re-search-forward (concat current-alias "/") nil t)
+        (while (re-search-forward (concat (regexp-quote current-alias) "/") nil t)
           (when (not (nth 3 (syntax-ppss)))
             (replace-match (concat new-alias "/")))))
       (save-excursion
-        (while (re-search-forward (concat "#::" current-alias "{") nil t)
+        (while (re-search-forward (concat "#::" (regexp-quote current-alias) "{") nil t)
           (replace-match (concat "#::" new-alias "{"))))
       (message "Successfully renamed alias '%s' to '%s'" current-alias new-alias))))
 
@@ -2747,15 +2763,17 @@ With a numeric prefix argument the let is introduced N lists up."
 (defun clojure-rename-ns-alias ()
   "Rename a namespace alias."
   (interactive)
-  (let ((current-alias (read-from-minibuffer "Current alias: ")))
-    (save-excursion
-      (clojure--find-ns-in-direction 'backward)
-      (let ((rgx (concat ":as +" current-alias))
-            (bound (save-excursion (forward-list 1) (point))))
-        (if (save-excursion (search-forward-regexp rgx bound t))
-            (let ((new-alias (read-from-minibuffer "New alias: ")))
-              (clojure--rename-ns-alias-internal current-alias new-alias))
-          (message "Cannot find namespace alias: '%s'" current-alias))))))
+  (save-excursion
+    (clojure--find-ns-in-direction 'backward)
+    (let* ((current-alias (completing-read "Current alias: "
+                                           (clojure-collect-ns-aliases
+                                            (thing-at-point 'list))))
+           (rgx (concat ":as +" (regexp-quote current-alias) "\\_>"))
+           (bound (save-excursion (forward-list 1) (point))))
+      (if (save-excursion (search-forward-regexp rgx bound t))
+          (let ((new-alias (read-from-minibuffer "New alias: ")))
+            (clojure--rename-ns-alias-internal current-alias new-alias))
+        (message "Cannot find namespace alias: '%s'" current-alias)))))
 
 (defun clojure--add-arity-defprotocol-internal ()
   "Add an arity to a signature inside a defprotocol.

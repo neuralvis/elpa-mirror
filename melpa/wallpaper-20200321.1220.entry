@@ -1,2 +1,2 @@
 
-(wallpaper . [(20200321 1220) ((emacs (25 1))) "Setting the wallpaper" single ((:commit . "314f3d99b4e4bcbbd6fdbc5ba4a87fd7791d8626") (:keywords "unix" "wallpaper" "extensions") (:authors ("Farlado" . "farlado@sdf.org")) (:maintainer "Farlado" . "farlado@sdf.org") (:url . "https://github.com/farlado/emacs-wallpaper"))])
+(wallpaper . [(20200321 1220) ((emacs (25 1))) "Setting the wallpaper" single ((:commit . "762354e958dbe298de06d119493d1aee8ffd0112") (:keywords "unix" "wallpaper" "extensions") (:authors ("Farlado" . "farlado@sdf.org")) (:maintainer "Farlado" . "farlado@sdf.org") (:url . "https://github.com/farlado/emacs-wallpaper"))])

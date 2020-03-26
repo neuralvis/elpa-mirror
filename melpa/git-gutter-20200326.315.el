@@ -5,7 +5,7 @@
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; Maintainer: Neil Okamoto <neil.okamoto+melpa@gmail.com>
 ;; URL: https://github.com/emacsorphanage/git-gutter
-;; Package-Version: 20200326.13
+;; Package-Version: 20200326.315
 ;; Version: 0.90
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -133,11 +133,11 @@ gutter information of other windows."
   "Face of added")
 
 (defface git-gutter:deleted
-  '((t (:foreground "red" :weight bold)))
+  '((t (:foreground "red" :weight bold :inherit default)))
   "Face of deleted")
 
 (defface git-gutter:unchanged
-  '((t (:background "yellow")))
+  '((t (:background "yellow" :inherit default)))
   "Face of unchanged")
 
 (defcustom git-gutter:disabled-modes nil
