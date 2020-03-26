@@ -137,6 +137,7 @@ notify me of any missing package or change you would like to see.
     info
     info-colors
     interaction-log
+    ioccur
     isearch, occur, etc.
     ivy
     ivy-posframe
