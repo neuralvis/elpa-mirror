@@ -4,7 +4,7 @@
 
 ;; Author: Nicholas Vollmer <progfolio@protonmail.com>
 ;; URL: https://github.com/progfolio/doct
-;; Package-Version: 20200325.251
+;; Package-Version: 20200325.2127
 ;; Created: December 10, 2019
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "25.1"))
@@ -527,13 +527,13 @@ If non-nil, DECLARATION is the declaration containing STRING."
   (pcase pair
     ;;nil values allowed for overrides. org-capture will just use defaults.
     (`(,(and (or :empty-lines :empty-lines-after :empty-lines-before) option) ,value)
-     (doct--type-check option value '(integerp)))
+     (doct--type-check option value '(integerp null)))
     (`(:table-line-pos ,value)
-     (doct--type-check :table-line-pos value '(stringp)))
+     (doct--type-check :table-line-pos value '(stringp null)))
     (`(:tree-type ,value)
      ;;only a warning because `org-capture-set-target-location'
      ;;has a default if any symbol other than week or month is set
-     (unless (member value '(week month))
+     (unless (member value '(week month nil))
        (when (doct--warning-enabled-p 'option-type)
          (lwarn 'doct :warning (concat
                                 ":tree-type %s in the \"%s\" declaration "

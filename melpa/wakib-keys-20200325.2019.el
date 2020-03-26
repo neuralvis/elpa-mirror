@@ -2,7 +2,7 @@
 
 ;; Author: Abdulla Bubshait
 ;; URL: https://github.com/darkstego/wakib-keys/
-;; Package-Version: 20200325.1710
+;; Package-Version: 20200325.2019
 ;; Created: 6 April 2018
 ;; Keywords: convenience, keybindings, keys
 ;; License: GPL v3
@@ -323,14 +323,19 @@ It returns the buffer."
     (setq buffer-offer-save t)
     buffer))
 
-(defun wakib-insert-newline-before ()
+(defun wakib-insert-line-before ()
   "Insert a newline and indent before current line."
   (interactive)
   (move-beginning-of-line 1)
   (newline-and-indent)
   (forward-line -1)
-  (indent-for-tab-command))
+  (indent-according-to-mode))
 
+(defun wakib-insert-line-after ()
+  "Insert a newline and indent before current line."
+  (interactive)
+  (move-end-of-line 1)
+  (newline-and-indent))
 
 (defun wakib-beginning-of-line-or-block ()
   "Move cursor to beginning of line or previous paragraph."
@@ -436,7 +441,8 @@ Then add C-d and C-e to KEYMAP"
     ("M-a" . wakib-select-line-block-all)
     ("M-s" . set-mark-command)
     ("M-S-s" . set-rectangular-region-anchor)
-    ("S-RET" . wakib-insert-newline-before)
+    ("<C-return>" . wakib-insert-line-after)
+    ("<C-S-return>" . wakib-insert-line-before)
     ("C-b" . switch-to-buffer)
     ("M-X" . pp-eval-expression)
     ("<C-wheel-up>" . text-scale-increase)
