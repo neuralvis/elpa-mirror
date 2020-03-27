@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200327.550
+;; Package-Version: 20200327.817
 ;; Version: 0.6.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -190,6 +190,7 @@
 ;;     mu4e-conversation
 ;;     multiple-cursors
 ;;     neotree
+;;     num3-mode
 ;;     org
 ;;     org-journal
 ;;     org-noter
@@ -2102,6 +2103,8 @@ between foreground and background is >= 7:1)."
    `(neo-vc-unlocked-changes-face ((,class (:inherit modus-theme-refine-blue))))
    `(neo-vc-up-to-date-face ((,class (:foreground ,fg-alt))))
    `(neo-vc-user-face ((,class (:foreground ,magenta))))
+   ;;;; num3-mode
+   `(num3-face-even ((,class (:background ,bg-alt :weight bold))))
    ;;;; org
    `(org-agenda-calendar-event ((,class (:foreground ,blue-alt))))
    `(org-agenda-calendar-sexp ((,class (:foreground ,cyan-alt))))

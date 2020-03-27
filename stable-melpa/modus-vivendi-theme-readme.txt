@@ -162,6 +162,7 @@ notify me of any missing package or change you would like to see.
     mu4e-conversation
     multiple-cursors
     neotree
+    num3-mode
     org
     org-journal
     org-noter

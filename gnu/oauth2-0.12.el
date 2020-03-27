@@ -1,9 +1,9 @@
 ;;; oauth2.el --- OAuth 2.0 Authorization Protocol
 
-;; Copyright (C) 2011-2016 Free Software Foundation, Inc
+;; Copyright (C) 2011-2020 Free Software Foundation, Inc
 
 ;; Author: Julien Danjou <julien@danjou.info>
-;; Version: 0.11
+;; Version: 0.12
 ;; Keywords: comm
 
 ;; This file is part of GNU Emacs.
@@ -149,7 +149,7 @@ This allows to store the token in an unique way."
   (secure-hash 'md5 (concat auth-url token-url resource-url)))
 
 ;;;###autoload
-(defun oauth2-auth-and-store (auth-url token-url resource-url client-id client-secret &optional redirect-uri)
+(defun oauth2-auth-and-store (auth-url token-url scope client-id client-secret &optional redirect-uri state)
   "Request access to a resource and store it using `plstore'."
   ;; We store a MD5 sum of all URL
   (let* ((plstore (plstore-open oauth2-token-file))
@@ -167,7 +167,7 @@ This allows to store the token in an unique way."
                            :token-url token-url
                            :access-response (plist-get plist :access-response))
       (let ((token (oauth2-auth auth-url token-url
-                                client-id client-secret resource-url nil redirect-uri)))
+                                client-id client-secret scope state redirect-uri)))
         ;; Set the plstore
         (setf (oauth2-token-plstore token) plstore)
         (setf (oauth2-token-plstore-id token) id)
@@ -190,11 +190,11 @@ This allows to store the token in an unique way."
 (defvar oauth--token-data)
 
 (defun oauth2-authz-bearer-header (token)
-  "Return 'Authoriztions: Bearer' header with TOKEN."
+  "Return `Authoriztions: Bearer' header with TOKEN."
   (cons "Authorization" (format "Bearer %s" token)))
 
 (defun oauth2-extra-headers (extra-headers)
-  "Return EXTRA-HEADERS with 'Authorization: Bearer' added."
+  "Return EXTRA-HEADERS with `Authorization: Bearer' added."
   (cons (oauth2-authz-bearer-header (oauth2-token-access-token (car oauth--token-data)))
         extra-headers))
 
@@ -245,6 +245,25 @@ when finished.  See `url-retrieve'."
 
 ;;;; ChangeLog:
 
+;; 2020-03-27  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	feat(oauth2): add state parameter support, rename resource-url to scope
+;; 
+;; 	The resource-url is actually a scope. Add support for optional state
+;; 	parameter.
+;; 
+;; 	This is version 0.12.
+;; 
+;; 	Thanks Xu Chunyang <xuchunyang56@gmail.com>
+;; 
+;; 2016-07-11  Paul Eggert	 <eggert@cs.ucla.edu>
+;; 
+;; 	Fix some quoting problems in doc strings
+;; 
+;; 	Most of these are minor issues involving, e.g., quoting `like this' 
+;; 	instead of 'like this'.	 A few involve escaping ` and ' with a preceding
+;; 	\= when the characters should not be turned into curved single quotes.
+;; 
 ;; 2016-07-09  Julien Danjou  <julien@danjou.info>
 ;; 
 ;; 	oauth2: send authentication token via Authorization header
