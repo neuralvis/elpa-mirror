@@ -82,6 +82,7 @@ notify me of any missing package or change you would like to see.
     dynamic-ruler
     easy-jekyll
     easy-kill
+    ebdb
     ediff
     eldoc-box
     elfeed

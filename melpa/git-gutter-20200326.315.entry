@@ -1,2 +1,0 @@
-
-(git-gutter . [(20200326 315) ((emacs (24 3))) "Port of Sublime Text plugin GitGutter" single ((:commit . "0cabf4c7c44a3acf397ede1bfea87d30c859e256") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Neil Okamoto" . "neil.okamoto+melpa@gmail.com") (:url . "https://github.com/emacsorphanage/git-gutter"))])
