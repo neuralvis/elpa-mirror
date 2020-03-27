@@ -5,7 +5,7 @@
 ;; Author: Yujie Wen <yjwen.ty at gmail dot com>
 ;; Created: 2013-04-27
 ;; Version: 1.0
-;; Package-Version: 20200304.937
+;; Package-Version: 20200327.1636
 ;; Package-Requires: ((org "8.3"))
 ;; Keywords: outlines, hypermedia, slideshow, presentation
 
@@ -1282,8 +1282,9 @@ transformed fragment attribute to ELEM's attr_html plist."
          (clientfile (org-export-output-file-name (concat "_client" extension) subtreep)))
     ; export filename_client HTML file if multiplexing
     (setq client-multiplex nil)
-    (setq retfile (org-export-to-file 'reveal file
-                    async subtreep visible-only body-only ext-plist))
+    (let ((org-export-exclude-tags (cons "noexport_reveal" org-export-exclude-tags)))
+      (setq retfile (org-export-to-file 'reveal file
+		      async subtreep visible-only body-only ext-plist)))
 
     ; export the client HTML file if client-multiplex is set true
     ; by previous call to org-export-to-file
