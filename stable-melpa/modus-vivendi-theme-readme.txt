@@ -144,6 +144,7 @@ notify me of any missing package or change you would like to see.
     ivy-posframe
     jira (org-jira)
     js2-mode
+    julia
     jupyter
     kaocha-runner
     keycast
