@@ -1,0 +1,2 @@
+
+(helm-ag . [(20200327 153) ((emacs (24 4)) (helm (2 0))) "the silver searcher with helm interface" single ((:commit . "3247695a906449d4b9a74debf58211e9b7ee9191") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Syohei YOSHIDA" . "syohex@gmail.com") (:url . "https://github.com/syohex/emacs-helm-ag"))])

@@ -4,7 +4,7 @@
 
 ;; Author: Patrick Brinich-Langlois <pbrinichlanglois@gmail.com>
 ;; Version: 2.0.0
-;; Package-Version: 20171015.2307
+;; Package-Version: 20200326.2359
 ;; URL: https://github.com/patbl/colemak-evil
 ;; Package-Requires: ((evil "20170323.1140"))
 
@@ -380,7 +380,7 @@ Shortcuts:
 
 
 ;;allows you to use ; as :
-(define-key evil-motion-state-map ";" 'evil-ex-read-command)
+(define-key evil-motion-state-map ";" 'evil-ex)
 
 ;;hooks for hints
 (evil-ex-define-cmd "hints" 'colemak-evil-hints)
