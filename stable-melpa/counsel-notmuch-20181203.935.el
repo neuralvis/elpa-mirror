@@ -4,7 +4,6 @@
 
 ;; Author: Alexander Fu Xi <fuxialexander@gmail.com>
 ;; URL: https://github.com/fuxialexander/counsel-notmuch
-;; Package-Version: 20181203.935
 ;; Keywords: mail
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24") (ivy "0.10.0") (notmuch "0.21") (s "1.12.0"))
