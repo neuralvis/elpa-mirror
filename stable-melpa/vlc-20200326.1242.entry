@@ -1,0 +1,2 @@
+
+(vlc . [(20200326 1242) ((emacs (25 1))) "VideoLAN VLC Media Player Control" single ((:commit . "68ccb6c15b186f32d42bdff72765b2050204c18f") (:keywords "tools") (:authors ("Xu Chunyang")) (:maintainer "Xu Chunyang") (:url . "https://github.com/xuchunyang/vlc.el"))])
