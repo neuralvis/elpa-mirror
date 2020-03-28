@@ -4,7 +4,6 @@
 
 ;; Author: Philip Arvidsson <contact@philiparvidsson.com>
 ;; URL: http://github.com/philiparvidsson/zweilight-emacs
-;; Package-Version: 20170113.605
 ;; Version: 2.4
 
 ;; This program is free software; you can redistribute it and/or modify
