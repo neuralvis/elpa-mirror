@@ -215,6 +215,7 @@ notify me of any missing package or change you would like to see.
     treemacs
     undo-tree
     vc (built-in mode line status for version control)
+    vc-annotate (C-x v g)
     visual-regexp
     volatile-highlights
     web-mode

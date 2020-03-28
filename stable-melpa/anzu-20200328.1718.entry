@@ -1,0 +1,2 @@
+
+(anzu . [(20200328 1718) ((emacs (24 3))) "Show number of matches in mode-line while searching" single ((:commit . "5bd8f5511d44f26ead6e87a40215e2ca7837f0e0") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Neil Okamoto" . "neil.okamoto+melpa@gmail.com") (:url . "https://github.com/emacsorphanage/anzu"))])
