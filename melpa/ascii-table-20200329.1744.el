@@ -4,7 +4,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-ascii-table
 ;; Package-Requires: ((emacs "24.3") (cl-lib "0.5"))
-;; Package-Version: 20200328.842
+;; Package-Version: 20200329.1744
 ;; Package-X-Original-Version: 0.1.0
 ;; Keywords: help tools
 ;;
@@ -32,6 +32,9 @@ Valid values are 2 (binary), 8 (octal), 10 (decimal), and
 
 If non-nil, control characters use caret notation (^A .. ^?).
 Otherwise their names NUL .. DEL are shown.")
+
+(defvar ascii-table-escape nil
+  "Use backslash notation for control characters in the ASCII table?")
 
 (defun ascii-table--binary (codepoint)
   "Internal helper to format CODEPOINT in binary."
@@ -61,6 +64,13 @@ Otherwise their names NUL .. DEL are shown.")
         ((= codepoint #x7F) "DEL")
         (t nil)))
 
+(defun ascii-table--control-escape (codepoint)
+  "Internal helper to get the C backslash escape of CODEPOINT."
+  (cond ((<= #x07 codepoint #x0D)
+         (string ?\\ (elt "abtnvfr" (- codepoint #x07))))
+        ((= codepoint #x1B) "\\e")
+        (t nil)))
+
 (defun ascii-table--table (codepoints/row)
   "Internal helper to compute the cells in the ASCII table.
 
@@ -80,7 +90,9 @@ one for the name or other representation."
                      (8  (format "%03o" codepoint))
                      (10 (format "%d" codepoint))
                      (16 (format "%02X" codepoint))))
-             (name (or (cl-ecase ascii-table-control
+             (name (or (and ascii-table-escape
+                            (ascii-table--control-escape codepoint))
+                       (cl-ecase ascii-table-control
                          ((nil) (ascii-table--control-name codepoint))
                          (caret (ascii-table--control-caret codepoint)))
                        (string codepoint)))
@@ -173,6 +185,12 @@ Changes between ^A notation and control character names."
   (setq ascii-table-control (if ascii-table-control nil 'caret))
   (ascii-table--revert-if-active))
 
+(defun ascii-table-toggle-escape ()
+  "Toggle whether C backslash escapes are shown in the ASCII table."
+  (interactive)
+  (setq ascii-table-escape (not ascii-table-escape))
+  (ascii-table--revert-if-active))
+
 (defun ascii-table-base-binary ()
   "Switch ASCII table to binary (base 2)."
   (interactive)
@@ -197,6 +215,7 @@ Changes between ^A notation and control character names."
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map special-mode-map)
     (define-key map (kbd "b") 'ascii-table-base-binary)
+    (define-key map (kbd "e") 'ascii-table-toggle-escape)
     (define-key map (kbd "d") 'ascii-table-base-decimal)
     (define-key map (kbd "o") 'ascii-table-base-octal)
     (define-key map (kbd "x") 'ascii-table-base-hex)
