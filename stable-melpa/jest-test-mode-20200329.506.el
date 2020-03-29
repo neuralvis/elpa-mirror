@@ -5,7 +5,7 @@
 ;; Author: Raymond Huang <rymndhng@gmail.com>
 ;; Maintainer: Raymond Huang <rymndhng@gmail.com>
 ;; URL: https://github.com/rymndhng/jest-test-mode.el
-;; Package-Version: 20200328.1704
+;; Package-Version: 20200329.506
 ;; Version: 0
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -40,6 +40,10 @@
 ;; C-c C-t p    - Runs all tests in the project
 ;; C-C C-t t    - Runs describe block at point
 ;; C-C C-t a    - Re-runs the last test command
+;; C-c C-t d n  - With node debug enabled, runs the current buffer's file as an unit test or an rspec example.
+;; C-C C-t d a  - With node debug enabled, re-runs the last test command
+;; C-C C-t d t  - With node debug enabled, runs describe block at point
+
 
 ;;; Code:
 

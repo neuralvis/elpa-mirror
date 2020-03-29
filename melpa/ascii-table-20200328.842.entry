@@ -1,0 +1,2 @@
+
+(ascii-table . [(20200328 842) ((emacs (24 3)) (cl-lib (0 5))) "Interactive ASCII table" single ((:commit . "9a13c4124c1efc5a6ea1661e3779b78040e5590e") (:keywords "help" "tools") (:authors ("Lassi Kortela" . "lassi@lassi.io")) (:maintainer "Lassi Kortela" . "lassi@lassi.io") (:url . "https://github.com/lassik/emacs-ascii-table"))])

@@ -1,2 +1,0 @@
-
-(jest-test-mode . [(20200328 1704) ((emacs (25 1))) "Minor mode for running Node.js tests using jest" single ((:commit . "3a2024dcb469a7e13cf03d584896a2ecf1464896") (:authors ("Raymond Huang" . "rymndhng@gmail.com")) (:maintainer "Raymond Huang" . "rymndhng@gmail.com") (:url . "https://github.com/rymndhng/jest-test-mode.el"))])
