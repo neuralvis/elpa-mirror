@@ -3,8 +3,8 @@
 ;; Copyright © 2013-2020, by Xah Lee
 
 ;; Author: Xah Lee ( http://xahlee.info/ )
-;; Version: 10.13.20200311125055
-;; Package-Version: 20200311.1951
+;; Version: 10.13.20200329225636
+;; Package-Version: 20200330.557
 ;; Created: 10 Sep 2013
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: convenience, emulations, vim, ergoemacs
@@ -841,7 +841,7 @@ Version 2015-12-22"
   "Upcase first letters of sentences of current text block or selection.
 
 URL `http://ergoemacs.org/emacs/emacs_upcase_sentence.html'
-Version 2020-03-02"
+Version 2020-03-29"
   (interactive)
   (let ($p1 $p2)
     (if (region-active-p)
@@ -862,7 +862,7 @@ Version 2020-03-02"
 
           ;; after period or question mark or exclamation
           (goto-char (point-min))
-          (while (re-search-forward "\\(\\.\\|\\?\\|!\\) ?\n? *\\([a-z]\\)" nil "move")
+          (while (re-search-forward "\\(\\.\\|\\?\\|!\\)[ \n]+ *\\([a-z]\\)" nil "move")
             (upcase-region (match-beginning 2) (match-end 2))
             (overlay-put (make-overlay (match-beginning 2) (match-end 2)) 'face 'highlight))
 
