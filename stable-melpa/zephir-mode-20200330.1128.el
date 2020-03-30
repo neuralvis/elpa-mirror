@@ -5,7 +5,7 @@
 ;; Author: Serghei Iakovlev <egrep@protonmail.ch>
 ;; Maintainer: Serghei Iakovlev <egrep@protonmail.ch>
 ;; Version: 0.6.0
-;; Package-Version: 20200329.1235
+;; Package-Version: 20200330.1128
 ;; URL: https://github.com/zephir-lang/zephir-mode
 ;; Keywords: languages
 ;; Package-Requires: ((cl-lib "0.5") (pkg-info "0.4") (emacs "25.1"))
@@ -218,12 +218,12 @@ This function determines single-quoted as well as double-quoted strings."
 If point is not inside a comment, return nil.  Uses CTX as a syntax context."
   (and ctx (nth 4 ctx) (nth 8 ctx)))
 
-(defun zephir-in-listlike (re-open)
-  "Return the position of RE-OPEN when `point' is in a ‘listlike’.
+(defun zephir-in-ipg (re-open)
+  "Return the position of RE-OPEN when `point' is inside an “IPG”.
 
 This function is intended to use when `point' is inside a
-parenthetical group (‘listlike’) eg. in an array, argument list,
-etc.  Return nil, if point is not in a ‘listlike’."
+parenthetical group (IPG) eg. in an array, argument list,
+etc.  Return nil, if point is not in an IPG."
   (save-excursion
     (let ((opoint (nth 1 (syntax-ppss))))
       (when (and opoint
@@ -449,6 +449,16 @@ see `zephir-beginning-of-defun'."
 
 ;;;; Indentation code
 
+(defun zephir-indent-block (block-start)
+  "Return the proper indentation for the block.
+BLOCK-START must contain open bracket position of the block."
+  (save-excursion
+    (let ((offset 0))
+      (unless (looking-at-p "}")
+        (setq offset zephir-indent-level))
+      (when (and block-start (progn (goto-char block-start) (looking-at-p "{")))
+        (+ (current-indentation) offset)))))
+
 (defun zephir-indent-listlike (pt-start re-close)
   "Return the proper indentation for the ‘listlike’.
 
@@ -521,8 +531,10 @@ This uses CTX as a current parse state."
     (back-to-indentation)
 
     (cond
-     ;; Inside multiline string
-     ((zephir-in-string-p) 0)
+     ;; Inside multiline string.
+     ;; If we're inside a string and strings aren't to be indented,
+     ;; return current indentation.
+     ((zephir-in-string-p) (current-indentation))
 
      ;; Multiline commentary
      ((zephir-in-comment-p)
@@ -554,11 +566,13 @@ This uses CTX as a current parse state."
      ;; TODO(serghei): Cover use-case for single-line comments (“//”)
 
      ;; When `point' is inside an innermost parenthetical grouping
-     ((let ((array-start (zephir-in-listlike "\\["))
-            (arglist-start (zephir-in-listlike "(")))
+     ((let ((array-start (zephir-in-ipg "\\["))
+            (arglist-start (zephir-in-ipg "("))
+            (block-start (zephir-in-ipg "{")))
         (cond
          (array-start (zephir-indent-listlike array-start "]"))
-         (arglist-start (zephir-indent-listlike arglist-start ")")))))
+         (arglist-start (zephir-indent-listlike arglist-start ")"))
+         (block-start (zephir-indent-block block-start)))))
 
      ;; Otherwise indent to the first column
      (t (prog-first-column)))))

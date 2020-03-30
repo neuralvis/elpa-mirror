@@ -2224,7 +2224,7 @@
 	  (:maintainer "Ingo Lohmar" . "i.lohmar@gmail.com")
 	  (:url . "https://github.com/ilohmar/wconf"))])
  (web-server .
-	     [(0 1 1)
+	     [(0 1 2)
 	      ((emacs
 		(24 3)))
 	      "Emacs Web Server" tar
