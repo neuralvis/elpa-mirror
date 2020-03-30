@@ -5,7 +5,7 @@
 ;; Maintainer: Alexander Fu Xi <fuxialexnader@gmail.com>
 ;; Homepage: https://github.com/fuxialexander/org-pdftools
 ;; Version: 1.0
-;; Package-Version: 20200329.1507
+;; Package-Version: 20200330.806
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "26.1") (org "9.3.6") (pdf-tools "0.8") (org-noter "1.4.1"))
 
@@ -32,6 +32,7 @@
 (require 'subr-x)
 (require 'cl-lib)
 (require 'org)
+(require 'org-refile nil t)
 (require 'org-noter)
 (require 'pdf-tools)
 (require 'pdf-view)

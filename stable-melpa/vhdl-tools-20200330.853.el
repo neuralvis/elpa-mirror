@@ -1,20 +1,16 @@
-;;; vhdl-tools.el --- Utilities for navigating vhdl sources. -*- lexical-binding: t; -*-
+;;; vhdl-tools.el --- Utilities for navigating vhdl sources -*- lexical-binding: t; -*-
 
-;; Based on `vhdl-goto-def' at `http://www.emacswiki.org/emacs/vhdl-goto-def.el'
+;; Copyright (C) 2015-2020 Cayetano Santos
 
-;; Copyright (C) 2003 Free Software Foundation, Inc.
-;; Copyright (C) 2015-2019 Cayetano Santos
-
-;; Original author:  wandad guscheh <wandad.guscheh@fh-hagenberg.at>
-;; Author:           Cayetano Santos
-;; Keywords: languages, convenience
-;; Package-Version: 20200128.957
+;; Author: Cayetano Santos
+;; Keywords:  convenience, languages, vhdl
+;; Package-Version: 20200330.853
 ;; Filename: vhdl-tools.el
 ;; Description: Utilities for navigating vhdl sources.
-;; URL: https://github.com/csantosb/vhdl-tools/wiki
-;; Compatibility: GNU Emacs >= 26.2
-;; Version: 6.2
-;; Package-Requires: ((ggtags "0.8.13") (emacs "26.2") (helm-rg "0.1") outshine)
+;; Homepage: https://gitlab.com/csantosb/vhdl-tools/-/wikis/home
+;; Compatibility: GNU Emacs >= 26.3
+;; Version: 6.3.pre
+;; Package-Requires: ((ggtags "0.9.0") (emacs "26.2") (helm-rg "0.1") (outshine "3.1-pre"))
 
 ;;; License:
 ;;
@@ -35,42 +31,28 @@
 
 ;;; Commentary:
 ;;
-;; `vhdl-tools' provide a minor mode based intended to complete the great `vhdl-mode'.
+;; `vhdl-tools' provides a minor mode intended to complete the great `vhdl-mode'.
 ;; It adds an extra layer of functionality on top of the later, extensively
-;; using `ggtags' to manage a vhdl project. `vhdl-tools' relies on `helm',
-;; `imenu' and `outshine' features to ease navigating vhdl
-;; sources.  Additionally, it provides `vOrg' mode too, which benefits of all
-;; `Org' features.
+;; using `ggtags' to manage a vhdl project. `vhdl-tools' relies on `helm-rg',
+;; `imenu' and `outshine' features to ease navigating vhdl sources.
 
 ;;; Install:
 ;;
-;; To install, proceed as usual: add to path and require after loading `vhdl-mode'
-;;
-;; (with-eval-after-load 'vhdl-mode
-;;   (add-to-list 'load-path "...")
-;;   (require 'vhdl-tools))
-;;
-;; or install from Melpa
-;;
-;;   M-x package-install RET vhdl-tools
-;;
-;; Then, activate the minor mode by completing the `vhdl-mode' hook.
-;;
-;; (add-hook 'vhdl-mode-hook
-;;	  (lambda ()
-;;	    (vhdl-tools-mode 1)))
+;; https://gitlab.com/csantosb/vhdl-tools/-/wikis/Install
 
 ;;; Use:
 ;;
 ;; Have a look at customization possibilities with \M-x customize-group `vhdl-tools'.
 ;;
-;; For details, refer to  https://github.com/csantosb/vhdl-tools/wiki
+;; For details, refer to https://gitlab.com/csantosb/vhdl-tools/-/wikis/Use
 ;;
-;; An example configuration file may be found at https://github.com/csantosb/vhdl-tools/wiki/Setup#example-configuration-file
+;; An example configuration file may be found at https://gitlab.com/csantosb/vhdl-tools/-/wikis/Setup#example-configuration-file
 
 ;;; Todo:
 
 ;;; Code:
+
+;;;; Requirements
 
 (eval-when-compile
   (require 'ggtags)
@@ -85,42 +67,9 @@
 (defgroup vhdl-tools nil "Some customizations of vhdl-tools package"
   :group 'local)
 
-(defgroup vhdl-tools-vorg nil "Some customizations of vhdl-tools vorg package"
-  :group 'local)
-
 ;;; Variables
 
 ;;;; User Variables
-
-;;;;; vOrg
-
-(defcustom vhdl-tools-vorg-src-vhdl-dir nil
-  "Stores the relative placement of vhdl code with respect to vorg sources.
-When nil, both share same directory."
-  :type 'string :group 'vhdl-tools-vorg)
-
-(defcustom vhdl-tools-vorg-src-vorg-dir nil
-  "Stores the relative placement of vorg sources with respect to vhdl code.
-When nil, both share same directory."
-  :type 'string :group 'vhdl-tools-vorg)
-
-(defcustom vhdl-tools-vorg-tangle-comment-format-beg "@@@"
-  "Variable to assign to `org-babel-tangle-comment-format-beg' during `vorg' tangling."
-  :type 'string :group 'vhdl-tools-vorg)
-
-(defcustom vhdl-tools-vorg-tangle-comment-format-end "@@@"
-  "Variable to assign to `org-babel-tangle-comment-format-end' during `vorg' tangling."
-  :type 'string :group 'vhdl-tools-vorg)
-
-(defcustom vhdl-tools-vorg-tangle-comments-link nil
-  "Flag to force set the comments:link header in vhdl src blocks."
-  :type 'boolean :group 'vhdl-tools-vorg)
-
-(defcustom vhdl-tools-vorg-tangle-header-argument-var nil
-  "Variable used to filter code blocks to be tangled."
-  :type 'boolean :group 'vhdl-tools-vorg)
-
-;;;;; tools
 
 (defcustom vhdl-tools-max-lines-disable-features 1500
   "Disable slower `vhdl-tools' features in buffers beyond this number of lines."
@@ -161,20 +110,6 @@ Needed to determine end of name."
 
 ;;;; Internal Variables
 
-(defconst vhdl-tools-vorg-vhdl-align-alist
-  (reverse
-   (let ((orig-alist (copy-alist vhdl-align-alist))
-	 (new-vhdl-align-alist nil))
-     ;;(message (format "\n\n" ))
-     (while orig-alist
-       (let* ((element (nth 0 orig-alist))
-	      (element-content (cons 'vhdl-tools-mode
-				     (cdr element))))
-	 (setq new-vhdl-align-alist
-	       (push element-content new-vhdl-align-alist))
-	 (setq orig-alist (cdr orig-alist))))
-     new-vhdl-align-alist)))
-
 (defvar vhdl-tools--jump-into-module-name nil)
 
 (defvar vhdl-tools--store-link-link nil)
@@ -203,23 +138,6 @@ Needed to determine end of name."
 ;;; Helper
 
 ;; Ancillary, internal functions
-
-(defun vhdl-tools--cleanup-tangled ()
-  "Make invisible reference comments after tangling."
-  (interactive)
-  (save-excursion
-    (when vhdl-tools-use-outshine
-      (outline-show-all)
-      (goto-char (point-min)))
-    (while (re-search-forward (format "^-- %s.*$" vhdl-tools-vorg-tangle-comment-format-beg) nil t nil)
-      (let ((endp (point))
-	    (begp (progn (beginning-of-line) (point))))
-	(overlay-put (make-overlay begp endp)
-		     'invisible
-		     (intern "vhdl-tangled")))
-      (forward-line))
-    (add-to-invisibility-spec 'vhdl-tangled)
-    (vhdl-tools--fold)))
 
 (defun vhdl-tools--fold ()
   "Fold to current heading level."
@@ -271,28 +189,6 @@ Needed to determine end of name."
   (when vhdl-tools-manage-folding
     (recenter-top-bottom vhdl-tools-recenter-nb-lines))
   (back-to-indentation))
-
-(defun vhdl-tools-vorg--post-jump-function ()
-  "To be called after jumping to recenter, indent, etc."
-  (when vhdl-tools-manage-folding
-    (recenter-top-bottom vhdl-tools-recenter-nb-lines))
-  (back-to-indentation))
-
-(defun vhdl-tools-vorg--get-vhdl-file (orgfile)
-  "Return the sibling vhdl code of `ORGFILE'.
-`ORGFILE' is the filename without extension."
-  (if (and vhdl-tools-vorg-src-vhdl-dir
-	   (file-exists-p vhdl-tools-vorg-src-vhdl-dir))
-      (format "%s/%s.vhd" vhdl-tools-vorg-src-vhdl-dir orgfile)
-    (format "%s.vhd" orgfile)))
-
-(defun vhdl-tools--get-vorg-file (vhdlfile)
-  "Return the sibling vorg source file of `VHDLFILE'.
-`VHDLFILE' is the filename without extension."
-  (if (and vhdl-tools-vorg-src-vorg-dir
-	   (file-exists-p vhdl-tools-vorg-src-vorg-dir))
-      (format "%s/%s.org" vhdl-tools-vorg-src-vorg-dir vhdlfile)
-    (format "%s.vhd" (file-name-base vhdlfile))))
 
 ;;; Feature: misc
 
@@ -760,8 +656,9 @@ Processes, instances and doc headers are shown in order of appearance."
 
 ;;;; Link Follow
 
-(defun vhdl-tools-follow-links(arg)
-  "Follow links in the form of Tag:ToSearch'."
+(defun vhdl-tools-follow-links(&optional arg)
+  "Follow links in the form of Tag:ToSearch'.
+With a prefix `ARG' ignore tosearch."
   (interactive "P")
   ;; get item in the form of tag@tosearch
   (save-excursion
@@ -807,274 +704,6 @@ Processes, instances and doc headers are shown in order of appearance."
 		 (setq ggtags-find-tag-hook nil)))
     ;; jump !
     (ggtags-find-definition vhdl-tools--follow-links-tag)))
-
-;;; Org / VHDL
-
-;; Following the literate programming paradigm, here we intend to provide some
-;; infrastructure to deal with jumping between a "filename.vhd" and its
-;; corresponding "filename.org", the former being tangled from the latter.
-
-;;;; VHDL to VOrg
-
-(defun vhdl-tools-vorg-jump-to-vorg()
-  "From `vhdl' file, jump to same line in `vorg' file."
-  (interactive)
-  (let* ((orgfile (vhdl-tools--get-vorg-file (file-name-base)))
-	 ;; store current line
-	 (myline_tmp
-	  (replace-regexp-in-string "+" "\\\\+"
-				    (vhdl-tools-vorg-get-current-line)))
-	 (myline_tmp2 (replace-regexp-in-string " +" " +" myline_tmp))
-	 (myline (format "^ *%s" myline_tmp2)))
-    (if (file-exists-p orgfile)
-	(progn
-	  (if vhdl-tools-vorg-tangle-comments-link
-	      ;; use org feature
-	      ;; I disable `org-id-update-id-locations' to speed-up things
-	      (cl-letf (((symbol-function 'org-id-update-id-locations)
-			 (lambda (&optional files silent) nil)))
-		(org-babel-tangle-jump-to-org))
-	    ;; use custom search
-	    (progn
-	      (find-file orgfile)
-	      (goto-char (point-min))
-	      (re-search-forward myline nil t nil)))
-	  ;; (org-content 5)
-	  ;; (org-back-to-heading nil)
-	  ;; (org-show-subtree)
-	  ;; (re-search-forward myline nil t nil)
-	  (recenter-top-bottom vhdl-tools-recenter-nb-lines)
-	  (back-to-indentation))
-      (message (format "no %s.org file exists" orgfile)))))
-
-;;;; VOrg to VHDL
-
-(defun vhdl-tools-vorg-jump-from-vorg()
-  "From `vorg' file, jump to `vhdl' file, tangling before if necessary."
-  (interactive)
-  (call-interactively 'vhdl-tools-vorg-tangle)
-  (let* ((vhdlfile (vhdl-tools-vorg--get-vhdl-file (file-name-base)))
-	 ;; store current line
-	 (myline_tmp
-	  (replace-regexp-in-string "+" "\\\\+"
-				    (vhdl-tools-vorg-get-current-line)))
-	 (myline_tmp2 (replace-regexp-in-string " +" " +" myline_tmp))
-	 (myline (format "^ *%s" myline_tmp2)))
-    (when (file-exists-p vhdlfile)
-      (find-file vhdlfile)
-      (goto-char (point-min))
-      (when vhdl-tools-use-outshine
-	(outline-next-heading))
-      (when (re-search-forward myline nil t nil)
-	(vhdl-tools--fold)
-	(re-search-forward myline nil t nil)
-	(recenter-top-bottom vhdl-tools-recenter-nb-lines)
-	(back-to-indentation)))))
-
-;;;; VOrg to module
-
-(defun vhdl-tools-vorg-jump-from-vorg-into-module()
-  "From `vorg' file, jump to same line in `vhdl' file.
-Tangle the code before if necessary, then jump into module."
-  (interactive)
-  (vhdl-tools-vorg-jump-from-vorg)
-  (vhdl-tools-jump-into-module))
-
-;;;; VOrg tangle
-
-(defun vhdl-tools-vorg-tangle (orgfile &optional force)
-  "Tangle a `vorg' `ORGFILE' file to its corresponding `vhdl' file.
-With an argument `FORCE', force tangling regardless of files status.
-`ORGFILE' must be the filename without extension."
-  ;; (interactive (list (format "%s.org" (file-name-base))))
-  (interactive (list (file-name-base)))
-  (let ((vhdlfile (vhdl-tools-vorg--get-vhdl-file orgfile))
-	(orgfilefull (format "%s.org" orgfile)))
-    (if (or force
-	    (file-newer-than-file-p orgfilefull vhdlfile)
-	    (not (file-exists-p vhdlfile)))
-	;; do tangle
-	(let (;; When tangling the org file, this code helps to auto set proper
-	      ;; indentation, whitespace fixup, alignment, and case fixing to
-	      ;; entire exported buffer
-	      (org-babel-post-tangle-hook (lambda()
-					    (vhdl-beautify-buffer)
-					    (save-buffer)))
-	      (org-babel-tangle-uncomment-comments nil)
-	      ;; list of property/value pairs that can be inherited by any entry.
-	      (org-global-properties
-	       '(("header-args:vhdl-tools" .
-		  ":prologue (vhdl-tools-vorg-prologue-header-argument) :tangle (vhdl-tools-vorg-tangle-header-argument)")))
-	      ;; sets the "comments:link" header arg
-	      ;; possible as this is constant header arg, not dynamic with code block
-	      (org-babel-default-header-args
-	       (if vhdl-tools-vorg-tangle-comments-link
-		   (cons '(:comments . "link")
-			 (assq-delete-all :comments org-babel-default-header-args))
-		 org-babel-default-header-args))
-	      (org-babel-tangle-comment-format-beg
-	       (format "%s %s" vhdl-tools-vorg-tangle-comment-format-beg
-		       org-babel-tangle-comment-format-beg))
-	      (org-babel-tangle-comment-format-end
-	       (format "%s %s" vhdl-tools-vorg-tangle-comment-format-end
-		       org-babel-tangle-comment-format-end)))
-	  ;; tangle and beautify the tangled file only when there are tangled blocks
-	  (when (org-babel-tangle-file orgfilefull vhdlfile "vhdl-tools")
-	    (when vhdl-tools-verbose
-	      (message (format "File %s tangled to %s." orgfilefull vhdlfile)))))
-      ;; don't tangle
-      (when vhdl-tools-verbose
-	(message (format "File %s NOT tangled to %s." orgfile vhdlfile))))))
-
-(defun vhdl-tools-vorg-tangle-all (arg)
-  "Tangle all `vorg' files in current dir to its corresponding `vhdl' file.
-With a prefix argument `ARG' force tangling regardless of files status."
-  (interactive "P")
-  (let ((vc-follow-symlinks nil)
-	(vhdl-tools-verbose t)
-	(org-global-properties
-	 '(("header-args:vhdl" . ":prologue (vhdl-tools-vorg-prologue-header-argument) :tangle (vhdl-tools-vorg-tangle-header-argument)"))))
-    (loop for thisfile in (file-expand-wildcards "*.org") do
-	  (unless (string-match "readme" thisfile)
-	    (vhdl-tools-vorg-tangle
-	     (file-name-base thisfile)
-	     (if (equal arg '(4))
-		 t
-	       nil))))))
-
-;;;; Vorg detangle
-
-;; (defun vhdl-tools-vorg-detangle ()
-;;   "Detangle current `vorg' file to its corresponding `vhdl' file."
-;;   (interactive)
-;;   (let ((old-buffer (current-buffer)))
-;;     (cl-letf (((symbol-function 'org-id-update-id-locations)
-;;	       (lambda (&optional files silent) nil)))
-;;       (org-babel-with-temp-filebuffer (buffer-file-name)
-;;	(goto-char (point-min))
-;;	(delete-matching-lines "^--\s\\*+\s.*$")
-;;	(delete-matching-lines "^$")
-;;	(org-babel-detangle)
-;;	(save-buffer))))
-;;   (vhdl-tools-vorg-jump-to-vorg)
-;;   (save-buffer))
-
-(defun vhdl-tools-vorg-detangle ()
-  "Detangle current `vorg' file to its corresponding `vhdl' file."
-  (interactive)
-  (save-window-excursion
-    (let ((old-buffer (current-buffer)))
-      (cl-letf (((symbol-function 'org-id-update-id-locations)
-		 (lambda (&optional files silent) nil)))
-	(with-temp-buffer
-	  (insert-buffer-substring old-buffer)
-	  (goto-char (point-min))
-	  (delete-matching-lines "^--\s\\*+\s.*$")
-	  (delete-matching-lines "^$")
-	  (org-babel-detangle)))))
-  (vhdl-tools-vorg-jump-to-vorg)
-  (save-buffer))
-
-;;;; VOrg source block beautify
-
-(defun vhdl-tools-vorg-publish ()
-  "Publish project."
-  (interactive)
-  (let ((vhdl-tools--currently-publishing t)
-	(current-prefix-arg '(4)))
-    (call-interactively 'org-publish)))
-
-;;;; VOrg source editing beautify
-
-(defun vhdl-tools-vorg-src-edit-beautify ()
-  "To be added to `org-src-mode-hook' when `vorg' mode is active.
-Beautifies source code blocks before editing."
-  (when (and (string= major-mode "vhdl-tools-mode")
-	     (not vhdl-tools--currently-publishing))
-    (require 'vhdl-mode)
-    (vhdl-beautify-buffer)))
-
-;;;; VOrg source block beautify
-
-(defun vhdl-tools-vorg-src-block-beautify ()
-  "Beautify of source code block at point."
-  (interactive)
-  (when (org-in-src-block-p t)
-    (org-edit-src-code)
-    (vhdl-beautify-buffer)
-    (org-edit-src-save)
-    (org-edit-src-exit)))
-
-;;;; Vorg Helper
-
-;; Ancillary functions
-
-(defun vhdl-tools-vorg-get-current-line ()
-  "Send current line avoiding any comments."
-  (save-excursion
-    (back-to-indentation)
-    (let ((vhdl-tools-vorg-line-beginning (point)))
-      ;; check there is a comment in current line
-      (if (let ((maxposition (save-excursion
-			       (end-of-line)
-			       (point))))
-	    (save-excursion
-	      (re-search-forward "--" maxposition t)))
-	  (progn
-	    (re-search-forward "--")
-	    (re-search-backward " ")
-	    ;; previous non whitespace character
-	    (re-search-backward "\\S-"))
-	(end-of-line))
-      (buffer-substring-no-properties
-       vhdl-tools-vorg-line-beginning
-       (point)))))
-
-(defun vhdl-tools-vorg-tangle-header-argument ()
-  "To be used as def argument to `tangle' in source block header."
-  ;; TODO: replace org-get-tags-at by org-get-tags
-  (if (let ((mytags (org-get-tags (point) t)))
-	(or (member vhdl-tools-vorg-tangle-header-argument-var mytags)
-	    (null mytags)))
-      (vhdl-tools-vorg--get-vhdl-file (file-name-base))
-    "no"))
-
-(defun vhdl-tools-vorg-prologue-header-argument ()
-  "To be used as def argument to `prologue' in source block header."
-  (save-excursion
-    (let ((debug-on-error nil))
-      (when (org-back-to-heading nil)
-	(let ((heading (car (cdr (org-element-headline-parser (point))))))
-	  (format "\n-- %s %s\n"
-		  (if (> (plist-get heading ':level) 1)
-		      (make-string (- (plist-get heading ':level) 1)
-				   ?*)
-		    (make-string 1 ?*))
-		  (plist-get heading ':raw-value)))))))
-
-;;;; Vorg Headings
-
-;;;;; Get to next
-
-(defun vhdl-tools-vorg-headings-next()
-  "Get to next heading in vorg buffer."
-  (interactive)
-  (org-next-visible-heading 1)
-  (when vhdl-tools-manage-folding
-    (outline-hide-sublevels 5)
-    (org-show-entry)
-    (vhdl-tools-vorg--post-jump-function)))
-
-;;;;; Get to previous
-
-(defun vhdl-tools-vorg-headings-prev()
-  "Get to next heading in vorg buffer."
-  (interactive)
-  (org-previous-visible-heading 1)
-  (when vhdl-tools-manage-folding
-    (outline-hide-sublevels 5)
-    (org-show-entry)
-    (vhdl-tools-vorg--post-jump-function)))
 
 ;;; Minor Mode - Tools
 
@@ -1132,9 +761,6 @@ Key bindings:
   ;; Enable mode global features
   (if vhdl-tools-mode
       (progn
-	;; puts the reference comments around in the source file out of sight
-	(when vhdl-tools-vorg-tangle-comments-link
-	  (vhdl-tools--cleanup-tangled))
 	;; a bit of feedback
 	(when vhdl-tools-verbose
 	  (message "[VHDL Tools] enabled.")))
@@ -1183,49 +809,6 @@ Key bindings:
     ;; a bit of feedback
     (when vhdl-tools-verbose
       (message "[VHDL Tools] feature outshine not enabled."))))
-
-;;; Derived Mode - vOrg
-
-;;;; Mode bindings
-
-(defvar vhdl-tools-vorg-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c M-,") #'vhdl-tools-vorg-jump-from-vorg)
-    (define-key map (kbd "C-c M-.") #'vhdl-tools-vorg-jump-from-vorg-into-module)
-    (define-key map [remap org-babel-tangle] #'vhdl-tools-vorg-tangle)
-    (define-key map (kbd "C-c C-v _") #'vhdl-tools-vorg-tangle-all)
-    (define-key map (kbd "C-c C-n") #'vhdl-tools-vorg-headings-next)
-    (define-key map (kbd "C-c C-p") #'vhdl-tools-vorg-headings-prev)
-    (define-key map (kbd "C-c M-b") #'vhdl-tools-vorg-src-block-beautify)
-    (define-key map (kbd "C-c M-P") #'vhdl-tools-vorg-publish)
-    map))
-
-;;;; Mode
-
-;;;###autoload
-(define-derived-mode vhdl-tools-vorg-mode org-mode "vOrg"
-  "Utilities for navigating vhdl sources in vorg files.
-
-Key bindings:
-\\{vhdl-tools-vorg-mode-map}"
-
-  (progn
-
-    ;; update hook
-    (add-to-list 'org-src-mode-hook 'vhdl-tools-vorg-src-edit-beautify)
-
-    ;; This auto removes any mode line on top of the vorg file before exporting
-    (add-hook 'org-export-before-processing-hook
-	      (lambda ()
-		(save-excursion
-		  (goto-char (point-min))
-		  (re-search-forward "-\\*- mode: vhdl-tools-vorg -\\*-")
-		  (delete-region (point-min) (point))))
-	      nil t)
-
-    ;; a bit of feedback
-    (when vhdl-tools-verbose
-      (message "VHDL Tools Vorg enabled."))))
 
 (provide 'vhdl-tools)
 

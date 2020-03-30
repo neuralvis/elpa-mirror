@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Artur Malabarba <bruce.connor.am@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Package-Version: 20200326.1542
+;; Package-Version: 20200330.741
 ;; Keywords: languages clojure clojurescript lisp
 ;; Version: 5.12.0-snapshot
 ;; Package-Requires: ((emacs "25.1"))
@@ -317,7 +317,8 @@ Out-of-the box `clojure-mode' understands lein, boot, gradle,
     (modify-syntax-entry ?\xa0 " " table) ; non-breaking space
     (modify-syntax-entry ?\t " " table)
     (modify-syntax-entry ?\f " " table)
-    (modify-syntax-entry ?, " " table)
+    ;; Setting commas as whitespace makes functions like `delete-trailing-whitespace' behave unexpectedly (#561)
+    (modify-syntax-entry ?, "." table)
 
     ;; Delimiters
     (modify-syntax-entry ?\( "()" table)
