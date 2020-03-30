@@ -1,2 +1,0 @@
-
-(annotate . [(20200317 1703) nil "annotate files without changing them" single ((:commit . "44b378b16ad407c36e8cf728e671c17116d854b6") (:authors ("Bastian Bechtold")) (:maintainer "Bastian Bechtold") (:url . "https://github.com/bastibe/annotate.el"))])
