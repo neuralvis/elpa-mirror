@@ -5,7 +5,7 @@
 ;; Licensed under the same terms as Emacs.
 
 ;; Version: 0.2.1
-;; Package-Version: 20181005.1524
+;; Package-Version: 20200330.41
 ;; Keywords: pytest python testing
 ;; URL: https://github.com/ionrock/pytest-el
 ;; Package-Requires: ((s "1.9.0"))
@@ -91,6 +91,9 @@
 (defcustom pytest-cmd-format-string "cd '%s' && %s %s '%s'"
   "Format string used to run the py.test command.")
 
+(defvar pytest-last-commands (make-hash-table :test 'equal)
+  "Last pytest commands by pytest buffer name")
+
 (defun pytest-cmd-format (format-string working-directory test-runner command-flags test-names)
   "Create the string used for running the py.test command.
 FORMAT-STRING is a template string used by (format) to compose
@@ -115,6 +118,9 @@ The function returns a string used to run the py.test command.  Here's an exampl
 Optional argument TESTS Tests to run.
 Optional argument FLAGS py.test command line flags."
   (interactive "fTest directory or file: \nspy.test flags: ")
+  (pytest-start-command (pytest-get-command tests flags)))
+
+(defun pytest-get-command (tests flags)
   (let* ((pytest (pytest-find-test-runner))
          (where (if tests
                     (let ((testpath (if (listp tests) (car tests) tests)))
@@ -124,15 +130,29 @@ Optional argument FLAGS py.test command line flags."
                       ((listp tests) tests)
                       ((stringp tests) (split-string tests))))
          (tnames (mapconcat (apply-partially 'format "'%s'") tests " "))
-         (cmd-flags (if flags flags pytest-cmd-flags))
-         (use-comint (s-contains? "pdb" cmd-flags)))
-    (funcall #'(lambda (command)
-                 (compilation-start command use-comint
-                                    (lambda (mode) (concat (pytest-get-temp-buffer-name)))))
-             (pytest-cmd-format pytest-cmd-format-string where pytest cmd-flags tnames))
+         (cmd-flags (if flags flags pytest-cmd-flags)))
+    (pytest-cmd-format pytest-cmd-format-string where pytest cmd-flags tnames)))
+
+(defun pytest-start-command(command)
+  (let ((use-comint (s-contains? "--pdb" command))
+        (temp-buffer-name (pytest-get-temp-buffer-name)))
+    (puthash temp-buffer-name command pytest-last-commands)
+    (compilation-start command use-comint
+                       (lambda (mode) (pytest-get-temp-buffer-name)))
     (if use-comint
-	(with-current-buffer (get-buffer (pytest-get-temp-buffer-name))
-	  (inferior-python-mode)))))
+	      (with-current-buffer (get-buffer temp-buffer-name)
+	        (inferior-python-mode)))))
+
+(defun pytest-again(&optional edit-command)
+  "Run the same tests again with the last command.
+
+   If EDIT-COMMAND is non-nil, the command can be edited."
+  (interactive "P")
+  (if-let* ((last-command (gethash (pytest-get-temp-buffer-name) pytest-last-commands))
+            (command (if edit-command (read-shell-command "Command: " last-command) last-command)))
+      (pytest-start-command command)
+    (error "Pytest has not run before")))
+
 
 (defun pytest-get-temp-buffer-name ()
   "Get name of temporary buffer.
@@ -163,6 +183,20 @@ Optional argument FLAGS py.test command line flags."
   "Start pdb on error."
   (interactive)
   (pytest-all (concat "--pdb " pytest-cmd-flags)))
+
+;;; Run tests that failed last time
+;;;###autoload
+(defun pytest-last-failed (&optional flags)
+  "Run tests that failed last time.
+Optional argument FLAGS py.test command line flags."
+  (interactive)
+  (pytest-all (concat "--last-failed " flags)))
+
+;;;###autoload
+(defun pytest-pdb-last-failed ()
+  "Run tests that failed last time, enger debugger on error."
+  (interactive)
+  (pytest-last-failed (concat "--pdb " pytest-cmd-flags)))
 
 ;;; Run all the tests in a directory (and its child directories)
 ;;;###autoload
