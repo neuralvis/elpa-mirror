@@ -1,0 +1,2 @@
+
+(dbc . [(20200330 1812) ((emacs (24 4)) (cl-lib (0 5)) (ht (2 3))) "Control how to open buffers" single ((:commit . "74d182b0205c2035ea8b1b630f9ee638c1851b3d") (:keywords "convenience") (:authors ("Matsievskiy S.V.")) (:maintainer "Matsievskiy S.V.") (:url . "https://gitlab.com/matsievskiysv/display-buffer-control"))])
