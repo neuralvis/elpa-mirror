@@ -163,6 +163,7 @@ notify me of any missing package or change you would like to see.
     mu4e-conversation
     multiple-cursors
     neotree
+    no-emoji
     num3-mode
     org
     org-journal
@@ -176,11 +177,14 @@ notify me of any missing package or change you would like to see.
     outline-mode
     outline-minor-faces
     package (M-x list-packages)
+    page-break-lines
     paradox
     paren-face
+    parrot
     pass
     persp-mode
     perspective
+    phi-grep
     powerline
     powerline-evil
     proced

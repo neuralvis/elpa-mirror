@@ -1,0 +1,2 @@
+
+(apdl-mode . [(20200331 1330) ((emacs (25 1))) "Major mode for the APDL programming language." tar ((:commit . "81f13a80ae9231852807d0e43146120444fbfad1") (:url . "https://github.com/dieter-wilhelm/apdl-mode") (:maintainer "H. Dieter Wilhelm" . "dieter@duenenhof-wilhelm.de") (:authors ("H. Dieter Wilhelm" . "dieter@duenenhof-wilhelm.de")) (:keywords "APDL" "Ansys" "languages" "FEA" "convenience" "tools"))])
