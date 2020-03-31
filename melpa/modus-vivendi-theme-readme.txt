@@ -61,6 +61,7 @@ notify me of any missing package or change you would like to see.
     counsel-org-capture-string
     cov
     csv-mode
+    ctrlf
     custom (M-x customize)
     dap-mode
     dashboard (emacs-dashboard)
@@ -185,6 +186,8 @@ notify me of any missing package or change you would like to see.
     persp-mode
     perspective
     phi-grep
+    phi-search
+    pomidor
     powerline
     powerline-evil
     proced
@@ -216,6 +219,7 @@ notify me of any missing package or change you would like to see.
     syslog-mode
     telephone-line
     term
+    tomatinho
     transient (pop-up windows like Magit's)
     treemacs
     undo-tree
