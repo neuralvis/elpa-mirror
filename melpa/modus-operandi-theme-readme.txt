@@ -152,6 +152,7 @@ notify me of any missing package or change you would like to see.
     lsp-mode
     lsp-ui
     magit
+    magit-imerge
     markdown-mode
     markup-faces (`adoc-mode')
     mentor
@@ -218,6 +219,7 @@ notify me of any missing package or change you would like to see.
     vc-annotate (C-x v g)
     visual-regexp
     volatile-highlights
+    wcheck-mode
     web-mode
     wgrep
     which-function-mode
