@@ -1,2 +1,0 @@
-
-(tango-plus-theme . [(20200331 1319) nil "A color theme based on the tango palette" single ((:commit . "827ec19a5cbe1190ab8bbffeb1e93fac1ca742f7") (:authors ("Titus von der Malsburg" . "malsburg@posteo.de")) (:maintainer "Titus von der Malsburg" . "malsburg@posteo.de") (:url . "https://github.com/tmalsburg/tango-plus-theme"))])
