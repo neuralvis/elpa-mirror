@@ -2,7 +2,7 @@
 
 ;; Author: Fox Kiester <noct@posteo.net>
 ;; URL: https://github.com/noctuid/link-hint.el
-;; Package-Version: 20200205.2244
+;; Package-Version: 20200401.0
 ;; Keywords: convenience url avy link links hyperlink
 ;; Package-Requires: ((avy "0.4.0") (emacs "24.1") (cl-lib "0.5"))
 ;; Version: 0.1
@@ -254,7 +254,7 @@ link-hint-NAME."
 (defun link-hint--var-valid-p (var)
   "Return t if VAR is bound and true or is the current major mode."
   (or (eq var major-mode)
-      (and (boundp var) (symbol-value var))))
+      (bound-and-true-p var)))
 
 (defun link-hint--type-valid-p (type)
   "Return whether TYPE is a valid type for the current buffer.
@@ -817,38 +817,36 @@ Only search the range between just after the point and BOUND."
 
 ;; * Avy/Action Helper Functions
 (defun link-hint--collect (start end type)
-  "Between START and END in the current buffer, collect all links of TYPE.
-If the link TYPE does not satisfy the necessary predicates, return nil."
-  (when (link-hint--type-valid-p type)
-    (save-excursion
-      (goto-char start)
-      (let ((current-window (get-buffer-window))
-            (next-func (get type :next))
-            (at-point-p (get type :at-point-p))
-            links
-            link-pos)
-        ;; as all "next-" functions are designed to look after the point,
-        ;; check if there is a link at the point the first time, in order
-        ;; to catch links that are at the start bound,
-        ;; TODO explain this better and retest
-        ;; as the eol of an invisible line can be visible in org buffers,
-        ;; don't do this if the point is at the eol
-        ;; TODO make this a do while instead if find a way around this
-        (when (and (not (looking-at (rx eol)))
-                   (funcall at-point-p))
-          (push (list :pos (point)
-                      :win current-window
-                      :args (funcall at-point-p)
-                      :type type)
-                links))
-        (while (setq link-pos (funcall next-func end))
-          (goto-char link-pos)
-          (push (list :pos link-pos
-                      :win current-window
-                      :args (funcall at-point-p)
-                      :type type)
-                links))
-        links))))
+  "Between START and END in the current buffer, collect all links of TYPE."
+  (save-excursion
+    (goto-char start)
+    (let ((current-window (get-buffer-window))
+          (next-func (get type :next))
+          (at-point-p (get type :at-point-p))
+          links
+          link-pos)
+      ;; as all "next-" functions are designed to look after the point,
+      ;; check if there is a link at the point the first time, in order
+      ;; to catch links that are at the start bound,
+      ;; TODO explain this better and retest
+      ;; as the eol of an invisible line can be visible in org buffers,
+      ;; don't do this if the point is at the eol
+      ;; TODO make this a do while instead if find a way around this
+      (when (and (not (looking-at (rx eol)))
+                 (funcall at-point-p))
+        (push (list :pos (point)
+                    :win current-window
+                    :args (funcall at-point-p)
+                    :type type)
+              links))
+      (while (setq link-pos (funcall next-func end))
+        (goto-char link-pos)
+        (push (list :pos link-pos
+                    :win current-window
+                    :args (funcall at-point-p)
+                    :type type)
+              links))
+      links)))
 
 ;; WORKAROUND for avy--find-visible-regions sometimes excluding visible ranges
 ;; (which may be org's fault)
@@ -902,11 +900,12 @@ If the link TYPE does not satisfy the necessary predicates, return nil."
   "Collect all visible links in the current buffer."
   (let (all-link-positions)
     (dolist (bounds (link-hint--find-visible-regions (window-start)
-                                                     (window-end)))
+                                                     (window-end nil t)))
       (dolist (type link-hint-types)
-        (setq all-link-positions
-              (append all-link-positions
-                      (link-hint--collect (car bounds) (cdr bounds) type)))))
+        (when (link-hint--type-valid-p type)
+          (setq all-link-positions
+                (append all-link-positions
+                        (link-hint--collect (car bounds) (cdr bounds) type))))))
     (sort (cl-delete-duplicates all-link-positions
                                 :test #'link-hint--equal
                                 ;; types earlier in `link-hint-types' have
