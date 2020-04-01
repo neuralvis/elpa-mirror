@@ -5,7 +5,7 @@
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; Maintainer: Neil Okamoto <neil.okamoto+melpa@gmail.com>
 ;; URL: https://github.com/emacsorphanage/anzu
-;; Package-Version: 20200328.2019
+;; Package-Version: 20200331.1717
 ;; Version: 0.62
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -236,7 +236,8 @@
 (defun anzu--use-result-cache-p (input)
   (and (eq (anzu--isearch-regexp-function) (car anzu--last-search-state))
        (eq isearch-regexp (cdr anzu--last-search-state))
-       (string= input anzu--last-isearch-string)))
+       (string= input anzu--last-isearch-string)
+       (not (eq last-command 'isearch-toggle-case-fold))))
 
 (defun anzu--update (query)
   (when (>= (length query) anzu-minimum-input-length)
