@@ -18,6 +18,7 @@ are disabled by default:
     modus-vivendi-theme-scale-headings
     modus-vivendi-theme-visible-fringes
     modus-vivendi-theme-distinct-org-blocks
+    modus-vivendi-theme-subtle-diffs
 
 The default scale is as follows (it can be customised as well):
 

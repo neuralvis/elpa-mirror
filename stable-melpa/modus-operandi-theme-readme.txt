@@ -18,6 +18,7 @@ are disabled by default:
     modus-operandi-theme-scale-headings
     modus-operandi-theme-visible-fringes
     modus-operandi-theme-distinct-org-blocks
+    modus-operandi-theme-subtle-diffs
 
 The default scale is as follows (it can be customised as well):
 
