@@ -4,7 +4,7 @@
 
 ;; Author: Mihai Olteanu <mihai_olteanu@fastmail.fm>
 ;; Version: 1.0
-;; Package-Version: 20200326.1738
+;; Package-Version: 20200401.1350
 ;; Package-Requires: ((emacs "26.1") (lastfm "1.1") (versuri "1.0") (s "1.12.0") (bind-key "2.4") (mpv "0.1.0"))
 ;; Keywords: multimedia
 ;; URL: https://github.com/mihaiolteanu/vuiet
@@ -198,7 +198,7 @@ l   visit the artist's lastfm page."
       (cl-loop for i from 1
                for song in songs
                do (insert
-                   (format "%2s. [[elisp:(vuiet-play '(\"%s\" \"%s\"))][%s]]\n"
+                   (format "%2s. [[elisp:(vuiet-play '((\"%s\" \"%s\")))][%s]]\n"
                            i artist (cadr song) (cadr song))))
 
       (vuiet--local-set-keys
@@ -259,10 +259,10 @@ artist."
                                             `(,artist-max-len ,song-max-len))
                                  ;; Add the actual artist and song.
                                  (car song) (cadr song))
-                         (vuiet--new-track (car song) (cadr song))))
+                         (list (car song) (cadr song))))
                  songs)
               :action (lambda (selection)
-                        (vuiet-play (cadr selection))))))
+                        (vuiet-play (list (cadr selection)))))))
 
 (cl-defun vuiet-loved-tracks-info (&key (page 1) (n 50))
   "Display N tracks from the user loved tracks in a new buffer.
@@ -390,8 +390,8 @@ inside this buffer."
   (interactive)
   (setf vuiet--playing-track nil
         mpv-on-exit-hook nil)
-  (setq-default mode-line-misc-info nil)
-  (mpv-kill))
+  (mpv-kill)
+  (vuiet-update-mode-line))
 
 (defun vuiet-playing-artist ()
   "Return the currently playing artist."
@@ -491,12 +491,12 @@ See `versuri-display' for the active keybindings inside this buffer."
 
 (defun vuiet--play-track (track)
   "Play the TRACK in the background with mpv and ytdl."
-  ;; Update the mode-line after the track has been found on youtube and playback
-  ;; has started. This gives us a chance to display to also display the total
-  ;; duration of the song besides the artist and song name.
   (setf mpv-on-event-hook
         (lambda (ev)
           (let ((event (cdr (car ev))))
+            ;; Update the mode-line after the track has been found on youtube
+            ;; and playback has started. This gives us a chance to also display
+            ;; the total duration of the song besides the artist and song name.
             (when (string-equal event "playback-restart")
               (vuiet--set-playing-track track (mpv-get-duration))
               (vuiet-update-mode-line)))))
@@ -510,10 +510,17 @@ See `versuri-display' for the active keybindings inside this buffer."
 
 (defun vuiet--next-track (tracks)
   "Yield the next VUIET-TRACK object from the TRACKS list.
-If no more objects available, return nil."
+If no more objects available, do a cleanup and return nil."
   (condition-case nil
       (iter-next tracks)
-    (iter-end-of-sequence nil)))
+    ;; No more tracks left.
+    (iter-end-of-sequence
+     (vuiet-stop)
+     nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                    Playlists
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (iter-defun vuiet--make-generator (songs random)
   "Make a generator of VUIET-TRACK objects from the SONGS list.
@@ -532,42 +539,22 @@ will yield each (length songs) elements, sequentially."
   "Play one track from the GENERATOR.
 Set mvp up so that after quiting (track finishes), the next item
 from the generator is played."
-  (vuiet-play (vuiet--next-track generator))
+  (vuiet-stop)                          ;Cleanup
+  (vuiet--play-track (vuiet--next-track generator))
   (setf mpv-on-exit-hook
         (lambda (&rest event)
-          (unless event
-            ;; A kill event (mpv closes) is "registered" as nil.
-            (vuiet-play generator)))))
+          ;; A kill event (mpv closes) is "registered" as nil.
+          (unless event            
+            (awhen (vuiet--next-track generator)
+              (vuiet--play-track it)))))
+  t)
 
-(cl-defun vuiet-play (item &key (random nil))
-  "Play the ITEM with mpv and scrobble to lastfm.
-If RANDOM is t, take a random track from ITEM.
-
-ITEM can be a `vuiet-track', a list of artist and song name
-strings, in which case they're played directly, or a list of
-artist and songs names in which case they're transformed into a
-generator, or a generator of tracks, either compiled or not, in
-which case a new `vuiet-track' is extracted and played, setting
-mpv up as such, that when the track finishes a new track will be
-extracted and played from the generator."
-  (vuiet-stop)           ;Clear hooks, leave in a clean state for a new start.
-  (cl-case (type-of item)
-    ;; A compiled generator
-    (compiled-function (vuiet--play-generator item))
-    (vuiet-track (vuiet--play-track item)) ; A track can be played directly.
-    (cons (cl-case (type-of (car item))
-            ;; A list of '(("artist1" "song1") ("artist2" "song2") ...)
-            ;; Transform them into a generator of tracks and try again.
-            (cons (vuiet-play (vuiet--make-generator item random)))
-            ;; A single ("artist1" "song1"), transform it into a vuiet-track and
-            ;; try again
-            (string (vuiet-play (vuiet--new-track (car item) (cadr item))))
-            ;; A non-compiled generator.
-            (symbol (vuiet--play-generator item)))))
-  nil)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Playlists
+;;;###autoload
+(cl-defun vuiet-play (songs &key (random nil))
+  "Play everyting in the SONGS list, randomly or sequentially.
+SONGS is a list of type ((artist1 song1) (artist2 song2) ...)."
+  (vuiet--play-generator
+   (vuiet--make-generator songs random)))
 
 ;;;###autoload
 (defun vuiet-play-artist (artist random)
@@ -576,12 +563,12 @@ If RANDOM is t, play the tracks at random, indefinitely.
 The number of tracks is equal to VUIET-ARTIST-TRACKS-LIMIT."
   (interactive (list (read-string "Artist: ")
                      (y-or-n-p "Play random? ")))
-  (vuiet-play (vuiet--make-generator
-               (lastfm-artist-get-top-tracks
-                artist
-                :limit vuiet-artist-tracks-limit)
-               random)))
+  (vuiet-play (lastfm-artist-get-top-tracks
+               artist
+               :limit vuiet-artist-tracks-limit)
+              :random random))
 
+;;;###autoload
 (defun vuiet-play-playing-artist (random)
   "Play the currently playing artist's top tracks.
 If RANDOM is t, play the tracks at random, indefinitely.
@@ -590,6 +577,40 @@ The number of tracks is equal to VUIET-ARTIST-TRACKS-LIMIT."
   (when (vuiet--playing-track)
     (vuiet-play-artist (vuiet-playing-artist)
                        random)))
+
+(defun vuiet-play-playing-track-album ()
+  "Play the full album of the currently playing track."
+  (interactive)
+  (when (vuiet--playing-track)
+    (let* ((artist (vuiet-playing-artist))
+           (song (vuiet-playing-track-name))
+           (album (car (lastfm-track-get-info artist song))))
+      (vuiet-play (lastfm-album-get-info artist album)))))
+
+(defun vuiet-info-playing-track-album ()
+  "Open an info buffer for the currently playing track album."
+  (interactive)
+  (when (vuiet--playing-track)
+    (let* ((artist (vuiet-playing-artist))
+           (song (vuiet-playing-track-name))
+           (album (car (lastfm-track-get-info artist song))))
+      (vuiet-album-info artist album))))
+
+;;;###autoload
+(defun vuiet-play-album (&optional artist album)
+  "Play the whole ALBUM of the given ARTIST.
+If called interactively, the album can be picked interactively
+from the ARTIST's top albums, where ARTIST is given in the
+minibuffer."
+  (interactive)
+  (if (and artist album)
+      (vuiet-play (lastfm-album-get-info artist album))
+    (let ((artist (read-string "Artist: ")))
+      (ivy-read (format "Play %s Album" artist)
+       (lastfm-artist-get-top-albums artist)
+       :action (lambda (album)
+                 (vuiet-play
+                  (lastfm-album-get-info artist (car album))))))))
 
 (iter-defun vuiet--artists-similar-tracks (artists)
   "Return a generator of tracks based on the given ARTISTS.
@@ -621,11 +642,12 @@ are played.  The number of similar artists taken into account is
 equal to VUIET-ARTIST-SIMILAR-LIMIT and the number of tracks is
 equal to VUIET-ARTIST-TRACKS-LIMIT."
   (interactive "sArtist(s): ")
-  (vuiet-play (vuiet--artists-similar-tracks
-               (if (stringp artists)
-                   ;; The function was called interactively.
-                   (mapcar #'s-trim (s-split "," artists))
-                 artists))))
+  (vuiet--play-generator
+   (vuiet--artists-similar-tracks
+    (if (stringp artists)
+        ;; The function was called interactively.
+        (mapcar #'s-trim (s-split "," artists))
+      artists))))
 
 (defun vuiet-play-playing-artist-similar ()
   "Play tracks from artists similar to the playing artist.
@@ -635,8 +657,9 @@ The number of similar artists taken into account is equal to
 VUIET-ARTIST-SIMILAR-LIMIT and the number of tracks is equal to
 VUIET-ARTIST-TRACKS-LIMIT."
   (interactive)
-  (vuiet-play (vuiet--artists-similar-tracks
-               (list (vuiet-playing-artist)))))
+  (vuiet--play-generator
+   (vuiet--artists-similar-tracks
+    (list (vuiet-playing-artist)))))
 
 (iter-defun vuiet--tags-similar-tracks (tags)
   "Return a generator of tracks based on the given TAGS.
@@ -668,11 +691,12 @@ the TAGS are played.  The number of artists with the given tag
 taken into account is equal to VUIET-TAG-ARTISTS-LIMIT while the
 number of tracks is equal to VUIET-ARTIST-TRACKS-LIMIT."
   (interactive "sTag(s): ")
-  (vuiet-play (vuiet--tags-similar-tracks
-               (if (stringp tags)
-                   ;; The function was called interactively.
-                   (mapcar #'s-trim (s-split "," tags))
-                 tags))))
+  (vuiet--play-generator
+   (vuiet--tags-similar-tracks
+    (if (stringp tags)
+        ;; The function was called interactively.
+        (mapcar #'s-trim (s-split "," tags))
+      tags))))
 
 (defun vuiet-play-playing-tags-similar ()
   "Play tracks from artists with similar tags as the current tags.
@@ -682,16 +706,23 @@ The number of artists with the given tag taken into account is
 equal to VUIET-TAG-ARTISTS-LIMIT while the number of tracks is
 equal to VUIET-ARTIST-TRACKS-LIMIT."
   (interactive)
-  (vuiet-play (vuiet--tags-similar-tracks
-               (mapcar #'car (lastfm-artist-get-top-tags
-                       (vuiet-playing-artist))))))
+  (vuiet--play-generator
+   (vuiet--tags-similar-tracks
+    (mapcar #'car (lastfm-artist-get-top-tags
+            (vuiet-playing-artist))))))
 
 ;;;###autoload
-(defun vuiet-play-track (artist name)
-  "Play track NAME from ARTIST."
-  (interactive (list (read-string "Artist: ")
-                     (read-string "Track Name: ")))
-  (vuiet-play (vuiet--new-track artist name)))
+(defun vuiet-play-track (&optional artist name)
+  "Play the song NAME from the given ARTIST.
+If called interactively, let the user select and play one of the
+ARTIST's top songs, where ARTIST is given in the minibuffer."
+  (interactive)
+  (if (and artist name)
+      (vuiet-play `((,artist ,name)))
+    (vuiet--ivy-play-song
+     (lastfm-artist-get-top-tracks
+      (read-string "Artist: ")
+      :limit vuiet-artist-tracks-limit))))
 
 ;;;###autoload
 (defun vuiet-play-track-search (track)
@@ -708,7 +739,7 @@ know the exact name and/or artist of the song."
   "Search a track by LYRICS and play it."
   (interactive "sLyrics: ")
   (let ((track (versuri-ivy-search lyrics)))
-    (vuiet-play track)))
+    (vuiet-play (list track))))
 
 ;;;###autoload
 (defun vuiet-play-loved-track ()
@@ -730,6 +761,7 @@ username given in the setup of the lastfm.el package."
                :limit vuiet-loved-tracks-limit)
               :random random))
 
+;;;###autoload
 (defun vuiet-play-recent-track ()
   "Play one of the recent listened tracks."
   (interactive)
@@ -754,6 +786,7 @@ tracks list."
                          :limit vuiet-artist-tracks-limit)))))
       (iter-yield (vuiet--new-track similar track)))))
 
+;;;###autoload
 (defun vuiet-play-loved-tracks-similar ()
   "Play tracks based on artists similar to loved tracks artists.
 Random tracks from random artists similar to a random artist from
@@ -764,7 +797,7 @@ The number of similar artists taken into account is equal to
 VUIET-ARTIST-SIMILAR-LIMIT and the number of tracks is equal to
 VUIET-ARTIST-TRACKS-LIMIT."
   (interactive)
-  (vuiet-play (vuiet--loved-tracks-similar-tracks)))
+  (vuiet--play-generator (vuiet--loved-tracks-similar-tracks)))
 
 (provide 'vuiet)
 
