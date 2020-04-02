@@ -125,6 +125,7 @@ notify me of any missing package or change you would like to see.
     helm-ls-git
     helm-switch-shell
     helm-xref
+    helpful
     highlight-blocks
     highlight-defined
     highlight-escape-sequences (`hes-mode')
