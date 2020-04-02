@@ -4,7 +4,7 @@
 
 ;; Author: Phil Hagelberg
 ;; URL: https://gitlab.com/technomancy/fennel-mode
-;; Package-Version: 20200206.2001
+;; Package-Version: 20200402.442
 ;; Version: 0.1.0
 ;; Created: 2018-02-18
 ;;
@@ -243,14 +243,16 @@ buffer, or when given a prefix arg."
     (read-only-mode)
     (goto-char (point-min))))
 
-(defun fennel-repl ()
+(defun fennel-repl (ask-for-command?)
   "Switch to the fennel repl buffer, or start a new one if needed."
-  (interactive)
+  (interactive "P")
   (if (get-buffer-process inferior-lisp-buffer)
       (pop-to-buffer inferior-lisp-buffer)
-    (run-lisp (if (string= inferior-lisp-program "lisp")
-                  "fennel"
-                inferior-lisp-program))
+    (run-lisp (cond (ask-for-command?
+                     (read-from-minibuffer "Command: "))
+                    ((string= inferior-lisp-program "lisp")
+                     "fennel")
+                    inferior-lisp-program))
     (set (make-local-variable 'lisp-describe-sym-command) "(doc %s)\n")
     (set (make-local-variable 'inferior-lisp-prompt) ">> ")
     (set (make-local-variable 'lisp-arglist-command) fennel-arglist-command)))

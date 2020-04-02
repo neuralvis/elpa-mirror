@@ -1,2 +1,2 @@
 
-(flycheck-phpstan . [(20200401 1455) ((emacs (24 3)) (flycheck (26)) (phpstan (0 4 0))) "Flycheck integration for PHPStan" single ((:commit . "277f0b4a1d227a67ddb304f397a0e1d8883f83c8") (:keywords "tools" "php") (:authors ("USAMI Kenta" . "tadsan@zonu.me")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-php/phpstan.el"))])
+(flycheck-phpstan . [(20200401 1455) ((emacs (24 3)) (flycheck (26)) (phpstan (0 4 0))) "Flycheck integration for PHPStan" single ((:commit . "a2b3513d546191a145f7dfeee7ce50203657da1e") (:keywords "tools" "php") (:authors ("USAMI Kenta" . "tadsan@zonu.me")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-php/phpstan.el"))])
