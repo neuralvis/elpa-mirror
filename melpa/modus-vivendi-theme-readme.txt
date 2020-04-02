@@ -134,6 +134,7 @@ notify me of any missing package or change you would like to see.
     hl-line-mode
     hl-todo
     hydra
+    ibuffer
     ido-mode
     iedit
     imenu-list
