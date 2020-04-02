@@ -1,2 +1,0 @@
-
-(org-superstar . [(20200401 2121) ((org (9 1 9)) (emacs (26 2))) "Prettify headings and plain lists in Org mode" single ((:commit . "10735de9e9e0ec9d52cab1bb1e8f3e4ba314f8ea") (:keywords "faces" "outlines") (:authors ("D. Williams" . "d.williams@posteo.net")) (:maintainer "D. Williams" . "d.williams@posteo.net") (:url . "https://github.com/integral-dw/org-superstar-mode"))])

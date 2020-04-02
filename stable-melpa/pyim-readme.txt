@@ -149,8 +149,6 @@ pyim 支持双拼输入模式，用户可以通过变量 `pyim-default-scheme' �
 *** 通过 pyim 来支持 rime 所有输入法
 
 1. 安裝配置 liberime 和 pyim, 方式见：[[https://github.com/merrickluo/liberime][liberime]].
-   注意，由于特殊的集成方式，pyim 通过变量 `pyim-liberime-search-limit' 来限制从 rime 获取
-   的词条数量，以提高输入法响应速度，用户可以根据自己设备的性能来灵活调整这个选项。
 2. 使用 rime 全拼输入法的用户，也可以使用 rime-quanpin scheme,
    这个 scheme 是专门针对 rime 全拼输入法定制的，支持全拼v快捷键。
    #+BEGIN_EXAMPLE
