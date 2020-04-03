@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2019 jack angers
 ;; Author: jack angers and contributors
 ;; Url: https://github.com/jacktasia/dumb-jump
-;; Package-Version: 20200306.513
+;; Package-Version: 20200402.2244
 ;; Version: 0.5.3
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
@@ -66,7 +66,8 @@
   :group 'dumb-jump
   :type '(choice (const :tag "Popup" popup)
                  (const :tag "Helm" helm)
-                 (const :tag "Ivy" ivy)))
+                 (const :tag "Ivy" ivy)
+                 (const :tag "Completing Read" completing-read)))
 
 (defcustom dumb-jump-ivy-jump-to-selected-function
   #'dumb-jump-ivy-jump-to-selected
@@ -1880,6 +1881,8 @@ This is the persistent action (\\[helm-execute-persistent-action]) for helm."
 for user to select.  Filters PROJ path from files for display."
   (let ((choices (--map (dumb-jump--format-result proj it) results)))
     (cond
+     ((eq dumb-jump-selector 'completing-read)
+      (dumb-jump-to-selected results choices (completing-read "Jump to: " choices)))
      ((and (eq dumb-jump-selector 'ivy) (fboundp 'ivy-read))
       (funcall dumb-jump-ivy-jump-to-selected-function results choices proj))
      ((and (eq dumb-jump-selector 'helm) (fboundp 'helm))
