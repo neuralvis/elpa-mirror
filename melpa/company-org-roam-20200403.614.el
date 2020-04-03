@@ -4,7 +4,7 @@
 
 ;; Author: Jethro Kuan <jethrokuan95@gmail.com>
 ;; URL: https://github.com/jethrokuan/company-org-roam
-;; Package-Version: 20200331.855
+;; Package-Version: 20200403.614
 ;; Keywords: org-mode, roam, convenience
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "26.1") (company "0.9.0") (dash "2.13") (org-roam "1.0.0"))
@@ -66,7 +66,7 @@ A value of nil means the caches never expire."
   (cl-destructuring-bind (high low _usec _psec) (current-time)
     (+ (lsh high 16) low)))
 
-(defun company-org-roam--post-completion (candidate)
+(defun company-org-roam--post-completion (title)
   "The post-completion action for `company-org-roam'.
 It deletes the inserted CANDIDATE, and replaces it with a
 relative file link.
@@ -74,18 +74,18 @@ relative file link.
 The completion inserts the absolute file path where the buffer
 does not have a corresponding file."
   (let* ((cache (gethash (file-truename org-roam-directory) company-org-roam-cache))
-         (path (gethash candidate cache))
+         (path (gethash title cache))
          (current-file-path (-> (or (buffer-base-buffer)
                                     (current-buffer))
                                 (buffer-file-name)
                                 (file-truename)
                                 (file-name-directory))))
-    (delete-region (- (point) (length candidate)) (point))
+    (delete-region (- (point) (length title)) (point))
     (insert (format "[[file:%s][%s]]"
                     (if current-file-path
                         (file-relative-name path current-file-path)
                       path)
-                    candidate))))
+                    (org-roam--format-link-title title)))))
 
 (defun company-org-roam--filter-candidates (prefix candidates)
   "Filter CANDIDATES that start with PREFIX.
