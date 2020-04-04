@@ -216,7 +216,9 @@ notify me of any missing package or change you would like to see.
     speedbar
     stripes
     suggest
+    switch-window
     swiper
+    swoop
     sx
     symbol-overlay
     syslog-mode
