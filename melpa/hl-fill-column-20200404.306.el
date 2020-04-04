@@ -1,7 +1,7 @@
 ;;; hl-fill-column.el --- Highlight fill column. -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/hl-fill-column
-;; Package-Version: 20190608.203
+;; Package-Version: 20200404.306
 ;; Created: November 1, 2018
 ;; Keywords: fill column, faces
 ;; Package-Requires: ((names "0.5") (emacs "24"))
@@ -39,7 +39,7 @@
   "Font lock keywords for fill column.")
 (make-variable-buffer-local (quote -keywords))
 
-(defface face '((t (:background "brightblack" :foreground "white")))
+(defface face '((t (:inherit font-lock-keyword-face :inverse-video t)))
   "Face used to highlight fill column"
   :group 'hl-fill-column)
 
