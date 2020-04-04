@@ -222,6 +222,7 @@ notify me of any missing package or change you would like to see.
     sx
     symbol-overlay
     syslog-mode
+    trashed
     telephone-line
     term
     tomatinho
