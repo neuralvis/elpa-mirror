@@ -3,7 +3,7 @@
 ;; Copyright (C) 2011-2020 Free Software Foundation, Inc
 
 ;; Author: Julien Danjou <julien@danjou.info>
-;; Version: 0.12
+;; Version: 0.13
 ;; Keywords: comm
 
 ;; This file is part of GNU Emacs.
@@ -143,17 +143,17 @@ TOKEN should be obtained with `oauth2-request-access'."
   :group 'oauth2
   :type 'file)
 
-(defun oauth2-compute-id (auth-url token-url resource-url)
+(defun oauth2-compute-id (auth-url token-url scope)
   "Compute an unique id based on URLs.
 This allows to store the token in an unique way."
-  (secure-hash 'md5 (concat auth-url token-url resource-url)))
+  (secure-hash 'md5 (concat auth-url token-url scope)))
 
 ;;;###autoload
 (defun oauth2-auth-and-store (auth-url token-url scope client-id client-secret &optional redirect-uri state)
   "Request access to a resource and store it using `plstore'."
   ;; We store a MD5 sum of all URL
   (let* ((plstore (plstore-open oauth2-token-file))
-         (id (oauth2-compute-id auth-url token-url resource-url))
+         (id (oauth2-compute-id auth-url token-url scope))
          (plist (cdr (plstore-get plstore id))))
     ;; Check if we found something matching this access
     (if plist
@@ -245,6 +245,14 @@ when finished.  See `url-retrieve'."
 
 ;;;; ChangeLog:
 
+;; 2020-04-04  Julien Danjou  <julien@danjou.info>
+;; 
+;; 	fix(oauth2): rename forgotten instance of resource-url -> scope
+;; 
+;; 	This is version 0.13
+;; 
+;; 	Thanks Rainer Gemulla <rgemulla@uni-mannheim.de>
+;; 
 ;; 2020-03-27  Julien Danjou  <julien@danjou.info>
 ;; 
 ;; 	feat(oauth2): add state parameter support, rename resource-url to scope
