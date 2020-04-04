@@ -8,7 +8,6 @@
 ;; Author: Masatake YAMATO <masata-y@is.aist-nara.ac.jp>
 ;; Maintainer: SKK Development Team <skk@ring.gr.jp>
 ;; URL: https://github.com/skk-dev/ddskk/blob/master/READMEs/README.ccc.org
-;; Package-Version: 20200314.1557
 ;; Keywords: cursor
 
 ;; This file is part of Daredevil SKK.
