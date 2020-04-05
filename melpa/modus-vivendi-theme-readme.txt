@@ -231,6 +231,7 @@ notify me of any missing package or change you would like to see.
     undo-tree
     vc (built-in mode line status for version control)
     vc-annotate (C-x v g)
+    visible-mark
     visual-regexp
     volatile-highlights
     wcheck-mode
