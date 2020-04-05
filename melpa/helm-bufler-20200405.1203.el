@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/bufler.el
-;; Package-Version: 20200401.1319
+;; Package-Version: 20200405.1203
 ;; Package-X-Original-Version: 0.2-pre
 ;; Package-Requires: ((emacs "26.3") (bufler "0.2-pre") (helm "1.9.4"))
 ;; Keywords: convenience
@@ -53,7 +53,7 @@ This mimics `bufler-workspace-switch-buffer'."
      ;; `map-nested-elt' in `bufler-buffer-alist-at'.  Maybe
      ;; that difference has been the source of some other
      ;; confusion too...
-     (butlast (bufler-group-tree-leaf-path (bufler-buffers) buffer))))
+     (bufler-buffer-workspace-path buffer)))
   (switch-to-buffer buffer))
 
 ;;;###autoload

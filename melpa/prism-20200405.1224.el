@@ -4,8 +4,8 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/prism.el
-;; Package-Version: 20200315.1926
-;; Version: 0.2
+;; Package-Version: 20200405.1224
+;; Version: 0.2.1
 ;; Package-Requires: ((emacs "26.1") (dash "2.14.1"))
 ;; Keywords: faces lisp
 
@@ -733,6 +733,7 @@ modified as desired for comments or strings, respectively."
                           (--when-let (alist-get face face-remapping-alist)
                             (face-remap-remove-relative (cons (-last-item it) (car (butlast it)))))))
     (let* ((colors (->> colors
+                        (--remove (string-prefix-p "unspecified-"))
                         (--map (pcase-exhaustive it
                                  ((pred facep) (face-attribute it :foreground nil 'default))
                                  ((pred stringp) it)
