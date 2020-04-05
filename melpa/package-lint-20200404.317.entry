@@ -1,2 +1,0 @@
-
-(package-lint . [(20200404 317) ((cl-lib (0 5)) (emacs (24 1)) (let-alist (1 0 6))) "A linting library for elisp package authors" tar ((:commit . "c02b0622cb1da4029fd436b13a92c283460f467d") (:keywords "lisp") (:authors ("Steve Purcell" . "steve@sanityinc.com") ("Fanael Linithien" . "fanael4@gmail.com")) (:maintainer "Steve Purcell" . "steve@sanityinc.com") (:url . "https://github.com/purcell/package-lint"))])

@@ -1,2 +1,0 @@
-
-(ssh-agency . [(20200329 1535) ((emacs (24 4)) (dash (2 10 0))) "manage ssh-agent from Emacs" single ((:commit . "67975f7773bfa0140d9dc09bd67df7f5489aa6ea") (:authors ("Noam Postavsky" . "npostavs@user.sourceforge.net")) (:maintainer "Noam Postavsky" . "npostavs@user.sourceforge.net") (:url . "https://github.com/magit/ssh-agency"))])
