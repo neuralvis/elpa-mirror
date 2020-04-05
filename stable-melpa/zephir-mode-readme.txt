@@ -21,4 +21,4 @@ name under the cursor.
 this to your Emacs configuration:
 
    (add-hook 'zephir-mode-hook
-     #(lambda () (subword-mode 1)))
+     #'(lambda () (subword-mode 1)))
