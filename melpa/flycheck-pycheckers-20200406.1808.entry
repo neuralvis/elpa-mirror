@@ -1,0 +1,2 @@
+
+(flycheck-pycheckers . [(20200406 1808) ((flycheck (0 18))) "multiple syntax checker for Python, using Flycheck" tar ((:commit . "58852753df948a325dd45758ee6553acda784f00") (:keywords "convenience" "tools" "languages") (:url . "https://github.com/msherry/flycheck-pycheckers"))])
