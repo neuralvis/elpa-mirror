@@ -1,0 +1,2 @@
+
+(unobtrusive-magit-theme . [(20200401 1215) ((emacs (24 1))) "An unobtrusive Magit theme" single ((:commit . "9ab74b605772131d5eed9018edda0d748b207c38") (:keywords "faces" "vc" "magit") (:authors ("Thomas A. Brown" . "tabsoftwareconsulting@gmail.com")) (:maintainer "Thomas A. Brown" . "tabsoftwareconsulting@gmail.com") (:url . "https://github.com/tee3/unobtrusive-magit-theme"))])
