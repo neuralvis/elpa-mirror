@@ -4,7 +4,7 @@
 ;;         Christian Schwarzgruber
 
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20200405.820
+;; Package-Version: 20200406.539
 ;; Version: 2.1.0
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -102,6 +102,7 @@ org-journal. Use `org-journal-file-format' instead.")
 
 ;; use this function to update auto-mode-alist whenever
 ;; org-journal-dir or org-journal-file-pattern change.
+;;;###autoload
 (defun org-journal-update-auto-mode-alist ()
   "Update `auto-mode-alist' to open journal files in `org-journal-mode'."
   (add-to-list 'auto-mode-alist
@@ -111,6 +112,7 @@ org-journal. Use `org-journal-file-format' instead.")
 (add-hook 'org-mode-hook 'org-journal-update-auto-mode-alist)
 (add-hook 'org-agenda-mode-hook 'org-journal-update-org-agenda-files)
 
+;;;###autoload
 (defun org-journal-dir-and-format->regex (dir format)
   "Update `org-journal-file-pattern' with the current `org-journal-file-format'."
   (concat
