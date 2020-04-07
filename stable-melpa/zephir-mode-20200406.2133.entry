@@ -1,0 +1,2 @@
+
+(zephir-mode . [(20200406 2133) ((cl-lib (0 5)) (pkg-info (0 4)) (emacs (25 1))) "Major mode for editing Zephir code" tar ((:commit . "979e8d5d4aec80c91d2f76a3e6c041a0e490f6db") (:keywords "languages") (:authors ("Serghei Iakovlev" . "egrep@protonmail.ch")) (:maintainer "Serghei Iakovlev" . "egrep@protonmail.ch") (:url . "https://github.com/zephir-lang/zephir-mode"))])

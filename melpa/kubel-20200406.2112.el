@@ -22,7 +22,7 @@
 ;; USA
 
 ;; Version: 1.0
-;; Package-Version: 20200406.1742
+;; Package-Version: 20200406.2112
 ;; Author: Adrien Brochard
 ;; Keywords: kubernetes k8s tools processes
 ;; URL: https://github.com/abrochard/kubel
@@ -98,7 +98,7 @@
 (with-no-warnings
   (require 'cl))
 
-(defgroup kubel nil "Cusomisation group for kubel."
+(defgroup kubel nil "Customisation group for kubel."
   :group 'extensions)
 
 (defvar kubel--list-format
