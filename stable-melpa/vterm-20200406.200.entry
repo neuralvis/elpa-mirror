@@ -1,2 +1,0 @@
-
-(vterm . [(20200406 200) ((emacs (25 1))) "This package implements a terminal via libvterm" tar ((:commit . "5d1a784e404a9a947a95109c6955813e51cbad59") (:keywords "terminals") (:authors ("Lukas Fürmetz" . "fuermetz@mailbox.org")) (:maintainer "Lukas Fürmetz" . "fuermetz@mailbox.org") (:url . "https://github.com/akermu/emacs-libvterm"))])
