@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20200407.204
+;; Package-Version: 20200407.237
 ;; Version: 0.7.0
 ;; Keywords: convenience, tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -650,17 +650,10 @@ will be removed."
   "Set POSFRAME's size.
 It will set the size by the POSFRAME's HEIGHT, MIN-HEIGHT
 WIDTH and MIN-WIDTH."
-  (if (and width height)
-      (unless (equal posframe--last-posframe-size
-                     (list height min-height width min-width))
-        (fit-frame-to-buffer
-         posframe height min-height width min-width)
-        (setq-local posframe--last-posframe-size
-                    (list height min-height width min-width)))
-    (fit-frame-to-buffer
-     posframe height min-height width min-width)
-    (setq-local posframe--last-posframe-size
-                (list height min-height width min-width))))
+  (fit-frame-to-buffer
+   posframe height min-height width min-width)
+  (setq-local posframe--last-posframe-size
+              (list height min-height width min-width)))
 
 (defun posframe--set-frame-position (posframe position
                                               parent-frame-width

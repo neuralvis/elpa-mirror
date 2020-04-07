@@ -17,7 +17,7 @@
 
 ;; Author: John Allen <jallen@fb.com>, Wilfred Hughes <me@wilfred.me.uk>
 ;; Version: 1.2.0
-;; Package-Version: 20191218.1628
+;; Package-Version: 20200407.246
 ;; Package-Requires: ((emacs "25.1") (s "1.11.0"))
 ;; URL: https://github.com/hhvm/hack-mode
 
@@ -1809,6 +1809,9 @@ Preserves point position in the line where possible."
 (add-to-list 'auto-mode-alist '("\\.hack$" . hack-mode))
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.hck$" . hack-mode))
+
+;;;###autoload
+(add-to-list 'interpreter-mode-alist (cons (purecopy "hhvm") 'hack-mode))
 
 (defun hack-format ()
   "Format the current buffer or region with hackfmt."
