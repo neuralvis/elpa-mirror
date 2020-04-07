@@ -5,7 +5,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/posframe
-;; Package-Version: 20200405.1200
+;; Package-Version: 20200407.204
 ;; Version: 0.7.0
 ;; Keywords: convenience, tooltip
 ;; Package-Requires: ((emacs "26"))
@@ -39,7 +39,18 @@
 
 ;; NOTE:
 ;; 1. For MacOS users, posframe needs Emacs version >= 26.0.91
-;; 2. Posframe will be very very slow when emacs is built with --with-x-toolkit=athena.
+;; 2. GNOME and MATE users with GTK3 builds should set
+;;    `x-gtk-resize-child-frames' to 'resize-mode or 'hide, then
+;;    restart emacs.
+
+;;    1. 'resize-mode has better behavior but not future-compatible.
+;;    2. 'hide is more future-proof but will blink the child frame every
+;;       time it's resized.
+
+;;    More details:
+
+;;    1. [[https://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-27&id=c49d379f17bcb0ce82604def2eaa04bda00bd5ec][Fix some problems with moving and resizing child frames]]
+;;    2. [[https://lists.gnu.org/archive/html/emacs-devel/2020-01/msg00343.html][Emacs's set-frame-size can not work well with gnome-shell?]]
 
 ;; [[./snapshots/posframe-1.png]]
 
@@ -418,10 +429,11 @@ or a name of a (possibly nonexistent) buffer.
 If NO-PROPERTIES is non-nil, The STRING's properties will
 be removed before being shown in posframe.
 
-Posframe's frame size can be set by WIDTH and HEIGHT.
-If one of them is nil, posframe's frame size will fit the
-buffer.  MIN-WIDTH and MIN-HEIGTH can be useful to prevent
-posframe becoming too small.
+WIDTH, MIN-WIDTH, HEIGHT and MIN-HEIGHT, specify bounds on the
+new total size of posframe.  MIN-HEIGHT and MIN-WIDTH default to
+the values of ‘window-min-height’ and ‘window-min-width’
+respectively.  These arguments are specified in the canonical
+character width and height of posframe.
 
 If LEFT-FRINGE or RIGHT-FRINGE is a number, left fringe or
 right fringe with be shown with the specified width.
@@ -1065,6 +1077,14 @@ bottom center.  The structure of INFO can be found in docstring of
     (cons (+ window-left (/ (- window-width posframe-width) 2))
           (+ window-top window-height
              (- 0 mode-line-height posframe-height)))))
+
+(defvar x-gtk-resize-child-frames)
+(when (and (string-match-p "GTK3" system-configuration-features)
+           (member (getenv "XDG_CURRENT_DESKTOP") '("GNOME"))
+           x-gtk-resize-child-frames)
+  (if (> emacs-major-version 26)
+      (message "Posframe: GNOME+GTK3 may need to set variable `x-gtk-resize-child-frames' to 'resize-mode or 'hide.")
+    (message "Posframe: GNOME+GTK3 have resize bug: https://lists.gnu.org/archive/html/emacs-devel/2020-01/msg00343.html")))
 
 (provide 'posframe)
 
