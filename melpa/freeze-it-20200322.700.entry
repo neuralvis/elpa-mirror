@@ -1,2 +1,2 @@
 
-(freeze-it . [(20200322 700) ((emacs (24 5))) "Minor mode to make your previous writing read-only" single ((:commit . "0e2ddd99dc1211800d55e874c1bd078f879e0d9c") (:keywords "wp" "text") (:authors ("William Rankin" . "code@william.bydasein.com")) (:maintainer "William Rankin" . "code@william.bydasein.com") (:url . "https://github.com/rnkn/freeze-it"))])
+(freeze-it . [(20200322 700) ((emacs (24 5))) "Minor mode to make your previous writing read-only" single ((:commit . "6c8585e3d725790ee7527aab0fd2367e7c2af6e0") (:keywords "wp" "text") (:authors ("William Rankin" . "code@william.bydasein.com")) (:maintainer "William Rankin" . "code@william.bydasein.com") (:url . "https://github.com/rnkn/freeze-it"))])

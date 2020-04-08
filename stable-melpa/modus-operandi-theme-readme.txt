@@ -108,6 +108,7 @@ notify me of any missing package or change you would like to see.
     flymake
     flyspell
     flyspell-correct
+    flx
     freeze-it
     frog-menu
     focus
@@ -136,6 +137,7 @@ notify me of any missing package or change you would like to see.
     hl-todo
     hydra
     ibuffer
+    icomplete
     ido-mode
     iedit
     imenu-list
