@@ -4,7 +4,7 @@
 
 ;; Author:  Kien Nguyen <kien.n.quang@gmail.com>
 ;; URL: https://github.com/kiennq/emacs-mini-modeline
-;; Package-Version: 20200408.453
+;; Package-Version: 20200408.729
 ;; Version: 0.1
 ;; Keywords: convenience, tools
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))
@@ -33,6 +33,7 @@
 (require 'dash)
 (require 'frame)
 (require 'timer)
+(require 'face-remap)
 
 (eval-when-compile
   (require 'subr-x)
