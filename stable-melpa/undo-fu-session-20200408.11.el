@@ -6,7 +6,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu-session
-;; Package-Version: 20200404.703
+;; Package-Version: 20200408.11
 ;; Keywords: convenience
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.1"))
@@ -485,7 +485,7 @@ Argument PENDING-LIST an `pending-undo-list'. compatible list."
 (defun undo-fu-session-mode-turn-on ()
   "Enable command `undo-fu-session-mode'."
   (when (and (not (minibufferp)) (not undo-fu-session-mode))
-    (spell-fu-mode 1)))
+    (undo-fu-session-mode 1)))
 
 ;;;###autoload
 (define-minor-mode undo-fu-session-mode

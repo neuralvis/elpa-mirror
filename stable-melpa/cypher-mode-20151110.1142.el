@@ -3,7 +3,6 @@
 ;; Copyright 2013 François-Xavier Bois
 
 ;; Version: 0.0.6
-;; Package-Version: 20151110.1142
 ;; Author: François-Xavier Bois <fxbois AT Google Mail Service>
 ;; Maintainer: François-Xavier Bois
 ;; Created: Sept 2013
