@@ -1,2 +1,2 @@
 
-(selectrum-prescient . [(20200404 1550) ((emacs (25 1)) (prescient (4 1)) (selectrum (1 0))) "Selectrum integration" single ((:commit . "14b91f8c1c2401e7c67bd111095402ed8552b0bc") (:keywords "extensions") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:url . "https://github.com/raxod502/prescient.el"))])
+(selectrum-prescient . [(20200404 1550) ((emacs (25 1)) (prescient (4 1)) (selectrum (1 0))) "Selectrum integration" single ((:commit . "3be69ac0d9d4e5dd5596673ce5dfebc31d8662ca") (:keywords "extensions") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:url . "https://github.com/raxod502/prescient.el"))])

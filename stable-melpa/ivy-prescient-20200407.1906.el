@@ -5,7 +5,7 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20200404.1550
+;; Package-Version: 20200407.1906
 ;; Created: 1 May 2018
 ;; Package-Requires: ((emacs "25.1") (prescient "4.1") (ivy "0.11.0"))
 ;; SPDX-License-Identifier: MIT
@@ -114,7 +114,8 @@ This is for use in `ivy-re-builders-alist'."
 (defun ivy-prescient-sort-function (c1 c2)
   "Comparison function that uses prescient.el to sort candidates.
 This is for use in `ivy-sort-functions-alist'. C1 and C2 are
-arbitrary candidates to be compared; they need not be strings."
+arbitrary candidates to be compared; they may be strings or cons
+cells whose cars are strings."
   ;; For some reason, Ivy supports candidates that are lists, and just
   ;; takes their cars. I guess we have to support that too.
   (when (listp c1)
