@@ -114,6 +114,7 @@ notify me of any missing package or change you would like to see.
     focus
     fold-this
     font-lock (generic syntax highlighting)
+    forge
     fountain (fountain-mode)
     geiser
     git
@@ -243,6 +244,7 @@ notify me of any missing package or change you would like to see.
     which-key
     whitespace-mode
     window-divider-mode
+    winum
     writegood-mode
     xah-elisp-mode
     xref
