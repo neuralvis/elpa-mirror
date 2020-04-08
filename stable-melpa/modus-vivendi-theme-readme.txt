@@ -33,6 +33,7 @@ inherit from font-lock or some basic group).  You are encouraged to
 notify me of any missing package or change you would like to see.
 
     ace-window
+    ag
     alert
     all-the-icons
     annotate
@@ -132,6 +133,7 @@ notify me of any missing package or change you would like to see.
     highlight-defined
     highlight-escape-sequences (`hes-mode')
     highlight-numbers
+    highlight-symbol
     highlight-thing
     hl-fill-column
     hl-line-mode
