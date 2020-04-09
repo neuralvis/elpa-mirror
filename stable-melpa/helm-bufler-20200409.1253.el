@@ -4,8 +4,8 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/bufler.el
-;; Package-Version: 20200408.1533
-;; Package-X-Original-Version: 0.2
+;; Package-Version: 20200409.1253
+;; Package-X-Original-Version: 0.3-pre
 ;; Package-Requires: ((emacs "26.3") (bufler "0.2-pre") (helm "1.9.4"))
 ;; Keywords: convenience
 
