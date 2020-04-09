@@ -1,2 +1,0 @@
-
-(helm-gtags . [(20200321 1456) ((emacs (24 4)) (helm (2 0))) "GNU GLOBAL helm interface" single ((:commit . "ff4329fec2cc1f53b404054ddab4cd16faef7241") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Syohei YOSHIDA" . "syohex@gmail.com") (:url . "https://github.com/syohex/emacs-helm-gtags"))])
