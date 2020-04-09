@@ -4,6 +4,7 @@
 ;;
 ;; Author: Raghav Kumar Gautam <raghav@apache.org>
 ;; URL: https://github.com/raghavgautam/osx-lib
+;; Package-Version: 20191121.1440
 ;; Keywords: Apple, AppleScript, OSX, Finder, Emacs, Elisp, VPN, Speech
 ;; Package-Requires: ((emacs "24.4"))
 ;;; Commentary:

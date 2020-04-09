@@ -52,6 +52,7 @@ notify me of any missing package or change you would like to see.
     centaur-tabs
     change-log and log-view (`vc-print-log' and `vc-print-root-log')
     cider
+    color-rg
     column-enforce-mode
     company-mode
     company-posframe
@@ -236,6 +237,7 @@ notify me of any missing package or change you would like to see.
     undo-tree
     vc (built-in mode line status for version control)
     vc-annotate (C-x v g)
+    vimish-fold
     visible-mark
     visual-regexp
     volatile-highlights
