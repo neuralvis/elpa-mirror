@@ -5,7 +5,7 @@
 ;; Author: James Nguyen <james@jojojames.com>
 ;; Maintainer: James Nguyen <james@jojojames.com>
 ;; URL: https://github.com/jojojames/dired-sidebar
-;; Package-Version: 20200226.333
+;; Package-Version: 20200409.801
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1") (dired-subtree "0.0.1"))
 ;; Keywords: dired, files, tools
@@ -1035,10 +1035,10 @@ This is somewhat experimental/hacky."
   "Redisplay icon themes unless over TRAMP."
   (unless (file-remote-p default-directory)
     (when (and (eq dired-sidebar-theme 'icons)
-               (fboundp 'all-the-icons-dired--display))
+               (fboundp 'all-the-icons-dired--refresh))
       ;; Refresh `all-the-icons-dired'.
       (dired-sidebar-revert)
-      (all-the-icons-dired--display))
+      (all-the-icons-dired--refresh))
     (when (dired-sidebar-using-tui-p)
       (dired-sidebar-tui-update-with-delay))))
 
