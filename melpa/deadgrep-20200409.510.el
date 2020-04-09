@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/deadgrep
-;; Package-Version: 20200202.1520
+;; Package-Version: 20200409.510
 ;; Keywords: tools
 ;; Version: 0.9
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3"))
@@ -1480,6 +1480,9 @@ This is intended for use with `next-error-function', which see."
 (defun deadgrep-debug ()
   "Show a buffer with some debug information about the current search."
   (interactive)
+  (unless (eq major-mode 'deadgrep-mode)
+    (user-error "deadgrep-debug should be run in a deadgrep results buffer"))
+
   (let ((command deadgrep--debug-command)
         (output deadgrep--debug-first-output)
         (buf (get-buffer-create "*deadgrep debug*"))

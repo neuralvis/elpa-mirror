@@ -2,8 +2,8 @@
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-language-id
-;; Package-Version: 20200407.1739
-;; Version: 0.5.0
+;; Package-Version: 20200409.607
+;; Version: 0.5.1
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: ISC
@@ -83,7 +83,7 @@
     ("Go" go-mode)
     ("GraphQL" graphql-mode)
     ("Haskell" haskell-mode)
-    ("HCL" hcl-mode terraform-mode)
+    ("HCL" hcl-mode)
     ("HTML"
      html-helper-mode html-mode mhtml-mode nxhtml-mode
      (web-mode (web-mode-content-type "html") (web-mode-engine "none")))

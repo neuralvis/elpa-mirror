@@ -4,8 +4,8 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Keywords: flycheck
-;; Package-Version: 20180430.2243
-;; Version: 0.2
+;; Package-Version: 20200409.501
+;; Version: 0.3
 ;; Package-Requires: ((dash "2.8.0") (s "1.9.0") (flycheck "29"))
 
 ;; This program is free software; you can redistribute it and/or modify
