@@ -7,7 +7,7 @@
 ;; Website: https://activitywatch.net
 ;; Homepage: https://github.com/pauldub/activity-watch-mode
 ;; Keywords: calendar, comm
-;; Package-Version: 20200130.805
+;; Package-Version: 20200410.648
 ;; Package-Requires: ((emacs "25") (projectile "0") (request "0") (json "0") (cl-lib "0"))
 ;; Version: 1.0.2
 
@@ -91,7 +91,7 @@
                                   (client . ,activity-watch-user-agent)
                                   (type . "app.editor.activity")))
              :headers '(("Content-Type" . "application/json"))
-             :success (function*
+             :success (cl-function
                        (lambda (&allow-other-keys)
                          (setq activity-watch-bucket-created t))))))
 
@@ -114,7 +114,7 @@ Argument TIME time at which the heartbeat was computed."
            :params `(("pulsetime" . ,activity-watch-pulse-time))
            :data (json-encode heartbeat)
            :headers '(("Content-Type" . "application/json"))
-           :error (function*
+           :error (cl-function
                    (lambda (&key data &allow-other-keys)
                      (message data)))))
 
