@@ -144,6 +144,7 @@ notify me of any missing package or change you would like to see.
     icomplete
     ido-mode
     iedit
+    iflipb
     imenu-list
     info
     info-colors

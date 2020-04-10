@@ -6,8 +6,8 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20200303.1716
-;; Package-X-Original-Version: 2.5
+;; Package-Version: 20200409.2344
+;; Package-X-Original-Version: 2.6
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -310,6 +310,9 @@ Example:
 	  (when (functionp fun)
 	    (apply fun arg)))
       (error "Backend not found"))))
+
+(defun org-msg-mml-recursive-support ()
+  (fboundp 'mml-expand-all-html-into-multipart-related))
 
 (defun org-msg-save-article-for-reply-gnus ()
   "Export the currently visited `gnus-article-buffer' as HTML.
@@ -731,6 +734,17 @@ This function is a hook for `message-send-hook'."
 	  (setq org-msg-text-plain (org-msg-org-to-text-plain)))
 	(goto-char (org-msg-start))
 	(delete-region (org-msg-start) (point-max))
+	(when (org-msg-mml-recursive-support)
+	  (when attachments
+	    (mml-insert-multipart "mixed")
+	    (dolist (file attachments)
+	      (mml-insert-tag 'part 'type (org-msg-file-mime-type file)
+			      'filename file 'disposition "attachment")))
+	  (when org-msg-text-plain-alternative
+	    (mml-insert-multipart "alternative")
+	    (mml-insert-part "text/plain")
+	    (insert org-msg-text-plain)
+	    (forward-line)))
 	(mml-insert-part "text/html")
 	(insert (org-msg-xml-to-str mail))))))
 
@@ -1012,8 +1026,9 @@ HTML emails."
 	(add-hook 'message-sent-hook 'undo)
 	(add-hook 'org-ctrl-c-ctrl-c-final-hook 'org-msg-ctrl-c-ctrl-c)
 	(add-to-list 'message-syntax-checks '(invisible-text . disabled))
-	(advice-add 'mml-expand-html-into-multipart-related
-		    :around #'org-msg-mml-into-multipart-related)
+	(unless (org-msg-mml-recursive-support)
+	  (advice-add 'mml-expand-html-into-multipart-related
+		      :around #'org-msg-mml-into-multipart-related))
 	(advice-add 'org-html--todo :around #'org-msg-html--todo)
 	(advice-add 'message-mail :after #'org-msg-post-setup)
 	(when (boundp 'bbdb-mua-mode-alist)
@@ -1023,8 +1038,9 @@ HTML emails."
     (remove-hook 'org-ctrl-c-ctrl-c-final-hook 'org-msg-ctrl-c-ctrl-c)
     (setq message-syntax-checks (delete '(invisible-text . disabled)
 					message-syntax-checks))
-    (advice-remove 'mml-expand-html-into-multipart-related
-		   #'org-msg-mml-into-multipart-related)
+    (unless (org-msg-mml-recursive-support)
+      (advice-remove 'mml-expand-html-into-multipart-related
+		     #'org-msg-mml-into-multipart-related))
     (advice-remove 'org-html--todo #'org-msg-html--todo)
     (advice-remove 'message-mail #'org-msg-post-setup)
     (when (boundp 'bbdb-mua-mode-alist)
