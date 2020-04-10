@@ -3,8 +3,8 @@
 ;; Copyright (C) 2019  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 2.1.6
-;; Package-Version: 20200409.1048
+;; Version: 2.1.7
+;; Package-Version: 20200410.952
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "25.1") (leaf "4.1.1"))
 ;; URL: https://github.com/conao3/ppp.el
@@ -75,16 +75,6 @@ Duplicate LEVEL is accepted."
   :type 'boolean
   :group 'ppp)
 
-(defcustom ppp-tail-newline t
-  "Whether add newline after `ppp' output or not."
-  :type 'boolean
-  :group 'ppp)
-
-(defcustom ppp-indent t
-  "Whether indent `ppp' output or not."
-  :type 'boolean
-  :group 'ppp)
-
 (defcustom ppp-debug-buffer-template "*PPP Debug buffer - %s*"
   "Buffer name for `ppp-debug'."
   :group 'ppp
@@ -98,14 +88,17 @@ The value its key is t, is default minimum-warning-level value."
   :group 'ppp
   :type 'sexp)
 
+;; If you want to change those internal variables, please use `let'.
+(defvar ppp-tail-newline t
+  "Whether add newline after `ppp' output or not.")
+(defvar ppp-indent t
+  "Whether indent `ppp' output or not.")
+
 
 ;;; Debug
 
 (defvar ppp-debug nil
   "If non-nil, show debug overlay.")
-
-(defvar-local ppp-buffer-using nil
-  "If non-nil, curerntly using *ppp-debug* buffer.")
 
 (defvar-local ppp-debug-ovs (make-list 5 nil)
   "Debug overlay.")

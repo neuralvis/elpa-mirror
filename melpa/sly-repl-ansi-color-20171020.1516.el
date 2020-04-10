@@ -3,6 +3,7 @@
 ;; Author: Javier "PuercoPop" Olaechea <pirata@gmail.com>
 ;;         Max Mikhanosha
 ;; Package-Requires: ((sly "0") (cl-lib "0.5"))
+;; Package-Version: 20171020.1516
 ;; Keywords: sly
 ;; URL: https://github.com/PuercoPop/sly-repl-ansi-color
 ;; Version: 0.1

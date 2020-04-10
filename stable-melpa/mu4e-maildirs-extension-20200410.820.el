@@ -6,7 +6,7 @@
 
 ;; Filename: mu4e-maildirs-extension.el
 ;; Version: 0.1
-;; Package-Version: 20200302.1228
+;; Package-Version: 20200410.820
 ;; Author: Andreu Gil Pàmies <agpchil@gmail.com>
 ;; Created: 22-07-2013
 ;; Description: Show mu4e maildirs summary in mu4e-main-view with unread and
@@ -293,7 +293,12 @@ If set to `nil' it won't be displayed."
 
 (defvar mu4e-maildirs-extension-bookmarks nil)
 
-(defvar mu4e-maildirs-extension-buffer-name mu4e~main-buffer-name)
+(defvar mu4e-maildirs-extension-buffer-name
+  ;; mu4e~main-buffer-name used to be private API, but is now public. We
+  ;; maintain backward-compatibility with older versions.
+  (if (boundp 'mu4e~main-buffer-name)
+      mu4e~main-buffer-name
+    mu4e-main-buffer-name))
 
 (defvar mu4e-maildirs-extension-index-updated-func
   'mu4e-maildirs-extension-index-updated-handler)
