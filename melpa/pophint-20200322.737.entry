@@ -1,2 +1,0 @@
-
-(pophint . [(20200322 737) ((log4e (0 2 0)) (yaxception (0 3))) "Provide navigation using pop-up tips, like Firefox's Vimperator Hint Mode" tar ((:commit . "2c43423c87c6892b0fd16e3749e021a3743ee708") (:keywords "popup") (:authors ("Hiroaki Otsu" . "ootsuhiroaki@gmail.com")) (:maintainer "Hiroaki Otsu" . "ootsuhiroaki@gmail.com") (:url . "https://github.com/aki2o/emacs-pophint"))])
