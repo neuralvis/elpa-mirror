@@ -2,7 +2,7 @@
 
 ;; Author: myuhe <yuhei.maeda_at_gmail.com>
 ;; URL: https://github.com/kidd/org-gcal.el
-;; Package-Version: 20191018.921
+;; Package-Version: 20200411.146
 ;; Version: 0.3
 ;; Maintainer: Raimon Grau <raimonster@gmail.com>
 ;; Copyright (C) :2014 myuhe all rights reserved.
@@ -38,6 +38,7 @@
 (require 'json)
 (require 'request-deferred)
 (require 'org-element)
+(require 'org-id)
 (require 'org-archive)
 (require 'cl-lib)
 (require 'rx)
@@ -248,7 +249,7 @@ SKIP-EXPORT.  Set SILENT to non-nil to inhibit notifications."
                  if
                  (let* ((entry-id (org-gcal--format-entry-id
                                    calendar-id (plist-get event :id)))
-                        (marker (org-id-find entry-id 'markerp)))
+                        (marker (org-gcal--id-find entry-id 'markerp)))
                    (cond
                     (marker
                      (org-gcal--event-entry-create
@@ -270,7 +271,7 @@ SKIP-EXPORT.  Set SILENT to non-nil to inhibit notifications."
                 (lambda (entry)
                   (deferred:$
                     (let ((marker (or (org-gcal--event-entry-marker entry)
-                                      (org-id-find (org-gcal--event-entry-entry-id entry))))
+                                      (org-gcal--id-find (org-gcal--event-entry-entry-id entry))))
                           (event (org-gcal--event-entry-event entry)))
                       (org-with-point-at marker
                         ;; If skipping exports, just overwrite current entry's
@@ -410,6 +411,34 @@ Does not preserve point."
           ;; Return final values.
           (and (not (equal value '(nil))) (nreverse value)))))))
 
+(defun org-gcal--find-id-file (id)
+  "Query the id database for the file in which this ID is located.
+
+Like ‘org-id-find-id-file’, except that it doesn’t fall back to the current
+buffer if ID is not found in the id database, but instead returns nil."
+  (unless org-id-locations (org-id-locations-load))
+  (or (and org-id-locations
+           (hash-table-p org-id-locations)
+           (gethash id org-id-locations))
+      nil))
+
+(defun org-gcal--id-find (id &optional markerp)
+  "Return the location of the entry with the id ID.
+The return value is a cons cell (file-name . position), or nil
+if there is no entry with that ID.
+With optional argument MARKERP, return the position as a new marker.
+
+Like ‘org-id-find’, except that it will not attempt to update
+‘org-id-locations’ when an ID is not found."
+  (cond
+   ((symbolp id) (setq id (symbol-name id)))
+   ((numberp id) (setq id (number-to-string id))))
+  (let ((file (org-gcal--find-id-file id))
+        org-agenda-new-buffers where)
+    (when file
+      (setq where (org-id-find-id-in-file id file markerp)))
+    where))
+
 (defun org-gcal--put-id (pom calendar-id event-id)
   "\
 Store a canonical ID generated from CALENDAR-ID and EVENT-ID in the \":ID:\"
@@ -424,6 +453,8 @@ canonical ID, so that existing links won’t be broken."
       ;; it as the first ID in the entry.
       (org-entry-delete (point) "ID")
       (org-entry-put (point) "ID" entry-id)
+      ;; Call for side effect of ensuring ID is in ‘org-id-locations’.
+      (org-id-get)
       ;; Now find the ID just inserted and insert the other IDs in their
       ;; original order.
       (let* ((range (org-get-property-block)))
