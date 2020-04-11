@@ -4,7 +4,7 @@
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Version: 0.0.1
-;; Package-Version: 20200331.1656
+;; Package-Version: 20200411.1645
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "26.1") (transient "0.1.0"))
 ;; URL: https://github.com/conao3/transient-dwim.el
@@ -37,7 +37,7 @@
 ;; now.  Just look at the neatly aligned menu and press the key
 ;; that appears.
 
-;; To Use this package, simply add this to your init.el:
+;; To use this package, simply add below code to your init.el:
 ;;   (define-key global-map (kbd "M-=") 'transient-dwim-dispatch)
 
 
@@ -87,6 +87,25 @@
   "Commit via magit with --all argument."
   (interactive)
   (magit-commit-extend '("--all")))
+
+(defun transient-dwim-magit-feature-checkout ()
+  "Checkout feature branch.
+If feature branch doesn't exist, create and checkout it."
+  (interactive)
+  (magit-branch-and-checkout "feature" "origin/master"))
+
+(defun transient-dwim-magit-feature-pull-request ()
+  "Do pull request from feature branch to origin/master."
+  (interactive)
+  (if (not (magit-get-current-branch))
+      (user-error "No branch is currently checked out")
+    (let ((username (magit-get "user.name")))
+      (shell-command
+       (mapconcat 'identity
+                  `(,(if (magit-remote-p username) ":" "hub fork")
+                    ,(format "git push %s" (shell-quote-argument username))
+                    "hub pull-request &")
+                  " && ")))))
 
 
 ;;; Main
@@ -345,10 +364,12 @@ The following %-sequences are supported:
      ("a" "  Amend"                magit-commit-amend)
      ("A" "  Amend -a"             transient-dwim-magit-amend-all)
      ("w" "  Reword"               magit-commit-reword)]
-    ["Edit"
-     ("U"   "fixup"                magit-commit-instant-fixup)
-     ("S"   "squash"               magit-commit-instant-squash)
-     ("s"   "Status"               magit-status)]
+    ["Misc"
+     ("U"   "Fixup"                magit-commit-instant-fixup)
+     ("S"   "Squash"               magit-commit-instant-squash)
+     ("s"   "Status"               magit-status)
+     ("("   "Checkout feature"     transient-dwim-magit-feature-checkout)
+     (")"   "PR feature"           transient-dwim-magit-feature-pull-request)]
     ["Magit dispatch"
      ;; ("A" "Apply"               magit-cherry-pick)
      ("b"   "Branch"               magit-branch)
