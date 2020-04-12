@@ -1,0 +1,2 @@
+
+(mix . [(20200405 1100) ((emacs (25 1))) "Mix Major Mode" single ((:commit . "e4b5aeb418cb96816cd556bd9404efe8937d10e6") (:keywords "tools") (:authors ("Ayrat Badykov" . "ayratin555@gmail.com")) (:maintainer "Ayrat Badykov" . "ayratin555@gmail.com") (:url . "https://github.com/ayrat555/mix.el"))])
