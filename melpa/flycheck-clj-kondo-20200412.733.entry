@@ -1,2 +1,0 @@
-
-(flycheck-clj-kondo . [(20200412 733) ((flycheck (0 18))) "Add clj-kondo linter to flycheck" single ((:commit . "b4a059ad1a66fd46575f90061f893d939d2fd300") (:authors ("Michiel Borkent" . "michielborkent@gmail.com")) (:maintainer "Michiel Borkent" . "michielborkent@gmail.com") (:url . "https://github.com/borkdude/flycheck-clj-kondo"))])

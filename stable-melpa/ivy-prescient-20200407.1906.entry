@@ -1,2 +1,2 @@
 
-(ivy-prescient . [(20200407 1906) ((emacs (25 1)) (prescient (4 1)) (ivy (0 11 0))) "prescient.el + Ivy" single ((:commit . "690ab6ea89656afac6962b563502491b18ecacdc") (:keywords "extensions") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:url . "https://github.com/raxod502/prescient.el"))])
+(ivy-prescient . [(20200407 1906) ((emacs (25 1)) (prescient (4 1)) (ivy (0 11 0))) "prescient.el + Ivy" single ((:commit . "53307731f37a888e41d0a9107ee21851efcd439d") (:keywords "extensions") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:url . "https://github.com/raxod502/prescient.el"))])

@@ -228,6 +228,8 @@ notify me of any missing package or change you would like to see.
     swoop
     sx
     symbol-overlay
+    tab-bar-mode
+    tab-line-mode
     syslog-mode
     trashed
     telephone-line

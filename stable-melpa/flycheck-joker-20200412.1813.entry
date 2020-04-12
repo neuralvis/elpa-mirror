@@ -1,0 +1,2 @@
+
+(flycheck-joker . [(20200412 1813) ((flycheck (0 18))) "Add Clojure syntax checker (via Joker) to flycheck" single ((:commit . "de092385c538c3b8e2c28b297cbdbc825fd64915") (:authors ("Roman Bataev" . "roman.bataev@gmail.com")) (:maintainer "Roman Bataev" . "roman.bataev@gmail.com"))])
