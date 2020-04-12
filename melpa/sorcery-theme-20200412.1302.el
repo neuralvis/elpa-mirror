@@ -1,10 +1,10 @@
 ;;; sorcery-theme.el --- A D&D (Dark and Dusty) Theme -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2020 Free Software Foundation, Inc.
+;; Copyright (c) 2020 Maxime Tréca
 
 ;; Author: Maxime Tréca <maxime@gmail.com>
 ;; Version: 1.0
-;; Package-Version: 20200406.2025
+;; Package-Version: 20200412.1302
 ;; Package-Requires: ((autothemer "0.2"))
 ;; URL: http://github.com/vxid/emacs-theme-sorcery
 
@@ -80,10 +80,10 @@
   (scroll-bar                 (:foreground c0 :background bg))
   (tool-bar                   (:foreground c0 :background bg))
   (tooltip                    (:foreground c0 :background bg))
-  (vertical-border            (:foreground c8 :background bg))
-  (window-divider             (:foreground c8 :background bg))
-  (window-divider-first-pixel (:foreground c8 :background bg))
-  (window-divider-last-pixel  (:foreground c8 :background bg))
+  (vertical-border            (:foreground c0 :background bg))
+  (window-divider             (:foreground c0 :background bg))
+  (window-divider-first-pixel (:foreground c0 :background bg))
+  (window-divider-last-pixel  (:foreground c0 :background bg))
 
   ;; Header line and mode line
   (header-line                (:foreground fg :background c0))
@@ -765,8 +765,8 @@
   (org-agenda-structure           (:foreground c7))
   (org-archived                   (:foreground c7))
   (org-block                      (:foreground fg :background c0))
-  (org-block-begin-line           (:foreground c7 :background c8))
-  (org-block-end-line             (:foreground c7 :background c8))
+  (org-block-begin-line           (:foreground fg :background bg :weight 'bold))
+  (org-block-end-line             (:foreground fg :background bg :weight 'bold))
   (org-checkbox                   (:foreground fg))
   (org-checkbox-statistics-done   (:foreground c2))
   (org-checkbox-statistics-todo   (:foreground c1))

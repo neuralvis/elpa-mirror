@@ -1,2 +1,0 @@
-
-(sorcery-theme . [(20200406 2025) ((autothemer (0 2))) "A D&D (Dark and Dusty) Theme" single ((:commit . "5f117ac4284b513a0c139c56b932088197a5afaa") (:authors ("Maxime Tréca" . "maxime@gmail.com")) (:maintainer "Maxime Tréca" . "maxime@gmail.com") (:url . "http://github.com/vxid/emacs-theme-sorcery"))])
