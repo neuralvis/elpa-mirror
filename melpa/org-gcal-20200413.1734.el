@@ -2,7 +2,7 @@
 
 ;; Author: myuhe <yuhei.maeda_at_gmail.com>
 ;; URL: https://github.com/kidd/org-gcal.el
-;; Package-Version: 20200413.445
+;; Package-Version: 20200413.1734
 ;; Version: 0.3
 ;; Maintainer: Raimon Grau <raimonster@gmail.com>
 ;; Copyright (C) :2014 myuhe all rights reserved.
@@ -37,9 +37,10 @@
 (require 'alert)
 (require 'json)
 (require 'request-deferred)
+(require 'org)
+(require 'org-archive)
 (require 'org-element)
 (require 'org-id)
-(require 'org-archive)
 (require 'cl-lib)
 (require 'rx)
 
@@ -87,6 +88,8 @@
   :group 'org-gcal
   :type 'string)
 
+(defvaralias 'org-gcal-file-alist 'org-gcal-fetch-file-alist)
+
 (defcustom org-gcal-fetch-file-alist nil
   "\
 Association list '(calendar-id file). For each calendar-id,‘org-gcal-fetch’
@@ -94,8 +97,6 @@ and ‘org-gcal-sync’ will retrieve new events on the calendar and insert
 them into the file."
   :group 'org-gcal
   :type '(alist :key-type (string :tag "Calendar Id") :value-type (file :tag "Org file")))
-
-(defvaralias 'org-gcal-file-alist 'org-gcal-fetch-file-alist)
 
 (defcustom org-gcal-logo-file nil
   "Org-gcal logo image filename to display in notifications."

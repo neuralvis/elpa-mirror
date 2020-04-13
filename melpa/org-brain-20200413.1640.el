@@ -5,7 +5,7 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200412.1548
+;; Package-Version: 20200413.1640
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2"))
 ;; Version: 0.92
@@ -285,6 +285,11 @@ Only applies to headline entries."
 
 (defcustom org-brain-exclude-siblings-tag "nosiblings"
   "`org-mode' tag which prevents the siblings of children of this node from being displayed."
+  :group 'org-brain
+  :type '(string))
+
+(defcustom org-brain-exclude-local-parent-tag "nolocalparent"
+  "`org-mode' tag which prevents this node to be displayed as a local parent."
   :group 'org-brain
   :type '(string))
 
@@ -1041,7 +1046,10 @@ Often you want the siblings too, then use `org-brain-siblings' instead."
                 (if (and (org-up-heading-safe)
                          (org-entry-get nil "ID"))
                     (org-brain-entry-from-id (org-entry-get nil "ID"))
-                  (when org-brain-include-file-entries (car entry)))))))
+                  (when (and org-brain-include-file-entries
+                             (not (member org-brain-exclude-local-parent-tag
+                                          (org-brain-get-tags (car entry)))))
+                    (car entry)))))))
       (list parent)))
 
 (defun org-brain-children (entry)

@@ -1,2 +1,0 @@
-
-(org-brain . [(20200412 1548) ((emacs (25 1)) (org (9 2))) "Org-mode concept mapping" single ((:commit . "28ced77bf81f2438dadf93126ef61e78dcedf3b8") (:keywords "outlines" "hypermedia") (:authors ("Erik Sjöstrand" . "sjostrand.erik@gmail.com")) (:maintainer "Erik Sjöstrand" . "sjostrand.erik@gmail.com") (:url . "http://github.com/Kungsgeten/org-brain"))])
