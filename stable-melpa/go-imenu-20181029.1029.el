@@ -4,6 +4,7 @@
 
 ;; Author: Brantou <brantou89@gmail.com>
 ;; URL: https://github.com/brantou/go-imenu.el
+;; Package-Version: 20181029.1029
 ;; Keywords: tools
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3"))

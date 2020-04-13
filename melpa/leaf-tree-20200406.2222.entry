@@ -1,2 +1,0 @@
-
-(leaf-tree . [(20200406 2222) ((emacs (25 1)) (imenu-list (0 8))) "Interactive side-bar feature for init.el using leaf" single ((:commit . "5dd7b85f51977e311533c4430d45c65280693a51") (:keywords "convenience" "leaf") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/leaf-tree.el"))])

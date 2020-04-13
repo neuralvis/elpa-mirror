@@ -1,0 +1,2 @@
+
+(icomplete-vertical . [(20200412 2151) ((emacs (24 4))) "Display icomplete candidates vertically" single ((:commit . "f4f0c0ed0c136155275e182266b21d532846f904") (:keywords "convenience" "completion") (:authors ("Omar Antolín Camarena" . "omar@matem.unam.mx")) (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx") (:url . "https://github.com/oantolin/icomplete-vertical"))])
