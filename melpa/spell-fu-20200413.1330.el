@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-spell-fu-mode
-;; Package-Version: 20200413.914
+;; Package-Version: 20200413.1330
 ;; Keywords: convenience
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "26.2"))
@@ -84,7 +84,7 @@ Set to 0.0 to highlight immediately (as part of syntax highlighting)."
 
 ;; See '-' as a word boundary \b, so 'full-screen' is detected as two words.
 (defvar-local spell-fu-syntax-table
-  (let ((table (standard-syntax-table)))
+  (let ((table (copy-syntax-table (standard-syntax-table))))
     (modify-syntax-entry ?- "-" table)
     table)
   "The syntax table to use when scanning words.")

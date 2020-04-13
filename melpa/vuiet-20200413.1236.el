@@ -4,7 +4,7 @@
 
 ;; Author: Mihai Olteanu <mihai_olteanu@fastmail.fm>
 ;; Version: 1.0
-;; Package-Version: 20200412.1434
+;; Package-Version: 20200413.1236
 ;; Package-Requires: ((emacs "26.1") (lastfm "1.1") (versuri "1.0") (s "1.12.0") (bind-key "2.4") (mpv "0.1.0"))
 ;; Keywords: multimedia
 ;; URL: https://github.com/mihaiolteanu/vuiet
@@ -89,6 +89,11 @@ into consideration as this limit."
 A number higher than your actual lastfm loved tracks, will take
 all of them into consideration.  A lower values is useful for
 taking into consideration only the most recently loved tracks."
+  :type '(number :tag "count")
+  :group 'vuiet)
+
+(defcustom vuiet-recent-tracks-limit 25
+  "Number of recent played tracks to show."
   :type '(number :tag "count")
   :group 'vuiet)
 
@@ -847,9 +852,10 @@ from the given ARTIST."
 ;;;###autoload
 (defun vuiet-play-recent-track ()
   "Play one of the recent listened tracks."
+The number of tracks shown is equal to VUIET-RECENT-TRACKS-LIMIT."
   (interactive)
   (vuiet--ivy-play-song (lastfm-user-get-recent-tracks
-                         :limit 25)))
+			 :limit vuiet-recent-tracks-limit)))
 
 (iter-defun vuiet--loved-tracks-similar-tracks ()
   "Return a generator of tracks based on the user's loved tracks.

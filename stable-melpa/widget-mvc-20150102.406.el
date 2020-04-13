@@ -3,7 +3,6 @@
 ;; Author: SAKURAI Masashi <m.sakurai at kiwanami.net>
 ;; Copyright (C) 2013 
 ;; Keywords: lisp, widget
-;; Package-Version: 20150102.406
 ;; Version: 0.0.2
 
 ;; This program is free software; you can redistribute it and/or modify

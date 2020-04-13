@@ -1,9 +1,9 @@
-;;; friendly-tramp-path.el --- Human-friendly TRAMP path construction
+;;; friendly-tramp-path.el --- Human-friendly TRAMP path construction -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019-2020 Jordan Besly
 ;;
 ;; Version: 0.1.0
-;; Package-Version: 20200413.910
+;; Package-Version: 20200413.1257
 ;; URL: https://github.com/p3r7/prf-tramp
 ;; Package-Requires: ((cl-lib "0.6.1"))
 ;;
@@ -55,7 +55,12 @@
 
 (defun friendly-tramp-path-dissect (path)
   "Convert PATH into a TRAMP VEC.
-More permissive version of `tramp-dissect-file-name'."
+More permissive version of `tramp-dissect-file-name'.
+
+PATH can be in on of the following formats:
+ - \"/<method>:[<user>[%<domain>]@]<host>[%<port>][:<localname>]\" (regular TRAMP format)
+ - \"[<user>[%<domain>]@]<host>[%<port>][:<localname>]\" (permissive format)
+"
   (if (file-remote-p path)
       (tramp-dissect-file-name path)
     (let* ((parsed (friendly-tramp-path--parse-char-loop path))
@@ -124,7 +129,6 @@ More permissive version of `tramp-dissect-file-name'."
      with last-at = nil
      with at = :first
      with current = nil
-     with got-method = nil
 
      for e in (delete "" (split-string path ""))
 
@@ -132,8 +136,7 @@ More permissive version of `tramp-dissect-file-name'."
      do
      (setq last-at :first)
      (if (string= e "/")
-         (setq at :method
-               got-method 't)
+         (setq at :method)
        (setq at nil))
 
      if (string= e "%")
