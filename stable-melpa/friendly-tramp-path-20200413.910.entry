@@ -1,0 +1,2 @@
+
+(friendly-tramp-path . [(20200413 910) ((cl-lib (0 6 1))) "Human-friendly TRAMP path construction" single ((:commit . "6bb752382bb1f89d8d4b7b677dc242f67bce5e37") (:url . "https://github.com/p3r7/prf-tramp"))])
