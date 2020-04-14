@@ -18,6 +18,7 @@ are disabled by default:
     modus-operandi-theme-scale-headings
     modus-operandi-theme-visible-fringes
     modus-operandi-theme-distinct-org-blocks
+    modus-operandi-theme-3d-modeline
     modus-operandi-theme-subtle-diffs
 
 The default scale is as follows (it can be customised as well):
@@ -221,6 +222,7 @@ notify me of any missing package or change you would like to see.
     smartparens
     smerge
     speedbar
+    spell-fu
     stripes
     suggest
     switch-window

@@ -1,2 +1,0 @@
-
-(modus-operandi-theme . [(20200413 445) ((emacs (26 1))) "Accessible light theme (WCAG AAA)" single ((:commit . "d7b7252dc259586e4e9f763cc69b8dab5bf25356") (:keywords "faces" "theme" "accessibility") (:authors ("Protesilaos Stavrou" . "info@protesilaos.com")) (:maintainer "Protesilaos Stavrou" . "info@protesilaos.com") (:url . "https://gitlab.com/protesilaos/modus-themes"))])

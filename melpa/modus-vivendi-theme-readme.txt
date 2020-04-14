@@ -18,6 +18,7 @@ are disabled by default:
     modus-vivendi-theme-scale-headings
     modus-vivendi-theme-visible-fringes
     modus-vivendi-theme-distinct-org-blocks
+    modus-vivendi-theme-3d-modeline
     modus-vivendi-theme-subtle-diffs
 
 The default scale is as follows (it can be customised as well):
@@ -221,6 +222,7 @@ notify me of any missing package or change you would like to see.
     smartparens
     smerge
     speedbar
+    spell-fu
     stripes
     suggest
     switch-window
