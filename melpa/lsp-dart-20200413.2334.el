@@ -1,7 +1,7 @@
 ;;; lsp-dart.el --- Dart support lsp-mode -*- lexical-binding: t; -*-
 
 ;; Version: 1.0
-;; Package-Version: 20200413.1606
+;; Package-Version: 20200413.2334
 ;; Package-Requires: ((emacs "25.2") (lsp-treemacs "0.1") (lsp-mode "6.0") (ht "2.0") (f "0.20.0") (dash "2.14.1") (dart-mode "1.0.5"))
 ;; Keywords: languages, extensions
 ;; URL: https://github.com/emacs-lsp/lsp-dart.el
@@ -426,7 +426,8 @@ from NAMES."
                                 (lsp-dart--build-command buffer)
                                 (or test-arg "")
                                 test-file)
-                        t))))
+                        t
+                        (lambda (_) "*LSP Dart tests*")))))
 
 (defun lsp-dart--build-test-overlay (buffer names kind range test-range)
   "Build an overlay for a test NAMES of KIND in BUFFER file.
