@@ -3,8 +3,8 @@
 ;; Copyright (C) 2020  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 1.1.2
-;; Package-Version: 20200414.1436
+;; Version: 1.1.5
+;; Package-Version: 20200414.1559
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "26.1") (leaf "3.6.0") (leaf-keywords "1.1.0") (ppp "2.1"))
 ;; URL: https://github.com/conao3/leaf-convert.el
@@ -92,7 +92,7 @@ see `leaf-convert--fill-info'"
 (defvar leaf-convert-config-like-keywords '(:preface :init :config :mode-hook)
   "Keywords like :config.")
 
-(defvar leaf-convert-mode-like-keywords '(:mode :interpreter :magic :magic-fallback)
+(defvar leaf-convert-mode-like-keywords '(:mode :interpreter :magic :magic-fallback :hook)
   "Keywords like :mode.")
 
 (defvar leaf-convert-omit-leaf-name-keywords '(:ensure :feather :package :require :after)
@@ -621,6 +621,8 @@ ELM can be string or symbol."
 
 :commands
   - The elements can be omitted for :bind, :bind* functions.
+  - The elements can be omitted for cdr of :mode like keywords arguments.
+  - The elements can be omitted if the mode symbol could be guessed.
 
 :mode :interpreter :magic :magic-fallback
   - The pair's cdr can be omitted if the same as leaf--name.
@@ -630,12 +632,22 @@ ELM can be string or symbol."
   - The pair's cdr can be omitted if the mode symbol could be guessed."
   (let ((name (alist-get 'leaf-convert--name contents))
         (keys (mapcar #'car contents)))
-    (when (or (and (memq 'commands keys) (memq 'bind keys))
-              (and (memq 'commands keys) (memq 'bind* keys)))
-      (let ((fns  (cadr (eval `(leaf-keys ,(alist-get 'bind contents) 'dryrun))))
-            (fns* (cadr (eval `(leaf-keys ,(alist-get 'bind* contents) 'dryrun)))))
-        (setf (alist-get 'commands contents)
-              (cl-set-difference (alist-get 'commands contents) (append fns fns*)))))
+    (when (and (memq 'commands keys)
+               (leaf-list-memq (append '(bind bind*)
+                                       (mapcar #'leaf-sym-from-keyword leaf-convert-mode-like-keywords))
+                               keys))
+      (setf (alist-get 'commands contents)
+            (cl-set-difference
+             (alist-get 'commands contents)
+             (append (cadr (eval `(leaf-keys ,(alist-get 'bind contents) 'dryrun)))
+                     (cadr (eval `(leaf-keys ,(alist-get 'bind* contents) 'dryrun)))
+                     (let (ret)
+                       (dolist (key (mapcar #'leaf-sym-from-keyword leaf-convert-mode-like-keywords))
+                         (dolist (elm (alist-get key contents))
+                           (pcase elm
+                             (`(,(and (pred stringp) _fn) . ,sym)
+                              (push sym ret)))))
+                       ret)))))
 
     (when (and (memq 'leaf-convert--name keys)
                (leaf-list-memq keys (mapcar #'leaf-sym-from-keyword leaf-convert-mode-like-keywords)))
@@ -643,13 +655,22 @@ ELM can be string or symbol."
         (when (memq key keys)
           (let (tmp)
             (dolist (pair (alist-get key contents))
-              (if (and (leaf-pairp pair)
-                       (or (eq (cdr pair) name)
-                           (eq (leaf-mode-sym (cdr pair)) name)
-                           (eq (cdr pair) (leaf-mode-sym name))))
+              (if (and (listp pair) (eq (leaf-mode-sym (cdr pair)) (leaf-mode-sym name)))
                   (push (car pair) tmp)
                 (push pair tmp)))
             (setf (alist-get key contents) (nreverse tmp))))))
+
+    (when (and (memq 'leaf-convert--name keys)
+               (leaf-list-memq keys (mapcar #'leaf-sym-from-keyword leaf-convert-mode-like-keywords)))
+      (let (guessp)                 ; t means, use guess major-mode feature
+        (dolist (key (mapcar #'leaf-sym-from-keyword leaf-convert-mode-like-keywords))
+          (when (memq key keys)
+            (dolist (pair (alist-get key contents))
+              (unless (listp pair)
+                (setq guessp t)))))
+        (when guessp
+          (setf (alist-get 'commands contents)
+                (delq (leaf-mode-sym (alist-get 'leaf-convert--name contents)) (alist-get 'commands contents))))))
 
     (when (and (memq 'leaf-convert--name keys) (memq 'defun keys))
       (let (tmp)
