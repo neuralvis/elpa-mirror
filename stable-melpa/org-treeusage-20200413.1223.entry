@@ -1,0 +1,2 @@
+
+(org-treeusage . [(20200413 1223) ((emacs (26 1)) (dash (2 17 0)) (org (9 1 6))) "Examine the usage of org headings in a tree-like manner" tar ((:commit . "a422d6848054ca723f4b267f8c31e5058e4a569e") (:keywords "outlines") (:authors ("Mehmet Tekman")) (:maintainer "Mehmet Tekman") (:url . "https://github.com/mtekman/org-treeusage.el"))])

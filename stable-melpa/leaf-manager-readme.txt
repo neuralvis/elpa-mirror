@@ -1,1 +1,1 @@
-Interactive folding Elisp code using :tag leaf keyword.
+Configuration manager for leaf based init.el
