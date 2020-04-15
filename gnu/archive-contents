@@ -1874,7 +1874,7 @@
  (smalltalk-mode .
 		 [(3 2 92)
 		  nil "Major mode for the GNU Smalltalk programming language" tar
-		  ((:maintainer "Derek Zhou" . "derek@shannon-data.com")
+		  ((:maintainer "Derek Zhou" . "derek@3qin.us")
 		   (:authors
 		    ("Steve Byrne"))
 		   (:url . "http://elpa.gnu.org/packages/smalltalk-mode.html"))])
