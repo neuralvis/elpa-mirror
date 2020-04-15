@@ -1,2 +1,2 @@
 
-(package-lint-flymake . [(20191116 45) ((emacs (26 1)) (package-lint (0 5))) "A package-lint Flymake backend" single ((:commit . "2c4a9244bbb8955488e834b26d122fbcae3a4281") (:url . "https://github.com/purcell/package-lint"))])
+(package-lint-flymake . [(20191116 45) ((emacs (26 1)) (package-lint (0 5))) "A package-lint Flymake backend" single ((:commit . "b70888b923e04eca595cd08f3fe31beafcf278d9") (:url . "https://github.com/purcell/package-lint"))])
