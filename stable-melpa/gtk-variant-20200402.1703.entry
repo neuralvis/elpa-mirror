@@ -1,2 +1,0 @@
-
-(gtk-variant . [(20200402 1703) ((emacs (25 1))) "Set the GTK theme variant (titlebar color)" single ((:commit . "1430de4189646feefce906c5855522c0cdb9029f") (:keywords "frames" "gtk" "titlebar") (:authors ("Paul Oppenheimer")) (:maintainer "Paul Oppenheimer") (:url . "https://github.com/bepve/gtk-variant"))])
