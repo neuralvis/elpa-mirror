@@ -5,7 +5,7 @@
 ;; Author: zwild <judezhao@outlook.com>
 ;; Created: 2018-12-26T22:41:19+08:00
 ;; URL: https://github.com/zwild/ammonite-term-repl
-;; Package-Version: 20190618.1517
+;; Package-Version: 20200416.559
 ;; Package-Requires: ((emacs "24.3") (s "1.12.0") (scala-mode "0.23"))
 ;; Version: 0.2
 ;; Keywords: processes, ammnite, term, scala
@@ -42,6 +42,7 @@
 (require 'comint)
 (require 'scala-mode)
 (require 's)
+(require 'subr-x)
 
 (defgroup ammonite-term-repl nil
   "A minor mode for a Ammonite REPL."

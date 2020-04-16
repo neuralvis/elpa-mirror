@@ -1,0 +1,2 @@
+
+(biblio . [(20200416 237) ((emacs (24 3)) (biblio-core (0 2))) "Browse and import bibliographic references from CrossRef, arXiv, DBLP, HAL, Dissemin, and doi.org" tar ((:commit . "39c362b9eb36e8c00efb5aa6ed406ef8c6a2e2ac"))])

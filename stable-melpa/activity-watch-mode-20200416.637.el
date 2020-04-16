@@ -7,8 +7,8 @@
 ;; Website: https://activitywatch.net
 ;; Homepage: https://github.com/pauldub/activity-watch-mode
 ;; Keywords: calendar, comm
-;; Package-Version: 20200410.648
-;; Package-Requires: ((emacs "25") (projectile "0") (request "0") (json "0") (cl-lib "0"))
+;; Package-Version: 20200416.637
+;; Package-Requires: ((emacs "25") (request "0") (json "0") (cl-lib "0"))
 ;; Version: 1.0.2
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@
 ;; Requires request.el (https://tkf.github.io/emacs-request/)
 ;;
 
-;;; Dependencies: request, projectile, json, cl-lib
+;;; Dependencies: request, json, cl-lib
 
 ;;; Code:
 
@@ -43,6 +43,7 @@
 (require 'request)
 (require 'json)
 (require 'cl-lib)
+(require 'subr-x)
 
 (defconst activity-watch-version "1.0.0")
 (defconst activity-watch-user-agent "emacs-activity-watch")
@@ -57,6 +58,9 @@
 (defvar activity-watch-max-heartbeat-per-sec 1)
 (defvar activity-watch-last-heartbeat-time nil)
 
+(defvar-local activity-watch-project-name nil
+  "Cached value of the project this file belongs to")
+
 (defgroup activity-watch nil
   "Customizations for Activity-Watch"
   :group 'convenience
@@ -66,6 +70,118 @@
   "API host for Activity-Watch."
   :type 'string
   :group 'activity-watch)
+
+(defcustom activity-watch-project-name-default "unknown"
+  "Default name for a non-identifiable project."
+  :type 'string
+  :group 'activity-watch)
+
+(defcustom activity-watch-project-name-resolvers '(projectile magit-dir-force magit-origin)
+  "List of resolvers used to find the project name.
+
+When determining the name of a project, the watcher will go down the list
+and for each name tries to call the function \
+`activity-watch-project-name-<symbol>' with no parameters.
+If the function returns a non-emtpy string, it will be used as the project name.
+Otherwise, the following resolver in the list will be queried.
+
+If no resolver is able to identify the project, \
+`activity-watch-project-name-default' is assumed.
+
+Methods provided by default are listed below.
+Every resolver that depends on an external package has a -force version.
+The default resolver checks if the package is loaded, and fails early if not.
+The forced resolver tries to `require' the package.
+
+projectile:
+projectile-force:
+  Return the project name from `projectile-project-name'.
+
+magit-dir:
+magit-dir-force:
+  Return the name of the directory where the repository is located.
+
+magit-origin:
+magit-origin-force:
+  Return the name of the repository extracted from the 'origin' remote.
+
+cwd:
+  Return the name of the current working directory."
+  :type '(list symbol)
+  :group 'activity-watch)
+
+(defmacro activity-watch--gen-feature-resolver (feature name &rest body)
+  "Generate a pair of functions: `activity-watch-project-name-<NAME>' \
+and `activity-watch-project-name-<NAME>-force'. The forced version will try \
+to `require' FEATURE first."
+  (declare (indent 2))
+  (let ((func (intern (concat
+                       "activity-watch-project-name-"
+                       (symbol-name name))))
+        (forced (intern (concat
+                         "activity-watch-project-name-"
+                         (symbol-name name)
+                         "-force")))
+        (feature-name (cond
+                       ((symbolp feature)
+                        (symbol-name feature))
+                       ((and (listp feature) (eq (car feature) 'quote))
+                        (symbol-name (cadr feature)))
+                       (t "<feature>")))
+        (docstring (when (and (stringp (car body))
+                              (cdr body))
+                     (prog1
+                         (concat "\n\n" (car body))
+                       (setq body (cdr body))))))
+    `(progn
+       (defun ,func ()
+         ,(concat "Check if feature `" feature-name "' is provided, \
+and when it is, use it to find the project's name." docstring)
+         (when (featurep ,feature)
+           ,@body))
+       (defun ,forced ()
+         ,(concat "Try to require feature `" feature-name "', and on success \
+use it to find the project's name." docstring)
+         (when (require ,feature nil t)
+           ,@body)))))
+
+(activity-watch--gen-feature-resolver 'projectile projectile
+  (when (projectile-project-p)
+       (projectile-project-name)))
+
+(activity-watch--gen-feature-resolver 'magit magit-dir
+  "This implementation returns the directory name where the repository is saved localy."
+  (when-let ((toplevel (magit-toplevel)))
+      (file-name-nondirectory (directory-file-name toplevel))))
+
+(activity-watch--gen-feature-resolver 'magit magit-origin
+  "This implementation tries to parse the URL of the remote 'origin'."
+  (when-let ((remote (magit-git-string "remote" "get-url" "origin"))
+             (proj (string-trim (car (last (split-string-and-unquote remote "/")))
+                                nil
+                                ".git")))
+    proj))
+
+(defun activity-watch-project-name-cwd ()
+  "Return the name of the `default-directory'."
+  (when default-directory
+    (file-name-nondirectory (directory-file-name (expand-file-name default-directory)))))
+
+(defun activity-watch--get-project (&optional refresh)
+  "Return the name of the project. If REFRESH is non-nil, disable cache.
+How the name is discoved depends on which resolvers are \
+specified in `activity-watch-project-name-resolvers'."
+       (setq-local activity-watch-project-name
+                   (or (and (not refresh)
+                            activity-watch-project-name)
+                       (cl-dolist (res activity-watch-project-name-resolvers)
+                         (if-let ((fun (intern (concat "activity-watch-project-name-"
+                                                       (symbol-name res))))
+                                  ((fboundp fun))
+                                  (proj (funcall fun))
+                                  ((not (activity-watch--s-blank proj))))
+                             (cl-return proj)))
+                       activity-watch-project-name-default)))
 
 (defun activity-watch--s-blank (string)
   "Return non-nil if the STRING is empty or nil.  Expects string."
@@ -92,18 +208,18 @@
                                   (type . "app.editor.activity")))
              :headers '(("Content-Type" . "application/json"))
              :success (cl-function
-                       (lambda (&allow-other-keys)
+                       (lambda (&rest _ &allow-other-keys)
                          (setq activity-watch-bucket-created t))))))
 
 (defun activity-watch--create-heartbeat (time)
   "Create heartbeart to sent to the activity watch server.
 Argument TIME time at which the heartbeat was computed."
-  (let ((project-name (projectile-project-name))
+  (let ((project-name (activity-watch--get-project))
         (file-name (buffer-file-name (current-buffer))))
     `((timestamp . ,(ert--format-time-iso8601 time))
       (duration . 0)
       (data . ((language . ,(if (activity-watch--s-blank (symbol-name major-mode)) "unknown" major-mode))
-               (project . ,(if (activity-watch--s-blank project-name) "unknown" project-name))
+               (project . ,project-name)
                (file . ,(if (activity-watch--s-blank file-name) "unknown" file-name)))))))
 
 
@@ -188,6 +304,12 @@ Argument DEFER Wether initialization should be deferred."
   (activity-watch--unbind-hooks)
   (activity-watch--stop-timer)
   (activity-watch--stop-idle-timer))
+
+;;;###autoload
+(defun activity-watch-refresh-project-name ()
+  "Recompute the name of the project for the current file."
+  (interactive)
+  (activity-watch--get-project t))
 
 ;;;###autoload
 (define-minor-mode activity-watch-mode

@@ -3,8 +3,8 @@
 ;; Copyright (C) 2016  Clément Pit-Claudel
 
 ;; Author: Clément Pit-Claudel <clement.pitclaudel@live.com>
-;; Version: 0.2
-;; Package-Version: 20200331.2013
+;; Version: 0.2.1
+;; Package-Version: 20200416.307
 ;; Package-Requires: ((emacs "24.3") (let-alist "1.0.4") (seq "1.11") (dash "2.12.1"))
 ;; Keywords: bib, tex, convenience, hypermedia
 ;; URL: https://github.com/cpitclaudel/biblio.el
@@ -105,8 +105,7 @@ Also see `biblio-cleanup-bibtex-function'.")
 DIALECT is `BibTeX' or `biblatex'.  AUTOKEY: see `biblio-format-bibtex'."
   (let ((bibtex-entry-format biblio--bibtex-entry-format)
         (bibtex-align-at-equal-sign t)
-        (bibtex-autokey-edit-before-use nil)
-        (bibtex-autokey-year-title-separator ":"))
+        (bibtex-autokey-edit-before-use nil))
     ;; Use biblatex to allow for e.g. @Online
     ;; Use BibTeX to allow for e.g. @TechReport
     (bibtex-set-dialect dialect t)
@@ -114,7 +113,7 @@ DIALECT is `BibTeX' or `biblatex'.  AUTOKEY: see `biblio-format-bibtex'."
 
 (defun biblio--cleanup-bibtex (autokey)
   "Default value of `biblio-cleanup-bibtex-function'.
-AUTOKEY: See biblio-format-bibtex."
+AUTOKEY: See `biblio-format-bibtex'."
   (save-excursion
     (when (search-forward "@data{" nil t)
       (replace-match "@misc{")))
@@ -140,10 +139,10 @@ With non-nil AUTOKEY, automatically generate a key for BIBTEX."
     (bibtex-mode)
     (save-excursion
       (insert (biblio-strip bibtex)))
-    (when (functionp biblio-cleanup-bibtex-function)
-      (funcall biblio-cleanup-bibtex-function autokey))
     (if (fboundp 'font-lock-ensure) (font-lock-ensure)
       (with-no-warnings (font-lock-fontify-buffer)))
+    (when (functionp biblio-cleanup-bibtex-function)
+      (funcall biblio-cleanup-bibtex-function autokey))
     (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun biblio--beginning-of-response-body ()
@@ -444,6 +443,13 @@ Uses .url, and .doi as a fallback."
   (or (get-text-property (point) 'biblio-metadata)
       (user-error "No entry at point")))
 
+(defcustom biblio-bibtex-use-autokey nil
+  "Whether to generate new BibTeX keys for inserted entries."
+  :type '(choice (const :tag "Keep original BibTeX keys" nil)
+                 (const :tag "Generate new BibTeX keys" t))
+  :group 'biblio
+  :package-version '(biblio . "0.2.1"))
+
 (defun biblio--selection-forward-bibtex (forward-to &optional quit)
   "Retrieve BibTeX for entry at point and pass it to FORWARD-TO.
 If QUIT is set, also kill the results buffer."
@@ -454,7 +460,10 @@ If QUIT is set, also kill the results buffer."
                'forward-bibtex metadata
                (lambda (bibtex)
                  (with-current-buffer results-buffer
-                   (funcall forward-to (biblio-format-bibtex bibtex) metadata))))
+                   (funcall
+                    forward-to
+                    (biblio-format-bibtex bibtex biblio-bibtex-use-autokey)
+                    metadata))))
       (when quit (quit-window)))))
 
 (defun biblio--selection-change-buffer (buffer-name)
