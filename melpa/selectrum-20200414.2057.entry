@@ -1,2 +1,0 @@
-
-(selectrum . [(20200414 2057) ((emacs (25 1))) "Easily select item from list" single ((:commit . "851018fc3bfc8384cbfba33c4ddfc58f659ffeea") (:keywords "extensions") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:url . "https://github.com/raxod502/selectrum"))])

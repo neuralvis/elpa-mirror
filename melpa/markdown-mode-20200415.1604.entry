@@ -1,2 +1,0 @@
-
-(markdown-mode . [(20200415 1604) ((emacs (24 4))) "Major mode for Markdown-formatted text" single ((:commit . "27ee0bf488f434e566abf8a9057823e784a023e8") (:keywords "markdown" "github flavored markdown" "itex") (:authors ("Jason R. Blevins" . "jblevins@xbeta.org")) (:maintainer "Jason R. Blevins" . "jblevins@xbeta.org") (:url . "https://jblevins.org/projects/markdown-mode/"))])
