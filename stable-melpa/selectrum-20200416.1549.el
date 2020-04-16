@@ -6,7 +6,7 @@
 ;; Created: 8 Dec 2019
 ;; Homepage: https://github.com/raxod502/selectrum
 ;; Keywords: extensions
-;; Package-Version: 20200416.446
+;; Package-Version: 20200416.1549
 ;; Package-Requires: ((emacs "25.1"))
 ;; SPDX-License-Identifier: MIT
 ;; Version: 1.0
@@ -671,12 +671,16 @@ Or if there is an active region, save the region to kill ring."
   (remove-text-properties
    0 (length value)
    '(face selectrum-current-candidate) value)
+  (apply
+   #'run-hook-with-args
+   'selectrum-candidate-selected-hook
+   value selectrum--read-args)
   (let ((inhibit-read-only t))
     (erase-buffer)
     (insert (or (get-text-property 0 'selectrum-candidate-full
                                    value)
-                value)))
-  (exit-minibuffer))
+                value))
+    (exit-minibuffer)))
 
 (defun selectrum-select-current-candidate ()
   "Exit minibuffer, picking the currently selected candidate.
@@ -795,13 +799,9 @@ select one of the listed candidates (so, for example,
              (enable-recursive-minibuffers nil)
              (minibuffer-history-variable history)
              (selected (read-from-minibuffer prompt nil keymap nil history)))
-        (prog1 (if (string-empty-p selected)
-                   (or default-candidate "")
-                 selected)
-          (apply
-           #'run-hook-with-args
-           'selectrum-candidate-selected-hook
-           selected selectrum--read-args))))))
+        (if (string-empty-p selected)
+            (or default-candidate "")
+          selected)))))
 
 ;;;###autoload
 (defun selectrum-completing-read
