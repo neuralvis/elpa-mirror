@@ -177,6 +177,7 @@ notify me of any missing package or change you would like to see.
     neotree
     no-emoji
     num3-mode
+    orderless
     org
     org-journal
     org-noter

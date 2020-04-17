@@ -1,2 +1,0 @@
-
-(2048-game . [(20151026 1933) nil "play 2048 in Emacs" single ((:commit . "b069dd82e7914262e1f2f00fafe010b32c024595") (:authors ("Zachary Kanfer" . "zkanfer@gmail.com")) (:maintainer "Zachary Kanfer" . "zkanfer@gmail.com") (:url . "https://bitbucket.org/zck/2048.el"))])

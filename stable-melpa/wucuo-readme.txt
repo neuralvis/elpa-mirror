@@ -11,6 +11,9 @@ To enable wucuo for all languages, insert below code into ".emacs",
     (wucuo-start t))
   (add-hook 'prog-mode-hook 'prog-mode-hook-setup)
 
+The `flyspell-mode' is turned on by `wucuo-start' by default.
+See `wucuo-flyspell-start-mode' for other options.
+
 Please note `flyspell-prog-mode' should not be enabled when using "wucuo".
 `flyspell-prog-mode' could be replaced by "wucuo".
 
