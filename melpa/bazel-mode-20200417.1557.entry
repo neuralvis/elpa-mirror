@@ -1,0 +1,2 @@
+
+(bazel-mode . [(20200417 1557) ((emacs (26 1))) "Emacs major mode for editing Bazel BUILD and WORKSPACE files" tar ((:commit . "0210ded348cab856f0f755dc17c1ed89aa7105d3") (:keywords "build tools" "languages") (:url . "https://github.com/bazelbuild/emacs-bazel-mode"))])
