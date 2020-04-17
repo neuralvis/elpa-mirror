@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200417.603
+;; Package-Version: 20200417.736
 ;; Version: 0.7.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -1433,7 +1433,10 @@ AMOUNT is a customisation option."
    `(fancy-dabbrev-preview-face ((,class (:foreground ,fg-alt :underline t))))
    `(fancy-dabbrev-selection-face ((,class (:inherit modus-theme-intense-cyan :weight bold))))
    ;;;; flycheck
-   `(flycheck-error ((,class (:foreground ,red-nuanced :underline (:color ,fg-lang-error :style line)))))
+   `(flycheck-error
+     ((,(append '((supports :underline (:style wave))) class)
+       (:underline (:color ,fg-lang-error :style wave)))
+      (,class (:foreground ,red-nuanced :underline (:color ,fg-lang-error :style line)))))
    `(flycheck-error-list-checker-name ((,class (:foreground ,magenta-active))))
    `(flycheck-error-list-column-number ((,class (:foreground ,fg-special-cold))))
    `(flycheck-error-list-error ((,class (:foreground ,red :weight ,modus-theme-bold))))
@@ -1447,9 +1450,15 @@ AMOUNT is a customisation option."
    `(flycheck-fringe-error ((,class (:inherit modus-theme-fringe-red))))
    `(flycheck-fringe-info ((,class (:inherit modus-theme-fringe-cyan))))
    `(flycheck-fringe-warning ((,class (:inherit modus-theme-fringe-yellow))))
-   `(flycheck-info ((,class (:foreground ,blue-nuanced :underline (:color ,fg-lang-note :style line)))))
+   `(flycheck-info
+     ((,(append '((supports :underline (:style wave))) class)
+       (:underline (:color ,fg-lang-note :style wave)))
+      (,class (:foreground ,blue-nuanced :underline (:color ,fg-lang-note :style line)))))
    `(flycheck-verify-select-checker ((,class (:box (:line-width 1 :color nil :style released-button)))))
-   `(flycheck-warning ((,class (:foreground ,yellow-nuanced :underline (:color ,fg-lang-warning :style line)))))
+   `(flycheck-warning
+     ((,(append '((supports :underline (:style wave))) class)
+       (:underline (:color ,fg-lang-warning :style wave)))
+      (,class (:foreground ,yellow-nuanced :underline (:color ,fg-lang-warning :style line)))))
    ;;;; flycheck-indicator
    `(flycheck-indicator-disabled ((,class (:foreground ,fg-inactive :slant ,modus-theme-slant))))
    `(flycheck-indicator-error ((,class (:foreground ,red-active :weight ,modus-theme-bold))))
@@ -1465,9 +1474,18 @@ AMOUNT is a customisation option."
    `(flycheck-posframe-info-face ((,class (:foreground ,cyan :weight bold))))
    `(flycheck-posframe-warning-face ((,class (:foreground ,yellow :weight bold))))
    ;;;; flymake
-   `(flymake-error ((,class (:foreground ,red-nuanced :underline (:color ,fg-lang-error :style line)))))
-   `(flymake-note ((,class (:foreground ,blue-nuanced :underline (:color ,fg-lang-note :style line)))))
-   `(flymake-warning ((,class (:foreground ,yellow-nuanced :underline (:color ,fg-lang-warning :style line)))))
+   `(flymake-error
+       ((,(append '((supports :underline (:style wave))) class)
+         (:underline (:color ,fg-lang-error :style wave)))
+        (,class (:foreground ,red-nuanced :underline (:color ,fg-lang-error :style line)))))
+   `(flymake-note
+     ((,(append '((supports :underline (:style wave))) class)
+       (:underline (:color ,fg-lang-note :style wave)))
+      (,class (:foreground ,blue-nuanced :underline (:color ,fg-lang-note :style line)))))
+   `(flymake-warning
+     ((,(append '((supports :underline (:style wave))) class)
+       (:underline (:color ,fg-lang-warning :style wave)))
+      (,class (:foreground ,yellow-nuanced :underline (:color ,fg-lang-warning :style line)))))
    ;;;; flyspell
    `(flyspell-duplicate
      ((,(append '((supports :underline (:style wave))) class)

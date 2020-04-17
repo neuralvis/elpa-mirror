@@ -2,7 +2,7 @@
 
 ;; Author: wamei <wamei.cho@gmail.com>
 ;; Keywords: elscreen, multi term
-;; Package-Version: 20151022.233
+;; Package-Version: 20200417.821
 ;; Version: 0.1.3
 ;; Package-Requires: ((emacs "24.4") (elscreen "1.4.6") (multi-term "1.3"))
 
@@ -76,7 +76,9 @@
          (is-shown nil)
          (window))
     (cond ((and (not (one-window-p)) is-current-buffer)
-           (delete-window))
+           (delete-window)
+           (jump-to-register (intern (concat "emt-pop-multi-term-" (number-to-string (elscreen-get-current-screen)))))
+           )
           ((not is-current-buffer)
            (walk-windows
             (lambda (win)
@@ -87,6 +89,7 @@
                   (select-window window)
                   (switch-to-buffer buffer))
                  (t
+                  (window-configuration-to-register (intern (concat "emt-pop-multi-term-" (number-to-string (elscreen-get-current-screen)))))
                   (funcall emt-pop-to-buffer-function buffer)))))))
 
 (defun emt-get-or-create-multi-term-buffer (&optional number)
@@ -97,7 +100,8 @@
     (unless buffer
       (save-current-buffer
         (letf (((symbol-function 'switch-to-buffer) (symbol-function 'emt-nothing-to-buffer)))
-          (setq buffer (multi-term))))
+          (multi-term)
+          (setq buffer (current-buffer))))
       (with-current-buffer buffer
         (rename-buffer (format emt-term-buffer-name fname number))))
     buffer))
