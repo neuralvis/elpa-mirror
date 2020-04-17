@@ -1,2 +1,0 @@
-
-(minesweeper . [(20150414 522) nil "play minesweeper in Emacs" single ((:commit . "310754e64570f6af5406123578506a6455a4328b") (:keywords "game" "fun" "minesweeper" "inane" "diversion") (:authors ("Zachary Kanfer" . "zkanfer@gmail.com")) (:maintainer "Zachary Kanfer" . "zkanfer@gmail.com") (:url . "https://bitbucket.org/zck/minesweeper.el"))])

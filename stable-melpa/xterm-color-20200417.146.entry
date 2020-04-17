@@ -1,0 +1,2 @@
+
+(xterm-color . [(20200417 146) ((cl-lib (0 5))) "ANSI, XTERM 256 and Truecolor support" single ((:commit . "1480f28bb1f0120abb639bd5c999ab4c7cfe2a4a") (:keywords "faces") (:authors ("xristos" . "xristos@sdf.org")) (:maintainer "xristos" . "xristos@sdf.org") (:url . "https://github.com/atomontage/xterm-color"))])
