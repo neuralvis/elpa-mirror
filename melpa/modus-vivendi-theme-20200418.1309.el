@@ -1,10 +1,10 @@
-;;; modus-operandi-theme.el --- Accessible light theme (WCAG AAA) -*- lexical-binding:t -*-
+;;; modus-vivendi-theme.el --- Accessible dark theme (WCAG AAA) -*- lexical-binding:t -*-
 
 ;; Copyright (c) 2019-2020 Free Software Foundation, Inc.
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200417.1705
+;; Package-Version: 20200418.1309
 ;; Version: 0.7.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -40,22 +40,23 @@
 ;; The theme provides the following customisation options, all of which
 ;; are disabled by default:
 ;;
-;;     modus-operandi-theme-slanted-constructs
-;;     modus-operandi-theme-bold-constructs
-;;     modus-operandi-theme-proportional-fonts
-;;     modus-operandi-theme-rainbow-headings
-;;     modus-operandi-theme-scale-headings
-;;     modus-operandi-theme-visible-fringes
-;;     modus-operandi-theme-distinct-org-blocks
-;;     modus-operandi-theme-3d-modeline
-;;     modus-operandi-theme-subtle-diffs
+;;     modus-vivendi-theme-slanted-constructs
+;;     modus-vivendi-theme-bold-constructs
+;;     modus-vivendi-theme-proportional-fonts
+;;     modus-vivendi-theme-rainbow-headings
+;;     modus-vivendi-theme-section-headings
+;;     modus-vivendi-theme-scale-headings
+;;     modus-vivendi-theme-visible-fringes
+;;     modus-vivendi-theme-distinct-org-blocks
+;;     modus-vivendi-theme-3d-modeline
+;;     modus-vivendi-theme-subtle-diffs
 ;;
 ;; The default scale is as follows (it can be customised as well):
 ;;
-;;     modus-operandi-theme-scale-1 1.05
-;;     modus-operandi-theme-scale-2 1.1
-;;     modus-operandi-theme-scale-3 1.15
-;;     modus-operandi-theme-scale-4 1.2
+;;     modus-vivendi-theme-scale-1 1.05
+;;     modus-vivendi-theme-scale-2 1.1
+;;     modus-vivendi-theme-scale-3 1.15
+;;     modus-vivendi-theme-scale-4 1.2
 ;;
 ;; What follows is the list of explicitly supported packages or face
 ;; groups (there are implicitly supported packages as well, which
@@ -295,8 +296,8 @@
 
 
 
-(deftheme modus-operandi
-  "Light theme that conforms with the highest accessibility
+(deftheme modus-vivendi
+  "Dark theme that conforms with the highest accessibility
   standard for colour contrast between background and
   foreground elements (WCAG AAA).")
 
@@ -312,7 +313,7 @@ between foreground and background is >= 7:1)."
   :group 'faces
   :prefix "modus-theme-"
   :link '(url-link :tag "GitLab" "https://gitlab.com/protesilaos/modus-themes")
-  :tag "Modus Operandi")
+  :tag "Modus Vivendi")
 
 (defface modus-theme-subtle-red nil t)
 (defface modus-theme-subtle-green nil t)
@@ -363,69 +364,88 @@ between foreground and background is >= 7:1)."
 
 ;; User-facing customisation options.  They are all deactivated by
 ;; default (users must opt in).
-(defcustom modus-operandi-theme-slanted-constructs nil
+(defcustom modus-vivendi-theme-slanted-constructs nil
   "Use slanted text in more code constructs (italics or oblique)."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-bold-constructs nil
+(defcustom modus-vivendi-theme-bold-constructs nil
   "Use bold text in more code constructs."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-proportional-fonts nil
+(defcustom modus-vivendi-theme-proportional-fonts nil
   "Use proportional fonts (variable-pitch) in headings."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-rainbow-headings nil
+(defcustom modus-vivendi-theme-rainbow-headings nil
   "Use more saturated colours for headings."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-scale-headings nil
+(defcustom modus-vivendi-theme-section-headings nil
+  "Use a background and an overline in headings."
+  :type 'boolean)
+
+(defcustom modus-vivendi-theme-scale-headings nil
   "Use font scaling for headings."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-scale-1 1.05
+(defcustom modus-vivendi-theme-scale-1 1.05
   "Font size that is slightly larger than the base value."
   :type 'number)
 
-(defcustom modus-operandi-theme-scale-2 1.1
-  "Font size slightly larger than `modus-operandi-theme-scale-1'."
+(defcustom modus-vivendi-theme-scale-2 1.1
+  "Font size slightly larger than `modus-vivendi-theme-scale-1'."
   :type 'number)
 
-(defcustom modus-operandi-theme-scale-3 1.15
-  "Font size slightly larger than `modus-operandi-theme-scale-2'."
+(defcustom modus-vivendi-theme-scale-3 1.15
+  "Font size slightly larger than `modus-vivendi-theme-scale-2'."
   :type 'number)
 
-(defcustom modus-operandi-theme-scale-4 1.2
-  "Font size slightly larger than `modus-operandi-theme-scale-3'."
+(defcustom modus-vivendi-theme-scale-4 1.2
+  "Font size slightly larger than `modus-vivendi-theme-scale-3'."
   :type 'number)
 
-(defcustom modus-operandi-theme-visible-fringes nil
+(defcustom modus-vivendi-theme-visible-fringes nil
   "Use a visible style for fringes."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-distinct-org-blocks nil
+(defcustom modus-vivendi-theme-distinct-org-blocks nil
   "Use a distinct background for `org-mode' source blocks."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-3d-modeline nil
+(defcustom modus-vivendi-theme-3d-modeline nil
   "Use a three-dimensional style for the active mode line."
   :type 'boolean)
 
-(defcustom modus-operandi-theme-subtle-diffs nil
+(defcustom modus-vivendi-theme-subtle-diffs nil
   "Use fewer/dim backgrounds in `diff-mode', `ediff',`magit'."
   :type 'boolean)
 
 ;; Helper functions that are meant to ease the implementation of the
 ;; above customisation options.
-(defun modus-operandi-theme-heading-style (subtle rainbow)
+(defun modus-vivendi-theme-heading-foreground (subtle rainbow)
   "Apply foreground value to headings.
 SUBTLE is the default aesthetic.
 RAINBOW is the saturated one."
-  (if modus-operandi-theme-rainbow-headings
+  (if modus-vivendi-theme-rainbow-headings
       (list :foreground rainbow)
     (list :foreground subtle)))
 
-(defun modus-operandi-theme-modeline-box (col3d col &optional btn int)
+(defun modus-vivendi-theme-heading-block (bg fg)
+  "Conditionally extend heading styles.
+Apply BG to background and FG to overline."
+  (when modus-vivendi-theme-section-headings
+    (list :background bg :overline fg)))
+
+(defun modus-vivendi-theme-org-todo-block (bgbox fgbox fg)
+  "Conditionally extend the styles of Org keywords.
+BGBOX applies to the background.
+FGBOX applies to the foreground and the border.
+FG is used when no block style is in effect."
+  (if modus-vivendi-theme-section-headings
+      (list :background bgbox :foreground fgbox :box (list :color fgbox))
+    (list :foreground fg)))
+
+(defun modus-vivendi-theme-modeline-box (col3d col &optional btn int)
   "Control the box properties of the mode line.
 COL3D is the border that is intended for the three-dimensional modeline.
 COL applies to the two-dimensional modeline.
@@ -433,36 +453,36 @@ Optional BTN provides the 3d button style.
 Optional INT defines a border width."
   (let* ((style (if btn 'released-button nil))
          (int (if int int 1)))
-    (if modus-operandi-theme-3d-modeline
+    (if modus-vivendi-theme-3d-modeline
         (list :line-width int :color col3d :style style)
       (list :line-width 1 :color col :style nil))))
 
-(defun modus-operandi-theme-modeline-props (bg3d fg3d &optional bg fg)
+(defun modus-vivendi-theme-modeline-props (bg3d fg3d &optional bg fg)
   "Control the background and foreground of the mode line.
 BG is the modeline's background.
 FG is the modeline's foreground.
 BG3D and FG3D apply to the three-dimensional modeline style."
-  (if modus-operandi-theme-3d-modeline
+  (if modus-vivendi-theme-3d-modeline
       (list :background bg3d :foreground fg3d)
     (list :background bg :foreground fg)))
 
-(defun modus-operandi-theme-diffs (subtle-bg subtle-fg intense-bg intense-fg)
-  "Colour combinations for `modus-operandi-theme-subtle-diffs'.
+(defun modus-vivendi-theme-diffs (subtle-bg subtle-fg intense-bg intense-fg)
+  "Colour combinations for `modus-vivendi-theme-subtle-diffs'.
 
 SUBTLE-BG should be similar or the same as the main background
 SUBTLE-FG should be an appropriate accent value
 INTENSE-BG should be one of the dedicated backgrounds for diffs
 INTENSE-FG should be one of the dedicated foregrounds for diffs"
-  (if modus-operandi-theme-subtle-diffs
+  (if modus-vivendi-theme-subtle-diffs
       (list :background subtle-bg :foreground subtle-fg)
     (list :background intense-bg :foreground intense-fg)))
 
-(defun modus-operandi-theme-scale (amount)
+(defun modus-vivendi-theme-scale (amount)
   "Scale heading by AMOUNT.
 
 AMOUNT is a customisation option."
-  (when modus-operandi-theme-scale-headings
-        (list :height amount)))
+  (when modus-vivendi-theme-scale-headings
+    (list :height amount)))
 
 
 
@@ -470,89 +490,95 @@ AMOUNT is a customisation option."
 ;; ratio relative to the foreground/background colour it is rendered
 ;; against.
 (let ((class '((class color) (min-colors 89)))
-      (fg-main "#000000") (bg-main "#ffffff")
-      (fg-alt "#505050") (bg-alt "#f3f1f3")
-      (fg-dim "#282828") (bg-dim "#f8f8f8")
+      (fg-main "#ffffff") (bg-main "#000000")
+      (fg-alt "#a8a8a8") (bg-alt "#181a20")
+      (fg-dim "#e0e6f0") (bg-dim "#110b11")
       ;; specifically for on/off states (e.g. `mode-line')
       ;;
       ;; must be combined with themselves
-      (fg-active "#191919") (bg-active "#e0e0e0")
-      (fg-inactive "#424242") (bg-inactive "#efedef")
+      (fg-active "#f5f5f5") (bg-active "#2f2f2f")
+      (fg-inactive "#bebebe") (bg-inactive "#202020")
       ;; special base values, used only for cases where the above
       ;; fg-* or bg-* cannot or should not be used (to avoid confusion)
       ;; must be combined with: {fg,bg}-{main,alt,dim}
-      (fg-special-cold "#093060") (bg-special-cold "#dde3f4")
-      (fg-special-mild "#184034") (bg-special-mild "#c4ede0")
-      (fg-special-warm "#5d3026") (bg-special-warm "#f0e0d4")
-      (fg-special-calm "#61284f") (bg-special-calm "#f8ddea")
+      (fg-special-cold "#c6eaff") (bg-special-cold "#203448")
+      (fg-special-mild "#bfebe0") (bg-special-mild "#00322e")
+      (fg-special-warm "#f8dec0") (bg-special-warm "#382f27")
+      (fg-special-calm "#fbd6f4") (bg-special-calm "#392a48")
       ;; styles for the main constructs
       ;;
       ;; must be combined with: `bg-main', `bg-alt', `bg-dim'
-      (red "#a80000") (green "#005200")
-      (yellow "#8b3800") (blue "#0030a6")
-      (magenta "#721045") (cyan "#005589")
+      (red "#ff8059") (green "#44bc44")
+      (yellow "#eecc00") (blue "#33beff")
+      (magenta "#feacd0") (cyan "#00d3d0")
       ;; styles for common, but still specialised constructs
       ;;
       ;; must be combined with: `bg-main', `bg-alt', `bg-dim'
-      (red-alt "#880000") (green-alt "#4a5700")
-      (yellow-alt "#714900") (blue-alt "#223fbf")
-      (magenta-alt "#8f0075") (cyan-alt "#185870")
+      (red-alt "#f4923b") (green-alt "#58dd13")
+      (yellow-alt "#e5f040") (blue-alt "#72a4ff")
+      (magenta-alt "#f78fe7") (cyan-alt "#4ae8fc")
       ;; same purpose as above, just slight differences
       ;;
       ;; must be combined with: `bg-main', `bg-alt', `bg-dim'
-      (red-alt-other "#9d2020") (green-alt-other "#145a00")
-      (yellow-alt-other "#804000") (blue-alt-other "#0000bb")
-      (magenta-alt-other "#5317ac") (cyan-alt-other "#005a68")
+      (red-alt-other "#ff9977") (green-alt-other "#90d800")
+      (yellow-alt-other "#f0ce43") (blue-alt-other "#00baf4")
+      (magenta-alt-other "#b6a0ff") (cyan-alt-other "#6ae4b9")
       ;; styles for elements that should be very subtle
       ;;
       ;; must be combined with: `bg-main', `bg-alt', `bg-dim'
-      (red-nuanced "#4d0006") (green-nuanced "#003000")
-      (yellow-nuanced "#3a2a00") (blue-nuanced "#001170")
-      (magenta-nuanced "#381050") (cyan-nuanced "#003434")
+      (red-nuanced "#ffcccc") (green-nuanced "#b0f0b0")
+      (yellow-nuanced "#e0e0bb") (blue-nuanced "#ccccff")
+      (magenta-nuanced "#eeccee") (cyan-nuanced "#aaeeee")
+      ;; styles for slightly accented background
+      ;;
+      ;; must be combined with any of the above foreground values
+      (red-nuanced-bg "#180505") (green-nuanced-bg "#061206")
+      (yellow-nuanced-bg "#18140a") (blue-nuanced-bg "#070722")
+      (magenta-nuanced-bg "#160616") (cyan-nuanced-bg "#091620")
       ;; styles for elements that should draw attention to themselves
       ;;
       ;; must be combined with: `bg-main'
-      (red-intense "#b60000") (green-intense "#006800")
-      (yellow-intense "#904200") (blue-intense "#1111ee")
-      (magenta-intense "#7000e0") (cyan-intense "#205b93")
+      (red-intense "#fb6859") (green-intense "#00fc50")
+      (yellow-intense "#ffdd00") (blue-intense "#00a2ff")
+      (magenta-intense "#ff8bd4") (cyan-intense "#30ffc0")
       ;; styles for background elements that should be visible yet
       ;; subtle
       ;;
       ;; must be combined with: `fg-dim'
-      (red-subtle-bg "#f2b0a2") (green-subtle-bg "#aecf90")
-      (yellow-subtle-bg "#e4c340") (blue-subtle-bg "#b5d0ff")
-      (magenta-subtle-bg "#f0d3ff") (cyan-subtle-bg "#c0efff")
+      (red-subtle-bg "#762422") (green-subtle-bg "#2f4a00")
+      (yellow-subtle-bg "#604200") (blue-subtle-bg "#10387c")
+      (magenta-subtle-bg "#49366e") (cyan-subtle-bg "#00415e")
       ;; styles for background elements that should be visible and
       ;; distinguishable
       ;;
       ;; must be combined with: `fg-main'
-      (red-intense-bg "#ff8892") (green-intense-bg "#5ada88")
-      (yellow-intense-bg "#f5df23") (blue-intense-bg "#6aaeff")
-      (magenta-intense-bg "#d5baff") (cyan-intense-bg "#42cbd4")
+      (red-intense-bg "#a4202a") (green-intense-bg "#006800")
+      (yellow-intense-bg "#874900") (blue-intense-bg "#2a40b8")
+      (magenta-intense-bg "#7042a2") (cyan-intense-bg "#005f88")
       ;; styles for refined git diffs and other contexts where both the
       ;; foreground and the background need to have the same/similar hue
       ;;
       ;; must be combined with themselves OR the foregrounds can be
       ;; combined with any of the base backgrounds
-      (red-refine-bg "#ffcccc") (green-refine-bg "#aceaac")
-      (yellow-refine-bg "#fff29a") (blue-refine-bg "#8ac7ff")
-      (magenta-refine-bg "#ffccff") (cyan-refine-bg "#8eecf4")
-      (red-refine-fg "#780000") (green-refine-fg "#004c00")
-      (yellow-refine-fg "#604000") (blue-refine-fg "#002288")
-      (magenta-refine-fg "#770077") (cyan-refine-fg "#004850")
+      (red-refine-bg "#77002a") (green-refine-bg "#00422a")
+      (yellow-refine-bg "#705000") (blue-refine-bg "#242679")
+      (magenta-refine-bg "#71206a") (cyan-refine-bg "#004065")
+      (red-refine-fg "#ffb9ab") (green-refine-fg "#9ff0cf")
+      (yellow-refine-fg "#ffffac") (blue-refine-fg "#8ec6ff")
+      (magenta-refine-fg "#ffcaf0") (cyan-refine-fg "#8ae4f2")
       ;; styles that are meant exclusively for the mode line
       ;;
       ;; must be combined with: `bg-active', `bg-inactive'
-      (red-active "#930000") (green-active "#005300")
-      (yellow-active "#703700") (blue-active "#0033c0")
-      (magenta-active "#6320a0") (cyan-active "#004882")
+      (red-active "#ffaa20") (green-active "#70e030")
+      (yellow-active "#efdf00") (blue-active "#00ccff")
+      (magenta-active "#d0acff") (cyan-active "#00ddc0")
       ;; styles that are meant exclusively for the fringes
       ;;
       ;; must have a minimum contrast ratio of 1.5:1 with `bg-inactive'
       ;; and be combined with `fg-main'
-      (red-fringe-bg "#ff7a7a") (green-fringe-bg "#70cc70")
-      (yellow-fringe-bg "#e0c000") (blue-fringe-bg "#7fafff")
-      (magenta-fringe-bg "#ffa0ff") (cyan-fringe-bg "#00d0f0")
+      (red-fringe-bg "#a00000") (green-fringe-bg "#006600")
+      (yellow-fringe-bg "#775500") (blue-fringe-bg "#3228bb")
+      (magenta-fringe-bg "#990099") (cyan-fringe-bg "#005599")
 
       ;; styles reserved for specific faces
       ;;
@@ -583,63 +609,63 @@ AMOUNT is a customisation option."
       ;; the window divider colours apply to faces with just an fg value
       ;;
       ;; all pairs are combinable with themselves
-      (bg-hl-line "#f1f2f6")
-      (bg-paren-match "#efcabf")
-      (bg-region "#bcbcbc")
+      (bg-hl-line "#151823")
+      (bg-paren-match "#6e3a50")
+      (bg-region "#3c3c3c")
 
-      (bg-tab-active "#ababab")
-      (bg-tab-inactive "#dadada")
-      (fg-tab-active "#000077")
+      (bg-tab-active "#484848")
+      (bg-tab-inactive "#2f2f2f")
+      (fg-tab-active "#99efff")
 
-      (fg-escape-char-construct "#8b1030")
-      (fg-escape-char-backslash "#644f00")
+      (fg-escape-char-construct "#e7a59a")
+      (fg-escape-char-backslash "#abab00")
 
-      (fg-lang-error "#9f004f")
-      (fg-lang-warning "#605000")
-      (fg-lang-note "#4040ae")
+      (fg-lang-error "#ef8690")
+      (fg-lang-warning "#b0aa00")
+      (fg-lang-note "#9d9def")
 
-      (fg-window-divider-inner "#888888")
-      (fg-window-divider-outer "#585858")
-      (fg-header "#2a2a2a") (bg-header "#e5e5e5")
-      (fg-whitespace "#645060") (bg-whitespace "#fff8fc")
+      (fg-window-divider-inner "#646464")
+      (fg-window-divider-outer "#969696")
+      (fg-header "#dddddd") (bg-header "#2a2a2a")
+      (fg-whitespace "#a4959f") (bg-whitespace "#170016")
 
-      (fg-diff-heading "#043355") (bg-diff-heading "#b7c2dd")
-      (fg-diff-added "#004500") (bg-diff-added "#d4fad4")
-      (fg-diff-changed "#524200") (bg-diff-changed "#fcefcf")
-      (fg-diff-removed "#691616") (bg-diff-removed "#ffe8ef")
-      (fg-diff-refine-added "#002a00") (bg-diff-refine-added "#94cf94")
-      (fg-diff-refine-changed "#302010") (bg-diff-refine-changed "#cccf8f")
-      (fg-diff-refine-removed "#400000") (bg-diff-refine-removed "#daa2b0")
-      (fg-diff-focus-added "#002c00") (bg-diff-focus-added "#bbeabb")
-      (fg-diff-focus-changed "#392900") (bg-diff-focus-changed "#ecdfbf")
-      (fg-diff-focus-removed "#4a0000") (bg-diff-focus-removed "#efcbcf")
+      (fg-diff-heading "#dadffe") (bg-diff-heading "#304466")
+      (fg-diff-added "#94ba94") (bg-diff-added "#0a280a")
+      (fg-diff-changed "#b0ba9f") (bg-diff-changed "#2a2000")
+      (fg-diff-removed "#c6adaa") (bg-diff-removed "#40160f")
+      (fg-diff-refine-added "#e0f6e0") (bg-diff-refine-added "#005a36")
+      (fg-diff-refine-changed "#ffffcc") (bg-diff-refine-changed "#585800")
+      (fg-diff-refine-removed "#ffd9eb") (bg-diff-refine-removed "#852828")
+      (fg-diff-focus-added "#b4ddb4") (bg-diff-focus-added "#203d20")
+      (fg-diff-focus-changed "#d0daaf") (bg-diff-focus-changed "#4a3a10")
+      (fg-diff-focus-removed "#eebdba") (bg-diff-focus-removed "#5e2526")
 
-      (fg-diff-neutral-0 "#040404") (bg-diff-neutral-0 "#979797")
-      (fg-diff-neutral-1 "#252525") (bg-diff-neutral-1 "#b0b0b0")
-      (fg-diff-neutral-2 "#3a3a3a") (bg-diff-neutral-2 "#cccccc")
+      (fg-diff-neutral-0 "#fcfcfc") (bg-diff-neutral-0 "#575757")
+      (fg-diff-neutral-1 "#dddddd") (bg-diff-neutral-1 "#454545")
+      (fg-diff-neutral-2 "#bfbfbf") (bg-diff-neutral-2 "#313131")
 
-      (fg-mark "#005040") (bg-mark "#a0f0cf")
-      (fg-mark-del "#840040") (bg-mark-del "#ffccbb")
-      (fg-mark-other "#782900") (bg-mark-other "#f5d88f")
+      (fg-mark "#60cfa2") (bg-mark "#002f2f")
+      (fg-mark-del "#ff99aa") (bg-mark-del "#5a0000")
+      (fg-mark-other "#f0aa20") (bg-mark-other "#3f2210")
 
       ;; conditional styles that evaluate user-facing customisation
       ;; options
       (modus-theme-slant
-       (if modus-operandi-theme-slanted-constructs
+       (if modus-vivendi-theme-slanted-constructs
            'italic
          'normal))
 
       (modus-theme-bold
-       (if modus-operandi-theme-bold-constructs
+       (if modus-vivendi-theme-bold-constructs
            'bold
          'normal))
 
       (modus-theme-variable-pitch
-       (if modus-operandi-theme-proportional-fonts
+       (if modus-vivendi-theme-proportional-fonts
            'variable-pitch
          'default)))
   (custom-theme-set-faces
-   'modus-operandi
+   'modus-vivendi
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; custom faces that are inherited by other constructs below ;;
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -706,7 +732,7 @@ AMOUNT is a customisation option."
    `(default ((,class (:background ,bg-main :foreground ,fg-main))))
    `(cursor ((,class (:background ,fg-main))))
    `(fringe ((,class (:background
-                      ,(if modus-operandi-theme-visible-fringes bg-inactive bg-main)
+                      ,(if modus-vivendi-theme-visible-fringes bg-inactive bg-main)
                       :foreground ,fg-main))))
    `(vertical-border ((,class (:foreground ,fg-window-divider-inner))))
    ;;;; basic and/or ungrouped styles
@@ -812,16 +838,16 @@ AMOUNT is a customisation option."
    `(font-latex-script-char-face ((,class (:foreground ,cyan-alt-other))))
    `(font-latex-sectioning-0-face ((,class (:inherit ,modus-theme-variable-pitch
                                                      :foreground ,blue-nuanced :weight bold
-                                                     ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                     ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(font-latex-sectioning-1-face ((,class (:inherit ,modus-theme-variable-pitch
                                                      :foreground ,blue-nuanced :weight bold
-                                                     ,@(modus-operandi-theme-scale modus-operandi-theme-scale-3)))))
+                                                     ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-3)))))
    `(font-latex-sectioning-2-face ((,class (:inherit ,modus-theme-variable-pitch
                                                      :foreground ,blue-nuanced :weight bold
-                                                     ,@(modus-operandi-theme-scale modus-operandi-theme-scale-2)))))
+                                                     ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-2)))))
    `(font-latex-sectioning-3-face ((,class (:inherit ,modus-theme-variable-pitch
                                                      :foreground ,blue-nuanced :weight bold
-                                                     ,@(modus-operandi-theme-scale modus-operandi-theme-scale-1)))))
+                                                     ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-1)))))
    `(font-latex-sectioning-4-face ((,class (:inherit ,modus-theme-variable-pitch
                                                      :foreground ,blue-nuanced :weight bold))))
    `(font-latex-sectioning-5-face ((,class (:inherit ,modus-theme-variable-pitch
@@ -829,7 +855,7 @@ AMOUNT is a customisation option."
    `(font-latex-sedate-face ((,class (:foreground ,magenta-alt-other :weight ,modus-theme-bold))))
    `(font-latex-slide-title-face ((,class (:inherit ,modus-theme-variable-pitch
                                                     :foreground ,cyan-nuanced :weight bold
-                                                    ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                    ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(font-latex-string-face ((,class (:foreground ,blue-alt))))
    `(font-latex-subscript-face ((,class (:height 0.95))))
    `(font-latex-superscript-face ((,class (:height 0.95))))
@@ -906,7 +932,7 @@ AMOUNT is a customisation option."
    `(cfw:face-sunday ((,class (:background ,bg-alt :foreground ,magenta-alt-other :weight bold))))
    `(cfw:face-title ((,class (:inherit ,modus-theme-variable-pitch
                                        :foreground ,fg-special-warm :weight bold
-                                       ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                       ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(cfw:face-today ((,class (:foreground ,blue :weight bold))))
    `(cfw:face-today-title ((,class (:inherit modus-theme-special-mild :box t))))
    `(cfw:face-toolbar ((,class (:background ,bg-active :foreground ,bg-active))))
@@ -1132,17 +1158,17 @@ AMOUNT is a customisation option."
    `(diff-hl-insert ((,class (:inherit modus-theme-fringe-green))))
    `(diff-hl-reverted-hunk-highlight ((,class (:inherit modus-theme-fringe-magenta :weight bold))))
    ;;;; diff-mode
-   `(diff-added ((,class ,(modus-operandi-theme-diffs
+   `(diff-added ((,class ,(modus-vivendi-theme-diffs
                            bg-main green
                            bg-diff-focus-added fg-diff-focus-added))))
-   `(diff-changed ((,class ,(modus-operandi-theme-diffs
+   `(diff-changed ((,class ,(modus-vivendi-theme-diffs
                              bg-main yellow
                              bg-diff-focus-changed fg-diff-focus-changed))))
    `(diff-context ((,class (:foreground ,fg-alt))))
    `(diff-file-header ((,class (:foreground ,blue :weight bold))))
    `(diff-function ((,class (:foreground ,fg-special-cold))))
    `(diff-header ((,class (:foreground ,blue-nuanced))))
-   `(diff-hunk-header ((,class ,(modus-operandi-theme-diffs
+   `(diff-hunk-header ((,class ,(modus-vivendi-theme-diffs
                                  bg-alt blue-alt
                                  bg-diff-heading fg-diff-heading))))
    `(diff-index ((,class (:foreground ,blue-alt :weight bold))))
@@ -1150,16 +1176,16 @@ AMOUNT is a customisation option."
    `(diff-indicator-changed ((,class (:inherit modus-theme-diff-focus-changed))))
    `(diff-indicator-removed ((,class (:inherit modus-theme-diff-focus-removed))))
    `(diff-nonexistent ((,class (:inherit modus-theme-neutral :weight bold))))
-   `(diff-refine-added ((,class ,(modus-operandi-theme-diffs
+   `(diff-refine-added ((,class ,(modus-vivendi-theme-diffs
                                   bg-diff-added fg-diff-added
                                   bg-diff-refine-added fg-diff-refine-added))))
-   `(diff-refine-changed ((,class ,(modus-operandi-theme-diffs
+   `(diff-refine-changed ((,class ,(modus-vivendi-theme-diffs
                                     bg-diff-changed fg-diff-changed
                                     bg-diff-refine-changed fg-diff-refine-changed))))
-   `(diff-refine-removed ((,class ,(modus-operandi-theme-diffs
+   `(diff-refine-removed ((,class ,(modus-vivendi-theme-diffs
                                     bg-diff-removed fg-diff-removed
                                     bg-diff-refine-removed fg-diff-refine-removed))))
-   `(diff-removed ((,class ,(modus-operandi-theme-diffs
+   `(diff-removed ((,class ,(modus-vivendi-theme-diffs
                              bg-main red
                              bg-diff-focus-removed fg-diff-focus-removed))))
    ;;;; dim-autoload
@@ -1263,7 +1289,7 @@ AMOUNT is a customisation option."
    `(doom-modeline-project-parent-dir ((,class (:foreground ,blue-active))))
    `(doom-modeline-project-root-dir ((,class (:foreground ,fg-active))))
    `(doom-modeline-unread-number ((,class (:foreground ,fg-active :slant italic))))
-   `(doom-modeline-urgent ((,class (:foreground ,red-active :weight bold :underline t))))
+   `(doom-modeline-urgent ((,class (:foreground ,red-active :weight bold))))
    `(doom-modeline-warning ((,class (:foreground ,yellow-active :weight bold))))
    ;;;; dynamic-ruler
    `(dynamic-ruler-negative-face ((,class (:inherit modus-theme-intense-neutral))))
@@ -1289,16 +1315,16 @@ AMOUNT is a customisation option."
    `(ebdb-role-defunct ((,class (:foreground ,fg-alt))))
    `(eieio-custom-slot-tag-face ((,class (:foreground ,red-alt))))
    ;;;; ediff
-   `(ediff-current-diff-A ((,class ,(modus-operandi-theme-diffs
+   `(ediff-current-diff-A ((,class ,(modus-vivendi-theme-diffs
                                      bg-alt red
                                      bg-diff-removed fg-diff-removed))))
-   `(ediff-current-diff-Ancestor ((,class ,(modus-operandi-theme-diffs
+   `(ediff-current-diff-Ancestor ((,class ,(modus-vivendi-theme-diffs
                                             bg-alt fg-special-cold
                                             bg-special-cold fg-special-cold))))
-   `(ediff-current-diff-B ((,class ,(modus-operandi-theme-diffs
+   `(ediff-current-diff-B ((,class ,(modus-vivendi-theme-diffs
                                      bg-alt green
                                      bg-diff-added fg-diff-added))))
-   `(ediff-current-diff-C ((,class ,(modus-operandi-theme-diffs
+   `(ediff-current-diff-C ((,class ,(modus-vivendi-theme-diffs
                                      bg-alt yellow
                                      bg-diff-changed fg-diff-changed))))
    `(ediff-even-diff-A ((,class (:background ,bg-diff-neutral-1 :foreground ,fg-diff-neutral-1))))
@@ -1563,19 +1589,19 @@ AMOUNT is a customisation option."
    `(fountain-scene-heading ((,class (:foreground ,fg-special-calm :weight bold))))
    `(fountain-section-heading ((,class (:inherit ,modus-theme-variable-pitch
                                                  :foreground ,fg-main :weight bold
-                                                 ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                 ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(fountain-section-heading-1 ((,class (:inherit ,modus-theme-variable-pitch
                                                    :foreground ,fg-main :weight bold
-                                                   ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                   ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(fountain-section-heading-2 ((,class (:inherit ,modus-theme-variable-pitch
                                                    :foreground ,fg-special-warm :weight bold
-                                                   ,@(modus-operandi-theme-scale modus-operandi-theme-scale-3)))))
+                                                   ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-3)))))
    `(fountain-section-heading-3 ((,class (:inherit ,modus-theme-variable-pitch
                                                    :foreground ,fg-special-cold :weight bold
-                                                   ,@(modus-operandi-theme-scale modus-operandi-theme-scale-2)))))
+                                                   ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-2)))))
    `(fountain-section-heading-4 ((,class (:inherit ,modus-theme-variable-pitch
                                                    :foreground ,fg-special-mild :weight bold
-                                                   ,@(modus-operandi-theme-scale modus-operandi-theme-scale-1)))))
+                                                   ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-1)))))
    `(fountain-section-heading-5 ((,class (:inherit ,modus-theme-variable-pitch
                                                    :foreground ,fg-special-calm :weight bold))))
    `(fountain-synopsis ((,class (:foreground ,green))))
@@ -1774,7 +1800,7 @@ AMOUNT is a customisation option."
    `(helm-time-zone-current ((,class (:foreground ,green))))
    `(helm-time-zone-home ((,class (:foreground ,magenta))))
    `(helm-source-header ((,class (:foreground ,red-alt :weight bold
-                                              ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                              ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(helm-top-columns ((,class (:inherit helm-header))))
    `(helm-ucs-char ((,class (:foreground ,yellow-alt-other))))
    `(helm-visible-mark ((,class (:inherit modus-theme-subtle-cyan))))
@@ -1795,7 +1821,7 @@ AMOUNT is a customisation option."
    `(helm-xref-file-name ((,class (:foreground ,fg-special-warm))))
    ;;;; helpful
    `(helpful-heading  ((,class (:inherit ,modus-theme-variable-pitch :foreground ,fg-main :weight bold
-                                         ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                         ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    ;;;; highlight region or ad-hoc regexp
    `(hi-black-b ((,class (:background ,fg-main :foreground ,bg-main))))
    `(hi-blue ((,class (:background ,bg-alt :foreground ,blue :underline t))))
@@ -1910,7 +1936,7 @@ AMOUNT is a customisation option."
                                    :inherit modus-theme-refine-blue))))
    `(ioccur-regexp-face ((,class (:inherit modus-theme-intense-magenta :weight bold))))
    `(ioccur-title-face ((,class (:foreground ,red-alt :weight bold
-                                             ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                             ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    ;;;; isearch, occur, and the like
    `(isearch ((,class (:inherit modus-theme-intense-green :weight bold))))
    `(isearch-fail ((,class (:inherit modus-theme-refine-red))))
@@ -1985,8 +2011,8 @@ AMOUNT is a customisation option."
    `(kaocha-runner-warning-face ((,class (:foreground ,yellow))))
    ;;;; keycast
    `(keycast-command ((,class (:foreground ,blue-active :weight bold))))
-   `(keycast-key ((,class (:box ,(modus-operandi-theme-modeline-box blue-intense blue-active t -3)
-                                ,@(modus-operandi-theme-modeline-props
+   `(keycast-key ((,class (:box ,(modus-vivendi-theme-modeline-box blue-intense blue-active t -3)
+                                ,@(modus-vivendi-theme-modeline-props
                                    blue-active bg-main
                                    blue-active bg-active)))))
    ;;;; line numbers (display-line-numbers-mode and global variant)
@@ -2053,20 +2079,20 @@ AMOUNT is a customisation option."
    `(magit-branch-upstream ((,class (:slant italic))))
    `(magit-cherry-equivalent ((,class (:background ,bg-main :foreground ,magenta-intense))))
    `(magit-cherry-unmatched ((,class (:background ,bg-main :foreground ,cyan-intense))))
-   `(magit-diff-added ((,class ,(modus-operandi-theme-diffs
+   `(magit-diff-added ((,class ,(modus-vivendi-theme-diffs
                                  bg-main green
                                  bg-diff-added fg-diff-added))))
-   `(magit-diff-added-highlight ((,class ,(modus-operandi-theme-diffs
+   `(magit-diff-added-highlight ((,class ,(modus-vivendi-theme-diffs
                                            bg-dim green
                                            bg-diff-focus-added fg-diff-focus-added))))
-   `(magit-diff-base ((,class ,(modus-operandi-theme-diffs
+   `(magit-diff-base ((,class ,(modus-vivendi-theme-diffs
                                 bg-main yellow
                                 bg-diff-changed fg-diff-changed))))
-   `(magit-diff-base-highlight ((,class ,(modus-operandi-theme-diffs
+   `(magit-diff-base-highlight ((,class ,(modus-vivendi-theme-diffs
                                           bg-dim yellow
                                           bg-diff-focus-changed fg-diff-focus-changed))))
    `(magit-diff-context ((,class (:foreground ,fg-alt))))
-   `(magit-diff-context-highlight ((,class ,(modus-operandi-theme-diffs
+   `(magit-diff-context-highlight ((,class ,(modus-vivendi-theme-diffs
                                              bg-dim fg-dim
                                              bg-inactive fg-inactive))))
    `(magit-diff-file-heading ((,class (:foreground ,fg-special-cold :weight bold))))
@@ -2078,10 +2104,10 @@ AMOUNT is a customisation option."
    `(magit-diff-hunk-region ((,class (:weight bold))))
    `(magit-diff-lines-boundary ((,class (:background ,fg-main))))
    `(magit-diff-lines-heading ((,class (:inherit modus-theme-refine-magenta))))
-   `(magit-diff-removed ((,class ,(modus-operandi-theme-diffs
+   `(magit-diff-removed ((,class ,(modus-vivendi-theme-diffs
                                    bg-main red
                                    bg-diff-removed fg-diff-removed))))
-   `(magit-diff-removed-highlight ((,class ,(modus-operandi-theme-diffs
+   `(magit-diff-removed-highlight ((,class ,(modus-vivendi-theme-diffs
                                              bg-dim red
                                              bg-diff-focus-removed fg-diff-focus-removed))))
    `(magit-diffstat-added ((,class (:foreground ,green))))
@@ -2235,15 +2261,15 @@ AMOUNT is a customisation option."
    `(message-mml ((,class (:foreground ,green-alt))))
    `(message-separator ((,class (:background ,bg-alt :foreground ,fg-special-warm))))
    ;;;; modeline
-   `(mode-line ((,class (:box ,(modus-operandi-theme-modeline-box bg-inactive fg-inactive t)
-                              ,@(modus-operandi-theme-modeline-props
+   `(mode-line ((,class (:box ,(modus-vivendi-theme-modeline-box bg-inactive fg-inactive t)
+                              ,@(modus-vivendi-theme-modeline-props
                                  bg-active fg-dim
                                  bg-active fg-active)))))
    `(mode-line-buffer-id ((,class (:weight bold))))
    `(mode-line-emphasis ((,class (:foreground ,blue-active :weight bold))))
    `(mode-line-highlight ((,class (:inherit modus-theme-active-blue :box (:line-width -1 :style pressed-button)))))
-   `(mode-line-inactive ((,class (:box ,(modus-operandi-theme-modeline-box bg-active bg-active)
-                                       ,@(modus-operandi-theme-modeline-props
+   `(mode-line-inactive ((,class (:box ,(modus-vivendi-theme-modeline-box bg-active bg-active)
+                                       ,@(modus-vivendi-theme-modeline-props
                                           bg-dim fg-inactive
                                           bg-inactive fg-inactive)))))
    ;;;; mood-line
@@ -2344,15 +2370,15 @@ AMOUNT is a customisation option."
    `(org-agenda-column-dateline ((,class (:inherit modus-theme-subtle-neutral))))
    `(org-agenda-current-time ((,class (:inherit modus-theme-intense-cyan))))
    `(org-agenda-date ((,class (:inherit ,modus-theme-variable-pitch :foreground ,fg-main
-                                        ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                        ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(org-agenda-date-today ((,class (:inherit ,modus-theme-variable-pitch :background ,cyan-subtle-bg
                                               :foreground ,fg-main :weight bold
-                                              ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                              ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(org-agenda-date-weekend ((,class (:inherit ,modus-theme-variable-pitch :foreground ,fg-alt
-                                                ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(org-agenda-diary ((,class (:background ,bg-main :foreground ,fg-main))))
    `(org-agenda-dimmed-todo-face ((,class (:inherit modus-theme-subtle-neutral))))
-   `(org-agenda-done ((,class (:foreground ,green))))
+   `(org-agenda-done ((,class (,@(modus-vivendi-theme-org-todo-block green-nuanced-bg green-nuanced green)))))
    `(org-agenda-filter-category ((,class (:background ,bg-active :foreground ,fg-main :box t))))
    `(org-agenda-filter-effort ((,class (:background ,bg-active :foreground ,fg-main :box t))))
    `(org-agenda-filter-regexp ((,class (:background ,bg-active :foreground ,fg-main :box t))))
@@ -2360,19 +2386,23 @@ AMOUNT is a customisation option."
    `(org-agenda-restriction-lock ((,class (:background ,bg-dim :foreground ,fg-dim))))
    `(org-agenda-structure ((,class (:inherit ,modus-theme-variable-pitch
                                              :foreground ,fg-special-mild
-                                             ,@(modus-operandi-theme-scale modus-operandi-theme-scale-3)))))
+                                             ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-3)))))
    `(org-archived ((,class (:background ,bg-alt :foreground ,fg-alt))))
    `(org-block ((,class (,@(and (>= emacs-major-version 27) '(:extend t))
-                         :background ,(if modus-operandi-theme-distinct-org-blocks bg-dim bg-main)
+                         :background ,(if modus-vivendi-theme-distinct-org-blocks bg-dim bg-main)
                          :foreground ,fg-main))))
    `(org-block-begin-line ((,class (,@(and (>= emacs-major-version 27)
-                                           modus-operandi-theme-distinct-org-blocks
+                                           modus-vivendi-theme-distinct-org-blocks
                                            '(:extend t))
                                     :background ,bg-alt :foreground ,fg-special-mild))))
    `(org-block-end-line ((,class (:inherit org-block-begin-line))))
    `(org-checkbox ((,class (:weight bold))))
-   `(org-checkbox-statistics-done ((,class (:foreground ,green :weight bold))))
-   `(org-checkbox-statistics-todo ((,class (:foreground ,yellow :weight bold))))
+   `(org-checkbox-statistics-done ((,class (:foreground ,green
+                                                        ,@(modus-vivendi-theme-heading-block
+                                                           green-nuanced-bg green-nuanced)))))
+   `(org-checkbox-statistics-todo ((,class (:foreground ,yellow
+                                                        ,@(modus-vivendi-theme-heading-block
+                                                           yellow-nuanced-bg yellow-nuanced)))))
    `(org-clock-overlay ((,class (:inherit modus-theme-special-cold))))
    `(org-code ((,class (:foreground ,magenta))))
    `(org-column ((,class (:background ,bg-alt))))
@@ -2382,7 +2412,7 @@ AMOUNT is a customisation option."
    `(org-default ((,class (:background ,bg-main :foreground ,fg-main))))
    `(org-document-info ((,class (:foreground ,fg-special-cold))))
    `(org-document-title ((,class (:foreground ,fg-special-cold :weight bold))))
-   `(org-done ((,class (:foreground ,green))))
+   `(org-done ((,class (,@(modus-vivendi-theme-org-todo-block green-nuanced-bg green-nuanced green)))))
    `(org-drawer ((,class (:foreground ,cyan-alt))))
    `(org-ellipsis ((,class (:foreground nil)))) ; inherits from the heading's colour
    `(org-footnote ((,class (:foreground ,blue-alt :underline t))))
@@ -2395,29 +2425,39 @@ AMOUNT is a customisation option."
    `(org-habit-overdue-future-face ((,class (:inherit modus-theme-refine-red))))
    `(org-habit-ready-face ((,class (:inherit modus-theme-intense-blue))))
    `(org-habit-ready-future-face ((,class (:inherit modus-theme-refine-blue))))
-   `(org-headline-done ((,class (:foreground ,green-nuanced))))
+   `(org-headline-done ((,class (:foreground ,green-nuanced
+                                             ,@(modus-vivendi-theme-heading-block
+                                                green-nuanced-bg green-nuanced)))))
    `(org-hide ((,class (:foreground ,fg-main))))
    `(org-latex-and-related ((,class (:foreground ,magenta-refine-fg))))
    `(org-level-1 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style fg-main magenta-alt-other)
-                                    ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                    ,@(modus-vivendi-theme-heading-foreground fg-main magenta-alt-other)
+                                    ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)
+                                    ,@(modus-vivendi-theme-heading-block magenta-nuanced-bg magenta-nuanced)))))
    `(org-level-2 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style fg-special-warm magenta-alt)
-                                    ,@(modus-operandi-theme-scale modus-operandi-theme-scale-3)))))
+                                    ,@(modus-vivendi-theme-heading-foreground fg-special-warm magenta-alt)
+                                    ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-3)
+                                    ,@(modus-vivendi-theme-heading-block red-nuanced-bg red-nuanced)))))
    `(org-level-3 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style fg-special-cold blue)
-                                    ,@(modus-operandi-theme-scale modus-operandi-theme-scale-2)))))
+                                    ,@(modus-vivendi-theme-heading-foreground fg-special-cold blue)
+                                    ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-2)
+                                    ,@(modus-vivendi-theme-heading-block blue-nuanced-bg blue-nuanced)))))
    `(org-level-4 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style fg-special-mild cyan-alt-other)
-                                    ,@(modus-operandi-theme-scale modus-operandi-theme-scale-1)))))
+                                    ,@(modus-vivendi-theme-heading-foreground fg-special-mild cyan-alt-other)
+                                    ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-1)
+                                    ,@(modus-vivendi-theme-heading-block cyan-nuanced-bg cyan-nuanced)))))
    `(org-level-5 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style fg-special-calm green-alt)))))
+                                    ,@(modus-vivendi-theme-heading-foreground fg-special-calm green-alt)
+                                    ,@(modus-vivendi-theme-heading-block green-nuanced-bg green-nuanced)))))
    `(org-level-6 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style yellow-nuanced yellow-alt-other)))))
+                                    ,@(modus-vivendi-theme-heading-foreground yellow-nuanced yellow-alt-other)
+                                    ,@(modus-vivendi-theme-heading-block yellow-nuanced-bg yellow-nuanced)))))
    `(org-level-7 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style red-nuanced red-alt)))))
+                                    ,@(modus-vivendi-theme-heading-foreground red-nuanced red-alt)
+                                    ,@(modus-vivendi-theme-heading-block red-nuanced-bg red-nuanced)))))
    `(org-level-8 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                    ,@(modus-operandi-theme-heading-style fg-dim magenta)))))
+                                    ,@(modus-vivendi-theme-heading-foreground fg-dim magenta)
+                                    ,@(modus-vivendi-theme-heading-block bg-alt fg-alt)))))
    `(org-link ((,class (:inherit link))))
    `(org-list-dt ((,class (:weight bold))))
    `(org-macro ((,class (:inherit org-latex-and-related))))
@@ -2436,7 +2476,8 @@ AMOUNT is a customisation option."
    `(org-tag-group ((,class (:foreground ,cyan-nuanced :weight bold))))
    `(org-target ((,class (:underline t))))
    `(org-time-grid ((,class (:foreground ,cyan-nuanced))))
-   `(org-todo ((,class (,@(modus-operandi-theme-heading-style magenta-alt-other blue-alt-other)))))
+   `(org-todo ((,class (,@(modus-vivendi-theme-org-todo-block magenta-nuanced-bg magenta-nuanced magenta-alt-other)
+                        ,@(modus-vivendi-theme-heading-foreground magenta-alt-other red-alt-other)))))
    `(org-upcoming-deadline ((,class (:foreground ,red-alt-other))))
    `(org-upcoming-distant-deadline ((,class (:foreground ,red-nuanced))))
    `(org-verbatim ((,class (:background ,bg-alt :foreground ,fg-special-calm))))
@@ -2469,25 +2510,33 @@ AMOUNT is a customisation option."
    `(origami-fold-replacement-face ((,class (:background ,bg-alt :foreground ,fg-alt))))
    ;;;; outline-mode
    `(outline-1 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style fg-main magenta-alt-other)
-                                  ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                  ,@(modus-vivendi-theme-heading-foreground fg-main magenta-alt-other)
+                                  ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)
+                                  ,@(modus-vivendi-theme-heading-block magenta-nuanced-bg magenta-nuanced)))))
    `(outline-2 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style fg-special-warm magenta-alt)
-                                  ,@(modus-operandi-theme-scale modus-operandi-theme-scale-3)))))
+                                  ,@(modus-vivendi-theme-heading-foreground fg-special-warm magenta-alt)
+                                  ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-3)
+                                  ,@(modus-vivendi-theme-heading-block red-nuanced-bg red-nuanced)))))
    `(outline-3 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style fg-special-cold blue)
-                                  ,@(modus-operandi-theme-scale modus-operandi-theme-scale-2)))))
+                                  ,@(modus-vivendi-theme-heading-foreground fg-special-cold blue)
+                                  ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-2)
+                                  ,@(modus-vivendi-theme-heading-block blue-nuanced-bg blue-nuanced)))))
    `(outline-4 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style fg-special-mild cyan-alt-other)
-                                  ,@(modus-operandi-theme-scale modus-operandi-theme-scale-1)))))
+                                  ,@(modus-vivendi-theme-heading-foreground fg-special-mild cyan-alt-other)
+                                  ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-1)
+                                  ,@(modus-vivendi-theme-heading-block cyan-nuanced-bg cyan-nuanced)))))
    `(outline-5 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style fg-special-calm green-alt)))))
+                                  ,@(modus-vivendi-theme-heading-foreground fg-special-calm green-alt)
+                                  ,@(modus-vivendi-theme-heading-block green-nuanced-bg green-nuanced)))))
    `(outline-6 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style yellow-nuanced yellow-alt-other)))))
+                                  ,@(modus-vivendi-theme-heading-foreground yellow-nuanced yellow-alt-other)
+                                  ,@(modus-vivendi-theme-heading-block yellow-nuanced-bg yellow-nuanced)))))
    `(outline-7 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style red-nuanced red-alt)))))
+                                  ,@(modus-vivendi-theme-heading-foreground red-nuanced red-alt)
+                                  ,@(modus-vivendi-theme-heading-block red-nuanced-bg red-nuanced)))))
    `(outline-8 ((,class (:inherit ,modus-theme-variable-pitch :weight bold
-                                  ,@(modus-operandi-theme-heading-style fg-dim magenta)))))
+                                  ,@(modus-vivendi-theme-heading-foreground fg-dim magenta)
+                                  ,@(modus-vivendi-theme-heading-block bg-alt fg-alt)))))
    ;;;; outline-minor-faces
    `(outline-minor-0 ((,class (:background ,bg-alt))))
    ;;;; package (M-x list-packages)
@@ -2506,7 +2555,7 @@ AMOUNT is a customisation option."
    `(package-status-new ((,class (:foreground ,green :weight bold))))
    `(package-status-unsigned ((,class (:foreground ,red-alt :weight bold))))
    ;;;; page-break-lines
-   `(page-break-lines ((,class (:foreground ,fg-alt))))
+   `(page-break-lines ((,class (:inherit default :foreground ,fg-window-divider-outer))))
    ;;;; paradox
    `(paradox-archive-face ((,class (:foreground ,fg-special-mild))))
    `(paradox-comment-face ((,class (:foreground ,fg-alt :slant ,modus-theme-slant))))
@@ -2536,7 +2585,7 @@ AMOUNT is a customisation option."
    `(persp-selected-face ((,class (:foreground ,blue-active :weight bold))))
    ;;;; phi-grep
    `(phi-grep-heading-face  ((,class (:foreground ,red-alt :weight bold
-                                                  ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                  ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(phi-grep-line-number-face ((,class (:foreground ,fg-special-warm))))
    `(phi-grep-match-face ((,class (:inherit modus-theme-special-calm))))
    `(phi-grep-modified-face ((,class (:inherit modus-theme-refine-yellow))))
@@ -2670,7 +2719,7 @@ AMOUNT is a customisation option."
    `(sallet-recentf-file-path ((,class (:foreground ,fg-special-mild))))
    `(sallet-regexp-match ((,class (:inherit modus-theme-refine-magenta))))
    `(sallet-source-header ((,class (:foreground ,red-alt :weight bold
-                                                ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(sallet-substring-match ((,class (:inherit modus-theme-refine-blue))))
    ;;;; selectrum
    `(selectrum-current-candidate ((,class (:inherit modus-theme-intense-cyan))))
@@ -2729,21 +2778,21 @@ AMOUNT is a customisation option."
    `(sp-wrap-overlay-opening-pair ((,class (:inherit sp-pair-overlay-face))))
    `(sp-wrap-tag-overlay-face ((,class (:inherit sp-pair-overlay-face))))
    ;;;; smerge
-   `(smerge-base ((,class ,(modus-operandi-theme-diffs
+   `(smerge-base ((,class ,(modus-vivendi-theme-diffs
                             bg-main yellow
                             bg-diff-focus-changed fg-diff-focus-changed))))
-   `(smerge-lower ((,class ,(modus-operandi-theme-diffs
+   `(smerge-lower ((,class ,(modus-vivendi-theme-diffs
                              bg-main green
                              bg-diff-focus-added fg-diff-focus-added))))
    `(smerge-markers ((,class (:background ,bg-diff-neutral-2 :foreground ,fg-diff-neutral-2))))
-   `(smerge-refined-added ((,class ,(modus-operandi-theme-diffs
+   `(smerge-refined-added ((,class ,(modus-vivendi-theme-diffs
                                      bg-diff-added fg-diff-added
                                      bg-diff-refine-added fg-diff-refine-added))))
    `(smerge-refined-changed ((,class nil)))
-   `(smerge-refined-removed ((,class ,(modus-operandi-theme-diffs
+   `(smerge-refined-removed ((,class ,(modus-vivendi-theme-diffs
                                        bg-diff-removed fg-diff-removed
                                        bg-diff-refine-removed fg-diff-refine-removed))))
-   `(smerge-upper ((,class ,(modus-operandi-theme-diffs
+   `(smerge-upper ((,class ,(modus-vivendi-theme-diffs
                              bg-main red
                              bg-diff-focus-removed fg-diff-focus-removed))))
    ;;;; speedbar
@@ -2779,9 +2828,9 @@ AMOUNT is a customisation option."
    `(swiper-match-face-4 ((,class (:inherit swiper-line-face))))
    ;;;; swoop
    `(swoop-face-header-format-line ((,class (:foreground ,red-alt :weight bold
-                                                         ,@(modus-operandi-theme-scale modus-operandi-theme-scale-3)))))
+                                                         ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-3)))))
    `(swoop-face-line-buffer-name ((,class (:foreground ,blue-alt :weight bold
-                                                       ,@(modus-operandi-theme-scale modus-operandi-theme-scale-4)))))
+                                                       ,@(modus-vivendi-theme-scale modus-vivendi-theme-scale-4)))))
    `(swoop-face-line-number ((,class (:foreground ,fg-special-warm))))
    `(swoop-face-target-line ((,class (:inherit modus-theme-intense-blue
                                                ,@(and (>= emacs-major-version 27) '(:extend t))))))
@@ -3084,7 +3133,7 @@ AMOUNT is a customisation option."
    `(ztreep-node-face ((,class (:foreground ,fg-main))))
    (when (>= emacs-major-version 27) ; EXPERIMENTAL this form is subject to review
      (custom-theme-set-faces
-      'modus-operandi
+      'modus-vivendi
       ;;;; tab-bar-mode
       `(tab-bar ((,class (:background ,bg-alt :foreground ,fg-alt))))
       `(tab-bar-tab ((,class (:box (:line-width 1 :color ,fg-window-divider-inner)
@@ -3103,10 +3152,10 @@ AMOUNT is a customisation option."
                                              :background ,bg-tab-inactive :foreground ,fg-dim))))))
    ;;; Theme Variables
    (custom-theme-set-variables
-    'modus-operandi
+    'modus-vivendi
     ;;;; ansi-colors
     `(ansi-color-faces-vector [default bold shadow italic underline success warning error])
-    `(ansi-color-names-vector [,fg-main ,red ,green ,yellow ,blue ,magenta ,cyan ,bg-main])
+    `(ansi-color-names-vector [,bg-main ,red ,green ,yellow ,blue ,magenta ,cyan ,fg-main])
     ;;;; flymake fringe indicators
     `(flymake-error-bitmap '(flymake-double-exclamation-mark modus-theme-fringe-red))
     `(flymake-warning-bitmap '(exclamation-mark modus-theme-fringe-yellow))
@@ -3134,7 +3183,7 @@ AMOUNT is a customisation option."
         ("FIXME" . ,red-alt-other)
         ("XXX+" . ,red-alt)
         ("REVIEW" . ,cyan-alt-other)
-        ("DEPRECATED" . ,blue-nuanced)))
+        ("DEPRECATED" . ,cyan-nuanced)))
     ;;;;; vc-annotate (C-x v g)
     `(vc-annotate-background nil)
     `(vc-annotate-background-mode nil)
@@ -3159,15 +3208,15 @@ AMOUNT is a customisation option."
         (360 . ,magenta-alt-other)))
     `(vc-annotate-very-old-color nil)
     ;;;; xterm-color
-    `(xterm-color-names [,fg-main ,red ,green ,yellow ,blue ,magenta ,cyan ,bg-alt])
-    `(xterm-color-names-bright [,fg-alt ,red-alt ,green-alt ,yellow-alt ,blue-alt ,magenta-alt ,cyan-alt ,bg-main]))))
+    `(xterm-color-names [,bg-main ,red ,green ,yellow ,blue ,magenta ,cyan ,fg-alt])
+    `(xterm-color-names-bright [,bg-alt ,red-alt ,green-alt ,yellow-alt ,blue-alt ,magenta-alt ,cyan-alt ,fg-main]))))
 
 ;;;###autoload
 (when load-file-name
   (add-to-list 'custom-theme-load-path
     (file-name-as-directory (file-name-directory load-file-name))))
 
-(provide-theme 'modus-operandi)
+(provide-theme 'modus-vivendi)
 
-(provide 'modus-operandi-theme)
-;;; modus-operandi-theme.el ends here
+(provide 'modus-vivendi-theme)
+;;; modus-vivendi-theme.el ends here

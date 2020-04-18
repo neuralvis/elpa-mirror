@@ -16,6 +16,7 @@ are disabled by default:
     modus-vivendi-theme-bold-constructs
     modus-vivendi-theme-proportional-fonts
     modus-vivendi-theme-rainbow-headings
+    modus-vivendi-theme-section-headings
     modus-vivendi-theme-scale-headings
     modus-vivendi-theme-visible-fringes
     modus-vivendi-theme-distinct-org-blocks

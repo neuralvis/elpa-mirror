@@ -4,6 +4,7 @@
 ;; Author: David Kerschner <dkerschner@gmail.com>
 ;; Created: Aug 25, 2010
 ;; Version: 0.2
+;; Package-Version: 20190201.2152
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

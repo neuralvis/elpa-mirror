@@ -5,7 +5,7 @@
 ;; Author: Titus von der Malsburg <malsburg@posteo.de>
 ;; Maintainer: Titus von der Malsburg <malsburg@posteo.de>
 ;; URL: https://github.com/tmalsburg/tango-plus-theme
-;; Package-Version: 20200406.1652
+;; Package-Version: 20200418.1110
 ;; Version: 2.0.0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -85,8 +85,7 @@ Semantic, and Ansi-Color faces are included.")
    ;; Faces defined in faces.el:
    `(default                        ((,class (:foreground ,black
 					      :background ,white))))
-   `(deemphasized                   ((,class (:foreground ,alum-4
-					      :background ,white))))
+   `(deemphasized                   ((,class (:foreground ,alum-4))))
    `(quote                          ((,class (:foreground ,alum-5
 					      :slant italic))))
    ;; Skipping bold, italic, bold-italic, underline, fixed-pitch,

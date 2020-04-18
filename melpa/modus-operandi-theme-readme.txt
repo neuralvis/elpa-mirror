@@ -16,6 +16,7 @@ are disabled by default:
     modus-operandi-theme-bold-constructs
     modus-operandi-theme-proportional-fonts
     modus-operandi-theme-rainbow-headings
+    modus-operandi-theme-section-headings
     modus-operandi-theme-scale-headings
     modus-operandi-theme-visible-fringes
     modus-operandi-theme-distinct-org-blocks

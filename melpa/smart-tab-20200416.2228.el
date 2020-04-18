@@ -1,19 +1,20 @@
-;;; smart-tab.el --- Intelligent tab completion and indentation.
+;;; smart-tab.el --- Intelligent tab completion and indentation
 
 ;; This file is NOT part of GNU Emacs.
 
-;; Copyright (C) 2009-2019 John SJ Anderson,
+;; Copyright (C) 2009-2020 John SJ Anderson,
 ;;                         Sebastien Rocca Serra,
 ;;                         Daniel Hackney
-;; Author: John SJ Anderson <genehack@genehack.org>,
+;; Author: John SJ Anderson <john@genehack.org>,
 ;;         Sebastien Rocca Serra <sroccaserra@gmail.com>,
 ;;         Daniel Hackney <dan@haxney.org>
-;; Maintainer: John SJ Anderson <genehack@genehack.org>
+;; Maintainer: John SJ Anderson <john@genehack.org>
 ;; Keywords: extensions
-;; Package-Version: 20190916.137
+;; Package-Version: 20200416.2228
 ;; Created: 2009-05-24
 ;; URL: http://github.com/genehack/smart-tab/tree/master
-;; Version: 0.5
+;; Version: 0.6
+;; Package-Requires: ((emacs "24.3"))
 ;;
 ;; This program is free software; you can redistribute it and/or modify it under
 ;; the terms of the GNU General Public License as published by the Free Software
@@ -96,7 +97,7 @@ By default, we check for the presence of `auto-complete-mode' and
 use it as the completion framework.  Set this variable if you want to use a
 different completion framework.
 
-Eg: For `company-mode', you can set this var to `company-complete'."
+Eg: For function `company-mode', you can set this var to `company-complete'."
   :type '(function)
   :group 'smart-tab)
 
