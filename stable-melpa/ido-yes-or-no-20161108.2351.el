@@ -5,6 +5,7 @@
 ;; Filename: ido-yes-or-no.el
 ;; Author: Ryan C. Thompson
 ;; URL: https://github.com/DarwinAwardWinner/ido-yes-or-no
+;; Package-Version: 20161108.2351
 ;; Version: 1.4
 ;; Created: 2011-09-24
 ;; Package-Requires: ((ido-completing-read+ "0"))
