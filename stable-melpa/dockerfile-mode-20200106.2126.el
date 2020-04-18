@@ -2,6 +2,7 @@
 
 ;; Copyright (c) 2013 Spotify AB
 ;; Package-Requires: ((emacs "24") (s "1.12"))
+;; Package-Version: 20200106.2126
 ;; Homepage: https://github.com/spotify/dockerfile-mode
 ;;
 ;; Licensed under the Apache License, Version 2.0 (the "License"); you may not
