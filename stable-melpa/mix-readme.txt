@@ -25,4 +25,4 @@ For example, to create a migration in a subproject you should press:
 C-u C-u C-c C-c C-c C-e:
 
 C-u C-u - to be prompted for migration name
-C-c C-c C-e - to select a mix project and ecto.gen.migration task
+C-c C-c C-c C-e - to select a mix project and ecto.gen.migration task
