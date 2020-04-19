@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/tarsius/keycast
 
 ;; Package-Requires: ((emacs "25.3"))
-;; Package-Version: 20200103.1239
+;; Package-Version: 20200418.2028
 
 ;; This file is not part of GNU Emacs.
 
@@ -170,7 +170,7 @@ instead."
   "Show current command and its key binding in the mode line."
   :global t
   (if keycast-mode
-      (let ((cons (member keycast-insert-after mode-line-format)))
+      (let ((cons (keycast--tree-member keycast-insert-after mode-line-format)))
         (unless cons
           (setq keycast-mode nil)
           (user-error
@@ -192,6 +192,14 @@ instead."
              (setcdr cons (cddr cons)))))
     (setq keycast--removed-tail nil)
     (remove-hook 'pre-command-hook 'keycast-mode-line-update)))
+
+(defun keycast--tree-member (elt tree)
+  (or (member elt tree)
+      (catch 'found
+        (dolist (sub tree)
+          (when-let ((found (and (listp sub)
+                                 (keycast--tree-member elt sub))))
+            (throw 'found found))))))
 
 (defun keycast-bottom-right-window-p ()
   (and (window-at-side-p nil 'right)
