@@ -1,2 +1,0 @@
-
-(meow . [(20200418 1648) ((emacs (26 3)) (dash (2 12 0)) (cl-lib (0 6 1))) "Modal Editing On Wheel" tar ((:commit . "b3e802d77655e4153a91cc21cae3406ae65a0e6e") (:keywords "convenience" "modal-editing") (:authors ("Shi Tianshu")) (:maintainer "Shi Tianshu") (:url . "https://www.github.com/DogLooksGood/meow"))])

@@ -209,6 +209,7 @@ notify me of any missing package or change you would like to see.
     rainbow-blocks
     rainbow-identifiers
     rainbow-delimiters
+    rcirc
     regexp-builder (also known as `re-builder')
     rg
     ripgrep
