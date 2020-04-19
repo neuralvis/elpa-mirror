@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018
 
 ;; URL: https://github.com/laishulu/emacs-tmux-pane
-;; Package-Version: 20200330.456
+;; Package-Version: 20200419.1331
 ;; Created: November 1, 2018
 ;; Keywords: convenience, terminals, tmux, window, pane, navigation, integration
 ;; Package-Requires: ((names "0.5") (emacs "24") (s "0"))
@@ -32,6 +32,7 @@
 ;; `names'. However, requiring it here means it will also work for
 ;; people who don't install through package.el.
 (eval-when-compile (require 'names))
+(require 'subr-x)
 
 (define-namespace tmux-pane-
 

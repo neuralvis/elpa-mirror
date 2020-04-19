@@ -5,7 +5,6 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/fwb-cmds
 ;; Keywords: convenience
-;; Package-Version: 20180318.2219
 
 ;; This file is not part of GNU Emacs.
 
