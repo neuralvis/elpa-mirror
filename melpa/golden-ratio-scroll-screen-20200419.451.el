@@ -4,7 +4,7 @@
 ;; Copyright (C) 2011~2015,纪秀峰 , all rights reserved.
 ;; Created: 2011-03-01
 ;; Version: 1.1
-;; Package-Version: 20170224.229
+;; Package-Version: 20200419.451
 ;; URL:   https://github.com/jixiuf/golden-ratio-scroll-screen
 ;; Keywords: scroll screen highlight
 ;;
@@ -92,7 +92,10 @@
   :type 'hook)
 
 (defface golden-ratio-scroll-highlight-line-face
-  '((t (:background "cadetblue4" :foreground "white" :weight bold)))
+  `((t (,@(and (>= emacs-major-version 27) '(:extend t))
+        :background "cadetblue4"
+        :foreground "white"
+        :weight bold)))
   "Font Lock mode face used to highlight line.
  (borrowed from etags-select.el)"
   :group 'golden-ratio-scroll-screen)
