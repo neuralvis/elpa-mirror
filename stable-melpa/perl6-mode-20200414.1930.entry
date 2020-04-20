@@ -1,2 +1,0 @@
-
-(perl6-mode . [(20200414 1930) ((emacs (24 4)) (pkg-info (0 1))) "Major mode for editing Perl 6 code" tar ((:commit . "0be91cc76e9c024faf50314fe96e77f836665da9") (:keywords "languages") (:authors ("Hinrik Örn Sigurðsson" . "hinrik.sig@gmail.com")) (:maintainer "Hinrik Örn Sigurðsson" . "hinrik.sig@gmail.com") (:url . "https://github.com/hinrik/perl6-mode"))])

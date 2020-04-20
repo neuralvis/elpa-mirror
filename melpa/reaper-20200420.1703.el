@@ -5,7 +5,7 @@
 ;; Author: Thomas Fini Hansen <xen@xen.dk>
 ;; Created: August 11, 2019
 ;; Version: 1.0.0
-;; Package-Version: 20200120.2006
+;; Package-Version: 20200420.1703
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: tools
 ;; Url: https://github.com/xendk/reaper
@@ -155,7 +155,7 @@
    (let* ((response-entries
            (reaper-alist-get '(time_entries)
                              (reaper-api "GET"
-                                         (format "time_entries?from=%s&to=%s&user=%s"  reaper-date reaper-date (reaper--get-user-id))
+                                         (format "time_entries?from=%s&to=%s&user_id=%s"  reaper-date reaper-date (reaper--get-user-id))
                                          nil
                                          "Refreshed cache of daily entries")))
           (request-time (current-time)))
