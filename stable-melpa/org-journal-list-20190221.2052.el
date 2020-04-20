@@ -4,6 +4,7 @@
 
 ;; Author: Huy Tran <huytd189@gmail.com> 
 ;; Version: 1.0
+;; Package-Version: 20190221.2052
 ;; URL: https://github.com/huytd/org-journal-list
 ;; Package-Requires: ((emacs "25"))
 
