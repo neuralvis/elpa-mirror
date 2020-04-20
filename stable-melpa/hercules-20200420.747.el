@@ -4,7 +4,7 @@
 
 ;; Author: Uros Perisic
 ;; URL: https://gitlab.com/jjzmajic/hercules
-;; Package-Version: 20190929.637
+;; Package-Version: 20200420.747
 
 ;; Version: 0.3
 ;; Keywords: convenience
@@ -106,7 +106,7 @@ Do so when calling FUNS showing KEYMAP.  Pass TRANSIENT to
    (progn
      (unless (symbol-function fun)
        (fset fun (lambda () (interactive))))
-     (advice-add fun :after
+     (advice-add fun :before
                  (pcase hst
                    ('toggle (apply-partially #'hercules--toggle keymap flatten transient))
                    ('show (apply-partially #'hercules--show keymap flatten transient))

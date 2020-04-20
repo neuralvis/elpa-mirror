@@ -5,7 +5,7 @@
 ;; Maintainer: Alexander Fu Xi <fuxialexnader@gmail.com>
 ;; Homepage: https://github.com/fuxialexander/org-pdftools
 ;; Version: 1.0
-;; Package-Version: 20200418.851
+;; Package-Version: 20200420.752
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "26.1") (org "9.3.6") (pdf-tools "0.8") (org-noter "1.4.1"))
 
@@ -325,7 +325,7 @@ Can be one of highlight/underline/strikeout/squiggly."
                                                     (mapconcat 'identity (pdf-view-active-region-text) ? ))))
                 (page (number-to-string (pdf-view-current-page)))
                 (link (org-pdftools-get-link))
-                (isearchstr (if (string-match ".*??\\(.*\\)" link)
+                (isearchstr (if (string-match (concat ".*" (regexp-quote org-pdftools-search-string-separator) "\\(.*\\)") link)
                                 (match-string 1 link)))
                 (desc (funcall org-pdftools-get-desc-function file page (or quot isearchstr))))
            (org-link-store-props
