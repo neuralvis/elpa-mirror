@@ -250,6 +250,7 @@ notify me of any missing package or change you would like to see.
     visible-mark
     visual-regexp
     volatile-highlights
+    vterm
     wcheck-mode
     web-mode
     wgrep

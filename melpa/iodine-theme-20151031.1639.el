@@ -4,7 +4,6 @@
 
 ;; Author: Srđan Panić <srdja.panic@gmail.com>
 ;; URL: https://github.com/srdja/iodine-theme
-;; Package-Version: 20151031.1639
 ;; Version 0.1
 ;; Keywords: themes
 ;; Package-Requires: ((emacs "24"))
