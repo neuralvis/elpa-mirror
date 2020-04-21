@@ -4,7 +4,7 @@
 
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Keywords: faces
-;; Package-Version: 20200420.2230
+;; Package-Version: 20200421.241
 ;; Version: 6.2.0
 ;; URL: http://projects.ryuslash.org/yoshi-theme/
 
@@ -384,8 +384,8 @@
    `(org-agenda-structure ((t (:foreground ,fgblue))))
    `(org-block ((t (:foreground ,fgdefault :background ,bgdim :inherit unspecified))))
    `(org-block-background ((t (:background ,bgdim))))
-   `(org-block-begin-line ((t (:foreground ,fgdefault :slant unspecified :background ,bgbright))))
-   `(org-block-end-line ((t (:foreground ,fgdefault :slant unspecified :background ,bgbright))))
+   `(org-block-begin-line ((t (:foreground ,fgdim :slant unspecified :background ,bgbright :height 0.71))))
+   `(org-block-end-line ((t (:foreground ,fgdim :slant unspecified :background ,bgdim :height 0.71))))
    `(org-checkbox-statistics-done ((t (:foreground ,bgcyan))))
    `(org-checkbox-statistics-todo ((t (:foreground ,fgcyan))))
    `(org-date ((t (:foreground ,fgpink :underline unspecified))))

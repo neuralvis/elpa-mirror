@@ -1,2 +1,0 @@
-
-(wucuo . [(20200417 425) ((emacs (24 4))) "Spell check code containing camel case words" single ((:commit . "f25d0023711e07fba13bba6b937257088493645e") (:keywords "convenience") (:authors ("Chen Bin <chenbin DOT sh AT gmail DOT com>")) (:maintainer "Chen Bin <chenbin DOT sh AT gmail DOT com>") (:url . "http://github.com/redguardtoo/wucuo"))])

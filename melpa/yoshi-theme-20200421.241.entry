@@ -1,0 +1,2 @@
+
+(yoshi-theme . [(20200421 241) nil "Theme named after my cat" single ((:commit . "0dac8afe67f2c00e21f62ea0c723cbfc66d1c217") (:keywords "faces") (:authors ("Tom Willemse" . "tom@ryuslash.org")) (:maintainer "Tom Willemse" . "tom@ryuslash.org") (:url . "http://projects.ryuslash.org/yoshi-theme/"))])
