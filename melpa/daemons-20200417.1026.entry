@@ -1,2 +1,0 @@
-
-(daemons . [(20200417 1026) ((emacs (25 1))) "UI for managing init system daemons (services)" tar ((:commit . "6f03413081d3c980e0930111f72cb15751dbeaae") (:keywords "unix" "convenience") (:authors ("Chris Bowdon")) (:maintainer "Chris Bowdon") (:url . "https://github.com/cbowdon/daemons.el"))])
