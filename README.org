@@ -1,18 +1,7 @@
 * =elpa-mirror=
 
 Mirrors for some Emacs package archives. These mirrors should be used only when
-official repository is temporarily down. Maintained using [[https://gitlab.com/d12frosted/mirror-elpa][mirror-elpa]].
-
-** Usage - GitLab
-
-Just setup =package-archives= in your =init.el= file.
-
-#+BEGIN_SRC emacs-lisp
-  (setq package-archives
-        '(("melpa" . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/melpa/")
-          ("org"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/org/")
-          ("gnu"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/gnu/")))
-#+END_SRC
+official repository is temporarily down. Maintained using [[https://github.com/d12frosted/mirror-elpa][mirror-elpa]].
 
 ** Usage - GitHub
 
@@ -23,6 +12,17 @@ Just setup =package-archives= in your =init.el= file.
         '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
           ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
           ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
+#+END_SRC
+
+** Usage - GitLab
+
+Just setup =package-archives= in your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+  (setq package-archives
+        '(("melpa" . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/melpa/")
+          ("org"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/org/")
+          ("gnu"   . "https://gitlab.com/d12frosted/elpa-mirror/raw/master/gnu/")))
 #+END_SRC
 
 ** Usage - Local
