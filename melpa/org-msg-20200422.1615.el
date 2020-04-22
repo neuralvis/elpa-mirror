@@ -6,8 +6,8 @@
 ;; Created: January 2018
 ;; Keywords: extensions mail
 ;; Homepage: https://github.com/jeremy-compostella/org-msg
-;; Package-Version: 20200409.2344
-;; Package-X-Original-Version: 2.6
+;; Package-Version: 20200422.1615
+;; Package-X-Original-Version: 2.7
 ;; Package-Requires: ((emacs "24.4") (htmlize "1.54"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -1076,9 +1076,28 @@ HTML emails."
   "Setup mu4e faces, addresses completion and run mu4e."
   (mu4e~compose-remap-faces)
   (mu4e~start)
-  (mu4e~compose-setup-fcc-maybe)
   (when mu4e-compose-complete-addresses
-    (mu4e~compose-setup-completion)))
+    (mu4e~compose-setup-completion))
+  ;; the following code is verbatim from mu4e-compse.el, mu4e-compose-mode
+  ;; this will setup fcc (saving sent messages) and handle flags
+  ;; (e.g. replied to)
+  (add-hook 'message-send-hook
+            (lambda () ;; mu4e~compose-save-before-sending
+              ;; when in-reply-to was removed, remove references as well.
+              (when (eq mu4e-compose-type 'reply)
+                (mu4e~remove-refs-maybe))
+              (when use-hard-newlines
+                (mu4e-send-harden-newlines))
+              ;; for safety, always save the draft before sending
+              (set-buffer-modified-p t)
+              (save-buffer)
+              (mu4e~compose-setup-fcc-maybe)
+              (widen)) nil t)
+  ;; when the message has been sent.
+  (add-hook 'message-sent-hook
+            (lambda () ;;  mu4e~compose-mark-after-sending
+              (setq mu4e-sent-func 'mu4e-sent-handler)
+              (mu4e~proc-sent (buffer-file-name))) nil t))
 
 (defvar org-msg-edit-mode-map
   (let ((map (make-sparse-keymap)))
