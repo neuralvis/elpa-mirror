@@ -4,7 +4,7 @@
 
 ;; Author: Tom Willemse <tom@ryuslash.org>
 ;; Keywords: faces
-;; Package-Version: 20200421.241
+;; Package-Version: 20200422.208
 ;; Version: 6.2.0
 ;; URL: http://projects.ryuslash.org/yoshi-theme/
 
@@ -137,9 +137,13 @@
    `(ediff-current-diff-A ((t (:inherit diff-removed))))
    `(ediff-current-diff-B ((t (:inherit diff-added))))
    `(ediff-current-diff-C ((t (:inherit diff-changed))))
+   `(ediff-even-diff-A ((t (:background ,bgyellow))))
+   `(ediff-even-diff-B ((t (:background ,bgyellow))))
    `(ediff-fine-diff-A ((t (:inherit diff-refine-removed))))
    `(ediff-fine-diff-B ((t (:inherit diff-refine-added))))
    `(ediff-fine-diff-C ((t (:inherit diff-refine-change))))
+   `(ediff-odd-diff-A ((t (:background ,bgyellow))))
+   `(ediff-odd-diff-B ((t (:background ,bgyellow))))
 
    ;;; ERC
    `(erc-button ((t (:weight unspecified :inherit button))))

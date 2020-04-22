@@ -5,7 +5,7 @@
 ;; Maintainer: Alexander Fu Xi <fuxialexnader@gmail.com>
 ;; Homepage: https://github.com/fuxialexander/org-pdftools
 ;; Version: 1.0
-;; Package-Version: 20200420.752
+;; Package-Version: 20200422.142
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "26.1") (org "9.3.6") (pdf-tools "0.8") (org-noter "1.4.1"))
 
@@ -391,8 +391,9 @@ and append it. ARG is passed to `org-link-complete-file'."
   (concat
    (replace-regexp-in-string
     "^file:"
+    (concat
     org-pdftools-link-prefix ":"
-    (org-link-complete-file arg))
+    (org-link-complete-file arg)))
    "::"
    (read-from-minibuffer
     "Page:"
