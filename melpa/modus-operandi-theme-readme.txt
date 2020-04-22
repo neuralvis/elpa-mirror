@@ -91,6 +91,7 @@ notify me of any missing package or change you would like to see.
     easy-kill
     ebdb
     ediff
+    eglot
     eldoc-box
     elfeed
     elfeed-score
