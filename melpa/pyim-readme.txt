@@ -143,7 +143,7 @@ pyim 支持双拼输入模式，用户可以通过变量 `pyim-default-scheme' �
 
 注意：
 1. pyim 支持微软双拼（microsoft-shuangpin）和小鹤双拼（xiaohe-shuangpin）。
-2. 用户可以使用变量 `pyim-schemes' 添加自定义双拼方案。
+2. 用户可以使用函数 `pyim-scheme-add' 添加自定义双拼方案。
 3. 用户可能需要重新设置 `pyim-translate-trigger-char'。
 
 *** 通过 pyim 来支持 rime 所有输入法

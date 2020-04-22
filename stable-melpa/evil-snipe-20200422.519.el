@@ -7,7 +7,7 @@
 ;; Created: December 5, 2014
 ;; Modified: July 31, 2018
 ;; Version: 2.1.2
-;; Package-Version: 20200103.923
+;; Package-Version: 20200422.519
 ;; Keywords: emulation, vim, evil, sneak, seek
 ;; Homepage: https://github.com/hlissner/evil-snipe
 ;; Package-Requires: ((emacs "24.4") (evil "1.2.12") (cl-lib "0.5"))
@@ -502,11 +502,15 @@ interactive codes. KEYMAP is the transient map to activate afterwards."
   (evil-snipe-repeat (or (and (integerp count) (- count)) -1)))
 
 ;;;###autoload
-(defmacro evil-snipe-def (n type forward-key backward-key)
+(cl-defmacro evil-snipe-def (n type forward-key backward-key
+                               &key forward-fn backward-fn)
   "Define a N-char snipe, and bind it to FORWARD-KEY and BACKWARD-KEY. TYPE can
-be inclusive or exclusive."
-  (let ((forward-fn  (intern (format "evil-snipe-%s" forward-key)))
-        (backward-fn (intern (format "evil-snipe-%s" backward-key)))
+be inclusive or exclusive. Specify FORWARD-FN and/or BACKWARD-FN to explicitly
+choose the function names."
+  (let ((forward-fn  (or forward-fn
+                         (intern (format "evil-snipe-%s" forward-key))))
+        (backward-fn (or backward-fn
+                         (intern (format "evil-snipe-%s" backward-key))))
         (inclusive-p (eq (evil-unquote type) 'inclusive)))
     `(progn
        (evil-define-motion ,forward-fn (count keys)
