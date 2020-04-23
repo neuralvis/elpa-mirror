@@ -11,7 +11,7 @@ configuration:
 
 (setq completion-styles '(orderless))
 
-You can customize the `orderless-regexp-separator' to decide how
+You can customize the `orderless-component-separator' to decide how
 the input pattern is split into component regexps.  The default
 splits on spaces.  You might want to add hyphens and slashes, for
 example, to ease completion of symbols and file paths,
