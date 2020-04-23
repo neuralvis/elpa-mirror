@@ -51,6 +51,7 @@ Supported languages:
 - Rust (rustfmt)
 - Scala (scalafmt)
 - Shell script (shfmt)
+- Snakemake (snakefmt)
 - Solidity (prettier prettier-plugin-solidity)
 - SQL (sqlformat)
 - Swift (swiftformat)
