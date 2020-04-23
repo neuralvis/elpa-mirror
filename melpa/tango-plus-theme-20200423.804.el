@@ -5,7 +5,7 @@
 ;; Author: Titus von der Malsburg <malsburg@posteo.de>
 ;; Maintainer: Titus von der Malsburg <malsburg@posteo.de>
 ;; URL: https://github.com/tmalsburg/tango-plus-theme
-;; Package-Version: 20200418.1110
+;; Package-Version: 20200423.804
 ;; Version: 2.0.0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -314,7 +314,7 @@ Semantic, and Ansi-Color faces are included.")
    `(mu4e-special-header-value-face ((,class (:inherit default))))
    `(mu4e-contact-face              ((,class (:inherit default :weight bold))))
    `(mu4e-highlight-face            ((,class (:inherit default :bold t))))
-   `(mu4e-modeline-face             ((,class (:inherit mode-line))))
+   `(mu4e-modeline-face             ((,class ())))
    `(mu4e-compose-separator-face    ((,class (:inherit deemphasized))))
    `(mu4e-cited-1-face              ((,class (:inherit font-lock-comment-face))))
    `(mu4e-cited-2-face              ((,class (:inherit font-lock-comment-face))))

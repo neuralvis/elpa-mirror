@@ -4,7 +4,7 @@
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://gitlab.com/protesilaos/modus-themes
-;; Package-Version: 20200422.1129
+;; Package-Version: 20200423.855
 ;; Version: 0.7.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: faces, theme, accessibility
@@ -1882,11 +1882,11 @@ AMOUNT is a customisation option."
    ;;;; hl-todo
    `(hl-todo ((,class (:foreground ,red-alt-other :weight bold))))
    ;;;; hydra
-   `(hydra-face-amaranth ((,class (:foreground ,yellow-intense :weight bold))))
-   `(hydra-face-blue ((,class (:foreground ,blue-intense :weight bold))))
-   `(hydra-face-pink ((,class (:foreground ,magenta-intense :weight bold))))
-   `(hydra-face-red ((,class (:foreground ,red-intense :weight bold))))
-   `(hydra-face-teal ((,class (:foreground ,cyan-intense :weight bold))))
+   `(hydra-face-amaranth ((,class (:foreground ,yellow :weight bold))))
+   `(hydra-face-blue ((,class (:foreground ,blue-alt :weight bold))))
+   `(hydra-face-pink ((,class (:foreground ,magenta-alt :weight bold))))
+   `(hydra-face-red ((,class (:foreground ,red :weight bold))))
+   `(hydra-face-teal ((,class (:foreground ,cyan :weight bold))))
    ;;;; icomplete
    `(icomplete-first-match ((,class (:foreground ,magenta :weight bold))))
    ;;;; icomplete-vertical
