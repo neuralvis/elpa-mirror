@@ -4,7 +4,7 @@
 
 ;; Author: Mihai Olteanu <mihai_olteanu@fastmail.fm>
 ;; Version: 1.0
-;; Package-Version: 20200415.1629
+;; Package-Version: 20200424.754
 ;; Package-Requires: ((emacs "26.1") (lastfm "1.1") (versuri "1.0") (s "1.12.0") (bind-key "2.4") (mpv "0.1.0"))
 ;; Keywords: multimedia
 ;; URL: https://github.com/mihaiolteanu/vuiet
@@ -403,8 +403,9 @@ inside this buffer."
                       #'vuiet-update-mode-line)))))
 
   (defun vuiet--reset-update-mode-line-timer ()
-    (cancel-timer timer)
-    (setf timer nil)))
+    (when timer
+      (cancel-timer timer)
+      (setf timer nil))))
 
 (let (playing-track)
   (defun vuiet--playing-track-set (track)

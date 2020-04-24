@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: frames
 ;; URL: https://github.com/muffinmad/emacs-mini-frame
-;; Package-Version: 20200417.2011
+;; Package-Version: 20200424.852
 ;; Package-X-Original-Version: 1.0
 ;; Package-Requires: ((emacs "26.1"))
 
@@ -216,7 +216,9 @@ ALIST is passed to `window--display-buffer'."
       (set-face-background 'fringe nil mini-frame-completions-frame))
     (modify-frame-parameters mini-frame-completions-frame show-parameters)
     (make-frame-visible mini-frame-completions-frame)
-    (window--display-buffer buffer (frame-selected-window mini-frame-completions-frame) 'frame alist)))
+    (let ((w (frame-selected-window mini-frame-completions-frame)))
+      (prog1 (window--display-buffer buffer w 'frame alist)
+        (set-window-dedicated-p w 'soft)))))
 
 (defun mini-frame--display (fn args)
   "Show mini-frame and call FN with ARGS."
@@ -302,7 +304,9 @@ ALIST is passed to `window--display-buffer'."
           (delete-frame-functions
            (cons #'mini-frame--delete-frame delete-frame-functions))
           ;; FIXME which-key is not working in mini frame
-          (which-key-popup-type 'frame))
+          (which-key-popup-type 'frame)
+          (ivy-fixed-height-minibuffer nil))
+      (ignore ivy-fixed-height-minibuffer)
       (ignore resize-mini-frames)
       (ignore which-key-popup-type)
       (unwind-protect
