@@ -4,7 +4,7 @@
 
 ;; Author: Omar Antolín Camarena <omar@matem.unam.mx>
 ;; Keywords: extensions
-;; Package-Version: 20200423.1644
+;; Package-Version: 20200423.2256
 ;; Version: 0.3
 ;; Homepage: https://github.com/oantolin/orderless
 ;; Package-Requires: ((emacs "24.3"))
@@ -165,55 +165,73 @@ at a word boundary in the candidate.  This is similar to the
    (cl-loop for prefix in (split-string component "\\>" t)
             collect `(seq word-boundary ,prefix))))
 
-(defun orderless--highlight-matches (regexps string)
-    "Highlight a match of each of the REGEXPS in STRING.
-Warning: only call this if you know all REGEXPs match STRING!"
-    (setq string (copy-sequence string))
-    (cl-loop with n = (length orderless-match-faces)
-             for regexp in regexps and i from 0 do
-             (string-match regexp string)
-             (cl-loop
-              for (x y) on (or (cddr (match-data)) (match-data)) by #'cddr
-              when x do
-              (font-lock-prepend-text-property
-               x y
-               'face (aref orderless-match-faces (mod i n))
-               string)))
-    string)
+(defun orderless-highlight-matches (regexps strings)
+    "Highlight a match of each of the REGEXPS in each of the STRINGS.
+Warning: only use this if you know all REGEXPs match all STRINGS!
+For the user's convenience, if REGEXPS is a string, it is
+converted to a list of regexps according to the value of
+`orderless-component-matching-styles'."
+    (when (stringp regexps)
+      (setq regexps (orderless--component-regexps regexps)))
+    (cl-loop for original in strings
+             for string = (copy-sequence original) do
+             (cl-loop with n = (length orderless-match-faces)
+                      for regexp in regexps and i from 0 do
+                      (string-match regexp string)
+                      (cl-loop
+                       for (x y) on (or (cddr (match-data)) (match-data))
+                       by #'cddr
+                       when x do
+                       (font-lock-prepend-text-property
+                        x y
+                        'face (aref orderless-match-faces (mod i n))
+                        string)))
+             collect string))
 
-(defun orderless--component-regexp (component)
-  "Build regexp to match COMPONENT.
+(defun orderless--component-regexps (pattern)
+  "Build regexps to match PATTERN.
 Consults `orderless-component-matching-styles' to decide what to
 match."
-  (rx-to-string
-   `(or ,@(cl-loop for style in orderless-component-matching-styles
-                   collect `(regexp ,(funcall style component))))))
+  (cl-loop for component in
+           (split-string pattern orderless-component-separator t) 
+           collect
+           (rx-to-string
+            `(or ,@(cl-loop for style in orderless-component-matching-styles
+                            collect `(regexp ,(funcall style component)))))))
 
-(defun orderless-all-completions (string table pred _point)
+(defun orderless--prefix+pattern (string table pred)
+  "Split STRING into prefix and pattern according to TABLE.
+The predicate PRED is used to constrain the entries in TABLE."
+  (let ((limit (car (completion-boundaries string table pred ""))))
+    (cons (substring string 0 limit) (substring string limit))))
+
+(defun orderless-filter (string table &optional pred)
   "Split STRING into components and find entries TABLE matching all.
-The predicate PRED is used to constrain the entries in TABLE.
-This function is part of the `orderless' completion style."
+The predicate PRED is used to constrain the entries in TABLE."
   (condition-case nil
       (save-match-data
-        (let* ((limit (car (completion-boundaries string table pred "")))
-               (prefix (substring string 0 limit))
-               (components (split-string (substring string limit)
-                                         orderless-component-separator
-                                         t))
-               (completion-regexp-list ; used by all-completions!!!
-                (if orderless-component-matching-styles
-                    (mapcar #'orderless--component-regexp components)
-                  components))
-               (completions (all-completions prefix table pred)))
-          (when completions
-            (nconc
-             (cl-loop for candidate in completions
-                      collect (orderless--highlight-matches
-                               completion-regexp-list
-                               candidate))
-             limit))))
+        (pcase-let* ((`(,prefix . ,pattern)
+                      (orderless--prefix+pattern string table pred))
+                     (completion-regexp-list
+                      (orderless--component-regexps pattern)))
+          (all-completions prefix table pred)))
     (invalid-regexp nil)))
 
+;;;###autoload
+(defun orderless-all-completions (string table pred _point)
+  "Split STRING into components and find entries TABLE matching all.
+The predicate PRED is used to constrain the entries in TABLE.  The
+matching portions of each candidate are highlighted.
+This function is part of the `orderless' completion style."
+  (let ((completions (orderless-filter string table pred)))
+    (when completions
+      (pcase-let ((`(,prefix . ,pattern)
+                   (orderless--prefix+pattern string table pred)))
+        (nconc
+         (orderless-highlight-matches pattern completions)
+         (length prefix))))))
+
+;;;###autoload
 (defun orderless-try-completion (string table pred point &optional _metadata)
   "Complete STRING to unique matching entry in TABLE.
 This uses `orderless-all-completions' to find matches for STRING
@@ -222,19 +240,20 @@ match, it completes to that match.  If there are no matches, it
 returns nil.  In any other case it \"completes\" STRING to
 itself, without moving POINT.
 This function is part of the `orderless' completion style."
-  (let* ((limit (car (completion-boundaries string table pred "")))
-         (prefix (substring string 0 limit))
-         (all (orderless-all-completions string table pred point)))
+  (let ((all (orderless-filter string table pred)))
     (cond
      ((null all) nil)
-     ((atom (cdr all))
-      (let ((full (concat prefix (car all))))
+     ((null (cdr all))
+      (let ((full (concat
+                   (car (orderless--prefix+pattern string table pred))
+                   (car all))))
         (cons full (length full))))
      (t (cons string point)))))
 
+;;;###autoload
 (cl-pushnew '(orderless
               orderless-try-completion orderless-all-completions
-              "Completion of multiple regexps, in any order.")
+              "Completion of multiple components, in any order.")
             completion-styles-alist
             :test #'equal)
 

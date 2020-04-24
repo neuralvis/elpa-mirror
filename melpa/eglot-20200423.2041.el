@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018-2020 Free Software Foundation, Inc.
 
 ;; Version: 1.6
-;; Package-Version: 20200416.2220
+;; Package-Version: 20200423.2041
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -1110,6 +1110,7 @@ Doubles as an indicator of snippet support."
                  (list (plist-get markup :value)
                        (pcase (plist-get markup :kind)
                          ("markdown" 'gfm-view-mode)
+                         ("plaintext" 'text-mode)
                          (_ major-mode))))))
     (with-temp-buffer
       (insert string)
