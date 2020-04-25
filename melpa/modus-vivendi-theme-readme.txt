@@ -72,6 +72,7 @@ notify me of any missing package or change you would like to see.
     dap-mode
     dashboard (emacs-dashboard)
     deadgrep
+    debbugs
     define-word
     deft
     diff-hl
@@ -168,6 +169,7 @@ notify me of any missing package or change you would like to see.
     lsp-ui
     magit
     magit-imerge
+    man
     markdown-mode
     markup-faces (`adoc-mode')
     mentor
@@ -244,6 +246,7 @@ notify me of any missing package or change you would like to see.
     tomatinho
     transient (pop-up windows like Magit's)
     treemacs
+    tuareg
     undo-tree
     vc (built-in mode line status for version control)
     vc-annotate (C-x v g)
@@ -261,6 +264,7 @@ notify me of any missing package or change you would like to see.
     window-divider-mode
     winum
     writegood-mode
+    woman
     xah-elisp-mode
     xref
     xterm-color (and ansi-colors)

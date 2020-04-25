@@ -48,5 +48,9 @@ As this example shows, prefix arguments are supported by default.
 
 Configuration:
 
-You can configure the package's behavior through variables whose names
-are prefixed with "owcmd-".
+You can configure the package's behavior through variables whose
+names are prefixed with "owcmd-".  Here is one suggested
+customization to try:
+
+  ;; Use C-g to abort owcmd and stay in the selected window.
+  (add-to-list 'owcmd-cancel-reselect-commands 'keyboard-quit)
