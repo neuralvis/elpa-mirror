@@ -1,0 +1,2 @@
+
+(neuron-mode . [(20200426 1310) ((emacs (26 3)) (f (0 20 0)) (counsel (0 13 0)) (markdown-mode (2 3))) "Major mode for editing zettelkasten notes using neuron" single ((:commit . "aa97a6fbb5c3b33ad73a1ba31c7e50c8842091a1") (:keywords "outlines") (:authors ("felko <http://github/felko>")) (:maintainer "felko <http://github/felko>") (:url . "https://github.com/felko/neuron-mode"))])

@@ -1,0 +1,2 @@
+
+(anakondo . [(20200426 28) ((emacs (26 3)) (projectile (2 1 0))) "Adds clj-kondo based Clojure[Script] editing facilities" single ((:commit . "50ca8b69e0e53e4163215f3fcc325620b4d5d5af") (:keywords "clojure" "clojurescript" "cljc" "clj-kondo" "completion" "languages" "tools") (:authors ("Didier A." . "didibus@users.noreply.github.com")) (:maintainer "Didier A." . "didibus@users.noreply.github.com") (:url . "https://github.com/didibus/anakondo"))])
