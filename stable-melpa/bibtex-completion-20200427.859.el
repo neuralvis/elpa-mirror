@@ -4,7 +4,7 @@
 ;;         Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Titus von der Malsburg <malsburg@posteo.de>
 ;; URL: https://github.com/tmalsburg/helm-bibtex
-;; Package-Version: 20200417.1725
+;; Package-Version: 20200427.859
 ;; Version: 1.0.0
 ;; Package-Requires: ((parsebib "1.0") (s "1.9.0") (dash "2.6.0") (f "0.16.2") (cl-lib "0.5") (biblio "0.2") (emacs "26.1"))
 
@@ -502,6 +502,23 @@ fields listed above) as an alist."
            ;; This will be useful to resolve cross-references:
            (push file reparsed-files)))))
 
+    ;; TODO This code doesn't belong here.  It's specific to just one
+    ;; way of doing notes and should be a module.  Could be run via a
+    ;; hook, a defadvice, or perhaps via inotify when the notes file
+    ;; changes.  The benefit of the last option is that it needs no
+    ;; new interface in core bibtex-completion and runs independently.
+    ;; The downside is that we get in trouble if the user changes the
+    ;; `bibtex-completion-notes-path'.  We're then tracking an
+    ;; incorrect file.
+
+    ;; TODO This code does not respect
+    ;; `bibtex-completion-notes-key-pattern'.
+
+    ;; TODO There should be a checksum for the notes file and the keys
+    ;; should only be collected if this checksum has changed.
+
+    ;; TODO This code should only be run if we actually reload BibTeX
+    ;; files.  No need to do it otherwise.
     (when (and bibtex-completion-notes-path
                (f-file? bibtex-completion-notes-path))
       (require 'org-element)
@@ -782,6 +799,8 @@ The single notes file is the one specified in
        (f-file? bibtex-completion-notes-path)
        (member entry-key bibtex-completion-cached-notes-keys)))
 
+;; This defvar allows other packages like org-roam-bibtex to customize
+;; the back-end for storing notes.
 (defvar bibtex-completion-find-note-functions
   (list #'bibtex-completion-find-note-multiple-files
         #'bibtex-completion-find-note-one-file)
@@ -1019,7 +1038,7 @@ which no PDF is available are omitted."
   (s-join ", " (cl-loop
                 for key in keys
                 for pdfs = (bibtex-completion-find-pdf key bibtex-completion-find-additional-pdfs)
-                append (--map (format "[[%s][%s]]" it key) pdfs))))
+                append (--map (org-link-make-string it key) pdfs))))
 
 (defun bibtex-completion-format-citation-org-apa-link-to-PDF (keys)
   "Format org-links to PDF for entries in KEYS.
@@ -1035,7 +1054,7 @@ several are available."
                                (car (split-string (bibtex-completion-get-value "date" entry "") "-")))
                 for pdf = (car (bibtex-completion-find-pdf key))
                 if pdf
-                  collect (format "[[file:%s][%s (%s)]]" pdf author year)
+                  collect (org-link-make-string pdf (format "%s (%s)" author year))
                 else
                   collect (format "%s (%s)" author year))))
 
@@ -1048,11 +1067,11 @@ several are available."
   (s-join ", " (cl-loop
                 for key in keys
                 for entry = (bibtex-completion-get-entry key)
-                for title = (bibtex-completion-get-value "title" entry)
+                for title = (bibtex-completion-apa-get-value "title" entry)
                 for pdf = (or (car (bibtex-completion-find-pdf key))
                               (bibtex-completion-get-value "url" entry))
                 if pdf
-                  collect (format "[[file:%s][%s]]" pdf title)
+                  collect (org-link-make-string pdf title)
                 else
                   collect (format "%s" title))))
 
@@ -1352,6 +1371,8 @@ according to `org-capture-templates'."
           (replace-regexp-in-string "\\\\n" "\n"))
      0 -1)))
 
+;; The purpose of this defvar is to allow other packages like
+;; org-roam-bibtex to customize the back-end used for notes.
 (defvar bibtex-completion-edit-notes-function
   #'bibtex-completion-edit-notes-default
   "Function used to edit notes.

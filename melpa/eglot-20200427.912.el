@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018-2020 Free Software Foundation, Inc.
 
 ;; Version: 1.6
-;; Package-Version: 20200424.1852
+;; Package-Version: 20200427.912
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -791,11 +791,19 @@ INTERACTIVE is t if called interactively."
   (interactive (list (eglot--current-server-or-lose)))
   (jsonrpc-forget-pending-continuations server))
 
-(defvar eglot-connect-hook nil "Hook run after connecting in `eglot--connect'.")
+(defvar eglot-connect-hook
+  '(eglot-signal-didChangeConfiguration)
+  "Hook run after connecting in `eglot--connect'.")
 
 (defvar eglot-server-initialized-hook
-  '(eglot-signal-didChangeConfiguration)
-  "Hook run after server is successfully initialized.
+  '()
+  "Hook run after a `eglot-lsp-server' instance is created.
+
+That is before a connection was established. Use
+`eglot-connect-hook' to hook into when a connection was
+successfully established and the server on the other side has
+received the initializing configuration.
+
 Each function is passed the server as an argument")
 
 (defun eglot--connect (managed-major-mode project class contact)
@@ -852,6 +860,7 @@ This docstring appeases checkdoc, that's all."
     (setf (eglot--project-nickname server) nickname)
     (setf (eglot--major-mode server) managed-major-mode)
     (setf (eglot--inferior-process server) autostart-inferior-process)
+    (run-hook-with-args 'eglot-server-initialized-hook server)
     ;; Now start the handshake.  To honour `eglot-sync-connect'
     ;; maybe-sync-maybe-async semantics we use `jsonrpc-async-request'
     ;; and mimic most of `jsonrpc-request'.
@@ -899,8 +908,7 @@ This docstring appeases checkdoc, that's all."
                           (let ((default-directory (car (project-roots project)))
                                 (major-mode managed-major-mode))
                             (hack-dir-local-variables-non-file-buffer)
-                            (run-hook-with-args 'eglot-connect-hook server)
-                            (run-hook-with-args 'eglot-server-initialized-hook server))
+                            (run-hook-with-args 'eglot-connect-hook server))
                           (eglot--message
                            "Connected! Server `%s' now managing `%s' buffers \
 in project `%s'."

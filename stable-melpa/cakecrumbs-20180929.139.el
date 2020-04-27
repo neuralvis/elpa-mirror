@@ -4,7 +4,6 @@
 
 ;; Author: ono hiroko <kuanyui.github.io>
 ;; Keywords: languages, html, jade, pug, sass, scss, stylus
-;; Package-Version: 20180929.139
 ;; Package-Requires: ((emacs "24.4"))
 ;; X-URL: https://github.com/kuanyui/cakecrumbs.el
 ;; Version: 0.1

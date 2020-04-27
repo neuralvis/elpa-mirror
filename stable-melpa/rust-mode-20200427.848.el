@@ -1,7 +1,7 @@
 ;;; rust-mode.el --- A major emacs mode for editing Rust source code -*-lexical-binding: t-*-
 
 ;; Version: 0.5.0
-;; Package-Version: 20200414.2105
+;; Package-Version: 20200427.848
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages
@@ -206,7 +206,7 @@ to the function arguments.  When nil, `->' will be indented one level."
   :group 'rust-mode)
 
 (defcustom rust-format-goto-problem t
-  "Jump to location of first detected probem when formatting buffer."
+  "Jump to location of first detected problem when formatting buffer."
   :type 'boolean
   :safe #'booleanp
   :group 'rust-mode)
