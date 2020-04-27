@@ -4,6 +4,7 @@
 ;;
 ;; Author: Peter Jones <pjones@pmade.com>
 ;; URL: https://github.com/pjones/bufshow
+;; Package-Version: 20130726.1838
 ;; Package-Requires: ((emacs "24.1"))
 ;; Version: 0.1.0
 ;;

@@ -1,2 +1,0 @@
-
-(org-special-block-extras . [(20200426 902) ((s (1 12 0)) (dash (2 16 0)) (emacs (26 1)) (dash-functional (1 2 0)) (org (9 1))) "29 new custom blocks & 31 link types for Org-mode" single ((:commit . "038d466970d89d1cd1f2966f5ae15d42175076fd") (:keywords "org" "blocks" "colors" "convenience") (:authors ("Musa Al-hassy" . "alhassy@gmail.com")) (:maintainer "Musa Al-hassy" . "alhassy@gmail.com") (:url . "https://alhassy.github.io/org-special-block-extras"))])

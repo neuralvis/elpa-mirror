@@ -14,9 +14,12 @@ blocks it introduces.
 
 
 The system is extensible:
-Users register a handler ORG-SPECIAL-BLOCK-EXTRAS/TYPE
+Users register a handler ORG-SPECIAL-BLOCK-EXTRAS--TYPE
 for a new custom block TYPE, which is then invoked.
 The handler takes three arguments:
 - CONTENTS: The string contents delimited by the custom block.
 - BACKEND:  The current exportation backend; e.g., 'html or 'latex.
 The handler must return a string.
+
+Full documentation can be found at
+https://alhassy.github.io/org-special-block-extras
