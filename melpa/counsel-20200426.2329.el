@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20200422.1208
+;; Package-Version: 20200426.2329
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -4053,7 +4053,7 @@ register tied to a mark in the message string."
             (cl-remove-if-not
              (lambda (x) (not (member (car x) counsel-evil-marks-exclude-registers)))
              all-markers)))
-         ;; seperate the markers from the evil registers
+         ;; separate the markers from the evil registers
          ;; for call to `counsel-mark--get-candidates'
          (registers (mapcar #'car all-markers))
          (markers (mapcar #'cdr all-markers))

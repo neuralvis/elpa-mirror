@@ -6,7 +6,7 @@
 ;; Author: Matt Harrison <matthewharrison@gmail.com>
 ;;         Dmitry Gutov <dgutov@yandex.ru>
 ;; Version: 1.1
-;; Package-Version: 20170808.1658
+;; Package-Version: 20200427.107
 
 ;; Permission is hereby granted, free of charge, to any person
 ;; obtaining a copy of this software and associated documentation
@@ -58,7 +58,7 @@
 (defcustom point-stack-advised-functions
   '(isearch-mode find-function-do-it find-library
     imenu beginning-of-buffer end-of-buffer
-    xref-find-definitions)
+    xref-find-definitions counsel-imenu counsel-git-grep)
   "Functions that will be advised by `point-stack-setup-advices'."
   :group 'point-stack)
 
