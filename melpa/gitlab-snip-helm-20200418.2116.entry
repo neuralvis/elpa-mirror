@@ -1,2 +1,0 @@
-
-(gitlab-snip-helm . [(20200418 2116) ((emacs (25)) (dash (2 12 0)) (helm (3 2))) "Gitlab snippets api helm package" single ((:commit . "31581317e3b949a35247ca3879bf060bbb5fad07") (:keywords "tools" "files" "convenience") (:authors ("Fermin MF" . "fmfs@posteo.net")) (:maintainer "Fermin MF" . "fmfs@posteo.net") (:url . "https://gitlab.com/sasanidas/gitlab-snip-helm"))])
