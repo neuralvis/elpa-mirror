@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: frames
 ;; URL: https://github.com/muffinmad/emacs-mini-frame
-;; Package-Version: 20200424.852
+;; Package-Version: 20200428.611
 ;; Package-X-Original-Version: 1.0
 ;; Package-Requires: ((emacs "26.1"))
 
@@ -272,6 +272,9 @@ ALIST is passed to `window--display-buffer'."
     (when (frame-live-p mini-frame-completions-frame)
       (make-frame-invisible mini-frame-completions-frame))
     (select-frame-set-input-focus mini-frame-selected-frame))))
+
+(defvar which-key-popup-type)
+(defvar ivy-fixed-height-minibuffer)
 
 (defun mini-frame-read-from-minibuffer (fn &rest args)
   "Show minibuffer-only child frame (if needed) and call FN with ARGS."
