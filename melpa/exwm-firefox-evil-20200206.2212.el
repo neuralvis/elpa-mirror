@@ -2,6 +2,7 @@
 
 ;; Author: Sebastian Wålinder <s.walinder@gmail.com>
 ;; URL: https://github.com/walseb/exwm-firefox-evil
+;; Package-Version: 20200206.2212
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.4") (exwm "0.16") (evil "1.0.0") (exwm-firefox-core "1.0"))
 ;; Keywords: extensions

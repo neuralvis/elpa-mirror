@@ -2,6 +2,7 @@
 
 ;; Author: Sebastian Wålinder <s.walinder@gmail.com>
 ;; URL: https://github.com/walseb/exwm-firefox-core
+;; Package-Version: 20190812.2110
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "24.4") (exwm "0.16"))
 ;; Keywords: extensions
