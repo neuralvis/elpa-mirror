@@ -7,7 +7,7 @@
 ;; Maintainer: Jason R. Blevins <jblevins@xbeta.org>
 ;; Created: May 24, 2007
 ;; Version: 2.4-dev
-;; Package-Version: 20200429.2354
+;; Package-Version: 20200430.119
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: Markdown, GitHub Flavored Markdown, itex
 ;; URL: https://jblevins.org/projects/markdown-mode/
@@ -318,7 +318,7 @@ Math support can be enabled, disabled, or toggled later using
   :package-version '(markdown-mode . "2.4"))
 
 (defcustom markdown-css-paths nil
-  "URL of CSS file to link to in the output XHTML."
+  "List of URLs of CSS files to link to in the output XHTML."
   :group 'markdown
   :type '(repeat (string :tag "CSS File Path")))
 
@@ -2103,9 +2103,8 @@ Depending on your font, some reasonable choices are:
   "Syntax highlighting for Markdown files.")
 
 ;; Footnotes
-(defvar markdown-footnote-counter 0
+(defvar-local markdown-footnote-counter 0
   "Counter for footnote numbers.")
-(make-variable-buffer-local 'markdown-footnote-counter)
 
 (defconst markdown-footnote-chars
   "[[:alnum:]-]"
@@ -4148,9 +4147,8 @@ if three backquotes inserted at the beginning of line."
     "mupad" "nesC" "ooc" "reStructuredText" "wisp" "xBase")
   "Language specifiers recognized by GitHub's syntax highlighting features.")
 
-(defvar markdown-gfm-used-languages nil
+(defvar-local markdown-gfm-used-languages nil
   "Language names used in GFM code blocks.")
-(make-variable-buffer-local 'markdown-gfm-used-languages)
 
 (defun markdown-trim-whitespace (str)
   (replace-regexp-in-string
@@ -5192,7 +5190,7 @@ Assumes match data is available for `markdown-regex-italic'."
 (defvar markdown-mode-mouse-map
   (let ((map (make-sparse-keymap)))
     (define-key map [follow-link] 'mouse-face)
-    (define-key map [mouse-2] 'markdown-follow-link-at-point)
+    (define-key map [mouse-2] #'markdown-follow-thing-at-point)
     map)
   "Keymap for following links with mouse.")
 
@@ -7085,7 +7083,9 @@ Standalone XHTML output is identified by an occurrence of
 
 (defun markdown-stylesheet-link-string (stylesheet-path)
   (concat "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\""
-          stylesheet-path
+          (or (and (string-prefix-p "~" stylesheet-path)
+                   (expand-file-name stylesheet-path))
+              stylesheet-path)
           "\"  />"))
 
 (defun markdown-add-xhtml-header-and-footer (title)
@@ -7187,14 +7187,12 @@ current filename, but with the extension removed and replaced with .html."
   (interactive)
   (browse-url-of-file (markdown-export)))
 
-(defvar markdown-live-preview-buffer nil
+(defvar-local markdown-live-preview-buffer nil
   "Buffer used to preview markdown output in `markdown-live-preview-export'.")
-(make-variable-buffer-local 'markdown-live-preview-buffer)
 
-(defvar markdown-live-preview-source-buffer nil
+(defvar-local markdown-live-preview-source-buffer nil
   "Source buffer from which current buffer was generated.
 This is the inverse of `markdown-live-preview-buffer'.")
-(make-variable-buffer-local 'markdown-live-preview-source-buffer)
 
 (defvar markdown-live-preview-currently-exporting nil)
 
@@ -8203,8 +8201,7 @@ BEG and END are the limits of scanned region."
 
 ;;; Display inline image ======================================================
 
-(defvar markdown-inline-image-overlays nil)
-(make-variable-buffer-local 'markdown-inline-image-overlays)
+(defvar-local markdown-inline-image-overlays nil)
 
 (defun markdown-remove-inline-images ()
   "Remove inline image overlays from image links in the buffer.
@@ -9276,8 +9273,7 @@ rows and columns and the column alignment."
         (if markdown-nested-imenu-heading-index
             #'markdown-imenu-create-nested-index
           #'markdown-imenu-create-flat-index))
-  ;; For menu support in XEmacs
-  (easy-menu-add markdown-mode-menu markdown-mode-map)
+
   ;; Defun movement
   (setq-local beginning-of-defun-function #'markdown-beginning-of-defun)
   (setq-local end-of-defun-function #'markdown-end-of-defun)

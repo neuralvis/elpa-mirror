@@ -4,6 +4,7 @@
 
 ;; Author: Nic Ferrier <nferrier@ferrier.me.uk>
 ;; Keywords: processes
+;; Package-Version: 20130322.12
 ;; Version: 0.0.1
 ;; Url: http://github.com/nicferrier/emacs-procnet
 

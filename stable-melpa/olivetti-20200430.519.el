@@ -6,7 +6,7 @@
 
 ;; Author: William Rankin <code@william.bydasein.com>
 ;; Keywords: wp, text
-;; Package-Version: 20200417.607
+;; Package-Version: 20200430.519
 ;; Version: 1.10.0-beta
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://gthub.com/rnkn/olivetti
@@ -298,10 +298,11 @@ If prefixed with ARG, incrementally decrease."
   (olivetti-set-buffer-windows)
   (message "Text body width set to %s" olivetti-body-width)
   (unless overriding-terminal-local-map
-    (let ((keys (substring (this-single-command-keys) 0 -1))
+    (let ((prefix-keys (substring (this-single-command-keys) 0 -1))
           (map (cdr olivetti-mode-map)))
-      (mapc (lambda (k) (setq map (assq k map))) keys)
-      (when (consp map) (set-transient-map (cdr map) t)))))
+      (when (< 0 (length prefix-keys))
+        (mapc (lambda (k) (setq map (assq k map))) prefix-keys)
+        (when (consp map) (set-transient-map (cdr map) t))))))
 
 (defun olivetti-shrink (&optional arg)
   "Incrementally decrease the value of `olivetti-body-width'.
