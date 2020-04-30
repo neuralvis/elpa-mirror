@@ -4,7 +4,6 @@
 
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/kostafey/popup-switcher
-;; Package-Version: 20200201.1913
 ;; Keywords: popup, switch, buffers, functions
 ;; Version: 0.2.14
 ;; Package-Requires: ((cl-lib "0.3")(popup "0.5.3"))
