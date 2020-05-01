@@ -1,2 +1,2 @@
 
-(ivy-bibtex . [(20200429 1606) ((bibtex-completion (1 0 0)) (swiper (0 7 0)) (cl-lib (0 5))) "A bibliography manager based on Ivy" single ((:commit . "6a884fe8ae939447849e76abf48d1bdf6a9bdcbb") (:authors ("Justin Burkett" . "justin@burkett.cc")) (:maintainer "Titus von der Malsburg" . "malsburg@posteo.de") (:url . "https://github.com/tmalsburg/helm-bibtex"))])
+(ivy-bibtex . [(20200429 1606) ((bibtex-completion (1 0 0)) (swiper (0 7 0)) (cl-lib (0 5))) "A bibliography manager based on Ivy" single ((:commit . "16b113692966da9bbe1f9f0ed8dcbfd2db61a7ba") (:authors ("Justin Burkett" . "justin@burkett.cc")) (:maintainer "Titus von der Malsburg" . "malsburg@posteo.de") (:url . "https://github.com/tmalsburg/helm-bibtex"))])

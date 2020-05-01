@@ -14,6 +14,9 @@ Usage:
      (setq imenu-create-index-function
            'counsel-etags-imenu-default-create-index-function)
 
+  Use `counsel-etags-imenu-excluded-names' to exclude tags by name.
+  Use `counsel-etags-imenu-excluded-types' to exclude tags by type
+
   `counsel-etags-scan-code' to create tags file
   `counsel-etags-grep' to grep
   `counsel-etags-grep-current-directory' to grep in current directory
