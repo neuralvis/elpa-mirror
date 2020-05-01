@@ -4,7 +4,7 @@
 ;;         Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Titus von der Malsburg <malsburg@posteo.de>
 ;; URL: https://github.com/tmalsburg/helm-bibtex
-;; Package-Version: 20200427.859
+;; Package-Version: 20200501.1524
 ;; Version: 1.0.0
 ;; Package-Requires: ((parsebib "1.0") (s "1.9.0") (dash "2.6.0") (f "0.16.2") (cl-lib "0.5") (biblio "0.2") (emacs "26.1"))
 
@@ -1140,15 +1140,14 @@ The format depends on
   "Return FIELD or ENTRY formatted following the APA guidelines.
 Return DEFAULT if FIELD is not present in ENTRY."
   ;; Virtual fields:
-  (cond
-    ((string= field "author-or-editor")
-     (let ((value (bibtex-completion-get-value "author" entry)))
-       (if value
-           (bibtex-completion-apa-format-authors value)
-         (bibtex-completion-apa-format-editors
-          (bibtex-completion-get-value "editor" entry)))))
-    ((string= field "author-abbrev")
-     (let ((value (bibtex-completion-get-value "author" entry)))
+  (pcase field
+    ("author-or-editor"
+     (if-let ((value (bibtex-completion-get-value "author" entry)))
+         (bibtex-completion-apa-format-authors value)
+       (bibtex-completion-apa-format-editors
+        (bibtex-completion-get-value "editor" entry))))
+    ("author-abbrev"
+     (when-let ((value (bibtex-completion-get-value "author" entry)))
        (bibtex-completion-apa-format-authors-abbrev value)))
     (t
      ;; Real fields:

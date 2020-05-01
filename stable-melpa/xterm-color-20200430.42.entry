@@ -1,2 +1,0 @@
-
-(xterm-color . [(20200430 42) ((emacs (24 4))) "ANSI, XTERM 256 and Truecolor support" single ((:commit . "e35607c85d7888c7e72c364f8a735b3e5f0b9d29") (:keywords "faces") (:authors ("xristos" . "xristos@sdf.org")) (:maintainer "xristos" . "xristos@sdf.org") (:url . "https://github.com/atomontage/xterm-color"))])
