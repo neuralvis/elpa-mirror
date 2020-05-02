@@ -1,0 +1,2 @@
+
+(with-shell-interpreter . [(20200502 1031) ((cl-lib (0 6 1))) "Helper for shell command APIs" single ((:commit . "e54874af6242e03ac6d6ca4c4df1fc25440589da") (:keywords "processes" "terminals") (:url . "https://github.com/p3r7/with-shell-interpreter"))])
