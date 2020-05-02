@@ -7,7 +7,6 @@
 ;; Description: Insert alt codes using meta key.
 ;; Keyword: alt codes insertion meta
 ;; Version: 0.0.4
-;; Package-Version: 20190701.1246
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/jcs090218/alt-codes
 
