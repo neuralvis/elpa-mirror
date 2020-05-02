@@ -30,6 +30,7 @@ The default scale is as follows (it can be customised as well):
     modus-vivendi-theme-scale-2 1.1
     modus-vivendi-theme-scale-3 1.15
     modus-vivendi-theme-scale-4 1.2
+    modus-vivendi-theme-scale-5 1.3
 
 What follows is the list of explicitly supported packages or face
 groups (there are implicitly supported packages as well, which

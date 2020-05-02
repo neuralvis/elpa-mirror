@@ -30,6 +30,7 @@ The default scale is as follows (it can be customised as well):
     modus-operandi-theme-scale-2 1.1
     modus-operandi-theme-scale-3 1.15
     modus-operandi-theme-scale-4 1.2
+    modus-operandi-theme-scale-5 1.3
 
 What follows is the list of explicitly supported packages or face
 groups (there are implicitly supported packages as well, which
