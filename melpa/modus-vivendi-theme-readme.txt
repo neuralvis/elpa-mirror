@@ -153,6 +153,7 @@ notify me of any missing package or change you would like to see.
     iedit
     iflipb
     imenu-list
+    indium
     info
     info-colors
     interaction-log
@@ -271,4 +272,5 @@ notify me of any missing package or change you would like to see.
     xref
     xterm-color (and ansi-colors)
     yaml-mode
+    yasnippet
     ztree
