@@ -253,6 +253,7 @@ notify me of any missing package or change you would like to see.
     undo-tree
     vc (built-in mode line status for version control)
     vc-annotate (C-x v g)
+    vdiff
     vimish-fold
     visible-mark
     visual-regexp

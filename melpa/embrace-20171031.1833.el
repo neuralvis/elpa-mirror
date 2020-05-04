@@ -4,6 +4,7 @@
 
 ;; Author: Junpeng Qiu <qjpchmail@gmail.com>
 ;; Package-Requires: ((cl-lib "0.5") (expand-region "0.10.0"))
+;; Package-Version: 20171031.1833
 ;; Keywords: extensions
 
 ;; This program is free software; you can redistribute it and/or modify
