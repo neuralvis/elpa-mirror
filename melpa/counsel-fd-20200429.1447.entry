@@ -1,2 +1,0 @@
-
-(counsel-fd . [(20200429 1447) ((counsel (0 12 0))) "counsel interface for fd" single ((:commit . "336177f51c4c0a247893e99469dd0ca23e031729") (:keywords "tools") (:url . "https://github.com/CsBigDataHub/counsel-fd"))])

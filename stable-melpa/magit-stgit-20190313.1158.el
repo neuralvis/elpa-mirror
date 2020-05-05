@@ -5,7 +5,6 @@
 ;; Author: Lluís Vilanova <vilanova@ac.upc.edu>
 ;; Maintainer: UNMAINTAINED
 ;; Keywords: vc tools
-;; Package-Version: 20190313.1158
 
 ;; Package: magit-stgit
 ;; Package-Requires: ((emacs "24.4") (magit "2.12.0") (magit-popup "2.12.0")

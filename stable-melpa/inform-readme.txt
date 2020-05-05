@@ -9,7 +9,7 @@ the variable `obarray'.
 
 You can follow these additional links with the usual Info
 keybindings.  The customisation variable
-`mouse-1-click-follows-link' is influencing the clicking behaviour
+`mouse-1-click-follows-link' is influencing the clicking behavior
 (and the tooltips) of the links, the variable's default is 450
 (milli seconds) setting it to nil means only clicking with mouse-2
 is following the link (hint: Drew Adams).
