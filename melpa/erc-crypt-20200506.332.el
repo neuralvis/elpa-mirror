@@ -4,7 +4,7 @@
 ;; All rights reserved
 
 ;; Version: 1.9 - 2020-04-10
-;; Package-Version: 20200430.45
+;; Package-Version: 20200506.332
 ;; Author: xristos <xristos@sdf.org>
 ;; URL: https://github.com/atomontage/erc-crypt
 ;; Package-Requires: ((cl-lib "0.5"))
@@ -214,7 +214,7 @@ and execute BODY. Finally, restore ERC text properties."
   "Generate a suitable IV to be used for message encryption.
 Return IV as a 128bit hex string."
   (substring (sha1 (mapconcat
-                    (lambda (x) (format "%d" x))
+                    #'int-to-string
                     (list (erc-crypt--time-millis)
                           (random t)
                           (random t))
