@@ -1,2 +1,0 @@
-
-(proof-general . [(20200504 1240) ((emacs (24 3))) "A generic front-end for proof assistants (interactive theorem provers)" tar ((:commit . "24e1c5ae3dec16c972babcf44786eb7eff3c6b53"))])

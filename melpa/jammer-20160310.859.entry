@@ -1,2 +1,0 @@
-
-(jammer . [(20160310 859) nil "Punish yourself for using Emacs inefficiently" single ((:commit . "c8bc3f265d3736e1cd9aabce3335a8dfdf8f9383") (:keywords "games") (:authors ("Vasilij Schneidermann" . "v.schneidermann@gmail.com")) (:maintainer "Vasilij Schneidermann" . "v.schneidermann@gmail.com") (:url . "https://github.com/wasamasa/jammer"))])

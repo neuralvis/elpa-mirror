@@ -9,7 +9,8 @@ The following example recreates some of evil-mode states keybindings
 
 Note: in this example ` key is used instead of ESC to return to normal state.
 (use-package multistate
-  :demand
+  :custom
+  (multistate-global-mode t)
   :hook
   ;; enable selection is Visual state
   (multistate-visual-state-enter . (lambda () (set-mark (point))))
@@ -29,6 +30,7 @@ Note: in this example ` key is used instead of ESC to return to normal state.
   ;; Normal state
   (multistate-define-state
    'normal
+   :default t
    :lighter "N"
    :cursor 'hollow
    :parent 'multistate-suppress-map)
@@ -49,8 +51,6 @@ Note: in this example ` key is used instead of ESC to return to normal state.
    :lighter "V"
    :cursor 'hollow
    :parent 'multistate-motion-state-map)
-  ;; Make Normal state default
-  (multistate-normal-state)
   ;; Enable multistate-mode globally
   (multistate-global-mode 1)
   :bind
