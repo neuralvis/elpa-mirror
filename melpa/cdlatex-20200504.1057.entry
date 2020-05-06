@@ -1,2 +1,0 @@
-
-(cdlatex . [(20200504 1057) nil "Fast input methods for LaTeX environments and math" single ((:commit . "017735c6111786b28d092e640f8a6c694a47d764") (:keywords "tex") (:authors ("Carsten Dominik" . "carsten.dominik@gmail.com")) (:maintainer "Carsten Dominik" . "carsten.dominik@gmail.com"))])

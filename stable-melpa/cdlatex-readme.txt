@@ -45,7 +45,9 @@ on-the-fly help.
        templates also contain labels created with RefTeX.  In a
        template, text needs to be filled in at various places, which we
        call "points of interest".  You can use the TAB key to jump to
-       the next point of interest in the template.
+       the next point of interest in the template.  If there is an
+       active region, the region will be wrappend into the environment,
+       ignoring the template content.
 
        For many frequently used LaTeX environments, abbreviations are
        available.  Most of the time, the abbreviation consists of the

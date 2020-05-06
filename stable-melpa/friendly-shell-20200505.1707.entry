@@ -1,2 +1,0 @@
-
-(friendly-shell . [(20200505 1707) ((emacs (24 1)) (cl-lib (0 6 1)) (with-shell-interpreter (0 2 1))) "Better shell-mode API" single ((:commit . "ae771d5cbfcd1294d7c333c7e7fe6c7847787cd3") (:keywords "processes" "terminals") (:url . "https://github.com/p3r7/friendly-shell"))])
