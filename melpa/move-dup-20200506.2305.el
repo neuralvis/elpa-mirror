@@ -17,7 +17,7 @@
 
 ;; Author: Jimmy Yuen Ho Wong <wyuenho@gmail.com>
 ;; Version: 1.0.0
-;; Package-Version: 20200311.1424
+;; Package-Version: 20200506.2305
 ;; Created: 11 June 2014
 ;; Url: https://github.com/wyuenho/move-dup
 ;; Compatibility: GNU Emacs 25.1
@@ -103,7 +103,7 @@ otherwise backward."
 
 ;;;###autoload
 (defun md-move-line (&optional n)
-  "Interactive function to move the current line N line.
+  "Interactive function to move the current line by N lines.
 
 If the prefix N is positive, this function moves the current line
 forward N lines; otherwise backward."

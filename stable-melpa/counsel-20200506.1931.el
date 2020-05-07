@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20200504.1920
+;; Package-Version: 20200506.1931
 ;; Version: 0.13.0
 ;; Package-Requires: ((emacs "24.5") (swiper "0.13.0"))
 ;; Keywords: convenience, matching, tools
@@ -224,11 +224,14 @@ respectively."
                   (ivy-set-index 0)
                 (ivy--recompute-index re ivy--all-candidates))
             (ivy-set-index
-             (ivy--preselect-index
-              (if (> (length re) 0)
-                  cur
-                (ivy-state-preselect ivy-last))
-              ivy--all-candidates))))
+             (let ((func (ivy-alist-setting ivy-index-functions-alist)))
+               (if func
+                   (funcall func re ivy--all-candidates)
+                 (ivy--preselect-index
+                  (if (> (length re) 0)
+                      cur
+                    (ivy-state-preselect ivy-last))
+                  ivy--all-candidates))))))
         (setq ivy--old-cands ivy--all-candidates)
         (if ivy--all-candidates
             (ivy--exhibit)
@@ -1565,21 +1568,24 @@ When CMD is non-nil, prompt for a specific \"git grep\" command."
 
 (defun counsel--git-grep-index (_re-str cands)
   (if (null ivy--old-cands)
-      (let ((ln (with-ivy-window
-                  (line-number-at-pos)))
-            (name (file-name-nondirectory (with-ivy-window (buffer-file-name)))))
-        (or
-         ;; closest to current line going forwards
-         (cl-position-if (lambda (x)
-                           (and (string-prefix-p name x)
-                                (>= (string-to-number
-                                     (substring x (1+ (length name)))) ln)))
-                         cands)
-         ;; closest to current line going backwards
-         (cl-position-if (lambda (x)
-                           (string-prefix-p name x))
-                         cands
-                         :from-end t)))
+      (let ((bname (with-ivy-window (buffer-file-name))))
+        (if bname
+            (let ((ln (with-ivy-window
+                        (line-number-at-pos)))
+                  (name (file-name-nondirectory bname)))
+              (or
+               ;; closest to current line going forwards
+               (cl-position-if (lambda (x)
+                                 (and (string-prefix-p name x)
+                                      (>= (string-to-number
+                                           (substring x (1+ (length name)))) ln)))
+                               cands)
+               ;; closest to current line going backwards
+               (cl-position-if (lambda (x)
+                                 (string-prefix-p name x))
+                               cands
+                               :from-end t)))
+          0))
     (ivy-recompute-index-swiper-async nil cands)))
 
 (ivy-configure 'counsel-git-grep

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018-2020 Free Software Foundation, Inc.
 
 ;; Version: 1.6
-;; Package-Version: 20200503.2059
+;; Package-Version: 20200506.2135
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; URL: https://github.com/joaotavora/eglot
@@ -75,7 +75,7 @@
 (require 'array)
 ;; forward-declare, but don't require (Emacs 28 doesn't seem to care)
 (defvar markdown-fontify-code-blocks-natively)
-(defvar company-backends) 
+(defvar company-backends)
 (defvar company-tooltip-align-annotations)
 
 
@@ -2564,7 +2564,7 @@ documentation.  Honour `eglot-put-doc-in-help-buffer',
          (menu `("Eglot code actions:" ("dummy" ,@menu-items)))
          (action (if (listp last-nonmenu-event)
                      (x-popup-menu last-nonmenu-event menu)
-                   (cdr (assoc (completing-read "[eglot] Pick an action: " 
+                   (cdr (assoc (completing-read "[eglot] Pick an action: "
                                                 menu-items nil t
                                                 nil nil (car menu-items))
                                menu-items)))))
