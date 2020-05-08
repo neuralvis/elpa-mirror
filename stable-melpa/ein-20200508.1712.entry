@@ -1,0 +1,2 @@
+
+(ein . [(20200508 1712) ((emacs (25)) (websocket (20190620)) (anaphora (20180618)) (request (20200117)) (deferred (0 5)) (polymode (20190714)) (exec-path-from-shell (20191229)) (dash (2 13 0))) "Emacs IPython Notebook" tar ((:commit . "e39a48334607cacd42011f21fa56ebf291258a1b"))])
