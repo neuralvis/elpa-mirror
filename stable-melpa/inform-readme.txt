@@ -5,21 +5,20 @@ linking is done, when the symbol names in texinfo documentations
 
 1. Quoted symbol names like `quoted-symbol' or:
 
-2. Function names are prefixed by M-x, for example "M-x
-function-name" or are quoted and prefixed like "`M-x
-function-name'".
+2. Function names are prefixed by M-x, for example M-x
+function-name or are quoted and prefixed like `M-x function-name'.
 
-3. Function names are behind the following forms like in the Elisp
-manual:
+3. Function names appearing behind the following forms, which
+occur, for example, in the Elisp manual:
 
-  -- Special Form:
+  -- Special Form: function-name
   -- Command:
   -- Function:
   -- Macro:
 
-4. Variables names are behind the following text:
+4. And variables names behind the following text:
 
-  -- User Option:
+  -- User Option: variable-name
   -- Variable:
 
  In any case all symbol names must be known to Emacs, i.e. their
@@ -31,5 +30,9 @@ keybindings.  The customisation variable
 (and the tooltips) of the links, the variable's default is 450
 (milli seconds) setting it to nil means only clicking with mouse-2
 is following the link (hint: Drew Adams).
+
+The link color of symbols - referencing their builtin documentation
+- is distinct from links which are referencing further Info
+ documentation.
 
 The code uses mostly mechanisms from Emacs' lisp/help-mode.el file.

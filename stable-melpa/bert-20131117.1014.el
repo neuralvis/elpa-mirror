@@ -4,6 +4,7 @@
 
 ;; Author: Oleksandr Manzyuk <manzyuk@gmail.com>
 ;; Version: 0.1
+;; Package-Version: 20131117.1014
 ;; Keywords: comm data
 
 ;; This file is NOT part of GNU Emacs.

@@ -5,6 +5,7 @@
 ;; Title: Berrys Theme
 ;; Project: berrys-theme
 ;; Version: 0.1.0
+;; Package-Version: 20191201.1609
 ;; URL: https://github.com/vbuzin/berrys-theme
 ;; Author: Slava Buzin <v8v.buzin@gmail.com>
 ;; Package-Requires: ((emacs "24.1"))
