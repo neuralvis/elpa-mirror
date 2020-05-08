@@ -6,7 +6,7 @@
 ;; Maintainer: João Távora <joaotavora@gmail.com>
 ;; Keywords: convenience, emulations
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Version: 0.2
+;; Version: 0.3
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -171,7 +171,7 @@ window's geometry."
                            (goto-char (point-min))
                            (cl-loop for start = (point)
                                     while (search-forward "\n"
-                                                          20000
+                                                          (+ 20000 (point-min))
                                                           'no-error)
                                     for width = (truncate
                                                  (car
@@ -376,21 +376,290 @@ screen. Text size is increased (display engine allowing) by
 
 ;;;; ChangeLog:
 
+;; 2020-05-07  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	* darkroom.el (Version): Bump to 0.3
+;; 
+;; 2020-05-07  Ilya Ostapyshyn  <ilya.ostapyshyn@gmail.com>
+;; 
+;; 	Fix #13: correctly calculate search bound for narrowed buffers
+;; 
+;; 	The search-forward function does not take narrowing into account, so we
+;; 	must  do that	 ourselves.
+;; 	 Co-authored-by: João Távora <joaotavora@gmail.com> 
+;; 	Copyright-paperwork-exempt: yes
+;; 	
+;; 	* darkroom.el (darkroom-guess-margins): Add (point-min) to the 20000
+;; 	
+;; 
 ;; 2019-03-15  João Távora  <joaotavora@gmail.com>
 ;; 
-;; 	Update packages/darkroom from upstream
+;; 	* darkroom.el (Version): Bump to 0.2
 ;; 
-;; 	Merge subtree commit '30d1b83a8cf7abfad8281f5d063e3316338bdfa4'
+;; 2018-10-08  Levi Tan Ong  <levi.ong@gmail.com>
 ;; 
-;; 2015-03-28  João Távora  <joaotavora@gmail.com>
+;; 	Close #10: deactivate text-scale-mode when leaving darkroom
 ;; 
-;; 	Update packages/darkroom by merging its external subtree
+;; 	Copyright-paperwork-exempt: yes
+;; 	
+;; 	* darkroom.el (darkroom--leave): Deactivate text-scale-mode.
 ;; 
-;; 2014-12-19  João Távora  <joaotavora@gmail.com>
+;; 2015-11-03  João Távora  <joaotavora@gmail.com>
 ;; 
-;; 	Add packages/darkroom by merging its upstream subtree
+;; 	* darkroom.el (face-remap): Require it. Needed for `buffer-face-mode'.
 ;; 
-;; 	* externals-list ("darkroom"): New subtree entry
+;; 2015-04-23  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Improve README.md and add a screenshot
+;; 
+;; 2015-01-05  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Add autoload cookies
+;; 
+;; 	* darkroom.el (darkroom-mode, darkroom-tentative-mode): Add autoload
+;; 	cookie.
+;; 	(darkroom-tentative-mode): Use `declare-function` to try and shoosh
+;; 	byte-compiler.
+;; 
+;; 2014-12-18  Joao Tavora	 <joaotavora@gmail.com>
+;; 
+;; 	Prepare for inclusion in GNU ELPA
+;; 
+;; 	Assign copyright to the Free Software Foundation and add Maintainer: 
+;; 	header.
+;; 
+;; 2014-12-18  Joao Tavora	 <joaotavora@gmail.com>
+;; 
+;; 	Fix darkroom-tentative-mode when switching window's buffer
+;; 
+;; 	* darkroom.el (darkroom--enter-or-leave): Call `darkroom-enter' with
+;; 	non-nil JUST-MARGINS.
+;; 	(darkroom--enter): Add JUST-MARGINS.
+;; 
+;; 2014-12-16  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Fix margin calculation yet again.
+;; 
+;; 	For scaled char widths the margin width, in columns, also has to be 
+;; 	scaled accordingly.
+;; 
+;; 	* darkroom.el (darkroom-verbose): New variable.
+;; 	(darkroom--window-width): New function.
+;; 	(darkroom-guess-margins): Use it.
+;; 	(darkroom--reset-margins): Cleanup.
+;; 
+;; 2014-12-16  Syohei YOSHIDA  <syohex@gmail.com>
+;; 
+;; 	load cl-lib
+;; 
+;; 2014-12-15  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Fix automatic margin calculation
+;; 
+;; 	* darkroom.el (darkroom--real-window-width): Removed horrible hack.
+;; 	(darkroom-guess-margins): Calculate with pixel widths.
+;; 
+;; 2014-12-15  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Fix `darkroom-tentative-mode'
+;; 
+;; 	* darkroom.el (darkroom--margin-factor): New variable.
+;; 	(darkroom--set-margins): Consider `darkroom-margin-factor'.
+;; 	(darkroom--reset-margins): Always reset margins to 0.
+;; 	(darkroom-increase-margins): Implement with `darkroom--margin-factor'.
+;; 	(darkroom--enter): Renamed from `darkroom--turn-on'. Don't afect hooks
+;; 	here.
+;; 	(darkroom--leave): Renamed from `darkroom--turn-off'.
+;; 	(darkroom--enter-or-leave): New function.
+;; 	(darkroom-mode): Use `darkroom--enter' and `darkroom--leave'. Set window
+;; 	change hook here.
+;; 	(darkroom--maybe-enable): Removed.
+;; 	(darkroom-tentative-mode): Redesign.
+;; 
+;; 	* darkroom.el (darkroom--margin-factor): New variable.
+;; 	(darkroom--set-margins):
+;; 
+;; 2014-12-12  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Redesign setting of margins, which now works per-window
+;; 
+;; 	`darkroom-tentative-mode' is now broken, but the rest now works better.
+;; 
+;; 	* darkroom.el (darkroom-margins): New semantics for function value.
+;; 	(darkroom--real-window-width): Compensate for margins that might already
+;; 	be there.
+;; 	(darkroom--guess-margins-statistics-cache): New variable.
+;; 	(darkroom-guess-margins): Use a cache.
+;; 	(darkroom--compute-margins): Take WINDOW aprameter.
+;; 	(darkroom--buffer-margins): Removed.
+;; 	(darkroom--set-margins): Redesigned.
+;; 	(darkroom--reset-margins): New function.
+;; 	(darkroom-increase-margins): Unimplement.
+;; 	(darkroom--saved-variables, darkroom--saved-state): New variables.
+;; 	(darkroom--turn-on): Redesign.
+;; 	(darkroom--turn-off): Redesign.
+;; 	(darkroom--maybe-enable): Check for `darkroom--saved-state'.
+;; 
+;; 2014-12-11  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Attempt a clearer design of modes
+;; 
+;; 	* darkroom.el (darkroom--turn-on): New function.
+;; 	(darkroom--tentative-mode-driving): Removed this.
+;; 	(darkroom-mode): Use new `darkroom--turn-on' and
+;; 	`darkroom--turn-off'.
+;; 	(darkroom-tentative-mode): Assert that no `darkroom-mode' and
+;; 	`darkroom-tentative-mode' are mixed.
+;; 	(darkroom--turn-off): New function.
+;; 
+;; 2014-12-11  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Corrections after another review iteration with Rasmus
+;; 
+;; 	* darkroom.el (darkroom-margins): New default.
+;; 	(darkroom-margins): Tweak docstring.
+;; 	(darkroom-margins): Better type spec.
+;; 	(darkroom-margins-if-failed-guess): New defcustom.
+;; 	(darkroom--real-window-width): New function.
+;; 	(darkroom-guess-margins): Simplified.
+;; 	(darkroom--compute-margins)
+;; 	(darkroom--saved-mode-line-format)
+;; 	(darkroom--saved-header-line-format, darkroom--saved-margins): Add 
+;; 	docstring.
+;; 	(darkroom-mode): Added an assertion.
+;; 	(darkroom--tentative-mode-driving): New variable.
+;; 	(darkroom--maybe-enable): Use `darkroom--tentative-mode-driving'
+;; 	(darkroom-mode): Attempt to ensure `darkroom--set-margins' always 
+;; 	happens after `darkroom--maybe-enable' in
+;; 	`window-configuration-change-hook'.
+;; 
+;; 2014-12-11  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Minor tweaks
+;; 
+;; 	* darkroom.el: Rewrite "Commentary" section
+;; 	(darkroom-margins): Don't mention `darkroom--set-margins'.
+;; 	(darkroom-guess-margins): Use `truncate', not `round'
+;; 
+;; 2014-12-09  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Prefix internal symbols with "darkroom--"
+;; 
+;; 	* darkroom.el (darkroom--compute-margins)
+;; 	(darkroom--float-to-columns, darkroom-buffer-margins)
+;; 	(darkroom--set-margins, darkroom--saved-mode-line-format)
+;; 	(darkroom--saved-header-line-format, darkroom--saved-margins)
+;; 	(darkroom-tentative-mode): Internal variables and functions now prefixed
+;; 	"darkroom--".
+;; 
+;; 2014-12-09  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Add some docstrings
+;; 
+;; 	* darkroom.el:
+;; 	(darkroom-increase-margins, darkroom-decrease-margins): Add docstring.
+;; 
+;; 2014-12-09  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Add (still non-functioning) `darkroom-compute-margins'
+;; 
+;; 	* darkroom.el: Require 'cl-lib
+;; 	(darkroom-guess-margins): New function for putting in
+;; 	`darkroom-margins'. But broken due to `window-width' not being suitable
+;; 	probably.
+;; 	(darkroom-compute-margins): Redesigned.
+;; 	(darkroom-set-margins): Don't `darkroom-compute-margins'
+;; 	(darkroom-mode): Reordered statements.
+;; 
+;; 2014-12-08  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Tidy up margin calculation
+;; 
+;; 	* darkroom.el (darkroom-compute-margins): Renamed from
+;; 	`darkroom-margins'.
+;; 	(darkroom-buffer-margins): New variable.
+;; 	(darkroom-set-margins): Redesign. Set `darkroom-buffer-margins'.
+;; 	(darkroom-increase-margins): Redesign.
+;; 	(darkroom-mode-map): Fix whitespace.
+;; 	(darkroom-mode): Use `set-mark-local-variable'
+;; 	(darkroom-mode): Save and restore current margins.
+;; 	(darkroom-tentative-mode): Fix whitespace.
+;; 
+;; 2014-12-08  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Integrate another comment from Rasmus
+;; 
+;; 	* darkroom.el (darkroom-margin-increment): New defcustom.
+;; 	(darkroom-increase-margins): Take a parameter.
+;; 	(darkroom-decrease-margins): Use `darkroom-increase-margins'
+;; 
+;; 2014-12-08  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Integrate some comments from Rasmus
+;; 
+;; 	See http://permalink.gmane.org/gmane.emacs.devel/179381 for the 
+;; 	discussion.
+;; 
+;; 	* darkroom.el: Add file header.
+;; 	(darkroom): Add customization group.
+;; 	(darkroom-margins): Make it a `defcustom'.
+;; 	(darkroom-turns-on-visual-line-mode): ditto.
+;; 	(darkroom-mode): Improve docstring.
+;; 	(darkroom-fill-paragraph-maybe): Removed.
+;; 	(darkroom-visual-mode-maybe-enable): Removed.
+;; 	(darkroom-mode): Improve docstring.
+;; 	(darkroom-mode): Use `darkroom-text-scale-increase'
+;; 	(darkroom-maybe-enable): Comment out debug code.
+;; 	(darkroom-mode): Don't `darkroom-visual-mode-maybe-enable'
+;; 	(darkroom-mode-map): Don't bind `darkroom-fill-paragraph-maybe'.
+;; 	(darkroom-saved-visual-line-mode): Removed.
+;; 	(darkroom-text-scale-increase): New defcustom.
+;; 
+;; 2014-02-27  Joao Tavora	 <joaotavora@gmail.com>
+;; 
+;; 	Add .gitignore
+;; 
+;; 2014-02-27  Joao Tavora	 <joaotavora@gmail.com>
+;; 
+;; 	Leave darkroom-mode when leaving tentative-mode
+;; 
+;; 	* darkroom.el (darkroom-tentative-mode): Leave minor mode as well when
+;; 	leaving tentative-mode.
+;; 
+;; 2014-02-27  Joao Tavora	 <joaotavora@gmail.com>
+;; 
+;; 	Now works with multiple windows for same darkroom buffer
+;; 
+;; 	* darkroom.el (darkroom-set-margins): set for every window separately.
+;; 	(darkroom-fill-paragraph-maybe): Be smarter we filling paragraph. TODO:
+;; 	use remap.
+;; 	(darkroom-saved-mode-line-format)
+;; 	(darkroom-saved-header-line-format)
+;; 	(darkroom-saved-visual-line-mode): new buffer-local vars.
+;; 	(darkroom-visual-mode-maybe-enable): new function.
+;; 	(darkroom-mode): Remove hack here.
+;; 	(darkroom-maybe-enable): new function.
+;; 	(darkroom-tentative-mode): New minor mode.
+;; 
+;; 2014-02-27  Joao Tavora	 <joaotavora@gmail.com>
+;; 
+;; 	darkroom-mode added
+;; 
+;; 2014-02-27  Joao Tavora	 <joaotavora@gmail.com>
+;; 
+;; 	first commit
+;; 
+;; 2012-12-25  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	fix: save HEADER-LINE-FORMAT as well
+;; 
+;; 2012-12-25  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	fix: DARKROOM-CONFIRM-FILL-PARAGRAPH -> DARKROOM-FILL-PARAGRAPH-MAYBE
+;; 
+;; 2012-08-30  João Távora  <joaotavora@gmail.com>
+;; 
+;; 	Initial commit
 ;; 
 
 

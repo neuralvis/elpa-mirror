@@ -417,7 +417,7 @@
 		 (:keywords "convenience")
 		 (:url . "http://elpa.gnu.org/packages/cycle-quotes.html"))])
  (darkroom .
-	   [(0 2)
+	   [(0 3)
 	    ((cl-lib
 	      (0 5)))
 	    "Remove visual distractions and focus on writing" single
