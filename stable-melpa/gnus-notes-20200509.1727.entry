@@ -1,0 +1,2 @@
+
+(gnus-notes . [(20200509 1727) ((emacs (25 1)) (bbdb (3 1)) (helm (3 1)) (hydra (0 13 0)) (org (8 3)) (s (0 0)) (lv (0 0)) (async (1 9 1))) "Keep handy notes of read Gnus articles with helm and org" tar ((:commit . "2d350dc3f6cc667846e58889c689c374c7afa745") (:keywords "convenience" "mail" "bbdb" "gnus" "helm" "org" "hydra") (:authors ("Deus Max" . "deusmax@gmx.com")) (:maintainer "Deus Max" . "deusmax@gmx.com") (:url . "https://github.com/deusmax/gnus-notes"))])
