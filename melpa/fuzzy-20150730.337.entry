@@ -1,2 +1,2 @@
 
-(fuzzy . [(20150730 337) nil "Fuzzy Matching" single ((:commit . "17d48823ef96fb3f805a20ea85182d24dec7ff00") (:keywords "convenience") (:authors ("Tomohiro Matsuyama" . "m2ym.pub@gmail.com")) (:maintainer "Tomohiro Matsuyama" . "m2ym.pub@gmail.com"))])
+(fuzzy . [(20150730 337) nil "Fuzzy Matching" single ((:commit . "a36bde2f6e94d6b2bfaae68d73bbd39734e5b907") (:keywords "convenience") (:authors ("Tomohiro Matsuyama" . "m2ym.pub@gmail.com")) (:maintainer "Tomohiro Matsuyama" . "m2ym.pub@gmail.com"))])

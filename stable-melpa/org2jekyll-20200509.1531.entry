@@ -1,0 +1,2 @@
+
+(org2jekyll . [(20200509 1531) ((dash-functional (2 11 0)) (s (1 9 0)) (deferred (0 3 1)) (kv (0 0 19))) "Minor mode to publish org-mode post to jekyll without specific yaml" tar ((:commit . "cb0b0d77cc95c7717ed431b39841fe44372a9341") (:keywords "org-mode" "jekyll" "blog" "publish") (:authors ("Antoine R. Dumont (@ardumont)" . "antoine.romain.dumont@gmail.com")) (:maintainer "Antoine R. Dumont (@ardumont)" . "antoine.romain.dumont@gmail.com") (:url . "https://github.com/ardumont/org2jekyll"))])

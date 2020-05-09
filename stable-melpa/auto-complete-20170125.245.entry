@@ -1,2 +1,2 @@
 
-(auto-complete . [(20170125 245) ((popup (0 5 0)) (cl-lib (0 5))) "Auto Completion for GNU Emacs" tar ((:commit . "74d2ae5644847bdc18ca5b248b61f132af822a44"))])
+(auto-complete . [(20170125 245) ((popup (0 5 0)) (cl-lib (0 5))) "Auto Completion for GNU Emacs" tar ((:commit . "2f11a4e6ff7f5d4939c3e1724158411a7efed057"))])

@@ -1,0 +1,2 @@
+
+(vega-view . [(20200509 818) ((emacs (25)) (cider (0 24 0)) (parseedn (0 1))) "Vega visualization viewer" single ((:commit . "692e3e240bb7004c181a3c17fda89bd5e9a349ce") (:keywords "multimedia") (:authors ("Jack Rusher" . "jack@appliedscience.studio")) (:maintainer "Jack Rusher" . "jack@appliedscience.studio") (:url . "https://www.github.com/applied-science/emacs-vega-view"))])

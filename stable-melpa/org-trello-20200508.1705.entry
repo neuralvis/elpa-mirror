@@ -1,2 +1,2 @@
 
-(org-trello . [(20200508 1705) ((request-deferred (0 2 0)) (deferred (0 4 0)) (s (1 11 0)) (dash-functional (2 12 1)) (dash (2 12 1))) "Minor mode to synchronize org-mode buffer and trello board" tar ((:commit . "4ddc257fe24e97c01e12b247568581ff255f0e8d"))])
+(org-trello . [(20200508 1705) ((request-deferred (0 2 0)) (deferred (0 4 0)) (s (1 11 0)) (dash-functional (2 12 1)) (dash (2 12 1))) "Minor mode to synchronize org-mode buffer and trello board" tar ((:commit . "453e15d83363c4a55b5501953c5f38a9abfcdf3a"))])
