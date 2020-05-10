@@ -1,0 +1,2 @@
+
+(with-shell-interpreter . [(20200510 1435) ((emacs (25 1)) (cl-lib (0 6 1))) "Helper for shell command APIs" single ((:commit . "5ff0c8bc0b99b28d6c696e56cd7f44c7aa9ccaf1") (:keywords "processes" "terminals") (:url . "https://github.com/p3r7/with-shell-interpreter"))])

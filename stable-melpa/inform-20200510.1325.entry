@@ -1,0 +1,2 @@
+
+(inform . [(20200510 1325) ((emacs (25 1))) "Symbol links in Info buffers to their help documentation." tar ((:commit . "9f9b98ead8aea4a50faf2bb4d60b28cab521c70e") (:url . "https://github.com/dieter-wilhelm/inform") (:maintainer "H. Dieter Wilhelm" . "dieter@duenenhof-wilhelm.de") (:authors ("H. Dieter Wilhelm" . "dieter@duenenhof-wilhelm.de")) (:keywords "help" "docs" "convenience"))])

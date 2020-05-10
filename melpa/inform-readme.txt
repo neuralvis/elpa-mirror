@@ -35,4 +35,8 @@ The link color of symbols - referencing their builtin documentation
 - is distinct from links which are referencing further Info
  documentation.
 
+Inform is checking if the Info documents are relevant Elisp and
+Emacs related files to avoid false positives.  Please see the
+customization variable `inform-none-emacs-or-elisp-documents'.
+
 The code uses mostly mechanisms from Emacs' lisp/help-mode.el file.
