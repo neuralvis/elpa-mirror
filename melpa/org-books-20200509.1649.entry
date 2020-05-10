@@ -1,0 +1,2 @@
+
+(org-books . [(20200509 1649) ((enlive (0 0 1)) (s (1 11 0)) (helm (2 9 2)) (helm-org (1 0)) (dash (2 14 1)) (emacs (25))) "Reading list management with Org mode" single ((:commit . "3b7bc4c9a01957d767ed15c2fbfa3505b8c5da46") (:keywords "outlines") (:authors ("Abhinav Tushar" . "abhinav.tushar.vs@gmail.com")) (:maintainer "Abhinav Tushar" . "abhinav.tushar.vs@gmail.com") (:url . "https://github.com/lepisma/org-books"))])
