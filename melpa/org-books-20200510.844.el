@@ -1,10 +1,10 @@
-;;; org-books.el --- Reading list management with Org mode   -*- lexical-binding: t -*-
+;;; org-books.el --- Reading list management with Org mode and helm   -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2017 Abhinav Tushar
 
-;; Author: Abhinav Tushar <abhinav.tushar.vs@gmail.com>
-;; Version: 0.2.17
-;; Package-Version: 20200509.1649
+;; Author: Abhinav Tushar <abhinav@lepisma.xyz>
+;; Version: 0.2.18
+;; Package-Version: 20200510.844
 ;; Package-Requires: ((enlive "0.0.1") (s "1.11.0") (helm "2.9.2") (helm-org "1.0") (dash "2.14.1") (emacs "25"))
 ;; URL: https://github.com/lepisma/org-books
 ;; Keywords: outlines
@@ -27,7 +27,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program. If not, see <http://www.gnu.org/licenses/>.
+;; along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Code:
 
@@ -86,7 +86,7 @@
 
 PATTERN-ALIST maps `url-type' symbol to regex pattern. See
 ORG-BOOKS-URL-PATTERNS for example."
-  (unless (null pattern-alist)
+  (when pattern-alist
     (let ((pattern (cdr (car pattern-alist))))
       (if (s-matches? pattern (url-host (url-generic-parse-url url)))
           (caar pattern-alist)
@@ -156,7 +156,7 @@ an alist of properties to be applied to the org entry."
   (with-current-buffer (find-file-noselect org-books-file)
     (->> (org-property-values "AUTHOR")
        (-reduce-from (lambda (acc line) (append acc (s-split "," line))) nil)
-       (-map #'s-trim)
+       (mapcar #'s-trim)
        (-distinct)
        (-sort #'s-less-p))))
 
@@ -231,6 +231,18 @@ Formatting is specified by LEVEL, TITLE, AUTHOR and PROPS as
 described in docstring of `org-books-format' function."
   (insert (org-books-format level title author props)))
 
+(defun org-books--insert-at-pos (pos title author &optional props)
+  "Goto POS in current buffer, insert a new entry and save buffer.
+
+TITLE, AUTHOR and PROPS are formatted using `org-books-format'."
+  (org-content)
+  (goto-char pos)
+  (let ((level (or (org-current-level) 0)))
+    (org-books-goto-place)
+    (insert "\n")
+    (org-books--insert (+ level 1) title author props)
+    (save-buffer)))
+
 (defun org-books-goto-place ()
   "Move to the position where insertion should happen."
   (if org-books-add-to-top
@@ -266,22 +278,14 @@ Optionally apply PROPS."
       (save-excursion
         (with-current-buffer (find-file-noselect org-books-file)
           (let ((headers (org-books-get-headers)))
-            (if (null headers)
-                (progn
-                  (goto-char (point-max))
-                  (org-books--insert 1 title author props)
-                  (save-buffer))
-              (helm :sources (helm-build-sync-source "org-book categories"
-                               :candidates (-map (lambda (h) (cons (car h) (marker-position (cdr h)))) headers)
-                               :action (lambda (pos)
-                                         (org-content)
-                                         (goto-char pos)
-                                         (let ((level (or (org-current-level) 0)))
-                                           (org-books-goto-place)
-                                           (insert "\n")
-                                           (org-books--insert (+ level 1) title author props)
-                                           (save-buffer))))
-                    :buffer "*helm org-books add*")))))
+            (if headers
+                (helm :sources (helm-build-sync-source "org-book categories"
+                                 :candidates (mapcar (lambda (h) (cons (car h) (marker-position (cdr h)))) headers)
+                                 :action (lambda (pos) (org-books--insert-at-pos pos title author props)))
+                      :buffer "*helm org-books add*")
+              (goto-char (point-max))
+              (org-books--insert 1 title author props)
+              (save-buffer)))))
     (message "org-books-file not set")))
 
 ;;;###autoload

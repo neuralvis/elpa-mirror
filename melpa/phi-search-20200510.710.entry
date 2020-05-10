@@ -1,2 +1,0 @@
-
-(phi-search . [(20200510 710) nil "another incremental search & replace, compatible with \"multiple-cursors\"" tar ((:commit . "d28c8b00f45d14b2172fa96ac69d6156e32f5d55") (:authors ("zk_phi")) (:maintainer "zk_phi") (:url . "http://hins11.yu-yake.com/"))])
