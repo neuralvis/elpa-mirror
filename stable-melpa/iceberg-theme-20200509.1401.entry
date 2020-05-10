@@ -1,2 +1,0 @@
-
-(iceberg-theme . [(20200509 1401) ((emacs (26 1)) (solarized-theme (1 3))) "Well-designed, eye-friendly, dark blue color scheme" single ((:commit . "bdbe847d961ae461c8b6938c914b2eb333fb0a5c") (:keywords "convenience") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/iceberg-theme.el"))])
