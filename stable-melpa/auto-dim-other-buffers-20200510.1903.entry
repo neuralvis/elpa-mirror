@@ -1,0 +1,2 @@
+
+(auto-dim-other-buffers . [(20200510 1903) nil "Makes non-current buffers less prominent" single ((:commit . "a87cf772ac4517864bd11e6d053d7dcedd802012") (:authors ("Steven Degutis") ("Michal Nazarewicz" . "mina86@mina86.com")) (:maintainer "Michal Nazarewicz" . "mina86@mina86.com") (:url . "https://github.com/mina86/auto-dim-other-buffers.el"))])
