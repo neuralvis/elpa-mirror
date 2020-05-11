@@ -1,2 +1,2 @@
 
-(eglot-jl . [(20200508 1552) ((emacs (25 1)) (eglot (1 4)) (julia-mode (0 3))) "Julia support for eglot" tar ((:commit . "65c70b8203684a34de16868583e2424de41b9ab6") (:keywords "convenience" "languages") (:authors ("Adam Beckmeyer" . "adam_git@thebeckmeyers.xyz")) (:maintainer "Adam Beckmeyer" . "adam_git@thebeckmeyers.xyz") (:url . "https://github.com/non-Jedi/eglot-jl"))])
+(eglot-jl . [(20200508 1552) ((emacs (25 1)) (eglot (1 4)) (julia-mode (0 3))) "Julia support for eglot" tar ((:commit . "9f126d0aca49a6b8009a98b3f431d04c3eecad59") (:keywords "convenience" "languages") (:authors ("Adam Beckmeyer" . "adam_git@thebeckmeyers.xyz")) (:maintainer "Adam Beckmeyer" . "adam_git@thebeckmeyers.xyz") (:url . "https://github.com/non-Jedi/eglot-jl"))])
