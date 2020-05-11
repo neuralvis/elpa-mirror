@@ -1,10 +1,10 @@
-;;; ace-link.el --- Quickly follow links
+;;; ace-link.el --- Quickly follow links -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014-2017 Oleh Krehel
+;; Copyright (C) 2014-2020 Oleh Krehel
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/ace-link
-;; Package-Version: 20200509.1252
+;; Package-Version: 20200511.1905
 ;; Version: 0.5.0
 ;; Package-Requires: ((avy "0.4.0"))
 ;; Keywords: convenience, links, avy
@@ -69,7 +69,7 @@
         ((eq major-mode 'mu4e-view-mode)
          (ace-link-mu4e))
         ((eq major-mode 'notmuch-show-mode)
-         (ace-link-notmuch-show))
+         (ace-link-notmuch))
         ((memq major-mode '(org-mode erc-mode elfeed-show-mode term-mode vterm-mode))
          (ace-link-org))
         ((eq major-mode 'org-agenda-mode)
@@ -202,7 +202,7 @@
                   (while (re-search-forward "#\\([0-9]+\\)" end t)
                     (push (match-beginning 0) cands))
                   (nreverse cands))))
-         (pt (avy-with ace-link-commit
+         (_pt (avy-with ace-link-commit
                (avy-process pts)))
          (url (cl-reduce
                (lambda (a b)
@@ -445,92 +445,9 @@ If EXTERNAL is double prefix, browse in new buffer."
             (push (point) candidates)))
         (nreverse candidates)))))
 
-;;* `ace-link-mu4e'
-;;;###autoload
-(defun ace-link-mu4e ()
-  "Open a visible link in an `mu4e-view-mode' buffer."
-  (interactive)
-  (if (bound-and-true-p mu4e-view-use-gnus)
-      (ace-link-gnus)
-    (let ((pt (avy-with ace-link-mu4e
-                (avy-process
-                 (mapcar #'cdr (ace-link--mu4e-collect))
-                 (avy--style-fn avy-style)))))
-      (ace-link--mu4e-action pt))))
-
-(declare-function shr-browse-url "shr")
-(declare-function mu4e~view-browse-url-from-binding "ext:mu4e-view")
-(declare-function mu4e~view-open-attach-from-binding "ext:mu4e-view")
-
-(defun ace-link--mu4e-action (pt)
-  (when (number-or-marker-p pt)
-    (goto-char (1+ pt))
-    (cond ((get-text-property (point) 'shr-url)
-           (shr-browse-url))
-          ((get-text-property (point) 'mu4e-url)
-           (mu4e~view-browse-url-from-binding))
-          ((get-text-property (point) 'mu4e-attnum)
-           (mu4e~view-open-attach-from-binding)))))
-
-(defun ace-link--mu4e-next-link (pos)
-  (let* ((shr-link-pos (text-property-not-all pos (point-max) 'shr-url nil))
-         (mu4e-link-pos (text-property-not-all pos (point-max) 'mu4e-url nil))
-         (mu4e-att-link-pos (text-property-not-all pos (point-max) 'mu4e-attnum nil))
-         (links (cl-remove-if-not
-                 (lambda (link)
-                   (elt link 1))
-                 (list
-                  (list 'shr-url shr-link-pos)
-                  (list 'mu4e-url mu4e-link-pos)
-                  (list 'mu4e-attnum mu4e-att-link-pos)))))
-
-    (if links
-        (car
-         (sort links (lambda (x y)
-                       (< (elt x 1) (elt y 1)))))
-      nil)))
-
-(defun ace-link--mu4e-end-of-link (link)
-  (or (text-property-any (elt link 1) (point-max) (elt link 0) nil)
-      (point-max)))
-
-(defun ace-link--mu4e-collect ()
-  "Collect the positions of visible links in the current mu4e buffer."
-  (save-excursion
-    (save-restriction
-      (narrow-to-region
-       (window-start)
-       (window-end))
-      (goto-char (point-min))
-      (let (link pos candidates)
-        (setq pos (point))
-        (while (setq link (ace-link--mu4e-next-link pos))
-          (goto-char (elt link 1))
-          (setq pos (ace-link--mu4e-end-of-link link))
-          (push (cons (buffer-substring-no-properties (elt link 1) pos) (elt link 1)) candidates))
-        (nreverse candidates)))))
-
-;;* `ace-link-notmuch-show'
-;;;###autoload
-(defun ace-link-notmuch-show-plain ()
-  "Open a visible link in a `notmuch-show' buffer.
-Only consider the 'text/plain' portion of the buffer."
-  (interactive)
-  (let ((pt (avy-with ace-link-notmuch-show-plain
-              (avy-process
-               (ace-link--notmuch-show-plain-collect)
-               #'avy--overlay-pre))))
-    (when pt
-      (ace-link--notmuch-show-plain-action pt))))
-
-(defun ace-link--notmuch-show-plain-action (pt)
-  "Open link at PT in a `notmuch-show' buffer.
-Only works in 'text/plain'"
-  (goto-char pt)
-  (browse-url-at-point))
-
-(defun ace-link--notmuch-show-plain-collect ()
-  "Collect the positions of visible links in `notmuch-show' buffer.
+;;* Helper functions for `ace-link-mu4e' and `ace-link-notmuch'
+(defun ace-link--email-view-plain-collect ()
+  "Collect the positions of visible links in email-view buffer.
 Only consider the links in 'text/plain'."
   (let (candidates pt)
     (save-excursion
@@ -544,48 +461,35 @@ Only consider the links in 'text/plain'."
           (push pt candidates))))
     (nreverse candidates)))
 
-;;;###autoload
-(defun ace-link-notmuch-show-html ()
-  "Open a visible link in a `notmuch-show' buffer.
-Only consider the 'text/html' portion of the buffer."
-  (interactive)
-  (if (bound-and-true-p mu4e-view-use-gnus)
-      (ace-link-gnus)
-    (let ((pt (avy-with ace-link-mu4e
-                (avy-process
-                 (mapcar #'cdr (ace-link--mu4e-collect))
-                 (avy--style-fn avy-style)))))
-      (ace-link--mu4e-action pt))))
-
-(defun ace-link--notmuch-show-html-action (pt)
-  "Open link at PT in a `notmuch-show' buffer.
-Only works in 'text/html'"
-  (when (number-or-marker-p pt)
-    (when (get-text-property (point) 'shr-url)
-      (shr-browse-url))))
-
-(defun ace-link--notmuch-show-html-next-link (pos)
-  "Find next link from POS in current `notmuch-show' buffer."
+(defun ace-link--email-view-next-link (pos &optional mu4e)
+  "Find next link from POS in current email-view buffer.
+If MU4E is non-nil, also consider mu4e-links."
   (let* ((shr-link-pos (text-property-not-all pos (point-max) 'shr-url nil))
-         (links (cl-remove-if-not
-                 (lambda (link)
-                   (elt link 1))
-                 (list
-                  (list 'shr-url shr-link-pos)))))
-
+         (links (list (list 'shr-url shr-link-pos))))
+    (when mu4e
+      (let ((mu4e-link-pos (text-property-not-all pos (point-max) 'mu4e-url nil))
+            (mu4e-att-link-pos (text-property-not-all pos (point-max) 'mu4e-attnum nil)))
+        (push (list 'mu4e-url mu4e-link-pos) links)
+        (push (list 'mu4e-attnum mu4e-att-link-pos) links)
+        (setq links (nreverse links))))
+    (setq links (cl-remove-if-not
+                 (lambda (link) (nth 1 link))
+                 links))
     (if links
         (car
          (sort links (lambda (x y)
                        (< (elt x 1) (elt y 1)))))
       nil)))
 
-(defun ace-link--notmuch-show-html-end-of-link (link)
-  "Return end of LINK at point in current `notmuch-show' buffer."
+(defun ace-link--email-view-end-of-link (link)
+  "Return end of LINK at point in current email-view buffer."
   (or (text-property-any (elt link 1) (point-max) (elt link 0) nil)
       (point-max)))
 
-(defun ace-link--notmuch-show-html-collect ()
-  "Collect the positions of visible links in current `notmuch-show' buffer."
+(defun ace-link--email-view-html-collect (&optional mu4e)
+  "Collect positions of visible links in the current email-view buffer.
+If MU4E is non-nil, or if the buffer is in `mu4e-view-mode', also
+consider mu4e’s links."
   (save-excursion
     (save-restriction
       (narrow-to-region
@@ -594,18 +498,86 @@ Only works in 'text/html'"
       (goto-char (point-min))
       (let (link pos candidates)
         (setq pos (point))
-        (while (setq link (ace-link--notmuch-show-html-next-link pos))
+        (while (setq link (ace-link--email-view-next-link pos mu4e))
           (goto-char (elt link 1))
-          (setq pos (ace-link--notmuch-show-html-end-of-link link))
+          (setq pos (ace-link--email-view-end-of-link link))
           (push (cons (buffer-substring-no-properties (elt link 1) pos) (elt link 1)) candidates))
         (nreverse candidates)))))
 
+;;* `ace-link-mu4e'
 ;;;###autoload
-(defun ace-link-notmuch-show ()
+(defun ace-link-mu4e ()
+  "Open a visible link in an `mu4e-view-mode' buffer."
+  (interactive)
+  (if (bound-and-true-p mu4e-view-use-gnus)
+      (ace-link-gnus)
+    (let ((pt (avy-with ace-link-mu4e
+                (avy-process
+                 (mapcar #'cdr (ace-link--email-view-html-collect t))
+                 (avy--style-fn avy-style)))))
+      (ace-link--mu4e-action pt))))
+
+(declare-function shr-browse-url "shr")
+(declare-function mu4e~view-browse-url-from-binding "ext:mu4e-view")
+(declare-function mu4e~view-open-attach-from-binding "ext:mu4e-view")
+
+(defun ace-link--mu4e-action (pt)
+  "Open link at PT in a `mu4e-view' buffer."
+  (when (number-or-marker-p pt)
+    (goto-char (1+ pt))
+    (cond ((get-text-property (point) 'shr-url)
+           (shr-browse-url))
+          ((get-text-property (point) 'mu4e-url)
+           (mu4e~view-browse-url-from-binding))
+          ((get-text-property (point) 'mu4e-attnum)
+           (mu4e~view-open-attach-from-binding)))))
+
+;;* `ace-link-notmuch'
+;;;###autoload
+(defun ace-link-notmuch-plain ()
+  "Open a visible link in a `notmuch-show' buffer.
+Only consider the 'text/plain' portion of the buffer."
+  (interactive)
+  (let ((pt (avy-with ace-link-notmuch-plain
+              (avy-process
+               (ace-link--email-view-plain-collect)
+               #'avy--overlay-pre))))
+    (when pt
+      (ace-link--notmuch-plain-action pt))))
+
+(defun ace-link--notmuch-plain-action (pt)
+  "Open link at PT in a `notmuch-show' buffer.
+Only works in 'text/plain'"
+  (when (number-or-marker-p pt)
+    (goto-char pt)
+    (browse-url-at-point)))
+
+;;;###autoload
+(defun ace-link-notmuch-html ()
+  "Open a visible link in a `notmuch-show' buffer.
+Only consider the 'text/html' portion of the buffer."
+  (interactive)
+  (if (bound-and-true-p mu4e-view-use-gnus)
+      (ace-link-gnus)
+    (let ((pt (avy-with ace-link-mu4e
+                (avy-process
+                 (mapcar #'cdr (ace-link--email-view-html-collect))
+                 (avy--style-fn avy-style)))))
+      (ace-link--mu4e-action pt))))
+
+(defun ace-link--notmuch-html-action (pt)
+  "Open link at PT in a `notmuch-show' buffer.
+Only works in 'text/html'"
+  (when (number-or-marker-p pt)
+    (when (get-text-property (point) 'shr-url)
+      (shr-browse-url))))
+
+;;;###autoload
+(defun ace-link-notmuch ()
   "Open a visible link in `notmuch-show' buffer.
 Consider both the links in 'text/plain' and 'text/html'."
   (interactive)
-  (let ((match (avy-with ace-link-notmuch-show
+  (let ((match (avy-with ace-link-notmuch
                  (avy-process
                   (ace-link--notmuch-collect)
                   #'avy--overlay-pre))))
@@ -621,11 +593,11 @@ Returns a list of cons \( fn . pt ) where FN is the function to
 call at PT."
   (append
    (mapcar (lambda (x)
-             (cons x #'ace-link--notmuch-show-plain-action))
-           (ace-link--notmuch-show-plain-collect))
+             (cons x #'ace-link--notmuch-plain-action))
+           (ace-link--email-view-plain-collect))
    (mapcar (lambda (x)
-             (cons (cdr x) #'ace-link--notmuch-show-html-action))
-           (ace-link--notmuch-show-html-collect))))
+             (cons (cdr x) #'ace-link--notmuch-html-action))
+           (ace-link--email-view-html-collect))))
 
 ;;* `ace-link-org'
 ;;;###autoload
@@ -641,7 +613,7 @@ call at PT."
 
 (declare-function org-open-at-point "org")
 (declare-function outline-invisible-p "outline")
-(defvar org-any-link-re)
+(defvar org-any-re)
 
 (defun ace-link--org-action (pt)
   (when (numberp pt)
@@ -653,7 +625,7 @@ call at PT."
         res)
     (save-excursion
       (goto-char (window-start))
-      (while (re-search-forward org-any-link-re end t)
+      (while (re-search-forward org-any-re end t)
         ;; Check that the link is visible. Look at the last character
         ;; position in the link ("...X]]") to cover links with and
         ;; without a description.
@@ -1036,7 +1008,7 @@ call at PT."
   (eval-after-load "info"
     `(define-key Info-mode-map ,key 'ace-link-info))
   (eval-after-load "notmuch"
-    `(define-key notmuch-show-mode-map ,key 'ace-link-notmuch-show))
+    `(define-key notmuch-show-mode-map ,key 'ace-link-notmuch))
   (eval-after-load "compile"
     `(define-key compilation-mode-map ,key 'ace-link-compilation))
   (eval-after-load "help-mode"
