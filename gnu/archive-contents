@@ -887,7 +887,7 @@
 	  (:keywords "mail" "org" "gnus" "bbdb" "todo" "task")
 	  (:url . "http://elpa.gnu.org/packages/gnorb.html"))])
  (gnu-elpa .
-	   [(1 0)
+	   [(1 1)
 	    nil "Advertize GNU ELPA packages" tar
 	    ((:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca")
 	     (:authors
