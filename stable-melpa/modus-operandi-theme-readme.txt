@@ -57,6 +57,7 @@ notify me of any missing package or change you would like to see.
     centaur-tabs
     change-log and log-view (`vc-print-log' and `vc-print-root-log')
     cider
+    circe
     color-rg
     column-enforce-mode
     company-mode
