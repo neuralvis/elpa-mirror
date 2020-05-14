@@ -25,8 +25,12 @@ Usage:
   `counsel-etags-find-tag' to two steps tag matching use regular expression and filter
   `counsel-etags-list-tag' to list all tags
   `counsel-etags-update-tags-force' to update current tags file by force
+  `counsel-etags-ignore-config-file' specifies paths of ignore configuration files
+  (".gitignore", ".hgignore", etc).  Path is either absolute or relative to the tags file.
+
 
 Tips:
+
 - Add below code into "~/.emacs" to AUTOMATICALLY update tags file:
 
   ;; Don't ask before reloading updated tags files
