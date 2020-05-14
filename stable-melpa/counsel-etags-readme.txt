@@ -1,7 +1,8 @@
  Setup:
   "Ctags" (Universal Ctags is recommended) should exist.
   "GNU Find" is used if it's installed but it's optional.
-  Or else, customize `counsel-etags-update-tags-backend' to generate tags file
+  Or else, customize `counsel-etags-update-tags-backend' to generate tags file.
+  Please note etags bundled with Emacs is not supported any more.
 
 Usage:
 
