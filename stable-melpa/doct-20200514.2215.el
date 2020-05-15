@@ -4,11 +4,11 @@
 
 ;; Author: Nicholas Vollmer <progfolio@protonmail.com>
 ;; URL: https://github.com/progfolio/doct
-;; Package-Version: 20200514.2104
+;; Package-Version: 20200514.2215
 ;; Created: December 10, 2019
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "25.1"))
-;; Version: 2.0.0
+;; Version: 2.0.1
 
 ;; This file is not part of GNU Emacs.
 
@@ -303,9 +303,8 @@ Intended to be used at runtime."
 ;;;###autoload
 (defun doct-flatten-lists-in (list &optional acc)
   "Flatten each list in LIST. Return ACC.
-For example: '((1) ((2 3) (4)) (((5)))) returns: '((1) (2) (3) (4) (5)).
-Note this mutates original list."
-  (dolist (element (nreverse list))
+For example: '((1) ((2 3) (4)) (((5)))) returns: '((1) (2) (3) (4) (5))."
+  (dolist (element (nreverse (copy-tree list)))
     (if (seq-every-p #'listp element)
         (setq acc (doct-flatten-lists-in element acc))
       (push element acc)))
@@ -1238,15 +1237,16 @@ Normally template \"Four\" would throw an error because its :keys are not a stri
          (entries (mapcar #'doct--convert-declaration-maybe (copy-tree declarations))))
     (unwind-protect
         (progn
-          (run-hook-with-args 'doct-after-conversion-functions entries)
+          (setq doct-templates entries)
+          (run-hook-with-args 'doct-after-conversion-functions doct-templates)
           ;;hook functions may set doct-templates to return manipulated list
           ;;remove metadata from parent templates
-          (or doct-templates (mapcar (lambda (template)
-                                       (if (eq (nth 2 template) :doct)
-                                           `(,(car template) ,(cadr template))
-                                         template))
-                                     (doct-flatten-lists-in entries))))
-      (setq doct-templates nil))))
+          (mapcar (lambda (template)
+                    (if (eq (nth 2 template) :doct)
+                        `(,(car template) ,(cadr template))
+                      template))
+                  (doct-flatten-lists-in doct-templates)))
+    (setq doct-templates nil))))
 
 (provide 'doct)
 
