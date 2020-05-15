@@ -6,4 +6,4 @@ Sample configure
     :ensure t
     :config
     (iceberg-theme-create-theme-file)
-    (load-theme "solarized-iceberg-dark" t))
+    (load-theme 'solarized-iceberg-dark t))

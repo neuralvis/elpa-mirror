@@ -1,2 +1,0 @@
-
-(elpher . [(20200514 927) ((emacs (26))) "A friendly gopher client" tar ((:commit . "619802e93c2190c3324575896819c025cb1ad478") (:keywords "comm" "gopher") (:authors ("Tim Vaughan" . "timv@ughan.xyz")) (:maintainer "Tim Vaughan" . "timv@ughan.xyz") (:url . "http://thelambdalab.xyz/elpher"))])

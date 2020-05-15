@@ -28,3 +28,8 @@ Or add one line setup if you prefer running `flyspell-buffer' manually:
 
 Or setup for only one major mode when major mode has its own flyspell setup:
   (wucuo-setup-major-mode "js2-mode")
+
+Instead of enabling `flyspell-mode' to check the word when inputting, you can use
+`wucuo-spell-check-buffer' to spell check current buffer.
+It uses `wucuo-update-interval',`wucuo-spell-check-buffer-max', and
+`wucuo-spell-check-buffer-predicate' to ensure buffer checking happen less frequently.
