@@ -1,0 +1,2 @@
+
+(multistate . [(20200514 2206) ((emacs (25 1)) (cl-lib (0 5)) (ht (2 3))) "Multistate mode" single ((:commit . "376f71ce189c59dcfd17ba78c1bd405854a38976") (:keywords "convenience") (:authors ("Matsievskiy S.V.")) (:maintainer "Matsievskiy S.V.") (:url . "https://gitlab.com/matsievskiysv/multistate"))])
