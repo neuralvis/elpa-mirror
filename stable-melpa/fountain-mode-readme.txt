@@ -44,18 +44,29 @@ handle exporting:
 ## Installation ##
 
 The latest stable release of Fountain Mode is available via
-[MELPA-stable] and can be installed with:
+[MELPA-stable]. First, add MELPA-stable to your package archives:
 
-    M-x package-install RET fountain-mode RET
+    M-x customize-option RET package-archives RET
 
-Alternately, download the [latest release], move this file into your
-load-path and add to your init.el file:
+Insert an entry named melpa-stable with the URL https://stable.melpa.org/packages/.
+
+You can then find the latest stable version of fountain-mode in the
+list returned by:
+
+    M-x list-packages RET
+
+If you prefer the latest but perhaps unstable version, do the above
+using [MELPA].
+
+## Advanced Installation ##
+
+Download the [latest release], move this file into your load-path and
+add to your init.el file:
 
     (require 'fountain-mode)
 
-If you prefer the latest but perhaps unstable version, install via
-[MELPA], or clone the repository into your load-path and require as
-above:
+If you wish to contribute to or alter Fountain Mode's code, clone the
+repository into your load-path and require as above:
 
     git clone https://github.com/rnkn/fountain-mode.git
 
