@@ -1,2 +1,0 @@
-
-(org-roam . [(20200515 1223) ((emacs (26 1)) (dash (2 13)) (f (0 17 2)) (s (1 12 0)) (org (9 3)) (emacsql (3 0 0)) (emacsql-sqlite (1 0 0))) "Roam Research replica with Org-mode" tar ((:commit . "9961a22a8c45a50c992f80f6d71879720c13432b") (:keywords "org-mode" "roam" "convenience") (:authors ("Jethro Kuan" . "jethrokuan95@gmail.com")) (:maintainer "Jethro Kuan" . "jethrokuan95@gmail.com") (:url . "https://github.com/org-roam/org-roam"))])
