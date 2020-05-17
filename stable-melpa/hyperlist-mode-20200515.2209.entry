@@ -1,0 +1,2 @@
+
+(hyperlist-mode . [(20200515 2209) ((emacs (24))) "A major-mode for viewing Hyperlists" single ((:commit . "00af994deda061fa95ad0046510eb6a2672c99aa") (:keywords "outlines") (:authors ("Wojciech Siewierski")) (:maintainer "Wojciech Siewierski") (:url . "https://github.com/vifon/hyperlist-mode"))])
