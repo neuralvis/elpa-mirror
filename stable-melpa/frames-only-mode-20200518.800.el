@@ -4,7 +4,7 @@
 
 ;; Author: David Shepherd <davidshepherd7@gmail.com>
 ;; Version: 1.0.0
-;; Package-Version: 20190524.1439
+;; Package-Version: 20200518.800
 ;; Package-Requires: ((emacs "24.4") (dash "2.13.0") (s "1.11.0"))
 ;; Keywords: frames, windows
 ;; URL: https://github.com/davidshepherd7/frames-only-mode
@@ -47,7 +47,7 @@ To disable completion popups entirely use the variable
   :group 'frames-only)
 
 (defcustom frames-only-mode-use-window-functions
-  (list #'calendar #'report-emacs-bug 'checkdoc-show-diagnostics 'checkdoc)
+  (list #'calendar #'report-emacs-bug 'checkdoc-show-diagnostics 'checkdoc 'org-compile-file)
   "List of functions inside which new emacs windows should be created instead of frames.
 
 \(i.e. pop-up-frames is let bound to nil, the default value)."

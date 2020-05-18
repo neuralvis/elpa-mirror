@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/ace-link
-;; Package-Version: 20200515.1854
+;; Package-Version: 20200518.957
 ;; Version: 0.5.0
 ;; Package-Requires: ((avy "0.4.0"))
 ;; Keywords: convenience, links, avy
@@ -73,7 +73,9 @@
          (ace-link-notmuch))
         ((memq major-mode '(org-mode
                             erc-mode elfeed-show-mode
-                            term-mode vterm-mode eshell-mode))
+                            term-mode vterm-mode
+                            eshell-mode
+                            telega-chat-mode))
          (ace-link-org))
         ((eq major-mode 'org-agenda-mode)
          (ace-link-org-agenda))
