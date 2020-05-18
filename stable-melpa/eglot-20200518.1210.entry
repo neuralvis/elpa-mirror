@@ -1,0 +1,2 @@
+
+(eglot . [(20200518 1210) ((emacs (26 1)) (jsonrpc (1 0 9)) (flymake (1 0 8)) (package (0 1 1)) (xref (1 0 1)) (eldoc (1 0 0))) "Client for Language Server Protocol (LSP) servers" single ((:commit . "363440249b091f229672727841d63250f970ea2e") (:keywords "convenience" "languages") (:authors ("João Távora" . "joaotavora@gmail.com")) (:maintainer "João Távora" . "joaotavora@gmail.com") (:url . "https://github.com/joaotavora/eglot"))])
