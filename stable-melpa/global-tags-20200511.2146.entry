@@ -1,2 +1,0 @@
-
-(global-tags . [(20200511 2146) ((emacs (26 1))) "Elisp API and editor integration for GNU global" single ((:commit . "5239c1ba873eb907d5665964820b4a7ddbf75b5c") (:keywords "convenience" "matching" "tools") (:authors ("Felipe Lema" . "felipelema@mortemale.org")) (:maintainer "Felipe Lema" . "felipelema@mortemale.org") (:url . "https://launchpad.net/global-tags.el"))])
