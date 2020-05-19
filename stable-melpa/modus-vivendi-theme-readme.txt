@@ -148,6 +148,7 @@ notify me of any missing package or change you would like to see.
     hl-line-mode
     hl-todo
     hydra
+    hyperlist
     ibuffer
     icomplete
     ido-mode
@@ -178,6 +179,7 @@ notify me of any missing package or change you would like to see.
     markup-faces (`adoc-mode')
     mentor
     messages
+    minimap
     modeline
     mood-line
     mu4e
