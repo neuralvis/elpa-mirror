@@ -6,7 +6,7 @@
 ;; Author: felko <http://github/felko>
 ;; Homepage: https://github.com/felko/neuron-mode
 ;; Keywords: outlines
-;; Package-Version: 20200503.930
+;; Package-Version: 20200519.1708
 ;; Package-X-Original-Version: 0.1
 ;; Package-Requires: ((emacs "26.3") (f "0.20.0") (counsel "0.13.0") (markdown-mode "2.3"))
 ;;
@@ -184,7 +184,7 @@ Extract only the result itself, so the query type is lost."
      (neuron--rebuild-cache)
      (pop-to-buffer-same-window buffer)
      (neuron-mode)
-     (message (concat "Created " path)))))
+     (message (concat "Created " (f-filename path))))))
 
 (defun neuron--style-zettel-id (zid)
   "Style a ZID as shown in the ivy prompt."
@@ -208,7 +208,7 @@ Extract only the result itself, so the query type is lost."
 
 (defun neuron--select-zettel-from-list (zettels &optional prompt)
   "Select a zettel from a given list.
-ZETTELS is a list of maps containing zettels (keys: id, title, tags, path)
+ZETTELS is a list of maps containing zettels (keys: id, title, day, tags, path)
 PROMPT is the prompt passed to `ivy-read'."
   (let* ((selection
           (ivy-read (or prompt "Select Zettel: ")
@@ -219,7 +219,7 @@ PROMPT is the prompt passed to `ivy-read'."
 (defun neuron--select-zettel-from-cache (&optional prompt)
   "Select a zettel from the current cache.
 PROMPT is the prompt passed to `ivy-read'."
-  (neuron--select-zettel-from-list neuron--zettel-cache prompt))
+  (neuron--select-zettel-from-list (map-values neuron--zettel-cache) prompt))
 
 (defun neuron--select-zettel-from-query (uri)
   "Select a zettel from the match of URI."
@@ -272,7 +272,7 @@ the inserted link will either be of the form <ID> or
       (neuron--insert-zettel-link-from-id id)
       (pop-to-buffer-same-window buffer)
       (neuron-mode)
-      (message (concat "Created " path)))))
+      (message (concat "Created " (f-filename path))))))
 
 (defun neuron--flatten-tag-node (node &optional root)
   "Flatten NODE into a list of tags.
@@ -395,7 +395,7 @@ The path is relative to the neuron output directory."
   (neuron--open-zettel-from-id (neuron--get-current-zettel-id)))
 
 (defconst neuron-link-regex
-  (concat "<\\(z:" thing-at-point-url-path-regexp "\\|[A-Za-z0-9-_]+\\(?:\?[^][\t\n {}]*\\)?\\)>")
+  (concat "<\\(z:" thing-at-point-url-path-regexp "\\|[A-Za-z0-9-_]+\\(?:\?[^][\t\n\\ {}]*\\)?\\)>")
   "Regex matching zettel links like <URL> or <ID>.
 Group 1 is the matched ID or URL.")
 

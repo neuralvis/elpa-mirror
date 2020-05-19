@@ -1,11 +1,11 @@
 ;;; closql.el --- store EIEIO objects using EmacSQL  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016-2019  Jonas Bernoulli
+;; Copyright (C) 2016-2020  Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/closql
 ;; Package-Requires: ((emacs "25.1") (emacsql-sqlite "3.0.0"))
-;; Package-Version: 20191229.1814
+;; Package-Version: 20200519.907
 ;; Keywords: extensions
 
 ;; This file is not part of GNU Emacs.
@@ -52,7 +52,9 @@
 ;;;; Oref
 
 (defun eieio-oref--closql-oref (fn obj slot)
-  (if (closql-object--eieio-childp obj)
+  (if (cl-letf (((symbol-function #'eieio--full-class-object)
+                 #'eieio--class-object))
+        (closql-object--eieio-childp obj))
       (closql-oref obj slot)
     (funcall fn obj slot)))
 

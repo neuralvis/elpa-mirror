@@ -4,7 +4,7 @@
 ;;         Christian Schwarzgruber
 
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20200516.1932
+;; Package-Version: 20200519.1703
 ;; Version: 2.1.0
 ;; Package-Requires: ((emacs "25.1") (org "9.1"))
 
@@ -716,8 +716,10 @@ hook is run."
                             ;; “time” is on some other day, use blank timestamp
                             (t ""))))
           (insert org-journal-time-prefix timestamp))
+
         (unless (null org-journal-skip-carryover-drawers)
           (org-journal-remove-drawer))
+
         (run-hooks 'org-journal-after-entry-create-hook))
 
       (if (and org-journal-hide-entries-p (org-journal-time-entry-level))
@@ -944,9 +946,9 @@ This is the counterpart of `org-journal-file-name->calendar-date' for
    file
    (let (dates)
      (save-excursion
-       (goto-char (point-min))
+       (org-first-headline-recenter)
        (while (re-search-forward org-journal-created-re nil t)
-         (when (= (save-excursion (org-back-to-heading) (outline-level)) 1)
+         (when (= (save-excursion (org-back-to-heading) (org-outline-level)) 1)
            (push (org-journal-entry-date->calendar-date) dates)))
        dates))))
 
@@ -1613,7 +1615,7 @@ If STR is empty, search for all entries using `org-journal-time-prefix'."
                                    (org-journal-file-name->calendar-date fname)
                                  (save-excursion
                                    (when (re-search-backward org-journal-created-re nil t)
-                                     (when (= (save-excursion (org-back-to-heading) (outline-level)) 1)
+                                     (when (= (save-excursion (org-back-to-heading) (org-outline-level)) 1)
                                        (org-journal-entry-date->calendar-date)))))))
                           (when date
                             (org-journal-calendar-date->time date)))
