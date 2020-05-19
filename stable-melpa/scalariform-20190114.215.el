@@ -4,6 +4,7 @@
 ;; Author: zwild <judezhao@outlook.com>
 ;; Created: 2018-12-26T22:41:19+08:00
 ;; URL: https://github.com/zwild/scalariform
+;; Package-Version: 20190114.215
 ;; Package-Requires: ((s "1.12.0") (f "0.20.0"))
 ;; Version: 0.1
 ;; Keywords: processes scala scalariform

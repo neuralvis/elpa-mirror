@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200512.19
+;; Package-Version: 20200519.226
 ;; Version: 0.3
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -354,6 +354,7 @@ Optional argument ARG the number of steps to undo."
   (let*
     ( ;; Assign for convenience.
       (was-undo-or-redo (undo-fu--was-undo-or-redo))
+      (was-redo (and was-undo-or-redo undo-fu--was-redo))
       (undo-fu-quit-command
         (if undo-fu-ignore-keyboard-quit
           'undo-fu-disable-checkpoint
@@ -400,6 +401,16 @@ Optional argument ARG the number of steps to undo."
         (steps (or arg 1))
         (last-command
           (cond
+            ;; Special case, to avoid being locked out of the undo-redo chain.
+            ;; without this, continuously redoing will end up in a state
+            ;; where you can no longer redo, nor can you undo.
+            ;;
+            ;; Detect this case and break the chain. Only do this when previously redoing
+            ;; otherwise undo will reverse immediately once it reaches the beginning,
+            ;; which we don't want even for unconstrained undo/redo,
+            ;; as we don't want to present the undo chain as infinite in either direction.
+            ((and was-redo (null undo-fu--respect) (eq t pending-undo-list))
+              'ignore)
             (was-undo-or-redo
               ;; Checked by the undo function.
               'undo)
