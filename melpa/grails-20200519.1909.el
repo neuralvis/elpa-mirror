@@ -4,7 +4,7 @@
 ;;
 ;; Authors: Alessandro Miliucci <lifeisfoo@gmail.com>
 ;; Version: 0.4.1
-;; Package-Version: 20160417.636
+;; Package-Version: 20200519.1909
 ;; URL: https://github.com/lifeisfoo/emacs-grails
 ;; Package-Requires: ((emacs "24"))
 
@@ -80,6 +80,11 @@
 
 ;;; Code:
 
+(defcustom grails-base-package ""
+  "Grails source code base package."
+  :type 'string
+  :group 'grails)
+
 (eval-and-compile
   (defvar grails-dir-name-by-type
     '((controller "controllers")
@@ -95,15 +100,26 @@
 
 (defvar grails-properties-by-version
   '((2 "application.properties" "^app.grails.version=")
-    (3 "gradle.properties" "^grailsVersion=")))
+    (3 "gradle.properties" "^grailsVersion=")
+    (4 "gradle.properties" "^grailsVersion=")
+    ))
+
+(defvar grails-source-code-base-directory
+  (s-replace "." "\/" grails-base-package)
+  )
 
 (defvar grails-urlmappings-by-version
-  '((2 "conf/UrlMappings.groovy")
-    (3 "controllers/UrlMappings.groovy")))
+  `((2 "conf/UrlMappings.groovy")
+    (3 "controllers/UrlMappings.groovy")
+    (4 ,(concat "controllers/" grails-source-code-base-directory "/UrlMappings.groovy"))
+    ))
+
 ;; TODO: refactor using only one list
 (defvar grails-bootstrap-by-version
-  '((2 "conf/BootStrap.groovy")
-    (3 "init/BootStrap.groovy")))
+  `((2 "conf/BootStrap.groovy")
+    (3 "init/BootStrap.groovy")
+    (4 ,(concat "init/" grails-source-code-base-directory "/BootStrap.groovy"))
+    ))
 
 ;;
 ;;

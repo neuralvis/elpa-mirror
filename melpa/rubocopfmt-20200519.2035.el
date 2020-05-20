@@ -1,7 +1,7 @@
 ;;; rubocopfmt.el --- Minor-mode to format Ruby code with RuboCop on save
 
-;; Version: 0.3.0
-;; Package-Version: 20181009.1703
+;; Version: 0.4.0
+;; Package-Version: 20200519.2035
 ;; Keywords: convenience wp edit ruby rubocop
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; URL: https://github.com/jimeh/rubocopfmt.el
@@ -95,6 +95,11 @@ inside a `before-save-hook'."
   :type '(repeat symbol)
   :group 'rubocopfmt)
 
+(defcustom rubocopfmt-on-save-use-lsp-format-buffer nil
+  "EXPERIMENTAL: When set to t and lsp-mode is enabled, use `lsp-format-buffer'
+to format buffer before saving, instead of `rubocopfmt'."
+  :type 'boolean
+  :group 'rubocopfmt)
 
 (defun rubocopfmt--apply-rcs-patch (patch-buffer)
   "Apply an RCS-formatted diff from PATCH-BUFFER to the current buffer."
@@ -288,9 +293,17 @@ If FILE is not found in DIRECTORY, the parent of DIRECTORY will be searched."
     (remove-hook 'before-save-hook 'rubocopfmt-before-save t)))
 
 (defun rubocopfmt-before-save ()
-  "Format buffer via rubocopfmt if major mode is `ruby-mode'."
+  "Format buffer if major mode is one listed in `rubocopfmt-major-modes'.
+
+Formatting is done via `rubocopfmt', or if
+`rubocopfmt-use-lsp-formatter' is t and `lsp-mode' is enabled in
+the buffer, format with `lsp-format-buffer' instead."
   (interactive)
-  (when (member major-mode rubocopfmt-major-modes) (rubocopfmt)))
+  (when (and (member major-mode rubocopfmt-major-modes))
+    (if (and rubocopfmt-on-save-use-lsp-format-buffer
+             (bound-and-true-p lsp-mode))
+        (lsp-format-buffer)
+        (rubocopfmt))))
 
 (provide 'rubocopfmt)
 ;;; rubocopfmt.el ends here
