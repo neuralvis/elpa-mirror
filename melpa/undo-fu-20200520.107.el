@@ -5,7 +5,7 @@
 ;; Author: Campbell Barton <ideasman42@gmail.com>
 
 ;; URL: https://gitlab.com/ideasman42/emacs-undo-fu
-;; Package-Version: 20200519.226
+;; Package-Version: 20200520.107
 ;; Version: 0.3
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -102,7 +102,7 @@ Instead, explicitly call `undo-fu-disable-checkpoint'."
   (undo-fu--checkpoint-unset))
 
 (defmacro undo-fu--with-advice (fn-orig where fn-advice &rest body)
-  "Execute BODY with advice temporarily enabled."
+  "Execute BODY with advice added WHERE using FN-ADVICE temporarily added to FN-ORIG."
   `
   (let ((fn-advice-var ,fn-advice))
     (unwind-protect
@@ -402,12 +402,11 @@ Optional argument ARG the number of steps to undo."
         (last-command
           (cond
             ;; Special case, to avoid being locked out of the undo-redo chain.
-            ;; without this, continuously redoing will end up in a state
-            ;; where you can no longer redo, nor can you undo.
+            ;; Without this, continuously redoing will end up in a state where undo & redo fails.
             ;;
             ;; Detect this case and break the chain. Only do this when previously redoing
             ;; otherwise undo will reverse immediately once it reaches the beginning,
-            ;; which we don't want even for unconstrained undo/redo,
+            ;; which we don't want even when unconstrained,
             ;; as we don't want to present the undo chain as infinite in either direction.
             ((and was-redo (null undo-fu--respect) (eq t pending-undo-list))
               'ignore)

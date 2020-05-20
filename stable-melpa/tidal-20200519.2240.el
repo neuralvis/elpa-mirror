@@ -6,7 +6,7 @@
 ;; Author: alex@slab.org
 ;; Homepage: https://github.com/tidalcycles/Tidal
 ;; Version: 0
-;; Package-Version: 20200517.2002
+;; Package-Version: 20200519.2240
 ;; Keywords: tools
 ;; Package-Requires: ((haskell-mode "16") (emacs "24"))
 
