@@ -1,0 +1,2 @@
+
+(ob-cypher . [(20200520 543) ((s (1 9 0)) (cypher-mode (0 0 6)) (dash (2 10 0)) (dash-functional (1 2 0))) "query neo4j using cypher in org-mode blocks" single ((:commit . "bbcb1d74531339145c609ba0f1fe79e158f89989") (:keywords "org" "babel" "cypher" "neo4j") (:authors ("ZHOU Feng" . "zf.pascal@gmail.com")) (:maintainer "ZHOU Feng" . "zf.pascal@gmail.com") (:url . "http://github.com/zweifisch/ob-cypher"))])

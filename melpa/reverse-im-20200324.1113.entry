@@ -1,2 +1,0 @@
-
-(reverse-im . [(20200324 1113) ((emacs (25 1))) "Reverse mapping for non-default system layouts" single ((:commit . "c42a7a585c7b85bc402f63535ae6261f68c6aa57") (:keywords "i18n") (:url . "https://github.com/a13/reverse-im.el"))])
