@@ -6,7 +6,7 @@
 ;; Created: 23 Dec 2019
 ;; Homepage: https://github.com/raxod502/ctrlf
 ;; Keywords: extensions
-;; Package-Version: 20200518.1505
+;; Package-Version: 20200521.1544
 ;; Package-Requires: ((emacs "25.1"))
 ;; SPDX-License-Identifier: MIT
 ;; Version: 1.0
@@ -780,7 +780,8 @@ And self-destruct this hook."
                     #'ctrlf--minibuffer-before-change-function
                     nil 'local))
       (let ((ctrlf--active-p t)
-            (cursor-in-non-selected-windows nil))
+            (cursor-in-non-selected-windows nil)
+            (blink-matching-paren nil))
         (read-from-minibuffer
          (ctrlf--prompt) nil keymap nil 'ctrlf-search-history
          (thing-at-point 'symbol t))))))

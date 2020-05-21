@@ -2,7 +2,7 @@
 ;;
 ;; Authors: Sean T Allen <sean@monkeysnatchbanana.com>
 ;; Version: 0.0.12
-;; Package-Version: 20200521.208
+;; Package-Version: 20200521.1148
 ;; URL: https://github.com/seantallen/ponylang-mode
 ;; Keywords: languages programming
 ;; Package-Requires: ((dash "2.10.0") (hydra "0.15.0))
@@ -101,7 +101,7 @@ by parse-partial-sexp, and should return a face. "
         (while (and (progn (previous-line) (beginning-of-line) (not (bobp)))
                     (or (looking-at "^$") (looking-at "^[ \t]*$")))
           nil)
-        (if (looking-at "^[ \t]*\\(class\\|actor\\|primitive\\|struct\\|trait\\|interface\\|fun\\|be\\)")
+        (if (looking-at "^[ \t]*\\(class\\|actor\\|primitive\\|struct\\|trait\\|interface\\|fun\\|be\\|new\\)")
             'font-lock-doc-face
           'font-lock-string-face))
     'font-lock-comment-face))
@@ -259,6 +259,11 @@ by parse-partial-sexp, and should return a face. "
     ;; capability constraints
     ("#\\(?:read\\|send\\|share\\|any\\|alias\\)" . 'font-lock-builtin-face)
 
+    ;; Variables definitions
+    (".*\\(object\\|let\\|var\\|embed\\|for\\)\\s +\\([^( \t\n,:]+\\)"
+     2
+     'font-lock-variable-name-face)
+
     ;; actor and class definitions
     ("\\(?:actor\\|class\\)\s+\\(?:\\(?:box\\|iso\\|ref\\|tag\\|trn\\|val\\)\s+\\)?\\($?[A-Z_][A-Za-z0-9_]*\\)"
      1
@@ -274,14 +279,17 @@ by parse-partial-sexp, and should return a face. "
      1
      'font-lock-function-name-face)
 
-    ;; actor, class, and type references
+    ;; type references: first filter
+    (".*:\\s +\\($?[A-Z_][A-Za-z0-9_]*\\)" 1 'font-lock-type-face)
+    
+    ;; constants
+    (,ponylang-constant-regexp . font-lock-constant-face)
+    
+    ;; type references: second filter
     ("\\(\s\\|[\[]\\|[\(]\\)\\($?_?[A-Z][A-Za-z0-9_]*\\)" 2 'font-lock-type-face)
 
     ;; ffi
     ("@[A-Za-z_][A-Z-a-z0-9_]+" . 'font-lock-builtin-face)
-
-    ;; constants
-    (,ponylang-constant-regexp . font-lock-constant-face)
 
     ;;(,ponylang-event-regexp . font-lock-builtin-face)
     ;;(,ponylang-functions-regexp . font-lock-function-name-face)
@@ -597,6 +605,7 @@ value is 0 then no banner is displayed."
   "Return the banner content."
   (cond ((not ponylang-banner) "")
         ((stringp ponylang-banner) ponylang-banner)
+        ((= 0 ponylang-banner) "")
         ((= 1 ponylang-banner) ponylang-banner-default)
         ((= 2 ponylang-banner) ponylang-banner-horse)
         ((= 3 ponylang-banner) ponylang-banner-knight)

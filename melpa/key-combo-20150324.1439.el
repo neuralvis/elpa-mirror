@@ -26,7 +26,6 @@
 ;; Author: Yuuki Arisawa <yuuki.ari@gmail.com>
 ;; Maintainer: Vitalie Spinu <spinuvit@gmail.com>
 ;; URL: https://github.com/uk-ar/key-combo
-;; Package-Version: 20150324.1439
 ;; Created: 30 November 2011
 ;; Version: 1.6
 ;; Keywords: keyboard input

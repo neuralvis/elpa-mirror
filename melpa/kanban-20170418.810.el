@@ -4,7 +4,6 @@
 ;;           and 2013 stackeffect
 
 ;; Version: 0.2.1
-;; Package-Version: 20170418.810
 
 ;; Author: Arne Babenhauserheide <arne_bab@web.de>
 ;; Keywords: outlines, convenience

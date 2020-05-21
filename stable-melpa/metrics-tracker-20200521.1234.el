@@ -4,8 +4,8 @@
 
 ;; Author: Ian Martins <ianxm@jhu.edu>
 ;; URL: https://github.com/ianxm/emacs-tracker
-;; Package-Version: 20200519.929
-;; Version: 0.3.3
+;; Package-Version: 20200521.1234
+;; Version: 0.3.6
 ;; Keywords: calendar
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 
@@ -353,18 +353,22 @@ days since the last occurrence of any base metric."
 
       ;; mix in the derived metrics
       (let (derived-metric-name ; metric name as a symbol
-            derived-from) ; list of metrics from which the current metric is derived
+            derived-from        ; list of metrics from which the current metric is derived
+            count)              ; count of entries
         (dolist (metric metrics-tracker-derived-metrics)
           (setq derived-metric-name (intern (car metric) metrics-tracker-metric-names)
                 derived-from (mapcar (lambda (ii) (gethash (intern ii metrics-tracker-metric-names) metrics))
                                      (nth 1 metric)))
-          (puthash derived-metric-name
-                   (list derived-metric-name
-                         (seq-reduce (lambda (count ii) (+ count (or (nth 1 ii) 0))) derived-from 0)
-                         (seq-reduce (lambda (first ii) (if (time-less-p first (nth 2 ii)) first (nth 2 ii))) derived-from today)
-                         (seq-reduce (lambda (last ii) (if (time-less-p last (nth 2 ii)) (nth 3 ii) last)) derived-from 0)
-                         (seq-reduce (lambda (daysago ii) (min daysago (or (nth 4 ii) most-positive-fixnum))) derived-from most-positive-fixnum))
-                   metrics)))
+          (setq count (seq-reduce (lambda (count ii) (+ count (or (nth 1 ii) 0))) derived-from 0))
+          (if (eq 0 count) ; filter out derived metrics
+              (message (format "Ignoring derived metric with no entries: %s" derived-metric-name))
+            (puthash derived-metric-name
+                     (list derived-metric-name
+                           count
+                           (seq-reduce (lambda (first ii) (if (time-less-p first (nth 2 ii)) first (nth 2 ii))) derived-from today)
+                           (seq-reduce (lambda (last ii) (if (time-less-p last (nth 2 ii)) (nth 3 ii) last)) derived-from 0)
+                           (seq-reduce (lambda (daysago ii) (min daysago (or (nth 4 ii) most-positive-fixnum))) derived-from most-positive-fixnum))
+                     metrics))))
 
       ;; convert hash to list and sort by last update date
       (setq metrics-tracker-metric-index (sort (hash-table-values metrics) (lambda (a b) (> (nth 4 b) (nth 4 a)))))
@@ -1240,7 +1244,7 @@ For example:
 
     ;; prep output buffer
     (setq buffer (get-buffer-create metrics-tracker-output-buffer-name)
-          fname (and (not (eq graph-output 'ascii)) (make-temp-file "metrics-tracker")))
+          fname (and (not (eq graph-output 'ascii)) (make-temp-file "metrics-tracker" nil (format ".%s" graph-output))))
 
     (with-temp-buffer
       ;; load metric data into bins; hash of `bin-data' for each metric
@@ -1323,12 +1327,10 @@ FNAME [string] filename of the temp file to write."
                (eq graph-type 'scatter))
            (insert "set xdata time\n")
            (insert (format "set xrange [\"%s\":\"%s\"]\n" (caar data) (caar (last data))))
-           (insert "set xtics rotate\n")
            (insert (format "set grid back ls 0 lc \"%s\"\n" fg-color))
            (insert "set pointsize 0.5\n"))
           ((or (eq graph-type 'bar)
                (eq graph-type 'stacked))
-           (insert "set xtics rotate\n")
            (insert (format "set boxwidth %f relative\n" (if (eq graph-type 'bar) 1.0 0.6)))
            (insert "set style data histogram\n")
            (insert (format "set style histogram %s\n"
@@ -1337,6 +1339,7 @@ FNAME [string] filename of the temp file to write."
            (insert (format "set grid ytics back ls 0 lc \"%s\"\n" fg-color))
            (if (eq graph-type 'stacked)
                (insert "set key invert\n"))))
+    (insert "set xtics rotate by 45 right\n")
     (insert (metrics-tracker--define-plot graph-type graph-output labels) "\n")
     (dotimes (_ii (length labels))
       (if (not date-format) ; is 'full
