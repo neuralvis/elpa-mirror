@@ -1,16 +1,17 @@
 This library offers an integration between Bibtex-completion and
 Org-roam by delegating the tasks of note's creation, editing and
-retrieval to Org-roam.  From the Org-roam's perspective, the library
-provides a means to populate Org-roam templates with bibliographic
-information secured through Bibtex-completion,.
+retrieval to Org-roam.  From the Org-roam's perspective, the
+library provides a means to populate Org-roam templates with
+bibliographic information secured through Bibtex-completion,.
 
 To use it:
 
 call interactively `org-roam-bibtex-mode' or
 call (org-roam-bibtex-mode +1) from Lisp.
 
-After enabling `org-roam-bibtex-mode', the function `orb-edit-notes' will
-shadow `bibtex-completion-edit-notes' in Helm-bibtex, Ivy-bibtex.
+After enabling `org-roam-bibtex-mode', the function
+`orb-edit-notes' will shadow `bibtex-completion-edit-notes' in
+Helm-bibtex, Ivy-bibtex.
 
 Additionally, `orb-notes-fn', which is a simple wrapper around
 `orb-edit-notes', is installed as Org-ref's
