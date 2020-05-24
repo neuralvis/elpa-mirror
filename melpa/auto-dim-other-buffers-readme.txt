@@ -29,9 +29,9 @@ group which can be accessed with:
 
     M-x customize-group RET auto-dim-other-buffers RET
 
-Note that despite it’s name, since Emacs 27.1 the mode operates on *windows*
+Note that despite it’s name, since Emacs 27 the mode operates on *windows*
 rather than buffers.  I.e. selected window is highlighted and all other
 windows are dimmed even if they display the same buffer.  In older Emacs
 versions the mode falls back to the old behaviour where all windows
-displaying selected buffer are highlighted.  This historic behaviour is where
-the mode gets its name from.
+displaying selected buffer are highlighted.  This historic behaviour
+is where the mode gets its name from.

@@ -1,0 +1,2 @@
+
+(ponylang-mode . [(20200523 1203) ((dash (2 17 0)) (hydra (0 15 0))) "A major mode for the Pony programming language" single ((:commit . "fdf4e05c4c84d71a22b811283e584ef736381677") (:keywords "languages" "programming") (:url . "https://github.com/ponylang/ponylang-mode"))])

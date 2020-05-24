@@ -1,0 +1,2 @@
+
+(deadgrep . [(20200524 17) ((emacs (25 1)) (dash (2 12 0)) (s (1 11 0)) (spinner (1 7 3))) "fast, friendly searching with ripgrep" single ((:commit . "a82a63db96b808a7aeec9a98fa9f90b24f12be0f") (:keywords "tools") (:authors ("Wilfred Hughes" . "me@wilfred.me.uk")) (:maintainer "Wilfred Hughes" . "me@wilfred.me.uk") (:url . "https://github.com/Wilfred/deadgrep"))])

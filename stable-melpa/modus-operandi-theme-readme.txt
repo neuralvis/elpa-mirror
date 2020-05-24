@@ -104,6 +104,7 @@ notify me of any missing package or change you would like to see.
     epa
     equake
     erc
+    eros
     ert
     eshell
     evil (evil-mode)
@@ -133,6 +134,7 @@ notify me of any missing package or change you would like to see.
     git-timemachine
     git-walktree
     gnus
+    golden-ratio-scroll-screen
     helm
     helm-ls-git
     helm-switch-shell
@@ -164,6 +166,7 @@ notify me of any missing package or change you would like to see.
     ivy
     ivy-posframe
     jira (org-jira)
+    journalctl-mode
     js2-mode
     julia
     jupyter
