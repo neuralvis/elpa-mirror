@@ -4,6 +4,7 @@
 
 ;; Author: Anders Lindgren
 ;; Keywords: faces, tools
+;; Package-Version: 20170127.2051
 ;; Created: 2013-12-07
 ;; Version: 0.0.7
 ;; URL: https://github.com/Lindydancer/font-lock-studio
