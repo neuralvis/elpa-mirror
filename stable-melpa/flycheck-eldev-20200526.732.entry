@@ -1,2 +1,2 @@
 
-(flycheck-eldev . [(20200526 732) ((flycheck (32)) (dash (2 17)) (emacs (24 4))) "Eldev support in Flycheck" single ((:commit . "4a939a3c171fe7ee19c495ec98e8a885b4dfd028") (:keywords "tools" "convenience") (:authors ("Paul Pogonyshev" . "pogonyshev@gmail.com")) (:maintainer "Paul Pogonyshev" . "pogonyshev@gmail.com") (:url . "https://github.com/flycheck/flycheck-eldev"))])
+(flycheck-eldev . [(20200526 732) ((flycheck (32)) (dash (2 17)) (emacs (24 4))) "Eldev support in Flycheck" single ((:commit . "4dba443dc0d7ac01936740355f46028581d48511") (:keywords "tools" "convenience") (:authors ("Paul Pogonyshev" . "pogonyshev@gmail.com")) (:maintainer "Paul Pogonyshev" . "pogonyshev@gmail.com") (:url . "https://github.com/flycheck/flycheck-eldev"))])
