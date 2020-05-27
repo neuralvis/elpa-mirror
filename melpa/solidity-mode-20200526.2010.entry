@@ -1,0 +1,2 @@
+
+(solidity-mode . [(20200526 2010) nil "Major mode for ethereum's solidity language" tar ((:commit . "d8eb460f1fc22aac65ad4926811df90df37ce68a") (:keywords "languages" "solidity") (:authors ("Lefteris Karapetsas " . "lefteris@refu.co")) (:maintainer "Lefteris Karapetsas " . "lefteris@refu.co"))])
