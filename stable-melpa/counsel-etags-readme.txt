@@ -89,4 +89,11 @@ Tips:
    cli options as "--exclude="@/ignore/file/path".
    Set `counsel-etags-ignore-config-files' to nil to turn off this feature.
 
+ - If base configuration file  "~/.ctags.exuberant" exists, it's used to
+   generate "~/.ctags" automatically.
+   "~/.ctags.exuberant" is in Exuberant Ctags format, but the "~/.ctags" is
+   in Universal Ctags format if Universal Ctags is used.
+   You can customize `counsel-etags-ctags-options-base' to change the path of
+   base configuration file.
+
 See https://github.com/redguardtoo/counsel-etags/ for more tips.

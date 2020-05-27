@@ -1,2 +1,2 @@
 
-(org-roam-server . [(20200526 711) ((org-roam (1 1 1)) (org (9 3)) (emacs (26 1)) (simple-httpd (1 5 1)) (s (1 12 0))) "Org Roam Database Visualizer" tar ((:commit . "e6c29d49f00b3b280e5732e3642d72981685f0c2") (:authors ("Göktuğ Karakaşlı" . "karakasligk@gmail.com")) (:maintainer "Göktuğ Karakaşlı" . "karakasligk@gmail.com") (:url . "https://github.com/goktug97/org-roam-server"))])
+(org-roam-server . [(20200526 711) ((org-roam (1 1 1)) (org (9 3)) (emacs (26 1)) (simple-httpd (1 5 1)) (s (1 12 0))) "Org Roam Database Visualizer" tar ((:commit . "12caafc4c7e4b1cb706f3505f8c72949f98f1445") (:authors ("Göktuğ Karakaşlı" . "karakasligk@gmail.com")) (:maintainer "Göktuğ Karakaşlı" . "karakasligk@gmail.com") (:url . "https://github.com/goktug97/org-roam-server"))])
