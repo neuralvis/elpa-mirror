@@ -3,7 +3,6 @@
 
 ;;; Author: Tsuchiya Masatoshi <tsuchiya@pine.kuee.kyoto-u.ac.jp>
 ;; URL: https://github.com/yuutayamada/stem
-;; Package-Version: 20131102.1109
 ;; Keywords: stemming
 
 ;;; License:
