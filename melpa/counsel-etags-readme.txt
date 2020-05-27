@@ -85,4 +85,8 @@ Tips:
    The parameter of hook is full path of the tags file.  `counsel-etags-tags-line' is a tool function
    to help user
 
+ - The ignore files (.gitignore, etc) are automatically detected and append to ctags
+   cli options as "--exclude="@/ignore/file/path".
+   Set `counsel-etags-ignore-config-files' to nil to turn off this feature.
+
 See https://github.com/redguardtoo/counsel-etags/ for more tips.
