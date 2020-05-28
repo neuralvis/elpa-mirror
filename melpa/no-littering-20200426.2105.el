@@ -6,6 +6,7 @@
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; Package-Version: 20200426.2105
+;; Package-Commit: e67d7edac513892c5997468899f177a6e7956906
 
 ;; This file is not part of GNU Emacs.
 

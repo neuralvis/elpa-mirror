@@ -4,6 +4,7 @@
 ;; Maintainer: Matsievskiy S.V.
 ;; Version: 0.1
 ;; Package-Version: 20200527.1040
+;; Package-Commit: 8aa8982e6afbe3820f60c3defbb3c8037e04eebe
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (ht "2.3"))
 ;; Homepage: https://gitlab.com/matsievskiysv/display-buffer-control
 ;; Keywords: convenience

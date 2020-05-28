@@ -4,6 +4,7 @@
 
 ;; Author: Igor Epstein <igorepst@gmail.com>
 ;; URL: https://github.com/igorepst/ivy-pages
+;; Package-Commit: 47b03a1f9384502cf22369ff31a2898c863d3aff
 ;; Created: 07/24/2016
 ;; Package-Version: 20160728.1920
 ;; Package-X-Original-Version: 20160724.001

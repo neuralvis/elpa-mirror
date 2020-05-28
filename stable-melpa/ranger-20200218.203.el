@@ -4,6 +4,7 @@
 ;; Author : Rich Alesi <https://github.com/ralesi>
 ;; Version: 0.9.8.6
 ;; Package-Version: 20200218.203
+;; Package-Commit: ae9b3816a6da927cca5beb62c45400103797a2da
 ;; Keywords: files, convenience, dired
 ;; Homepage: https://github.com/ralesi/ranger
 ;; Package-Requires: ((emacs "24.4"))

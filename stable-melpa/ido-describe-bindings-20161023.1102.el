@@ -4,6 +4,7 @@
 ;; Author: Danil <danil@kutkevich.org>, Syohei YOSHIDA <syohex@gmail.com>
 ;; Version: 0.0.11
 ;; Package-Version: 20161023.1102
+;; Package-Commit: a814e25cb272401bdfee94cb98d915119d307414
 ;; Package-Requires: ((dash "2.13.0"))
 ;; Keywords: help
 ;; URL: https://github.com/danil/ido-describe-bindings

@@ -4,6 +4,7 @@
 ;; Author: Benjamin Levy <blevy@protonmail.com>
 ;; Version: 0.1.0
 ;; Package-Version: 20200215.2217
+;; Package-Commit: 8eca8084cc025c43ce2677b38ed4919218dd9ad9
 ;; Description: Automatically toggle org-mode latex fragment previews as the cursor enters and exits them
 ;; Homepage: https://github.com/io12/org-fragtog
 ;; Package-Requires: ((emacs "24.3") (org "9.3.2"))

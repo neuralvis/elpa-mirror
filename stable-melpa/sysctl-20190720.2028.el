@@ -5,6 +5,7 @@
 ;; Author: Dante Catalfamo
 ;; Version: 0.3.3
 ;; Package-Version: 20190720.2028
+;; Package-Commit: 0fc50305a96de059ad1ff4e6081c9b4089f5247f
 ;; Package-Requires: ((emacs "26"))
 ;; URL: https://github.com/dantecatalfamo/sysctl.el
 ;; Keywords: sysctl, tools, unix

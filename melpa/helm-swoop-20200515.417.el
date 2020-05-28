@@ -5,6 +5,7 @@
 
 ;; Version: 2.0.0
 ;; Package-Version: 20200515.417
+;; Package-Commit: 2efc552591102ab8b4408ad60a3c4be991bb8e93
 ;; Author: Shingo Fukuyama - http://fukuyama.co
 ;; URL: https://github.com/emacsorphanage/helm-swoop
 ;; Created: Oct 24 2013

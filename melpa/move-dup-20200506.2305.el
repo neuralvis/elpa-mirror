@@ -18,6 +18,7 @@
 ;; Author: Jimmy Yuen Ho Wong <wyuenho@gmail.com>
 ;; Version: 1.0.0
 ;; Package-Version: 20200506.2305
+;; Package-Commit: fa9be365fcd6a2b89388b4d27dec93928d506678
 ;; Created: 11 June 2014
 ;; Url: https://github.com/wyuenho/move-dup
 ;; Compatibility: GNU Emacs 25.1

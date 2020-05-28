@@ -5,6 +5,7 @@
 ;; Author: Christopher Monsanto <chris@monsan.to>, Alexey Romanov <alexey.v.romanov@gmail.com>
 ;; Version: 0.1
 ;; Package-Version: 20180725.1912
+;; Package-Commit: 48c42c58ce2f0e693301b0cb2d085055410c1b25
 ;; URL: https://github.com/alexeyr/company-auctex/
 ;; Package-Requires: ((yasnippet "0.8.0") (company "0.8.0") (auctex "11.87"))
 

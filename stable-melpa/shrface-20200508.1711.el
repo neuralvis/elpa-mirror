@@ -5,6 +5,7 @@
 ;; Author: Damon Chan <elecming@gmail.com>
 ;; URL: https://github.com/chenyanming/shrface
 ;; Package-Version: 20200508.1711
+;; Package-Commit: 3e26cd0da6c2d544d8f0a8d378f4ff1807e481a8
 ;; Keywords: faces
 ;; Created: 10 April 2020
 ;; Version: 2.6

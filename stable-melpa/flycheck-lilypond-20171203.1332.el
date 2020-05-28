@@ -5,6 +5,7 @@
 ;; Author: Hinrik Örn Sigurðsson <hinrik.sig@gmail.com>
 ;; URL: https://github.com/hinrik/flycheck-lilypond
 ;; Package-Version: 20171203.1332
+;; Package-Commit: cc1b7677a932c42e5dab1661ad7b923d4aae744c
 ;; Keywords: tools, convenience
 ;; Version: 0.1-git
 ;; Package-Requires: ((emacs "24.3") (flycheck "0.22"))

@@ -5,6 +5,7 @@
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/mrkkrp/ebal
 ;; Package-Version: 20180101.616
+;; Package-Commit: 1740118125ae7aa6ba82d36e1fe0e69065a6fcaa
 ;; Version: 0.3.1
 ;; Package-Requires: ((emacs "24.4") (f "0.18.0"))
 ;; Keywords: convenience, cabal, haskell

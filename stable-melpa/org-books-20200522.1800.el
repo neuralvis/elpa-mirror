@@ -5,6 +5,7 @@
 ;; Author: Abhinav Tushar <abhinav@lepisma.xyz>
 ;; Version: 0.2.19
 ;; Package-Version: 20200522.1800
+;; Package-Commit: 4b93bb1e20e2e66b9e64819b21ca75f36c389370
 ;; Package-Requires: ((enlive "0.0.1") (s "1.11.0") (helm "2.9.2") (helm-org "1.0") (dash "2.14.1") (emacs "25"))
 ;; URL: https://github.com/lepisma/org-books
 ;; Keywords: outlines

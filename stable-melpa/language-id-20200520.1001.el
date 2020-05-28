@@ -3,6 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-language-id
 ;; Package-Version: 20200520.1001
+;; Package-Commit: 5024ebc9adc8f5ea82803bf76fffb6eee5829b0a
 ;; Version: 0.5.2
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util

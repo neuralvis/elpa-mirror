@@ -5,6 +5,7 @@
 ;; Author: Eric James Michael Ritz <lobbyjones@gmail.com>
 ;; URL: https://github.com/ejmr/tup-mode
 ;; Package-Version: 20140410.1614
+;; Package-Commit: bcc100c6485f1c81fdcd1215dfc6c41a81c215c8
 ;; Version: 1.3.1
 ;;
 ;;

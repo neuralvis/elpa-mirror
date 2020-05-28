@@ -4,6 +4,7 @@
 
 ;; Version: 1.1
 ;; Package-Version: 20200306.1408
+;; Package-Commit: 7065e01188ed17b86a7b4f01b95ace575a15eef1
 ;; Package-Requires: ((helm "1.5") (cl-lib "0.5") (emacs "24.1"))
 ;; URL: https://github.com/emacs-helm/helm-firefox
 

@@ -5,6 +5,7 @@
 ;; Author: DarkSun <lujun9972@gmail.com>
 ;; URL: https://github.com/lujun9972/podcaster
 ;; Package-Version: 20161020.1535
+;; Package-Commit: 9854517025deb5d556168a68955fb7b662239f5c
 ;; Version: 0.01
 ;; Package-Requires: ((cl-lib "0.5"))
 

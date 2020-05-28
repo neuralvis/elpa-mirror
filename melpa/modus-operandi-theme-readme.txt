@@ -144,6 +144,7 @@ notify me of any missing package or change you would like to see.
     highlight-blocks
     highlight-defined
     highlight-escape-sequences (`hes-mode')
+    highlight-indentation
     highlight-numbers
     highlight-symbol
     highlight-thing

@@ -4,6 +4,7 @@
 
 ;; Package-Requires: ((flycheck "26") (haskell-mode "13"))
 ;; Package-Version: 20160520.944
+;; Package-Commit: f04235e00998000ee2c305f5a3ee72bb5dbbc926
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

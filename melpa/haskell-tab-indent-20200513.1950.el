@@ -4,6 +4,7 @@
 
 ;; Author: Sean Whitton <spwhitton@spwhitton.name>
 ;; URL: https://spwhitton.name/tech/code/haskell-tab-indent/
+;; Package-Commit: 0482f0de774c58bd7f2e079f5bf01781eed709a3
 ;; Version: 0.3
 ;; Package-Version: 20200513.1950
 ;; Package-X-Original-Version: 0.3

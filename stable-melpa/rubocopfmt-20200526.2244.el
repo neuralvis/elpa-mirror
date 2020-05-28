@@ -2,6 +2,7 @@
 
 ;; Version: 0.4.1
 ;; Package-Version: 20200526.2244
+;; Package-Commit: 054681f682e24b6c69dac8ccd28b6efa60fa8bda
 ;; Keywords: convenience wp edit ruby rubocop
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; URL: https://github.com/jimeh/rubocopfmt.el

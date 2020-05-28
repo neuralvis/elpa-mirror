@@ -2,6 +2,7 @@
 
 ;; Version: 0.2.20191224
 ;; Package-Version: 20191224.706
+;; Package-Commit: 3d34bce20c1d7d35b99916672ea0dd67a96c7716
 ;; Author: Andrea Orru <andreaorru1991@gmail.com>, Andrew Kelley <superjoe30@gmail.com>, kristopher tate <kt@connectfree.co.jp>
 ;; Keywords: zen, languages
 ;; Package-Requires: ((emacs "24.3"))

@@ -3,6 +3,7 @@
 ;; Maintainer: Michal Nazarewicz <mina86@mina86.com>
 ;; URL: https://github.com/mina86/auto-dim-other-buffers.el
 ;; Package-Version: 20200522.2343
+;; Package-Commit: bedeef9ea3f2d8e45961427359ff88f840fcb67d
 ;; Version: 2.0.1
 
 ;; This file is not part of GNU Emacs.

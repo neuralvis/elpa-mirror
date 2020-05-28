@@ -5,6 +5,7 @@
 ;; Author: Rotem Yaari <rotemy@MBP.local>
 ;; Keywords: languages
 ;; Package-Version: 20181125.637
+;; Package-Commit: d924505ecd954625dcb2d56dfba97111dc6a17fa
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

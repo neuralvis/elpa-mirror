@@ -6,6 +6,7 @@
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: https://github.com/Andersbakken/rtags
 ;; Package-Version: 20191222.920
+;; Package-Commit: ed229d2e4070cc07ba76e537e8f5f93835ff0710
 ;; Package-Requires: ((auto-complete "1.4.0") (rtags "2.10"))
 
 ;; This file is not part of GNU Emacs.

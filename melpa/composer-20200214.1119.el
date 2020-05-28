@@ -6,6 +6,7 @@
 ;; Created: 5 Dec 2015
 ;; Version: 0.1.1
 ;; Package-Version: 20200214.1119
+;; Package-Commit: 8b4867e30efcdf10c6d9a74822aa281404377818
 ;; Keywords: tools php dependency manager
 ;; Homepage: https://github.com/zonuexe/composer.el
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5") (s "1.9.0") (f "0.17") (request "0.2.0") (seq "1.9") (php-runtime "0.1.0"))

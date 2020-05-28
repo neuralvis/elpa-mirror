@@ -6,6 +6,7 @@
 ;; Maintainer: Dmitry Cherkassov <dcherkassov@gmail.com>
 ;; URL: https://github.com/4da/eshell-toggle
 ;; Package-Version: 20200107.2230
+;; Package-Commit: ddfbe0a693497c4d4bc5494a19970ba4f6ab9033
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "25.1")(dash "2.11.0"))
 ;; Keywords: processes

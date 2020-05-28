@@ -6,6 +6,7 @@
 ;; Created: 21 May 2015
 ;; Version: 0.0.1
 ;; Package-Version: 20150521.2056
+;; Package-Commit: cb92be2cf0804cc53142dc5edb36f8e0ef5cec32
 ;; Keywords: tools
 ;; Homepage: https://github.com/aheaume/pyfmt.el
 

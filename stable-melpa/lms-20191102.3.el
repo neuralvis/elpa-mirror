@@ -6,6 +6,7 @@
 ;; Author: Iñigo Serna <inigoserna@gmx.com>
 ;; URL: https://hg.serna.eu/emacs/lms
 ;; Package-Version: 20191102.3
+;; Package-Commit: 0967d3bada2ab70784a944d56c81691b8e87dbd8
 ;; Version: 0.12
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: multimedia

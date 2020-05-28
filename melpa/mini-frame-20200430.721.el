@@ -4,6 +4,7 @@
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: frames
+;; Package-Commit: 78d9bbb272acc5f2927648cc706321f95e2955c9
 ;; URL: https://github.com/muffinmad/emacs-mini-frame
 ;; Package-Version: 20200430.721
 ;; Package-X-Original-Version: 1.0

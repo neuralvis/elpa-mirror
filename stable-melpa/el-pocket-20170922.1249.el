@@ -3,6 +3,7 @@
 ;; Created: 4 Aug 2014
 ;; Last Updated: 28 Jan 2015
 ;; Version: 0.2
+;; Package-Commit: a80abfb67efe68ada1d7d0a73aecee57e763baaa
 ;; Package-Version: 20170922.1249
 ;; Package-X-Original-Version: 20150202.1528
 ;; Url: http://github.com/pterygota/el-pocket

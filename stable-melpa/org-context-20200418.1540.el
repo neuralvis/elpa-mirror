@@ -5,6 +5,7 @@
 ;; Author: Sylvain Rousseau <thisirs at gmail dot com>
 ;; URL: https://github.com/thisirs/org-context
 ;; Package-Version: 20200418.1540
+;; Package-Commit: bbef096dc20b206b792b0ef310f2eed7c70ca3a0
 ;; Version: 0.1
 ;; Keywords: Org, capture, agenda, convenience
 

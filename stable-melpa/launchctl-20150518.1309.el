@@ -1,6 +1,7 @@
 ;;; launchctl.el --- Interface to launchctl on Mac OS X.
 ;; Author: Peking Duck <github.com/pekingduck>
 ;; Version: 1.0
+;; Package-Commit: 73f8f52a5aa9a0be9bdcf68c29ad0fa2b4a115a4
 ;; Package-Version: 20150518.1309
 ;; Package-X-Original-Version: 20150513
 ;; Package-Requires: ((emacs "24.1"))

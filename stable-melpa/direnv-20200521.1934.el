@@ -3,6 +3,7 @@
 ;; Author: wouter bolsterlee <wouter@bolsterl.ee>
 ;; Version: 2.1.0
 ;; Package-Version: 20200521.1934
+;; Package-Commit: 7e6d8fec2dcc8fffcd0df731ab57670127e13361
 ;; Package-Requires: ((emacs "25") (dash "2.12.0"))
 ;; Keywords: direnv, environment, processes, unix, tools
 ;; URL: https://github.com/wbolster/emacs-direnv

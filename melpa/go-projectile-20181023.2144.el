@@ -5,6 +5,7 @@
 ;; Author: Doug MacEachern <dougm@vmware.com>
 ;; URL: https://github.com/dougm/go-projectile
 ;; Package-Version: 20181023.2144
+;; Package-Commit: 7910884b4de560f3fc70b53752f658ef9cdc02cd
 ;; Keywords: project, convenience
 ;; Version: 0.2.1
 ;; Package-Requires: ((projectile "0.10.0") (go-mode "0") (go-eldoc "0.16") (go-rename "0") (go-guru "0"))

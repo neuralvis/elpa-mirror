@@ -5,6 +5,7 @@
 ;; Authors: dickmao <github id: dickmao>
 ;; Version: 0.1.0
 ;; Package-Version: 20200407.1525
+;; Package-Commit: 41b62dca8961c2100cb4a776e62ae721c532e392
 ;; Keywords: news
 ;; URL: https://github.com/dickmao/nnhackernews
 ;; Package-Requires: ((emacs "25.2") (request "20190819") (dash "20190401") (dash-functional "20180107") (anaphora "20180618"))

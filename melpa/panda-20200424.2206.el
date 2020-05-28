@@ -5,6 +5,7 @@
 ;; Author: Sebastian Monia <smonia@outlook.com>
 ;; URL: https://github.com/sebasmonia/panda
 ;; Package-Version: 20200424.2206
+;; Package-Commit: bdd9f80283d8ae4a69f8789e5f18b1560b94fe43
 ;; Package-Requires: ((emacs "25"))
 ;; Version: 1.1
 ;; Keywords: maint tool

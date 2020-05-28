@@ -5,6 +5,7 @@
 ;; Author: Gergely Nagy <algernon@madhouse-project.org>
 ;; URL: https://github.com/algernon/tdd-status-mode-line
 ;; Package-Version: 20131123.1716
+;; Package-Commit: 4c082e62f4915b573338a97efcc6854d132323dc
 ;; Version: 0.1.2
 ;; Keywords: faces tdd
 ;; Prefix: tdd-status

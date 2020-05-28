@@ -4,6 +4,7 @@
 
 ;; Author: Gaby Launay <gaby.launay@protonmail.com>
 ;; URL: https://github.com/galaunay/poetry.el
+;; Package-Commit: d876522e5af576d53c62b2838f85c9441fe62258
 ;; Keywords: Python, Tools
 ;; Package-Version: 20200527.948
 ;; Package-X-Original-Version: 0.2.0

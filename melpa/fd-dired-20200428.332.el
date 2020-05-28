@@ -4,6 +4,7 @@
 
 ;; Version: 0.1.0
 ;; Package-Version: 20200428.332
+;; Package-Commit: 001cc95effdd5c4d9974b3f2c40b2ddf1f0e3de2
 ;; URL: https://github.com/yqrashawn/fd-dired
 ;; Package-Requires: ((emacs "25"))
 ;; Author: Rashawn Zhang <namy.19@gmail.com>

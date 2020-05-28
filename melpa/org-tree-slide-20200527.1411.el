@@ -5,6 +5,7 @@
 ;; Author: Takaaki ISHIKAWA <takaxp at ieee dot org>
 ;; Version: 2.8.14
 ;; Package-Version: 20200527.1411
+;; Package-Commit: 80cb1ac6f98d533c9efb1a4b402822b84410b1d1
 ;; Maintainer: Takaaki ISHIKAWA <takaxp at ieee dot org>
 ;; Twitter: @takaxp
 ;; URL: https://github.com/takaxp/org-tree-slide

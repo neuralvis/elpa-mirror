@@ -6,6 +6,7 @@
 ;; Author: Erik Sjöstrand
 ;; URL: http://github.com/Kungsgeten/ink-mode
 ;; Package-Version: 20160814.1116
+;; Package-Commit: e35f26abbaf8ea23c5aa0a0c7ef15334cdfb7b48
 ;; Version: 0.1
 ;; Keywords: languages
 ;; Package-Requires: ((emacs "24.3"))

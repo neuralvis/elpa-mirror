@@ -5,6 +5,7 @@
 ;; Author:           Arjan van der Gaag
 ;; URL:              https://github.com/avdgaag/projectile-hanami
 ;; Package-Version: 20160505.1311
+;; Package-Commit: c4b8e7d4dfec789ef8493a7c5d4ce0cf7937e579
 ;; Version:          0.1.0
 ;; Keywords:         hanami, ruby, projectile
 ;; Package-Requires: ((emacs "24.3") (projectile "0.12.0") (rake "0.3.2") (inf-ruby "2.2.6"))

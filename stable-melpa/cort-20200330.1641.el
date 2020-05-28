@@ -6,6 +6,7 @@
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; Keywords: test lisp
 ;; Package-Version: 20200330.1641
+;; Package-Commit: eb94d2a5b3a048a495fb0218b2df9021f8c864f4
 ;; Version: 7.0.1
 ;; URL: https://github.com/conao3/cort.el
 ;; Package-Requires: ((emacs "24.0"))

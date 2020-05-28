@@ -6,6 +6,7 @@
 ;; Maintainer: Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Version:    0.9
 ;; Package-Version: 20200526.732
+;; Package-Commit: 4dba443dc0d7ac01936740355f46028581d48511
 ;; Keywords:   tools, convenience
 ;; Homepage:   https://github.com/flycheck/flycheck-eldev
 ;; Package-Requires: ((flycheck "32") (dash "2.17") (emacs "24.4"))

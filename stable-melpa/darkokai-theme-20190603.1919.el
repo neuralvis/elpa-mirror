@@ -2,6 +2,7 @@
 
 ;; URL: http://github.com/sjrmanning/darkokai
 ;; Package-Version: 20190603.1919
+;; Package-Commit: a53815fbfb06604d7f51519c62cc11e507204a70
 ;; Version: 0.1.2
 
 ;; The MIT License (MIT)

@@ -7,6 +7,7 @@
 ;; Contributors:
 ;;         Aldric Giacomoni <trevoke@gmail.com>
 ;; Keywords: org-mode, org, kanban, tools
+;; Package-Commit: 544aac80f1c7113cfe42cf1a2b89f5ca6bd9ead6
 ;; Package-Requires: ((s) (dash "2.13.0") (emacs "24.4") (org "9.1"))
 ;; Package-Version: 20200329.543
 ;; Package-X-Original-Version: 0.5.0

@@ -3,6 +3,7 @@
 ;; Author: Tyler Dodge
 ;; Version: 1.0
 ;; Package-Version: 20200523.2004
+;; Package-Commit: 27dafe2a470d54a2c664164b5f9cbd2a1e5d921e
 ;; Keywords: convenience, processes, terminals, files
 ;; Package-Requires: ((emacs "25.1") (seq "2.3") (f "0.20.0") (s "1.12.0") (dash "2.17.0") (mustache "0.24") (ht "0.9"))
 ;; URL: https://github.com/tyler-dodge/org-runbook

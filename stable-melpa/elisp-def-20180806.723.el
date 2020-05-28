@@ -3,6 +3,7 @@
 ;; Copyright (C) 2018  Wilfred Hughes
 ;; Version: 1.1
 ;; Package-Version: 20180806.723
+;; Package-Commit: 368b04da68783601b52e3169312183381871cf9e
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; Keywords: lisp

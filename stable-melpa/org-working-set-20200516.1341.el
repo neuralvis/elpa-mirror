@@ -5,6 +5,7 @@
 ;; Author: Marc Ihm <1@2484.de>
 ;; URL: https://github.com/marcIhm/org-working-set
 ;; Package-Version: 20200516.1341
+;; Package-Commit: c8c66a97e9adf84a4778f68e100259eaba67905b
 ;; Version: 2.2.1
 ;; Package-Requires: ((emacs "25.1"))
 

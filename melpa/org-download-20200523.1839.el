@@ -5,6 +5,7 @@
 ;; Author: Oleh Krehel
 ;; URL: https://github.com/abo-abo/org-download
 ;; Package-Version: 20200523.1839
+;; Package-Commit: 8e12cf05a2f529e4859d73dd956a33e7fba8d7ea
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3") (async "1.2"))
 ;; Keywords: multimedia images screenshots download

@@ -4,6 +4,7 @@
 ;; Maintainer: contrapunctus <xmpp:contrapunctus@jabber.fr>
 ;; Keywords: multimedia
 ;; Package-Version: 20200508.1620
+;; Package-Commit: f1a030c538af6d47d32eef04ab6536eeef948268
 ;; Homepage: https://gitlab.com/contrapunctus/sxiv.el
 ;; Package-Requires: ((dash "2.16.0") (emacs "25.1"))
 ;; Version: 0.3.1

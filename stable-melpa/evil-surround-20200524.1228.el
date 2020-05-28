@@ -12,6 +12,7 @@
 ;; Created: July 23 2011
 ;; Version: 1.0.3
 ;; Package-Version: 20200524.1228
+;; Package-Commit: 1c34944d8c98da4a2385d24ee89eef9cdf569a12
 ;; Package-Requires: ((evil "1.2.12"))
 ;; Mailing list: <implementations-list at lists.ourproject.org>
 ;;      Subscribe: http://tinyurl.com/implementations-list

@@ -7,6 +7,7 @@
 ;; Created: Fri Oct 11 12:14:25 2013 (-0400)
 ;; Version: 1.0.4
 ;; Package-Version: 20171030.1900
+;; Package-Commit: 2341a2b6a33d4b8b74c35062ec9cfe1bffd61944
 ;; Package-Requires: ()
 ;; Last-Updated: Sun Dec  8 20:23:51 2013 (-0500)
 ;;           By: Jordon Biondo

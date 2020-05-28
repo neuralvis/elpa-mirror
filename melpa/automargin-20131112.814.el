@@ -19,6 +19,7 @@
 ;; Author: zk_phi
 ;; URL: http://hins11.yu-yake.com/
 ;; Package-Version: 20131112.814
+;; Package-Commit: 4901d969ad69f5244e6300baab4ba04efed800c3
 ;; Version: 0.0.2
 
 ;;; Commentary:

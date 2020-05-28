@@ -5,6 +5,7 @@
 ;; Author: Seiji Zenitani <zenitani@mac.com>
 ;; Version: 20200508
 ;; Package-Version: 20200508.249
+;; Package-Commit: f808ac53870d32c57a3cd01dd2850ee62d3af98a
 ;; Keywords: tools, unix
 ;; Created: 1998-12-27
 ;; Compatibility: Emacs 21 or later

@@ -18,6 +18,7 @@
 
 ;; Version: 2.1.1
 ;; Package-Version: 20200504.2004
+;; Package-Commit: 1a36cb5ab6668aa57b1b7192521a472feeec1ea2
 ;; Author: zk_phi
 ;; URL: http://hins11.yu-yake.com/
 ;; Package-Requires: ((popwin "0.7.0alpha"))

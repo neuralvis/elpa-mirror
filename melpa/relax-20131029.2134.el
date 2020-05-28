@@ -5,6 +5,7 @@
 ;; Author: Phil Hagelberg
 ;; URL: http://github.com/technomancy/relax.el
 ;; Package-Version: 20131029.2134
+;; Package-Commit: 6e33892623ab87833082262321dc8e1977209626
 ;; Version: 0.2
 ;; Keywords: database http
 ;; Created: 2009-05-11

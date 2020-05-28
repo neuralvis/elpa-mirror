@@ -6,6 +6,7 @@
 ;; Maintainer: Alexandre Duret-Lutz <adl@lrde.epita.fr>
 ;; URL: https://gitlab.lrde.epita.fr/spot/emacs-modes
 ;; Package-Version: 20191010.1132
+;; Package-Commit: 558e55429acde26423332a03a3b65b12efdbce5f
 ;; Keywords: major-mode, automata, convenience
 ;; Created: 2015-11-13
 

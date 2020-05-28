@@ -18,6 +18,7 @@
 ;; Author: Miquel Sabaté Solà <mikisabate@gmail.com>
 ;; Version: 0.3.2
 ;; Package-Version: 20200505.851
+;; Package-Commit: 0f73c5a87b874e72ed286cf43e0b8dfec73769c3
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: faces
 ;; URL: https://github.com/mssola/soria

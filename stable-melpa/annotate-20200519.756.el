@@ -7,6 +7,7 @@
 ;; Maintainer: Bastian Bechtold
 ;; URL: https://github.com/bastibe/annotate.el
 ;; Package-Version: 20200519.756
+;; Package-Commit: 99c45f553e7caef693506498d11e4b664b6f2946
 ;; Created: 2015-06-10
 ;; Version: 0.7.0
 

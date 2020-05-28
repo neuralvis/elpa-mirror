@@ -5,6 +5,7 @@
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: https://github.com/technomancy/heroku.el
 ;; Package-Version: 20120629.1813
+;; Package-Commit: 92af1c073b593c4def99c8777c869992aa4d0b3a
 ;; Version: 1.0.0
 ;; Keywords: convenience, api, database
 

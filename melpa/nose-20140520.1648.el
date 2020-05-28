@@ -6,6 +6,7 @@
 
 ;; Version: 0.1.1
 ;; Package-Version: 20140520.1648
+;; Package-Commit: 194d7789bf797f31ea0adc45f08beb66ae9ea98e
 ;; Keywords: nose python testing
 ;; Created: 04 Apr 2009
 

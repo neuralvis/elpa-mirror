@@ -5,6 +5,7 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Version: 1.0.2
 ;; Package-Version: 20200520.1324
+;; Package-Commit: e18ee8d02d834a6c31a21726c458202a78dc0b71
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "26.1") (quickrun "2.2"))
 ;; URL: https://github.com/conao3/oj.el

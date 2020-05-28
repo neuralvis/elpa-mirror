@@ -6,6 +6,7 @@
 ;; Maintainer: Pierre Neidhardt <mail@ambrevar.xyz>
 ;; URL: https://github.com/emacs-helm/helm-fish-completion
 ;; Package-Version: 20200509.1056
+;; Package-Commit: fd730198afe01f6eecc6c5841358a8eea4cf4b09
 ;; Version: 0.3
 ;; Package-Requires: ((emacs "25") (helm "3") (fish-completion "1.2"))
 

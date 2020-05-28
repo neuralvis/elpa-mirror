@@ -6,6 +6,7 @@
 ;; Maintainer: Kaleb Elwert <belak@coded.io>
 ;; Version: 0.1
 ;; Package-Version: 20200525.1430
+;; Package-Commit: d1bc669200bf5753cf1963e5e65269e0d60648d5
 ;; URL: https://github.com/belak/emacs-monokai-pro-theme
 
 ;;; Commentary:

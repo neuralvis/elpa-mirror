@@ -6,6 +6,7 @@
 ;; Author: Sergey Pashinin <sergey at pashinin dot com>
 ;; Keywords: session management window-configuration persistence
 ;; Package-Version: 20200519.1214
+;; Package-Commit: 5d27baaaee1222050244ac0c87566ab8335711b6
 ;; Homepage: https://github.com/pashinin/workgroups2
 ;; Version: 1.2.0
 ;; Package-Requires: ((emacs "24.4") (dash "2.8.0"))

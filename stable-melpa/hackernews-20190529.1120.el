@@ -6,6 +6,7 @@
 ;; Maintainer: Basil L. Contovounesios <contovob@tcd.ie>
 ;; Keywords: comm hypermedia news
 ;; Package-Version: 20190529.1120
+;; Package-Commit: 2362d7b00e59da7caddc8c0adc24dccb42fddef9
 ;; Version: 0.5.0
 ;; Homepage: https://github.com/clarete/hackernews.el
 

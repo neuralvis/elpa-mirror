@@ -18,6 +18,7 @@
 ;; Author: Thomas Letan <contact@thomasletan.fr>
 ;; URL: https://git.sr.ht/~lthms/colorless-themes.el
 ;; Package-Version: 20200325.1307
+;; Package-Commit: 2b4c341640c8191a39e4bc28d6cd04c7d6dcbb37
 ;; Package-Requires: ((emacs "24.1"))
 ;; Version: 0.2
 ;; License: GPL-3

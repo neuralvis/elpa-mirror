@@ -5,6 +5,7 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Version: 1.0.1
 ;; Package-Version: 20200508.617
+;; Package-Commit: e075bda369bbd0df2ac5e5d5626664f4a0062676
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "26.1") (transient "0.1"))
 ;; URL: https://github.com/conao3/transient-dwim.el

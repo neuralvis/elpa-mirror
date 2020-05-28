@@ -1,5 +1,6 @@
 ;;; smart-dash.el --- Smart-Dash minor mode
 ;; Package-Version: 20200104.1620
+;; Package-Commit: cc540eea7452e15d4ef2b09d8809d88174f509c0
 
 ;; Copyright (C) 2008-2010 Dennis Lambe Jr.
 

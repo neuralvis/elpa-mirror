@@ -3,6 +3,7 @@
 ;; Authors: Minh Nguyen-Hue <minh.nh1989@gmail.com>
 ;; URL: https://github.com/suonlight/multi-libvterm
 ;; Package-Version: 20200329.940
+;; Package-Commit: 11f1b0cc97a24aba66fb561a0a94e9a66375b30f
 ;; Keywords: terminals, processes
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "26.3") (vterm "0.0") (projectile "1.2.0"))

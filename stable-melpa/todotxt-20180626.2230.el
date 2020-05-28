@@ -10,6 +10,7 @@
 ;; Created: 14 March 2011
 ;; Version: 0.2.4
 ;; Package-Version: 20180626.2230
+;; Package-Commit: f13e404304c9d26c105de872f96b4601441b3875
 ;; URL: https://github.com/rpdillon/todotxt.el
 ;; Keywords: todo.txt, todotxt, todotxt.el
 ;; Compatibility: GNU Emacs 22 ~ 25

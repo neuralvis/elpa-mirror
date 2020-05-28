@@ -8,6 +8,7 @@
 ;; Created: 2007-10-31
 ;; Version: 0.9.3
 ;; Package-Version: 20160615.643
+;; Package-Commit: 1bbdef942f28c61a0adb89d1b3c2cca5b10ca2dc
 ;; Keywords: docs help
 ;; Package-Requires: ((cl-lib "0.5"))
 

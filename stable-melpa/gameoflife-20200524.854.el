@@ -5,6 +5,7 @@
 ;; Author: Anders Lindgren
 ;; Keywords: games
 ;; Package-Version: 20200524.854
+;; Package-Commit: 33fdfea6c4a73a4131eb087a0ccce4876814c76c
 ;; Version: 0.0.1
 ;; Created: 2017-11-15
 ;; URL: https://github.com/Lindydancer/gameoflife

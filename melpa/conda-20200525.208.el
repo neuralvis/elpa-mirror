@@ -3,6 +3,7 @@
 ;; Copyright (C) 2016-2020 Rami Chowdhury
 ;; Author: Rami Chowdhury <rami.chowdhury@gmail.com>
 ;; URL: http://github.com/necaris/conda.el
+;; Package-Commit: 9d0213020ff170b17e11b35cad40ac9a8bf30f4c
 ;; Version: 0.4
 ;; Package-Version: 20200525.208
 ;; Package-X-Original-Version: 0.4

@@ -5,6 +5,7 @@
 ;; Author: Marc Ihm <1@2484.de>
 ;; URL: https://github.com/marcIhm/org-id-cleanup
 ;; Package-Version: 20200523.735
+;; Package-Commit: e79540b64e0ee5ef11adfeb932a9b04beb905680
 ;; Version: 1.4.0
 ;; Package-Requires: ((org "9.2.6") (dash "2.12.0") (emacs "25.1"))
 

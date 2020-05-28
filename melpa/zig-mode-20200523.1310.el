@@ -2,6 +2,7 @@
 
 ;; Version: 0.0.8
 ;; Package-Version: 20200523.1310
+;; Package-Commit: b4ae21ada29230f7fcba0d32e53466970eff9cc1
 ;; Author: Andrea Orru <andreaorru1991@gmail.com>, Andrew Kelley <superjoe30@gmail.com>
 ;; Keywords: zig, languages
 ;; Package-Requires: ((emacs "24.3"))

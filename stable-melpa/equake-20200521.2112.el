@@ -16,6 +16,7 @@
 ;; Author: Benjamin Slade <slade@jnanam.net>
 ;; Maintainer: Benjamin Slade <slade@jnanam.net>
 ;; URL: https://gitlab.com/emacsomancer/equake
+;; Package-Commit: 85ddbd9bd6448f6d0a07d42e0c71861307996790
 ;; Package-Version: 20200521.2112
 ;; Package-X-Original-Version: 0.90
 ;; Version: 0.90

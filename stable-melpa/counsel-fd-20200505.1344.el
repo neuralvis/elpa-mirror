@@ -4,6 +4,7 @@
 
 ;; Version: 0.1.0
 ;; Package-Version: 20200505.1344
+;; Package-Commit: afba62f73d348cd7dfd10db039769788f5ae7ad4
 ;; URL: https://github.com/CsBigDataHub/counsel-fd
 ;; Package-Requires: ((counsel "0.12.0"))
 ;; Keywords: tools

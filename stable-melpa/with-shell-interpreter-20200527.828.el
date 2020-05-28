@@ -4,6 +4,7 @@
 ;;
 ;; Version: 0.3.0
 ;; Package-Version: 20200527.828
+;; Package-Commit: 6480165cbabd2a63130d1ea4003fa23ca661db7b
 ;; Keywords: processes, terminals
 ;; URL: https://github.com/p3r7/with-shell-interpreter
 ;; Package-Requires: ((emacs "25.1")(cl-lib "0.6.1"))

@@ -4,6 +4,7 @@
 ;; Homepage: https://gitlab.com/jessieh/mood-line
 ;; Keywords: mode-line faces
 ;; Package-Version: 20200429.309
+;; Package-Commit: 5ff7cb514d7842901b592fa5132b75bc2b0df2e8
 ;; Version: 1.2.2
 ;; Package-Requires: ((emacs "25.1"))
 

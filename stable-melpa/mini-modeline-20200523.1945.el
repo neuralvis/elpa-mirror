@@ -5,6 +5,7 @@
 ;; Author:  Kien Nguyen <kien.n.quang@gmail.com>
 ;; URL: https://github.com/kiennq/emacs-mini-modeline
 ;; Package-Version: 20200523.1945
+;; Package-Commit: bec2bcf601d8fb55b0a67bfa9ac18c6e83c268d4
 ;; Version: 0.1
 ;; Keywords: convenience, tools
 ;; Package-Requires: ((emacs "25.1") (dash "2.12.0"))

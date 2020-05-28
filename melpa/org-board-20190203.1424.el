@@ -8,6 +8,7 @@
 ;; Last updated:  Wed 30 May 2018 20:06:39 CEST
 ;; Version: 1138
 ;; Package-Version: 20190203.1424
+;; Package-Commit: 2e01e801abc04b8fb718ca4bc19636242ac0cb52
 ;; Keywords: org, bookmarks, archives
 ;; Homepage: https://github.com/scallywag/org-board
 ;;

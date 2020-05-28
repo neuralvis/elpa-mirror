@@ -2,6 +2,7 @@
 
 ;; Version: 0.5.0
 ;; Package-Version: 20200513.812
+;; Package-Commit: 6e4835cd0051fdf4bbb8bde6047ee5f5b39465cd
 ;; Author: Mozilla
 ;; Url: https://github.com/rust-lang/rust-mode
 ;; Keywords: languages

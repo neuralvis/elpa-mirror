@@ -5,6 +5,7 @@
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/avy
 ;; Package-Version: 20200522.510
+;; Package-Commit: 2dde8b71a0feb366c8ee5e2a1400a0d3a0f06424
 ;; Version: 0.5.0
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5"))
 ;; Keywords: point, location

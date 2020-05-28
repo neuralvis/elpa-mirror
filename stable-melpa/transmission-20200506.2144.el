@@ -5,6 +5,7 @@
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 0.12.1
 ;; Package-Version: 20200506.2144
+;; Package-Commit: b2c35b6f4c503976581573a4512c50e8081f9038
 ;; Package-Requires: ((emacs "24.4") (let-alist "1.0.5"))
 ;; Keywords: comm, tools
 

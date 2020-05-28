@@ -5,6 +5,7 @@
 ;; Created: 2019-06-16
 ;; Version: 0.3.0
 ;; Package-Version: 20200321.533
+;; Package-Commit: 9f82d31f9f0fb06bbc2ce18e21e79d1eabbe6c5e
 ;; Package-Requires: ((emacs "24.5"))
 ;; Keywords: lisp wp files convenience
 ;; URL: https://github.com/font-lock-cl/font-lock-cl

@@ -2,6 +2,7 @@
 ;;
 ;; Version: 1.0.1
 ;; Package-Version: 20200524.2226
+;; Package-Commit: 501468082e46bd0975ef4d8765363fd564338099
 ;; Author: Ryan Barrett <fillcode@ryanb.org>
 ;; URL: https://snarfed.org/fillcode
 ;;

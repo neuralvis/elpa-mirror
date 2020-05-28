@@ -5,6 +5,7 @@
 ;; Author: Chunyang Xu <xuchunyang56@gmail.com>
 ;; URL: https://github.com/xuchunyang/youdao-dictionary.el
 ;; Package-Version: 20200429.259
+;; Package-Commit: bd839711e3cf6d3eb9c308cea5694369a440899e
 ;; Package-Requires: ((popup "0.5.0") (pos-tip "0.4.6") (chinese-word-at-point "0.2") (names "0.5") (emacs "24"))
 ;; Version: 0.4
 ;; Created: 11 Jan 2015

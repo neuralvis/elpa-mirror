@@ -6,6 +6,7 @@
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/ryo-modal
 ;; Package-Version: 20200515.1703
+;; Package-Commit: 5d988e8b3a5d3d6f2f58d97031d2f500ef55473b
 ;; Keywords: convenience, modal, keys
 ;; Version: 0.4
 ;; Package-Requires: ((emacs "25.1"))

@@ -5,6 +5,7 @@
 ;; Author: Bonface M. K.
 ;; Keywords: languages, tools
 ;; Package-Version: 20200102.2000
+;; Package-Commit: 8b49ca0ecdff9df7c3f428bac22a96ed675ee5dd
 ;; Homepage: https://www.bonfacemunyoki.com
 ;; Version: 0.01
 ;; Package-Requires: ((emacs  "26.1") (org "9.3"))

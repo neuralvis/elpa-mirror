@@ -4,6 +4,7 @@
 ;; Author: Danil <danil@kutkevich.org>, Josuah Demangeon <sshbio>, sebasar
 ;; Version: 0.2.0
 ;; Package-Version: 20160820.1440
+;; Package-Commit: 6a0bfeaca2e334b47b4f38ab80d63f53535b189e
 ;; Package-Requires: ((dash "2.13.0"))
 ;; Keywords: inner buffer search
 ;; URL: https://github.com/danil/ido-occur

@@ -5,6 +5,7 @@
 ;; Author: Yevgnen Koh <wherejoystarts@gmail.com>
 ;; Package-Requires: ((emacs "24.5") (ivy "0.13.0"))
 ;; Package-Version: 20200521.452
+;; Package-Commit: 43875867fa15517c23c2b2c73451a4ab5ce855c0
 ;; Version: 0.1.6
 ;; Keywords: ivy
 

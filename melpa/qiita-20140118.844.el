@@ -3,6 +3,7 @@
 ;; Author: Wataru MIYAGUNI (gonngo _at_ gmail.com)
 ;; URL: https://github.com/gongo/qiita-el
 ;; Package-Version: 20140118.844
+;; Package-Commit: 93c697b97d540fd1601a13a3d9889fb939b19878
 ;; Package-Requires: ((helm "1.5.9") (markdown-mode "2.0"))
 ;; Keywords: qiita
 

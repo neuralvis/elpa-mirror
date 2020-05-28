@@ -9,6 +9,7 @@
 ;; Created: 13 Dec 2014
 ;; Keywords: unicode, input,
 ;; Package-Version: 20141219.720
+;; Package-Commit: e76ccb549e6a2a66c373da927eb65d69353e07db
 ;; Bitbucket: https://bitbucket.org/m00nlight/unicode-input/
 
 ;; This program is free software: you can redistribute it and/or modify

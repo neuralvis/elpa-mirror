@@ -7,6 +7,7 @@
 ;;          Greg McGary <gkm@magilla.cichlid.com>
 ;; Keywords: i18n gettext
 ;; Package-Version: 20190511.1542
+;; Package-Commit: 1916142f6a817c733d5ec37e3b4fbae3da67e499
 ;; Created: 1995
 
 ;; This file is part of GNU gettext.

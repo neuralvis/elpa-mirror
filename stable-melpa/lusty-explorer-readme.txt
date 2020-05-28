@@ -36,8 +36,8 @@ To modify the keybindings, use something like:
 Respects these variables:
   completion-ignored-extensions
 
-Development:    <http://github.com/sjbach/lusty-emacs>
-Further info:   <http://www.emacswiki.org/cgi-bin/wiki/LustyExplorer>
+Development:    <https://github.com/sjbach/lusty-emacs>
+Further info:   <https://www.emacswiki.org/cgi-bin/wiki/LustyExplorer>
                 (Probably out-of-date)
 
 

@@ -2,6 +2,7 @@
 
 ;; URL: https://github.com/laishulu/hl-fill-column
 ;; Package-Version: 20200404.306
+;; Package-Commit: 43cb3c35a92c912b7205b8a36f1ad0ec0a5b4a22
 ;; Created: November 1, 2018
 ;; Keywords: fill column, faces
 ;; Package-Requires: ((names "0.5") (emacs "24"))

@@ -7,6 +7,7 @@
 ;; Author: Magnar Sveen <magnars@gmail.com>
 ;; URL: https://github.com/mrkkrp/vimish-fold
 ;; Package-Version: 20200524.1729
+;; Package-Commit: 9d12e39f01da517565666e09a2e32e01aed24a90
 ;; Version: 0.3.0
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (f "0.18.0"))
 ;; Keywords: convenience

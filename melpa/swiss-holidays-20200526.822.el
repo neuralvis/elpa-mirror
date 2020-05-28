@@ -3,6 +3,7 @@
 ;; Author: Christian Egli <christian.egli@alumni.ethz.ch>
 ;; Version: 0.1
 ;; Package-Version: 20200526.822
+;; Package-Commit: 0995c9685033a09466f5b2dceb7316362bde997a
 ;; Keywords: calendar
 ;; URL: https://github.com/egli/swiss-holidays
 

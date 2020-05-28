@@ -3,6 +3,7 @@
 ;; Author: Fox Kiester <noct@posteo.net>
 ;; URL: https://github.com/noctuid/lispyville
 ;; Package-Version: 20200522.2248
+;; Package-Commit: 398c890ec8b78ea08c68e2701243d71c6931e826
 ;; Created: March 03, 2016
 ;; Keywords: vim, evil, lispy, lisp, parentheses
 ;; Package-Requires: ((lispy "0") (evil "1.2.12") (cl-lib "0.5") (emacs "24.4"))

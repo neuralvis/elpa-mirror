@@ -4,6 +4,7 @@
 
 ;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
+;; Package-Commit: 5e963e8ef17e937745b8f3b64f29690290c7a5c0
 ;; Package-Version: 20200503.1919
 ;; Package-X-Original-Version: 3.1.1
 ;; Version: 3.1.1

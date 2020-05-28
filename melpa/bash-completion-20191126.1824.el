@@ -1,5 +1,6 @@
 ;;; bash-completion.el --- BASH completion for the shell buffer -*- lexical-binding: t -*-
 ;; Package-Version: 20191126.1824
+;; Package-Commit: 96ce14af9674f3e605bacca87abc0c23b8f13cd5
 
 ;; Copyright (C) 2009 Stephane Zermatten
 

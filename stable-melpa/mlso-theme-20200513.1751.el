@@ -2,6 +2,7 @@
 
 ;; Version: 1.3
 ;; Package-Version: 20200513.1751
+;; Package-Commit: 059c5773403b73a14a1b04d62d1d5b077a3f6e06
 ;; URL: https://github.com/Mulling/mlso-theme
 ;; Author: github.com/Mulling
 ;; Package-Requires: ((emacs "24"))

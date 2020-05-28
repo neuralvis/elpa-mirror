@@ -4,6 +4,7 @@
 ;; Author: Daniel Leslie dan@ironoxide.ca
 ;; URL: http://github.com/dleslie/seclusion-mode
 ;; Package-Version: 20121118.2353
+;; Package-Commit: 9634e76c52bfb7200ff0f9f01404f743429e9ef0
 ;; Version: 1.1.1
 
 ;; Licensed under the GPL3

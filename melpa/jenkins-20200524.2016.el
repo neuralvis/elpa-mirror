@@ -5,6 +5,7 @@
 ;; Author: Rustem Muslimov <r.muslimov@gmail.com>
 ;; Keywords: jenkins, convenience
 ;; Package-Version: 20200524.2016
+;; Package-Commit: bd06cdc57c0cb9217d773eeba06ecc998f10033b
 ;; Package-Requires: ((dash "2.12") (emacs "24.3") (json "1.4"))
 
 ;; This program is free software; you can redistribute it and/or modify

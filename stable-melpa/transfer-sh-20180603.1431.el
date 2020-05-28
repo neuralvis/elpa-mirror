@@ -5,6 +5,7 @@
 ;; Author: S. Roskamp <steffen.roskamp@gmail.com>
 ;; Keywords: cloud, upload, share
 ;; Package-Version: 20180603.1431
+;; Package-Commit: 55da85f963d347255a2b46568954923679331798
 ;; Package-Requires: ((async "1.0"))
 
 ;; This program is free software; you can redistribute it and/or modify

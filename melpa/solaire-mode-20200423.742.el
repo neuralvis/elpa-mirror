@@ -8,6 +8,7 @@
 ;; Modified: April 23, 2020
 ;; Version: 1.1.3
 ;; Package-Version: 20200423.742
+;; Package-Commit: adc8c0c60d914f6395eba0bee78feedda128b30b
 ;; Keywords: dim bright window buffer faces
 ;; Homepage: https://github.com/hlissner/emacs-solaire-mode
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))

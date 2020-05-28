@@ -5,6 +5,7 @@
 ;; Author: lordnik22
 ;; Version: 1.0.0
 ;; Package-Version: 20190809.2156
+;; Package-Commit: 9591a4747eb2e5cab53203a120f9b854c75e629b
 ;; Keywords: extensions matching
 ;; URL: https://github.com/lordnik22
 ;; Package-Requires: ((emacs "25"))

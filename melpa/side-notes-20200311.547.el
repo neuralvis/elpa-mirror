@@ -5,6 +5,7 @@
 ;; Author: William Rankin <code@william.bydasein.com>
 ;; Keywords: convenience
 ;; Package-Version: 20200311.547
+;; Package-Commit: f78d7ba1173cf6056a95935add30cd30b7a7d347
 ;; Version: 0.3.1
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://github.com/rnkn/side-notes

@@ -4,6 +4,7 @@
 ;; Package-Version: 20200520.1838
 ;;; Package-X-Original-Version: 0.1.0
 ;;; URL: https://github.com/russell/deno-emacs
+;; Package-Commit: 9c350dae6a73c54445ef8d6cae1fa4bd9ce34c71
 ;;; Package-Requires: ((emacs "24"))
 
 ;; Copyright (c) 2020 Russell Clarey

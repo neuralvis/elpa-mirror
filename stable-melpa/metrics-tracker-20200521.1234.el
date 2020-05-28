@@ -5,6 +5,7 @@
 ;; Author: Ian Martins <ianxm@jhu.edu>
 ;; URL: https://github.com/ianxm/emacs-tracker
 ;; Package-Version: 20200521.1234
+;; Package-Commit: e136fb4d0bf8e07c5e41f5585f2a3891e17f06f6
 ;; Version: 0.3.6
 ;; Keywords: calendar
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))

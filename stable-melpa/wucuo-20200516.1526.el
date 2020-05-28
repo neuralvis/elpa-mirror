@@ -4,6 +4,7 @@
 ;;
 ;; Version: 0.1.2
 ;; Package-Version: 20200516.1526
+;; Package-Commit: 49d2ae558068954eb8c4324b8ee7a6b2b0a00ef9
 ;; Keywords: convenience
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/wucuo

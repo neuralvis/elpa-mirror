@@ -7,6 +7,7 @@
 ;; Created: Sat Apr  4 13:41:20 2015 (-0700)
 ;; Version: 4.13
 ;; Package-Version: 20200520.1535
+;; Package-Commit: b9ca2566b867464c25b720e2148d240961c110e7
 ;; Package-Requires: ((emacs "24.4") (seq "0.5") (cl-lib "0.5") (memoize "1.1"))
 ;; URL: https://github.com/DarwinAwardWinner/ido-completing-read-plus
 ;; Keywords: ido, completion, convenience

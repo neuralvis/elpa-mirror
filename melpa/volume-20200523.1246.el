@@ -6,6 +6,7 @@
 ;; Author: Daniel Brockman <daniel@brockman.se>
 ;; URL: http://www.brockman.se/software/volume-el/
 ;; Package-Version: 20200523.1246
+;; Package-Commit: bd0ca8430098164740f111ac2bd2582d7f628b79
 ;; Created: September 9, 2005
 ;; Updated: December 25, 2019
 ;; Version: 1.0

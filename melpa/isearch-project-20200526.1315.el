@@ -8,6 +8,7 @@
 ;; Keyword: convenience, search
 ;; Version: 0.2.1
 ;; Package-Version: 20200526.1315
+;; Package-Commit: 00de3182f730f6dcb4803c9bb190c5de4189b8f0
 ;; Package-Requires: ((emacs "26.1") (cl-lib "0.6") (f "0.20.0"))
 ;; URL: https://github.com/jcs090218/isearch-project
 

@@ -6,6 +6,7 @@
 ;; Maintainer: Juergen Hoetzel <juergen@hoetzel.info>
 ;; URL: https://github.com/juergenhoetzel/pkgbuild-mode
 ;; Package-Version: 20200425.616
+;; Package-Commit: bc22301198b3f581d89352510e847454fb1cb9ff
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 1.0-snapshot
 ;; Keywords: languages

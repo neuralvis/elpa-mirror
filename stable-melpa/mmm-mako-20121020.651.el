@@ -6,6 +6,7 @@
 ;; Author: Philip Jenvey <pjenvey@underboss.org>
 ;; URL: https://bitbucket.org/pjenvey/mmm-mako
 ;; Package-Version: 20121020.651
+;; Package-Commit: 5c9ff92137b547569264eeca1ab2a86e4ba12f55
 ;; Version: 1.1
 ;; Package-Requires: ((mmm-mode "0.4.8"))
 

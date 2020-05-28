@@ -2,6 +2,7 @@
 ;; Author: Edmund Miller <edmund.a.miller@gmail.com>
 ;; URL:  https://github.com/emiller88/emacs-jest/
 ;; Package-Version: 20200523.350
+;; Package-Commit: 4b5b63cf23e3d5a6d36650dcaea264b74b67767d
 ;; Version: 0.1.0
 ;; Keywords: jest, javascript, testing
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0") (dash-functional "2.12.0") (magit-popup "2.12.0") (projectile "0.14.0") (s "1.12.0") (js2-mode "20180301") (cl-lib "0.6.1"))

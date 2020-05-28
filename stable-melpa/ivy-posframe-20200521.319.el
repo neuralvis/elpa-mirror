@@ -8,6 +8,7 @@
 ;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
 ;; Package-Version: 20200521.319
+;; Package-Commit: 61cb32e0aa23e1a9451f1d76dc5d29d867830de5
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, ivy
 ;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.11.0"))

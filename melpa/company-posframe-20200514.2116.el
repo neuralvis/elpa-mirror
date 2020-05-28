@@ -6,6 +6,7 @@
 ;; Maintainer: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/company-posframe
 ;; Package-Version: 20200514.2116
+;; Package-Commit: 4e506d661ed9cd2e4cf16281f3a11009210e9c30
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching
 ;; Package-Requires: ((emacs "26.0")(company "0.9.0")(posframe "0.1.0"))

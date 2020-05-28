@@ -5,6 +5,7 @@
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/plain-org-wiki
 ;; Package-Version: 20200507.2135
+;; Package-Commit: 99cd7f90e5c741cf3327f464852203baee7c488c
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3") (ivy "0.12.0"))
 ;; Keywords: convenience

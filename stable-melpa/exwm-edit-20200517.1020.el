@@ -3,6 +3,7 @@
 ;; Author: Ag Ibragimov
 ;; URL: https://github.com/agzam/exwm-edit
 ;; Package-Version: 20200517.1020
+;; Package-Commit: e9fbede16e32989684ac01d2c498620cf6176d10
 ;; Created: 2018-05-16
 ;; Keywords: convenience
 ;; License: GPL v3

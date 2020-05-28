@@ -5,6 +5,7 @@
 ;; Author: Naoya Yamashita <conao3@gmail.com>
 ;; Version: 0.0.1
 ;; Package-Version: 20200515.934
+;; Package-Commit: 9615307cbd37e698d6939a04128162ef893313cb
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "26.1") (solarized-theme "1.3"))
 ;; URL: https://github.com/conao3/iceberg-theme.el

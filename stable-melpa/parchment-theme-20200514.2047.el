@@ -3,6 +3,7 @@
 ;; Author: Alex Griffin <a@ajgrf.com>
 ;; URL: https://github.com/ajgrf/parchment
 ;; Package-Version: 20200514.2047
+;; Package-Commit: 4fa14adbc043497fc942568fdb78505ca549e5b7
 ;; Version: 0.4.0-pre
 ;; Package-Requires: ((autothemer "0.2"))
 

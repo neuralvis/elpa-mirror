@@ -7,6 +7,7 @@
 ;; Compatibility: GNU Emacs 24.1+
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5") (async "1.9.3"))
 ;; Package-Version: 20200509.803
+;; Package-Commit: ddeccf7808cf39fedc41cd33204b0ef5fe4253b5
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
