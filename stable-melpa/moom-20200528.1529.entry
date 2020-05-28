@@ -1,0 +1,2 @@
+
+(moom . [(20200528 1529) ((emacs (25 1))) "Commands to control frame position and size" tar ((:commit . "c14a84c28ae27d73a9dd14fd758ac389c1f78026") (:keywords "frames" "faces" "convenience") (:authors ("Takaaki ISHIKAWA <takaxp at ieee dot org>")) (:maintainer "Takaaki ISHIKAWA <takaxp at ieee dot org>") (:url . "https://github.com/takaxp/Moom"))])

@@ -1,2 +1,0 @@
-
-(lsp-java . [(20200527 1600) ((emacs (25 1)) (lsp-mode (6 0)) (markdown-mode (2 3)) (dash (2 14 1)) (f (0 20 0)) (ht (2 0)) (dash-functional (1 2 0)) (request (0 3 0)) (treemacs (2 5))) "Java support for lsp-mode" tar ((:commit . "2824889e5c5ebf680dd81ec2a48cbe6240bbf025") (:keywords "languague" "tools") (:url . "https://github.com/emacs-lsp/lsp-java"))])

@@ -1,0 +1,2 @@
+
+(ivy-rich . [(20200527 2359) ((emacs (24 5)) (ivy (0 13 0))) "More friendly display transformer for ivy." single ((:commit . "f957c97bbc137382f1d9a9e26f1426c7ac68bb99") (:keywords "ivy") (:authors ("Yevgnen Koh" . "wherejoystarts@gmail.com")) (:maintainer "Yevgnen Koh" . "wherejoystarts@gmail.com"))])
