@@ -22,3 +22,10 @@ Features:
 
 * Additional test dependencies (see `eldev-add-extra-dependencies')
   are seen from the test files, but not from the main files.
+
+For the extension to have any effect, you need to install Eldev:
+
+    https://github.com/doublep/eldev#installation
+
+If Flycheck doesn’t seem to recognize dependencies declared in a
+project, verify its setup (`C-c !  v').
