@@ -7,8 +7,8 @@
 ;; Maintainer: Jason R. Blevins <jblevins@xbeta.org>
 ;; Created: May 24, 2007
 ;; Version: 2.4-dev
-;; Package-Version: 20200527.1432
-;; Package-Commit: 6406b874f6b2952b9590e10f163e72bac80c3081
+;; Package-Version: 20200529.35
+;; Package-Commit: 023da0f25399b1cd05cf4f5e8cff3e9f61d3e44e
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: Markdown, GitHub Flavored Markdown, itex
 ;; URL: https://jblevins.org/projects/markdown-mode/
@@ -48,6 +48,7 @@
 (defvar jit-lock-start)
 (defvar jit-lock-end)
 (defvar flyspell-generic-check-word-predicate)
+(defvar electric-pair-pairs)
 
 
 ;;; Constants =================================================================
@@ -9488,6 +9489,17 @@ rows and columns and the column alignment."
 
 ;;; GitHub Flavored Markdown Mode  ============================================
 
+(defun gfm--electric-pair-fence-code-block ()
+  (when (and electric-pair-mode
+             (not markdown-gfm-use-electric-backquote)
+             (eql last-command-event ?`)
+             (let ((count 0))
+               (while (eql (char-before (- (point) count)) ?`)
+                 (cl-incf count))
+               (= count 3))
+             (eql (char-after) ?`))
+    (save-excursion (insert (make-string 2 ?`)))))
+
 (defvar gfm-mode-hook nil
   "Hook run when entering GFM mode.")
 
@@ -9497,6 +9509,7 @@ rows and columns and the column alignment."
   (setq markdown-link-space-sub-char "-")
   (setq markdown-wiki-link-search-subdirectories t)
   (setq-local markdown-table-at-point-p-function 'gfm--table-at-point-p)
+  (add-hook 'post-self-insert-hook #'gfm--electric-pair-fence-code-block 'append t)
   (markdown-gfm-parse-buffer-for-languages))
 
 

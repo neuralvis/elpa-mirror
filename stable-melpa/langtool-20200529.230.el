@@ -4,11 +4,11 @@
 
 ;; Author: Masahiro Hayashi <mhayashi1120@gmail.com>
 ;; Keywords: docs
-;; Package-Version: 20200117.441
-;; Package-Commit: a71ed02ce06920ae3cafd6708de1c21811ce14c3
+;; Package-Version: 20200529.230
+;; Package-Commit: 8276eccc5587bc12fd205ee58a7a982f0a136e41
 ;; URL: https://github.com/mhayashi1120/Emacs-langtool
 ;; Emacs: GNU Emacs 24 or later
-;; Version: 2.2.0
+;; Version: 2.2.1
 ;; Package-Requires: ((cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or
@@ -155,7 +155,7 @@
 
 ;; * Show LanguageTool report automatically by `popup'
 ;;   This idea come from:
-;;   http://d.hatena.ne.jp/LaclefYoshi/20150912/langtool_popup
+;;   https://laclefyoshi.hatenablog.com/entry/20150912/langtool_popup
 ;;
 ;;     (defun langtool-autoshow-detail-popup (overlays)
 ;;       (when (require 'popup nil t)

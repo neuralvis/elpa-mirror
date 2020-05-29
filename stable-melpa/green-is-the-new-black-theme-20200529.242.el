@@ -3,8 +3,8 @@
 ;; Author: Fred Campos <fred.tecnologia@gmail.com>
 ;; Maintainer: Fred Campos <fred.tecnologia@gmail.com>
 ;; URL: https://github.com/fredcamps/green-is-the-new-black-emacs
-;; Package-Version: 20190724.1252
-;; Package-Commit: 34f0372878a07a23bf1d9418aa380c403d272457
+;; Package-Version: 20200529.242
+;; Package-Commit: 9b682c0000bc732e4c55e876ac968877eada0402
 ;; Keywords: faces, themes
 ;; Version: 0.0.6
 
@@ -98,6 +98,7 @@
    `(diff-refine-removed ((t (:inherit diff-removed))))
    `(tool-bar ((t (:background, gitnb-black :foreground, gitnb-dark-green))))
    `(menu ((t (:background, gitnb-green :foreground, gitnb-black :box nil))))
+   `(visible-bell ((t (:foreground, gitnb-black :background, gitnb-bright-green))))
    `(tty-menu-selected-face ((t  (:background, gitnb-bright-green :foreground, gitnb-black :weight bold))))
    `(tty-menu-enabled-face ((t  (:background, gitnb-green :foreground, gitnb-black))))
    `(tty-menu-disabled-face ((t  (:background, gitnb-grey :foreground, gitnb-black))))
@@ -168,6 +169,8 @@
    `(sml/prefix  ((t (:foreground, gitnb-light-green))))
    `(sml/process ((t (:foreground, gitnb-light-green))))
 
+   `(doom-visual-bell ((t (:foreground, gitnb-black :background, gitnb-bright-green))))
+
    `(smerge-base ((t (:foreground, gitnb-bright-green :background, gitnb-dark-green))))
    `(smerge-markers ((t (:foreground, gitnb-bright-green :background, gitnb-dark-green))))
    `(smerge-mine ((t (:foreground, gitnb-bright-green :background, gitnb-dark-green))))
@@ -183,6 +186,14 @@
    `(js2-error ((t (:foreground, gitnb-red))))
 
    `(which-func ((t (:foreground, gitnb-grey))))))
+
+
+;;;###autoload
+(and load-file-name
+     (boundp 'custom-theme-load-path)
+     (add-to-list 'custom-theme-load-path
+                  (file-name-as-directory
+                   (file-name-directory load-file-name))))
 
 
 (provide-theme 'green-is-the-new-black)
