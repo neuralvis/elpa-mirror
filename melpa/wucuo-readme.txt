@@ -10,8 +10,8 @@ Please note `flyspell-prog-mode' and `flyspell-mode' should not be enabled
 when using this program.
 
 3. Tips
-If `wucuo-flyspell-start-mode' is "lite", `wucuo-start' runs `flyspell-buffer'.
-If it's "lite", `wucuo-start' runs `flyspell-region' to check visible region
+If `wucuo-flyspell-start-mode' is "normal", `wucuo-start' runs `flyspell-buffer'.
+If it's "normal", `wucuo-start' runs `flyspell-region' to check visible region
 in current window.
 
 The interval of checking is set by `wucuo-update-interval'.
