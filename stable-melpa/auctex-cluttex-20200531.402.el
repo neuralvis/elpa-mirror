@@ -4,8 +4,8 @@
 
 ;; Author: Masahiro Nakamura <tsuucat@icloud.com>
 ;; Version: 0.1.0
-;; Package-Version: 20200311.1453
-;; Package-Commit: 76fba4a1a918ce8a276fa0e22f026ad9a45a47dc
+;; Package-Version: 20200531.402
+;; Package-Commit: 7e36dcb88c0021e48e7a095257e63e2913f75789
 ;; URL: https://github.com/tsuu32/auctex-cluttex
 ;; Package-Requires: ((emacs "24.4") (auctex "12.2"))
 ;; Keywords: tex
@@ -69,15 +69,15 @@
   '("%(cluttexengine)"
     (lambda ()
       (format "%s%stex"
-              (cond
-               ((eq TeX-engine 'default) "pdf")
-               ((eq TeX-engine 'xetex) "xe")
-               ((eq TeX-engine 'luatex) "lua")
-               ((eq TeX-engine 'ptex) "p")
-               ((eq TeX-engine 'uptex) "up"))
-              (cond
-               ((eq major-mode 'plain-tex-mode) "")
-               ((eq major-mode 'latex-mode) "la")))))
+              (pcase TeX-engine
+                ('default "pdf")
+                ('xetex "xe")
+                ('luatex "lua")
+                ('ptex "p")
+                ('uptex "up"))
+              (pcase major-mode
+                ('plain-tex-mode "")
+                ('latex-mode "la")))))
   "TeX engine detector for `auctex-cluttex-ClutTeX-command'.
 See `TeX-expand-list-builtin'.")
 
