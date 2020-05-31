@@ -3,8 +3,8 @@
 ;; Copyright (C) 2018-2020 Chen Bin
 ;;
 ;; Version: 0.2.1
-;; Package-Version: 20200530.905
-;; Package-Commit: 4df82d6429b99ab1d6354ebe7631e36b2ff7ec83
+;; Package-Version: 20200531.304
+;; Package-Commit: 690a674f137818f7d16f30327329e655b39065ce
 ;; Keywords: convenience
 ;; Author: Chen Bin <chenbin DOT sh AT gmail DOT com>
 ;; URL: http://github.com/redguardtoo/wucuo
@@ -36,8 +36,10 @@
 ;;   (add-hook 'prog-mode-hook 'wucuo-start)
 ;;   (add-hook 'text-mode-hook 'wucuo-start)
 ;;
-;; Please note `flyspell-prog-mode' and `flyspell-mode' should not be enabled
-;; when using this program.
+;; The spell checking starts when current buffer is saved.
+;;
+;; Please note `flyspell-prog-mode' and `flyspell-mode' should be turned off
+;; before using this program.
 ;;
 ;; 3. Tips
 ;; If `wucuo-flyspell-start-mode' is "normal", `wucuo-start' runs `flyspell-buffer'.
