@@ -1,2 +1,2 @@
 
-(ponylang-mode . [(20200529 858) ((dash (2 17 0)) (hydra (0 15 0))) "A major mode for the Pony programming language" single ((:commit . "3c654d6401a85b1b0629696b2bb39fe3c8b58f8d") (:keywords "languages" "programming") (:url . "https://github.com/ponylang/ponylang-mode"))])
+(ponylang-mode . [(20200529 858) ((dash (2 17 0)) (hydra (0 15 0))) "A major mode for the Pony programming language" single ((:commit . "7638f521c639aea60156ca2a047c6f0d2f2faf12") (:keywords "languages" "programming") (:url . "https://github.com/ponylang/ponylang-mode"))])

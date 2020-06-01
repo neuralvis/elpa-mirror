@@ -1,0 +1,2 @@
+
+(tron-legacy-theme . [(20200530 1545) nil "An orginal retro-futuristic theme inspired by Tron: Legacy" single ((:commit . "d6b0c811decb33d8bef3359e138f12b20bcf5e15") (:authors ("Ian Y.E. Pan")) (:maintainer "Ian Y.E. Pan") (:url . "https://github.com/ianpan870102/tron-legacy-emacs-theme"))])

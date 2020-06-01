@@ -3,7 +3,7 @@
 ;; Authors: Sean T Allen <sean@monkeysnatchbanana.com>
 ;; Version: 0.1.5
 ;; Package-Version: 20200529.858
-;; Package-Commit: 3c654d6401a85b1b0629696b2bb39fe3c8b58f8d
+;; Package-Commit: 7638f521c639aea60156ca2a047c6f0d2f2faf12
 ;; URL: https://github.com/ponylang/ponylang-mode
 ;; Keywords: languages programming
 ;; Package-Requires: ((dash "2.17.0") (hydra "0.15.0"))
