@@ -4,9 +4,9 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-helm-gtags
-;; Package-Version: 20200409.1559
-;; Package-Commit: 25b81d7774622911c1e95d9020209ae4ace1542b
-;; Version: 1.5.6
+;; Package-Version: 20200602.1610
+;; Package-Commit: a15fe1dd272d252ad933d8129db1dce02fd41adb
+;; Version: 1.5.7
 ;; Package-Requires: ((emacs "24.4") (helm "2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -66,7 +66,7 @@
   :group 'helm)
 
 (defcustom helm-gtags-path-style 'root
-  "Style of file path"
+  "Style of file path."
   :type '(choice (const :tag "Root of the current project" root)
                  (const :tag "Relative from the current directory" relative)
                  (const :tag "Absolute Path" absolute)))
@@ -92,7 +92,7 @@
   :group 'helm-gtags)
 
 (defcustom helm-gtags-pulse-at-cursor t
-  "If non-nil, pulse at point after jumping"
+  "If non-nil, pulse at point after jumping."
   :type 'boolean
   :group 'helm-gtags)
 
@@ -107,19 +107,20 @@
   :group 'helm-gtags)
 
 (defcustom helm-gtags-update-interval-second 60
-  "Tags are updated in `after-save-hook' if this seconds is passed from last update.
+  "Tags are updated in `after-save-hook' if this seconds is passed from \
+last update.
 Always update if value of this variable is nil."
   :type '(choice (integer :tag "Update interval seconds")
                  (boolean :tag "Update every time" nil))
   :group 'helm-gtags)
 
 (defcustom helm-gtags-highlight-candidate t
-  "Highlight candidate or not"
+  "Highlight candidate or not."
   :type 'boolean
   :group 'helm-gtags)
 
 (defcustom helm-gtags-use-input-at-cursor nil
-  "Use input at cursor"
+  "Use input at cursor."
   :type 'boolean
   :group 'helm-gtags)
 
@@ -145,12 +146,12 @@ Always update if value of this variable is nil."
   :group 'helm-gtags)
 
 (defcustom helm-gtags-fuzzy-match nil
-  "Enable fuzzy match"
+  "Enable fuzzy match."
   :type 'boolean
   :group 'helm-gtags)
 
 (defcustom helm-gtags-maximum-candidates (if helm-gtags-fuzzy-match 100 9999)
-  "Maximum number of helm candidates"
+  "Maximum number of helm candidates."
   :type 'integer
   :group 'helm-gtags)
 
@@ -198,6 +199,7 @@ Always update if value of this variable is nil."
   "Not documented.")
 
 (defmacro helm-declare-obsolete-variable (old new version)
+  "Not documented, OLD, NEW, VERSION."
   `(progn
      (defvaralias ,old ,new)
      (make-obsolete-variable ,old ,new ,version)))
@@ -263,7 +265,7 @@ Always update if value of this variable is nil."
     (when completion
       (push "-c" options))
     (helm-aif (assoc-default type helm-gtags--search-option-alist)
-        (push it options))
+              (push it options))
     (when (or (eq helm-gtags-path-style 'absolute)
               (helm-gtags--use-abs-path-p gtagslibpath))
       (push "-a" options))
@@ -332,9 +334,9 @@ Always update if value of this variable is nil."
 (defun helm-gtags--path-libpath-p (tagroot)
   "Not documented."
   (helm-aif (getenv "GTAGSLIBPATH")
-      (cl-loop for path in (parse-colon-path it)
-               for libpath = (file-name-as-directory (expand-file-name path))
-               thereis (string= tagroot libpath))))
+            (cl-loop for path in (parse-colon-path it)
+                     for libpath = (file-name-as-directory (expand-file-name path))
+                     thereis (string= tagroot libpath))))
 
 (defsubst helm-gtags--convert-cygwin-windows-file-name-p ()
   "Not documented."
@@ -344,16 +346,16 @@ Always update if value of this variable is nil."
   "Not documented."
   (with-temp-buffer
     (helm-aif (getenv "GTAGSROOT")
-        it
-      (unless (zerop (process-file "global" nil t nil "-p"))
-        (error "GTAGS not found"))
-      (goto-char (point-min))
-      (when (looking-at "^\\([^\r\n]+\\)")
-        (let ((tag-path (match-string-no-properties 1)))
-          (file-name-as-directory
-           (if (helm-gtags--convert-cygwin-windows-file-name-p)
-               (cygwin-convert-file-name-from-windows tag-path)
-             tag-path)))))))
+              it
+              (unless (zerop (process-file "global" nil t nil "-p"))
+                (error "GTAGS not found"))
+              (goto-char (point-min))
+              (when (looking-at "^\\([^\r\n]+\\)")
+                (let ((tag-path (match-string-no-properties 1)))
+                  (file-name-as-directory
+                   (if (helm-gtags--convert-cygwin-windows-file-name-p)
+                       (cygwin-convert-file-name-from-windows tag-path)
+                     tag-path)))))))
 
 (defun helm-gtags--find-tag-directory ()
   "Not documented."
@@ -763,42 +765,42 @@ Always update if value of this variable is nil."
 
 (defvar helm-source-gtags-tags
   (helm-build-in-buffer-source "Jump to definitions"
-    :init 'helm-gtags--tags-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display 'helm-gtags--candidate-transformer
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--find-file-action)
+                               :init 'helm-gtags--tags-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display 'helm-gtags--candidate-transformer
+                               :persistent-action 'helm-gtags--persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--find-file-action)
   "Not documented.")
 
 (defvar helm-source-gtags-pattern
   (helm-build-in-buffer-source "Find pattern"
-    :init 'helm-gtags--pattern-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display 'helm-gtags--candidate-transformer
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--find-file-action)
+                               :init 'helm-gtags--pattern-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display 'helm-gtags--candidate-transformer
+                               :persistent-action 'helm-gtags--persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--find-file-action)
   "Not documented.")
 
 (defvar helm-source-gtags-rtags
   (helm-build-in-buffer-source "Jump to references"
-    :init 'helm-gtags--rtags-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display 'helm-gtags--candidate-transformer
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--find-file-action)
+                               :init 'helm-gtags--rtags-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display 'helm-gtags--candidate-transformer
+                               :persistent-action 'helm-gtags--persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--find-file-action)
   "Not documented.")
 
 (defvar helm-source-gtags-gsyms
   (helm-build-in-buffer-source "Jump to symbols"
-    :init 'helm-gtags--gsyms-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display 'helm-gtags--candidate-transformer
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--find-file-action)
+                               :init 'helm-gtags--gsyms-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display 'helm-gtags--candidate-transformer
+                               :persistent-action 'helm-gtags--persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--find-file-action)
   "Not documented.")
 
 (defun helm-gtags--highlight-candidate (candidate)
@@ -843,21 +845,21 @@ Always update if value of this variable is nil."
 
 (defvar helm-source-gtags-find-tag-from-here
   (helm-build-in-buffer-source "Find tag from here"
-    :init 'helm-gtags--find-tag-from-here-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display 'helm-gtags--candidate-transformer
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--find-file-action)
+                               :init 'helm-gtags--find-tag-from-here-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display 'helm-gtags--candidate-transformer
+                               :persistent-action 'helm-gtags--persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--find-file-action)
   "Not documented.")
 
 (defvar helm-source-gtags-parse-file
   (helm-build-in-buffer-source "Parse file"
-    :init 'helm-gtags--parse-file-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display 'helm-gtags--parse-file-candidate-transformer
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action 'helm-gtags--parse-file-action)
+                               :init 'helm-gtags--parse-file-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display 'helm-gtags--parse-file-candidate-transformer
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action 'helm-gtags--parse-file-action)
   "Not documented.")
 
 (defun helm-gtags--show-stack-action (cand)
@@ -871,12 +873,12 @@ Always update if value of this variable is nil."
 
 (defvar helm-source-gtags-show-stack
   (helm-build-sync-source "Show Context Stack"
-    :candidates 'helm-gtags--show-stack-init
-    :volatile t
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action 'helm-gtags--show-stack-action)
+                          :candidates 'helm-gtags--show-stack-init
+                          :volatile t
+                          :candidate-number-limit helm-gtags-maximum-candidates
+                          :persistent-action 'helm-gtags--persistent-action
+                          :fuzzy-match helm-gtags-fuzzy-match
+                          :action 'helm-gtags--show-stack-action)
   "Not documented.")
 
 ;;;###autoload
@@ -966,20 +968,20 @@ Always update if value of this variable is nil."
 (defun helm-gtags--source-select-tag (candidate)
   "Not documented."
   (helm-build-in-buffer-source "Select Tag"
-    :init (lambda () (helm-gtags--tags-init candidate))
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--find-file-action))
+                               :init (lambda () (helm-gtags--tags-init candidate))
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :persistent-action 'helm-gtags--persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--find-file-action))
 
 (defun helm-gtags--source-select-rtag (candidate)
   "Not documented."
   (helm-build-in-buffer-source "Select Rtag"
-    :init (lambda () (helm-gtags--rtags-init candidate))
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :persistent-action 'helm-gtags--persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--find-file-action))
+                               :init (lambda () (helm-gtags--rtags-init candidate))
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :persistent-action 'helm-gtags--persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--find-file-action))
 
 (defsubst helm-gtags--action-by-timer (src)
   "Not documented."
@@ -1015,17 +1017,17 @@ Always update if value of this variable is nil."
 
 (defvar helm-source-gtags-select
   (helm-build-in-buffer-source "Find tag from here"
-    :init 'helm-gtags--source-select-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :persistent-action #'ignore
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action (helm-make-actions
-             "Goto the location" #'helm-gtags--select-tag-action
-             "Goto the location(other buffer)"
-             (lambda (c)
-               (setq helm-gtags--use-otherwin t)
-               (helm-gtags--select-tag-action c))
-             "Move to the referenced point" #'helm-gtags--select-rtag-action))
+                               :init 'helm-gtags--source-select-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :persistent-action #'ignore
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action (helm-make-actions
+                                        "Goto the location" #'helm-gtags--select-tag-action
+                                        "Goto the location(other buffer)"
+                                        (lambda (c)
+                                          (setq helm-gtags--use-otherwin t)
+                                          (helm-gtags--select-tag-action c))
+                                        "Move to the referenced point" #'helm-gtags--select-rtag-action))
   "Not documented.")
 
 (defun helm-gtags--select-path-init ()
@@ -1070,17 +1072,17 @@ Always update if value of this variable is nil."
 (defun helm-gtags--file-persistent-action (cand)
   "Not documented."
   (let ((default-directory (with-helm-current-buffer
-                             default-directory)))
+                            default-directory)))
     (helm-ff-kill-or-find-buffer-fname (helm-gtags--file-name cand))))
 
 (defvar helm-source-gtags-select-path
   (helm-build-in-buffer-source "Select path"
-    :init 'helm-gtags--select-path-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display 'helm-gtags--files-candidate-transformer
-    :persistent-action #'helm-gtags--file-persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--file-util-action)
+                               :init 'helm-gtags--select-path-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display 'helm-gtags--files-candidate-transformer
+                               :persistent-action #'helm-gtags--file-persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--file-util-action)
   "Not documented.")
 
 (defun helm-gtags--searched-directory ()
@@ -1197,8 +1199,7 @@ Always update if value of this variable is nil."
           (progn
             (fit-window-to-buffer win)
             (when (yes-or-no-p "Remove GNU Global tag files? ")
-              (with-demoted-errors (mapc #'delete-file files))
-              ))
+              (with-demoted-errors (mapc #'delete-file files))))
         (when (window-live-p win)
           (quit-window t win))))))
 
@@ -1244,12 +1245,12 @@ Always update if value of this variable is nil."
 
 (defvar helm-source-gtags-files
   (helm-build-in-buffer-source "Find files"
-    :init #'helm-gtags--files-init
-    :candidate-number-limit helm-gtags-maximum-candidates
-    :real-to-display #'helm-gtags--files-candidate-transformer
-    :persistent-action #'helm-gtags--file-persistent-action
-    :fuzzy-match helm-gtags-fuzzy-match
-    :action helm-gtags--file-util-action)
+                               :init #'helm-gtags--files-init
+                               :candidate-number-limit helm-gtags-maximum-candidates
+                               :real-to-display #'helm-gtags--files-candidate-transformer
+                               :persistent-action #'helm-gtags--file-persistent-action
+                               :fuzzy-match helm-gtags-fuzzy-match
+                               :action helm-gtags--file-util-action)
   "Not documented.")
 
 ;;;###autoload

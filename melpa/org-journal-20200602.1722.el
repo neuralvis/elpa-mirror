@@ -4,8 +4,8 @@
 ;;         Christian Schwarzgruber
 
 ;; URL: http://github.com/bastibe/org-journal
-;; Package-Version: 20200529.1906
-;; Package-Commit: 0b637343129d56f32e1c7821ad864049cbddef19
+;; Package-Version: 20200602.1722
+;; Package-Commit: 0bcefa5c371b2a344729c56efc012c08ff82c168
 ;; Version: 2.1.0
 ;; Package-Requires: ((emacs "25.1") (org "9.1"))
 
@@ -1379,7 +1379,10 @@ and cleans out past org-journal files."
            (let* ((future (org-journal-read-period 'future))
                   (beg (car future))
                   (end (cdr future)))
-             (setcar (cdr beg) (1- (cadr beg)))
+             (setcar (cdr beg) (1- (cadr beg))) ;; Include today; required for `org-journal-search-build-file-list'
+             (when (< (nth 2 (decode-time (current-time))) org-extend-today-until)
+               (setq beg (decode-time (apply #'encode-time `(0 59 -1 ,(nth 1 beg) ,(nth 0 beg) ,(nth 2 beg))))
+                     beg (list (nth 4 beg) (nth 3 beg) (nth 5 beg))))
              (org-journal-search-build-file-list
               (org-journal-calendar-date->time beg)
               (org-journal-calendar-date->time end)))))

@@ -12,4 +12,4 @@ to "m".  Here is sample setup:
 
 See https://github.com/redguardtoo/evil-matchit/ for help.
 
-This program requires EVIL (http://gitorious.org/evil)
+This program requires EVIL (https://github.com/emacs-evil/evil)
