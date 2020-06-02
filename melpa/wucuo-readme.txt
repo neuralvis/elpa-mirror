@@ -11,6 +11,11 @@ The spell checking starts when current buffer is saved.
 Please note `flyspell-prog-mode' and `flyspell-mode' should be turned off
 before using this program.
 
+User's configuration for the package flyspell still works.
+Flyspell provides two minor modes, `flyspell-prog-mode' and `flyspell-mode'.
+They are replaced by this program.  But all the other commands and configuration
+for flyspell is still valid.
+
 3. Tips
 If `wucuo-flyspell-start-mode' is "normal", `wucuo-start' runs `flyspell-buffer'.
 If it's "normal", `wucuo-start' runs `flyspell-region' to check visible region
