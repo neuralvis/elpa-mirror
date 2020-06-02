@@ -4,8 +4,8 @@
 
 ;; Author:  Hiroki YAMAKAWA <s06139@gmail.com>
 ;; URL: https://github.com/HKey/org-taskforecast
-;; Package-Version: 20200601.1157
-;; Package-Commit: 4e69cf66f3342af170a56181d6258c7220fa5462
+;; Package-Version: 20200602.914
+;; Package-Commit: 9670ac3ceeca7ca0adcb83b4f55bee9a1992a5b7
 ;; Keywords: convenience
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "26.1") (dash "2.16.0") (dash-functional "2.16.0") (s "1.12.0") (org-ql "0.4"))
@@ -2866,8 +2866,11 @@ NOW is an encoded time."
     (org-taskforecast--list-remove-link id)
     ;; Move the cursor to the next line or the previous line to prevent
     ;; moving the cursor to the top of a task list.
-    (when (or (/= 0 (forward-line 1)) (eobp))
-      (forward-line -1))
+    (when (/= 0 (forward-line 1))
+      ;; This relies that there is an empty line at the end of buffer.
+      (error "Empty line not found at the end of buffer"))
+    (when (eobp)
+      (forward-line -2))
     (org-taskforecast--list-refresh now)
     (message "%s has been removed from task list." title)))
 

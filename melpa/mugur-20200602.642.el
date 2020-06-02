@@ -4,8 +4,8 @@
 
 ;; Author: Mihai Olteanu <mihai_olteanu@fastmail.fm>
 ;; Version: 1.0
-;; Package-Version: 20200520.739
-;; Package-Commit: d450d316df042f2e29ab20a9d31f071e08033e92
+;; Package-Version: 20200602.642
+;; Package-Commit: 5333d0ff56cb4d1448e4cdf48278abcbc32e96eb
 ;; Package-Requires: ((emacs "26.1") (s "1.12.0") (anaphora "1.0.4"))
 ;; Keywords: multimedia
 ;; URL: https://github.com/mihaiolteanu/mugur
@@ -101,6 +101,13 @@
      (ms_btn1) (ms_btn2) (ms_btn3) (ms_btn4) (ms_btn5)
      (ms_wh_up) (ms_wh_down) (ms_wh_left) (ms_wh_right)
      (ms_accel1) (ms_accel2) (ms_accel3))
+
+    ("RGB Lighting"
+     (rgb_tog) (rgb_mod) (rgb_rmod)
+     (rgb_hui) (rgb_hud) (rgb_sai) (rgb_sad) (rgb_vai) (rgb_vad)
+     (rgb_mode_plain) (rgb_mode_breathe) (rgb_mode_rainbow)
+     (rgb_mode_swirl) (rgb_mode_snake) (rgb_mode_knight)
+     (rgb_mode_xmas) (rgb_mode_gradient) (rgb_mode_rgbtest))
     
     ("Special Keys"
      (--- "_x_") (() "___"))))
@@ -180,6 +187,10 @@ the same form.")
   "Is KEY a mouse key?"
   (mugur--key-in-category-p "Mouse Keys" key))
 
+(defun mugur--rgb-p (key)
+  "Is KEY an rgb key?"
+  (mugur--key-in-category-p "RGB Lighting" key))
+
 (defun mugur--special-key-p (key)
   "Is KEY one of empty or transparent keys?"
   (mugur--key-in-category-p "Special Keys" key))
@@ -195,7 +206,8 @@ the same form.")
 (cl-defun mugur--keycode (key &key (ss nil) (mod nil))
   "Return the KEY keycode usable in the C keymap array."
   (awhen (mugur--keycode-raw key)
-    (if (or (mugur--special-key-p key)
+    (if (or (mugur--rgb-p key)
+            (mugur--special-key-p key)
             (mugur--quantum-p key))
         it
       (if (mugur--modifier-key-p key)

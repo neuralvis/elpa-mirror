@@ -5,8 +5,8 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200527.800
-;; Package-Commit: c1d1643b8c100773356798024128fb6a5bed2c7a
+;; Package-Version: 20200602.741
+;; Package-Commit: 8a727b0bb486e52b6060e6a4071cf288c0552c2d
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2"))
 ;; Version: 0.93
@@ -1247,14 +1247,18 @@ A link can be either an org link or an org attachment.
 The car is the raw-link and the cdr is the description."
   (let ((links
          (delete-dups
-          (org-element-map (org-brain-entry-data entry) 'link
-            (lambda (link)
-              (unless (member (org-element-property :type link)
-                              org-brain-ignored-resource-links)
-                (cons (org-element-property :raw-link link)
-                      (when-let ((desc (car (org-element-contents link))))
-                        (replace-regexp-in-string "[ \t\n\r]+" " " desc)))))
-            nil nil t))))
+          (with-temp-buffer
+            (insert-file-contents (org-brain-entry-path entry))
+            (org-element-map (org-brain-entry-data entry) 'link
+              (lambda (link)
+                (unless (member (org-element-property :type link)
+                                org-brain-ignored-resource-links)
+                  (cons (org-element-property :raw-link link)
+                        (when-let ((beg (org-element-property :contents-begin link))
+                                   (end (org-element-property :contents-end link)))
+                          (replace-regexp-in-string
+                           "[ \t\n\r]+" " " (buffer-substring beg end))))))
+              nil nil t)))))
     (if (org-brain-filep entry)
         links
       ;; Headline entry
