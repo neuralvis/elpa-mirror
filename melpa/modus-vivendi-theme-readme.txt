@@ -97,6 +97,7 @@ notify me of any missing package or change you would like to see.
     ebdb
     ediff
     eglot
+    el-search
     eldoc-box
     elfeed
     elfeed-score

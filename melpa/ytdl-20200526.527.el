@@ -6,7 +6,7 @@
 ;; Maintainer: Arnaud Hoffmann <tuedachu@gmail.com>
 ;; URL: https://gitlab.com/tuedachu/ytdl
 ;; Package-Version: 20200526.527
-;; Package-Commit: 18b28aedc83f2c42848ce929f732d71ad03d1c36
+;; Package-Commit: 194a2149674b805f3a8f78893cad6fc2efe75ae5
 ;; Version: 1.2.2
 ;; Package-Requires: ((emacs "24.3") (async "1.9.4"))
 ;; Keywords: comm, emulations, multimedia

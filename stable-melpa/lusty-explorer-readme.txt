@@ -20,10 +20,6 @@ previous column).  Pressing TAB or RET will select the highlighted match
 To create a new buffer with the given name, press C-x e.  To open dired at
 the current viewed directory, press C-x d.
 
-Note: lusty-explorer.el benefits greatly from byte-compilation.  (If you
-installed this package via an automatic system like `package-install', which
-is likely, then it's probably already been compiled.)
-
 Customization:
  --------------
 
