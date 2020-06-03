@@ -4,10 +4,10 @@
 
 ;; Author:  Hiroki YAMAKAWA <s06139@gmail.com>
 ;; URL: https://github.com/HKey/org-taskforecast
-;; Package-Version: 20200602.914
-;; Package-Commit: 70c1d033f835ee4ceb93ff37f647ab898f1dadee
+;; Package-Version: 20200603.616
+;; Package-Commit: 690352ecb50b7c6d768f65812c8f6e7de3defbe1
 ;; Keywords: convenience
-;; Version: 0.1.0
+;; Version: 0.2.0
 ;; Package-Requires: ((emacs "26.1") (dash "2.16.0") (dash-functional "2.16.0") (s "1.12.0") (org-ql "0.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -2056,6 +2056,16 @@ to nil."
   :group 'org-taskforecast
   :package-version '(org-taskforecast . "0.1.0"))
 
+(defcustom org-taskforecast-search-files #'org-agenda-files
+  "Files to be searched by `org-taskforecast-register-tasks-for-today'.
+The value is a list of files (string) or a function which has no parameter.
+If the value is a function, its result must be a list of files (string)."
+  :type '(choice
+          (repeat file)
+          (function :tag "Function which returns a list of file names"))
+  :group 'org-taskforecast
+  :package-version '(org-taskforecast . "0.2.0"))
+
 (defun org-taskforecast--ask-generat-sections (file sections date day-start)
   "Ask whether generate section headings to FILE if there is no ones.
 If the answer is yes, this function generates section headings by
@@ -2115,6 +2125,12 @@ When the task is already registered, this command does nothing.
               day-start)))
     (user-error "Heading is not a task")))
 
+(defun org-taskforecast--search-files ()
+  "Files to be searched by `org-taskforecast-register-tasks-for-today'."
+  (if (functionp org-taskforecast-search-files)
+      (funcall org-taskforecast-search-files)
+    org-taskforecast-search-files))
+
 ;;;###autoload
 (defun org-taskforecast-register-tasks-for-today (file date day-start &optional sections sorting-storategy)
   "Register tasks for today or before as tasks for today from agenda files.
@@ -2143,7 +2159,7 @@ If not, do nothing.
                           (+ day-start 2400)
                           date))
          ((hh mm) (org-taskforecast--split-hhmm day-start)))
-    (org-ql-select (org-agenda-files)
+    (org-ql-select (org-taskforecast--search-files)
       '(and (todo) (ts-a))
       :action
       (lambda ()
@@ -2722,25 +2738,34 @@ NOW is an encoded time."
     (with-current-buffer buffer
       (org-taskforecast--save-window-start buffer
         (let ((inhibit-read-only t)
-              (current-entry (org-taskforecast--list-get-entry-at-point)))
+              (current-entry (org-taskforecast--list-get-entry-at-point))
+              (eobp (eobp)))
           (erase-buffer)
           (org-taskforecast--insert-task-list
            (org-taskforecast--date-of-time now org-taskforecast-day-start)
            org-taskforecast-day-start
            now)
           ;; Restore the line position of the cursor
-          (goto-char (point-min))
-          (-some--> current-entry
-            (save-excursion
-              (cl-loop until (eobp)
-                       for entry = (org-taskforecast--list-get-entry-at-point)
-                       if (and entry
-                               (string=
-                                (org-taskforecast-entry-id it)
-                                (org-taskforecast-entry-id entry)))
-                       return (point)
-                       else do (forward-line)))
-            (goto-char it)))))))
+          (cond (current-entry
+                 (goto-char (point-min))
+                 (-some--> current-entry
+                   (save-excursion
+                     (cl-loop until (eobp)
+                              for entry =
+                              (org-taskforecast--list-get-entry-at-point)
+                              if (and entry
+                                      (string=
+                                       (org-taskforecast-entry-id it)
+                                       (org-taskforecast-entry-id entry)))
+                              return (point)
+                              else do (forward-line)))
+                   (goto-char it)))
+                ;; When the cursor is at the end of buffer, it cannot get
+                ;; the current entry because the last line is empty line.
+                ;; So to restore the position of cursor, move the cursor
+                ;; to the end of buffer directly.
+                (eobp
+                 (goto-char (point-max)))))))))
 
 (defun org-taskforecast-list-refresh (clear-cache now)
   "Refresh `org-taskforecast-list-mode' buffer.

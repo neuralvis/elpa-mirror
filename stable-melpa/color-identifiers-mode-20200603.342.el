@@ -1,11 +1,11 @@
-;;; color-identifiers-mode.el --- Color identifiers based on their names
+;;; color-identifiers-mode.el --- Color identifiers based on their names -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2014 Ankur Dave
 
 ;; Author: Ankur Dave <ankurdave@gmail.com>
 ;; Url: https://github.com/ankurdave/color-identifiers-mode
-;; Package-Version: 20200527.1928
-;; Package-Commit: f0d8813dd1e3e34d2e7cbb0072fba123392b2449
+;; Package-Version: 20200603.342
+;; Package-Commit: 75a837548b58d0ade286f32559e3d49bae844d6d
 ;; Created: 24 Jan 2014
 ;; Version: 1.1
 ;; Keywords: faces, languages
@@ -311,7 +311,7 @@ arguments, loops (for .. in), or for comprehensions."
                                 (-filter (lambda (token) (and (listp token) (eq (car token) '\,))) rest)))
                          (args-filtered (cons first-arg rest-args))
                          (params (-map (lambda (token)
-                                         (car (split-string (symbol-name token) "=")))
+                                         (car (split-string (symbol-name token) "[=:]")))
                                        args-filtered)))
                     (setq result (append params result)))))
             (wrong-type-argument nil))))
@@ -349,7 +349,7 @@ For Emacs Lisp support within color-identifiers-mode."
      (append (when (listp (car rest))
                (mapcar (lambda (var) (if (symbolp var) var (car var))) (car rest)))
              (color-identifiers:elisp-declarations-in-sexp rest)))
-    ((or `(defun ,- ,args . ,rest) `(lambda ,args . ,rest))
+    ((or `(defun ,_ ,args . ,rest) `(lambda ,args . ,rest))
      (append (when (listp args) args)
              (color-identifiers:elisp-declarations-in-sexp rest)))
     (`nil nil)
@@ -366,8 +366,7 @@ For Emacs Lisp support within color-identifiers-mode."
          (let ((ids (color-identifiers:elisp-declarations-in-sexp cons)))
            (when ids
              (setq result (append ids result)))))
-       result))
-    (other-object nil)))
+       result))))
 
 (defun color-identifiers:elisp-get-declarations ()
   "Extract a list of identifiers declared in the current buffer.
@@ -449,9 +448,9 @@ For Clojure support within color-identifiers-mode. "
        (append params (color-identifiers:clojure-declarations-in-sexp rest))))
     ;; (defn name doc-string? attr-map? [binding-form*] body)
     ;; (defn name doc-string? attr-map? ([binding-form*] body)+)
-    ((or `(defn ,- . ,rest)
-         `(defn- ,- . ,rest)
-         `(defmacro ,- . ,rest))
+    ((or `(defn ,_ . ,rest)
+         `(defn- ,_ . ,rest)
+         `(defmacro ,_ . ,rest))
      (let ((params (-mapcat (lambda (params+body)
                               (when (color-identifiers:clojure-contains-binding-forms-p params+body)
                                 (color-identifiers:clojure-extract-params params+body)))
@@ -473,8 +472,7 @@ For Clojure support within color-identifiers-mode. "
              (setq result (append ids result)))))
        result))
     ((pred arrayp)
-     (apply 'append (mapcar 'color-identifiers:clojure-declarations-in-sexp sexp)))
-    (other-object nil)))
+     (apply 'append (mapcar 'color-identifiers:clojure-declarations-in-sexp sexp)))))
 
 (defun color-identifiers:clojure-get-declarations ()
   "Extract a list of identifiers declared in the current buffer.
@@ -545,8 +543,7 @@ the left parenthesis, after `function' keyword."
                   (forward-sexp)
                   (point)))
            (str (color-identifiers:remove-string-or-comment
-                 (buffer-substring (1+ lend) (1- rend))))
-           (result))
+                 (buffer-substring (1+ lend) (1- rend)))))
       (mapcar (lambda (s) (replace-regexp-in-string "\\s *=.*" "" s))
               (split-string str "," t " "))))
 
@@ -565,7 +562,7 @@ For Emacs Lisp support within color-identifiers-mode."
                                    result))
             (let ((var-name (match-string-no-properties 1)))
               (unless (string= var-name "")
-                (add-to-list 'result var-name)))))))
+                (cl-pushnew var-name result)))))))
     (delete-dups result)
     result))
 
@@ -608,12 +605,12 @@ Colors are output to `color-identifiers:colors'."
     ;; converted to LAB
     (dotimes (h n)
       (dotimes (s n)
-        (add-to-list
-         'candidates
+        (cl-pushnew
          (apply 'color-srgb-to-lab
                 (color-hsl-to-rgb (/ h n-1)
                                   (+ min-saturation (* (/ s n-1) saturation-range))
-                                  luminance)))))
+                                  luminance))
+         candidates)))
     (let ((choose-candidate (lambda (candidate)
                               (delq candidate candidates)
                               (push candidate chosens))))
@@ -636,18 +633,16 @@ Colors are output to `color-identifiers:colors'."
                       (apply 'color-rgb-to-hex rgb)))
                   chosens)))))
 
-(defvar color-identifiers:color-index-for-identifier nil
+(defvar-local color-identifiers:color-index-for-identifier nil
   "Alist of identifier-index pairs for internal use.
 The index refers to `color-identifiers:colors'. Only used when
 `color-identifiers-coloring-method' is `sequential'.")
-(make-variable-buffer-local 'color-identifiers:color-index-for-identifier)
 
-(defvar color-identifiers:identifiers nil
+(defvar-local color-identifiers:identifiers nil
   "Set of identifiers in the current buffer.
 Only used when `color-identifiers-coloring-method' is `hash' and
 a declaration scan function is registered for the current major
 mode. This variable memoizes the result of the declaration scan function.")
-(make-variable-buffer-local 'color-identifiers:identifiers)
 
 (defun color-identifiers:attribute-luminance (attribute)
   "Find the HSL luminance of the specified ATTRIBUTE on the default face."
