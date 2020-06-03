@@ -1,2 +1,0 @@
-
-(lsp-dart . [(20200530 2002) ((emacs (25 2)) (lsp-treemacs (0 1)) (lsp-mode (6 0)) (dap-mode (0 4)) (ht (2 0)) (f (0 20 0)) (dash (2 14 1)) (pkg-info (0 4)) (dart-mode (1 0 5))) "Dart support lsp-mode" tar ((:commit . "86291c20f1e0b3a267ddc6a99a7f37e18e7bee19") (:keywords "languages" "extensions") (:url . "https://emacs-lsp.github.io/lsp-dart"))])

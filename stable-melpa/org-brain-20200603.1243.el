@@ -5,11 +5,11 @@
 
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
-;; Package-Version: 20200602.1438
-;; Package-Commit: c9c6995854a59b0ddfdf8243860a4c5c821ad022
+;; Package-Version: 20200603.1243
+;; Package-Commit: 49e5231ea1c64b4cced041a6d5d63e5871965018
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2"))
-;; Version: 0.93
+;; Version: 0.94
 
 ;;; Commentary:
 
@@ -2409,7 +2409,8 @@ Unless WANDER is t, `org-brain-stop-wandering' will be run."
         (run-hooks 'org-brain-after-visualize-hook))
       (unless (eq major-mode 'org-brain-visualize-mode)
         (org-brain-visualize-mode))
-      (goto-char entry-pos))
+      (goto-char entry-pos)
+      (set-buffer-modified-p nil))
     (unless nofocus
       (when org-brain--visualize-follow
         (org-brain-goto-current)
@@ -3027,7 +3028,9 @@ Helper function for `org-brain-visualize'."
   (if-let ((text (org-brain-text entry)))
       (progn
         (setq text (string-trim text))
-        (if (or (> (length text) 0) org-brain-show-full-entry)
+        (if (or (boundp org-brain-polymode)
+                org-brain-show-full-entry
+                (> (length text) 0))
             (progn
               (insert "\n\n")
               (setq org-brain--vis-entry-text-marker (point-marker))
@@ -3180,6 +3183,49 @@ Return the position of ENTRY in the buffer."
   'org-brain-visualize-add-grandparent 'org-brain-show-ancestor-level "0.5")
 (define-obsolete-function-alias
   'org-brain-visualize-remove-grandparent 'org-brain-hide-ancestor-level "0.5")
+
+;;;;; Polymode
+
+;; This code has been adapted from Dustin Lacewell's project polybrain
+;; Have a look at: https://github.com/dustinlacewell/polybrain.el/
+
+(with-eval-after-load "polymode"
+  (define-hostmode org-brain-poly-hostmode
+    :mode 'org-brain-visualize-mode)
+
+  (define-innermode org-brain-poly-innermode
+    :mode 'org-mode
+    :head-matcher "^[─-]\\{3\\} Entry [─-]+\n"
+    :tail-matcher "\\'"
+    :head-mode 'host
+    :tail-mode 'host)
+
+  (define-polymode org-brain-polymode
+    :hostmode 'org-brain-poly-hostmode
+    :innermodes '(org-brain-poly-innermode)
+    (setq-local polymode-move-these-vars-from-old-buffer
+                (delq 'buffer-read-only polymode-move-these-vars-from-old-buffer)))
+
+  (defun org-brain-polymode-save ()
+    "Save entry text to the entry's file."
+    (interactive)
+    (when (buffer-modified-p)
+      (let ((text (save-excursion
+                    (goto-char org-brain--vis-entry-text-marker)
+                    (end-of-line)
+                    (buffer-substring (point) (point-max)))))
+        (find-file (org-brain-entry-path org-brain--vis-entry))
+        (seq-let (entry-min entry-max) (org-brain-text-positions org-brain--vis-entry)
+          (goto-char entry-min)
+          (delete-region entry-min entry-max)
+          (insert text)
+          (unless (looking-at-p "\n")
+            (insert "\n\n"))
+          (save-buffer)
+          (switch-to-buffer (other-buffer (current-buffer) 1))
+          (set-buffer-modified-p nil)))))
+
+  (define-key org-brain-polymode-map "\C-x\C-s" 'org-brain-polymode-save))
 
 ;;;; Brain link
 
