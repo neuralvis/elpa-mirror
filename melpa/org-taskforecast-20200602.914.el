@@ -5,7 +5,7 @@
 ;; Author:  Hiroki YAMAKAWA <s06139@gmail.com>
 ;; URL: https://github.com/HKey/org-taskforecast
 ;; Package-Version: 20200602.914
-;; Package-Commit: 1dc75f26c27f752a00731e843c784ab4d10b7b56
+;; Package-Commit: 70c1d033f835ee4ceb93ff37f647ab898f1dadee
 ;; Keywords: convenience
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "26.1") (dash "2.16.0") (dash-functional "2.16.0") (s "1.12.0") (org-ql "0.4"))
