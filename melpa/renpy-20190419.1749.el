@@ -13,7 +13,7 @@
 ;; Created: Nov 2003
 ;; Version: 0.3
 ;; Package-Version: 20190419.1749
-;; Package-Commit: 943e1af71d23128ff100d41d178ccffe28f97944
+;; Package-Commit: bb85d1f1751ba54fd2785a4ddf4b2acbadfa2647
 ;; Homepage: https://github.com/billywade/renpy-mode
 ;; Keywords: languages
 
