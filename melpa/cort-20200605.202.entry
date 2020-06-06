@@ -1,2 +1,0 @@
-
-(cort . [(20200605 202) ((emacs (24 4)) (ansi (0 4))) "Simplify extended unit test framework" single ((:commit . "a40f4182937d2c1d013c6eeb58302a05acce1bbf") (:keywords "test" "lisp") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/cort.el"))])

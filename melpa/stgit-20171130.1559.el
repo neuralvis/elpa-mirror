@@ -6,7 +6,7 @@
 ;; Homepage: http://www.procode.org/stgit
 ;; Version: 0.17.1
 ;; Package-Version: 20171130.1559
-;; Package-Commit: fb180610de78c68736c963236afb28ee3ac952b4
+;; Package-Commit: 3b7a9893b304a96e82a05face5a562f6806db9b9
 ;;
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
