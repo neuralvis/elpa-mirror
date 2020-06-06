@@ -1,0 +1,2 @@
+
+(stgit . [(20200606 1308) nil "major mode for StGit interaction" single ((:commit . "fbeff5d75877258bbd3beba81a124a2ebefb0d30") (:authors ("David Kågedal" . "davidk@lysator.liu.se")) (:maintainer "David Kågedal" . "davidk@lysator.liu.se") (:url . "http://stacked-git.github.io"))])

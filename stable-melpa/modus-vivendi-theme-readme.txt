@@ -185,6 +185,7 @@ notify me of any missing package or change you would like to see.
     markup-faces (`adoc-mode')
     mentor
     messages
+    minibuffer-line
     minimap
     modeline
     mood-line
