@@ -1,2 +1,0 @@
-
-(journalctl-mode . [(20200601 1956) ((emacs (24 1))) "Sample major mode for  viewing output journalctl" single ((:commit . "72885eb14eda2f497908381089e4415cb75d6584") (:keywords "unix") (:authors ("Sebastian Meisel" . "sebastian.meisel@gmail.com")) (:maintainer "Sebastian Meisel" . "sebastian.meisel@gmail.com") (:url . "https://github.com/SebastianMeisel/journalctl-mode"))])
