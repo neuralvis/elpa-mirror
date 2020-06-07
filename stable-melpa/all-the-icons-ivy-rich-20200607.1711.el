@@ -5,8 +5,8 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/all-the-icons-ivy-rich
 ;; Version: 1.3.0
-;; Package-Version: 20200324.550
-;; Package-Commit: a9a4389c1930a5a071857b4d450eaecb21f4d6b9
+;; Package-Version: 20200607.1711
+;; Package-Commit: ba92652a59320aa0a287c9c5f9a834fbd3593c6c
 ;; Package-Requires: ((emacs "24.5") (ivy-rich "0.1.0") (all-the-icons "2.2.0"))
 ;; Keywords: convenience, icons, ivy
 
@@ -56,6 +56,18 @@
   :group 'all-the-icons
   :group 'ivy-rich
   :link '(url-link :tag "Homepage" "https://github.com/seagle0128/all-the-icons-ivy-rich"))
+
+(defface all-the-icons-ivy-rich-icon-face
+  '((t (:inherit default)))
+  "Face used for the icons while `all-the-icons-ivy-rich-color-icon' is nil."
+  :group 'all-the-icons-ivy-rich)
+
+(defcustom all-the-icons-ivy-rich-color-icon t
+  "Whether display the colorful icons.
+
+It respects `all-the-icons-color-icons'."
+  :group 'all-the-icons-ivy-rich
+  :type 'boolean)
 
 (defcustom all-the-icons-ivy-rich-icon-size 1.0
   "The default icon size in ivy."
@@ -312,9 +324,15 @@ See `ivy-rich-display-transformers-list' for details."
   "Format ICON'."
   (when icon
     (format " %s"
-            (propertize icon
-                        'face `(:inherit ,(get-text-property 0 'face icon)
-                                :height ,all-the-icons-ivy-rich-icon-size)))))
+            (let* ((props (get-text-property 0 'face icon))
+                   (family (plist-get props :family))
+                   (face (if all-the-icons-ivy-rich-color-icon
+                             (plist-get props :inherit)
+                           'all-the-icons-ivy-rich-icon-face))
+                   (new-face `(:inherit ,face
+                               :family ,family
+                               :height ,all-the-icons-ivy-rich-icon-size)))
+              (propertize icon 'face new-face)))))
 
 (defun all-the-icons-ivy-rich-bookmark-name (candidate)
   "Return bookmark name from CANDIDATE."
