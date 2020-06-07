@@ -12,8 +12,8 @@
 ;; Maintainer: Dave Love <fx@gnu.org>; Quildreen Motta <https://github.com/robotlolita>; Billy Wade <https://github.com/billywade>
 ;; Created: Nov 2003
 ;; Version: 0.3
-;; Package-Version: 20190419.1749
-;; Package-Commit: ed9456e5ae8524eef8b80e6d0642db3b427beabb
+;; Package-Version: 20200607.135
+;; Package-Commit: f2f95a72a8c842f229f80999132e8ea8ee73f6fc
 ;; Homepage: https://github.com/billywade/renpy-mode
 ;; Keywords: languages
 
