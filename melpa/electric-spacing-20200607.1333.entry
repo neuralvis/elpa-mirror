@@ -1,0 +1,2 @@
+
+(electric-spacing . [(20200607 1333) nil "Insert operators with surrounding spaces smartly" tar ((:commit . "6a56516da2c46aa6693514b43d8ce33408a5bc9c") (:authors ("William Xu" . "william.xwl@gmail.com")) (:maintainer "William Xu" . "william.xwl@gmail.com"))])
