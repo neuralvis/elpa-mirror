@@ -1,0 +1,2 @@
+
+(zimports . [(20200606 1700) ((emacs (26 1)) (projectile (2 1 0))) "Reformat python imports with zimports" single ((:commit . "354029c72044c57bddaca54b75a21ce062f5e105") (:url . "https://github.com/schmir/zimports.el"))])
