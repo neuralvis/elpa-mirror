@@ -4,10 +4,10 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: processes, tools
-;; Package-Commit: 21f357c5527092b3e12ba5354bd2b507a446cd1b
+;; Package-Commit: 22bbfb7f6f9e7c4b5173f945bc368f4a702fafed
 ;; Homepage: https://github.com/purcell/envrc
 ;; Package-Requires: ((seq "2") (emacs "24.4"))
-;; Package-Version: 20200603.717
+;; Package-Version: 20200610.2211
 ;; Package-X-Original-Version: 0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,12 @@
 ;; interaction with this functionality, see `envrc-mode-map', and the
 ;; commands `envrc-reload', `envrc-allow' and `envrc-deny'.
 
+;; In particular, you can enable keybindings for the above commands by
+;; binding your preferred prefix to `envrc-command-map' in
+;; `envrc-mode-map', e.g.
+
+;;    (with-eval-after-load 'envrc
+;;      (define-key envrc-mode-map (kbd "C-c $") 'envrc-command-map))
 
 ;;; Code:
 
@@ -76,14 +82,22 @@ You can set this to nil to disable the lighter."
 
 (put 'envrc--lighter 'risky-local-variable t)
 
-(defcustom envrc-mode-map
+(defcustom envrc-command-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c C-e a") 'envrc-allow)
-    (define-key map (kbd "C-c C-e d") 'envrc-deny)
-    (define-key map (kbd "C-c C-e r") 'envrc-reload)
-    (define-key map (kbd "C-c C-e C-e") 'envrc-reload)
+    (define-key map (kbd "a") 'envrc-allow)
+    (define-key map (kbd "d") 'envrc-deny)
+    (define-key map (kbd "r") 'envrc-reload)
+    (define-key map (kbd "C-e") 'envrc-reload)
     map)
-  "Keymap for `envrc-mode'."
+  "Keymap for commands in `envrc-mode'.
+See `envrc-mode-map' for how to assign a prefix binding to these."
+  :type 'keymap)
+(fset 'envrc-command-map envrc-command-map)
+
+(defcustom envrc-mode-map (make-sparse-keymap)
+  "Keymap for `envrc-mode'.
+To access `envrc-command-map' from this map, give it a prefix keybinding,
+e.g. (define-key envrc-mode-map (kbd \"C-c $\") 'envrc-command-map)"
   :type 'keymap)
 
 ;;;###autoload
@@ -139,7 +153,9 @@ One of '(none on error).")
 This is based on a file scan.  In most cases we prefer to use the
 cached list of known dirs.
 
-Regardless of buffer file name, we always use `default-directory': the two should always match, unless the user called `cd'"
+Regardless of buffer file name, we always use
+`default-directory': the two should always match, unless the user
+called `cd'"
   (let ((env-dir (locate-dominating-file default-directory ".envrc")))
     (when env-dir
       ;; `locate-dominating-file' appears to sometimes return abbreviated paths, e.g. with ~
