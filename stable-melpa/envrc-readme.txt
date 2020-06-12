@@ -15,4 +15,4 @@ binding your preferred prefix to `envrc-command-map' in
 `envrc-mode-map', e.g.
 
    (with-eval-after-load 'envrc
-     (define-key envrc-mode-map (kbd "C-c $") 'envrc-command-map))
+     (define-key envrc-mode-map (kbd "C-c e") 'envrc-command-map))
