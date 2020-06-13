@@ -1,0 +1,2 @@
+
+(all-the-icons-ibuffer . [(20200612 1642) ((emacs (24 4)) (all-the-icons (2 2 0))) "Display icons for all buffers in ibuffer" single ((:commit . "c210e59929f7322ef6111062c3e413034505d8d1") (:keywords "convenience" "icons" "ibuffer") (:authors ("Vincent Zhang" . "seagle0128@gmail.com")) (:maintainer "Vincent Zhang" . "seagle0128@gmail.com") (:url . "https://github.com/seagle0128/all-the-icons-ibuffer"))])
