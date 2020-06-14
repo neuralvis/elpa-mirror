@@ -1,0 +1,2 @@
+
+(ytel . [(20200613 1236) ((emacs (25 3))) "Query YouTube via Invidious" single ((:commit . "4b1b2e7921f8b3b08bc7f8d85afc967bef0dd79a") (:keywords "youtube" "matching" "multimedia") (:authors ("Gabriele Rastello")) (:maintainer "Gabriele Rastello") (:url . "https://github.com/grastello/ytel"))])

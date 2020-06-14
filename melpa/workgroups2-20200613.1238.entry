@@ -1,0 +1,2 @@
+
+(workgroups2 . [(20200613 1238) ((emacs (25 1)) (dash (2 8 0))) "New workspaces for Emacs" single ((:commit . "80a602e9ccf2b83aab1bda24d84250af048d3d90") (:keywords "session" "management" "window-configuration" "persistence") (:authors ("Sergey Pashinin <sergey at pashinin dot com>")) (:maintainer "Sergey Pashinin <sergey at pashinin dot com>") (:url . "https://github.com/pashinin/workgroups2"))])

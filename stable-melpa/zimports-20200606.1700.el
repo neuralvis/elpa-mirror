@@ -2,7 +2,7 @@
 
 ;; URL: https://github.com/schmir/zimports.el
 ;; Package-Version: 20200606.1700
-;; Package-Commit: 354029c72044c57bddaca54b75a21ce062f5e105
+;; Package-Commit: a96e9b993c9aaccf1fd07c8fddfc247c4e07618c
 ;; Version: 0
 ;; Package-Requires: ((emacs "26.1") (projectile "2.1.0"))
 

@@ -8,6 +8,7 @@ Usage:
 
   `counsel-etags-find-tag-at-point' to navigate.  This command will also
   run `counsel-etags-scan-code' AUTOMATICALLY if tags file is not built yet.
+  It also calls `counsel-etags-fallback-grep-function' if not tag is found.
 
   Run `counsel-etags-list-tag-in-current-file' to list tags in current file.
 
