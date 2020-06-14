@@ -4,8 +4,8 @@
 
 ;; Author: Love Lagerkvist
 ;; URL: https://github.com/motform/arduino-cli-mode
-;; Package-Version: 20200608.503
-;; Package-Commit: 12be4ca4c718f16fefdd4bec194a7c6c0c0de593
+;; Package-Version: 20200614.732
+;; Package-Commit: 4d408bd52ed47412166e63880a5ddad2a2dfd1fd
 ;; Version: 200697
 ;; Package-Requires: ((emacs "25.1"))
 ;; Created: 2019-11-16
@@ -113,7 +113,7 @@
 (defun arduino-cli--verbosity ()
   "Get the current verbosity level."
   (pcase arduino-cli-verbosity
-    ('quitet  " --quiet")
+    ('quiet  " --quiet")
     ('verbose " --verbose")))
 
 (defun arduino-cli--warnings ()
@@ -149,12 +149,12 @@
   "Run arduino-cli CMD in PATH (if provided) and print as message."
   (let* ((default-directory (if path (car path) default-directory))
          (cmd (concat "arduino-cli " cmd))
-         (cmd* (arduino-cli--add-flags 'mesesage cmd))
+         (cmd* (arduino-cli--add-flags 'message cmd))
          (out (shell-command-to-string cmd*)))
     (message out)))
 
 (defun arduino-cli--arduino? (usb-device)
-  "Return USB-DEVICE it is an Arduino, nil otherwise."
+  "Return USB-DEVICE if it is an Arduino, nil otherwise."
   (assoc 'boards usb-device))
 
 (defun arduino-cli--selected-board? (board selected-board)
