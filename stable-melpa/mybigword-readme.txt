@@ -21,3 +21,13 @@ Usage,
 
   Run `mybigword-show-big-words-from-file'
   Run `mybigword-show-big-words-from-current-buffer'
+
+
+Customize `mybigword-excluded-words' or `mybigword-personal-excluded-words' to
+exclude words.
+
+Customize `mybigword-default-format-function' to format the word for display.
+If it's `mybigword-format-with-dictionary', the `dictionary-definition' is used to
+find the definitions of all big words.
+
+Customize `mybigword-hide-word-function' to hide word for display

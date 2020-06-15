@@ -1,2 +1,2 @@
 
-(python-mode . [(20200608 737) nil "Python major mode" tar ((:commit . "1c269f4f0ee65f6400e958d7812fe09c60d944a2"))])
+(python-mode . [(20200608 737) nil "Python major mode" tar ((:commit . "6658e5d768db0c0d8dbc6fdedff3a85b65327061"))])

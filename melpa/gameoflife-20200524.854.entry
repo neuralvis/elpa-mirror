@@ -1,2 +1,0 @@
-
-(gameoflife . [(20200524 854) nil "Screensaver running Conway's Game of Life" single ((:commit . "33fdfea6c4a73a4131eb087a0ccce4876814c76c") (:keywords "games") (:authors ("Anders Lindgren")) (:maintainer "Anders Lindgren") (:url . "https://github.com/Lindydancer/gameoflife"))])

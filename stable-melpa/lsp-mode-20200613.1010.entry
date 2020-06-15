@@ -1,2 +1,0 @@
-
-(lsp-mode . [(20200613 1010) ((emacs (25 1)) (dash (2 14 1)) (dash-functional (2 14 1)) (f (0 20 0)) (ht (2 0)) (spinner (1 7 3)) (markdown-mode (2 3)) (lv (0))) "LSP mode" tar ((:commit . "c74eb1e63f7647de3ebb4015233020455d087340") (:keywords "languages") (:authors ("Vibhav Pant, Fangrui Song, Ivan Yonchovski")) (:maintainer "Vibhav Pant, Fangrui Song, Ivan Yonchovski") (:url . "https://github.com/emacs-lsp/lsp-mode"))])

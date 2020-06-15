@@ -1,2 +1,2 @@
 
-(git-commit . [(20200608 928) ((emacs (25 1)) (dash (20200524)) (transient (20200601)) (with-editor (20200522))) "Edit Git commit messages" single ((:commit . "a1f8faaaebc5860e2f290cbcea76e4c114342a74") (:keywords "git" "tools" "vc") (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/magit"))])
+(git-commit . [(20200608 928) ((emacs (25 1)) (dash (20200524)) (transient (20200601)) (with-editor (20200522))) "Edit Git commit messages" single ((:commit . "8b45756390e43bfc3247dd85bf5f7738516e569a") (:keywords "git" "tools" "vc") (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/magit"))])
