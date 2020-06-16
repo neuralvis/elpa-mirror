@@ -1,0 +1,2 @@
+
+(rust-mode . [(20200615 2149) ((emacs (25 1))) "A major emacs mode for editing Rust source code" single ((:commit . "ef152ad23cc66cdf9ca885b4d47fece69f3edbf1") (:keywords "languages") (:authors ("Mozilla")) (:maintainer "Mozilla") (:url . "https://github.com/rust-lang/rust-mode"))])
