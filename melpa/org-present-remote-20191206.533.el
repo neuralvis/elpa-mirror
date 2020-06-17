@@ -6,7 +6,7 @@
 ;; Package-Version: 20191206.533
 ;; Package-X-Original-Version: 0.1
 ;; Package-Requires: ((org-present "9") (elnode "0.9") (emacs "25"))
-;; Package-Commit: d66aa2022eea65c83b6e5e5b99a1331284a7ec30
+;; Package-Commit: ba7e07af3bd1142e310e868893b919286758a007
 ;; URL: https://gitlab.com/duncan-bayne/org-present-remote
 ;; Keywords: comm, docs
 

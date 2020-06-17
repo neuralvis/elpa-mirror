@@ -1,0 +1,2 @@
+
+(helm-grepint . [(20200616 1533) ((helm (1 0)) (emacs (24))) "Generic helm interface to grep" single ((:commit . "874f09a240dc03109033c6526151176b94ba3bd5") (:keywords "grep" "grepping" "searching" "helm") (:authors ("Kalle Kankare" . "kalle.kankare@iki.fi")) (:maintainer "Kalle Kankare" . "kalle.kankare@iki.fi") (:url . "https://github.com/kopoli/helm-grepint"))])
