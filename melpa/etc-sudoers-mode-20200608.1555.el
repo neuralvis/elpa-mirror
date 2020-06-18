@@ -18,7 +18,7 @@
 ;; Author: Peter Oliver <git@mavit.org.uk>
 ;; Version: 1.0.0
 ;; Package-Version: 20200608.1555
-;; Package-Commit: 8d3805d8b8e016278204d727f6b97913ea0e5079
+;; Package-Commit: 52d5be9214185cfbba56e0b39bc4af474fc95f45
 ;; Package-Requires: ()
 ;; Keywords: languages
 ;; URL: https://gitlab.com/mavit/etc-sudoers-mode/
