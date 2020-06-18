@@ -6,7 +6,7 @@
 ;; Maintainer: Fred Campos
 ;; Version: 0.0.1
 ;; Package-Version: 20200608.1711
-;; Package-Commit: 5bc740454f7b4c789c1fd89f5fe9f96572706ab7
+;; Package-Commit: a3c0527a5a029a1162734006f9d528b30dcb3263
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; Homepage: http://github.com/fredcamps/lsp-jedi
 ;; Keywords: language-server, tools, python, jedi, ide
