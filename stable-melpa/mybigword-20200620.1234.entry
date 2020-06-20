@@ -1,0 +1,2 @@
+
+(mybigword . [(20200620 1234) ((emacs (25 1))) "Vocabulary builder using Zipf to extract English big words" tar ((:commit . "e244d5d59bc1162ee5bbf5ae00e5d977d4b78e66") (:keywords "convenience") (:authors ("Chen Bin <chenbin DOT sh AT gmail.com>")) (:maintainer "Chen Bin <chenbin DOT sh AT gmail.com>") (:url . "https://github.com/redguardtoo/mybigword"))])

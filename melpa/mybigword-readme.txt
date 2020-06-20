@@ -26,8 +26,30 @@ Usage,
 Customize `mybigword-excluded-words' or `mybigword-personal-excluded-words' to
 exclude words.
 
-Customize `mybigword-default-format-function' to format the word for display.
-If it's `mybigword-format-with-dictionary', the `dictionary-definition' is used to
-find the definitions of all big words.
+Tips,
 
-Customize `mybigword-hide-word-function' to hide word for display
+  1. Customize `mybigword-default-format-function' to format the word for display.
+  If it's `mybigword-format-with-dictionary', the `dictionary-definition' is used to
+  find the definitions of all big words.
+
+  Sample to display the dictionary definitions of big words:
+
+    (let* ((mybigword-default-format-function 'mybigword-format-with-dictionary))
+      (mybigword-show-big-words-from-current-buffer))
+
+  2. Parse the *.srt to play the video containing the word in org file
+  Make sure the org tree node has the property =SRT_PATH=.
+
+  Sample of org file:
+   * Star Trek s06e26
+     :PROPERTIES:
+     :SRT_PATH: ~/Star.Trek.DS9-s06e26.Tears.of.the.Prophets.srt
+     :END:
+   telepathic egotist
+
+  Move focus over the word like "egotist". Run "M-x mybigword-play-video-of-word-at-point".
+  mplayer plays the corresponding video at the time the word is spoken.
+
+  Please note `mybigword-play-video-of-word-at-point' can be used in other major modes.
+  See `mybigword-default-video-info-function' for details.
+  Customize `mybigword-hide-word-function' to hide word for display
