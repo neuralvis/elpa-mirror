@@ -1,2 +1,2 @@
 
-(elfeed . [(20200209 1942) ((emacs (24 3))) "an Emacs Atom/RSS feed reader" tar ((:commit . "a2cae98b4f04616c06455b6104d2ca5ff4b86867"))])
+(elfeed . [(20200209 1942) ((emacs (24 3))) "an Emacs Atom/RSS feed reader" tar ((:commit . "b233acf5bceb42589dcf7aa550fce1a4bfaac3f5"))])

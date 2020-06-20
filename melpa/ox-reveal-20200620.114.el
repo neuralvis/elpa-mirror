@@ -5,8 +5,8 @@
 ;; Author: Yujie Wen <yjwen.ty at gmail dot com>
 ;; Created: 2013-04-27
 ;; Version: 1.0
-;; Package-Version: 20200607.1311
-;; Package-Commit: 84039bb499290926511b04749882ecb5eda45a0c
+;; Package-Version: 20200620.114
+;; Package-Commit: 18e57df3ba56563590f47eaa1beb78591779c42a
 ;; Package-Requires: ((org "8.3"))
 ;; Keywords: outlines, hypermedia, slideshow, presentation
 
@@ -685,6 +685,9 @@ custom variable `org-reveal-root'."
          ;; Local files
          (local-root-path (org-reveal--file-url-to-path root-path))
          (local-reveal-js (org-reveal--choose-path local-root-path version "dist/reveal.js" "js/reveal.js"))
+         (reveal-4-plugin (if (eq 4 (org-reveal--get-reveal-js-version info))
+                              (org-reveal-plugin-scripts-4 info)
+                            (cons "" "")))
          (in-single-file (plist-get info :reveal-single-file)))
     (concat
      ;; reveal.js/js/reveal.js
@@ -705,12 +708,14 @@ custom variable `org-reveal-root'."
        (concat
         "<script src=\"" reveal-js "\"></script>\n"))
      ;; plugin headings
+     (if-format "%s\n" (car reveal-4-plugin))
      "
 <script>
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
 "
+     (if-format "%s,\n" (cdr reveal-4-plugin))
  
      (let ((options (plist-get info :reveal-init-options)))
        (and (string< "" options)
@@ -808,7 +813,7 @@ dependencies: [
                                                    (plist-get available-plugins p))
                                                  plugins))))
           (if (not (null plugin-info))
-              (concat
+              (cons
                ;; Plugin initialization script
                (let ((root-path (file-name-as-directory (plist-get info :reveal-root))))
                  (mapconcat
@@ -817,13 +822,13 @@ dependencies: [
                   plugin-info
                   ""))
                ;; Reveal initialization for plugins
-               (format "<script>Reveal.initialize({plugins: [%s]})</script>\n"
+               (format "plugins: [%s]"
                        (mapconcat #'car plugin-info ",")))
             ;; No available plugin info found. Perhaps wrong plugin
             ;; names are given
-            ""))
+            (cons nil nil)))
         ;; No plugins, return empty string
-        "")))
+      (cons nil nil))))
 (defun org-reveal-toc (depth info)
   "Build a slide of table of contents."
   (let ((toc (org-html-toc depth info)))
@@ -1293,9 +1298,6 @@ info is a plist holding export options."
 </div>\n"
    (org-reveal--build-pre/postamble 'postamble info)
    (org-reveal-scripts info)
-   (if (eq 4 (org-reveal--get-reveal-js-version info))
-       (org-reveal-plugin-scripts-4 info)
-     "")
    "</body>
 </html>\n"))
 
