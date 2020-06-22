@@ -1,0 +1,2 @@
+
+(helm-fish-completion . [(20200622 1255) ((emacs (25)) (helm (3)) (fish-completion (1 2))) "Helm interface for fish completion" single ((:commit . "f055dab2f14462ff130841d4ab421f34baab39d5") (:authors ("Pierre Neidhardt" . "mail@ambrevar.xyz")) (:maintainer "Pierre Neidhardt" . "mail@ambrevar.xyz") (:url . "https://github.com/emacs-helm/helm-fish-completion"))])

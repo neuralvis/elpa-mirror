@@ -1,0 +1,2 @@
+
+(flymake-kondor . [(20200617 943) ((emacs (26 1)) (flymake-quickdef (0 1 1))) "Linter with clj-kondo" single ((:commit . "aadb1eaad2fad5529f76098bc1ecd69054c011a6") (:authors ("https://turbocafe.keybase.pub")) (:maintainer "https://turbocafe.keybase.pub") (:url . "https://github.com/turbo-cafe/flymake-kondor"))])
