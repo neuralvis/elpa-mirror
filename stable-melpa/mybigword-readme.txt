@@ -37,6 +37,9 @@ Tips,
     (let* ((mybigword-default-format-function 'mybigword-format-with-dictionary))
       (mybigword-show-big-words-from-current-buffer))
 
+  You can also set `mybigword-default-format-header-function' to add a header before
+  displaying words.
+
   2. Parse the *.srt to play the video containing the word in org file
   Make sure the org tree node has the property =SRT_PATH=.
 
