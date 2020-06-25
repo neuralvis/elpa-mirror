@@ -40,8 +40,12 @@ Tips,
   You can also set `mybigword-default-format-header-function' to add a header before
   displaying words.
 
+  Customize `mybigword-hide-word-function' to hide word for display
+
+
   2. Parse the *.srt to play the video containing the word in org file
-  Make sure the org tree node has the property =SRT_PATH=.
+  Make sure the org tree node has the property SRT_PATH.
+  Mplayer is required to play the video.  See `mybigword-mplayer-program' for details.
 
   Sample of org file:
    * Star Trek s06e26
@@ -50,9 +54,13 @@ Tips,
      :END:
    telepathic egotist
 
-  Move focus over the word like "egotist". Run "M-x mybigword-play-video-of-word-at-point".
-  mplayer plays the corresponding video at the time the word is spoken.
+  Move focus over the word like "egotist".  Run "M-x mybigword-play-video-of-word-at-point".
+  Then mplayer plays the corresponding video at the time the word is spoken.
 
   Please note `mybigword-play-video-of-word-at-point' can be used in other major modes.
   See `mybigword-default-video-info-function' for details.
-  Customize `mybigword-hide-word-function' to hide word for display
+
+
+  3. Use `mybigword-pronounce-word' to pronounce the word at point.
+  The word's audio is downloaded from https://dictionary.cambridge.org
+  The audio download url could be customized in `mybigword-default-audio-url-function'.

@@ -194,6 +194,7 @@ notify me of any missing package or change you would like to see.
     multiple-cursors
     neotree
     no-emoji
+    notmuch
     num3-mode
     nxml-mode
     orderless
