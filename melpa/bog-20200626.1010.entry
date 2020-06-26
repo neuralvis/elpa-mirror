@@ -1,0 +1,2 @@
+
+(bog . [(20200626 1010) ((cl-lib (0 5))) "Extensions for research notes in Org mode" single ((:commit . "6a4f69f959ee96e05ab48fb47aff8a6988b0005c") (:keywords "bib" "outlines") (:authors ("Kyle Meyer" . "kyle@kyleam.com")) (:maintainer "Kyle Meyer" . "kyle@kyleam.com") (:url . "https://github.com/kyleam/bog"))])
