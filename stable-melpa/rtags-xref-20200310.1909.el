@@ -6,7 +6,7 @@
 ;; Maintainer: RTags Team
 ;; URL: https://github.com/Andersbakken/rtags
 ;; Package-Version: 20200310.1909
-;; Package-Commit: 3a125528209b2674dac46ff80698d481870f5dc0
+;; Package-Commit: 49f09682e441d0aba76667580ce67b0cd757fde9
 ;; Version: 0.2
 ;; Package-Requires: ((emacs "25.1") (rtags "2.37"))
 

@@ -3,7 +3,7 @@
 ;; Author: Wouter Bolsterlee <wouter@bolsterl.ee>
 ;; Version: 2.0.0
 ;; Package-Version: 20170425.1209
-;; Package-Commit: 7844079b47f47bb1dc24c885b0ac2e67524fa960
+;; Package-Commit: 540fb5c567eaab1aa2a4d62cab098c3e69b0fd7d
 ;; Package-Requires: ((emacs "24") (evil "1.2.12") (evil-snipe "2.0.3"))
 ;; Keywords: colemak evil
 ;; URL: https://github.com/wbolster/evil-colemak-basics
