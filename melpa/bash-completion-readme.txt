@@ -113,5 +113,5 @@ the environment variable EMACS_BASH_COMPLETE set to t.
 COMPATIBILITY
 
 bash-completion.el is known to work with Bash 3 and 4, on Emacs,
-starting with version 24.1, under Linux and OSX. It does not work
+starting with version 24.3, under Linux and OSX. It does not work
 on XEmacs.

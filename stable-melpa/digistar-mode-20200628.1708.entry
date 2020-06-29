@@ -1,0 +1,2 @@
+
+(digistar-mode . [(20200628 1708) nil "major mode for Digistar scripts" single ((:commit . "ea5829eca1f9a6948f85078f2c5c878d6e9e007d") (:keywords "languages") (:authors ("John Foerch" . "jjfoerch@earthlink.net")) (:maintainer "John Foerch" . "jjfoerch@earthlink.net"))])

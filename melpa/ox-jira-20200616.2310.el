@@ -5,7 +5,7 @@
 ;; Author: Stig Brautaset <stig@brautaset.org>
 ;; Version: 0.1-SNAPSHOT
 ;; Package-Version: 20200616.2310
-;; Package-Commit: 4693c22ec4a7edcbbc989550a638a8e580e1c1ca
+;; Package-Commit: e9a47ef51862f11a5c006cf9e8c5f4ec5517aced
 ;; Keywords: outlines, hypermedia, wp
 ;; Homepage: https://github.com/stig/ox-jira.el
 ;; Package-Requires: ((org "8.3"))
