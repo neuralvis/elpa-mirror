@@ -1,2 +1,0 @@
-
-(ivy-emms . [(20200628 1342) ((ivy (0 13 0)) (emms (0 0)) (emacs (24 4))) "Ivy interface to emms tracks" single ((:commit . "494613399198edb67de897ff95c1fe907519541c") (:keywords "multimedia") (:authors ("Fran Burstall" . "fran.burstall@gmail.com")) (:maintainer "Fran Burstall" . "fran.burstall@gmail.com") (:url . "https://github.com/franburstall/ivy-emms"))])

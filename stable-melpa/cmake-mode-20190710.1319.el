@@ -2,7 +2,7 @@
 
 ;; Package-Requires: ((emacs "24.1"))
 ;; Package-Version: 20190710.1319
-;; Package-Commit: 45542049563f0ee8358ead563a4e4cc7d7270110
+;; Package-Commit: 4b7b8c2885977eacc3ba769f7b3877e514957de3
 
 ; Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 ; file Copyright.txt or https://cmake.org/licensing for details.

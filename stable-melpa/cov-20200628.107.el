@@ -8,7 +8,7 @@
 
 ;; Keywords: coverage gcov c
 ;; Package-Version: 20200628.107
-;; Package-Commit: b501dfa4ddfbe84619d4e0bb30c33975cb792855
+;; Package-Commit: 4ac96844989924d3db0fec0b3edfae174e0b83bd
 ;; Homepage: https://github.com/AdamNiederer/cov
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.4") (f "0.18.2") (s "1.11.0") (elquery))
