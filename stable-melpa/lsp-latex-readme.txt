@@ -32,9 +32,9 @@ Functions
    with prefix argument(C-u).
 Note
   In this package, you can use even texlab v0.4.2 or older, written with Java,
-  though it is not recommended. If you want to use them, you can write like:
+  though it is not recommended.  If you want to use them, you can write like:
 
-  ;; Path to Java executable. If it is added to environmental PATH,
+  ;; Path to Java executable.  If it is added to environmental PATH,
   ;; you don't have to write this.
   (setq lsp-latex-java-executable "/path/to/java")
 

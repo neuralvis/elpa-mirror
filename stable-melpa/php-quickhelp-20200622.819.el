@@ -2,7 +2,7 @@
 ;; Copyright (C) 2020 Vincenzo Pupillo
 ;; Version: 0.3.2
 ;; Package-Version: 20200622.819
-;; Package-Commit: 8d4abf7db0ee0d6308a2beb114a39465c3196af7
+;; Package-Commit: 6635167e32deafd62f003d1f26867f0c67e133c0
 ;; Author: Vincenzo Pupillo
 ;; URL: https://github.com/vpxyz/php-quickhelp
 ;; Package-Requires: ((emacs "25.1"))
