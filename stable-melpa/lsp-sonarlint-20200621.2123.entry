@@ -1,2 +1,0 @@
-
-(lsp-sonarlint . [(20200621 2123) ((emacs (25)) (dash (2 12 0)) (lsp-mode (6 3)) (ht (2 3))) "Emacs Sonarlint lsp client" tar ((:commit . "7606b1e5515e1f0710e36e6dc3dcbca8d83b90a4") (:keywords "languages" "tools" "php" "javascript" "xml" "ruby" "html" "scala" "java" "python") (:authors ("Fermin MF" . "fmfs@posteo.net")) (:maintainer "Fermin MF" . "fmfs@posteo.net") (:url . "https://gitlab.com/sasanidas/lsp-sonarlint"))])

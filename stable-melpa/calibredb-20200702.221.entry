@@ -1,0 +1,2 @@
+
+(calibredb . [(20200702 221) ((emacs (25 1)) (org (9 0)) (transient (0 1 0)) (s (1 12 0)) (dash (2 17 0))) "Yet another calibre client" tar ((:commit . "06f188a4dbb6b4ea89dd4416471fcb8446bcee3b") (:keywords "tools") (:authors ("Damon Chan" . "elecming@gmail.com")) (:maintainer "Damon Chan" . "elecming@gmail.com") (:url . "https://github.com/chenyanming/calibredb.el"))])
