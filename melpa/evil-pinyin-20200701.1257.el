@@ -2,7 +2,7 @@
 
 ;; URL: https://github.com/laishulu/evil-pinyin
 ;; Package-Version: 20200701.1257
-;; Package-Commit: 2f1d9dffbb567d433d396307ed5a29d434c98dee
+;; Package-Commit: 3b6173503ca450b087bf8db0dd86920630a751b5
 ;; Created: June 17th, 2020
 ;; Keywords: extensions
 ;; Package-Requires: ((emacs "25") (names "0.5") (evil "1") (pinyinlib "0.1.1"))
