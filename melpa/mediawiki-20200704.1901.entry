@@ -1,0 +1,2 @@
+
+(mediawiki . [(20200704 1901) nil "mediawiki frontend" single ((:commit . "5dd7de042ebd113511bd0431afce4c1894852239") (:keywords "mediawiki" "wikipedia" "network" "wiki") (:authors ("Mark A. Hershberger" . "mah@everybody.org")) (:maintainer "Mark A. Hershberger" . "mah@everybody.org") (:url . "https://github.com/hexmode/mediawiki-el"))])

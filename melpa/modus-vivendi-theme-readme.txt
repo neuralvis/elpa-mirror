@@ -22,6 +22,7 @@ are disabled by default:
     modus-vivendi-theme-distinct-org-blocks
     modus-vivendi-theme-3d-modeline
     modus-vivendi-theme-subtle-diffs
+    modus-vivendi-theme-faint-syntax
     modus-vivendi-theme-intense-standard-completions
     modus-vivendi-theme-override-colors-alist
 

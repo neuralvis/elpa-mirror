@@ -22,6 +22,7 @@ are disabled by default:
     modus-operandi-theme-distinct-org-blocks
     modus-operandi-theme-3d-modeline
     modus-operandi-theme-subtle-diffs
+    modus-operandi-theme-faint-syntax
     modus-operandi-theme-intense-standard-completions
     modus-operandi-theme-override-colors-alist
 
