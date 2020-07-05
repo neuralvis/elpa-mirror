@@ -19,6 +19,8 @@
 
 ;; Author:	Ivan Andrus <darthandrus at gmail.com>
 ;; URL: https://bitbucket.org/gvol/nanowrimo-mode
+;; Package-Version: 20151105.228
+;; Package-Commit: b1d41458926ccb39cefbb1bb74aefe4f02fd349f
 
 ;;; Commentary:
 
@@ -676,13 +678,6 @@ headaches.  In case of overdose, close eyes and cease thinking."
   (message "%s"
            (nth (random (length nanowrimo-stuck-suggestions))
                 nanowrimo-stuck-suggestions)))
-
-;;}}}
-
-(provide 'nanowrimo)
-
-;;; nanowrimo.el ends here
-     nanowrimo-stuck-suggestions)))
 
 ;;}}}
 
