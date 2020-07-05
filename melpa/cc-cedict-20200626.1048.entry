@@ -1,2 +1,0 @@
-
-(cc-cedict . [(20200626 1048) ((emacs (25))) "Interface to CC-CEDICT (a Chinese-English dictionary)" single ((:commit . "fdd97e8a21efb8551e617e27a94edc930ddaf28b") (:authors ("Xu Chunyang" . "mail@xuchunyang.me")) (:maintainer "Xu Chunyang" . "mail@xuchunyang.me") (:url . "https://github.com/xuchunyang/cc-cedict.el"))])
