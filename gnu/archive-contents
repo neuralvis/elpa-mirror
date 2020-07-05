@@ -1648,6 +1648,14 @@
 	   ("James Clark" . "jjc@clark.com"))
 	  (:keywords "languages")
 	  (:url . "http://elpa.gnu.org/packages/psgml.html"))])
+ (pspp-mode .
+	    [(1 1)
+	     nil "Major mode for editing PSPP files" single
+	     ((:url . "http://elpa.gnu.org/packages/pspp-mode.html")
+	      (:keywords "pspp" "major-mode")
+	      (:authors
+	       ("Scott Andrew Borton" . "scott@pp.htv.fi"))
+	      (:maintainer "John Darrington" . "john@darrington.wattle.id.au"))])
  (python .
 	 [(0 26 1)
 	  ((emacs
