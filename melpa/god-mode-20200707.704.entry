@@ -1,0 +1,2 @@
+
+(god-mode . [(20200707 704) ((emacs (25 1))) "Minor mode for God-like command entering" tar ((:commit . "e42109bf8d07c0fa24e8fb8d789d2a1593bc7338") (:authors ("Chris Done" . "chrisdone@gmail.com")) (:maintainer "Chris Done" . "chrisdone@gmail.com") (:url . "https://github.com/emacsorphanage/god-mode"))])

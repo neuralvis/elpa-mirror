@@ -1,0 +1,2 @@
+
+(evil-pinyin . [(20200707 1817) ((emacs (25)) (names (0 5)) (evil (1))) "Evil search Chinese characters by pinyin" tar ((:commit . "3cc2f7271a1b0946c32305aefca94cff386f7670") (:keywords "extensions") (:url . "https://github.com/laishulu/evil-pinyin"))])
