@@ -5,7 +5,7 @@
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/mrkkrp/fix-input
 ;; Package-Version: 20190713.1349
-;; Package-Commit: d3e17161d137fb75baf1449741ccaadb949e127a
+;; Package-Commit: 7aef6fb29840a2f3c7e3c01eeeb7838a0e702050
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: input method

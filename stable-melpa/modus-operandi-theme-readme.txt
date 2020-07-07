@@ -149,6 +149,7 @@ notify me of any missing package or change you would like to see.
     highlight-indentation
     highlight-numbers
     highlight-symbol
+    highlight-tail
     highlight-thing
     hl-fill-column
     hl-line-mode

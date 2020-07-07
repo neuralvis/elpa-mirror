@@ -5,7 +5,7 @@
 ;; Author: Mark Karpov <markkarpov92@gmail.com>
 ;; URL: https://github.com/mrkkrp/avy-menu
 ;; Package-Version: 20190713.1348
-;; Package-Commit: aee6878a8c2f18c3ac3bd34d608783b52cd708e0
+;; Package-Commit: 970204989bcd4a4f8223c2fe980a08dc58441045
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "24.3") (avy "0.3.0"))
 ;; Keywords: popup, menu
