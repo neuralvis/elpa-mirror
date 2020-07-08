@@ -457,7 +457,7 @@
 		  ("Daiki Ueno" . "ueno@gnu.org"))
 		 (:maintainer nil . "emacs-devel@gnu.org"))])
  (debbugs .
-	  [(0 24)
+	  [(0 25)
 	   ((emacs
 	     (25 1))
 	    (soap-client

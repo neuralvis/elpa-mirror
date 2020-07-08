@@ -2,8 +2,8 @@
 ;; Copyright (C) 2015-2019 jack angers
 ;; Author: jack angers and contributors
 ;; Url: https://github.com/jacktasia/dumb-jump
-;; Package-Version: 20200622.1507
-;; Package-Commit: 05531ade2d0d78aa7e99598d69f29201b8d4614d
+;; Package-Version: 20200707.2011
+;; Package-Commit: ba6a4e6af4ac04b273acb95dea12b9d929cf1b00
 ;; Version: 0.5.3
 ;; Package-Requires: ((emacs "24.3") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
@@ -2908,6 +2908,25 @@ Using ag to search only the files found via git-grep literal symbol search."
 
 ;;; Xref Backend
 (when (featurep 'xref)
+  (dolist (obsolete
+	   '(dumb-jump-mode
+	     dumb-jump-go
+	     dumb-jump-go-prefer-external-other-window
+	     dumb-jump-go-prompt
+	     dumb-jump-quick-look
+	     dumb-jump-go-other-window
+	     dumb-jump-go-current-window
+	     dumb-jump-go-prefer-external
+	     dumb-jump-go-current-window))
+    (make-obsolete
+     obsolete
+     (format "`%s' has been obsoleted by the xref interface."
+	     obsolete)
+     "2020-06-26"))
+  (make-obsolete 'dumb-jump-back
+		 "`dumb-jump-back' has been obsoleted by `xref-pop-marker-stack'."
+		 "2020-06-26")
+
   (cl-defmethod xref-backend-identifier-at-point ((_backend (eql dumb-jump)))
     (let* ((ident (dumb-jump-get-point-symbol))
 	   (start (car (bounds-of-thing-at-point 'symbol)))

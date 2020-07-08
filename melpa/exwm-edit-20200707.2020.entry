@@ -1,0 +1,2 @@
+
+(exwm-edit . [(20200707 2020) ((emacs (25 1))) "Edit mode for EXWM" single ((:commit . "e1291e311840f1049106fe98cec032a1c75efd2b") (:keywords "convenience") (:authors ("Ag Ibragimov")) (:maintainer "Ag Ibragimov") (:url . "https://github.com/agzam/exwm-edit"))])
