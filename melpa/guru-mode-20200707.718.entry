@@ -1,2 +1,0 @@
-
-(guru-mode . [(20200707 718) nil "Become an Emacs guru" single ((:commit . "1f50aa9a392dd8722e240b48cca907062f2614d7") (:keywords "convenience") (:authors ("Bozhidar Batsov")) (:maintainer "Bozhidar Batsov") (:url . "https://github.com/bbatsov/guru-mode"))])

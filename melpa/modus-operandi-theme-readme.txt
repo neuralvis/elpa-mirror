@@ -20,6 +20,7 @@ are disabled by default:
     modus-operandi-theme-scale-headings
     modus-operandi-theme-visible-fringes
     modus-operandi-theme-distinct-org-blocks
+    modus-operandi-theme-rainbow-org-src-blocks
     modus-operandi-theme-3d-modeline
     modus-operandi-theme-subtle-diffs
     modus-operandi-theme-faint-syntax

@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/seagle0128/all-the-icons-ivy-rich
 ;; Version: 1.4.1
 ;; Package-Version: 20200704.1638
-;; Package-Commit: 0561e53c9731e7f32872774a5eed4eb8c3c37029
+;; Package-Commit: a87cd16933920e67da54323c26aa668d8987e329
 ;; Package-Requires: ((emacs "25.1") (ivy-rich "0.1.0") (all-the-icons "2.2.0"))
 ;; Keywords: convenience, icons, ivy
 

@@ -20,6 +20,7 @@ are disabled by default:
     modus-vivendi-theme-scale-headings
     modus-vivendi-theme-visible-fringes
     modus-vivendi-theme-distinct-org-blocks
+    modus-vivendi-theme-rainbow-org-src-blocks
     modus-vivendi-theme-3d-modeline
     modus-vivendi-theme-subtle-diffs
     modus-vivendi-theme-faint-syntax
