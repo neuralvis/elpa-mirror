@@ -1,2 +1,2 @@
 
-(literate-elisp . [(20200708 803) ((cl-lib (0 6)) (emacs (26 1))) "A library to write Emacs Lisp codes in org mode" single ((:commit . "997403b203ce29ebac2dc456457f885dde7ac802") (:keywords "lisp" "docs" "extensions" "tools") (:authors ("Jingtao Xu" . "jingtaozf@gmail.com")) (:maintainer "Jingtao Xu" . "jingtaozf@gmail.com") (:url . "https://github.com/jingtaozf/literate-elisp"))])
+(literate-elisp . [(20200708 803) ((cl-lib (0 6)) (emacs (26 1))) "A library to write Emacs Lisp codes in org mode" single ((:commit . "f2720729ee7689b0f6e254e30d74d1caa7c4d796") (:keywords "lisp" "docs" "extensions" "tools") (:authors ("Jingtao Xu" . "jingtaozf@gmail.com")) (:maintainer "Jingtao Xu" . "jingtaozf@gmail.com") (:url . "https://github.com/jingtaozf/literate-elisp"))])

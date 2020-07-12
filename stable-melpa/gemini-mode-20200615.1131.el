@@ -6,7 +6,7 @@
 ;; Created: 20 May 2020
 ;; Version: 0.5.2
 ;; Package-Version: 20200615.1131
-;; Package-Commit: 8ad9cba8028004895de50f902b1a087dfaa3d3a3
+;; Package-Commit: 3aeb8f2f603ccc5004f93f1f25e989c31f9c6f65
 ;; Keywords: languages
 ;; Homepage: https://git.carcosa.net/jmcbray/gemini.el
 ;; Package-Requires: ((emacs "24.3"))

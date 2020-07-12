@@ -1,0 +1,2 @@
+
+(fountain-mode . [(20200712 1557) ((emacs (24 5)) (seq (2 20))) "Major mode for screenwriting in Fountain markup" single ((:commit . "abdeaeec14fee293980813cbe57d595fc25c31e3") (:keywords "wp" "text") (:authors ("William Rankin" . "william@bydasein.com")) (:maintainer "William Rankin" . "william@bydasein.com") (:url . "https://github.com/rnkn/fountain-mode"))])

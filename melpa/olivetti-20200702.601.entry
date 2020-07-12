@@ -1,2 +1,2 @@
 
-(olivetti . [(20200702 601) ((emacs (24 5))) "Minor mode for a nice writing environment" single ((:commit . "57ca8e70bc9ee975f0e2a60bfc4121064dadd2e0") (:keywords "wp" "text") (:authors ("William Rankin" . "william@bydasein.com")) (:maintainer "William Rankin" . "william@bydasein.com") (:url . "https://github.com/rnkn/olivetti"))])
+(olivetti . [(20200702 601) ((emacs (24 5))) "Minor mode for a nice writing environment" single ((:commit . "e86927b3b5d1c070d57442062850c47b6cadb36c") (:keywords "wp" "text") (:authors ("William Rankin" . "william@bydasein.com")) (:maintainer "William Rankin" . "william@bydasein.com") (:url . "https://github.com/rnkn/olivetti"))])

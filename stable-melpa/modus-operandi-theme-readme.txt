@@ -111,6 +111,9 @@ notify me of any missing package or change you would like to see.
     eros
     ert
     eshell
+    eshell-fringe-status
+    eshell-git-prompt
+    eshell-prompt-extras (epe)
     evil (evil-mode)
     evil-goggles
     evil-visual-mark-mode
