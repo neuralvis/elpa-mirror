@@ -1,0 +1,2 @@
+
+(ponylang-mode . [(20200713 305) ((dash (2 17 0)) (hydra (0 15 0)) (hl-todo (3 1 2)) (yafolding (0 4 1)) (rainbow-delimiters (2 1 4)) (fill-column-indicator (1 90))) "A major mode for the Pony programming language" single ((:commit . "b549f3ae018264ca7641139687a758d0faf5f34b") (:keywords "languages" "programming") (:url . "https://github.com/ponylang/ponylang-mode"))])
