@@ -1,8 +1,8 @@
 ;;; smart-input-source.el --- Switch OS native input source smartly -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/emacs-smart-input-source
-;; Package-Version: 20200713.1546
-;; Package-Commit: 3e8758c85f33589451391767a042c82b1aa794bc
+;; Package-Version: 20200713.1618
+;; Package-Commit: ed85128f05ca7b211ae5ab8fd1e9f70035edc71e
 ;; Created: March 27th, 2020
 ;; Keywords: convenience
 ;; Package-Requires: ((names "0.5") (emacs "25") (terminal-focus-reporting "0.0"))
@@ -505,12 +505,15 @@ Possible values: 'normal, 'prefix, 'sequence.")
 (defvar -real-this-command nil
   "Real this command. Some commands overwrite it.")
 
+(defvar -prefix-override-order -1000
+  "Order of the prefix override in `emulation-mode-map-alists'.")
+
 (defun -prefix-override-recap-advice (&rest res)
   "Advice for `prefix-override-recap-triggers' with RES."
   (add-to-ordered-list
    'emulation-mode-map-alists
    'smart-input-source--prefix-override-map-alist
-   1)
+   -prefix-override-order)
   res)
 
 (defun -prefix-override-handler (arg)

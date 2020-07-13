@@ -4,8 +4,8 @@
 
 ;; Author: Philipp Middendorf
 ;; URL: https://github.com/plapadoo/vdf-mode
-;; Package-Version: 20191122.823
-;; Package-Commit: 35f5c3531b256b6578b9878ac2ce1ed79b3c8511
+;; Package-Version: 20200713.1838
+;; Package-Commit: 8fbf6157440345879a0543bcab233e790a7b60ee
 ;; Version: 1.2
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -62,6 +62,7 @@
       (indent-line-to depth)
     (save-excursion (indent-line-to depth)))))
 
+;;;###autoload
 (define-derived-mode vdf-mode prog-mode "vdf"
   "major mode for editing Valve VDF files"
   (set (make-local-variable 'font-lock-defaults) '(vdf-highlights))

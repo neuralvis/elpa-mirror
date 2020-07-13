@@ -6,8 +6,8 @@
 ;;              See README.md for full list of contributors.
 ;; Created:     Thu Mar 2 22:19:19 CET 2017
 ;; Version:     1.0.0
-;; Package-Version: 20200518.1350
-;; Package-Commit: 9ca799106afa5979f48345d4c0b6de32456f9f82
+;; Package-Version: 20200713.1746
+;; Package-Commit: ca999d3c2b80850025fbeb6633dcb25889dbc343
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL:         https://github.com/m-cat/nimbus-theme
 ;; Keywords:    faces
@@ -110,6 +110,7 @@
        (date           light-blue)
        (executable     red)
        (file           blue)
+       (file-suffix    light-gray)
        (hash           dark-tan)
        (heading        purple)
        (hl-line        blue-bg)
@@ -379,7 +380,7 @@
    `(diredfl-flag-mark ((t (:inherit dired-flagged))))
    `(diredfl-flag-mark-line ((t (:background ,selection))))
    `(diredfl-file-name ((t (:foreground ,file))))
-   `(diredfl-file-suffix ((t (:foreground ,light-gray))))
+   `(diredfl-file-suffix ((t (:foreground ,file-suffix))))
    `(diredfl-ignored-file-name ((t (:foreground ,ignore))))
    `(diredfl-number ((t (:foreground ,number))))
    `(diredfl-symlink ((t (:inherit dired-symlink :slant italic))))
@@ -405,7 +406,7 @@
    `(diredp-file-name ((t (:foreground ,file))))
    `(diredp-flag-mark ((t (:inherit dired-flagged))))
    `(diredp-flag-mark-line ((t (:background ,selection))))
-   `(diredp-file-suffix ((t (:foreground ,light-gray))))
+   `(diredp-file-suffix ((t (:foreground ,file-suffix))))
    `(diredp-ignored-file-name ((t (:foreground ,ignore))))
    `(diredp-mode-line-flagged ((t (:inherit dired-flagged))))
    `(diredp-mode-line-marked ((t (:inherit dired-mark))))
@@ -617,6 +618,7 @@
    `(helm-ff-dotted-symlink-directory ((t (:inherit helm-ff-dotted-directory :slant italic))))
    `(helm-ff-executable ((t (:foreground ,executable))))
    `(helm-ff-file ((t (:foreground ,file))))
+   `(helm-ff-file-extension ((t (:foreground ,file-suffix))))
    `(helm-ff-prefix ((t (:foreground ,red))))
    `(helm-ff-socket ((t (:foreground ,purple))))
    `(helm-ff-symlink ((t (:inherit dired-symlink))))
@@ -725,7 +727,7 @@
    `(js2-jsdoc-value ((t (:foreground ,yellow))))
    `(js2-private-function-call ((t (:foreground ,dark-green))))
    `(js2-private-member ((t (:foreground ,dark-tan))))
-   `(js2-warning ((t (:underline ,orange))))
+   `(js2-warning ((t (:underline (:color ,nimbus-warn :style wave)))))
 
    ;; display-line-numbers
    `(line-number ((t (:inherit default :foreground ,line))))

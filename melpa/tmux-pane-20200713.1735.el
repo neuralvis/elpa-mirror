@@ -3,8 +3,8 @@
 ;; Copyright (C) 2018
 
 ;; URL: https://github.com/laishulu/emacs-tmux-pane
-;; Package-Version: 20200701.1644
-;; Package-Commit: 0b2e0f85923fef0fc98b9d74fca50abcd7b51831
+;; Package-Version: 20200713.1735
+;; Package-Commit: 788927930479a6ca6427ad9b7596efd26eaa055f
 ;; Created: November 1, 2018
 ;; Keywords: convenience, terminals, tmux, window, pane, navigation, integration
 ;; Package-Requires: ((names "0.5") (emacs "24") (s "0"))
@@ -161,6 +161,9 @@
      ,tmux-pane--override-keymap))
   "Map alist for override.")
 
+(defvar -override-map-alist-order 0
+  "Order of map alist in `emulation-mode-map-alists'.")
+
 :autoload
 (define-minor-mode mode
   "Seamlessly navigate between tmux pane and emacs window."
@@ -171,7 +174,7 @@
     (add-to-ordered-list
      'emulation-mode-map-alists
      'tmux-pane--override-map-alist
-     1)
+     -override-map-alist-order)
     (setq -override-map-enable t))
    ((not mode)
     (setq -override-map-enable nil))))
