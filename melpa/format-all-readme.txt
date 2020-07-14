@@ -14,6 +14,7 @@ Supported languages:
 - Bazel Starlark (buildifier)
 - BibTeX (emacs)
 - C/C++/Objective-C (clang-format)
+- Cabal (cabal-fmt)
 - Clojure/ClojureScript (node-cljfmt)
 - CMake (cmake-format)
 - Crystal (crystal tool format)

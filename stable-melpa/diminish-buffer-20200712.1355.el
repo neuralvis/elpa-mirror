@@ -8,7 +8,7 @@
 ;; Keyword: diminish hide buffer menu
 ;; Version: 0.0.7
 ;; Package-Version: 20200712.1355
-;; Package-Commit: cef452767c16c564dabc819b234fd3236fa97a51
+;; Package-Commit: 2ef1e03458b9528a737814546aaee66067db649e
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://github.com/jcs090218/diminish-buffer
 

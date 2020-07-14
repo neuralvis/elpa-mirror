@@ -7,8 +7,6 @@
 ;; Description: Make window/frame transparent.
 ;; Keyword: window transparent frame
 ;; Version: 0.1.2
-;; Package-Version: 20200704.356
-;; Package-Commit: df814cb578b0a4c01ed68f1da262df17d2a0a694
 ;; Package-Requires: ((emacs "24.3"))
 ;; URL: https://github.com/jcs-elpa/transwin
 
