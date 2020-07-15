@@ -155,6 +155,7 @@ notify me of any missing package or change you would like to see.
     highlight-symbol
     highlight-tail
     highlight-thing
+    hl-defined
     hl-fill-column
     hl-line-mode
     hl-todo

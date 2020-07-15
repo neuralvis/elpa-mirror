@@ -1,2 +1,0 @@
-
-(org-clock-csv . [(20200708 41) ((org (8 3)) (s (1 0))) "Export `org-mode' clock entries to CSV format." single ((:commit . "759892f122b58747198859704f1baeb72efbcc6a") (:keywords "calendar" "data" "org") (:authors ("Aaron Jacobs" . "atheriel@gmail.com")) (:maintainer "Aaron Jacobs" . "atheriel@gmail.com") (:url . "https://github.com/atheriel/org-clock-csv"))])

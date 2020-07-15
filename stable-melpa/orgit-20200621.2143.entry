@@ -1,2 +1,0 @@
-
-(orgit . [(20200621 2143) ((emacs (25 1)) (magit (2 90 1)) (org (9 3))) "support for Org links to Magit buffers" single ((:commit . "a4e689f009a19edf5475ec20f6d723b2ab375db6") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/magit/orgit"))])
