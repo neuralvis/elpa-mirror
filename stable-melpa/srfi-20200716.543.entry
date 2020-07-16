@@ -1,0 +1,2 @@
+
+(srfi . [(20200716 543) ((emacs (25 1))) "Scheme Requests for Implementation browser" tar ((:commit . "15a8a7f51fa7872c3848bdd1b98645da1913a639") (:keywords "languages" "util") (:authors ("Lassi Kortela" . "lassi@lassi.io")) (:maintainer "Lassi Kortela" . "lassi@lassi.io") (:url . "https://github.com/srfi-explorations/emacs-srfi"))])

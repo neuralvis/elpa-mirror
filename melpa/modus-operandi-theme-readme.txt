@@ -52,8 +52,9 @@ notify me of any missing package or change you would like to see.
     auctex and TeX
     auto-dim-other-buffers
     avy
-    breakpoint (provided by built-in gdb-mi.el)
     bm
+    boon
+    breakpoint (provided by built-in gdb-mi.el)
     buffer-expose
     calendar and diary
     calfw
