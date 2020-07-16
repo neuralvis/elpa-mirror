@@ -1,8 +1,8 @@
 ;;; smart-input-source.el --- Switch OS native input source smartly -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/emacs-smart-input-source
-;; Package-Version: 20200716.156
-;; Package-Commit: 9f8126c47273d4bd8eea6fd5fa57b338da7017d3
+;; Package-Version: 20200716.1719
+;; Package-Commit: d9ac0478f8373346a44424cedff362cfa6872a87
 ;; Created: March 27th, 2020
 ;; Keywords: convenience
 ;; Package-Requires: ((names "0.5") (emacs "25") (terminal-focus-reporting "0.0"))
@@ -60,15 +60,12 @@ Should accept a string which is the id of the input source.")
 
 (defvar other-pattern "\\cc"
   "Pattern to identify a character as other lang.")
-(make-variable-buffer-local 'smart-input-source-other-pattern)
 
 (defvar other "com.sogou.inputmethod.sogou.pinyin"
   "Input source for other lang.")
-(make-variable-buffer-local 'smart-input-source-other)
 
 (defvar blank-pattern "[:blank:]"
   "Pattern to identify a character as blank.")
-(make-variable-buffer-local 'smart-input-source-blank-pattern)
 
 (defvar auto-refresh-seconds 0.2
   "Idle timer interval to auto refresh input source status from OS.
@@ -120,15 +117,25 @@ Possible values:
 nil: dynamic context
 'english: English context
 'other: other language context.")
-(make-variable-buffer-local 'smart-input-source-follow-context-fixed)
 
 (defvar follow-context-aggressive-line t
   "Aggressively detect context across blank lines.")
-(make-variable-buffer-local 'smart-input-source-follow-context-aggressive-line)
 
 (defvar follow-context-hooks
   '(evil-insert-state-entry-hook)
   "Hooks trigger the set of input source following context.")
+
+(defvar inline-english-activated-hook nil
+  "Hook to run after inline english region activated.")
+
+(defvar inline-english-deactivated-hook nil
+  "Hook to run after inline english region deactivated.")
+
+(defvar inline-other-activated-hook nil
+  "Hook to run after inline other language region activated.")
+
+(defvar inline-other-deactivated-hook nil
+  "Hook to run after inline other language region deactivated.")
 
 (defface inline-face
   '()
@@ -153,7 +160,6 @@ Possible values:
 1: delete 1 space if exists
 0: don't delete space
 'all: delete all space.")
-(make-variable-buffer-local 'smart-input-source-inline-tighten-head-rule)
 
 (defvar inline-tighten-tail-rule 1
   "Rule to delete tail spaces.
@@ -162,19 +168,15 @@ Possible values:
 1: delete 1 space if exists
 0: don't delete space
 'all: delete all space.")
-(make-variable-buffer-local 'smart-input-source-inline-tighten-tail-rule)
 
 (defvar inline-single-space-close nil
   "Single space closes the inline region.")
-(make-variable-buffer-local 'smart-input-source-inline-with-single-space-close)
 
 (defvar inline-with-english t
   "With the inline region.")
-(make-variable-buffer-local 'smart-input-source-inline-with-english)
 
 (defvar inline-with-other nil
   "With the inline other lang region.")
-(make-variable-buffer-local 'smart-input-source-inline-with-other)
 
 ;;
 ;; Following symbols are not supposed to be used directly by end user.
@@ -279,6 +281,19 @@ Possible values:
     (member source (list 'other other))
     other)))
 
+(defun -mk-get-fn-cmd (cmd)
+  "Make a function to be bound to `do-get' from CMD."
+  (lambda ()
+    (condition-case err
+        (string-trim (shell-command-to-string cmd))
+      ((file-missing file-error)
+       (when (equal (car (cdr err))
+                    "Setting current directory")
+         (message
+          "Default directory for buffer <%s> is missing, now set to '~'"
+          (current-buffer))
+         (setq default-directory "~"))))))
+
 (defun -mk-get-fn ()
   "Make a function to be bound to `do-get'."
   (cond
@@ -286,16 +301,7 @@ Possible values:
     (equal -ism 'emp)
     #'mac-input-source)
    (; external ism
-    (lambda ()
-      (condition-case err
-          (string-trim (shell-command-to-string -ism))
-        ((file-missing file-error)
-         (when (equal (car (cdr err))
-                      "Setting current directory")
-           (message
-            "Default directory for buffer <%s> is missing, now set to '~'"
-            (current-buffer))
-           (setq default-directory "~"))))))))
+    (-mk-get-fn-cmd -ism))))
 
 (defun -mk-set-fn ()
   "Make a function to be bound to `do-set'."
@@ -363,12 +369,56 @@ SOURCE should be 'english or 'other."
      (eq -current 'other)
      (-set 'english)))))
 
-(defun lazyman_config_ism (english other &optional type)
+(defun ism-lazyman-config (english-source other-source &optional ism-type)
   "Config ism for lazy man.
 
-english: ENGLISH input source.
-other: OTHER language input source.
-type: TYPE can be 'emp, 'macism, 'im-select, 'fcitx, 'fcitx5, 'ibus.")
+english-source: ENGLISH input source, nil means default,
+                ignored by ISM-TYPE of 'fcitx, 'fcitx5, 'emacs. 
+other-source: OTHER language input source, nil means default,
+              ignored by ISM-TYPE of 'fcitx, 'fcitx5.
+type: TYPE can be 'emacs, 'emp, 'macism, 'im-select, 'fcitx, 'fcitx5, 'ibus.
+      nil TYPE fits both 'emp and 'macism."
+  (interactive)
+  (unless english-source
+    (setq english english-source))
+  (unless other-source
+    (setq other other-source))
+  (unless ism-type
+    (setq external-ism (pcase ism-type
+                         ('emacs nil)
+                         ('emp nil)
+                         ('macism "macism")
+                         ('im-select "im-select.exe")
+                         ('fcitx "fcitx-remote")
+                         ('fcitx5 "fcitx5-remote")
+                         ('ibus "ibus"))))
+
+  (cond
+   (; emacs builtin input method, set do-get and do-set
+    (eq ism-type 'emacs)
+    (setq default-input-method other-source)
+    (setq english nil)
+    (setq do-get (lambda() current-input-method))
+    (setq do-set (lambda(source)
+                   (unless (equal source current-input-method)
+                     (toggle-input-method)))))
+   (; for builtin supoort, use the default do-get and do-set
+    (member ism-type (list nil 'emp 'macism 'im-select))
+    t)
+   (; fcitx and fcitx5, use the default do-get, set do-set
+    (member ism-type (list 'fcitx-remote 'fcitx5-remote))
+    (setq english "1")
+    (setq other "2")
+    (setq do-set (lambda(source)
+                   (pcase source
+                     ("1" (start-process "set-input-source" nil -ism "-c"))
+                     ("2" (start-process "set-input-source" nil -ism "-o"))))))
+   (; ibus, set do-get and do-set
+    (eq ism-type 'ibus)
+    (setq do-get (-mk-get-fn-cmd (format "%s engine" -ism)))
+    (setq do-set (lambda(source)
+                   (start-process
+                    "set-input-source" nil -ism "engine" source))))))
 
 ;;
 ;; Following codes are mainly about auto update mode
@@ -1028,21 +1078,20 @@ input source to English."
           (and inline-with-english
                (-context-other-p back-detect fore-detect (1- (point)))
                (equal -for-buffer 'other))
-          (setq -inline-lang 'english)
-          (-inline-activate (1- (point))))
+          (-inline-activate 'english (1- (point))))
 
          (;inline other lang region
           (and inline-with-other
                (= (1+ -inline-first-space-point) (point))
                (-context-english-p back-detect fore-detect (- (point) 2))
                (equal -for-buffer 'english))
-          (setq -inline-lang 'other)
-          (-inline-activate (- (point) 2)))))))))
+          (-inline-activate 'other (- (point) 2)))))))))
 
-(defun -inline-activate (start)
+(defun -inline-activate (lang start)
   "Activate the inline region overlay from START."
   (interactive)
   (-ensure-ism
+   (setq -inline-lang lang)
    (when (overlayp -inline-overlay)
      (delete-overlay -inline-overlay))
 
@@ -1056,7 +1105,11 @@ input source to English."
                     #'-inline-ret-check-to-deactivate)
                   keymap))
    (add-hook 'post-command-hook #'-inline-fly-check-deactivate nil t)
-   (-set -inline-lang)))
+   (-set -inline-lang))
+
+  (pcase -inline-lang
+    ('other (run-hooks 'smart-input-source-inline-other-activated-hook))
+    ('english (run-hooks 'smart-input-source-inline-english-activated-hook))))
 
 (defun -inline-fly-check-deactivate ()
   "Check whether to deactivate the inline region overlay."
@@ -1180,7 +1233,10 @@ input source to English."
               (eq inline-tighten-head-rule 'all)
               (delete-region (point) tighten-fore-to))))))))
   (delete-overlay -inline-overlay)
-  (setq -inline-overlay nil))
+  (setq -inline-overlay nil)
+  (pcase -inline-lang
+    ('other (run-hooks 'smart-input-source-inline-other-deactivated-hook))
+    ('english (run-hooks 'smart-input-source-inline-english-deactivated-hook))))
 
 
 ;; end of namespace
