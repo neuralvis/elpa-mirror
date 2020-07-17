@@ -21,6 +21,7 @@ Usage:
 
   `counsel-etags-scan-code' to create tags file
   `counsel-etags-grep' to grep
+  `counsel-etags-grep-extra-arguments' has extra arguments for grep
   `counsel-etags-grep-current-directory' to grep in current directory
   `counsel-etags-recent-tag' to open recent tag
   `counsel-etags-find-tag' to two steps tag matching use regular expression and filter
