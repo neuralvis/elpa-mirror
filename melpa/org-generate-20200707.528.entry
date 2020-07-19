@@ -1,2 +1,0 @@
-
-(org-generate . [(20200707 528) ((emacs (26 1)) (org (9 3)) (mustache (0 23))) "Generate template files/folders from org document" single ((:commit . "2208a09c3b80a0aa02e4df996889d2927970ebbb") (:keywords "convenience") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/org-generate.el"))])

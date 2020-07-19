@@ -1,2 +1,0 @@
-
-(rainbow-fart . [(20200716 137) ((emacs (25 1)) (flycheck (32 -4))) "Checks the keywords of code to play suitable sounds" tar ((:commit . "9ff6cdb1b153ef11906ad6f054736cbfc660ca0c") (:keywords "tools") (:url . "https://github.com/stardiviner/emacs-rainbow-fart"))])

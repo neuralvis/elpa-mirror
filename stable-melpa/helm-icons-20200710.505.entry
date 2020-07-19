@@ -1,0 +1,2 @@
+
+(helm-icons . [(20200710 505) ((emacs (25 1)) (dash (2 14 1)) (f (0 20 0)) (treemacs (2 7))) "Helm icons" single ((:commit . "0f07ee5d6c0230651ca847f627fa9d9cb80856ff") (:keywords "convenience") (:authors ("Ivan Yonchovski" . "yyoncho@gmail.com")) (:maintainer "Ivan Yonchovski" . "yyoncho@gmail.com") (:url . "https://github.com/yyoncho/helm-icons"))])

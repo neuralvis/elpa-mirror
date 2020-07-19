@@ -1,2 +1,0 @@
-
-(inf-clojure . [(20200523 611) ((emacs (24 4)) (clojure-mode (5 11))) "Run an external Clojure process in an Emacs buffer" single ((:commit . "d7eb9ce315e5753e651b539501c65d9c9f425dfb") (:keywords "processes" "clojure") (:url . "http://github.com/clojure-emacs/inf-clojure"))])

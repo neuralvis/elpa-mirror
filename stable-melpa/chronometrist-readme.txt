@@ -24,5 +24,3 @@ Largely modelled after the Android application, [A Time Tracker](https://github.
 * Chronometrist is tailored towards long-term, rarely-changing, everyday tasks, rather than transient ones. You might think of it as a program to help balance your day, or to help you form habits.
 
 For information on usage and customization, see https://github.com/contrapunctus-1/chronometrist/blob/master/README.md
-
-## VARIABLES ##

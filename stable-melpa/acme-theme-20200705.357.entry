@@ -1,0 +1,2 @@
+
+(acme-theme . [(20200705 357) nil "A color theme based on Acme & Sam from Plan 9" single ((:commit . "95b7e021108c08f0ea8a54b48b005fc77d9a3805") (:authors ("Ian Y.E. Pan")) (:maintainer "Ian Y.E. Pan") (:url . "https://github.com/ianpan870102/acme-emacs-theme"))])
