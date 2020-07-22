@@ -1,0 +1,2 @@
+
+(org-working-set . [(20200722 506) ((org (9 2 6)) (dash (2 12 0)) (s (1 12 0)) (emacs (25 1))) "Manage and visit a small set of org-nodes." single ((:commit . "6314d8cf0b84e7213fb9dc1216d0e66a5a7d8a65") (:authors ("Marc Ihm" . "1@2484.de")) (:maintainer "Marc Ihm" . "1@2484.de") (:url . "https://github.com/marcIhm/org-working-set"))])
