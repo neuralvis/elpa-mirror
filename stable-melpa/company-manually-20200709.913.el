@@ -6,7 +6,7 @@
 ;; Maintainer: Yanghao Xie <yhaoxie@gmail.com>
 ;; URL: https://github.com/yanghaoxie/company-manually
 ;; Package-Version: 20200709.913
-;; Package-Commit: 0b696c268fc7ba3ef70c1b2c9ebe5dad0f4ec4a0
+;; Package-Commit: b922318da821fc3cf1d3155f21d543ea8470c881
 ;; Version: 0.1.0
 ;; Keywords: convenience, company-mode, manually build candidates
 ;; Package-Requires: ((emacs "24.3") (company "0.9.0") (ivy "0.13.0"))

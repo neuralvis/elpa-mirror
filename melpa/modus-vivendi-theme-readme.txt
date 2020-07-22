@@ -12,20 +12,19 @@ as part of the ongoing development process.
 The theme provides the following customisation options, all of which
 are disabled by default:
 
-    modus-vivendi-theme-slanted-constructs
-    modus-vivendi-theme-bold-constructs
-    modus-vivendi-theme-proportional-fonts
-    modus-vivendi-theme-rainbow-headings
-    modus-vivendi-theme-section-headings
-    modus-vivendi-theme-scale-headings
-    modus-vivendi-theme-visible-fringes
-    modus-vivendi-theme-distinct-org-blocks
-    modus-vivendi-theme-rainbow-org-src-blocks
-    modus-vivendi-theme-3d-modeline
-    modus-vivendi-theme-subtle-diffs
-    modus-vivendi-theme-faint-syntax
-    modus-vivendi-theme-intense-standard-completions
-    modus-vivendi-theme-override-colors-alist
+    modus-vivendi-theme-slanted-constructs             (boolean)
+    modus-vivendi-theme-bold-constructs                (boolean)
+    modus-vivendi-theme-variable-pitch-headings        (boolean)
+    modus-vivendi-theme-rainbow-headings               (boolean)
+    modus-vivendi-theme-section-headings               (boolean)
+    modus-vivendi-theme-scale-headings                 (boolean)
+    modus-vivendi-theme-visible-fringes                (boolean)
+    modus-vivendi-theme-org-blocks                     (choice)
+    modus-vivendi-theme-3d-modeline                    (boolean)
+    modus-vivendi-theme-subtle-diffs                   (boolean)
+    modus-vivendi-theme-faint-syntax                   (boolean)
+    modus-vivendi-theme-intense-standard-completions   (boolean)
+    modus-vivendi-theme-override-colors-alist          (alist)
 
 The default scale is as follows (it can be customised as well):
 

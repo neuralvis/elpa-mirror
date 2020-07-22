@@ -1,0 +1,2 @@
+
+(bicycle . [(20200720 1958) ((emacs (25 1))) "cycle outline and code visibility" single ((:commit . "89d833a873247f932c24cdd0da76619868005904") (:keywords "outlines") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/tarsius/bicycle"))])

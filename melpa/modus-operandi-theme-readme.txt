@@ -12,20 +12,19 @@ as part of the ongoing development process.
 The theme provides the following customisation options, all of which
 are disabled by default:
 
-    modus-operandi-theme-slanted-constructs
-    modus-operandi-theme-bold-constructs
-    modus-operandi-theme-proportional-fonts
-    modus-operandi-theme-rainbow-headings
-    modus-operandi-theme-section-headings
-    modus-operandi-theme-scale-headings
-    modus-operandi-theme-visible-fringes
-    modus-operandi-theme-distinct-org-blocks
-    modus-operandi-theme-rainbow-org-src-blocks
-    modus-operandi-theme-3d-modeline
-    modus-operandi-theme-subtle-diffs
-    modus-operandi-theme-faint-syntax
-    modus-operandi-theme-intense-standard-completions
-    modus-operandi-theme-override-colors-alist
+    modus-operandi-theme-slanted-constructs             (boolean)
+    modus-operandi-theme-bold-constructs                (boolean)
+    modus-operandi-theme-variable-pitch-headings        (boolean)
+    modus-operandi-theme-rainbow-headings               (boolean)
+    modus-operandi-theme-section-headings               (boolean)
+    modus-operandi-theme-scale-headings                 (boolean)
+    modus-operandi-theme-visible-fringes                (boolean)
+    modus-operandi-theme-org-blocks                     (choice)
+    modus-operandi-theme-3d-modeline                    (boolean)
+    modus-operandi-theme-subtle-diffs                   (boolean)
+    modus-operandi-theme-faint-syntax                   (boolean)
+    modus-operandi-theme-intense-standard-completions   (boolean)
+    modus-operandi-theme-override-colors-alist          (alist)
 
 The default scale is as follows (it can be customised as well):
 

@@ -1,0 +1,2 @@
+
+(hnreader . [(20200720 407) ((emacs (25 1)) (promise (1 1)) (request (0 3 0)) (org (9 2))) "A hackernews reader" single ((:commit . "e13b51cb345e3c8e61bfcb4b612219cf85565659") (:authors ("Thanh Vuong" . "thanhvg@gmail.com")) (:maintainer "Thanh Vuong" . "thanhvg@gmail.com") (:url . "https://github.com/thanhvg/emacs-hnreader/"))])

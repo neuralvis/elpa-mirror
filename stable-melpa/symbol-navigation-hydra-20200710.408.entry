@@ -1,2 +1,0 @@
-
-(symbol-navigation-hydra . [(20200710 408) ((auto-highlight-symbol (1 53)) (hydra (0 15 0)) (emacs (24 4))) "A hydra for navigation" single ((:commit . "72982a79f01faaf077d51f617ab3ebab10d40286") (:keywords "highlight" "face" "match" "convenience" "hydra" "symbol") (:authors ("Brett Wines" . "bgwines@cs.stanford.edu")) (:maintainer "Brett Wines" . "bgwines@cs.stanford.edu") (:url . "https://github.com/bgwines/symbol-navigation-hydra"))])

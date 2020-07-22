@@ -28,6 +28,7 @@ Supported languages:
 - Emacs Lisp (emacs)
 - Fish Shell (fish_indent)
 - Fortran 90 (fprettify)
+- Gleam (gleam format)
 - Go (gofmt)
 - GraphQL (prettier)
 - Haskell (brittany)
