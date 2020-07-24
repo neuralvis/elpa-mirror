@@ -1,2 +1,0 @@
-
-(weyland-yutani-theme . [(20200721 1435) ((emacs (24 1))) "Emacs theme based off Alien movie franchise" single ((:commit . "d61fe530396cdb56e60f51e6e31d3cdbaad44f79") (:authors ("Joe Staursky")) (:maintainer "Joe Staursky") (:url . "https://github.com/jstaursky/weyland-yutani-theme"))])

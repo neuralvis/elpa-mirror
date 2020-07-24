@@ -5,7 +5,7 @@ youtube-dl is a command-line program to download videos from
 YouTube and a few more sites.  More information at
 https://yt-dl.org.
 
-youtube-dl supports many more sites: PeeTube, BBC, IMDB,
+youtube-dl supports many more sites: PeerTube, BBC, IMDB,
 InternetVideoArchive (non-exhaustive list)
 
 * Setup
