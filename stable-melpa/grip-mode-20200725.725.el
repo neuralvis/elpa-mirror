@@ -5,8 +5,8 @@
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; Homepage: https://github.com/seagle0128/grip-mode
 ;; Version: 2.2.1
-;; Package-Version: 20200312.1136
-;; Package-Commit: 9615c4774727a719d38313a679d70f2a2c6aca68
+;; Package-Version: 20200725.725
+;; Package-Commit: 52768a0187f8ce9b42010dc45bbc432551aeccee
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience, markdown, preview
 
@@ -197,14 +197,15 @@ Use default browser unless `xwidget' is available."
   "Start rendering and previewing with grip."
   (interactive)
   (when buffer-file-name
+    (add-hook 'kill-buffer-hook #'grip-stop-preview nil t)
+    (add-hook 'kill-emacs-hook #'grip-stop-preview nil t)
     (cond ((derived-mode-p 'org-mode)
            (grip--preview-org))
           ((derived-mode-p 'markdown-mode)
            (grip--preview-md))
           (t
            (grip-mode -1)
-           (user-error "`%s' not supported by grip preview" major-mode)))
-    (add-hook 'kill-buffer-hook #'grip-stop-preview nil t)))
+           (user-error "`%s' not supported by grip preview" major-mode)))))
 
 (defun grip-stop-preview ()
   "Stop rendering and previewing with grip."
@@ -215,6 +216,7 @@ Use default browser unless `xwidget' is available."
   (remove-hook 'after-change-functions #'grip-refresh-md t)
   (remove-hook 'after-save-hook #'grip-refresh-md t)
   (remove-hook 'kill-buffer-hook #'grip-stop-preview t)
+  (remove-hook 'kill-emacs-hook #'grip-stop-preview t)
 
   ;; Kill grip process
   (grip--kill-process))

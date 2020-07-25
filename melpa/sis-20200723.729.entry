@@ -1,0 +1,2 @@
+
+(sis . [(20200723 729) ((emacs (25 1)) (terminal-focus-reporting (0 0))) "Switch native or OS input source (input method) smartly" single ((:commit . "a3d0358665c6114e58ff518169fabf3fd0d13be3") (:keywords "convenience") (:url . "https://github.com/laishulu/emacs-smart-input-source"))])
