@@ -1,0 +1,2 @@
+
+(ytdl . [(20200724 2209) ((emacs (26 1)) (async (1 9 4)) (transient (0 2 0)) (dash (2 17 0))) "Emacs Interface for youtube-dl" single ((:commit . "b21ceb64b78615bc979551b1bcf18d2273b50e3e") (:keywords "comm" "emulations" "multimedia") (:authors ("Arnaud Hoffmann" . "tuedachu@gmail.com")) (:maintainer "Arnaud Hoffmann" . "tuedachu@gmail.com") (:url . "https://gitlab.com/tuedachu/ytdl"))])

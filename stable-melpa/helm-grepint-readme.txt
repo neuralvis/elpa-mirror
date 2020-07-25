@@ -39,6 +39,11 @@ details on what is required for a new grep to be defined.
 
 ### Notable changes
 
+Version 1.5.0
+
+- Use templates in the :arguments of `helm-grepint-add-grep-config'. Use
+  the templated approach for both `git-grep' and `ag' configurations.
+
 Version 1.4.0
 
 - The F2 action runs the command and displays the results in `grep-mode'.

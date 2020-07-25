@@ -1,2 +1,2 @@
 
-(mustache . [(20190905 2214) ((ht (0 9)) (s (1 3 0)) (dash (1 2 0))) "a mustache templating library in emacs lisp" tar ((:commit . "dbb78880b7dd259d5c51bb5e380579f0287d2db0"))])
+(mustache . [(20190905 2214) ((ht (0 9)) (s (1 3 0)) (dash (1 2 0))) "a mustache templating library in emacs lisp" tar ((:commit . "ab60fadde451b4c4b2470b0ad43c402ecee77e76"))])
