@@ -23,6 +23,7 @@ are disabled by default:
     modus-vivendi-theme-3d-modeline                    (boolean)
     modus-vivendi-theme-subtle-diffs                   (boolean)
     modus-vivendi-theme-faint-syntax                   (boolean)
+    modus-vivendi-theme-intense-hl-line                (boolean)
     modus-vivendi-theme-intense-standard-completions   (boolean)
     modus-vivendi-theme-override-colors-alist          (alist)
 

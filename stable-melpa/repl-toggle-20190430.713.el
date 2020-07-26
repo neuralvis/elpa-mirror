@@ -6,7 +6,7 @@
 ;; Maintainer: Tom Regner <tom@goochesa.de>
 ;; Version: 0.6.1
 ;; Package-Version: 20190430.713
-;; Package-Commit: a36caac7649fbffbe30f7b06541c9efd723563fc
+;; Package-Commit: f066782c10226d31ea8c1cc386cfa7fa3a4e3aa7
 ;; Keywords: repl, buffers, toggle
 ;; Package-Requires: ((fullframe  "0.0.5"))
 

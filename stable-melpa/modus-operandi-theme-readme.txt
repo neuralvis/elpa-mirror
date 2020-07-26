@@ -23,6 +23,7 @@ are disabled by default:
     modus-operandi-theme-3d-modeline                    (boolean)
     modus-operandi-theme-subtle-diffs                   (boolean)
     modus-operandi-theme-faint-syntax                   (boolean)
+    modus-operandi-theme-intense-hl-line                (boolean)
     modus-operandi-theme-intense-standard-completions   (boolean)
     modus-operandi-theme-override-colors-alist          (alist)
 

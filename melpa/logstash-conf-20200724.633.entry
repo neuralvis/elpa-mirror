@@ -1,2 +1,0 @@
-
-(logstash-conf . [(20200724 633) nil "basic mode for editing logstash configuration" single ((:commit . "7639db81d3e7c05df35e69f798827e592ded5235") (:authors ("Wilfred Hughes" . "me@wilfred.me.uk")) (:maintainer "Wilfred Hughes" . "me@wilfred.me.uk"))])
