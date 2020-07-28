@@ -82,6 +82,7 @@ notify me of any missing package or change you would like to see.
     debbugs
     define-word
     deft
+    dictionary
     diff-hl
     diff-mode
     dim-autoload

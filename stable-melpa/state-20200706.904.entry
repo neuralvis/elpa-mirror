@@ -1,2 +1,0 @@
-
-(state . [(20200706 904) ((emacs (24))) "Quick navigation between workspaces" single ((:commit . "c9e03487bd19d2fc4ead4f9cd1e651f6b680343f") (:keywords "convenience" "workspaces") (:authors ("Sylvain Rousseau <thisirs at gmail dot com>")) (:maintainer "Sylvain Rousseau <thisirs at gmail dot com>") (:url . "https://github.com/thisirs/state.git"))])
