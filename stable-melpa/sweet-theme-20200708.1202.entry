@@ -1,2 +1,2 @@
 
-(sweet-theme . [(20200708 1202) ((emacs (24 1))) "Sweet-looking theme" single ((:commit . "529e857c405229ea8cc89b42fd9d8d0cee1b314c") (:keywords "faces") (:authors ("2bruh4me")) (:maintainer "2bruh4me") (:url . "https://github.com/2bruh4me/sweet-theme"))])
+(sweet-theme . [(20200708 1202) ((emacs (24 1))) "Sweet-looking theme" single ((:commit . "78f741806ecebe01224bf54d09ad80e306652508") (:keywords "faces") (:authors ("2bruh4me")) (:maintainer "2bruh4me") (:url . "https://github.com/2bruh4me/sweet-theme"))])

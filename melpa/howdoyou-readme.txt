@@ -2,7 +2,7 @@ This package is inspired by python howdoi (https://github.com/gleitz/howdoi)
 and howdoi Emacs package (https://github.com/lockie/emacs-howdoi and
 https://github.com/atykhonov/emacs-howdoi). it searches your query all
 across stackoverflow and its sisters' sites. They are: stackoverflow.com,
-stackexchange.com, superuser.com, serverfault.com and askubunu.com. The
+stackexchange.com, superuser.com, serverfault.com and askubuntu.com. The
 result is then showed in an `org-mode' buffer. For each result, the question
 and three answers were showed, but they are collapsed by default except the
 first answer. As this package uses Google to get the links, for each query

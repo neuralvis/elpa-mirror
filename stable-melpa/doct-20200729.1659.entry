@@ -1,0 +1,2 @@
+
+(doct . [(20200729 1659) ((emacs (25 1))) "DOCT: Declarative Org capture templates" single ((:commit . "e46443d2a721a3f6cb566595d78baf78a80d4a8e") (:keywords "org" "convenience") (:authors ("Nicholas Vollmer" . "progfolio@protonmail.com")) (:maintainer "Nicholas Vollmer" . "progfolio@protonmail.com") (:url . "https://github.com/progfolio/doct"))])

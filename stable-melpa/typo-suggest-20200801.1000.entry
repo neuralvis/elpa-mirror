@@ -1,0 +1,2 @@
+
+(typo-suggest . [(20200801 1000) ((emacs (24 3)) (helm (3 0)) (company (0 9 10))) "Don't make typos with the help of helm and company" single ((:commit . "ac48f2e59daee15983a5fd13009f751e0d928ab1") (:keywords "convenience" "wp") (:authors ("Kadir Can Çetin" . "kadircancetin@gmail.com")) (:maintainer "Kadir Can Çetin" . "kadircancetin@gmail.com") (:url . "https://github.com/kadircancetin/typo-suggest"))])

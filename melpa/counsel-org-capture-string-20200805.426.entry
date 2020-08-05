@@ -1,0 +1,2 @@
+
+(counsel-org-capture-string . [(20200805 426) ((emacs (25 1)) (ivy (0 10))) "Counsel for org-capture-string" single ((:commit . "01a88bc7167ec2c09825aa5a362c3470fb61549c") (:keywords "outlines") (:authors ("Akira Komamura" . "akira.komamura@gmail.com")) (:maintainer "Akira Komamura" . "akira.komamura@gmail.com") (:url . "https://github.com/akirak/counsel-org-capture-string"))])

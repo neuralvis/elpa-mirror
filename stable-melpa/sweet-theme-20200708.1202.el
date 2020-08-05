@@ -5,7 +5,7 @@
 ;; Author: 2bruh4me
 ;; Keywords: faces
 ;; Package-Version: 20200708.1202
-;; Package-Commit: 529e857c405229ea8cc89b42fd9d8d0cee1b314c
+;; Package-Commit: 78f741806ecebe01224bf54d09ad80e306652508
 ;; Version: 4
 ;; URL: https://github.com/2bruh4me/sweet-theme
 ;; Package-Requires: ((emacs "24.1"))

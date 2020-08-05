@@ -18,12 +18,13 @@ are disabled by default:
     modus-operandi-theme-rainbow-headings               (boolean)
     modus-operandi-theme-section-headings               (boolean)
     modus-operandi-theme-scale-headings                 (boolean)
-    modus-operandi-theme-visible-fringes                (boolean)
+    modus-operandi-theme-fringes                        (choice)
     modus-operandi-theme-org-blocks                     (choice)
     modus-operandi-theme-3d-modeline                    (boolean)
     modus-operandi-theme-subtle-diffs                   (boolean)
     modus-operandi-theme-faint-syntax                   (boolean)
     modus-operandi-theme-intense-hl-line                (boolean)
+    modus-operandi-theme-intense-paren-match            (boolean)
     modus-operandi-theme-intense-standard-completions   (boolean)
     modus-operandi-theme-override-colors-alist          (alist)
 
@@ -53,6 +54,7 @@ notify me of any missing package or change you would like to see.
     auto-dim-other-buffers
     avy
     bm
+    bongo
     boon
     breakpoint (provided by built-in gdb-mi.el)
     buffer-expose

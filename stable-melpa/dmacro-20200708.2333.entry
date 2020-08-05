@@ -1,2 +1,0 @@
-
-(dmacro . [(20200708 2333) ((emacs (24 1)) (cl-lib (0 6))) "Repeated detection and execution of key operation" single ((:commit . "0be5a16b0612b169eb63b5377969dd87dfc7be1a") (:keywords "convenience") (:authors ("Toshiyuki Masui" . "masui@ptiecan.com") ("Makoto Owada") ("Eiji Obata") ("Nobuyuki Mine")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/emacs-jp/dmacro"))])

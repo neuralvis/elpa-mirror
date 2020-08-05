@@ -1,0 +1,2 @@
+
+(evil-tex . [(20200802 1228) ((emacs (25 1)) (evil (1 0)) (auctex (11 88))) "Useful features for editing TeX in evil-mode" single ((:commit . "bb01576e4cf9cc10c529621ced3ef3a7eb5ab376") (:keywords "tex" "emulation" "vi" "evil" "wp") (:url . "https://github.com/iyefrat/evil-tex"))])

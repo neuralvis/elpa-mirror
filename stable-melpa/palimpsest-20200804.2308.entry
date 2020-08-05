@@ -1,0 +1,2 @@
+
+(palimpsest . [(20200804 2308) nil "Various deletion strategies when editing" single ((:commit . "6135dd18b4d3bddcd58e60840ab3e86cb32ea45b") (:authors ("Daniel Szmulewicz" . "daniel.szmulewicz@gmail.com")) (:maintainer "Daniel Szmulewicz" . "daniel.szmulewicz@gmail.com"))])

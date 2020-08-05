@@ -19,4 +19,4 @@ This library exposes the following types of functions:
 - writers: insert/update the contents of a buffer given a parse tree
 
 For examples please see full documentation at:
-https://github.com/ndwarshuis/org-ml.el
+https://github.com/ndwarshuis/org-ml

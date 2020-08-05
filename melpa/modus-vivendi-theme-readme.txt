@@ -18,12 +18,13 @@ are disabled by default:
     modus-vivendi-theme-rainbow-headings               (boolean)
     modus-vivendi-theme-section-headings               (boolean)
     modus-vivendi-theme-scale-headings                 (boolean)
-    modus-vivendi-theme-visible-fringes                (boolean)
+    modus-vivendi-theme-fringes                        (choice)
     modus-vivendi-theme-org-blocks                     (choice)
     modus-vivendi-theme-3d-modeline                    (boolean)
     modus-vivendi-theme-subtle-diffs                   (boolean)
     modus-vivendi-theme-faint-syntax                   (boolean)
     modus-vivendi-theme-intense-hl-line                (boolean)
+    modus-vivendi-theme-intense-paren-match            (boolean)
     modus-vivendi-theme-intense-standard-completions   (boolean)
     modus-vivendi-theme-override-colors-alist          (alist)
 
@@ -53,6 +54,7 @@ notify me of any missing package or change you would like to see.
     auto-dim-other-buffers
     avy
     bm
+    bongo
     boon
     breakpoint (provided by built-in gdb-mi.el)
     buffer-expose

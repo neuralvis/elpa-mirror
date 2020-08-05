@@ -1,0 +1,2 @@
+
+(most-used-words . [(20200804 1653) ((emacs (24 3))) "Display most used words in buffer" single ((:commit . "862cada91cb0ed6de4c9a6097a831686c7976971") (:keywords "convenience" "wp") (:authors ("Udyant Wig" . "udyant.wig@gmail.com")) (:maintainer "Udyant Wig" . "udyant.wig@gmail.com") (:url . "https://github.com/udyantw/most-used-words"))])

@@ -1,2 +1,0 @@
-
-(ctrlf . [(20200716 1411) ((emacs (25 1))) "Emacs finally learns how to ctrl+F" single ((:commit . "2f0b6eca832ff5c6e3e9f41e7bd897f33c701ebe") (:keywords "extensions") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:url . "https://github.com/raxod502/ctrlf"))])

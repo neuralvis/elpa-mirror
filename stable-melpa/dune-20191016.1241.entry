@@ -1,2 +1,2 @@
 
-(dune . [(20191016 1241) nil "Integration with the dune build system" tar ((:commit . "2f25e4857f39c41236bb3f2fdc90dc5c1b81e57a") (:url . "https://github.com/ocaml/dune"))])
+(dune . [(20191016 1241) nil "Integration with the dune build system" tar ((:commit . "bc8d005805bdd1ca60a55761c2d5668d96101309") (:url . "https://github.com/ocaml/dune"))])

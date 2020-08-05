@@ -5,7 +5,7 @@
 ;; Author: Jethro Kuan <jethrokuan95@gmail.com>
 ;; URL: https://github.com/jethrokuan/company-org-roam
 ;; Package-Version: 20200711.355
-;; Package-Commit: 5d7ccd944519ae1d03f5e17ddfe33dcd8a0cc71e
+;; Package-Commit: 1132663bd68022aa7ea005ff53c7c7571890769d
 ;; Keywords: org-mode, roam, convenience
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "26.1") (company "0.9.0") (dash "2.13") (org-roam "1.0.0"))
