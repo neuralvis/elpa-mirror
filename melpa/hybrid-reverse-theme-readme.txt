@@ -10,6 +10,7 @@ Supported packages:
 - flycheck
 - ido-vertical-mode
 - lsp-ui
+- magit
 - neotree
 - php-mode
 - rainbow-delimiters
