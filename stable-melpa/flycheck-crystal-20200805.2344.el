@@ -4,8 +4,8 @@
 
 ;; Authors: crystal-lang-tools
 ;; URL: https://github.com/crystal-lang-tools/emacs-crystal-mode
-;; Package-Version: 20180627.242
-;; Package-Commit: 2428b016243e78a0312cf6b3ba6939e7169a1405
+;; Package-Version: 20200805.2344
+;; Package-Commit: f9e4db16ff9fdc6a296363aa35d19cfb4926e472
 ;; Keywords: tools crystal
 ;; Version: 0.1
 ;; Package-Requires: ((flycheck "30"))
@@ -59,7 +59,7 @@ of the current file."
    (and
     buffer-file-name
     (locate-dominating-file buffer-file-name "shard.yml"))
-default-directory))
+   default-directory))
 
 (flycheck-define-checker crystal-build
   "A Crystal syntax checker using crystal build"
@@ -68,10 +68,12 @@ default-directory))
             "--no-codegen"
             "--no-color"
             "-f" "json"
-            source-inplace)
+            "--stdin-filename"
+            (eval (buffer-file-name)))
   :working-directory flycheck-crystal--find-default-directory
   :error-parser flycheck-crystal--error-parser
   :modes crystal-mode
+  :standard-input t
   )
 
 (defun flycheck-crystal--error-parser (output checker buffer)

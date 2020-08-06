@@ -1,8 +1,8 @@
 ;;; sis.el --- Switch native or OS input source (input method) smartly -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/emacs-smart-input-source
-;; Package-Version: 20200805.952
-;; Package-Commit: e6678936ea6714bd6249f765fb63f353a9432a16
+;; Package-Version: 20200806.147
+;; Package-Commit: a0b7bc3175f72c951e59c692a50b83295e33fcd0
 ;; Created: March 27th, 2020
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "25.1") (terminal-focus-reporting "0.0"))
@@ -813,13 +813,13 @@ Possible values: 'normal, 'prefix, 'sequence.")
       (; key sequence is canceled
        (not sis--real-this-command)
        (when sis-log-mode (message "Key sequence canceled."))
-       (sis--respect-force-restore-after-cmd t)
+       (setq sis--respect-force-restore-after-cmd t)
        (sis--to-normal-stage))
 
       (; end key sequence
        t
        (when sis-log-mode (message "Key sequence ended."))
-       (sis--respect-force-restore-after-cmd t)
+       (setq sis--respect-force-restore-after-cmd t)
        (sis--to-normal-stage))))
     (; current is normal stage
      'normal

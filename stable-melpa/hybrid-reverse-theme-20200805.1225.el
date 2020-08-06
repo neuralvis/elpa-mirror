@@ -3,7 +3,7 @@
 ;; Author: Riyyi
 ;; URL: https://github.com/riyyi/emacs-hybrid-reverse
 ;; Package-Version: 20200805.1225
-;; Package-Commit: 2f35b13f2ae0115a3d9269732d9d89f62beccb21
+;; Package-Commit: e935d5c8b6ed19fd1841ec3337c0bfb7588e132c
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: faces, theme
