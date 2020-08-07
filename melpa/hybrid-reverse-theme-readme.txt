@@ -11,6 +11,7 @@ Supported packages:
 - ido-vertical-mode
 - lsp-ui
 - magit
+- mu4e
 - neotree
 - php-mode
 - rainbow-delimiters
