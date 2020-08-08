@@ -19,3 +19,18 @@ Supported packages:
 - telephone-line
 - transient
 - which-key
+
+Supported defaults:
+- dired
+- display-line-numbers-mode
+- font-lock-mode
+- ido-mode
+- isearch
+- linum-mode
+- message-mode
+- mode-line
+- org-mode*
+- outline-mode
+- shell-script-mode
+- show-paren-mode
+- whitespace-mode
