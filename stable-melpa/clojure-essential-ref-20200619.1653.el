@@ -4,7 +4,7 @@
 ;;
 ;; Version: 0.1.0
 ;; Package-Version: 20200619.1653
-;; Package-Commit: e05d61b96f6469a93f52015b7ad5deadf616139e
+;; Package-Commit: 7685d5060116c2ff23e04edf63a42bba9577c9d0
 ;; URL: https://github.com/p3r7/clojure-essential-ref
 ;; Package-Requires: ((emacs "24")(cider "0.24.0"))
 ;;

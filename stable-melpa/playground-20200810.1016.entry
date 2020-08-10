@@ -1,0 +1,2 @@
+
+(playground . [(20200810 1016) ((emacs (24 4))) "Manage sandboxes for alternative configurations" single ((:commit . "fec6c5536b0b4106214251eff9826b6a2bcb37c3") (:keywords "maint") (:authors ("Akira Komamura" . "akira.komamura@gmail.com")) (:maintainer "Akira Komamura" . "akira.komamura@gmail.com") (:url . "https://github.com/akirak/emacs-playground"))])

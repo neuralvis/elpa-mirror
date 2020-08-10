@@ -5,7 +5,7 @@
 ;; Author: Aldric Giacomoni <trevoke@gmail.com>
 ;; Version: 1.0.1
 ;; Package-Version: 20200809.2319
-;; Package-Commit: 5e92b555e979f90a9aa02cf62e9c5e362409adf5
+;; Package-Commit: 6837b4b192c850ae45b042a78b79f4e7cca2d56e
 ;; Homepage: https://github.com/Trevoke/org-gtd.el
 ;; Package-Requires: ((emacs "26.1") (org-edna "1.0.2") (f "0.20.0") (org "9.3.1") (org-agenda-property "1.3.1"))
 
