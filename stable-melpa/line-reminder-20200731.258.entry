@@ -1,2 +1,0 @@
-
-(line-reminder . [(20200731 258) ((emacs (24 4)) (indicators (0 0 4))) "Line annotation similar to Visual Studio" single ((:commit . "961f593aba142cab4133f3be3b8f5ebbd91ba2ab") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs-elpa/line-reminder"))])

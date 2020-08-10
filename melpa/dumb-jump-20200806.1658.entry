@@ -1,2 +1,0 @@
-
-(dumb-jump . [(20200806 1658) ((emacs (24 3)) (s (1 11 0)) (dash (2 9 0)) (popup (0 5 3))) "Jump to definition for 40+ languages without configuration" single ((:commit . "f511d6de4fa6d9ca97dbaa3e18e8cc3ecfd2fd07") (:keywords "programming") (:authors ("jack angers and contributors")) (:maintainer "jack angers and contributors") (:url . "https://github.com/jacktasia/dumb-jump"))])

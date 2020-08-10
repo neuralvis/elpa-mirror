@@ -1,2 +1,2 @@
-This package provide modes to switch OS native input source smartly.
-For more information see the README in the GitHub repo.
+This package enables less manual switch for native or OS input source (input
+method). For more information see the README in the GitHub repo.

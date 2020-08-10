@@ -5,6 +5,7 @@ Supported packages:
 - centaur-tabs
 - column-enforce-mode
 - company-mode
+- deft
 - elfeed
 - evil
 - flycheck

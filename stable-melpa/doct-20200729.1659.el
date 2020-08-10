@@ -5,7 +5,7 @@
 ;; Author: Nicholas Vollmer <progfolio@protonmail.com>
 ;; URL: https://github.com/progfolio/doct
 ;; Package-Version: 20200729.1659
-;; Package-Commit: e46443d2a721a3f6cb566595d78baf78a80d4a8e
+;; Package-Commit: e369a82d14d4cae76cd5a48cefb3532e2d45e9be
 ;; Created: December 10, 2019
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "25.1"))
