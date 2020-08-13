@@ -5,7 +5,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: languages
 ;; Package-Version: 20200327.2302
-;; Package-Commit: cc8ee143d4ef45a8c540901852326ccdf6ff8482
+;; Package-Commit: 213251f82a69edc033766ec96948e83aeb428cd2
 ;; URL: https://github.com/purcell/emacs-nixpkgs-fmt
 ;; Package-Requires: ((emacs "24") (reformatter "0.3"))
 ;; Version: 0

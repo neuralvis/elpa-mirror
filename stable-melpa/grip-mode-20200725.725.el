@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/seagle0128/grip-mode
 ;; Version: 2.2.1
 ;; Package-Version: 20200725.725
-;; Package-Commit: 52768a0187f8ce9b42010dc45bbc432551aeccee
+;; Package-Commit: 281ada2c93bac7043c6f665fac065a17d4247bdc
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience, markdown, preview
 

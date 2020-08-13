@@ -1,0 +1,2 @@
+
+(erc-status-sidebar . [(20200811 136) ((emacs (24 5)) (seq (2 3))) "a hexchat-like activity overview for ERC channels" single ((:commit . "b589b74245591257c9e666bd5cd25812e04b7a34") (:authors ("Andrew Barbarello")) (:maintainer "Andrew Barbarello") (:url . "https://github.com/drewbarbs/erc-status-sidebar"))])

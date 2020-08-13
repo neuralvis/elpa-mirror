@@ -1,2 +1,0 @@
-
-(transient-dwim . [(20200726 148) ((emacs (26 1)) (transient (0 1))) "Useful preset transient commands" single ((:commit . "ae1fb6d40f4503c096b4c15e30062294f6aac6f7") (:keywords "tools") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/transient-dwim.el"))])

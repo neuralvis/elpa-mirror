@@ -1,6 +1,7 @@
 A port of the Vim theme Hybrid Reverse for Emacs 24.1+.
 
 Supported packages:
+- ace-window
 - avy
 - centaur-tabs
 - column-enforce-mode
@@ -15,13 +16,17 @@ Supported packages:
 - mu4e
 - neotree
 - php-mode
+- powerline
+- powerline-evil
 - rainbow-delimiters
 - selectrum
+- spaceline
 - telephone-line
 - transient
 - which-key
 
 Supported defaults:
+- custom (M-x customize)
 - dired
 - display-line-numbers-mode
 - font-lock-mode

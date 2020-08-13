@@ -62,6 +62,10 @@ Usage
 
 Changes
 
+v1.22 11 Aug 2020
+  Fixed a bug in xmlunicode-in-comment where it would mistake the
+  beginning of a CDATA section for the start of a comment.
+  Removed deprecated 'cl package.
 v1.21 24 Nov 2019
   Moved the helm-related functions into a separate file. Helm must be
   setup before you can require 'xmlunicode-helm. This avoids an ugly bug

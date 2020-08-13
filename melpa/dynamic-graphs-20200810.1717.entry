@@ -1,2 +1,0 @@
-
-(dynamic-graphs . [(20200810 1717) ((emacs (26 1))) "Manipulation with graphviz graphs" single ((:commit . "e309279d048f18c5fdd6cb51a7ec1646e5c40b04") (:keywords "tools") (:authors ("Tomas Zellerin" . "tomas@zellerin.cz")) (:maintainer "Tomas Zellerin" . "tomas@zellerin.cz") (:url . "https://github.com/zellerin/dynamic-graphs"))])

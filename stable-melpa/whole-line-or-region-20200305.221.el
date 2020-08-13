@@ -7,7 +7,7 @@
 ;; Maintainer:      Steve Purcell <steve@sanityinc.com>
 ;; Created:         July 1, 2001
 ;; Keywords:        convenience wp
-;; Package-Commit: 71f84725e2643b2ee74f27c60c4fd8b79c9c3c97
+;; Package-Commit: 9791ae59f8bd8b9375d2dede92de8eba5f0d89fb
 ;; Package-Version: 20200305.221
 ;; Package-X-Original-Version: 0
 ;; Package-Requires: ((emacs "24.1"))

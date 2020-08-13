@@ -1,0 +1,2 @@
+
+(sis . [(20200811 1640) ((emacs (25 1)) (terminal-focus-reporting (0 0))) "Less manual switch for native or OS input source (input method)." single ((:commit . "537d48e656b1107f9aad82b3f7b059f97860298c") (:keywords "convenience") (:url . "https://github.com/laishulu/emacs-smart-input-source"))])

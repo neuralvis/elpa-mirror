@@ -216,6 +216,7 @@ notify me of any missing package or change you would like to see.
     org-recur
     org-roam
     org-superstar
+    org-table-sticky-header
     org-treescope
     origami
     outline-mode
@@ -266,11 +267,12 @@ notify me of any missing package or change you would like to see.
     tab-bar-mode
     tab-line-mode
     syslog-mode
-    trashed
+    table (built-in table.el)
     telephone-line
     term
     tomatinho
     transient (pop-up windows like Magit's)
+    trashed
     treemacs
     tty-menu
     tuareg
