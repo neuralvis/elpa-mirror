@@ -33,6 +33,7 @@ Supported defaults:
 - display-line-numbers-mode
 - font-lock-mode
 - ido-mode
+- info
 - isearch
 - linum-mode
 - man
@@ -42,4 +43,6 @@ Supported defaults:
 - outline-mode
 - shell-script-mode
 - show-paren-mode
+- tab-bar-mode
+- tab-line-mode
 - whitespace-mode

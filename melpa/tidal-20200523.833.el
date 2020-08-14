@@ -7,7 +7,7 @@
 ;; Homepage: https://github.com/tidalcycles/Tidal
 ;; Version: 0
 ;; Package-Version: 20200523.833
-;; Package-Commit: 15358e69481ffbf269a9d89705b2d991f49fb33e
+;; Package-Commit: 137192a2ef6c4f457ddba38a0397570266333854
 ;; Keywords: tools
 ;; Package-Requires: ((haskell-mode "16") (emacs "24"))
 

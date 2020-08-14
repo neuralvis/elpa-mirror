@@ -5,7 +5,7 @@
 ;; Author: Bill Piel <bill@billpiel.com>
 ;; Version: 0.0.18
 ;; Package-Version: 20190919.654
-;; Package-Commit: f09c46d30211000b6a9aaf0633d5d9d9b46a55c2
+;; Package-Commit: cbc3546fb6b1374080f1646ac3a6532a5723b7eb
 ;; URL: https://github.com/clojure-emacs/sayid
 ;; Package-Requires: ((cider "0.21.0"))
 

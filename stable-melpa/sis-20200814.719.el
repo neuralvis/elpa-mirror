@@ -2,7 +2,7 @@
 
 ;; URL: https://github.com/laishulu/emacs-smart-input-source
 ;; Package-Version: 20200814.719
-;; Package-Commit: baa12511d1decf1e3ed172a7235f087b696ad941
+;; Package-Commit: 7ea6b8d316724303713dfb1360dc84076bd2b7f8
 ;; Created: March 27th, 2020
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "25.1") (terminal-focus-reporting "0.0"))

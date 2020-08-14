@@ -139,9 +139,10 @@ notify me of any missing package or change you would like to see.
     forge
     fountain (fountain-mode)
     geiser
-    git
+    git-commit
     git-gutter (and variants)
     git-lens
+    git-rebase
     git-timemachine
     git-walktree
     gnus
