@@ -231,6 +231,7 @@ notify me of any missing package or change you would like to see.
     perspective
     phi-grep
     phi-search
+    pkgbuild-mode
     pomidor
     powerline
     powerline-evil

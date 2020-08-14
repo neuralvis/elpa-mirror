@@ -6,7 +6,9 @@ Supported packages:
 - centaur-tabs
 - column-enforce-mode
 - company-mode
+- dashboard
 - deft
+- doom-modeline
 - elfeed
 - evil
 - flycheck
@@ -33,6 +35,7 @@ Supported defaults:
 - ido-mode
 - isearch
 - linum-mode
+- man
 - message-mode
 - mode-line
 - org-mode*
