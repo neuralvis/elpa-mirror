@@ -1,8 +1,8 @@
 ;;; xref.el --- Cross-referencing commands              -*-lexical-binding:t-*-
 
 ;; Copyright (C) 2014-2020 Free Software Foundation, Inc.
-;; Version: 1.0.1
-;; Package-Requires: ((emacs "26.3") (project "0.1.1"))
+;; Version: 1.0.2
+;; Package-Requires: ((emacs "26.3"))
 
 ;; This is a GNU ELPA :core package.  Avoid functionality that is not
 ;; compatible with the version of Emacs recorded above.
@@ -263,17 +263,24 @@ be found, return nil.
 
 The default implementation uses `semantic-symref-tool-alist' to
 find a search tool; by default, this uses \"find | grep\" in the
-`project-current' roots."
-  (cl-mapcan
+current project's main and external roots."
+  (mapcan
    (lambda (dir)
      (xref-references-in-directory identifier dir))
    (let ((pr (project-current t)))
-     (append
-      (project-roots pr)
+     (cons
+      (if (fboundp 'project-root)
+          (project-root pr)
+        (with-no-warnings
+          (project-roots pr)))
       (project-external-roots pr)))))
 
 (cl-defgeneric xref-backend-apropos (backend pattern)
-  "Find all symbols that match regexp PATTERN.")
+  "Find all symbols that match PATTERN string.
+The second argument has the same meaning as in `apropos'.
+
+If BACKEND is implemented in Lisp, it can use
+`xref-apropos-regexp' to convert the pattern to regexp.")
 
 (cl-defgeneric xref-backend-identifier-at-point (_backend)
   "Return the relevant identifier at point.
@@ -1098,14 +1105,24 @@ The argument has the same meaning as in `apropos'."
                       "Search for pattern (word list or regexp): "
                       nil 'xref--read-pattern-history)))
   (require 'apropos)
-  (xref--find-xrefs pattern 'apropos
-                    (apropos-parse-pattern
-                     (if (string-equal (regexp-quote pattern) pattern)
-                         ;; Split into words
-                         (or (split-string pattern "[ \t]+" t)
-                             (user-error "No word list given"))
-                       pattern))
-                    nil))
+  (let* ((newpat
+          (if (and (version< emacs-version "28.0.50")
+                   (memq (xref-find-backend) '(elisp etags)))
+              ;; Handle backends in older Emacs.
+              (xref-apropos-regexp pattern)
+            ;; Delegate pattern handling to the backend fully.
+            ;; The old way didn't work for "external" backends.
+            pattern)))
+    (xref--find-xrefs pattern 'apropos newpat nil)))
+
+(defun xref-apropos-regexp (pattern)
+  "Return an Emacs regexp from PATTERN similar to `apropos'."
+  (apropos-parse-pattern
+   (if (string-equal (regexp-quote pattern) pattern)
+       ;; Split into words
+       (or (split-string pattern "[ \t]+" t)
+           (user-error "No word list given"))
+     pattern)))
 
 
 ;;; Key bindings
@@ -1267,13 +1284,13 @@ FILES must be a list of absolute file names."
         (insert (mapconcat #'identity files "\0"))
         (setq default-directory dir)
         (setq status
-              (project--process-file-region (point-min)
-                                            (point-max)
-                                            shell-file-name
-                                            output
-                                            nil
-                                            shell-command-switch
-                                            command)))
+              (xref--process-file-region (point-min)
+                                         (point-max)
+                                         shell-file-name
+                                         output
+                                         nil
+                                         shell-command-switch
+                                         command)))
       (goto-char (point-min))
       (when (and (/= (point-min) (point-max))
                  (not (looking-at grep-re))
@@ -1287,6 +1304,24 @@ FILES must be a list of absolute file names."
                     (buffer-substring-no-properties (point) (line-end-position)))
               hits)))
     (xref--convert-hits (nreverse hits) regexp)))
+
+(defun xref--process-file-region ( start end program
+                                   &optional buffer display
+                                   &rest args)
+  ;; FIXME: This branching shouldn't be necessary, but
+  ;; call-process-region *is* measurably faster, even for a program
+  ;; doing some actual work (for a period of time). Even though
+  ;; call-process-region also creates a temp file internally
+  ;; (http://lists.gnu.org/archive/html/emacs-devel/2019-01/msg00211.html).
+  (if (not (file-remote-p default-directory))
+      (apply #'call-process-region
+             start end program nil buffer display args)
+    (let ((infile (make-temp-file "ppfr")))
+      (unwind-protect
+          (progn
+            (write-region start end infile nil 'silent)
+            (apply #'process-file program infile buffer display args))
+        (delete-file infile)))))
 
 (defun xref--rgrep-command (regexp files dir ignores)
   (require 'find-dired)      ; for `find-name-arg'
@@ -1369,8 +1404,8 @@ Such as the current syntax table and the applied syntax properties."
   (let (xref--last-file-buffer
         (tmp-buffer (generate-new-buffer " *xref-temp*")))
     (unwind-protect
-        (cl-mapcan (lambda (hit) (xref--collect-matches hit regexp tmp-buffer))
-                   hits)
+        (mapcan (lambda (hit) (xref--collect-matches hit regexp tmp-buffer))
+                hits)
       (kill-buffer tmp-buffer))))
 
 (defun xref--collect-matches (hit regexp tmp-buffer)
