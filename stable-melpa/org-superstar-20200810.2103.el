@@ -6,7 +6,7 @@
 ;; Maintainer: D. Williams <d.williams@posteo.net>
 ;; Keywords: faces, outlines
 ;; Package-Version: 20200810.2103
-;; Package-Commit: 401bc67302517d0607a37697b5a196dede664a52
+;; Package-Commit: 9ee98125bf07c111e12feafc0f8f4b6d3f070841
 ;; Version: 1.3.0
 ;; Homepage: https://github.com/integral-dw/org-superstar-mode
 ;; Package-Requires: ((org "9.1.9") (emacs "26.1"))

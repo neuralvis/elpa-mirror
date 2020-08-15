@@ -17,6 +17,7 @@ Supported packages:
 - magit
 - mu4e
 - neotree
+- org-roam
 - php-mode
 - powerline
 - powerline-evil
