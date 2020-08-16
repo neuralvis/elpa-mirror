@@ -3,7 +3,7 @@
 ;; Authors: Sean T Allen <sean@monkeysnatchbanana.com>
 ;; Version: 0.5.3
 ;; Package-Version: 20200724.137
-;; Package-Commit: c3489b171e14129fb714381e3d5a94c023629328
+;; Package-Commit: 136cc4f7ab4f2ab549633392a72d55051c8b31ac
 ;; URL: https://github.com/ponylang/ponylang-mode
 ;; Keywords: languages programming
 ;; Package-Requires: ((emacs "25.1") (dash "2.17.0") (hydra "0.15.0") (hl-todo "3.1.2") (yafolding "0.4.1") (yasnippet "0.14.0") (company-ctags "0.0.4") (rainbow-delimiters "2.1.4") (fill-column-indicator "1.90"))

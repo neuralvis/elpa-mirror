@@ -249,6 +249,7 @@ notify me of any missing package or change you would like to see.
     ruler-mode
     sallet
     selectrum
+    semantic
     sesman
     shell-script-mode
     show-paren-mode

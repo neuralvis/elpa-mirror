@@ -26,6 +26,7 @@ Supported packages:
 - spaceline
 - telephone-line
 - transient
+- treemacs
 - which-key
 
 Supported defaults:

@@ -5,7 +5,7 @@
 ;; Authors: Damon Kwok <damon-kwok@outlook.com>
 ;; Version: 0.0.1
 ;; Package-Version: 20200812.957
-;; Package-Commit: 2710681fd64cf46527806a84d222c9f776a5c39c
+;; Package-Commit: 3bd2cdb4f6c6e8400d58fa1001d0513e39ce38bb
 ;; URL: https://github.com/damon-kwok/zetz-mode
 ;; Keywords: languages programming
 ;; Package-Requires: ((emacs "25.1") (dash "2.17.0") (hydra "0.15.0"))

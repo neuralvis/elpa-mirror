@@ -1,2 +1,2 @@
 
-(tracking . [(20171210 2102) nil "Buffer modification tracking" tar ((:commit . "323a7e5245df4e9eb5c7af053a4c100af68134e7") (:authors ("Jorgen Schaefer" . "forcer@forcix.cx")) (:maintainer "Jorgen Schaefer" . "forcer@forcix.cx") (:url . "https://github.com/jorgenschaefer/circe/wiki/Tracking"))])
+(tracking . [(20171210 2102) nil "Buffer modification tracking" tar ((:commit . "89aac22259e5d09ae1183e0df163338fe491e9e7") (:authors ("Jorgen Schaefer" . "forcer@forcix.cx")) (:maintainer "Jorgen Schaefer" . "forcer@forcix.cx") (:url . "https://github.com/jorgenschaefer/circe/wiki/Tracking"))])
