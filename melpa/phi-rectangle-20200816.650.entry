@@ -1,0 +1,2 @@
+
+(phi-rectangle . [(20200816 650) nil "another rectangle-mark command (rewrite of rect-mark)" single ((:commit . "4ea8b40a614c1cc9087b9c0bd924a2d9d6cc0a83") (:authors ("zk_phi")) (:maintainer "zk_phi") (:url . "http://zk-phi.github.io/"))])

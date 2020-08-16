@@ -1,2 +1,0 @@
-
-(magic-latex-buffer . [(20200815 1818) ((cl-lib (0 5)) (emacs (24 4))) "Magically enhance LaTeX-mode font-locking for semi-WYSIWYG editing" single ((:commit . "ab48d335698a0823ab807ecee8980fd48e2f3a13") (:authors ("zk_phi")) (:maintainer "zk_phi") (:url . "http://hins11.yu-yake.com/"))])

@@ -5,7 +5,7 @@
 ;; Authors: Damon Kwok <damon-kwok@outlook.com>
 ;; Version: 0.0.1
 ;; Package-Version: 20200812.807
-;; Package-Commit: 692958b2065d649569d5cfa015cbec32b439fc74
+;; Package-Commit: 3519f83e68af163a6b01753ad7bb4cecf26c24b2
 ;; URL: https://github.com/damon-kwok/verona-mode
 ;; Keywords: languages programming
 ;; Package-Requires: ((emacs "25.1") (dash "2.17.0") (hydra "0.15.0"))
