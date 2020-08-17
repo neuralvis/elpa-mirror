@@ -1,0 +1,2 @@
+
+(lsp-focus . [(20200809 1413) ((focus (0 1 1)) (lsp-mode (6 1))) "focus.el support for lsp-mode" single ((:commit . "c8270663c1fa8650cf0e248caa6a8e3d8f25d80d") (:keywords "languages" "lsp-mode") (:authors ("Vibhav Pant")) (:maintainer "Vibhav Pant") (:url . "https://github.com/emacs-lsp/lsp-focus"))])

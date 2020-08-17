@@ -18,7 +18,7 @@
 
 ;; Version: 1.0.2
 ;; Package-Version: 20200816.551
-;; Package-Commit: cd60edcc62b784743e66b91f61b3e5a3764b056f
+;; Package-Commit: c39cacb11992383887fa096ace85510baed94aef
 ;; Author: zk_phi
 ;; URL: http://zk-phi.gitub.io/
 ;; Package-Requires: ((popwin "0.7.0alpha"))

@@ -1,2 +1,0 @@
-
-(ob-napkin . [(20200813 5) ((emacs (26 1))) "Babel functions for Napkin" single ((:commit . "b7875ddbcb972cb230b3676f414a0f8a3843f7c0") (:keywords "tools" "literate programming" "reproducible research" "napkin" "plantuml") (:authors ("Hans Jang")) (:maintainer "Hans Jang") (:url . "https://github.com/pinetr2e/ob-napkin"))])
