@@ -259,6 +259,7 @@ notify me of any missing package or change you would like to see.
     smart-mode-line
     smartparens
     smerge
+    spaceline
     speedbar
     spell-fu
     stripes

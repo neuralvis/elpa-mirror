@@ -3,9 +3,9 @@
 ;; Copyright (C) 2020  Naoya Yamashita
 
 ;; Author: Naoya Yamashita <conao3@gmail.com>
-;; Version: 0.0.1
-;; Package-Version: 20200811.636
-;; Package-Commit: 06f74ee40d20ad52b9a869a89546f2bc7cc10bc1
+;; Version: 1.0.0
+;; Package-Version: 20200817.420
+;; Package-Commit: 1a21eb9ad956a0371dd3c9e1bec53407d685f705
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "26.1") (posframe "0.7"))
 ;; URL: https://github.com/conao3/dired-posframe.el
@@ -146,13 +146,13 @@ because it uses `post-command-hook'.
 Features:
   - Hide dired-posframe when lost window focus.
   - Show dired-posframe when get window focus."
-  :group 'dird-posframe
+  :group 'dired-posframe
   :type 'boolean
   :set (lambda (sym val)
          (set-default sym val)
          (if val
-             (add-hook 'post-command-hook 'dired-posframe--post-command)
-           (remove-hook 'post-command-hook 'dired-posframe--post-command))))
+             (add-hook 'post-command-hook #'dired-posframe--post-command)
+           (remove-hook 'post-command-hook #'dired-posframe--post-command))))
 
 
 ;;; Functions
