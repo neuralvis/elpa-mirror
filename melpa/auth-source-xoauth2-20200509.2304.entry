@@ -1,2 +1,0 @@
-
-(auth-source-xoauth2 . [(20200509 2304) ((emacs (26 1))) "Integrate auth-source with XOAUTH2" single ((:commit . "0daccb02762fbb9dcbd794a05ffc14b221c57647") (:authors ("Cesar Crusius" . "ccrusius@google.com")) (:maintainer "Cesar Crusius" . "ccrusius@google.com") (:url . "https://github.com/ccrusius/auth-source-xoauth2"))])

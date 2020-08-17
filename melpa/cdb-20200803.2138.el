@@ -6,7 +6,7 @@
 ;; Maintainer: SKK Development Team <skk@ring.gr.jp>
 ;; Keywords: cdb
 ;; Package-Version: 20200803.2138
-;; Package-Commit: 2742939e6e699c8cc591c7bf5e56c01434d66bdf
+;; Package-Commit: 275a831be77573470309a78967734d2b6d10f218
 
 ;; This file is not part of GNU Emacs.
 

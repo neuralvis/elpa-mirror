@@ -5,7 +5,7 @@
 ;; Authors: Damon Kwok <damon-kwok@outlook.com>
 ;; Version: 0.0.1
 ;; Package-Version: 20200812.956
-;; Package-Commit: 5c0cdcc1be72c04e9819abdf862eca859f251987
+;; Package-Commit: 15a73b304e624d9b07fd8f23670569678d6cd9c3
 ;; URL: https://github.com/damon-kwok/v-mode
 ;; Keywords: languages programming
 ;; Package-Requires: ((emacs "25.1") (dash "2.17.0") (hydra "0.15.0"))
