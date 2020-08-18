@@ -1,2 +1,0 @@
-
-(templatel . [(20200813 1151) ((emacs (25 1))) "Templating language;" tar ((:commit . "320610b02b72bfa5a69b0b07ce4bf6fbb9de8472") (:authors ("Lincoln Clarete" . "lincoln@clarete.li")) (:maintainer "Lincoln Clarete" . "lincoln@clarete.li") (:url . "https://clarete.li/templatel"))])
