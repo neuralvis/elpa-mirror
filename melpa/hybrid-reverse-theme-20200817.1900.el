@@ -2,8 +2,8 @@
 
 ;; Author: Riyyi
 ;; URL: https://github.com/riyyi/emacs-hybrid-reverse
-;; Package-Version: 20200815.1718
-;; Package-Commit: 0663b8b8fb18c16babb5c1a54eeff585d5ef8be5
+;; Package-Version: 20200817.1900
+;; Package-Commit: 83d3a1c57fb23e8a2a55ca29f743922579242bbe
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: faces, theme
@@ -49,6 +49,7 @@
 ;; - rainbow-delimiters
 ;; - selectrum
 ;; - spaceline
+;; - switch-window
 ;; - telephone-line
 ;; - transient
 ;; - treemacs
@@ -390,7 +391,7 @@
 ;;;;; ace-window
    `(aw-background-face                       ((t (                          :background ,hr-black-2))))
    `(aw-key-face                              ((t (:foreground ,hr-blue))))
-   `(aw-leading-char-face                     ((t (:foreground ,hr-yellow                              :weight bold))))
+   `(aw-leading-char-face                     ((t (:foreground ,hr-yellow                              :weight bold :height 3.0))))
    `(aw-minibuffer-leading-char-face          ((t (:foreground ,hr-yellow                              :weight bold))))
    `(aw-mode-line-face                        ((t (                                                    :inherit mode-line))))
 
@@ -763,6 +764,10 @@
    `(spaceline-python-venv                    ((t (:foreground ,hr-magenta))))
    `(spaceline-read-only                      ((t (                                                    :inherit mode-line))))
    `(spaceline-unmodified                     ((t (:foreground ,hr-black     :background ,hr-orange))))
+
+;;;;; switch-window
+   `(switch-window-background                 ((t (:foreground ,hr-black-2))))
+   `(switch-window-label                      ((t (:foreground ,hr-yellow                              :weight bold :height 3.0))))
 
 ;;;;; telephone-line
    `(telephone-line-accent-active             ((t (:foreground ,hr-fg        :background ,hr-black-5))))

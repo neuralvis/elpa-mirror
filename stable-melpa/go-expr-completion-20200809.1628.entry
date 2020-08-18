@@ -1,2 +1,0 @@
-
-(go-expr-completion . [(20200809 1628) ((emacs (24 1))) "Complement the return values for Go" single ((:commit . "3c650a7366e1f2334673c7874516321aa80e7cec") (:authors ("Ryo Fujimoto" . "fujimisakri@gmail.com")) (:maintainer "Ryo Fujimoto" . "fujimisakri@gmail.com") (:url . "https://github.com/fujimisakari/emacs-go-expr-completion"))])

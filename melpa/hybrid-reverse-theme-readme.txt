@@ -24,6 +24,7 @@ Supported packages:
 - rainbow-delimiters
 - selectrum
 - spaceline
+- switch-window
 - telephone-line
 - transient
 - treemacs

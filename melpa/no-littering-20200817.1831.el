@@ -5,8 +5,8 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20200805.2137
-;; Package-Commit: aaa3c36b25e07017595b54e91e190f69f0de0487
+;; Package-Version: 20200817.1831
+;; Package-Commit: 85629e5979f2159ab8cc77814dd4cb219e6ba69c
 
 ;; This file is not part of GNU Emacs.
 
@@ -370,6 +370,7 @@ directories."
     (setq org-recent-headings-save-file    (var "org/recent-headings.el"))
     (setq pandoc-data-dir                  (etc "pandoc-mode/"))
     (setq pcache-directory                 (var "pcache/"))
+    (setq persist--directory-location      (var "persist/"))
     (setq persistent-scratch-save-file     (var "persistent-scratch.el"))
     (setq persp-save-dir                   (var "persp-mode/"))
     (eval-after-load 'projectile
