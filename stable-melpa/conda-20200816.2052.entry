@@ -1,2 +1,0 @@
-
-(conda . [(20200816 2052) ((emacs (24 4)) (pythonic (0 1 0)) (dash (2 13 0)) (s (1 11 0)) (f (0 18 2))) "Work with your conda environments" single ((:commit . "d0e07721111bc178819c167406d3d62ebff99265") (:keywords "python" "environment" "conda") (:authors ("Rami Chowdhury" . "rami.chowdhury@gmail.com")) (:maintainer "Rami Chowdhury" . "rami.chowdhury@gmail.com") (:url . "http://github.com/necaris/conda.el"))])

@@ -64,3 +64,7 @@ Tips,
   3. Use `mybigword-pronounce-word' to pronounce the word at point.
   The word's audio is downloaded from https://dictionary.cambridge.org
   The audio download url could be customized in `mybigword-default-audio-url-function'.
+
+  4. Use `mybigword-show-image-of-word' to show images of the word at point
+  in external browser.  Please note `browse-url-generic' is used in this
+  command.

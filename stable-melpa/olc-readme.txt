@@ -1,7 +1,7 @@
 This program provides basic open location code support in Emacs
-Lisp.  The support for recovering shortened codes depends on the
-request library and uses OpenStreetMap; please check the terms of
-use for the service to ensure that you remain compliant.
+Lisp. Recovery of shortened codes uses OpenStreetMap nominatim;
+please check the terms of use for the service to ensure that your
+use complies with the API terms of use.
 
 All methods required by the open location code specification are
 provided in some form.  The implementation passed the tests present

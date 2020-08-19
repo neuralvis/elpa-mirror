@@ -2,6 +2,7 @@ A port of the Vim theme Hybrid Reverse for Emacs 24.1+.
 
 Supported packages:
 - ace-window
+- auto-complete
 - avy
 - centaur-tabs
 - column-enforce-mode
@@ -18,7 +19,9 @@ Supported packages:
 - mu4e
 - neotree
 - org-roam
+- paradox
 - php-mode
+- popup
 - powerline
 - powerline-evil
 - rainbow-delimiters
@@ -29,6 +32,7 @@ Supported packages:
 - transient
 - treemacs
 - which-key
+- winum
 
 Supported defaults:
 - custom (M-x customize)
@@ -48,4 +52,5 @@ Supported defaults:
 - show-paren-mode
 - tab-bar-mode
 - tab-line-mode
+- tty-menu
 - whitespace-mode
