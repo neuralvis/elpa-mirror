@@ -6,8 +6,8 @@
 ;; Author:      Ulf Jasper <ulf.jasper@web.de>
 ;; Created:     22. Sep. 2011
 ;; Keywords:    demo, svg, clock
-;; Version:     1.1
-;; Package-Requires: ((svg "0.1") (emacs "25.0"))
+;; Version:     1.2
+;; Package-Requires: ((svg "1.0") (emacs "27.0"))
 
 ;; This file is part of GNU Emacs.
 
@@ -60,11 +60,12 @@
 ;;    Initial version.
 
 ;;; Code:
-(defconst svg-clock-version "0.5" "Version number of `svg-clock'.")
+(defconst svg-clock-version "1.1" "Version number of `svg-clock'.")
 
 (require 'dom)
 (require 'svg)
 (require 'cl-macs)
+(require 'time-date)
 
 (cl-defstruct svg-clock-handle
   marker  ;; points to the clock's buffer and position
@@ -315,6 +316,30 @@ Argument ARGS contain the action's arguments."
 
 ;;;; ChangeLog:
 
+;; 2020-08-18  Lars Ingebrigtsen  <larsi@gnus.org>
+;; 
+;; 	Revert "Copy svg--def to manipulate the DOM directly from svg-clock.el"
+;; 
+;; 	This reverts commit 1f7c74037d3adadc86c72c9736308a24107ad964.
+;; 
+;; 	This had already been fixed in almost the same way.
+;; 
+;; 2020-08-18  Lars Ingebrigtsen  <larsi@gnus.org>
+;; 
+;; 	Bump version after last fix
+;; 
+;; 2020-08-18  Pip Cet  <pipcet@gmail.com>
+;; 
+;; 	Copy svg--def to manipulate the DOM directly from svg-clock.el
+;; 
+;; 2020-01-22  Ulf Jasper	<ulf.jasper@web.de>
+;; 
+;; 	Fix requirements and version numbers
+;; 
+;; 	- Require emacs version 27 via 'Package-Requires'.
+;; 	- Sync internal version number with package version.
+;; 	- require time-date
+;; 
 ;; 2019-11-04  Lars Ingebrigtsen  <larsi@gnus.org>
 ;; 
 ;; 	Allow controlling whether to show the seconds and the face
