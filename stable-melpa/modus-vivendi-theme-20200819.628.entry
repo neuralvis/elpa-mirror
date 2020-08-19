@@ -1,0 +1,2 @@
+
+(modus-vivendi-theme . [(20200819 628) ((emacs (26 1))) "Accessible dark theme (WCAG AAA)" single ((:commit . "26a211835b6e62e4ad29b2feee75472e02046fa8") (:keywords "faces" "theme" "accessibility") (:authors ("Protesilaos Stavrou" . "info@protesilaos.com")) (:maintainer "Protesilaos Stavrou" . "info@protesilaos.com") (:url . "https://gitlab.com/protesilaos/modus-themes"))])

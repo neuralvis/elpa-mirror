@@ -4,8 +4,8 @@
 
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
-;; Package-Version: 20200810.1245
-;; Package-Commit: 2eaf2c0e2d42457b55068d92659ef14195e12918
+;; Package-Version: 20200819.531
+;; Package-Commit: 46d2010c6a6cccfc4be72317f10ea99fd041ab54
 ;; Keywords: project, convenience
 ;; Version: 2.3.0-snapshot
 ;; Package-Requires: ((emacs "25.1") (pkg-info "0.4"))
@@ -2810,9 +2810,11 @@ test/impl/other files as below:
                                   :test-suffix "-test")
 (projectile-register-project-type 'emacs-eldev (lambda () (or (projectile-verify-file "Eldev")
                                                               (projectile-verify-file "Eldev-local")))
+                                  :project-file "Eldev"
                                   :compile "eldev package"
                                   :test "eldev test"
-                                  :run "eldev emacs")
+                                  :run "eldev emacs"
+                                  :package "eldev package")
 
 ;; R
 (projectile-register-project-type 'r '("DESCRIPTION")

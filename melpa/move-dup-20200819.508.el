@@ -17,8 +17,8 @@
 
 ;; Author: Jimmy Yuen Ho Wong <wyuenho@gmail.com>
 ;; Version: 1.1.0
-;; Package-Version: 20200818.2256
-;; Package-Commit: c9b9869b42d511e686d09df9d7fefa1d3a925958
+;; Package-Version: 20200819.508
+;; Package-Commit: e3db9745e99db1c7cb9344379c9b860cfeeeaf13
 ;; Created: 11 June 2014
 ;; Url: https://github.com/wyuenho/move-dup
 ;; Compatibility: GNU Emacs 25.1
@@ -227,11 +227,6 @@ DIRECTION is \"down\"."
           ((string= direction "up")
            (backward-char text-length)))))
 
-(defgroup move-dup nil
-  "Eclipse-like moving and duplicating lines or rectangles."
-  :group 'convenience
-  :group 'wp)
-
 ;;;###autoload
 (define-minor-mode move-dup-mode
   "Minor mode for Eclipse-like moving and duplicating lines or
@@ -244,6 +239,7 @@ The default key bindings are:
 \([C-M-up] . md-duplicate-up)
 \([C-M-down] . md-duplicate-down)"
   :lighter " md"
+  :group 'move-dup
   :keymap '(([M-up] . md-move-lines-up)
             ([M-down] . md-move-lines-down)
             ([C-M-up] . md-duplicate-up)
@@ -255,7 +251,8 @@ The default key bindings are:
     (move-dup-mode 1)))
 
 ;;;###autoload
-(define-globalized-minor-mode global-move-dup-mode move-dup-mode move-dup-on)
+(define-globalized-minor-mode global-move-dup-mode move-dup-mode move-dup-on
+  :group 'move-dup)
 
 (provide 'move-dup)
 ;;; move-dup.el ends here

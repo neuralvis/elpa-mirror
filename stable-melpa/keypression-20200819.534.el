@@ -4,8 +4,8 @@
 
 ;; Author: chuntaro <chuntaro@sakura-games.jp>
 ;; Keywords: key, screencast, tools
-;; Package-Version: 20200818.1055
-;; Package-Commit: ba30e4960cf5258016bc06205d00c8fadb0aa7d8
+;; Package-Version: 20200819.534
+;; Package-Commit: 9427241f3fa539e4b5ad7581a05eb7e49f2cf518
 ;; Version: 1.0.5
 ;; Homepage: https://github.com/chuntaro/emacs-keypression
 ;; Package-Requires: ((emacs "26.3"))
@@ -199,11 +199,13 @@ See `set-face-attribute' help for details."
   :type 'string
   :group 'keypression)
 
-(defcustom keypression-ignore-mouse-events '(mouse-1 mouse-2 mouse-3 mouse-movement wheel-up wheel-down)
+(defcustom keypression-ignore-mouse-events '(mouse-1 mouse-2 mouse-3 mouse-4 mouse-5 mouse-movement wheel-up wheel-down)
   "List of mouse events to ignore."
   :type '(set (const mouse-1)
               (const mouse-2)
               (const mouse-3)
+              (const mouse-4)
+              (const mouse-5)
               (const mouse-movement)
               (const wheel-up)
               (const wheel-down))
