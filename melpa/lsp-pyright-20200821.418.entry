@@ -1,0 +1,2 @@
+
+(lsp-pyright . [(20200821 418) ((emacs (26 1)) (lsp-mode (7 0)) (dash (2 14 1)) (ht (2 0))) "Python LSP client using Pyright" single ((:commit . "b75384ae35524b799f35e47ea14659ea337b880e") (:keywords "languages" "tools" "lsp") (:authors ("Arif Rezai, Vincent Zhang, Andrew Christianson")) (:maintainer "Arif Rezai, Vincent Zhang, Andrew Christianson") (:url . "https://github.com/emacs-lsp/lsp-pyright"))])

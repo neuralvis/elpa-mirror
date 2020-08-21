@@ -1,2 +1,2 @@
 
-(org-gtd . [(20200820 1444) ((emacs (26 1)) (org-edna (1 0 2)) (f (0 20 0)) (org (9 3 1)) (org-agenda-property (1 3 1))) "An implementation of GTD" single ((:commit . "0d2063e4ed741f721a12793cd6d1c09e2d232911") (:authors ("Aldric Giacomoni" . "trevoke@gmail.com")) (:maintainer "Aldric Giacomoni" . "trevoke@gmail.com") (:url . "https://github.com/Trevoke/org-gtd.el"))])
+(org-gtd . [(20200820 1444) ((emacs (26 1)) (org-edna (1 0 2)) (f (0 20 0)) (org (9 3 1)) (org-agenda-property (1 3 1))) "An implementation of GTD" single ((:commit . "e982934060c9f2afa214cad355f5a2e989ddf6cd") (:authors ("Aldric Giacomoni" . "trevoke@gmail.com")) (:maintainer "Aldric Giacomoni" . "trevoke@gmail.com") (:url . "https://github.com/Trevoke/org-gtd.el"))])
