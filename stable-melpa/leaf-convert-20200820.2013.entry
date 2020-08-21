@@ -1,0 +1,2 @@
+
+(leaf-convert . [(20200820 2013) ((emacs (26 1)) (leaf (3 6 0)) (leaf-keywords (1 1 0)) (ppp (2 1))) "Convert many format to leaf format" single ((:commit . "2cc21f9e1d218b89360fd5a27383970cd13d092c") (:keywords "tools") (:authors ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Naoya Yamashita" . "conao3@gmail.com") (:url . "https://github.com/conao3/leaf-convert.el"))])

@@ -14,6 +14,7 @@ Supported packages:
 - evil
 - flycheck
 - ido-vertical-mode
+- linum-relative
 - lsp-ui
 - magit
 - mu4e

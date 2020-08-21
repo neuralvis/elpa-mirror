@@ -1,14 +1,14 @@
 ;;; projectile-git-autofetch.el --- automatically fetch git repositories  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Andreas Müller
+;; Copyright (C) 2020  Andreas Müller
 
 ;; Author: Andreas Müller <code@0x7.ch>
 ;; Keywords: tools, vc
-;; Package-Version: 20191013.1806
-;; Package-Commit: 4a3eba7658a52c6e955d5f7085cd3fd62b53b9c6
+;; Package-Version: 20200820.2028
+;; Package-Commit: 423ed5fa6508c4edc0a837bb585c7e77e99876be
 ;; Version: 0.1.0
 ;; URL: https://github.com/andrmuel/projectile-git-autofetch
-;; Package-Requires: ((emacs "25.1") (projectile "0.14.0") (alert "1.2"))
+;; Package-Requires: ((emacs "25.1") (projectile "0.14.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 ;;; Code:
 
 (require 'projectile)
-(require 'alert)
+(require 'notifications)
 
 (defgroup projectile-git-autofetch nil
   "Automatically fetch git repositories."
@@ -134,9 +134,9 @@ parameters."
         (when (> (buffer-size) 0)
           (run-hooks 'projectile-git-autofetch-after-successful-fetch-hook)
           (when projectile-git-autofetch-notify
-            (alert (buffer-string)
-                   ':title (format "projectile-git-autofetch: %s"
-                                   (projectile-project-name))))))
+            (notifications-notify
+             :title (format "projectile-git-autofetch: %s" (projectile-project-name))
+             :body (buffer-string) ))))
       (delete-process process)
       (kill-buffer buffer))))
 

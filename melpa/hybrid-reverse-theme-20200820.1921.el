@@ -2,8 +2,8 @@
 
 ;; Author: Riyyi
 ;; URL: https://github.com/riyyi/emacs-hybrid-reverse
-;; Package-Version: 20200819.240
-;; Package-Commit: 18b1b786fb4346ad31ec76df75cb672ef5cc7cbf
+;; Package-Version: 20200820.1921
+;; Package-Commit: e3d1ef71d096f90c959d404ced50e3bc6850e022
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: faces, theme
@@ -39,6 +39,7 @@
 ;; - evil
 ;; - flycheck
 ;; - ido-vertical-mode
+;; - linum-relative
 ;; - lsp-ui
 ;; - magit
 ;; - mu4e
@@ -543,6 +544,9 @@
 
 ;;;;; ido-vertical-mode
    `(ido-vertical-match-face                  ((t (:foreground ,hr-yellow                              :weight bold :underline t))))
+
+;;;;; linum-relative
+   `(linum-relative-current-face              ((t (:foreground ,hr-yellow    :background ,hr-black-2   :weight bold))))
 
 ;;;;; lsp-ui
    `(lsp-ui-doc-background                    ((t (                          :background ,hr-black-3))))
