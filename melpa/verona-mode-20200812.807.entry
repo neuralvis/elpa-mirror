@@ -1,2 +1,0 @@
-
-(verona-mode . [(20200812 807) ((emacs (25 1)) (dash (2 17 0)) (hydra (0 15 0))) "A major mode for the Verona programming language" single ((:commit . "3519f83e68af163a6b01753ad7bb4cecf26c24b2") (:keywords "languages" "programming") (:url . "https://github.com/damon-kwok/verona-mode"))])

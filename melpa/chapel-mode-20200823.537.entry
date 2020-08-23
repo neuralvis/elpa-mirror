@@ -1,0 +1,2 @@
+
+(chapel-mode . [(20200823 537) ((emacs (25 1)) (hydra (0 15 0))) "A major mode for the Chapel programming language" single ((:commit . "605cac164dc6810ef9c2d52b3328a5602724b0d6") (:keywords "chapel" "chpl" "programming" "languages") (:url . "https://github.com/damon-kwok/chapel-mode"))])

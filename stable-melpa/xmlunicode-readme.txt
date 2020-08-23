@@ -62,6 +62,13 @@ Usage
 
 Changes
 
+v1.23 23 Aug 2020
+  Fixed bug where xmlunicode-smart-hyphen didn't recognize the
+  context "<!-" as the beginning of a comment and therefore that
+  another "-" should be inserted rather than replacing the hyphen
+  with an emdash. This was a consequence of changing
+  xmlunicode-in-comment so that a bare "<!" wasn't recognized as
+  the start of a comment.
 v1.22 11 Aug 2020
   Fixed a bug in xmlunicode-in-comment where it would mistake the
   beginning of a CDATA section for the start of a comment.

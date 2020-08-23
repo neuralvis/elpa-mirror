@@ -1,0 +1,2 @@
+
+(lakota-input . [(20200819 211) nil "Input modes for Lakota language orthographies" single ((:commit . "f381bb72fa4114e944c1a83548821a52bd6bc500") (:authors ("Grant Shangreaux" . "shshoshin@protonmail.com")) (:maintainer "Grant Shangreaux" . "shshoshin@protonmail.com") (:url . "https://git.sr.ht/~shoshin/lakota-input"))])

@@ -1,2 +1,0 @@
-
-(v-mode . [(20200812 956) ((emacs (25 1)) (dash (2 17 0)) (hydra (0 15 0))) "A major mode for the V programming language" single ((:commit . "15a73b304e624d9b07fd8f23670569678d6cd9c3") (:keywords "languages" "programming") (:url . "https://github.com/damon-kwok/v-mode"))])
