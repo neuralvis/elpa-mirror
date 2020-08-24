@@ -1,0 +1,2 @@
+
+(baff . [(20200823 1858) ((emacs (24 3)) (f (0 20 0))) "Create a byte array from a file" single ((:commit . "4a430ba05a97a8d473493f838b526737ba51dad8") (:keywords "convenience" "usability") (:authors ("Dave Footitt" . "dave.footitt@gmail.com")) (:maintainer "Dave Footitt" . "dave.footitt@gmail.com") (:url . "https://github.com/dave-f/baff/"))])
