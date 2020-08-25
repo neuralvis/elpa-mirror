@@ -4,7 +4,7 @@
 
 ;; Author: Ray Wang <ray.hackmylife@gmail.com>
 ;; Package-Requires: ((exec-path-from-shell "1.12") (emacs "26.2"))
-;; Package-Commit: 5538142ab34ac073c3f8b628770ed1877a47afd4
+;; Package-Commit: f17f7251587bbb5669e65ac28265f25a05e26d34
 ;; Package-Version: 20200823.747
 ;; Package-X-Original-Version: 0
 ;; Keywords: proxy, comm

@@ -1,4 +1,4 @@
-A port of the Vim theme Hybrid Reverse for Emacs 24.1+.
+Material color scheme based on Hybrid Reverse for Vim.
 
 Supported packages:
 - ace-window
@@ -27,11 +27,13 @@ Supported packages:
 - powerline-evil
 - rainbow-delimiters
 - selectrum
+- smart-mode-line
 - spaceline
 - switch-window
 - telephone-line
 - transient
 - treemacs
+- vterm
 - which-key
 - winum
 
@@ -53,5 +55,6 @@ Supported defaults:
 - show-paren-mode
 - tab-bar-mode
 - tab-line-mode
+- term
 - tty-menu
 - whitespace-mode

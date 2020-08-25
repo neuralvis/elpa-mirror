@@ -1,0 +1,2 @@
+
+(php-quickhelp . [(20200824 1125) ((emacs (25 1))) "Quickhelp at point for php" single ((:commit . "4063c33e55d5e46dead534394f4d9b17bf2eab83") (:authors ("Vincenzo Pupillo")) (:maintainer "Vincenzo Pupillo") (:url . "https://github.com/vpxyz/php-quickhelp"))])
