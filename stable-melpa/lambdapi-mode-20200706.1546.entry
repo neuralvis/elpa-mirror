@@ -1,2 +1,0 @@
-
-(lambdapi-mode . [(20200706 1546) ((emacs (26 1)) (eglot (1 5)) (math-symbol-lists (1 2 1))) "A major mode for editing Lambdapi source code" tar ((:commit . "665cb18e484b8e41b0314fc442422b671cda2962") (:keywords "languages") (:authors ("Rodolphe Lepigre, Gabriel Hondet")) (:maintainer "Deducteam" . "dedukti-dev@inria.fr") (:url . "https://github.com/Deducteam/lambdapi"))])
