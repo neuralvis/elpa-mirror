@@ -7,7 +7,7 @@
 ;; Created: 28 May 2020
 ;; Version: 0.1
 ;; Package-Version: 20200824.442
-;; Package-Commit: 293acc6a2d8553ae279724b806d7f79a275e107a
+;; Package-Commit: 02c39007b36e81b3f823e5826164b9e20e074611
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: startup lisp tools
 ;; URL: https://github.com/SidharthArya/modular-config.el
