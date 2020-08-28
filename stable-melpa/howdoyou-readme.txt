@@ -26,3 +26,8 @@ Customization
 howdoyou-use-curl:                default is true if curl is available
 howdoyou-number-of-answers:       maximal number of answers to show, default is 3
 howdoyou-switch-to-answer-buffer: switch to answer buffer if non nil, default is nil
+
+Changelog
+2020-08-27:
+- bump version
+- adapt to recent change by SO: css class from "post-text" to "s-prose"

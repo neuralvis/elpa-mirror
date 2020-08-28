@@ -1,2 +1,0 @@
-
-(auto-read-only . [(20200726 1356) ((cl-lib (0 5))) "Automatically make the buffer to read-only" single ((:commit . "a6c493c5279d484c00ce7fe75dfd2e60101b97db") (:keywords "files" "convenience") (:authors ("USAMI Kenta" . "tadsan@zonu.me")) (:maintainer "USAMI Kenta" . "tadsan@zonu.me") (:url . "https://github.com/zonuexe/auto-read-only.el"))])

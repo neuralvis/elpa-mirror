@@ -51,6 +51,7 @@ Supported defaults:
 - mode-line
 - org-mode*
 - outline-mode
+- ruler-mode
 - shell-script-mode
 - show-paren-mode
 - tab-bar-mode

@@ -22,7 +22,7 @@ are disabled by default:
     modus-vivendi-theme-org-blocks                     (choice)
     modus-vivendi-theme-prompts                        (choice)
     modus-vivendi-theme-3d-modeline                    (boolean)
-    modus-vivendi-theme-subtle-diffs                   (boolean)
+    modus-vivendi-theme-diffs                          (choice)
     modus-vivendi-theme-faint-syntax                   (boolean)
     modus-vivendi-theme-intense-hl-line                (boolean)
     modus-vivendi-theme-intense-paren-match            (boolean)
@@ -210,6 +210,7 @@ notify me of any missing package or change you would like to see.
     notmuch
     num3-mode
     nxml-mode
+    objed
     orderless
     org
     org-journal

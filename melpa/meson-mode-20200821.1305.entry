@@ -1,2 +1,0 @@
-
-(meson-mode . [(20200821 1305) ((emacs (26 1))) "Major mode for the Meson build system files" tar ((:commit . "1bbda365040b2f1ab463a24ba9bb8acdd1494959") (:keywords "languages" "tools") (:authors ("Michal Sojka" . "sojkam1@fel.cvut.cz")) (:maintainer "Michal Sojka" . "sojkam1@fel.cvut.cz") (:url . "https://github.com/wentasah/meson-mode"))])

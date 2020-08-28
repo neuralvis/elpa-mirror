@@ -22,7 +22,7 @@ are disabled by default:
     modus-operandi-theme-org-blocks                     (choice)
     modus-operandi-theme-prompts                        (choice)
     modus-operandi-theme-3d-modeline                    (boolean)
-    modus-operandi-theme-subtle-diffs                   (boolean)
+    modus-operandi-theme-diffs                          (choice)
     modus-operandi-theme-faint-syntax                   (boolean)
     modus-operandi-theme-intense-hl-line                (boolean)
     modus-operandi-theme-intense-paren-match            (boolean)
@@ -210,6 +210,7 @@ notify me of any missing package or change you would like to see.
     notmuch
     num3-mode
     nxml-mode
+    objed
     orderless
     org
     org-journal
