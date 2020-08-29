@@ -1,2 +1,0 @@
-
-(gdscript-mode . [(20200827 616) ((emacs (26 3))) "Major mode for Godot's GDScript language" tar ((:commit . "4a95d69034989779b3f6a45c82bd18de94b6782f") (:keywords "languages") (:authors ("Nathan Lovato <nathan@gdquest.com>, Fabián E. Gallina" . "fgallina@gnu.org")) (:maintainer nil . "nathan@gdquest.com") (:url . "https://github.com/GDQuest/emacs-gdscript-mode/"))])

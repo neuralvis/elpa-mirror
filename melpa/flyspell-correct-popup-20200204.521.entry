@@ -1,2 +1,0 @@
-
-(flyspell-correct-popup . [(20200204 521) ((flyspell-correct (0 6 1)) (popup (0 5 3)) (emacs (24))) "Correcting words with flyspell via popup interface" single ((:commit . "4a968dcd4b11742b1c3242fe0b58aa094bc2c3b6") (:authors ("Boris Buliga" . "boris@d12frosted.io")) (:maintainer "Boris Buliga" . "boris@d12frosted.io") (:url . "https://github.com/d12frosted/flyspell-correct"))])

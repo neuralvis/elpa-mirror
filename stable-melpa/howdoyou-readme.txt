@@ -31,3 +31,5 @@ Changelog
 2020-08-27:
 - bump version
 - adapt to recent change by SO: css class from "post-text" to "s-prose"
+2020-08-28:
+- adapt to recent change by SO: css class from "post-text" to "s-prose"

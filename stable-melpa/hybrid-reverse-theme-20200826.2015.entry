@@ -1,2 +1,0 @@
-
-(hybrid-reverse-theme . [(20200826 2015) ((emacs (24 1))) "Emacs theme with material color scheme" single ((:commit . "b226c35abb772f4de4142e1f6fe1feead54e5260") (:keywords "faces" "theme") (:authors ("Riyyi")) (:maintainer "Riyyi") (:url . "https://github.com/riyyi/emacs-hybrid-reverse"))])

@@ -7,13 +7,6 @@ parsing the Table of Contents into syntax that is understood by the
 `pdfoutline' and `djvused' commands that are used to add the table of
 contents to pdf- and djvu-files respectively.
 
-Important: For djvu documents, only outlines with maximum level deepness of 1
-are correctly parsed. For outlines with level deepness of 2 not all levels
-are set to correct level because the algorithm in the toc--parse-djvused
-function does not parse such files correctly yet (you are welcome to ‘repair’
-the algorithm to produce the correct syntax as it is described on the djvused
-website here).
-
 Requirements: Currently the package requires the `pdftotext' (part of
 poppler-utils), `pdfoutline' (part of fntsample) and `djvused' (part of
 http://djvu.sourceforge.net/) command line utilities to be available.
@@ -29,14 +22,18 @@ toc-extract-pages, or M-x toc-extract-pages-ocr if doc has no text layer or
 text layer is bad, and answer the subsequent prompts by entering the
 pagenumbers for the first and the last page each followed by RET. For PDF
 extraction with OCR, currently it is required to view all contents pages once
-before extraction (toc-mode uses the cached file data). A buffer with the,
-somewhat cleaned up, extracted text will open in TOC-cleanup mode. Prefix
-command with the universal argument (C-u) to omit clean and get the raw text.
-2. TOC-Cleanup In this mode you can further cleanup the contents to create a
-list where each line has the structure:
+before extraction (toc-mode uses the cached file data). Also the languages
+used for tesseract OCR can be customized via the `toc-ocr-languages'
+variable. A buffer with the, somewhat cleaned up, extracted text will open in
+TOC-cleanup mode. Prefix command with the universal argument (C-u) to omit
+clean and get the raw text. 2. TOC-Cleanup In this mode you can further
+cleanup the contents to create a list where each line has the structure:
 
 TITLE (SOME) PAGENUMBER
 
+(If the initial TOC looks bad/unusable then try to use then universal
+argument C-u before extraction in the previous step and/or try the ocr option
+with or without the universal argument)
 There can be any number of spaces between TITLE and PAGE. The correct
 pagenumbers can be edited in the next step. A document outline supports
 different levels and levels are automatically assigned in order of increasing
