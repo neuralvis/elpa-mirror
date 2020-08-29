@@ -1,12 +1,12 @@
 ;;; logview.el --- Major mode for viewing log files  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015-2018 Paul Pogonyshev
+;; Copyright (C) 2015-2020 Paul Pogonyshev
 
 ;; Author:     Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Maintainer: Paul Pogonyshev <pogonyshev@gmail.com>
-;; Version:    0.13.1
-;; Package-Version: 20200331.2111
-;; Package-Commit: c67298a215136617de60c9041904ee6a455dcd4f
+;; Version:    0.13.3snapshot
+;; Package-Version: 20200829.1516
+;; Package-Commit: dec120cf8d43673c31f7cd7bc0e1800006067cf4
 ;; Keywords:   files, tools
 ;; Homepage:   https://github.com/doublep/logview
 ;; Package-Requires: ((emacs "24.4") (datetime "0.6.1") (extmap "1.0"))
@@ -1937,7 +1937,8 @@ it stays in effect for other threads."
   (logview--assert 'timestamp)
   (logview--std-temporarily-widening
     (logview--locate-current-entry entry start
-      (let* ((thread          (logview--entry-group entry start logview--thread-group))
+      (let* ((thread          (when (memq 'thread logview--submode-features)
+                                (logview--entry-group entry start logview--thread-group)))
              (difference-base (or (when logview--timestamp-difference-per-thread-bases
                                     (gethash thread logview--timestamp-difference-per-thread-bases))
                                   logview--timestamp-difference-base)))

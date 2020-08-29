@@ -9,7 +9,7 @@
 ;; Maintainer: SKK Development Team <skk@ring.gr.jp>
 ;; URL: https://github.com/skk-dev/ddskk/blob/master/READMEs/README.ccc.org
 ;; Package-Version: 20200314.1557
-;; Package-Commit: 81410b925afd4cfd1ca5ab6c1257e221e1cc664f
+;; Package-Commit: 68af3021cf59ce899c5c22f2206bafa815f60f45
 ;; Keywords: cursor
 
 ;; This file is part of Daredevil SKK.
