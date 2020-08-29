@@ -2,8 +2,8 @@
 
 ;; Author: Riyyi
 ;; URL: https://github.com/riyyi/emacs-hybrid-reverse
-;; Package-Version: 20200828.1545
-;; Package-Commit: d968b6bb3c7f2c50611217e3a24be07d1d3b2ed8
+;; Package-Version: 20200829.17
+;; Package-Commit: 8d53338d6e9222afb9b028686af292e82b8a729b
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: faces, theme
@@ -118,7 +118,7 @@
 	  (_hr-white+2    "#d0d0d0") ; grey82~
 	  (_hr-white+3    "#cccccc") ; grey80
 	  (hr-fg         "#c5c8c6") ; grey78~
-	  (hr-white+4    "#bcbcbc") ; grey74~
+	  (_hr-white+4    "#bcbcbc") ; grey74~
 	  (hr-white+5    "#9e9e9e") ; grey62
 	  (hr-white+6    "#707880") ; grey46~
 	  ;; ----------------------
