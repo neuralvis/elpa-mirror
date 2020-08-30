@@ -5,7 +5,7 @@
 ;; Author: Noah Friedman <friedman@splode.com>
 ;; Keywords: extensions
 ;; Created: 1995-10-06
-;; Version: 1.8.0
+;; Version: 1.9.0
 ;; Package-Requires: ((emacs "26.3"))
 
 ;; This is a GNU ELPA :core package.  Avoid functionality that is not
@@ -289,13 +289,13 @@ Otherwise work like `message'."
 	     (or (window-in-direction 'above (minibuffer-window))
 		 (minibuffer-selected-window)
 		 (get-largest-window)))
-    (when mode-line-format
-	  (unless (and (listp mode-line-format)
-		       (assq 'eldoc-mode-line-string mode-line-format))
+          (when (and mode-line-format
+                     (not (and (listp mode-line-format)
+                               (assq 'eldoc-mode-line-string mode-line-format))))
 	    (setq mode-line-format
 		  (list "" '(eldoc-mode-line-string
 			     (" " eldoc-mode-line-string " "))
-			mode-line-format))))
+			mode-line-format)))
           (setq eldoc-mode-line-string
                 (when (stringp format-string)
                   (apply #'format-message format-string args)))
@@ -573,7 +573,8 @@ Meant as a value for `eldoc-documentation-strategy'."
                       (let* ((callback (eldoc--make-callback :enthusiast))
                              (str (funcall f callback)))
                         (if (stringp str) (funcall callback str))
-                        nil))))
+                        nil)))
+  t)
 
 ;; JT@2020-07-10: ElDoc is pre-loaded, so in Emacs < 28 we can't
 ;; make the "old" `eldoc-documentation-function' point to the new
