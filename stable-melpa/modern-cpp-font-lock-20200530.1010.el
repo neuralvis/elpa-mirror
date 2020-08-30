@@ -4,6 +4,8 @@
 
 ;; Author: Ludwig PACIFICI <ludwig@lud.cc>
 ;; URL: https://github.com/ludwigpacifici/modern-cpp-font-lock
+;; Package-Version: 20200530.1010
+;; Package-Commit: 865955d0035382a17a7f03add0d00d0bd812b103
 ;; Version: 0.1.3
 ;; Created: 12 May 2016
 ;; Keywords: languages, c++, cpp, font-lock

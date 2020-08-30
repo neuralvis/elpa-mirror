@@ -1,0 +1,2 @@
+
+(eshell-outline . [(20200824 151) ((emacs (25 1))) "Enhanced outline-mode for Eshell" single ((:commit . "1298415008a75011b268620c6b47693422997458") (:keywords "unix" "eshell" "outline" "convenience") (:authors ("Jamie Beardslee" . "jdb@jamzattack.xyz")) (:maintainer "Jamie Beardslee" . "jdb@jamzattack.xyz") (:url . "https://git.jamzattack.xyz/eshell-outline"))])
