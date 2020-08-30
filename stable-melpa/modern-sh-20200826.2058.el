@@ -5,7 +5,7 @@
 ;; Authors: Damon Kwok <damon-kwok@outlook.com>
 ;; Version: 0.0.1
 ;; Package-Version: 20200826.2058
-;; Package-Commit: 65369a4855df03b8b5c0869bc7d037e880290d83
+;; Package-Commit: 87fc7aaf63aa723b4046e59d2d273572e33ad33c
 ;; URL: https://github.com/damon-kwok/modern-sh
 ;; Keywords: languages programming
 ;; Package-Requires: ((emacs "25.1") (hydra "0.15.0") (eval-in-repl "0.9.7"))

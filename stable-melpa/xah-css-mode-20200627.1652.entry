@@ -1,2 +1,0 @@
-
-(xah-css-mode . [(20200627 1652) ((emacs (24 3))) "Major mode for editing CSS code." single ((:commit . "98e550db52865d6de141d5bbb85f8b4e68b56b39") (:keywords "languages" "convenience" "css" "color") (:authors ("Xah Lee ( http://xahlee.info/ )")) (:maintainer "Xah Lee ( http://xahlee.info/ )") (:url . "http://ergoemacs.org/emacs/xah-css-mode.html"))])

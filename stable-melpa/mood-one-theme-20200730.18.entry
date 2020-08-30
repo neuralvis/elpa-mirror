@@ -1,2 +1,0 @@
-
-(mood-one-theme . [(20200730 18) ((emacs (24 4))) "A dark color scheme inspired by the Doom One theme." single ((:commit . "00e2d3797a271c0b3ecb0bab56dc705558015311") (:keywords "mode-line" "faces") (:authors ("Jessie Hildebrandt <jessieh.net>")) (:maintainer "Jessie Hildebrandt <jessieh.net>") (:url . "https://gitlab.com/jessieh/mood-one-theme"))])
