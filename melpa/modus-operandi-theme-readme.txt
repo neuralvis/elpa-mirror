@@ -21,7 +21,7 @@ are disabled by default:
     modus-operandi-theme-fringes                        (choice)
     modus-operandi-theme-org-blocks                     (choice)
     modus-operandi-theme-prompts                        (choice)
-    modus-operandi-theme-3d-modeline                    (boolean)
+    modus-operandi-theme-mode-line                      (choice)
     modus-operandi-theme-diffs                          (choice)
     modus-operandi-theme-faint-syntax                   (boolean)
     modus-operandi-theme-intense-hl-line                (boolean)
@@ -54,6 +54,7 @@ notify me of any missing package or change you would like to see.
     auctex and TeX
     auto-dim-other-buffers
     avy
+    awesome-tray
     bm
     bongo
     boon

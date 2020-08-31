@@ -21,7 +21,7 @@ are disabled by default:
     modus-vivendi-theme-fringes                        (choice)
     modus-vivendi-theme-org-blocks                     (choice)
     modus-vivendi-theme-prompts                        (choice)
-    modus-vivendi-theme-3d-modeline                    (boolean)
+    modus-vivendi-theme-mode-line                      (choice)
     modus-vivendi-theme-diffs                          (choice)
     modus-vivendi-theme-faint-syntax                   (boolean)
     modus-vivendi-theme-intense-hl-line                (boolean)
@@ -54,6 +54,7 @@ notify me of any missing package or change you would like to see.
     auctex and TeX
     auto-dim-other-buffers
     avy
+    awesome-tray
     bm
     bongo
     boon
