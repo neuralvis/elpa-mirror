@@ -18,16 +18,30 @@ extraction 2 cleanup 3 adjust/correct pagenumbers 4 add TOC to document
 
 1. Extraction Open some pdf or djvu file in Emacs (pdf-tools and djvu package
 recommended). Find the pagenumbers for the TOC. Then type M-x
-toc-extract-pages, or M-x toc-extract-pages-ocr if doc has no text layer or
-text layer is bad, and answer the subsequent prompts by entering the
+`toc-extract-pages', or M-x `toc-extract-pages-ocr' if doc has no text layer
+or text layer is bad, and answer the subsequent prompts by entering the
 pagenumbers for the first and the last page each followed by RET. For PDF
 extraction with OCR, currently it is required to view all contents pages once
 before extraction (toc-mode uses the cached file data). Also the languages
 used for tesseract OCR can be customized via the `toc-ocr-languages'
 variable. A buffer with the, somewhat cleaned up, extracted text will open in
 TOC-cleanup mode. Prefix command with the universal argument (C-u) to omit
-clean and get the raw text. 2. TOC-Cleanup In this mode you can further
-cleanup the contents to create a list where each line has the structure:
+clean and get the raw text. If the extracted text is of too low quality you
+either can hack/extend the `toc-extract-pages-ocr' definition, or
+alternatively you can try to extract the text with the python
+document-contents-extractor script (see URL
+`https://pypi.org/project/document-contents-extractor/'), which is more
+configurable (you are also welcome to hack and improve that script).
+
+The documentation at URL
+`https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html' might be
+useful.
+
+If you merely want to extract text without further processing then you can
+use the command `toc-extract-only'.
+
+2. TOC-Cleanup In this mode you can further cleanup the contents to create a
+list where each line has the structure:
 
 TITLE (SOME) PAGENUMBER
 
@@ -88,3 +102,33 @@ the (customizable) variable toc-replace-original-file is nil, then the TOC is
 added to a copy of the original pdf file with the path as defined by the
 variable toc-destination-file-name. Either a relative path to the original
 file directory or an absolute path can be given.
+
+Sometimes the `pdfoutline/djvused' application is not able to add the TOC to
+the document. In that case you can either debug the problem by copying the
+used terminal command from the `*messages*' buffer and run it manually in the
+document's folder, or you can delete the outline source buffer and run
+`toc--tablist-to-handyoutliner' from the tablist buffer to get an outline
+source file that can be used with HandyOutliner (see URL
+`http://handyoutlinerfo.sourceforge.net/') Unfortunately the handyoutliner
+command does not take arguments, but if you customize the
+`toc-handyoutliner-path' and `toc-file-browser-command' variables, then Emacs
+will try to open HandyOutliner and the file browser so that you can drag the
+files directly into HandyOutliner).
+
+Finally, if you just want to extract some text
+
+Keybindings
+all-modes (i.e. all steps)
+ Key Binding        Description
+  ~C-c C-c~         dispatch (next step)
+
+toc-cleanup-mode
+ ~C-c C-j~          toc--join-next-unnumbered-lines
+
+toc-mode (tablist)
+ ~TAB~              preview/jump-to-page
+ ~right/left~       toc-in/decrease-remaining
+ ~C-right/C-left~   toc-in/decrease-remaining and view page
+ ~S-right/S-left~   in/decrease pagenumber current entry
+ ~C-down/C-up~      scroll document other window (if document buffer shown)
+ ~S-down/S-up~      full page scroll document other window ( idem )

@@ -106,6 +106,7 @@ notify me of any missing package or change you would like to see.
     ediff
     eglot
     el-search
+    eldoc
     eldoc-box
     elfeed
     elfeed-score
