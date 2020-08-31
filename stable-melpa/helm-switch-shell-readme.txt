@@ -15,7 +15,9 @@ directory).
 
 By default, new shells are created with eshell. You can customize
 this by setting helm-switch-shell-new-shell-type to be shell, in
-which case new shells will be created with shell.
+which case new shells will be created with shell, or vterm, in
+which case they will be created with vterm (if the emacs-libvterm
+package is installed).
 
 It provides the following keybindings by default:
 C-s: open the indicated shell in horizontal split (split-window-below)

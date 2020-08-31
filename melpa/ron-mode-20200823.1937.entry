@@ -1,2 +1,0 @@
-
-(ron-mode . [(20200823 1937) ((emacs (24 5 1))) "Rusty Object Notation mode" single ((:commit . "e7bfa03623049c5dc36e02f3ec3030f6efb99cc8") (:keywords "languages") (:authors ("Daniel Hutzley" . "endergeryt@gmail.com")) (:maintainer "Daniel Hutzley" . "endergeryt@gmail.com") (:url . "https://chiselapp.com/user/Hutzdog/repository/ron-mode/home"))])
