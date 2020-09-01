@@ -4,8 +4,8 @@
 
 ;; Author: Daniel Laurens Nicolai <dalanicolai@gmail.com>
 ;; Version: 0
-;; Package-Version: 20200831.1307
-;; Package-Commit: b45b78102c285b0b0f2d38b74a16ada2b9c9bb23
+;; Package-Version: 20200901.1329
+;; Package-Commit: 9260beb0a7a91b936588ddfa7d1c5ec75ca1b3dc
 ;; Keywords: tools, outlines, convenience
 ;; Package-Requires: ((emacs "26.1"))
 ;; URL: https://github.com/dalanicolai/toc-mode
@@ -165,6 +165,7 @@
 (require 'pdf-tools nil t)
 (require 'djvu nil t)
 (require 'evil nil t)
+(require 'seq)
 
 ;; List of declarations to eliminate byte-compile errors
 (defvar djvu-doc-image)
@@ -517,7 +518,7 @@ Prompt for startpage and endpage and print OCR output to new buffer."
                lines
                (list (list nil
                            (vector
-                            (number-to-string (cl-position spaces levels))
+                            (number-to-string (seq-position spaces levels))
                             (mapconcat #'identity (butlast line-list) " ")
                             (mapconcat #'identity (last line-list) " "))))))
         (forward-line)))
@@ -741,7 +742,10 @@ to `pdfoutline' shell command."
   (interactive)
   (start-process ""
                  nil
-                 toc-handyoutliner-path)
+                 toc-handyoutliner-path))
+
+(defun toc--open-filepath-in-file-browser ()
+  (interactive)
   (let ((process-connection-type nil))
     (start-process ""
                    nil
@@ -770,7 +774,8 @@ to `pdfoutline' shell command."
     (insert text))
   (save-buffer)
   (when (and toc-handyoutliner-path toc-file-browser-command)
-    (toc--open-handy-outliner)))
+    (toc--open-handy-outliner)
+    (toc--open-filepath-in-file-browser)))
 
 
 ;;;; add outline to document

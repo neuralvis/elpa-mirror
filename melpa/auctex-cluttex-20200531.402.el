@@ -5,7 +5,7 @@
 ;; Author: Masahiro Nakamura <tsuucat@icloud.com>
 ;; Version: 0.1.0
 ;; Package-Version: 20200531.402
-;; Package-Commit: 7e36dcb88c0021e48e7a095257e63e2913f75789
+;; Package-Commit: 85315f96293fc004ba10ec2e25998498244ff826
 ;; URL: https://github.com/tsuu32/auctex-cluttex
 ;; Package-Requires: ((emacs "24.4") (auctex "12.2"))
 ;; Keywords: tex
