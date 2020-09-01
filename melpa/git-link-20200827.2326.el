@@ -4,7 +4,7 @@
 ;; Author: Skye Shaw <skye.shaw@gmail.com>
 ;; Version: 0.8.1 (unreleased)
 ;; Package-Version: 20200827.2326
-;; Package-Commit: c89e6e142af821814665561004613eb0778070b1
+;; Package-Commit: 7109c36c82496d6954dcf2b0b9c622b26e6ac75d
 ;; Keywords: git, vc, github, bitbucket, gitlab, sourcehut, convenience
 ;; URL: http://github.com/sshaw/git-link
 ;; Package-Requires: ((emacs "24.3"))
