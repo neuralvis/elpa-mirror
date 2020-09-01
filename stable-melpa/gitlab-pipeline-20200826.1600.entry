@@ -1,2 +1,0 @@
-
-(gitlab-pipeline . [(20200826 1600) ((emacs (25 1)) (ghub (3 3 0))) "Get infomations of Gitlab pipelines" single ((:commit . "5e41757c613c74005b55295c5e8b5d6a5c83f24c") (:keywords "comm" "tools" "git") (:authors ("Giap Tran" . "txgvnn@gmail.com")) (:maintainer "Giap Tran" . "txgvnn@gmail.com") (:url . "https://github.com/TxGVNN/gitlab-pipeline"))])
