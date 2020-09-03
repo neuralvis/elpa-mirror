@@ -1,2 +1,0 @@
-
-(sayid . [(20200820 603) ((cider (0 21 0))) "sayid nREPL middleware client" single ((:commit . "c4a47e1e8f7942cbce163abb46585624d724f8cd") (:authors ("Bill Piel" . "bill@billpiel.com")) (:maintainer "Bill Piel" . "bill@billpiel.com") (:url . "https://github.com/clojure-emacs/sayid"))])

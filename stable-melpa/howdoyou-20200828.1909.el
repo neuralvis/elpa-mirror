@@ -5,7 +5,7 @@
 ;; Author: Thanh Vuong <thanhvg@gmail.com>
 ;; URL: https://github.com/thanhvg/howdoyou/
 ;; Package-Version: 20200828.1909
-;; Package-Commit: e6b761efa16728fe92a7db323c80805cfa1509eb
+;; Package-Commit: 7cb47ea7339cd7830ebacc8a4900bb930de3f59f
 ;; Package-Requires: ((emacs "25.1") (promise "1.1") (request "0.3.0") (org "9.2"))
 ;; Version: 0.2
 

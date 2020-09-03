@@ -1,7 +1,7 @@
 ;;; mlso-theme.el --- A dark, medium contrast theme -*- lexical-binding :t; -*-
 
 ;; Version: 1.4
-;; Package-Commit: b54065858c82c6f1fce6d50b1ee83c18863a7a5b
+;; Package-Commit: b47243006470798caa4d3f8fe1af9bd5ef06bbee
 ;; Package-Version: 20200828.1221
 ;; Package-X-Original-Version: 20200513.1751
 ;; URL: https://github.com/Mulling/mlso-theme

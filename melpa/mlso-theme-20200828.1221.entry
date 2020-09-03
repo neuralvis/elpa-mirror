@@ -1,2 +1,2 @@
 
-(mlso-theme . [(20200828 1221) ((emacs (24))) "A dark, medium contrast theme" single ((:commit . "b54065858c82c6f1fce6d50b1ee83c18863a7a5b") (:authors ("github.com/Mulling")) (:maintainer "github.com/Mulling") (:url . "https://github.com/Mulling/mlso-theme"))])
+(mlso-theme . [(20200828 1221) ((emacs (24))) "A dark, medium contrast theme" single ((:commit . "b47243006470798caa4d3f8fe1af9bd5ef06bbee") (:authors ("github.com/Mulling")) (:maintainer "github.com/Mulling") (:url . "https://github.com/Mulling/mlso-theme"))])

@@ -1,2 +1,0 @@
-
-(org-taskforecast . [(20200817 748) ((emacs (26 1)) (dash (2 16 0)) (dash-functional (2 16 0)) (s (1 12 0)) (org-ql (0 4)) (transient (0 2 0))) "Manage closed task list and forecast time flow with org-mode" single ((:commit . "fc160ce255a98da36c59da4d49a628dd7f742087") (:keywords "convenience") (:authors ("Hiroki YAMAKAWA" . "s06139@gmail.com")) (:maintainer "Hiroki YAMAKAWA" . "s06139@gmail.com") (:url . "https://github.com/HKey/org-taskforecast"))])

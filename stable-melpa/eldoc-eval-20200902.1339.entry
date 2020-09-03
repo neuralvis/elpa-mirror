@@ -1,0 +1,2 @@
+
+(eldoc-eval . [(20200902 1339) nil "Enable eldoc support when minibuffer is in use." single ((:commit . "5ecafc2b3d3e712c96dcdbcff0cbe43f1b6fed3d") (:authors ("Thierry Volpiatto" . "thierry.volpiatto@gmail.com")) (:maintainer "Thierry Volpiatto" . "thierry.volpiatto@gmail.com"))])

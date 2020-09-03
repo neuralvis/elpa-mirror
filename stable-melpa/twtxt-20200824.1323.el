@@ -3,7 +3,7 @@
 ;; Author: DEADBLACKCLOVER <deadblackclover@protonmail.com>
 ;; Version: 0.1
 ;; Package-Version: 20200824.1323
-;; Package-Commit: 0dc67b627a00e8b927353e27f91a4affa45fc8b5
+;; Package-Commit: e7bafaf92124bb4f2a0be5c1a635b80f9b3a8c87
 ;; URL: https://github.com/deadblackclover/twtxt-el
 ;; Package-Requires: ((emacs "25.1") (request "0.2.0"))
 

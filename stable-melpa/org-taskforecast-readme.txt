@@ -9,16 +9,3 @@ also manipulate tasks in the list like org-agenda.
 
 This package uses org-id to find an org heading.  So ID property
 of an org heading is set as needed.
-
-* About TaskChute
-
-TaskChute (https://taskchute.net/) is a method and tools to manage
-tasks and time.
-
-I'm interested in TaskChute and I had wanted to do that, but it was
-difficult for me to move to other task management tools because I
-had already had many tasks in org-mode.  So I had started to
-develop this package to do TaskChute in Emacs with org-mode.
-However I haven't used the original TaskChute, so this package may
-be a TaskChute like tool but it doesn't represent TaskChute's
-features and its philosophy completely.
