@@ -1,7 +1,7 @@
 ;;; project.el --- Operations on the current project  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015-2020 Free Software Foundation, Inc.
-;; Version: 0.5.1
+;; Version: 0.5.2
 ;; Package-Requires: ((emacs "26.3") (xref "1.0.2"))
 
 ;; This is a GNU ELPA :core package.  Avoid using functionality that
@@ -581,6 +581,8 @@ DIRS must contain directory names."
 ;;;###autoload
 (defvar project-prefix-map
   (let ((map (make-sparse-keymap)))
+    (define-key map "!" 'project-shell-command)
+    (define-key map "&" 'project-async-shell-command)
     (define-key map "f" 'project-find-file)
     (define-key map "F" 'project-or-external-find-file)
     (define-key map "b" 'project-switch-to-buffer)
@@ -665,7 +667,9 @@ The following commands are available:
   (interactive)
   (project--other-place-command '((display-buffer-in-new-tab))))
 
-;;;###autoload (define-key tab-prefix-map "p" #'project-other-tab-command)
+;;;###autoload
+(when (bound-and-true-p tab-prefix-map)
+  (define-key tab-prefix-map "p" #'project-other-tab-command))
 
 (declare-function grep-read-files "grep")
 (declare-function xref--show-xrefs "xref")
@@ -881,6 +885,20 @@ if one already exists."
     (if (and eshell-buffer (not current-prefix-arg))
         (pop-to-buffer eshell-buffer)
       (eshell t))))
+
+;;;###autoload
+(defun project-async-shell-command ()
+  "Run `async-shell-command' in the current project's root directory."
+  (interactive)
+  (let ((default-directory (project-root (project-current t))))
+    (call-interactively #'async-shell-command)))
+
+;;;###autoload
+(defun project-shell-command ()
+  "Run `shell-command' in the current project's root directory."
+  (interactive)
+  (let ((default-directory (project-root (project-current t))))
+    (call-interactively #'shell-command)))
 
 (declare-function fileloop-continue "fileloop" ())
 
