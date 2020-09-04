@@ -1,0 +1,2 @@
+
+(flycheck-projectile . [(20200903 1924) ((emacs (25 1)) (flycheck (31)) (projectile (2 2))) "Project-wide errors" single ((:commit . "7f850a5cce0e2756317391825916bdcd5fd4b1bb") (:authors ("Nikita Bloshchanevich" . "nikblos@outlook.com")) (:maintainer "Nikita Bloshchanevich" . "nikblos@outlook.com") (:url . "https://github.com/nbfalcon/flycheck-projectile"))])

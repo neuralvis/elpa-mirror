@@ -1,0 +1,2 @@
+
+(ccc . [(20200904 1431) nil "buffer local cursor color control library" single ((:commit . "2ce65eabea78d1eca10ae0ddf44f5769da1a36be") (:keywords "cursor") (:authors ("Masatake YAMATO" . "masata-y@is.aist-nara.ac.jp")) (:maintainer "SKK Development Team") (:url . "https://github.com/skk-dev/ddskk"))])

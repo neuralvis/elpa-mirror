@@ -98,4 +98,8 @@ Tips:
    You can customize `counsel-etags-ctags-options-base' to change the path of
    base configuration file.
 
+ - Grep result is sorted by string distance of current file path and candidate file path.
+   The sorting happens in Emacs 27+.
+   You can set `counsel-etags-sort-grep-result-p' to nil to disable sorting.
+
 See https://github.com/redguardtoo/counsel-etags/ for more tips.

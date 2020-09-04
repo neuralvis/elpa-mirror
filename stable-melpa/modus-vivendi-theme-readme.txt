@@ -55,6 +55,7 @@ notify me of any missing package or change you would like to see.
     auto-dim-other-buffers
     avy
     awesome-tray
+    binder
     bm
     bongo
     boon
@@ -121,6 +122,7 @@ notify me of any missing package or change you would like to see.
     eshell-fringe-status
     eshell-git-prompt
     eshell-prompt-extras (epe)
+    eshell-syntax-highlighting
     evil (evil-mode)
     evil-goggles
     evil-visual-mark-mode

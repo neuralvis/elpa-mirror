@@ -7,7 +7,7 @@
 ;; Author: William Rankin <william@bydasein.com>
 ;; Keywords: wp, text
 ;; Package-Version: 20200702.601
-;; Package-Commit: 0bc5e98b8456493084d1bd3df35e92a12c5da3b2
+;; Package-Commit: 1a670ff64f66cb69f9e1520c009419cf09f47f58
 ;; Version: 1.11.1
 ;; Package-Requires: ((emacs "24.5"))
 ;; URL: https://github.com/rnkn/olivetti
