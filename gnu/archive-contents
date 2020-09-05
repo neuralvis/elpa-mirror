@@ -1931,7 +1931,7 @@
 	      ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
 	     (:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca"))])
  (seq .
-      [(2 20)
+      [(2 22)
        nil "Sequence manipulation functions" tar
        ((:maintainer nil . "emacs-devel@gnu.org")
 	(:authors
@@ -2054,6 +2054,14 @@
 	     ("Artur Malabarba" . "emacs@endlessparentheses.com"))
 	    (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
 	    (:url . "https://github.com/Malabarba/spinner.el"))])
+ (sql-beeline .
+	      [(0 1)
+	       nil "Beeline support for sql.el" single
+	       ((:url . "http://elpa.gnu.org/packages/sql-beeline.html")
+		(:keywords "sql" "hive" "beeline" "hiveserver2")
+		(:authors
+		 ("Filipp Gunbin" . "fgunbin@fastmail.fm"))
+		(:maintainer "Filipp Gunbin" . "fgunbin@fastmail.fm"))])
  (sql-indent .
 	     [(1 5)
 	      ((cl-lib
