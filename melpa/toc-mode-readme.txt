@@ -1,20 +1,48 @@
 toc-mode.el is a package to create and add a Table of Contents to pdf and
 djvu documents. It implements features to extract a Table of Contents from
 the textlayer of a document or via OCR if that last option is necessary or
-prefered. Subsequently this package implements various features to assist in
-tidy up the extracted Table of Contents, adjust the pagenumbers and finally
-parsing the Table of Contents into syntax that is understood by the
-`pdfoutline' and `djvused' commands that are used to add the table of
-contents to pdf- and djvu-files respectively.
+prefered. For 'software generated' PDFs it provides the option to use
+pdf.tocgen (see URL `https://krasjet.com/voice/pdf.tocgen/'). Subsequently
+this package implements various features to assist in tidy up the extracted
+Table of Contents, adjust the pagenumbers and finally parsing the Table of
+Contents into syntax that is understood by the `pdfoutline' and `djvused'
+commands that are used to add the table of contents to pdf- and djvu-files
+respectively.
 
-Requirements: Currently the package requires the `pdftotext' (part of
+Requirements: To use the pdf.tocgen functionality that software has to be
+installed (see URL `https://krasjet.com/voice/pdf.tocgen/'). For the other
+remaining functionality the package requires the `pdftotext' (part of
 poppler-utils), `pdfoutline' (part of fntsample) and `djvused' (part of
 http://djvu.sourceforge.net/) command line utilities to be available.
 Extraction with OCR requires the tesseract command line utility to be
 available.
 
-Usage: Extraction and adding contents to a document is done in 4 steps: 1
-extraction 2 cleanup 3 adjust/correct pagenumbers 4 add TOC to document
+Usage:
+
+For 'software-generated' (i.e. PDF's not created from scans) PDF-files it is
+recommend to use `toc-extract-with-pdf-tocgen'. To use this function you
+first have to provide the font properties for the different headline levels.
+For that select the word in a headline of a certain level and then type M-x
+`toc-gen-set-level'. This function will ask which level you are setting, the
+highest level should be level 1. After you have set the various levels (1,2,
+etc.) then it is time to run M-x `toc-extract-with-pdf-tocgen'. If a TOC is
+extracted succesfully, then in the pdftocgen-mode buffer simply press C-c C-c
+to add the contents to the PDF. The contents will be added to a copy of the
+original PDF with the filename output.pdf and this copy will be opened in a
+new buffer. If the pdf-tocgen option does not work well then continue with
+the steps below.
+
+In each step below, check out available shortcuts using C-h m. Additionally
+you can find available functions by typing the M-x mode-name (e.g. M-x
+toc-cleanup), or with two dashes in the mode name (e.g. M-x toc--cleanup). Of
+course if you use packages like Ivy or Helm you just use the fuzzy search
+functionality.
+
+Extraction and adding contents to a document is done in 4 steps:
+1 extraction
+2 cleanup
+3 adjust/correct pagenumbers
+4 add TOC to document
 
 1. Extraction Open some pdf or djvu file in Emacs (pdf-tools and djvu package
 recommended). Find the pagenumbers for the TOC. Then type M-x
@@ -65,7 +93,7 @@ There are some handy functions to assist in the cleanup. C-c C-j jumps
 automatically to the next line not ending with a number and joins it with the
 next line. If the indentation structure of the different lines does not
 correspond with the levels, then the levels can be set automatically from the
-number of separatorss in the indices with M-x toc--cleanup-set-level-by-index.
+number of separatorss in the indices with M-x toc-cleanup-set-level-by-index.
 The default separators is a . but a different separators can be entered by
 preceding the function invocation with the universal argument (C-u). Some
 documents contain a structure like

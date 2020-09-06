@@ -244,6 +244,7 @@ notify me of any missing package or change you would like to see.
     powerline-evil
     proced
     prodigy
+    racket-mode
     rainbow-blocks
     rainbow-identifiers
     rainbow-delimiters

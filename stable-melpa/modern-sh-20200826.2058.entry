@@ -1,2 +1,0 @@
-
-(modern-sh . [(20200826 2058) ((emacs (25 1)) (hydra (0 15 0)) (eval-in-repl (0 9 7))) "Minor mode for editing shell script" single ((:commit . "87fc7aaf63aa723b4046e59d2d273572e33ad33c") (:keywords "languages" "programming") (:url . "https://github.com/damon-kwok/modern-sh"))])

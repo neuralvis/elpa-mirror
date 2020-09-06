@@ -17,22 +17,25 @@ They are replaced by this program.  But all the other commands and configuration
 for flyspell is still valid.
 
 3. Tips
-If `wucuo-flyspell-start-mode' is "normal", `wucuo-start' runs `flyspell-buffer'.
-If it's "normal", `wucuo-start' runs `flyspell-region' to check visible region
-in current window.
 
-The interval of checking is set by `wucuo-update-interval'.
+- `wucuo-spell-check-file' will spell check one file and report its typos
+
+- If `wucuo-flyspell-start-mode' is "normal", `wucuo-start' runs `flyspell-buffer'.
+  If it's "normal", `wucuo-start' runs `flyspell-region' to check visible region
+  in current window.
+
+- The interval of checking is set by `wucuo-update-interval'
 
 See `wucuo-check-nil-font-face' on how to check plain text (text without font)
 
-Use `wucuo-current-font-face' to detect font face at point.
+- Use `wucuo-current-font-face' to detect font face at point
 
-In `wucuo-flyspell-start-mode' is "normal", `wucuo-spell-check-buffer-max' specifies
-the maximum size of buffer to check.
-In `wucuo-flyspell-start-mode' is "fast", `wucuo-spell-check-region-max' specifies
-the maximum size of visible region to check.
+- In `wucuo-flyspell-start-mode' is "normal", `wucuo-spell-check-buffer-max' specifies
+  the maximum size of buffer to check.
+  In `wucuo-flyspell-start-mode' is "fast", `wucuo-spell-check-region-max' specifies
+  the maximum size of visible region to check.
 
-You can define a function in `wucuo-spell-check-buffer-predicate'.
+- You can define a function in `wucuo-spell-check-buffer-predicate'.
 If the function returns t, the spell checking of current buffer will continue.
 
 If it returns nil, the spell checking is skipped.
