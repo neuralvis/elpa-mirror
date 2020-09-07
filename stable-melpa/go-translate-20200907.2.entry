@@ -1,0 +1,2 @@
+
+(go-translate . [(20200907 2) ((emacs (26 1))) "Google Translate" single ((:commit . "0dc7bb44773dec604b17a2994fc592d82fb7ecbf") (:keywords "convenience") (:authors ("lorniu" . "lorniu@gmail.com")) (:maintainer "lorniu" . "lorniu@gmail.com") (:url . "https://github.com/lorniu/go-translate"))])

@@ -1,0 +1,2 @@
+
+(vterm . [(20200907 42) ((emacs (25 1))) "Fully-featured terminal emulator" tar ((:commit . "fa39a07c87bdff9ae9945b3e3998f8e09c25b407") (:keywords "terminals") (:authors ("Lukas Fürmetz" . "fuermetz@mailbox.org")) (:maintainer "Lukas Fürmetz" . "fuermetz@mailbox.org") (:url . "https://github.com/akermu/emacs-libvterm"))])
