@@ -1,0 +1,2 @@
+
+(ivy-searcher . [(20200908 1116) ((emacs (25 1)) (ivy (0 8 0)) (searcher (0 1 8)) (s (1 12 0)) (f (0 20 0))) "Ivy interface to use searcher" single ((:commit . "2b41e09e31ab089d0ee4c88c4c399de8445048dc") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs-elpa/ivy-searcher"))])

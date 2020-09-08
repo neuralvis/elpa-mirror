@@ -1,2 +1,2 @@
 
-(ox-report . [(20200906 642) ((emacs (24 4))) "Export your org file to minutes report PDF file" single ((:commit . "91e188d4c2c7e36df53faca1841d9b1c5f44d1c5") (:keywords "org" "outlines" "report" "exporter" "meeting" "minutes") (:authors ("Matthias David" . "matthias@gnu.re")) (:maintainer "Matthias David" . "matthias@gnu.re") (:url . "https://github.com/DarkBuffalo/ox-report"))])
+(ox-report . [(20200906 642) ((emacs (24 4))) "Export your org file to minutes report PDF file" single ((:commit . "2c7b13dcc97424e5237a0e2a80738e809c9b083b") (:keywords "org" "outlines" "report" "exporter" "meeting" "minutes") (:authors ("Matthias David" . "matthias@gnu.re")) (:maintainer "Matthias David" . "matthias@gnu.re") (:url . "https://github.com/DarkBuffalo/ox-report"))])

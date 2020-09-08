@@ -6,7 +6,7 @@
 ;; Author: Erik Sjöstrand <sjostrand.erik@gmail.com>
 ;; URL: http://github.com/Kungsgeten/org-brain
 ;; Package-Version: 20200625.2050
-;; Package-Commit: 671db0e08b91c7d2637d765a7afca8b2561275c8
+;; Package-Commit: 1662ebd680f041eb7deae68d3a24465a37ffadde
 ;; Keywords: outlines hypermedia
 ;; Package-Requires: ((emacs "25.1") (org "9.2"))
 ;; Version: 0.94
