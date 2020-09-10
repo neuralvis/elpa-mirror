@@ -1,2 +1,0 @@
-
-(transwin . [(20200704 356) ((emacs (24 3))) "Make window/frame transparent" single ((:commit . "df814cb578b0a4c01ed68f1da262df17d2a0a694") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs-elpa/transwin"))])
