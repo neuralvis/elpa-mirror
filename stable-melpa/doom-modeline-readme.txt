@@ -45,4 +45,4 @@ In `init.el`,
 or
 (use-package doom-modeline
   :ensure t
-  :hook (after-init . doom-modeline-mode))
+  :hook (window-setup . doom-modeline-mode))

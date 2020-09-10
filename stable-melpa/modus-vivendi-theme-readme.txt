@@ -77,6 +77,7 @@ notify me of any missing package or change you would like to see.
     counsel-notmuch
     counsel-org-capture-string
     cov
+    cperl-mode
     csv-mode
     ctrlf
     custom (M-x customize)
