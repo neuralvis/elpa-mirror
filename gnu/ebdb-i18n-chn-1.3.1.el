@@ -4,8 +4,8 @@
 
 ;; Author: Eric Abrahamsen <eric@ericabrahamsen.net>
 ;; Maintainer: Eric Abrahamsen <eric@ericabrahamsen.net>
-;; Version: 1.3
-;; Package-Requires: ((pyim "1.6.0") (ebdb "0.2"))
+;; Version: 1.3.1
+;; Package-Requires: ((pyim "1.6.0") (ebdb "0.6.17"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -110,7 +110,6 @@
 (cl-defmethod ebdb-string-i18n ((field ebdb-field-name-complex)
 				(_script (eql han)))
   "Properly format names in Chinese characters.
-
 This should only run once, at init time, or any time a record's
 name is changed.  The value ends up in the 'name-string slot of
 the record cache."
@@ -143,15 +142,15 @@ searches via pinyin will find the record."
     (if (eql add-or-del 'add)
 	(progn
 	  (setq hashfunc #'ebdb-puthash
-		listfunc #'object-add-to-list))
+		listfunc #'ebdb-add-to-list))
       (setq hashfunc #'ebdb-remhash
-	    listfunc #'object-remove-from-list))
+	    listfunc #'ebdb-remove-from-list))
     (funcall hashfunc fl-py record)
     (funcall hashfunc lf-py record)
     (funcall hashfunc name-string record)
-    (funcall listfunc (ebdb-record-cache record) 'alt-names fl-py)
-    (funcall listfunc (ebdb-record-cache record) 'alt-names name-string)
-    (funcall listfunc (ebdb-record-cache record) 'alt-names lf-py)))
+    (funcall listfunc (ebdb-record-alt-names record) fl-py)
+    (funcall listfunc (ebdb-record-alt-names record) name-string)
+    (funcall listfunc (ebdb-record-alt-names record) lf-py)))
 
 (cl-defmethod ebdb-china-handle-name ((field ebdb-field-name-simple)
 				      (record ebdb-record)
@@ -165,11 +164,11 @@ searches via pinyin will find the record."
     (if (eql add-or-del 'add)
 	(progn
 	  (setq hashfunc #'ebdb-puthash
-		listfunc #'object-add-to-list))
+		listfunc #'ebdb-add-to-list))
       (setq hashfunc #'ebdb-remhash
-	    listfunc #'object-remove-from-list))
+	    listfunc #'ebdb-remove-from-list))
     (funcall hashfunc name-string record)
-    (funcall listfunc (ebdb-record-cache record) 'alt-names name-string)))
+    (funcall listfunc (ebdb-record-alt-names record) name-string)))
 
 (cl-defmethod ebdb-init-field-i18n ((field ebdb-field-name)
 				    record
@@ -189,6 +188,22 @@ searches via pinyin will find the record."
 
 ;;;; ChangeLog:
 
+;; 2020-09-11  Eric Abrahamsen  <eric@ericabrahamsen.net>
+;; 
+;; 	[ebdb-i18n-chn] Flush version 1.3.1
+;; 
+;; 	* packages/ebdb-i18n-chn/ebdb-i18n-chn.el: No wonder this wasn't working
+;; 	correctly.
+;; 
+;; 2020-04-18  Eric Abrahamsen  <eric@ericabrahamsen.net>
+;; 
+;; 	Prepare to update for newer version of EBDB, but don't release
+;; 
+;; 	* packages/ebdb-i18n-chn/ebdb-i18n-chn.el (ebdb-china-handle-name): Use
+;; 	the new cache accessors, as well as
+;; 	`ebdb-add-to-list'/`ebdb-remove-from-list'. Release when EBDB changes 
+;; 	are sufficiently tested.
+;; 
 ;; 2019-08-15  Eric Abrahamsen  <eric@ericabrahamsen.net>
 ;; 
 ;; 	Fix ebdb-parse methods to return slots, not objects, bump to 1.3
