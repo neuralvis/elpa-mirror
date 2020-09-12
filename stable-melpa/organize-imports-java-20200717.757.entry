@@ -1,2 +1,0 @@
-
-(organize-imports-java . [(20200717 757) ((emacs (25 1)) (f (0 20 0)) (s (1 12 0))) "Automatically organize imports in Java code" single ((:commit . "c431b338d34c94345217b2b904d9c6f331d4015c") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs-elpa/organize-imports-java"))])
