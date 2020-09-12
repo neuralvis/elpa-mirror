@@ -9,7 +9,7 @@
 ;; Maintainer: 10sr <8.slashes@gmail.com>
 ;; Keywords: matching
 ;; Package-Version: 20200909.907
-;; Package-Commit: 961a6ae28c90bbe11b960e794a4b4fe0f9bba25d
+;; Package-Commit: c19235a35db076eebb5ad31fb42daf6520620f6d
 ;; URL: https://github.com/10sr/fuzzy-finder-el
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4"))

@@ -29,12 +29,14 @@ Purpose:
  journal of nodes added to the working-set, which may serve as a
  reference later.
 
- Remark: Depending on your needs you might find these packages
- interesting too as they provide similar functionality: org-now and
- org-mru-clock.
+
+Similar Packages:
+
+ Depending on your needs you might find these packages interesting too
+ as they provide similar functionality: org-now and org-mru-clock.
 
 
-Fictional User-Story:
+User-Story:
 
  Assume, you come into the office in the morning and start your Emacs
  with org-mode, because you keep all your notes in org.  Yesterday

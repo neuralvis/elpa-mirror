@@ -1,2 +1,2 @@
 
-(cfengine-code-style . [(20171115 2108) nil "C code style for CFEngine project." single ((:commit . "07eee4265baa24053d63c162f5fc25ff7a2d2ebb") (:authors ("Mikhail Gusarov" . "mikhail.gusarov@cfengine.com")) (:maintainer "Mikhail Gusarov" . "mikhail.gusarov@cfengine.com") (:url . "https://github.com/cfengine/core"))])
+(cfengine-code-style . [(20171115 2108) nil "C code style for CFEngine project." single ((:commit . "b801d6e8068c3d4bf95ced1beede192aac2b8220") (:authors ("Mikhail Gusarov" . "mikhail.gusarov@cfengine.com")) (:maintainer "Mikhail Gusarov" . "mikhail.gusarov@cfengine.com") (:url . "https://github.com/cfengine/core"))])

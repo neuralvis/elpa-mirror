@@ -18,7 +18,8 @@ for flyspell is still valid.
 
 3. Tips
 
-- `wucuo-spell-check-file' will spell check one file and report its typos
+- `wucuo-spell-check-file' spell check one file and report typos
+- `wucuo-spell-check-directory' spell check files in one directory and report typos
 
 - If `wucuo-flyspell-start-mode' is "normal", `wucuo-start' runs `flyspell-buffer'.
   If it's "normal", `wucuo-start' runs `flyspell-region' to check visible region
