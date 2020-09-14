@@ -1,0 +1,2 @@
+
+(abridge-diff . [(20200913 2131) ((emacs (26 1))) "Abridge long line-based diff hunks, including in magit" single ((:commit . "262bd008921fa35e7f47ccdfe9af046c8044d92c") (:keywords "magit" "diffs" "tools") (:authors ("J.D. Smith <jdtsmith AT gmail>")) (:maintainer "J.D. Smith <jdtsmith AT gmail>") (:url . "https://github.com/jdtsmith/abridge-diff"))])

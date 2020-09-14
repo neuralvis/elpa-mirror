@@ -4,7 +4,7 @@
 ;; Maintainer: Jack Kamm
 ;; Version: 4.0.0
 ;; Package-Version: 20200204.1612
-;; Package-Commit: 20409358ad321fb937152cf93a50a4a775e405d6
+;; Package-Commit: 55aab9c9a5c953b5c043c5a4ff7f3d36fbb9f0f7
 ;; Package-Requires: ((emacs "24.3"))
 ;; Homepage: https://github.com/jackkamm/undo-propose.el
 ;; Keywords: convenience, files, undo, redo, history

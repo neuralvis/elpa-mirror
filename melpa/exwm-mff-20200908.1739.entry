@@ -1,2 +1,0 @@
-
-(exwm-mff . [(20200908 1739) ((emacs (25))) "Mouse Follows Focus" single ((:commit . "2081c482d201edf4a30106a6a7df89cadf24bfd9") (:keywords "unix") (:authors ("Ian Eure" . "public@lowbar.fyi")) (:maintainer "Ian Eure" . "public@lowbar.fyi") (:url . "https://github.com/ieure/exwm-mff"))])
