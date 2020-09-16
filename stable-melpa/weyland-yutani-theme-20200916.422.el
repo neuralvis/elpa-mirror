@@ -5,8 +5,8 @@
 ;; Author: Joe Staursky
 ;; Homepage: https://github.com/jstaursky/weyland-yutani-theme
 ;; Version: 0.1
-;; Package-Version: 20200915.245
-;; Package-Commit: 8cd5765c4efb5eca814e30cb998547552c2099e7
+;; Package-Version: 20200916.422
+;; Package-Commit: fb96b1478864c4502fec18b02e5f152440f2bed7
 ;; Package-Requires: ((emacs "24.1"))
 
 ;; SPECIAL THANKS goes to emacs-theme-generator
@@ -65,9 +65,10 @@ the parenthetical noise."
       (base4           "#3e4044")
       (base5           "#4e5054")
       (base6           "#717ea5")
+      (base6.1         "#8c9dc4")
       (base7           "#505a76")
 
-      (bg              "#202226")       ;#202226 #040C0B
+      (bg              "#202226")
       (bg-alt          "#26282c")
       (bg-Black        "#2b2f37")
       (bg-darker       "#1f2024")
@@ -88,7 +89,7 @@ the parenthetical noise."
       (key2            "#7ABE5B")
       (key3            "#6aa454")
 
-      ;; Main Palette {"#18191a",
+      ;; Main Palette
       (HarlequinGreen        "#79c151")
       (Indigo                "#877CEB")
       (Violet                "#c291eb")
@@ -291,8 +292,14 @@ the parenthetical noise."
       :underline
       (:color ,vibrant-Red :style wave))
 
+
+    ;; MODE SUPPORT: info-documentation
+    `(info-function-ref-item                   :foreground ,HarlequinGreen       :background ,bg-Grey-alt
+      :underline ,very-dark-bg)
+    `(info-reference-item                      :foreground ,vibrant-Purple       :background ,bg-dark-Black
+      :box (:color ,bg-dark-Black :line-width -1))
+
     ;; MODE SUPPORT: org-mode
-    ;; TODO
     `(org-document-title                       :foreground ,HarlequinGreen
       :underline t
       :height 1.5)
