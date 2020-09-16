@@ -1,2 +1,0 @@
-
-(eshell-syntax-highlighting . [(20200909 2102) ((emacs (25 1))) "Highlight eshell commands" single ((:commit . "b91435d6efd17aab4c4511ec58c446010546e39a") (:keywords "convenience") (:authors ("Alex Kreisher" . "akreisher18@gmail.com")) (:maintainer "Alex Kreisher" . "akreisher18@gmail.com") (:url . "https://github.com/akreisher/eshell-syntax-highlighting"))])

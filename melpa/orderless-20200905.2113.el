@@ -5,7 +5,7 @@
 ;; Author: Omar Antolín Camarena <omar@matem.unam.mx>
 ;; Keywords: extensions
 ;; Package-Version: 20200905.2113
-;; Package-Commit: 6b94b9abf89c97e65803bc6f05c766e60e11a469
+;; Package-Commit: e56eeef6e11909ccd62aa7250867dce803706d2c
 ;; Version: 0.5
 ;; Homepage: https://github.com/oantolin/orderless
 ;; Package-Requires: ((emacs "24.4"))

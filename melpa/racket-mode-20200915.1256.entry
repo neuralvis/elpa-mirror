@@ -1,0 +1,2 @@
+
+(racket-mode . [(20200915 1256) ((emacs (25 1)) (faceup (0 0 2)) (pos-tip (20191127 1028))) "Racket editing, REPL, and more" tar ((:commit . "7e03a74f59e53acaf38d48fe5650b568667ec470") (:authors ("Greg Hendershott")) (:maintainer "Greg Hendershott") (:url . "https://www.racket-mode.com/"))])
