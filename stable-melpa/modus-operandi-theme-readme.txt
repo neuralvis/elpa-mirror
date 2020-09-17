@@ -15,6 +15,7 @@ are disabled by default:
     modus-operandi-theme-slanted-constructs             (boolean)
     modus-operandi-theme-bold-constructs                (boolean)
     modus-operandi-theme-variable-pitch-headings        (boolean)
+    modus-operandi-theme-no-mixed-fonts                 (boolean)
     modus-operandi-theme-headings                       (alist)
     modus-operandi-theme-scale-headings                 (boolean)
     modus-operandi-theme-fringes                        (choice)

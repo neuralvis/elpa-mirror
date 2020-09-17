@@ -7,7 +7,7 @@
 ;; Created: 1999-04-20
 ;; Version: 1.190317
 ;; Package-Version: 20200912.1106
-;; Package-Commit: 32bb102d5c6ba32f633ccc555ea8950560f1149e
+;; Package-Commit: cd96468ab66bba6b68c8cb3737f8a64468280373
 ;; Keywords: calendar
 ;; URL: https://github.com/emacs-jp/japanese-holidays
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.3"))

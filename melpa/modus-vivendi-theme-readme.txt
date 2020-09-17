@@ -15,6 +15,7 @@ are disabled by default:
     modus-vivendi-theme-slanted-constructs             (boolean)
     modus-vivendi-theme-bold-constructs                (boolean)
     modus-vivendi-theme-variable-pitch-headings        (boolean)
+    modus-vivendi-theme-no-mixed-fonts                 (boolean)
     modus-vivendi-theme-headings                       (alist)
     modus-vivendi-theme-scale-headings                 (boolean)
     modus-vivendi-theme-fringes                        (choice)
