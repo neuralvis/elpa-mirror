@@ -1,6 +1,6 @@
 ;;; eldoc-eval.el --- Enable eldoc support when minibuffer is in use. -*- lexical-binding: t -*-
 ;; Package-Version: 20200902.1339
-;; Package-Commit: 5ecafc2b3d3e712c96dcdbcff0cbe43f1b6fed3d
+;; Package-Commit: f6e639047d9b3695877e63dd3de8f24e704d6d23
 
 ;; Copyright (C) 2011, 2012, 2013 Free Software Foundation, Inc.
 
