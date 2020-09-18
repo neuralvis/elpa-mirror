@@ -35,7 +35,7 @@ You can get `linkd.el' here:
 
 (@* "What's this" )
 
- A minor mode for emacs.
+ A minor mode for Emacs.
 
   * automatic highlighting current symbol like eclipse IDE.
   * cycle through highlighted locations.
