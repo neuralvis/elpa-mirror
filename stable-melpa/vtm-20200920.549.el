@@ -1,8 +1,8 @@
 ;;; vtm.el --- Manages vterm buffers with configuration files -*- lexical-binding: t; -*-
 
 ;; URL: https://github.com/laishulu/emacs-vterm-manager
-;; Package-Version: 20200920.52
-;; Package-Commit: 0b36a1be723f86afabd9fc4dbf2c2480fa390df2
+;; Package-Version: 20200920.549
+;; Package-Commit: ee9285215da5e42ffc2d9e3108c7d0f5bc49c97e
 ;; Created: August 23th, 2020
 ;; Keywords: convenience
 ;; Package-Requires: ()
@@ -31,7 +31,7 @@
 (require 'subr-x)
 (require 'toml)
 
-(defvar vtm-prefix-string "*VTM:"
+(defvar vtm-prefix-string "*>"
   "Prefix string of the vterm buffer name.")
 (defvar vtm-postfix-string "*"
   "Postfix string of the vterm buffer name.")

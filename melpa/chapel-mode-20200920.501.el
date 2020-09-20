@@ -2,8 +2,8 @@
 
 ;; Authors: Damon Kwok <damon-kwok@outlook.com>
 ;; Version: 0.0.1
-;; Package-Version: 20200913.314
-;; Package-Commit: 4e73bc98c9a2b844cb75322afa086f3c3f9b456f
+;; Package-Version: 20200920.501
+;; Package-Commit: a99319a43b0a2bf9621a1f61a519ea102ec65783
 ;; URL: https://github.com/damon-kwok/chapel-mode
 ;; Keywords: chapel chpl programming languages
 ;; Package-Requires: ((emacs "25.1") (hydra "0.15.0"))
@@ -251,10 +251,12 @@
      ;; constants references
      (,chapel-constant-regexp . font-lock-constant-face)
      ("[,;( \t]\\([A-Z$]+\\)[ \t]*[,;)]" 1 'font-lock-constant-face)
-     ("[=,(][ \t]*\\([A-Z][A-Z_$]+\\)" 1 'font-lock-constant-face)
+     ;; ("[=,(][ \t]*\\([A-Z][A-Z_$]+\\)" 1 'font-lock-constant-face)
+     ("[=][ \t]*\\([A-Z][A-Z_$]+\\)" 1 'font-lock-constant-face)
 
      ;; fields
      ("\\.\\([A-Za-z0-9_$]+\\)\\." 1 'font-lock-variable-name-face)
+     ("[(][ \t,]*\\([a-zA-Z][A-Za-z0-9_$]*\\)" 1 'font-lock-variable-name-face)
 
      ;; type declaration
      ("\\(class\\|record\\|type\\|enum\\|union\\|struct|\\|module\\|use\\|require\\|import\\)[ \t]+\\([A-Za-z0-9_$]*\\)"
