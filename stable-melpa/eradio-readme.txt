@@ -1,1 +1,1 @@
-A radio player frontend for vlc
+A simple Internet radio player

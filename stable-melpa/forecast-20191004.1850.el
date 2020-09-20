@@ -5,7 +5,7 @@
 ;; Author: Göktuğ Kayaalp <self@gkayaalp.com>
 ;; Keywords: weather, forecast
 ;; Package-Version: 20191004.1850
-;; Package-Commit: 37620eeccd150a73ae52fd0987ff3832291b68db
+;; Package-Commit: e086c59a14701cd041641b51c952fa704ee963df
 ;; Version: 0.8
 ;; URL: https://dev.gkayaalp.com/elisp/index.html#forecast-el
 ;; Package-Requires: ((emacs "24.4"))

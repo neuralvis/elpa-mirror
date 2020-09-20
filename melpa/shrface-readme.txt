@@ -9,7 +9,7 @@ It can be used in `dash-docs', `eww', `nov.el', and `mu4e'.
 - Read html email with `mu4e' , the same reading experience just like org mode
   without formatting html to org file.
 - Switch/jump the headlines just like org-mode in `eww' and `nov.el' with `imenu'
-- Togle/cycle the headlines just like org-mode in `eww' and `nov.el' with `outline-minor-mode'
+- Toggle/cycle the headlines just like org-mode in `eww' and `nov.el' with `outline-minor-mode'
   and `org-cycle'/`org-shifttab'
 - Enable indentation just like org-mode in `eww' and `nov.el' with `org-indent-mode'
 - Analysis capability for Researchers:

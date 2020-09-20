@@ -1,0 +1,2 @@
+
+(vtm . [(20200920 52) nil "Manages vterm buffers with configuration files" single ((:commit . "0b36a1be723f86afabd9fc4dbf2c2480fa390df2") (:keywords "convenience") (:url . "https://github.com/laishulu/emacs-vterm-manager"))])

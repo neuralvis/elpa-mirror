@@ -1,0 +1,2 @@
+
+(shrface . [(20200919 1215) ((emacs (25 1)) (org (9 0))) "Extend shr/eww with org features and analysis capability" single ((:commit . "64f9f0aac5242992473b868cf5627ebebec39215") (:keywords "faces") (:authors ("Damon Chan" . "elecming@gmail.com")) (:maintainer "Damon Chan" . "elecming@gmail.com") (:url . "https://github.com/chenyanming/shrface"))])
