@@ -5,7 +5,7 @@
 ;; Author: Henry Newcomer <a.cliche.email@gmail.com>
 ;; Version: 0.1
 ;; Package-Version: 20191229.19
-;; Package-Commit: 0da19f68ba22a39c02d83063f5b4936401ce4d97
+;; Package-Commit: 2aea296b236966cdb8dbdc238678f2752b505aba
 ;; URL: https://github.com/HenryNewcomer/laguna-theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

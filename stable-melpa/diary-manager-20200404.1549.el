@@ -7,7 +7,7 @@
 ;; Homepage: https://github.com/raxod502/diary-manager
 ;; Keywords: extensions
 ;; Package-Version: 20200404.1549
-;; Package-Commit: 2850e8f27662eb1e8a34425b3032a361a5c989cc
+;; Package-Commit: 4f9d3104f0d89fe3e39c878d2035e6b6d9510659
 ;; Package-Requires: ((emacs "25"))
 ;; SPDX-License-Identifier: MIT
 ;; Version: 2.0.2

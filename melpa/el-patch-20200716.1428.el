@@ -7,7 +7,7 @@
 ;; Homepage: https://github.com/raxod502/el-patch
 ;; Keywords: extensions
 ;; Package-Version: 20200716.1428
-;; Package-Commit: ff1951d776f80d2fd4a0cd9a0c930182fbb57b3c
+;; Package-Commit: a47067b4d63f3674d284a772bfe773021540c043
 ;; Package-Requires: ((emacs "25"))
 ;; SPDX-License-Identifier: MIT
 ;; Version: 2.3.1

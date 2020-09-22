@@ -7,7 +7,7 @@
 ;; Homepage: https://github.com/raxod502/ctrlf
 ;; Keywords: extensions
 ;; Package-Version: 20200920.242
-;; Package-Commit: d7663bf50903b0325b1e02830d15864447ea0c81
+;; Package-Commit: 2279f684f8d75a75f6b98ddaa908182f08c0d877
 ;; Package-Requires: ((emacs "25.1"))
 ;; SPDX-License-Identifier: MIT
 ;; Version: 1.1
