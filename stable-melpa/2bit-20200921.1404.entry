@@ -1,0 +1,2 @@
+
+(2bit . [(20200921 1404) ((emacs (24 3))) "Library for reading data from 2bit files" single ((:commit . "f53484d2fa095341b847276fe4b5cc66ac30f4c2") (:keywords "files" "data") (:authors ("Dave Pearson" . "davep@davep.org")) (:maintainer "Dave Pearson" . "davep@davep.org") (:url . "https://github.com/davep/2bit.el"))])

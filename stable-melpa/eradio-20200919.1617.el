@@ -5,7 +5,7 @@
 ;; Author: Olav Fosse <fosseolav@gmail.com>
 ;; Version: 0.1
 ;; Package-Version: 20200919.1617
-;; Package-Commit: c8ce24ebb80e2a6f7942d4feaaf77098fc07c30c
+;; Package-Commit: e3878c5bb51ac26cc0576d2c657ad8c852ebb542
 ;; URL: https://github.com/olav35/eradio
 ;; Package-Requires: ((emacs "24.1"))
 

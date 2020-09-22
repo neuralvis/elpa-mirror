@@ -1,0 +1,2 @@
+
+(agda2-mode . [(20200921 1641) ((emacs (24 3)) (annotation (1 0)) (eri (1 0))) "interactive development for Agda, a dependently typed functional programming language" tar ((:commit . "358e080008e46ccf6d22631284a1602bc382d3f6"))])

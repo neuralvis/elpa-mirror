@@ -132,6 +132,7 @@ notify me of any missing package or change you would like to see.
     eyebrowse
     fancy-dabbrev
     flycheck
+    flycheck-color-mode-line
     flycheck-indicator
     flycheck-posframe
     flymake
@@ -289,6 +290,7 @@ notify me of any missing package or change you would like to see.
     treemacs
     tty-menu
     tuareg
+    typescript
     undo-tree
     vc (built-in mode line status for version control)
     vc-annotate (C-x v g)

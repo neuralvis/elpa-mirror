@@ -1,2 +1,0 @@
-
-(dw . [(20200915 1615) ((emacs (25 1))) "Diceware passphrase generation commands" single ((:commit . "2df0332f5d4b8a81e4aa6c20c6d4ccb7b442e2ec") (:keywords "convenience" "games") (:authors ("D. Williams" . "d.williams@posteo.net")) (:maintainer "D. Williams" . "d.williams@posteo.net") (:url . "https://github.com/integral-dw/dw-passphase-generator"))])

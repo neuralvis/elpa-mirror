@@ -1,2 +1,2 @@
 
-(eradio . [(20200919 1617) ((emacs (24 1))) "A simple Internet radio player" single ((:commit . "c8ce24ebb80e2a6f7942d4feaaf77098fc07c30c") (:authors ("Olav Fosse" . "fosseolav@gmail.com")) (:maintainer "Olav Fosse" . "fosseolav@gmail.com") (:url . "https://github.com/olav35/eradio"))])
+(eradio . [(20200919 1617) ((emacs (24 1))) "A simple Internet radio player" single ((:commit . "e3878c5bb51ac26cc0576d2c657ad8c852ebb542") (:authors ("Olav Fosse" . "fosseolav@gmail.com")) (:maintainer "Olav Fosse" . "fosseolav@gmail.com") (:url . "https://github.com/olav35/eradio"))])
