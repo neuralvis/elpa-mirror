@@ -1,2 +1,0 @@
-
-(no-littering . [(20200918 2242) ((cl-lib (0 5))) "help keeping ~/.emacs.d clean" single ((:commit . "c863b0d5edae5094fcf1a6e5604a1c5530802215") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/emacscollective/no-littering"))])
