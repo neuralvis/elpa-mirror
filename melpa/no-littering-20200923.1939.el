@@ -5,8 +5,8 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/emacscollective/no-littering
 ;; Package-Requires: ((cl-lib "0.5"))
-;; Package-Version: 20200923.1934
-;; Package-Commit: 89a68e3571c42274bd040f9282b40fe0c61fdb6b
+;; Package-Version: 20200923.1939
+;; Package-Commit: 438472ca63d8368a3d9d1691618df873758739c8
 
 ;; This file is not part of GNU Emacs.
 
@@ -206,7 +206,7 @@ This variable has to be set before `no-littering' is loaded.")
 
 ;;; Built-in packages
 
-    (setq abbrev-file-name                 (var "abbrev.el"))
+    (setq abbrev-file-name                 (etc "abbrev.el"))
     (setq auto-insert-directory            (etc "auto-insert/"))
     (setq auto-save-list-file-prefix       (var "auto-save/sessions/"))
     (setq backup-directory-alist           (list (cons "." (var "backup/"))))
@@ -223,6 +223,9 @@ This variable has to be set before `no-littering' is loaded.")
       `(make-directory ,(var "erc/dcc/") t))
     (setq erc-dcc-get-default-directory    (var "erc/dcc/"))
     (setq erc-log-channels-directory       (var "erc/log-channels/"))
+    (eval-after-load 'eshell
+      `(make-directory ,(etc "eshell/") t))
+    (setq eshell-aliases-file              (etc "eshell/aliases"))
     (setq eshell-directory-name            (var "eshell/"))
     (setq eudc-options-file                (etc "eudc-options.el"))
     (eval-after-load 'eww

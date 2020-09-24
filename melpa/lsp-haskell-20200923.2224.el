@@ -1,8 +1,8 @@
 ;;; lsp-haskell.el --- Haskell support for lsp-mode
 
 ;; Version: 1.0
-;; Package-Version: 20200923.744
-;; Package-Commit: a7e65841da44d54013f468012da68b1ef9e0a2bd
+;; Package-Version: 20200923.2224
+;; Package-Commit: c84f0711cee3350e0dff1328c1ef8215a7e9757b
 ;; Package-Requires: ((lsp-mode "3.0") (haskell-mode "1.0"))
 ;; Keywords: haskell
 ;; URL: https://github.com/emacs-lsp/lsp-haskell
@@ -235,11 +235,19 @@ and `lsp-haskell-server-args'."
                                 ("haskell.maxNumberOfProblems" lsp-haskell-max-number-of-problems)
                                 ("haskell.hlintOn" lsp-haskell-hlint-on t)))
 
+;; This mapping is set for 'haskell-mode -> haskell' in the lsp-mode repo itself. If we move
+;; it there, then delete it from here.
+;; It also isn't *too* important: it only sets the language ID, see
+;; https://microsoft.github.io/language-server-protocol/specification#textDocumentItem
+(add-to-list 'lsp-language-id-configuration '(haskell-literate-mode . "haskell"))
+
 ;; Register the client itself
 (lsp-register-client
   (make-lsp--client
     :new-connection (lsp-stdio-connection (lambda () (lsp-haskell--server-command)))
-    :major-modes '(haskell-mode)
+    ;; Should run under haskell-mode and haskell-literate-mode. We need to list the
+    ;; latter even though it's a derived mode of the former
+    :major-modes '(haskell-mode haskell-literate-mode)
     ;; This is arbitrary.
     :server-id 'lsp-haskell
     ;; We need to manually pull out the configuration section and set it. Possibly in
@@ -247,8 +255,9 @@ and `lsp-haskell-server-args'."
     :initialized-fn (lambda (workspace)
                       (with-lsp-workspace workspace
                         (lsp--set-configuration (lsp-configuration-section "haskell"))))
-    ;; No need to set :language-id, since there isn't one for Haskell and we
-    ;; don't support multiple languages
+    ;; This is somewhat irrelevant, but it is listed in lsp-language-id-configuration, so
+    ;; we should set something consistent here.
+    :language-id "haskell"
     ))
 
 ;; ---------------------------------------------------------------------

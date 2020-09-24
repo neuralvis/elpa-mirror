@@ -10,8 +10,8 @@
 ;; Maintainer:      Steve Purcell <steve@sanityinc.com>
 ;; Created:         July 1, 2001
 ;; Keywords:        convenience wp
-;; Package-Commit: a5caad5ec3855dbed503cf889c5c789af613c72a
-;; Package-Version: 20200919.2156
+;; Package-Commit: f0051d301f83d6dd26ce30a8ea039a8510c79cc0
+;; Package-Version: 20200924.129
 ;; Package-X-Original-Version: 0
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.6"))
 ;; Homepage:  https://github.com/purcell/whole-line-or-region
@@ -108,10 +108,16 @@ commands are affected."
   :lighter " WLR"
   :keymap 'whole-line-or-region-local-mode-map)
 
+(defcustom whole-line-or-region-inhibit-modes '(pdf-view-mode)
+  "Inhibit the effect of `whole-line-or-region-global-mode' in these major modes."
+  :type '(list symbol))
+
 ;;;###autoload
 (define-globalized-minor-mode whole-line-or-region-global-mode
   whole-line-or-region-local-mode
-  (lambda () (whole-line-or-region-local-mode 1)))
+  (lambda ()
+    (unless (apply 'derived-mode-p whole-line-or-region-inhibit-modes)
+      (whole-line-or-region-local-mode 1))))
 
 
 
