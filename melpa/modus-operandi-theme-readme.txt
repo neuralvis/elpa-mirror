@@ -209,6 +209,7 @@ notify me of any missing package or change you would like to see.
     minimap
     modeline
     mood-line
+    mpdel
     mu4e
     mu4e-conversation
     multiple-cursors
