@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2020  Free Software Foundation, Inc.
 
-;; Version: 0.1
+;; Version: 0.1.1
 ;; Package-Requires: ((emacs "25.1") (org "9.1"))
 
 ;; Author: Eric Abrahamsen <eric@ericabrahamsen.net>
@@ -302,8 +302,8 @@ fragilely, and deleted and re-set with abandon.")
  :keymap ogt-link-keymap
  :export #'ogt-export-link)
 
-(defun ogt-follow-link (link)
-  (org-id-open link))
+(defun ogt-follow-link (link arg)
+  (org-id-open link arg))
 
 (defun ogt-export-link (_path desc _backend)
   "Export a translation link.
@@ -794,6 +794,13 @@ Prompts for a bookmark, and sets up the windows."
 
 ;;;; ChangeLog:
 
+;; 2020-09-23  Eric Abrahamsen  <eric@ericabrahamsen.net>
+;; 
+;; 	[org-translate] Fix bum link following, bump to 0.1.1
+;; 
+;; 	* packages/org-translate/org-translate.el (ogt-follow-link): Apparently
+;; 	this takes a prefix arg, don't know how this passed basic testing.
+;; 
 ;; 2020-09-21  Eric Abrahamsen  <eric@ericabrahamsen.net>
 ;; 
 ;; 	[org-translate] Release version 0.1
