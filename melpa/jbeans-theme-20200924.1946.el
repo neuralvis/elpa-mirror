@@ -2,11 +2,11 @@
 
 ;; Author: Adam Olsen <arolsen@gmail.com>
 ;; URL: <https://github.com/synic/jbeans-emacs>
-;; Package-Commit: 3caa95998d8492a2ca6c17971de499ca15609871
+;; Package-Commit: a63916a928324c42bfbe3016972c2ecff598b1ae
 ;; Version: 1.3
 ;; Package-Requires: ((emacs "24"))
 ;; Based On: ujelly by Mark Tran
-;; Package-Version: 20180309.1625
+;; Package-Version: 20200924.1946
 ;; Package-X-Original-Version: 20151208.2136
 ;; "What do you mean, no one calls you JBeans?!  I call you JBeans!"
 ;; -- Wilbur
@@ -156,6 +156,7 @@
 ;;;;; FCI Ruler
        ;; As of now, this does nothing, because fci-rule-color is not a face yet.
        `(fci-rule-color                      ((,class (:foreground ,jbeans-grey-4 :background ,jbeans-grey-4))))
+       `(fill-column-indicator               ((,class (:foreground ,jbeans-grey-3 :background ,jbeans-bg))))
 ;;;;; Fonts
        `(font-lock-builtin-face              ((,class (:foreground ,jbeans-blue-1))))
        `(font-lock-comment-face              ((,class (:slant italic :foreground ,jbeans-grey-7))))

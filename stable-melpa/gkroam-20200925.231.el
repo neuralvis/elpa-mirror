@@ -3,8 +3,8 @@
 ;; Copyright (C) 2020 Kinney Zhang
 ;;
 ;; Version: 2.2.0
-;; Package-Version: 20200924.1607
-;; Package-Commit: 17a570821d601f3f061cd17de707bd1642f69762
+;; Package-Version: 20200925.231
+;; Package-Commit: 339ddc97c40abf214d5e315383d0622769056daa
 ;; Keywords: org, convenience
 ;; Author: Kinney Zhang <kinneyzhang666@gmail.com>
 ;; URL: https://github.com/Kinneyzhang/gkroam.el
@@ -393,15 +393,14 @@ If BUFFER is non-nil, check the buffer visited file."
   (interactive)
   (if (gkroam-at-root-p)
       (let* ((title (thing-at-point 'word t))
+             (bounds (bounds-of-thing-at-point 'word))
              (page-exist-p (gkroam--get-page title)))
         (if page-exist-p
             (progn
-              (backward-word)
-              (kill-word 1)
+              (delete-region (car bounds) (cdr bounds))
               (gkroam-insert title))
           (gkroam-new title)
-          (backward-word)
-          (kill-word 1)
+          (delete-region (car bounds) (cdr bounds))
           (gkroam-insert title)
           (gkroam-find title)))
     (message "Not in the gkroam directory!")))
