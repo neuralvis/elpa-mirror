@@ -2,8 +2,8 @@
 ;; Filename: simple-screen.el
 ;; Description: Simple screen configuration manager.
 ;; URL: https://github.com/wachikun/simple-screen
-;; Package-Version: 20161009.920
-;; Package-Commit: 596e3a451d9af24730ab31a8fe15c91a4264d09d
+;; Package-Version: 20200926.109
+;; Package-Commit: 3ce535755986f7c25890d11e42fa621a3a069a4f
 ;; Author: Tadashi Watanabe <wac@umiushi.org>
 ;; Maintainer: Tadashi Watanabe <wac@umiushi.org>
 ;; Copyright (C) 2012,2013 Tadashi Watanabe <wac@umiushi.org>
@@ -86,10 +86,11 @@
 
 (defun simple-screen-save-window-point (index)
   (let ((point-hash (make-hash-table)))
-    (mapc #'(lambda (a)
-	      (let ((point (window-point a))
-		    (point-max (with-current-buffer (window-buffer a) (point-max))))
-		(puthash a `((point . ,point) (point-max . ,point-max)) point-hash)))
+    (mapc #'(lambda (key)
+              (when (window-buffer key)
+	        (let ((point (window-point key))
+		      (point-max (with-current-buffer (window-buffer key) (point-max))))
+		  (puthash key `((point . ,point) (point-max . ,point-max)) point-hash))))
 	  (window-list))
     (aset simple-screen-window-point-vector index point-hash)))
 
@@ -97,14 +98,15 @@
   (when (aref simple-screen-window-point-vector index)
     (let ((point-hash (aref simple-screen-window-point-vector index)))
       (maphash #'(lambda (key alist)
-		   (let ((point-max (with-current-buffer (window-buffer key) (point-max)))
-			 (saved-point (cdr (assq 'point alist)))
-			 (saved-point-max (cdr (assq 'point-max alist))))
-		     (if (and (eq saved-point saved-point-max)
-			      (not (eq point-max saved-point-max)))
-			 (progn
-			   (set-window-point key point-max))
-		       (set-window-point key saved-point))))
+                   (when (window-buffer key)
+		     (let ((point-max (with-current-buffer (window-buffer key) (point-max)))
+			   (saved-point (cdr (assq 'point alist)))
+			   (saved-point-max (cdr (assq 'point-max alist))))
+		       (if (and (eq saved-point saved-point-max)
+			        (not (eq point-max saved-point-max)))
+			   (progn
+			     (set-window-point key point-max))
+		         (set-window-point key saved-point)))))
 	       point-hash))))
 
 (defun simple-screen-core (index)
