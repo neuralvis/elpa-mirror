@@ -22,7 +22,7 @@ associated data:
 
 -  item notes (see **Notes** below)
 -  item tags (see **Tags** below)
--  item include state (see **Concatentating** below)
+-  item include state (see **Concatenating** below)
 
 
 Navigation
