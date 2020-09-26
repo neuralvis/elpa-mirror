@@ -1,62 +1,73 @@
-# Binder #
+Binder
+======
 
-Binder is global minor mode (and associated major modes) to facilitate
-working on a writing project in multiple files. It is heavily inspired
-by the binder feature in the [macOS writing app Scrivener][1].
+Binder is global minor mode to facilitate working on a writing project
+in multiple files. It is heavily inspired by the binder feature in the
+[macOS writing app Scrivener][3].
 
 The rationale behind working this way is to split a large writing
-project into much smaller pieces.
+project into smaller pieces.
 
-[1]: https://www.literatureandlatte.com/scrivener/
 
-## Features ##
+Features
+--------
 
 Primarily, Binder provides a global minor mode binder-mode. This
 allows working with files in the current binder-project-directory.
 Data concerning these files is saved in a .binder.el file in the
-project directory. (You can change the name of this file with the
-binder-default-file option.)
+project directory.
 
-## Navigation ##
+A project can be thought of an ordered list of files with the following
+associated data:
+
+-  item notes (see **Notes** below)
+-  item tags (see **Tags** below)
+-  item include state (see **Concatentating** below)
+
+
+Navigation
+----------
 
 At the most basic level, you can navigate back and forth through the
 files in a project:
 
-- binder-next (C-c ]) visits the next file in the binder, and
-- binder-previous (C-c [) visits the previous.
+-  binder-next (C-c ]) visits the next file in the project
+-  binder-previous (C-c [) visits the previous
 
 Calling these commands activates a transient map so that each command
-can be repeated without prefix key/s.
+can be repeated without the prefix key.
 
-## Sidebar ##
+
+Sidebar
+-------
 
 You'll mostly interact with the project structure via the sidebar.
 
-- binder-toggle-sidebar (C-c ') toggles the visibility of the binder
-  sidebar.
-- binder-reveal-in-sidebar (C-c ;) finds the current file in the
-  sidebar.
+-  binder-toggle-sidebar (C-c ') toggles the visibility of the binder
+   sidebar
+-  binder-reveal-in-sidebar (C-c ;) finds the current file in the
+   sidebar
 
-Each project item is a file, referenced relative to the project
-directory. Project items are displayed in a linear ordered list. Calling
-binder-sidebar-find-file (RET) or binder-sidebar-find-file-other-window (o)
-will visit the corresponding file.
+Each project items is a file reference relative to the project
+directory. Items are displayed as:
 
-Each item in the sidebar displays the following information:
+    x * name        #tag1 #tag2
 
-1. binder-sidebar-include-char (default x) denotes that this item is
-   included when the "joining" the project (see **Concatentate** below).
-2. binder-sidebar-notes-char (default *) denotes that this item has some
-   notes, which can be edited in binder-notes-mode (see below), or...
-3. binder-sidebar-missing-char (default ?) denote that the item's
-   corresponding file cannot be found, but can be relocated by calling
-   binder-sidebar-relocate (R). The item will also highlight red.
-4. The item name, which is either the file relative to the project
-   directory or an arbitrary display name, which can be set by calling
-   binder-sidebar-rename (r).
-5. The item tags, each prefixed with binder-sidebar-status-char
-   (default #). The tags column can be set with the
-   binder-sidebar-tags-column option.
+These things mean:
+
+| key  | description                                     |
+|------|-------------------------------------------------|
+| x    | item is included when concatenating the project |
+| *    | item has notes                                  |
+| ?    | the item's corresponding file cannot be found   |
+| name | the file name (or custom display name)          |
+| #tag | arbitrary item tags                             |
+
+An item's display name can be changed with binder-sidebar-rename (r).
+If a file cannot be found, relocate with binder-sidebar-relocate (R).
+
+Calling binder-sidebar-find-file (RET) will visit the corresponding
+file.
 
 To add an existing file, call binder-sidebar-add-file (a) or add all
 files in directory with binder-sidebar-add-all-files (A).
@@ -66,18 +77,18 @@ file-name and adds this (possibly non-existent) file to the project
 after the current file's index. If no file-name extension is provided,
 use binder-default-file-extension.
 
-> Hint: you can use an alternate default file extension for different
-> projects by setting a directory local variable.
+>  Hint: you can use an alternate default file extension for different
+>  projects by setting a directory local variable.
 
 Files can also be added to a project from outside the sidebar with
 binder-add-file (C-c :).
 
-Remove items with binder-sidebar-remove (d) -- this *does not delete the
-files*, only removes them from the project, but it *does delete* the
-corresponding notes and tags.
-
 Items can be reordered with binder-sidebar-shift-up (M-p | M-up) and
 binder-sidebar-shift-down (M-n | M-down).
+
+Remove items with binder-sidebar-remove (d) -- this *does not delete
+the files*, only removes them from the project, but it *does* delete the
+corresponding notes and tags.
 
 Hide item file extensions by setting the binder-sidebar-hide-file-extensions
 option. This can be toggled with binder-sidebar-toggle-file-extensions (E).
@@ -89,101 +100,138 @@ number of columns specified in option binder-sidebar-resize-window-step.
 You can customize how the sidebar window is displayed by setting
 binder-sidebar-display-alist option.
 
-### Marking ###
 
-Multiple items can be marked to add tags, toggle include state or
-delete.
-
-Call binder-sidebar-mark (m) to mark an item and binder-sidebar-unmark (u)
-to unmark an item or binder-sidebar-unmark-all (U) for all sidebar items.
-
-### Tags ###
-
-A project is strictly a linear list. As your project grows, you may find
-the number of items becomes unweidly. Tags can help organize a project.
-An item can have any number of tags.
-
-Add a tag to an item with binder-sidebar-add-tag (t). Remove a tag
-from an item with binder-sidebar-remove-tag (T). You can tag/untag
-multiple items at once by using marks.
-
-Items listed in the sidebar can be narrowed to only show items with a
-certain tag with binder-sidebar-narrow-by-tag (/) and/or only show
-items without a certain tag with binder-sidebar-exclude-by-tag (\).
-Each of these commands can be called multiple times with additional
-tags. Reset the sidebar with binder-sidebar-refresh (g).
-
-## Notes ##
-
-Project items can have notes, which are stored within the project file.
+Notes
+-----
 
 To open the notes buffer from the sidebar, call either
-binder-sidebar-open-notes (z) to (open and) select the notes window,
-or binder-sidebar-toggle-notes (i) to toggle the window. To open a
-project file's notes when visiting that file, call binder-toggle-notes
-(C-c ").
+binder-sidebar-open-notes (z) to open and select the notes window, or
+binder-sidebar-toggle-notes (i) to toggle the window.
 
-> n.b. Notes are not automatically saved.
+To open a project file's notes from outside the sidebar, call
+binder-toggle-notes (C-c ").
+
+You need to call either binder-notes-save (C-x C-s) or
+binder-notes-save-and-quit-window (C-c C-c) to save notes to the
+project file.
 
 Calling quit-window (C-c C-q | C-c C-k) or binder-toggle-sidebar
-does not save notes. You need to call either binder-notes-save (C-x C-s)
-or binder-notes-save-and-quit-window (C-c C-c).
+does not save notes.
 
 You can embiggen the notes window, to pop it out from the sidebar and
-edit like a regular buffer window, with binder-notes-expand-window (C-c C-l).
-
-If you want the notes buffer to stay in sync with the item under the
-cursor in the sidebar, change the option binder-notes-keep-in-sync. This
-can be disconcerting, and again, notes are not automatically saved!
+edit like a regular buffer window, with binder-notes-expand-window (C-c
+C-l).
 
 You can customize how the notes window is displayed by setting
 binder-notes-display-alist option.
 
-## Concatenate ##
 
-A writing project written in discrete pieces probably has an end goal of
-being put together. Each Binder project item has a property of being
-"included" or not. In the sidebar, an item's include state is toggled
-with binder-sidebar-toggle-include (x).
+Tags
+----
+
+Tags can help organize a project. An item can have any number of tags.
+
+Add a tag to an item with binder-sidebar-add-tag (t). Remove a tag
+from an item with binder-sidebar-remove-tag (T). You can tag/untag
+multiple items at once by using marks (see **Marking** below).
+
+Items in the sidebar can be narrowed to only show items with a certain
+tag with binder-sidebar-narrow-by-tag (/) and/or only show items
+without a certain tag with binder-sidebar-exclude-by-tag (\). Each of
+these commands can be called multiple times with additional tags.
+
+Reset the sidebar filters with binder-sidebar-refresh (g).
+
+
+Marking
+-------
+
+Multiple items can be marked to add tags, toggle include state or
+delete. Call binder-sidebar-mark (m) to mark an item or
+binder-sidebar-unmark (u) to unmark an item.
+
+To unmark all sidebar items, call binder-sidebar-unmark-all (U).
+
+
+Concatenating
+-------------
+
+A writing project in discrete pieces probably has an end goal of being
+put together. Each project item has a property of being "included" or
+not. In the sidebar, an item's include state is toggled with
+binder-sidebar-toggle-include (x).
 
 When calling binder-sidebar-concat (c | v), project items marked as
-included will be concatenated in a new buffer (separated by
-binder-concat-separator string.) The default mode of this buffer is set
-by binder-default-concat-mode.
+included will be concatenated in a new buffer. The default mode of this
+buffer is set by binder-default-concat-mode.
 
-> Hint: you can use an alternate default mode for different projects by
-> setting a directory local variable.
+>  Hint: you can use an alternate default mode for different projects by
+>  setting a directory local variable.
 
-In this buffer, calling binder-concat-find-original (C-c RET) will
-visit the original file corresponding to the text at point.
+When in the *Binder Concat View* buffer, calling
+binder-concat-find-original (C-c RET) will visit the original file
+corresponding to the text at point.
 
-## Why not just use Org Mode? ##
 
-[Org Mode] is nice, but it's also a very *heavy* tool that almost
-insists that everything be done within Org Mode. This isn't useful if
-you want to write in a different format, e.g. [Markdown] or
-[Fountain].
+Requirements
+------------
 
-Also, I prefer to keep my writing in a collection of separate text
-files. It feels nicer to work on something small and self-contained than
-to organize a large file with headings and use indirect buffers with
-narrowing.
+-  Emacs 24.4
+-  seq 2.20 (part of Emacs 25.1+)
 
-[org mode]: https://orgmode.org
-[markdown]: https://jblevins.org/projects/markdown-mode/
-[fountain]: https://github.com/rnkn/fountain-mode
 
-## Requirements ##
+Installation
+------------
 
-- Emacs 24.4
-- seq 2.20
+The latest stable release of Binder is available via [MELPA-stable][1].
+First, add MELPA-stable to your package archives:
 
-## Bugs and Feature Requests ##
+    M-x customize-option RET package-archives RET
 
-Report bugs and feature requests at:
-<https://github.com/rnkn/binder/issues>
+Insert an entry named melpa-stable with URL:
+https://stable.melpa.org/packages/
 
-## Tutorial ##
+You can then find the latest stable version of binder in the list
+returned by:
+
+    M-x list-packages RET
+
+If you prefer the latest but perhaps unstable version, do the above
+using [MELPA][2].
+
+
+Advanced Installation
+---------------------
+
+Download the [latest release][4], move this file into your load-path
+and add to your init.el file:
+
+    (require 'binder)
+    (require 'binder-tutorial)  ;; optional
+
+If you wish to contribute to or alter Binder's code, clone the
+repository into your load-path and require as above:
+
+    git clone https://github.com/rnkn/binder.git
+
+
+Bugs and Feature Requests
+-------------------------
+
+Send me an email (address in the package header). For bugs, please
+ensure you can reproduce with:
+
+    $ emacs -Q -l binder.el
+
+
+Tutorial
+--------
 
 Binder comes with a tutorial. Calling M-x binder-tutorial will prompt
 for an empty directory in which to generate the tutorial files.
+
+
+[1]: https://stable.melpa.org/#/binder
+[2]: https://melpa.org/#/binder
+[3]: https://www.literatureandlatte.com/scrivener/
+[4]: https://github.com/rnkn/binder/releases/latest

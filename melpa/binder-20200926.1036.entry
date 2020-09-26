@@ -1,0 +1,2 @@
+
+(binder . [(20200926 1036) ((emacs (24 4)) (seq (2 20))) "Global minor mode to facilitate multi-file writing projects" tar ((:commit . "4d4eb1e6de72df2f33e37b3497ae9a5b8e4d288a") (:keywords "files" "outlines" "wp" "text") (:authors ("William Rankin" . "william@bydasein.com")) (:maintainer "William Rankin" . "william@bydasein.com") (:url . "https://github.com/rnkn/binder"))])

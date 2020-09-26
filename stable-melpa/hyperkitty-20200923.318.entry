@@ -1,2 +1,0 @@
-
-(hyperkitty . [(20200923 318) ((request (0 3 2)) (emacs (25 1))) "Emacs interface for Hyperkitty archives" single ((:commit . "7d8d1ede1224e6446bbcf393e3fded087c985086") (:keywords "mail" "hyperkitty" "mailman") (:authors ("Abhilash Raj" . "maxking@asynchronous.in")) (:maintainer "Abhilash Raj" . "maxking@asynchronous.in") (:url . "https://github.com/maxking/hyperkitty.el"))])
