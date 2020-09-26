@@ -5,10 +5,12 @@ define their own functionality, making them self-contained,
 standalone computational artifacts, dependent only on Emacs,
 or other implementations of the Org-babel protocol in the future.
 
-orgstrap.el is an elisp implementation of the orgstrap conventions and
-provides `orgstrap-init' and `orgstrap-mode' to simplify authoring of
-orgstrapped files.  For more details see README.org which is also the
-literate source for this orgstrap.el file in the git repo at
+orgstrap.el is an elisp implementation of the orgstrap conventions.
+It defines a regional minor mode for `org-mode' that runs orgstrap
+blocks.  It also provides `orgstrap-init' and `orgstrap-edit-mode'
+to simplify authoring of orgstrapped files.  For more details see
+README.org which is also the literate source for this orgstrap.el
+file in the git repo at
 https://github.com/tgbugs/orgstrap/blob/master/README.org
 or whever you can find git:c1b28526ef9931654b72dff559da2205feb87f75
 
