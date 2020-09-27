@@ -1,0 +1,2 @@
+
+(ctrlxo . [(20200923 1839) ((emacs (25 1))) "Switch to the most recently used window" single ((:commit . "037c5edfe12cba4eefa020c420dca7c300fbb225") (:keywords "frames") (:authors ("Andrii Kolomoiets" . "andreyk.mad@gmail.com")) (:maintainer "Andrii Kolomoiets" . "andreyk.mad@gmail.com") (:url . "https://github.com/muffinmad/emacs-ctrlxo"))])
