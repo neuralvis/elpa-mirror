@@ -3,8 +3,8 @@
 
 ;; Author: Daniel Laurens Nicolai <dalanicolai@gmail.com>
 ;; Version: 0
-;; Package-Version: 20200910.1133
-;; Package-Commit: 7e2e6be947b4da96cb12c1db833cf6e076ae328d
+;; Package-Version: 20200926.2117
+;; Package-Commit: 06de33f5113c8ce136e08f1ff9852abad7677bac
 ;; Keywords: tools, outlines, convenience
 ;; Package-Requires: ((emacs "26.1"))
 ;; URL: https://github.com/dalanicolai/toc-mode
@@ -271,7 +271,7 @@ document's directory. You will be prompted to enter the LEVEL
 number. The highest level should have number 1, the next leve
 number 2 etc."
   (interactive "nWhich level you are setting (number): ")
-  (let* ((page (pdf-view-current-page))
+  (let* ((page (eval (pdf-view-current-page)))
          (filename (url-filename (url-generic-parse-url buffer-file-name)))
          (pdfxmeta-result (shell-command
                            (format "pdfxmeta --auto %s --page %s '%s' \"%s\" >> recipe.toml"
@@ -980,6 +980,33 @@ The text of the current buffer is passed as source input to either the
     (cond ((string= ".pdf" ext) (toc--add-to-pdf))
           ((string= ".djvu" ext) (toc--add-to-djvu)))))
 
+(defun toc--source-to-handyoutliner ()
+  " "
+  (interactive)
+  (goto-char (point-min))
+  (while (not (eobp))
+    (let ((num (thing-at-point 'number)))
+      (delete-char 2)
+      (dotimes (_x num) (insert "\t"))
+      (re-search-forward "[0-9]+")
+      (let ((page (match-string 0)))
+        (replace-match "")
+        (delete-char 1)
+        (move-end-of-line 1)
+        (insert " ")
+        (insert page)
+      (forward-line)))
+    ))
+  ;; (goto-char (point-min))
+  ;; (while (not (eobp))
+  ;;   (re-search-forward "[0-9]+")
+  ;;   (let ((page (match-string 0)))
+  ;;     (replace-match "")
+  ;;     (delete-char 1)
+  ;;     (move-end-of-line 1)
+  ;;     (insert " ")
+  ;;     (insert page)
+  ;;     (forward-line))))
 
 (provide 'toc-mode)
 
