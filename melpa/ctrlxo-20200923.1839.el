@@ -4,7 +4,7 @@
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: frames
-;; Package-Commit: 037c5edfe12cba4eefa020c420dca7c300fbb225
+;; Package-Commit: 79a8d48d4dbb7ea2388a85fc9d6fc6dc1fe444b2
 ;; URL: https://github.com/muffinmad/emacs-ctrlxo
 ;; Package-Version: 20200923.1839
 ;; Package-X-Original-Version: 1.0

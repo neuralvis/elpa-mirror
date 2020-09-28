@@ -1,0 +1,2 @@
+
+(helm-atoms . [(20200927 1752) ((emacs (25 1)) (helm (2 0))) "Reverse variable lookup using Helm" single ((:commit . "80eedcbbf9ad19b72f61ea3a8ea4dc79ca587103") (:keywords "help" "lisp" "maint" "helm" "tools" "matching") (:authors ("Dante Catalfamo")) (:maintainer "Dante Catalfamo") (:url . "https://github.com/dantecatalfamo/helm-atoms"))])

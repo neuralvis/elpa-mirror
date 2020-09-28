@@ -10,5 +10,5 @@ Commands
 Customization
 
 `helm-atoms-search-sequences'
-Search atoms bound to sequences (lists, vectors).
+Search atoms bound to sequences (lists, vectors) if non-nil.
 More thorough search, but worse performance.

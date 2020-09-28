@@ -3,7 +3,7 @@
 ;; Author: Derek Feichtinger <derek.feichtinger@psi.ch>
 ;; Keywords: org
 ;; Package-Version: 20180420.525
-;; Package-Commit: 6b1edbd2384191122a30788ac72f2233c2df0294
+;; Package-Commit: 10e2c51b70fe48b766233a1d640a62ea8b489a91
 ;; Homepage: https://github.com/dfeich/org-screenshot
 ;; Version: 0.1.20160928
 
