@@ -4,10 +4,7 @@ Fountain Mode
 Fountain Mode is a screenwriting program for GNU Emacs using the
 Fountain plain text markup format.
 
-For more information on the Fountain format: https://fountain.io
-
-Community screenshots: https://github.com/rnkn/fountain-mode/issues/114
-
+For more information on the Fountain format: <https://fountain.io>
 
 Features
 --------
@@ -82,8 +79,8 @@ using [MELPA][2].
 Advanced Installation
 ---------------------
 
-Download the [latest release][3], move this file into your load-path and
-add to your init.el file:
+Download the latest tagged release, move this file into your load-path
+and add to your init.el file:
 
     (require 'fountain-mode)
 
@@ -104,4 +101,3 @@ ensure you can reproduce with:
 
 [1]: https://stable.melpa.org/#/fountain-mode
 [2]: https://melpa.org/#/fountain-mode
-[3]: https://github.com/rnkn/fountain-mode/tags

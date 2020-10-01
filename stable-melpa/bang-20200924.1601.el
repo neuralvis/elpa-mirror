@@ -3,7 +3,7 @@
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 1.0.3
 ;; Package-Version: 20200924.1601
-;; Package-Commit: dfe9be0aaca1e07106f87584716aabaea97b224f
+;; Package-Commit: a2077ecf974fb8299fef0f008aa974d782245ec8
 ;; Keywords: unix, processes, convenience
 ;; Package-Requires: ((emacs "24.1"))
 ;; URL: https://git.sr.ht/~zge/bang

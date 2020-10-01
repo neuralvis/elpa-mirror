@@ -5,7 +5,7 @@
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25") (evil "1.2.12") (treemacs "0.0"))
 ;; Package-Version: 20200716.2041
-;; Package-Commit: 18baf5d412645ea780aec718f8960904d6bf91c1
+;; Package-Commit: 069eb3e6d6b2a3fdf56439a9f171bc3b32b0ec55
 ;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 

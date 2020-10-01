@@ -49,6 +49,7 @@ Supported languages:
 - PureScript (purty)
 - Python (black)
 - R (styler)
+- Reason (bsrefmt)
 - Ruby (rufo)
 - Rust (rustfmt)
 - Scala (scalafmt)

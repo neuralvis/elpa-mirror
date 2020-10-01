@@ -1,0 +1,2 @@
+
+(q-mode . [(20200929 330) ((emacs (24))) "A q editing mode" single ((:commit . "fd9210a454a8faff69df98a73131c1cadec87ade") (:keywords "faces" "files" "q") (:url . "https://github.com/psaris/q-mode"))])

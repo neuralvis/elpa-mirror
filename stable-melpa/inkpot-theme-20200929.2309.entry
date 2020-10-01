@@ -1,0 +1,2 @@
+
+(inkpot-theme . [(20200929 2309) nil "port of vim's inkpot theme" single ((:commit . "2fee11a253439d8c05ec788b7552d3bce261af1b") (:keywords "color" "theme") (:authors ("Sarah Iovan" . "sarah@hwaetageek.com") ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Sarah Iovan" . "sarah@hwaetageek.com") (:url . "https://github.com/ideasman42/emacs-inkpot-theme"))])
