@@ -7,7 +7,7 @@
 ;; Modified   : 2020
 ;; Version    : 0.10.0
 ;; Package-Version: 20200930.1938
-;; Package-Commit: e79d69419123c7b4fece163a78f7ad40a6c47c68
+;; Package-Commit: 795b9bbe5fe29563a77c07d70f081a729de2d77b
 ;; Keywords   : c# languages oop mode
 ;; X-URL      : https://github.com/josteink/csharp-mode
 

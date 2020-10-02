@@ -1,0 +1,2 @@
+
+(elmpd . [(20201001 2042) ((emacs (25 1))) "A tight, ergonomic, async client library for mpd" single ((:commit . "6fc45d09266d4f577779903db8d772bb318c2793") (:keywords "comm") (:authors ("Michael Herstine" . "sp1ff@pobox.com")) (:maintainer "Michael Herstine" . "sp1ff@pobox.com") (:url . "https://github.com/sp1ff/elmpd"))])

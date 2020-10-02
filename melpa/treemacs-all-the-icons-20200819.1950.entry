@@ -1,2 +1,2 @@
 
-(treemacs-all-the-icons . [(20200819 1950) ((emacs (25)) (all-the-icons (4 0 1)) (treemacs (0 0))) "all-the-icons integration for treemacs" single ((:commit . "069eb3e6d6b2a3fdf56439a9f171bc3b32b0ec55") (:authors ("Eric Dallo" . "ercdll1337@gmail.com")) (:maintainer "Eric Dallo" . "ercdll1337@gmail.com") (:url . "https://github.com/Alexander-Miller/treemacs"))])
+(treemacs-all-the-icons . [(20200819 1950) ((emacs (25)) (all-the-icons (4 0 1)) (treemacs (0 0))) "all-the-icons integration for treemacs" single ((:commit . "6981b3e826c3cde3c5a0e415277bbd5151fe6ddb") (:authors ("Eric Dallo" . "ercdll1337@gmail.com")) (:maintainer "Eric Dallo" . "ercdll1337@gmail.com") (:url . "https://github.com/Alexander-Miller/treemacs"))])

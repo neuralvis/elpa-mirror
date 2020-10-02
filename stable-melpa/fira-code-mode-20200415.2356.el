@@ -6,7 +6,7 @@
 ;; Author: Jonathan Ming <jming422@gmail.com>
 ;; Version: 1.0
 ;; Package-Version: 20200415.2356
-;; Package-Commit: c6945a005b9a581c81e2f3560eab4bd629967364
+;; Package-Commit: 2ee50c4fd087c06d4ed4de68119af4635c396e02
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: faces, ligatures, fonts, programming-ligatures
 ;; URL: https://github.com/jming422/fira-code-mode

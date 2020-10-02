@@ -1,0 +1,2 @@
+
+(searcher . [(20201001 1803) ((emacs (25 1)) (dash (2 10)) (f (0 20 0))) "Searcher in pure elisp" single ((:commit . "e4e6666dcf812ed3c21c96b8c1ae83c48cad4a11") (:authors ("Shen, Jen-Chieh" . "jcs090218@gmail.com")) (:maintainer "Shen, Jen-Chieh" . "jcs090218@gmail.com") (:url . "https://github.com/jcs-elpa/searcher"))])
