@@ -1,0 +1,2 @@
+
+(notmuch-maildir . [(20201002 1110) ((emacs (26)) (notmuch (0 30))) "Visualize maildirs as a tree" single ((:commit . "1caf5731f3f0a796e717b06e73d9cab69a5f8f02") (:keywords "mail") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://git.sr.ht/~tarsius/notmuch-maildir"))])

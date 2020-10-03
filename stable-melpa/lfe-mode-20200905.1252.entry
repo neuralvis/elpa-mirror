@@ -1,2 +1,2 @@
 
-(lfe-mode . [(20200905 1252) nil "Lisp Flavoured Erlang mode" tar ((:commit . "9ff31fc9e15ed0651e420e513556656b3c81e715"))])
+(lfe-mode . [(20200905 1252) nil "Lisp Flavoured Erlang mode" tar ((:commit . "1d60b2988ff52f71bd2230f9d0bbe3159d88fc9b"))])

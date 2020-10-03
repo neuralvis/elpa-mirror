@@ -28,6 +28,10 @@ howdoyou-number-of-answers:       maximal number of answers to show, default is 
 howdoyou-switch-to-answer-buffer: switch to answer buffer if non nil, default is nil
 
 Changelog
+2020-10-02:
+- update with change from google
+- impove test
+- bump version
 2020-08-27:
 - bump version
 - adapt to recent change by SO: css class from "post-text" to "s-prose"
