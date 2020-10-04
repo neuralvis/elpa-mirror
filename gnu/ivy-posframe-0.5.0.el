@@ -1,15 +1,14 @@
 ;;; ivy-posframe.el --- Using posframe to show Ivy  -*- lexical-binding: t -*-
 
-
 ;; Copyright (C) 2017-2020 Free Software Foundation, Inc.
 
-;; Author: Feng Shu
+;; Author: Feng Shu <tumashu@163.com>
+;;         Naoya Yamashita <conao3@gmail.com>
 ;; Maintainer: Feng Shu <tumashu@163.com>
-;; Maintainer: Naoya Yamashita <conao3@gmail.com>
 ;; URL: https://github.com/tumashu/ivy-posframe
-;; Version: 0.2.0
+;; Version: 0.5.0
 ;; Keywords: abbrev, convenience, matching, ivy
-;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(ivy "0.11.0"))
+;; Package-Requires: ((emacs "26.0") (posframe "0.8.0") (ivy "0.13.0"))
 
 ;; This file is part of GNU Emacs.
 
@@ -153,71 +152,58 @@
   :group 'ivy
   :prefix "ivy-posframe")
 
-(defcustom ivy-posframe-style 'window-bottom-left
+(defcustom ivy-posframe-style 'frame-center
   "The style of ivy-posframe."
-  :group 'ivy-posframe
   :type 'string)
 
 (defcustom ivy-posframe-font nil
   "The font used by ivy-posframe.
 When nil, Using current frame's font as fallback."
-  :group 'ivy-posframe
   :type 'string)
 
 (defcustom ivy-posframe-width nil
   "The width of ivy-posframe."
-  :group 'ivy-posframe
   :type 'number)
 
 (defcustom ivy-posframe-height nil
   "The height of ivy-posframe."
-  :group 'ivy-posframe
   :type 'number)
 
 (defcustom ivy-posframe-min-width nil
   "The width of ivy-min-posframe."
-  :group 'ivy-posframe
   :type 'number)
 
 (defcustom ivy-posframe-min-height nil
   "The height of ivy-min-posframe."
-  :group 'ivy-posframe
   :type 'number)
 
 (defcustom ivy-posframe-size-function #'ivy-posframe-get-size
   "The function which is used to deal with posframe's size."
-  :group 'ivy-posframe
   :type 'function)
 
 (defcustom ivy-posframe-border-width 1
   "The border width used by ivy-posframe.
 When 0, no border is showed."
-  :group 'ivy-posframe
   :type 'number)
 
 (defcustom ivy-posframe-hide-minibuffer t
   "Hide input of minibuffer when using ivy-posframe."
-  :group 'ivy-posframe
   :type 'boolean)
 
 (defcustom ivy-posframe-parameters nil
   "The frame parameters used by ivy-posframe."
-  :group 'ivy-posframe
   :type 'string)
 
 (defcustom ivy-posframe-height-alist nil
   "The `ivy-height-alist' while working ivy-posframe."
-  :group 'ivy-posframe
   :type 'sexp)
 
 (defcustom ivy-posframe-display-functions-alist '((t . ivy-posframe-display))
   "The `ivy-display-functions-alist' while working ivy-posframe."
-  :group 'ivy-posframe
   :type 'sexp)
 
 (defcustom ivy-posframe-lighter " ivy-posframe"
   "The lighter string used by `ivy-posframe-mode'."
-  :group 'ivy-posframe
   :type 'string)
 
 (defface ivy-posframe
@@ -243,8 +229,7 @@ When 0, no border is showed."
 (defcustom ivy-posframe-buffer " *ivy-posframe-buffer*"
   "The posframe-buffer used by ivy-posframe."
   :set #'ivy-posframe-buffer-setter
-  :type 'string
-  :group 'ivy-posframe)
+  :type 'string)
 
 (defvar ivy-posframe--ignore-prompt nil
   "When non-nil, ivy-posframe will ignore prompt.
@@ -321,26 +306,50 @@ This variable is useful for `ivy-posframe-read-action' .")
   (when (posframe-workable-p)
     (posframe-hide ivy-posframe-buffer)))
 
+(defvar avy-all-windows)
+(defvar avy-keys)
+(defvar avy-style)
+(defvar avy-pre-action)
+(defvar swiper-faces)
+(defvar swiper-background-faces)
+(defvar swiper-min-highlight)
+
+(declare-function avy--make-backgrounds "avy")
+(declare-function avy-window-list "avy")
+(declare-function avy-read-de-bruijn "avy")
+(declare-function avy-read "avy")
+(declare-function avy-tree "avy")
+(declare-function avy--overlay-post "avy")
+(declare-function avy--remove-leading-chars "avy")
+(declare-function avy-push-mark "avy")
+(declare-function avy--done "avy")
+(declare-function avy-action-goto "avy")
+(declare-function avy-candidate-beg "avy")
+(declare-function ivy-avy "avy")
+(declare-function swiper--avy-candidate "swiper")
+(declare-function swiper-avy "swiper")
+(declare-function swiper--update-input-ivy "swiper")
+
 (defun ivy-posframe-dispatching-done ()
   "Ivy-posframe's `ivy-dispatching-done'."
   (interactive)
-  (cl-letf (((symbol-function 'ivy-read-action) #'ivy-posframe-read-action))
+  (let* ((ivy-read-action-function #'ivy-posframe-read-action-by-key))
     (ivy-done)))
 
 (defun ivy-posframe-read-action ()
   "Ivy-posframe version `ivy-read-action'"
   (interactive)
-  (let* ((ivy-read-action-function #'ivy-posframe-read-action-by-key)
-         (caller (ivy-state-caller ivy-last))
-         (display-function
-          (or ivy--display-function
-              (cdr (or (assq caller ivy-display-functions-alist)
-                       (assq t ivy-display-functions-alist))))))
+  (let* ((ivy-read-action-function #'ivy-posframe-read-action-by-key))
     (call-interactively #'ivy-read-action)))
 
 (defun ivy-posframe-read-action-by-key (actions)
   "Ivy-posframe's `ivy-read-action-by-key'."
   (let* ((set-message-function nil)
+         (caller (ivy-state-caller ivy-last))
+         (display-function
+          (or ivy--display-function
+              (cdr (or (assq caller ivy-display-functions-alist)
+                       (assq t ivy-display-functions-alist)))))
          (hint (funcall ivy-read-action-format-function (cdr actions)))
          (resize-mini-windows t)
          (key "")
@@ -350,7 +359,6 @@ This variable is useful for `ivy-posframe-read-action' .")
                                     (string-prefix-p key (car x)))
                                   (cdr actions)))
                 (not (string= key (car (nth action-idx (cdr actions))))))
-      ;; NOTE: (setq key xxx) is only different from `ivy-read-action-by-key'
       (setq key (concat key (string
                              (read-key
                               (if (functionp display-function)
@@ -374,23 +382,6 @@ This variable is useful for `ivy-posframe-read-action' .")
   (frame-selected-window
    (buffer-local-value 'posframe--frame
                        (get-buffer ivy-posframe-buffer))))
-
-(defvar avy-all-windows)
-(defvar avy-keys)
-(defvar avy-style)
-(defvar avy-pre-action)
-
-(declare-function avy--make-backgrounds "avy")
-(declare-function avy-window-list "avy")
-(declare-function avy-read-de-bruijn "avy")
-(declare-function avy-read "avy")
-(declare-function avy-tree "avy")
-(declare-function avy--overlay-post "avy")
-(declare-function avy--remove-leading-chars "avy")
-(declare-function avy-push-mark "avy")
-(declare-function avy--done "avy")
-(declare-function avy-action-goto "avy")
-(declare-function avy-candidate-beg "avy")
 
 (defun ivy-posframe-avy ()
   "Ivy-posframe's `ivy-avy'."
@@ -420,14 +411,13 @@ This variable is useful for `ivy-posframe-read-action' .")
                               (append swiper-faces swiper-background-faces)))
                (setq min-overlay-start (overlay-start ov))))
            visible-overlays))
-         (offset (if (eq (ivy-state-caller ivy-last) 'swiper) 1 0))
-         (window (ivy-posframe--window)))
+         (offset (if (eq (ivy-state-caller ivy-last) 'swiper) 1 0)))
     (nconc
      (mapcar (lambda (ov)
                (cons (overlay-start ov)
                      (overlay-get ov 'window)))
              overlays-for-avy)
-     ;; NOTE: This line should be the *only* different from
+     ;; NOTE: This line should be the *only* difference from
      ;; `swiper-avy-candidates'.
      (with-current-buffer ivy-posframe-buffer
        (save-excursion
@@ -478,7 +468,9 @@ This variable is useful for `ivy-posframe-read-action' .")
   "Ivy-posframe's `swiper-avy'."
   (interactive)
   (if (not (string-match-p "^ivy-posframe-display"
-                           (symbol-name ivy--display-function)))
+                           (or (ignore-errors
+                                 (symbol-name ivy--display-function))
+                               "")))
       ;; if swiper is not use ivy-posframe's display function.
       ;; call `swiper-avy'.
 
@@ -578,7 +570,6 @@ This variable is useful for `ivy-posframe-read-action' .")
   :global t
   :require 'ivy-posframe
   :lighter ivy-posframe-lighter
-  :group 'ivy-posframe
   :keymap '(([remap ivy-avy]              . ivy-posframe-avy)
             ([remap swiper-avy]           . ivy-posframe-swiper-avy)
             ([remap ivy-read-action]      . ivy-posframe-read-action)
@@ -590,12 +581,6 @@ This variable is useful for `ivy-posframe-read-action' .")
     (mapc (lambda (elm)
             (advice-remove (car elm) (cdr elm)))
           ivy-posframe-advice-alist)))
-
-;;;###autoload
-(defun ivy-posframe-enable ()
-  (interactive)
-  (ivy-posframe-mode 1)
-  (message "ivy-posframe: suggest use `ivy-posframe-mode' instead."))
 
 ;;;; ChangeLog:
 
