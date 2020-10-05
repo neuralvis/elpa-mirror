@@ -3,7 +3,7 @@
 ;; Author: Torsten Hilbrich <torsten.hilbrich@gmx.net>
 ;; Keywords: network
 ;; Package-Version: 20191111.446
-;; Package-Commit: 46ee5d9ba15cac7282ed73c8b4c272a969c6159e
+;; Package-Commit: bdf0aa7761d1c1a3bc0652b2fdc4a54b3acdb06a
 ;; Version: 1.11
 
 ;; This file is free software; you can redistribute it and/or modify

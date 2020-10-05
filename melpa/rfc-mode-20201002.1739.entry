@@ -1,2 +1,0 @@
-
-(rfc-mode . [(20201002 1739) ((emacs (25 1)) (helm (3 2))) "RFC document browser and viewer" single ((:commit . "6e41dcd82f2bc56979fb2b950c74d169b1458ea4") (:authors ("Nicolas Martyanoff" . "khaelin@gmail.com")) (:maintainer "Nicolas Martyanoff" . "khaelin@gmail.com") (:url . "https://github.com/galdor/rfc-mode"))])

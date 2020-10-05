@@ -1,0 +1,2 @@
+
+(dired-quick-sort . [(20201005 337) ((hydra (0 13 0))) "Persistent quick sorting of dired buffers in various ways." single ((:commit . "d300eec3c06e4dc082e257b60f46003e7dbc3d1c") (:keywords "convenience" "files") (:authors ("Hong Xu" . "hong@topbug.net")) (:maintainer "Hong Xu" . "hong@topbug.net") (:url . "https://gitlab.com/xuhdev/dired-quick-sort#dired-quick-sort"))])
