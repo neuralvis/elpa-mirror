@@ -6,7 +6,7 @@
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Keywords: files
 ;; Package-Version: 20180922.1615
-;; Package-Commit: f49a8bbf95f70671a74a24f7f4de453b2686be46
+;; Package-Commit: d6d4d1930969bbc22fd0551d5195887bf92cab3e
 ;; Version: 0.0.1
 ;; Created: 25th February 2014
 ;; Package-requires: ((dash "2.5.0") (dired-hacks-utils "0.0.1"))

@@ -1,2 +1,0 @@
-
-(jsonnet-mode . [(20200930 1418) ((emacs (24))) "Major mode for editing jsonnet files" single ((:commit . "d4d2b53b5ba16c1f35df8be61389963939cb8c7a") (:keywords "languages") (:authors ("Nick Lanham")) (:maintainer "Nick Lanham") (:url . "https://github.com/mgyucht/jsonnet-mode"))])
