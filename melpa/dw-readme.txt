@@ -16,7 +16,7 @@ This file serves as the pool of random words from which your secure
 passphrase is generated.  Put a wordlist for passphrase generation
 into the directory specified by ‘dw-directory’.  It will be
 automatically generated the first time this package is loaded.  If
-you don't already have a wordlist, you can find two common, english
+you don't already have a wordlist, you can find two common, English
 wordlists below:
 
 https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt
