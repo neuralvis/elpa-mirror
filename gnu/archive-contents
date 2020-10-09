@@ -1091,7 +1091,7 @@
 		 (:maintainer "Clemens Radermacher" . "clemera@posteo.net")
 		 (:url . "https://github.com/clemera/ivy-explorer"))])
  (ivy-posframe .
-	       [(0 5 0)
+	       [(0 5 1)
 		((emacs
 		  (26 0))
 		 (posframe

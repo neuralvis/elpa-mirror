@@ -93,6 +93,7 @@ notify me of any missing package or change you would like to see.
     diff-hl
     diff-mode
     dim-autoload
+    dir-treeview
     dired
     dired-async
     dired-git

@@ -5,7 +5,7 @@
 ;; Author: Manuel Uberti <manuel.uberti@inventati.org>
 ;; Version: 0.1.0
 ;; Package-Version: 20200927.640
-;; Package-Commit: d99034aae5649e708a272e6fd37dc37470ec18b3
+;; Package-Commit: b94950301139846002d2020bc630440ff834bf24
 ;; Keywords: convenience
 ;; Package-Requires: ((emacs "26.1") (flymake-quickdef "1.0.0"))
 ;; URL: https://github.com/manuel-uberti/flymake-proselint
