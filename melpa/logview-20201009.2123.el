@@ -5,8 +5,8 @@
 ;; Author:     Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Maintainer: Paul Pogonyshev <pogonyshev@gmail.com>
 ;; Version:    0.13.3snapshot
-;; Package-Version: 20200829.1516
-;; Package-Commit: dec120cf8d43673c31f7cd7bc0e1800006067cf4
+;; Package-Version: 20201009.2123
+;; Package-Commit: 2dcc17677896bee3f79eeca9ac142a301c0e407b
 ;; Keywords:   files, tools
 ;; Homepage:   https://github.com/doublep/logview
 ;; Package-Requires: ((emacs "24.4") (datetime "0.6.1") (extmap "1.0"))
@@ -341,6 +341,14 @@ work just as the name."
                                    (cons :tag "" (const :tag "Aliases:" aliases) (repeat string))))))
   :set   'logview--set-submode-affecting-variable)
 
+
+(defcustom logview-guess-lines 10
+  "When guessing submodes, consider this many lines at the top.
+If any line corresponds to a defined submode, all the others are
+not even looked at.  If this number is very large, Logview might
+be slow when opening buffers in submodes it doesn't know about."
+  :group 'logview
+  :type  'integer)
 
 (defcustom logview-auto-revert-mode nil
   "Automatically put recognized buffers into Auto-Revert mode.
@@ -2359,9 +2367,7 @@ returns non-nil."
   (save-excursion
     (save-restriction
       (widen)
-      (goto-char 1)
-      (end-of-line)
-      (let ((first-line (buffer-substring 1 (point)))
+      (let ((n 0)
             standard-timestamps)
         (logview--iterate-split-alists (lambda (_timestamp-name timestamp) (push timestamp standard-timestamps))
                                        logview-additional-timestamp-formats logview-std-timestamp-formats)
@@ -2369,11 +2375,17 @@ returns non-nil."
           (push (cdr format) standard-timestamps))
         (setq standard-timestamps (nreverse standard-timestamps))
         (catch 'success
-          (logview--iterate-split-alists (lambda (name definition)
-                                           (condition-case error
-                                               (logview--initialize-submode name definition standard-timestamps first-line)
-                                             (error (warn (error-message-string error)))))
-                                         logview-additional-submodes logview-std-submodes))))))
+          (goto-char 1)
+          (while (and (< n (max logview-guess-lines 1)) (not (eobp)))
+            (let ((line (buffer-substring-no-properties (point) (progn (end-of-line) (point)))))
+              (when (> (length line) 0)
+                (logview--iterate-split-alists (lambda (name definition)
+                                                 (condition-case error
+                                                     (logview--initialize-submode name definition standard-timestamps line)
+                                                   (error (warn (error-message-string error)))))
+                                               logview-additional-submodes logview-std-submodes))
+              (forward-line 1)
+              (setq n (1+ n)))))))))
 
 (defun logview--initialize-submode (name definition standard-timestamps &optional test-line)
   (let* ((format            (cdr (assq 'format    definition)))
