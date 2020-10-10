@@ -6,9 +6,9 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Searcher in pure elisp
 ;; Keyword: search searcher project file text string
-;; Version: 0.3.0
-;; Package-Version: 20201001.1803
-;; Package-Commit: e4e6666dcf812ed3c21c96b8c1ae83c48cad4a11
+;; Version: 0.4.0
+;; Package-Version: 20201010.538
+;; Package-Commit: be3eb424b0fa00ac22f147aa797af4368f64c6c6
 ;; Package-Requires: ((emacs "25.1") (dash "2.10") (f "0.20.0"))
 ;; URL: https://github.com/jcs-elpa/searcher
 
@@ -85,6 +85,7 @@
 (defcustom searcher-search-type 'regex
   "Type of the searching algorithm."
   :type '(choice (const :tag "regex" regex)
+                 (const :tag "regex-fuzzy" regex-fuzzy)
                  (const :tag "flx" flx))
   :group 'searcher)
 
@@ -131,9 +132,33 @@ Do `searcher-clean-cache' if project tree strucutre has been changed.")
   "Return string at line with current cursor position."
   (substring (buffer-string) (1- (line-beginning-position)) (1- (line-end-position))))
 
-(defun searcher--form-fuzzy-regex (str-or-regex)
+;;; Fuzzy
+
+(defun searcher--form-fuzzy-regex-flx (str-or-regex)
   "Convert STR-OR-REGEX to fuzzy regular expression."
   (format "\\_<[%s][^ \t\n\r\f]*\\_>" str-or-regex))
+
+(defun searcher--trim-trailing-re (regex)
+  "Trim incomplete REGEX.
+If REGEX ends with \\|, trim it, since then it matches an empty string."
+  (if (string-match "\\`\\(.*\\)[\\]|\\'" regex) (match-string 1 regex) regex))
+
+(defun searcher--regex-fuzzy (str)
+  "Build a regex sequence from STR.
+Insert .* between each char."
+  (setq str (searcher--trim-trailing-re str))
+  (if (string-match "\\`\\(\\^?\\)\\(.*?\\)\\(\\$?\\)\\'" str)
+      (concat (match-string 1 str)
+              (let ((lst (string-to-list (match-string 2 str))))
+                (apply #'concat
+                       (cl-mapcar
+                        #'concat
+                        (cons "" (cdr (mapcar (lambda (c) (format "[^%c\n]*" c))
+                                              lst)))
+                        (mapcar (lambda (x) (format "\\(%s\\)" (regexp-quote (char-to-string x))))
+                                lst))))
+              (match-string 3 str))
+    str))
 
 ;;; Core
 
@@ -148,43 +173,14 @@ Do `searcher-clean-cache' if project tree strucutre has been changed.")
 (defun searcher--search-string (str-or-regex)
   "Return search string depends on `searcher-search-type' and STR-OR-REGEX."
   (cl-case searcher-search-type
-    ('regex str-or-regex)
-    ('flx (searcher--form-fuzzy-regex str-or-regex))))
-
-(defun searcher--search-cons (str-or-regex start-pt fuzzy-regex)
-  "Return cons that form by (start point, end point).
-
-Argument STR-OR-REGEX is the input of search string.
-Argument START-PT is the starting search point.
-Argument FUZZY-REGEX is regular expression for fuzzy matching."
-  (let ((buf-str (buffer-string)) start end
-        match-str score-data score good-score-p break-it)
-    (cl-case searcher-search-type
-      ('regex
-       (setq start (ignore-errors (string-match str-or-regex buf-str start-pt)))
-       (when start (setq start (1+ start) end (1+ (match-end 0)))))
-      ('flx
-       (while (not break-it)
-         (setq start (ignore-errors (string-match fuzzy-regex buf-str start-pt)))
-         (if (not start)
-             (setq break-it t)
-           (setq end (match-end 0)
-                 match-str (substring buf-str start end)
-                 score-data (flx-score match-str str-or-regex)
-                 score (if score-data (nth 0 score-data) nil)
-                 good-score-p (if score (< searcher-flx-threshold score) nil))
-           (if good-score-p
-               (progn
-                 (setq start (1+ start) end (1+ end))
-                 (setq break-it t))
-             (setq start-pt (1+ start)))))))
-    (if (and start end) (cons start end) nil)))
+    (regex-fuzzy (searcher--regex-fuzzy str-or-regex))
+    (flx (searcher--form-fuzzy-regex-flx str-or-regex))
+    (t str-or-regex)))
 
 (defun searcher--init ()
   "Initialize searcher."
   (cl-case searcher-search-type
-    ('regex )
-    ('flx (require 'flx))))
+    (flx (require 'flx))))
 
 ;;;###autoload
 (defun searcher-search-in-project (str-or-regex)
@@ -214,31 +210,41 @@ Argument FUZZY-REGEX is regular expression for fuzzy matching."
 (defun searcher-search-in-file (file str-or-regex)
   "Search STR-OR-REGEX in FILE."
   (searcher--init)
-  (let ((matchs '()) (match "") (ln-str "") (ln 1) (col nil)
-        (ln-pt 1) delta-ln
-        (search-cons t) start (end 0)
-        (fuzzy-regex (searcher--search-string str-or-regex)))
+  (let ((matches '()) (ln 1) col (ln-pt 1) delta-ln start end push-it
+        (real-regex str-or-regex))
+    (setq str-or-regex (searcher--search-string str-or-regex))
     (unless (string-empty-p str-or-regex)
       (with-temp-buffer
         (if (file-exists-p file)
             (insert-file-contents file)
           (insert (with-current-buffer file (buffer-string))))
-        (while search-cons
-          (setq search-cons (searcher--search-cons str-or-regex end fuzzy-regex))
-          (when search-cons
-            (setq start (car search-cons) end (cdr search-cons))
-            (goto-char start)
-            (setq ln-str (searcher--line-string)
-                  col (current-column))
-            (setq delta-ln (1- (count-lines ln-pt start))  ; Calculate lines.
-                  ;; Function `count-lines' missing 1 if column is at 0, so we
-                  ;; add 1 back to line if column is 0.
-                  ln (+ ln delta-ln (if (= col 0) 1 0))
-                  ln-pt start)
-            (setq match (searcher--form-match file ln-str start end ln col))
-            (push match matchs)
-            (setq end (1+ end))))))
-    matchs))
+        (goto-char (point-min))
+        ;; NOTE: We still need `ignore-errors' because it doesn't handle
+        ;; invalid regular expression issue!
+        (while (ignore-errors (search-forward-regexp str-or-regex nil t))
+          (setq start (match-beginning 0) end (match-end 0))
+          (setq col (save-excursion (goto-char start) (current-column))
+                delta-ln (1- (count-lines ln-pt start))  ; Calculate lines.
+                ;; Function `count-lines' missing 1 if column is at 0, so we
+                ;; add 1 back to line if column is 0.
+                ln (+ ln delta-ln (if (= col 0) 1 0))
+                ln-pt start)
+          (setq push-it
+                (cl-case searcher-search-type
+                  (flx
+                   (let* ((match-str (substring (buffer-string) (1- start) (1- end)))
+                          (score-data (flx-score match-str real-regex))
+                          (score (if score-data (nth 0 score-data) nil))
+                          (good-score-p (if score (< searcher-flx-threshold score) nil)))
+                     good-score-p))
+                  (t t)))
+          ;; Push if good.
+          (when push-it
+            (push (searcher--form-match file (searcher--line-string)
+                                        start end ln col)
+                  matches)
+            (setq push-it nil)))))
+    matches))
 
 (provide 'searcher)
 ;;; searcher.el ends here
