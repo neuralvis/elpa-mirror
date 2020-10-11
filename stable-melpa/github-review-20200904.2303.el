@@ -2,7 +2,7 @@
 ;; Author: Laurent Charignon <l.charignon@gmail.com>
 ;; Maintainer: Laurent Charignon <l.charignon@gmail.com>
 ;; Keywords: git, tools, vc, github
-;; Package-Commit: 07565c1010b9be2eb0dad910409ed500cc381014
+;; Package-Commit: f86b1c28553c0858fd528f966c11a09f88a6cf9e
 ;; Homepage: https://github.com/charignon/github-review
 ;; Package-Requires: ((emacs "25") (s "1.12.0") (ghub "2.0") (dash "2.11.0") (deferred "0.5.1"))
 ;; Package-Version: 20200904.2303
