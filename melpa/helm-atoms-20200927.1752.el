@@ -5,7 +5,7 @@
 ;; Author: Dante Catalfamo
 ;; Version: 0.2.0
 ;; Package-Version: 20200927.1752
-;; Package-Commit: 80eedcbbf9ad19b72f61ea3a8ea4dc79ca587103
+;; Package-Commit: a671c8451d3f15af51ad7a1e107ef6d924642ba2
 ;; Package-Requires: ((emacs "25.1") (helm "2.0"))
 ;; URL: https://github.com/dantecatalfamo/helm-atoms
 ;; Keywords: help lisp maint helm tools matching

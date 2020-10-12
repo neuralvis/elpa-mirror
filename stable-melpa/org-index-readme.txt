@@ -23,6 +23,12 @@ Purpose:
  To start using your index, invoke the subcommand 'add' to create
  index entries and 'occur' to find them.
 
+ The set of columns within the index-table is fixed (see variable
+ `oidx--all-columns') but can be arranged in any order you wish; just
+ edit the index table. The number of columns shown during occur is
+ determined by `org-index-occur-columns'. Using both features allows to
+ make columns invisible, that you dont care about.
+
 
 Setup:
 

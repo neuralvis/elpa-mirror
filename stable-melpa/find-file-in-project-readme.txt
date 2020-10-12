@@ -18,6 +18,8 @@ Usage,
   - `ffip-create-project-file' creates ".dir-locals.el"
   - `ffip-lisp-find-file-in-project' finds file in project.
     If its parameter is not nil, it find directory.
+    This command is written in pure Lisp and does not use any third party
+    command line program.  So it works in all environments.
 
 A project is found by searching up the directory tree until a file
 is found that matches `ffip-project-file'.

@@ -1,0 +1,2 @@
+
+(eradio . [(20201011 1157) ((emacs (24 1))) "A simple Internet radio player" single ((:commit . "3536fb70795470e028fb44b286f1647c5d91d2f9") (:authors ("Olav Fosse" . "fosseolav@gmail.com")) (:maintainer "Olav Fosse" . "fosseolav@gmail.com") (:url . "https://github.com/olav35/eradio"))])

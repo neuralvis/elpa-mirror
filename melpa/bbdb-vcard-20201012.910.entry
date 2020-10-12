@@ -1,0 +1,2 @@
+
+(bbdb-vcard . [(20201012 910) ((bbdb (3 0))) "vCard import/export for BBDB" tar ((:commit . "534ec0f070766e68c64e57441265ed67898073d3") (:keywords "data" "calendar" "mail" "news") (:authors ("Bert Burgemeister" . "trebbu@googlemail.com") ("Toke Høiland-Jørgensen") ("Kevin Brubeck Unhammer") ("Steve Purcell") ("Vincent Geddes" . "vincent.geddes@gmail.com")) (:maintainer "Bert Burgemeister" . "trebbu@googlemail.com") (:url . "https://github.com/tohojo/bbdb-vcard"))])
