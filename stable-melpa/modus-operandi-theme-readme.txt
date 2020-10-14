@@ -27,6 +27,7 @@ are disabled by default:
     modus-operandi-theme-intense-hl-line                (boolean)
     modus-operandi-theme-intense-paren-match            (boolean)
     modus-operandi-theme-links                          (choice)
+    modus-operandi-theme-comments                       (choice)
     modus-operandi-theme-completions                    (choice)
     modus-operandi-theme-override-colors-alist          (alist)
 
