@@ -4,8 +4,8 @@
 
 ;; Authors: stardiviner <numbchild@gmail.com>
 ;; Package-Requires: ((emacs "27.1") (all-the-icons "4.0.0"))
-;; Package-Commit: be208d2aceb0cc71fcd54a8127af25800461b94e
-;; Package-Version: 20200828.922
+;; Package-Commit: b33d5408680bb57de42fd92aa3e4a56ef5e05984
+;; Package-Version: 20201014.722
 ;; Package-X-Original-Version: 1.0
 ;; Keywords: hypermedia
 ;; homepage: https://github.com/stardiviner/org-link-beautify
@@ -141,7 +141,7 @@
                        ("occur" (all-the-icons-icon-for-mode 'occur-mode))
                        ("man" (all-the-icons-icon-for-mode 'Man-mode))
                        ("info" (all-the-icons-icon-for-mode 'Info-mode))
-                       ("help" (all-the-icons-icon-for-mode 'Help-Mode))
+                       ("help" (all-the-icons-icon-for-mode 'Info-mode))
                        ("rss" (all-the-icons-material "rss_feed"))
                        ("elfeed" (all-the-icons-material "rss_feed"))
                        ("telnet" (all-the-icons-faicon "compress"))

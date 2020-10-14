@@ -3,8 +3,8 @@
 ;; Copyright (C) 2020 Kinney Zhang
 ;;
 ;; Version: 2.3.7
-;; Package-Version: 20201014.228
-;; Package-Commit: b0a6e739e3ce2c977bbbe022ae95a746a992353a
+;; Package-Version: 20201014.638
+;; Package-Commit: c7cdb88396c5a98fbcc4549a8e44bc395b47be6d
 ;; Keywords: org, convenience
 ;; Author: Kinney Zhang <kinneyzhang666@gmail.com>
 ;; URL: https://github.com/Kinneyzhang/gkroam.el
@@ -445,7 +445,8 @@ With optional argument ALIAS, format also with alias."
 (defun gkroam--get-headlines (title)
   "Get page's headline list, the page is titled with TITLE."
   (with-temp-buffer
-    (insert-file-contents-literally
+    (insert-file-contents
+     ;; do not use `insert-file-contents-literally', it cannot show chinese normally.
      (gkroam--get-file (gkroam--get-page title)))
     (save-restriction
       (gkroam--narrow-to-region)
@@ -543,23 +544,23 @@ With optional argument ALIAS, format also with alias."
     (gkroam-find title)))
 
 ;;;###autoload
-(defun gkroam-insert (&optional title headline alias)
+(defun gkroam-insert (&optional title alias)
   "Insert a gkroam page link at point.
 With optional arguments, use TITLE or HEADLINE or ALIAS to format link."
   (interactive)
   (if (gkroam-at-root-p)
-      (let* ((title (or title (completing-read
-                               "Choose a page or create a new: "
-                               (gkroam--all-titles) nil nil)))
-             (headlines (gkroam--get-headlines title))
-             (headline
-              (or headline
-                  (when headlines (completing-read
-                                   "Choose a headline, directly press \"C-p RET\" or \"RET\" to skip: "
-                                   headlines nil nil))))
+      (let* ((title (or title
+                        (completing-read
+                         "Choose a page or create a new: "
+                         (gkroam--all-titles) nil nil)))
+             (title-exist-p (gkroam--get-page title))
+             (headline (when title-exist-p
+                         (completing-read
+                          "Choose a headline or press \"C-p RET\" (\"RET\") to skip: "
+                          (gkroam--get-headlines title) nil nil)))
              (alias (or alias
                         (completing-read
-                         "Give an alias, directly press \"RET\" to skip: "
+                         "Give an alias or press \"RET\" to skip: "
                          nil nil nil))))
         (when (string= headline "") (setq headline nil))
         (when (string= alias "") (setq alias nil))
@@ -580,10 +581,9 @@ With optional arguments, use TITLE or HEADLINE or ALIAS to format link."
         (if page-exist-p
             (progn
               (delete-region (car bounds) (cdr bounds))
-              (gkroam-insert title))
-          (gkroam-new title)
+              (gkroam-insert title ""))
           (delete-region (car bounds) (cdr bounds))
-          (gkroam-insert title nil)
+          (gkroam-insert title "")
           (gkroam-find title)))
     (message "Not in the gkroam directory!")))
 
@@ -599,10 +599,9 @@ With optional arguments, use TITLE or HEADLINE or ALIAS to format link."
         (if page-exist-p
             (progn
               (delete-region beg end)
-              (gkroam-insert title))
-          (gkroam-new title)
+              (gkroam-insert title ""))
           (delete-region beg end)
-          (gkroam-insert title)
+          (gkroam-insert title "")
           (gkroam-find title)))
     (message "Not in the gkroam directory!")))
 
@@ -814,7 +813,8 @@ The overlays has a PROP and VALUE."
              (btn-end (button-end btn))
              (new-link (completing-read "Edit link: " nil nil nil btn-label nil btn-label)))
         (delete-region btn-start btn-end)
-        (insert new-link))
+        (insert new-link)
+        (save-buffer))
     (message "no link at point")))
 
 ;; page beautify
@@ -1210,10 +1210,6 @@ Turning on this mode runs the normal hook `gkroam-capture-mode-hook'."
       (setq end (cdr bds))
       (list beg end gkroam-pages . nil)))))
 
-(defun gkroam-set-window-fringe ()
-  "Set gkroam window fringe to zero."
-  (fringe-mode 0))
-
 (defun gkroam-set-major-mode ()
   "Set major mode to `gkroam-mode' after find file in `gkroam-root-dir'."
   (when (file-equal-p
@@ -1236,7 +1232,6 @@ Turning on this mode runs the normal hook `gkroam-capture-mode-hook'."
   (add-hook 'gkroam-mode-hook #'gkroam-prettify-page)
   (add-hook 'gkroam-mode-hook (lambda ()
                                 (gkroam-overlay-link (point-min))))
-  (add-hook 'gkroam-mode-hook #'gkroam-set-window-fringe)
   
   (add-hook 'gkroam-mode-hook
             (lambda ()
@@ -1245,9 +1240,7 @@ Turning on this mode runs the normal hook `gkroam-capture-mode-hook'."
                           (when (and (eq major-mode 'gkroam-mode)
                                      (eq buffer-read-only nil))
                             (gkroam-prettify-page)
-                            (gkroam-overlay-link (point-min))
-                            ;; (indent-region (point-min) (point-max))
-                            )))))
+                            (gkroam-overlay-link (point-min)))))))
 
   (when (require 'ivy nil t)
     (unless (null ivy-mode)
