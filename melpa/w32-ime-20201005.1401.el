@@ -22,7 +22,7 @@
 ;; Maintainer:       Masamichi Hosoda <trueroad@trueroad.jp>
 ;; URL:              https://github.com/trueroad/w32-ime.el
 ;; Package-Version: 20201005.1401
-;; Package-Commit: fa49a2cf2895dfa7a234dd854e49bc6036756418
+;; Package-Commit: 34ba004717ecb9d46c3fc20162005261cffb0bcd
 ;; Version:          20201005
 ;; Package-Requires: ((emacs "24.4"))
 

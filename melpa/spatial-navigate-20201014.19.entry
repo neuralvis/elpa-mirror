@@ -1,0 +1,2 @@
+
+(spatial-navigate . [(20201014 19) ((emacs (26 2))) "Directional navigation between white-space blocks" single ((:commit . "0ed7313d6de4a38fbcc0b8d3e0c2d2aed5349a6a") (:authors ("Campbell Barton" . "ideasman42@gmail.com")) (:maintainer "Campbell Barton" . "ideasman42@gmail.com") (:url . "https://gitlab.com/ideasman42/emacs-spatial-navigate"))])
