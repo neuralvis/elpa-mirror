@@ -1,2 +1,0 @@
-
-(howm . [(20190818 1144) ((cl-lib (0 5))) "Wiki-like note-taking tool" tar ((:commit . "4f550d35935abc943e37e1f2da78c52218ac7c8d") (:authors ("HIRAOKA Kazuyuki" . "khi@users.osdn.me")) (:maintainer "HIRAOKA Kazuyuki" . "khi@users.osdn.me") (:url . "https://howm.osdn.jp"))])
