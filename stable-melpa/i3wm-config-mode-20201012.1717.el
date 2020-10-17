@@ -5,7 +5,7 @@
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "24.1"))
 ;; Package-Version: 20201012.1717
-;; Package-Commit: 7c39b61d737f0cc1bf5dda432d63de88519cd61f
+;; Package-Commit: 6e796e8ee4fa3fd69cc47a3d470f54267d88e155
 ;; Homepage: https://github.com/Alexander-Miller/i3wm-Config-Mode
 ;; Version: 1.0
 ;; Keywords: faces, languages, i3wm, font-lock

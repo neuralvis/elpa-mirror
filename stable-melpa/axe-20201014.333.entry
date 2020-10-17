@@ -1,2 +1,0 @@
-
-(axe . [(20201014 333) ((emacs (25 1)) (hmac (0 0)) (request (0 3 2)) (s (1 12 0)) (xmlgen (0 5))) "AWS Extensions" tar ((:commit . "706543e6ca104e70745504dc6ec2f9a7a0f63c07") (:authors ("Craig Niles <niles.c at gmail.com>")) (:maintainer "Craig Niles <niles.c at gmail.com>") (:url . "https://github.com/cniles/axe"))])

@@ -246,6 +246,7 @@ notify me of any missing package or change you would like to see.
     phi-search
     pkgbuild-mode
     pomidor
+    popup
     powerline
     powerline-evil
     proced
