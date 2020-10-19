@@ -1,0 +1,2 @@
+
+(kana . [(20201012 1415) ((emacs (24 4)) (dash (2 17 0))) "Learn Japanese hiragana and katakana" single ((:commit . "29ffa6c7b683e9300938caff40250cde5ac020bb") (:keywords "tools") (:authors ("Damon Chan" . "elecming@gmail.com")) (:maintainer "Damon Chan" . "elecming@gmail.com") (:url . "https://github.com/chenyanming/kana"))])

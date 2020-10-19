@@ -1,2 +1,0 @@
-
-(auto-highlight-symbol . [(20200923 448) nil "Automatic highlighting current symbol minor mode" single ((:commit . "2a0ce27ee3fad4eecd7eadc64db7296e0f1cc89b") (:keywords "highlight" "face" "match" "convenience") (:authors ("Mitsuo Saito" . "arch320@NOSPAM.gmail.com")) (:maintainer "Mitsuo Saito" . "arch320@NOSPAM.gmail.com") (:url . "http://github.com/jcs-elpa/auto-highlight-symbol"))])

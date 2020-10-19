@@ -4,7 +4,7 @@
 
 ;; Author: Dimitar Dimitrov <mail.mitko@gmail.com>
 ;; URL: https://github.com/drdv/yahtzee
-;; Package-Commit: 27e9265ac9ad9039cccd5b0d3204eed013ee88fd
+;; Package-Commit: 8a9b4551d0451b9ccc8a1cde560dbbc4d75a98bb
 ;; Package-Version: 20200511.2005
 ;; Package-X-Original-Version: 20170616.1
 ;; Package-Requires: ((emacs "24.3"))

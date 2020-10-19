@@ -1,0 +1,2 @@
+
+(ob-deno . [(20201019 101) ((emacs (26 1))) "Babel Functions for Javascript/TypeScript with Deno" single ((:commit . "d5ef87a095cfccd3dfdcae75e5936d3daee59882") (:keywords "literate programming" "reproducible research" "javascript" "typescript" "tools") (:authors ("HIGASHI Taiju")) (:maintainer "HIGASHI Taiju") (:url . "https://github.com/taiju/ob-deno"))])
