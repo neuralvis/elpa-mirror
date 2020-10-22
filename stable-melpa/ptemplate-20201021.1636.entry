@@ -1,0 +1,2 @@
+
+(ptemplate . [(20201021 1636) ((emacs (25 1)) (yasnippet (0 13 0))) "Project templates" single ((:commit . "6db3de83246e8ec01a6f1b750031654a166785d5") (:authors ("Nikita Bloshchanevich" . "nikblos@outlook.com")) (:maintainer "Nikita Bloshchanevich" . "nikblos@outlook.com") (:url . "https://github.com/nbfalcon/ptemplate"))])

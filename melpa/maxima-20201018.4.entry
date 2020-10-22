@@ -1,2 +1,2 @@
 
-(maxima . [(20201018 4) ((emacs (25 1)) (s (1 11 0)) (test-simple (1 3 0))) "Major modes for writing Maxima code" tar ((:commit . "23b91e84ef21db25e17f6b5f9277af8012aed161") (:keywords "maxima" "tools" "math") (:authors ("William F. Schelter") ("Jay Belanger") ("Fermin Munoz")) (:maintainer "Fermin Munoz" . "fmfs@posteo.net") (:url . "https://gitlab.com/sasanidas/maxima"))])
+(maxima . [(20201018 4) ((emacs (25 1)) (s (1 11 0)) (test-simple (1 3 0))) "Major modes for writing Maxima code" tar ((:commit . "e2cf1b1e52695b63aca2e0071a02f7e8d2101370") (:keywords "maxima" "tools" "math") (:authors ("William F. Schelter") ("Jay Belanger") ("Fermin Munoz")) (:maintainer "Fermin Munoz" . "fmfs@posteo.net") (:url . "https://gitlab.com/sasanidas/maxima"))])

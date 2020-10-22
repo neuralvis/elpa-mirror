@@ -5,7 +5,7 @@
 ;; Author: Michael Allan <mike@reluk.ca>
 ;; Version: 0-snapshot
 ;; Package-Version: 20201012.1409
-;; Package-Commit: b417b9bda04496280aadfc1b8523a3974eeeb9d5
+;; Package-Commit: f02aa2502fd8aaa0b0bedebfaf326d287cb16f39
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: c, languages
 ;; URL: http://reluk.ca/project/Java/Emacs/

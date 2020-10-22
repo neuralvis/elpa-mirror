@@ -1,4 +1,4 @@
-This theme is designed for colour-contrast accessibility.
+This theme is designed for color-contrast accessibility.
 
 1. Provide a consistent minimum contrast ratio between background and
 foreground values of 7:1 or higher.  This meets the highest such
@@ -9,7 +9,7 @@ Consortium's Working Group on Accessibility (WCAG AAA standard).
 already quite long (see further below), with more additions to follow
 as part of the ongoing development process.
 
-The theme provides the following customisation options, all of which
+The theme provides the following customization options, all of which
 are disabled by default:
 
     modus-vivendi-theme-slanted-constructs             (boolean)
@@ -31,7 +31,7 @@ are disabled by default:
     modus-vivendi-theme-completions                    (choice)
     modus-vivendi-theme-override-colors-alist          (alist)
 
-The default scale is as follows (it can be customised as well):
+The default scale is as follows (it can be customized as well):
 
     modus-vivendi-theme-scale-1 1.05
     modus-vivendi-theme-scale-2 1.1

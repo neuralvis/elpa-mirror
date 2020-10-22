@@ -5,7 +5,7 @@
 ;; Author: Damon Chan <elecming@gmail.com>
 ;; URL: https://github.com/chenyanming/kana
 ;; Package-Version: 20201012.1415
-;; Package-Commit: 29ffa6c7b683e9300938caff40250cde5ac020bb
+;; Package-Commit: b93cdbf72a1c818d1a48530ef20c5dec64d7945e
 ;; Keywords: tools
 ;; Created: 23 May 2020
 ;; Version: 1.0.0

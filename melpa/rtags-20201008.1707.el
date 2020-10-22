@@ -6,7 +6,7 @@
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; Package-Requires: ((emacs "24.3"))
 ;; Package-Version: 20201008.1707
-;; Package-Commit: e6c7005bfad5df335ce86378b642ebd33aa66f26
+;; Package-Commit: 63a7d9b733def9fe76568f81321a65a450829575
 ;; Version: 2.38.130
 
 ;; URL: https://github.com/Andersbakken/rtags

@@ -64,6 +64,8 @@ Sample ".dir-locals.el",
 To find in current directory, use `find-file-in-current-directory'
 and `find-file-in-current-directory-by-selected'.
 
+`ffip-fix-file-path-at-point' replaces path at point with correct relative/absolute path.
+
 `ffip-split-window-horizontally' and `ffip-split-window-vertically' find&open file
 in split window.
 

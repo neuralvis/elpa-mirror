@@ -1,0 +1,2 @@
+
+(ergoemacs-mode . [(20201020 108) ((emacs (24 1)) (undo-tree (0 6 5)) (cl-lib (0 5))) "Emacs mode based on common modern interface and ergonomics." tar ((:commit . "f5aa0f7b9150b2387769b15362d05178189e2630") (:keywords "convenience") (:authors ("Xah Lee" . "xah@xahlee.org") ("David Capello" . "davidcapello@gmail.com") ("Matthew L. Fidler" . "matthew.fidler@gmail.com")) (:maintainer "Matthew L. Fidler" . "matthew.fidler@gmail.com") (:url . "https://github.com/ergoemacs/ergoemacs-mode"))])
