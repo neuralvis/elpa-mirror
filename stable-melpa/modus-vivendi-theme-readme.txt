@@ -23,11 +23,10 @@ are disabled by default:
     modus-vivendi-theme-prompts                        (choice)
     modus-vivendi-theme-mode-line                      (choice)
     modus-vivendi-theme-diffs                          (choice)
-    modus-vivendi-theme-faint-syntax                   (boolean)
+    modus-vivendi-theme-syntax                         (choice)
     modus-vivendi-theme-intense-hl-line                (boolean)
     modus-vivendi-theme-intense-paren-match            (boolean)
     modus-vivendi-theme-links                          (choice)
-    modus-vivendi-theme-comments                       (choice)
     modus-vivendi-theme-completions                    (choice)
     modus-vivendi-theme-override-colors-alist          (alist)
 

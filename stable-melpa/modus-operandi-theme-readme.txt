@@ -23,11 +23,10 @@ are disabled by default:
     modus-operandi-theme-prompts                        (choice)
     modus-operandi-theme-mode-line                      (choice)
     modus-operandi-theme-diffs                          (choice)
-    modus-operandi-theme-faint-syntax                   (boolean)
+    modus-operandi-theme-syntax                         (choice)
     modus-operandi-theme-intense-hl-line                (boolean)
     modus-operandi-theme-intense-paren-match            (boolean)
     modus-operandi-theme-links                          (choice)
-    modus-operandi-theme-comments                       (choice)
     modus-operandi-theme-completions                    (choice)
     modus-operandi-theme-override-colors-alist          (alist)
 

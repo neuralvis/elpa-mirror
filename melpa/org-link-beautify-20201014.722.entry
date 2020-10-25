@@ -1,2 +1,0 @@
-
-(org-link-beautify . [(20201014 722) ((emacs (27 1)) (all-the-icons (4 0 0))) "Beautify Org Links" single ((:commit . "b33d5408680bb57de42fd92aa3e4a56ef5e05984") (:keywords "hypermedia") (:url . "https://github.com/stardiviner/org-link-beautify"))])
