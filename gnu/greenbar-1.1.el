@@ -3,7 +3,7 @@
 ;; Copyright (C) 2013-2020  Free Software Foundation, Inc.
 
 ;; Author: Michael R. Mauger <michael@mauger.com>
-;; Version: 1.0
+;; Version: 1.1
 ;; Package-Type: simple
 ;; Keywords: faces, terminals
 
@@ -22,13 +22,19 @@
 
 ;;; Commentary:
 
-;; For some of us old neck beards who learned to write software on
-;; pucch cards and print out our code and output on wide line
-;; printers.  When reading long rows of text across a 14 7/8" page it
+;; For us old neck beards, who learned to write software on punch
+;; cards and print out our code and output on wide line printers, it
 ;; was helpful to have alternating bands of subtle background coloring
-;; to guide your eyes across the line.  This is also referred to as
-;; `zebra striping` and is enabled in on PostScript output in
-;; `ps-print.el' by enabling the `ps-zebra-stripes' setting.
+;; to guide our eyes across the line on the page.  Reading long rows
+;; of text across a 14 7/8" page, it was very easy to loose your place
+;; vertically while scanning the page horizontally.  The subtle
+;; background shading was often done with pale bands of green
+;; alternating with the white of the paper.
+
+;; Paper pre-printed with the pale green bars was often referred to as
+;; "green bar" and the technique is also referred to as "zebra
+;; striping."  In Emacs, in `ps-print.el' (PostScript print facility),
+;; the feature is enabling with the `ps-zebra-stripes' setting.
 
 ;; To enable `greenbar-mode' in your `comint-mode' buffers, add the
 ;; following to your Emacs configuration:
@@ -37,7 +43,7 @@
 
 ;; If you want to enable `greenbar-mode' only in a single mode derived
 ;; from `comint-mode', then you need to add `greenbar-mode' only to
-;; the desired derive mode hook.  Adding `greenbar-mode' to
+;; the desired derived mode hook.  Adding `greenbar-mode' to
 ;; `comint-mode-hook' enables it for all comint derived modes.
 
 ;; The variable `greenbar-color-theme' is a list of predefined bar
@@ -50,9 +56,19 @@
 ;; are to be applied.  The value is either a name from color theme
 ;; defined in `greenbar-color-themes' or it is a list of color names.
 
+;; The variable `greenbar-lines-per-bar' controls how many output
+;; lines are displayed using each band's background color.
+
+;; By default, input lines are not highlighted, but if
+;; `greenbar-highlight-input' is set to a non-nil value, then input is
+;; also highlighted with green bars as well.
+
+;; Suggestions for other background color themes are always welcome.
+
 ;;; Code:
 
 (require 'comint)
+(require 'cl-lib)
 
 (defgroup greenbar nil
   "Stripe comint output like \"green bar\", or \"zebra stripe\" paper."
@@ -85,23 +101,38 @@
 
            (mapcar (lambda (c) (apply #'concat "#" c))
                    `((,x ,x ,o) (,x ,o ,o) (,x ,o ,x) (,o ,o ,x) (,o ,x ,x) (,o ,x ,o))))))
-  "Greenbar themes.
+  "A list of Greenbar themes.
 
-A list of greenbar themes, each of which is a list starting with
-a symbol that names the theme followed by the list bar colors.")
+Each member of the list starts with a symbol that identifies the
+theme followed by the list bar colors.")
 
 (defcustom greenbar-background-colors 'greenbar
   "List of background colors to be applied to output stripes."
   :type `(choice ,@(mapcar (lambda (c)
                              (list 'const (car c)))
                            greenbar-color-themes)
-                 (repeat (color :tag "Background list"))))
+                 (repeat (color :tag "Background color"))))
+
+(defcustom greenbar-highlight-input nil
+  "Should prompts and command input be highlighted."
+  :type 'booleanp)
 
 (defun greenbar-color-list ()
   "Get the list of greenbar background colors."
     (or (cdr (assoc greenbar-background-colors
                     greenbar-color-themes))
         greenbar-background-colors))
+
+(defun greenbar-is-valid-bar (color-list)
+  "Return non-nil, if COLOR-LIST is a list of valid colors."
+  (and color-list
+       (listp color-list)
+       (cl-every #'identity
+                 (mapcar #'color-defined-p color-list))))
+
+(defun greenbar-is-command-input (_start end)
+  "Return non-nil, if input is in region betweeen START and END."
+  (= end comint-last-input-end))
 
 (defun greenbar-next-bar ()
   "Reset the local configuration if we are at the end of a bar.
@@ -121,12 +152,15 @@ Every `greenbar-lines-per-bar' lines are colored with a rotating
 set of background colors found in
 `greenbar-background-colors'."
 
-  (let ((bg-list (greenbar-color-list))
+  (let ((bar (greenbar-color-list))
         (start comint-last-output-start)
         (end (process-mark (get-buffer-process (current-buffer)))))
 
-    ;;(message "greenbar: %S %S %S" start end (replace-regexp-in-string "\n" "\\\\n" (buffer-substring start end)))
-    (when (and bg-list (listp bg-list) (not (= start end)))
+    (when (and (greenbar-is-valid-bar bar)
+               (not (= start end))
+               (or greenbar-highlight-input
+                   (not (greenbar-is-command-input start end))))
+
       (greenbar-next-bar) ; make sure greenbar state is valid
       (save-excursion
         (save-restriction
@@ -149,10 +183,10 @@ set of background colors found in
             (setq greenbar-current-line (forward-line greenbar-current-line))
 
             ;; Mark the bar
-            (let ((bar-face (nth greenbar-current-bar bg-list)))
+            (let ((bar-bg (nth greenbar-current-bar bar)))
               (font-lock-append-text-property
                start (point)
-               'font-lock-face (list :background bar-face
+               'font-lock-face (list :background bar-bg
                                      :extend t)))
 
             ;; Get ready for the next bar
@@ -174,6 +208,18 @@ set of background colors found in
 
 ;;;; ChangeLog:
 
+;; 2020-10-24  Michael R. Mauger  <michael@mauger.com>
+;; 
+;; 	Add `greenbar-highlight-input' to highlight command input.
+;; 
+;; 	Originally they were highlighted mistakenly. The default now avoids 
+;; 	highlighting the input commands to help you visuallize the commands and
+;; 	their results.
+;; 
+;; 2020-10-19  Michael R. Mauger  <michael@mauger.com>
+;; 
+;; 	greenbar -- cleaned-up comments and docstrings
+;; 
 ;; 2020-10-19  Stefan Monnier  <monnier@iro.umontreal.ca>
 ;; 
 ;; 	* packages/greenbar/greenbar.el: Fix copyright line
