@@ -1,2 +1,0 @@
-
-(jazz-theme . [(20201023 921) nil "A warm color theme for Emacs 24+." single ((:commit . "6bc611bd72df867c93142c34c423ef1e2973fb3b") (:authors ("Roman Parykin" . "donderom@ymail.com")) (:maintainer "Roman Parykin" . "donderom@ymail.com") (:url . "https://github.com/donderom/jazz-theme"))])

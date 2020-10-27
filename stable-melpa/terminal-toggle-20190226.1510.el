@@ -5,7 +5,7 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/terminal-toggle.el
 ;; Package-Version: 20190226.1510
-;; Package-Commit: f824d634aef3600cb7a8e2ddf9e8444c6607c160
+;; Package-Commit: 30e4a34bf8235c19e96220c9cbea2ad1b35c9de6
 ;; Keywords: outlines
 ;; Package-Requires: ((emacs "24") (popwin "1.0.0"))
 ;; Version: 0.1

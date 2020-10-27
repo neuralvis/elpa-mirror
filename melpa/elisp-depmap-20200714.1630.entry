@@ -1,2 +1,2 @@
 
-(elisp-depmap . [(20200714 1630) ((emacs (26 1)) (dash (2 17 0))) "Generate an elisp dependency map in graphviz" tar ((:commit . "98676e6ffcc4efb70cc991e659c79cb599b01bc7") (:keywords "outlines") (:authors ("Mehmet Tekman")) (:maintainer "Mehmet Tekman") (:url . "https://github.com/mtekman/elisp-depmap.el"))])
+(elisp-depmap . [(20200714 1630) ((emacs (26 1)) (dash (2 17 0))) "Generate an elisp dependency map in graphviz" tar ((:commit . "1869569356f0a9d97ae0cb1df95ed0ecadb0f7ef") (:keywords "outlines") (:authors ("Mehmet Tekman")) (:maintainer "Mehmet Tekman") (:url . "https://github.com/mtekman/elisp-depmap.el"))])

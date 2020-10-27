@@ -1,0 +1,2 @@
+
+(elfeed-score . [(20201025 2157) ((emacs (24 1)) (elfeed (3 3 0)) (cl-lib (0 6 1))) "Gnus-style scoring for Elfeed" single ((:commit . "396b9cad25786127527d74dd7574b416d58e596c") (:keywords "news") (:authors ("Michael Herstine" . "sp1ff@pobox.com")) (:maintainer "Michael Herstine" . "sp1ff@pobox.com") (:url . "https://github.com/sp1ff/elfeed-score"))])

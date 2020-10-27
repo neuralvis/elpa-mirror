@@ -6,8 +6,6 @@
 ;; Version 1.0
 ;; Package-Requires ((evil "0"))
 ;; URL: https://github.com/VanLaser/evil-nl-break-undo
-;; Package-Version: 20181125.2054
-;; Package-Commit: 4a8f2bf99c978a109eeb92965a72a17bedb68762
 
 ;; This file is NOT part of GNU Emacs.
 

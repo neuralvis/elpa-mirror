@@ -1,2 +1,2 @@
 
-(terminal-toggle . [(20190226 1510) ((emacs (24)) (popwin (1 0 0))) "simple pop-up terminal" single ((:commit . "f824d634aef3600cb7a8e2ddf9e8444c6607c160") (:keywords "outlines") (:authors ("Mehmet Tekman")) (:maintainer "Mehmet Tekman") (:url . "https://github.com/mtekman/terminal-toggle.el"))])
+(terminal-toggle . [(20190226 1510) ((emacs (24)) (popwin (1 0 0))) "simple pop-up terminal" single ((:commit . "30e4a34bf8235c19e96220c9cbea2ad1b35c9de6") (:keywords "outlines") (:authors ("Mehmet Tekman")) (:maintainer "Mehmet Tekman") (:url . "https://github.com/mtekman/terminal-toggle.el"))])
