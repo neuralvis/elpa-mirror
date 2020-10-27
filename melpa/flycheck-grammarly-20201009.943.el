@@ -8,7 +8,7 @@
 ;; Keyword: grammar check
 ;; Version: 0.2.2
 ;; Package-Version: 20201009.943
-;; Package-Commit: 958a433c5f3c9b6ffd2d1c630f4d30e13d9b1a71
+;; Package-Commit: b93821ce3d12946fa617b8c9e3c5a388c1a305b9
 ;; Package-Requires: ((emacs "25.1") (flycheck "0.14") (grammarly "0.1.3"))
 ;; URL: https://github.com/jcs-elpa/flycheck-grammarly
 

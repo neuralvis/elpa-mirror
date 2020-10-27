@@ -1,0 +1,2 @@
+
+(toc-mode . [(20201027 1643) ((emacs (26 1))) "Manage outlines of pdf and djvu document" single ((:commit . "a0018b8a63ca1e53f001c3fa908b6297dc5af3e8") (:keywords "tools" "outlines" "convenience") (:authors ("Daniel Laurens Nicolai" . "dalanicolai@gmail.com")) (:maintainer "Daniel Laurens Nicolai" . "dalanicolai@gmail.com") (:url . "https://github.com/dalanicolai/toc-mode"))])
