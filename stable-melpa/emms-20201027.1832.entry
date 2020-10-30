@@ -1,2 +1,2 @@
 
-(emms . [(20201027 1832) ((cl-lib (0 5))) "The Emacs Multimedia System" tar ((:commit . "a027a7a871402a65dfd413df09d8c630dd379232") (:keywords "emms" "mp3" "ogg" "flac" "music" "mpeg" "video" "multimedia") (:authors ("Jorgen Schäfer" . "forcer@forcix.cx")) (:maintainer "Yoni Rabkin" . "yrk@gnu.org") (:url . "https://www.gnu.org/software/emms/"))])
+(emms . [(20201027 1832) ((cl-lib (0 5))) "The Emacs Multimedia System" tar ((:commit . "94019bb34c56341e66b14c41ff706273e039f525") (:keywords "emms" "mp3" "ogg" "flac" "music" "mpeg" "video" "multimedia") (:authors ("Jorgen Schäfer" . "forcer@forcix.cx")) (:maintainer "Yoni Rabkin" . "yrk@gnu.org") (:url . "https://www.gnu.org/software/emms/"))])

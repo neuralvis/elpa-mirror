@@ -201,6 +201,7 @@ notify me of any missing package or change you would like to see.
     lsp-ui
     magit
     magit-imerge
+    make-mode
     man
     markdown-mode
     markup-faces (`adoc-mode')

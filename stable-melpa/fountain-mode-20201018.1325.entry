@@ -1,2 +1,2 @@
 
-(fountain-mode . [(20201018 1325) ((emacs (24 4)) (seq (2 20))) "Major mode for screenwriting in Fountain markup" single ((:commit . "8dd2878841e40ba0ce86b9d74df3530f64ef49d4") (:keywords "wp" "text") (:authors ("Paul W. Rankin" . "pwr@skeletons.cc")) (:maintainer "Paul W. Rankin" . "pwr@skeletons.cc") (:url . "https://git.skeletons.cc/fountain-mode"))])
+(fountain-mode . [(20201018 1325) ((emacs (24 4)) (seq (2 20))) "Major mode for screenwriting in Fountain markup" single ((:commit . "8dc9eb4f936ee5b6ee13716c1dd8e385a9550950") (:keywords "wp" "text") (:authors ("Paul W. Rankin" . "pwr@skeletons.cc")) (:maintainer "Paul W. Rankin" . "pwr@skeletons.cc") (:url . "https://git.skeletons.cc/fountain-mode"))])

@@ -57,6 +57,12 @@ The documentation at URL
 `https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html' might be
 useful.
 
+For TOC's that are formatted as two columns per page, prepend the
+`toc-extract-pages-ocr' command with two universal arguments. Then after you
+are asked for the start and finish pagenumbers, a third question asks you to
+set the tesseract psm code. For the double column layout it is best (as far
+as I know) to use psm code '1'.
+
 Software-generated PDF's with pdf.tocgen
 For 'software-generated' (i.e. PDF's not created from scans) PDF-files it is
 sometimes easier to use `toc-extract-with-pdf-tocgen'. To use this function
