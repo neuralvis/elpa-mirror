@@ -47,6 +47,11 @@ repository for a bit more documentation.
 
 Change Log:
 
+* 2020-10-28 1.1.8 Ken Manheimer:
+  - Change back to having multishell-list require multishell,
+    rather than the other way around, and remove now unnecessary
+    new autoloads.
+  - Bump version for ELPA release.
 * 2020-10-28 1.1.7 Ken Manheimer:
   - Forward compatibility: 'cl-progv' rather than 'progv', resolves
     multishell-list error in recent emacs versions.
