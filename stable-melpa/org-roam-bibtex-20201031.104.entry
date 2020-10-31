@@ -1,0 +1,2 @@
+
+(org-roam-bibtex . [(20201031 104) ((emacs (27 1)) (org-roam (1 2 2)) (bibtex-completion (2 0 0))) "Org Roam meets BibTeX" tar ((:commit . "d279aa19d25ae5916bf1f67826672df886872496") (:keywords "org-mode" "roam" "convenience" "bibtex" "helm-bibtex" "ivy-bibtex" "org-ref") (:authors ("Leo Vivier" . "leo.vivier+dev@gmail.com") ("Mykhailo Shevchuk" . "mail@mshevchuk.com") ("Jethro Kuan" . "jethrokuan95@gmail.com")) (:maintainer "Leo Vivier" . "leo.vivier+dev@gmail.com") (:url . "https://github.com/org-roam/org-roam-bibtex"))])

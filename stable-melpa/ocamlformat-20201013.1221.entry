@@ -1,2 +1,2 @@
 
-(ocamlformat . [(20201013 1221) ((emacs (24 3))) "Utility functions to format ocaml code" single ((:commit . "19e8914ee10c022d63ac8201f4e3964ba7fad7be") (:keywords "languages" "ocaml") (:url . "https://github.com/ocaml-ppx/ocamlformat"))])
+(ocamlformat . [(20201013 1221) ((emacs (24 3))) "Utility functions to format ocaml code" single ((:commit . "c895227e3c926a97ed7f1551d40409a54739a1b5") (:keywords "languages" "ocaml") (:url . "https://github.com/ocaml-ppx/ocamlformat"))])

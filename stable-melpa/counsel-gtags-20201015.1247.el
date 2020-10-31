@@ -7,7 +7,7 @@
 ;;         Jimmy Aguilar Mena <spacibba@aol.com>
 ;; URL: https://github.com/FelipeLema/emacs-counsel-gtags
 ;; Package-Version: 20201015.1247
-;; Package-Commit: 9e291c23651040b8ffbd2bd7a581303aaf11b05c
+;; Package-Commit: 2da9f7b0d72648c02ddc6a6e847811383903a35d
 ;; Version: 0.01
 ;; Package-Requires: ((emacs "25.1") (counsel "0.8.0") (seq "1.0"))
 

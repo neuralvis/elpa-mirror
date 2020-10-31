@@ -1,2 +1,0 @@
-
-(vc-fossil . [(20200926 1833) nil "VC backend for the fossil sofware configuraiton management system" single ((:commit . "4254ef5715eaaf59ab2361fcddb6f4cce4c0481f") (:authors ("Venkat Iyer" . "venkat@comit.com")) (:maintainer "Venkat Iyer" . "venkat@comit.com"))])

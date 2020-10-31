@@ -5,7 +5,7 @@
 ;; Author: HIGASHI Taiju
 ;; Keywords: literate programming, reproducible research, javascript, typescript, tools
 ;; Package-Version: 20201019.101
-;; Package-Commit: d5ef87a095cfccd3dfdcae75e5936d3daee59882
+;; Package-Commit: f1129d20fe9931f1c0b62c4af781f5489abd957f
 ;; Homepage: https://github.com/taiju/ob-deno
 ;; Version: 1.0.1
 ;; Package-Requires: ((emacs "26.1"))

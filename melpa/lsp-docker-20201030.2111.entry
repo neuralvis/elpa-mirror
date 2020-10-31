@@ -1,0 +1,2 @@
+
+(lsp-docker . [(20201030 2111) ((emacs (25 1)) (dash (2 14 1)) (lsp-mode (6 2 1))) "LSP Docker integration" single ((:commit . "c94531fa5bf1b4d30556e692e8b89b836f1d9910") (:keywords "languages" "langserver") (:authors ("Ivan Yonchovski" . "yyoncho@gmail.com")) (:maintainer "Ivan Yonchovski" . "yyoncho@gmail.com") (:url . "https://github.com/emacs-lsp/lsp-docker"))])
