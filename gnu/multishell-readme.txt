@@ -47,6 +47,8 @@ repository for a bit more documentation.
 
 Change Log:
 
+* 2020-10-30 1.1.9 Ken Manheimer:
+  - Require cl-lib when compiling for cl-letf macro.
 * 2020-10-28 1.1.8 Ken Manheimer:
   - Change back to having multishell-list require multishell,
     rather than the other way around, and remove now unnecessary
