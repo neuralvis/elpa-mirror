@@ -1,2 +1,0 @@
-
-(etc-sudoers-mode . [(20201023 1229) ((sudo-edit (0)) (with-editor (0))) "Edit Sudo security policies" single ((:commit . "cc07fc59f9fc646169f991ba7bbd411944945b67") (:keywords "languages") (:authors ("Peter Oliver" . "git@mavit.org.uk")) (:maintainer "Peter Oliver" . "git@mavit.org.uk") (:url . "https://gitlab.com/mavit/etc-sudoers-mode/"))])

@@ -1,0 +1,2 @@
+
+(bufler . [(20201103 1625) ((emacs (26 3)) (dash (2 17)) (dash-functional (2 17)) (f (0 17)) (pretty-hydra (0 2 2)) (magit-section (0 1))) "Group buffers into workspaces with programmable rules" tar ((:commit . "1dc3bd63f13e9a1a826bb14fdd4b11b7bfd8bbb3") (:keywords "convenience") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/bufler.el"))])

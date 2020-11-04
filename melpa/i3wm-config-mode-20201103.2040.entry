@@ -1,0 +1,2 @@
+
+(i3wm-config-mode . [(20201103 2040) ((emacs (24 1))) "Better syntax highlighting for i3wm's config file" single ((:commit . "72a7734a0d8ff6805ae757978f37a80983ccf9f6") (:keywords "faces" "languages" "i3wm" "font-lock") (:authors ("Alexander Miller" . "alexanderm@web.de")) (:maintainer "Alexander Miller" . "alexanderm@web.de") (:url . "https://github.com/Alexander-Miller/i3wm-Config-Mode"))])

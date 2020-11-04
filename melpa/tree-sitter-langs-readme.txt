@@ -3,7 +3,7 @@ This is a convenient bundle of language grammars and queries for
 `tree-sitter' is widespread enough for language major modes to include these
 definitions on their own.
 
-Basically it's a multi-step process:
+Basically it's a multi-phase adoption process:
 
 1. `tree-sitter-langs' populates global registries of grammars and queries.
    These global registries are defined by `tree-sitter-mode' and other

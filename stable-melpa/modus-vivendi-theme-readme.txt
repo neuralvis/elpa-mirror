@@ -240,6 +240,7 @@ notify me of any missing package or change you would like to see.
     paren-face
     parrot
     pass
+    pdf-tools
     persp-mode
     perspective
     phi-grep

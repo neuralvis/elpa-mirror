@@ -1,2 +1,0 @@
-
-(orgstrap . [(20201019 516) ((emacs (24 4))) "Bootstrap an Org file using file local variables" single ((:commit . "48a971d2e91a330aa569efa926ec5834b8e32c09") (:keywords "lisp" "org" "org-mode" "bootstrap") (:authors ("Tom Gillespie")) (:maintainer "Tom Gillespie") (:url . "https://github.com/tgbugs/orgstrap"))])

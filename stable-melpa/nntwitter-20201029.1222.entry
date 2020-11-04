@@ -1,2 +1,2 @@
 
-(nntwitter . [(20201029 1222) ((emacs (25 1)) (dash (20190401)) (anaphora (20180618)) (request (20190819))) "Gnus Backend For Twitter" tar ((:commit . "6b61219ce60b5b6d487de5bcf0e172fca6959fe0") (:url . "https://github.com/dickmao/nntwitter"))])
+(nntwitter . [(20201029 1222) ((emacs (25 1)) (dash (20190401)) (anaphora (20180618)) (request (20190819))) "Gnus Backend For Twitter" tar ((:commit . "7da9088c5d22a67392c5824665cf677d979073ea") (:url . "https://github.com/dickmao/nntwitter"))])

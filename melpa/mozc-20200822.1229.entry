@@ -1,2 +1,2 @@
 
-(mozc . [(20200822 1229) nil "minor mode to input Japanese with Mozc" single ((:commit . "08c83425312065dd37ef65e34e5f93ab972a3930") (:keywords "mule" "multilingual" "input method"))])
+(mozc . [(20200822 1229) nil "minor mode to input Japanese with Mozc" single ((:commit . "42426e181cd4691eb840290f60890b0f21e7b23e") (:keywords "mule" "multilingual" "input method"))])
