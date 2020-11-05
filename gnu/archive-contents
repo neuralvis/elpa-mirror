@@ -1272,7 +1272,7 @@
 	 ("Nicolas Petton" . "nicolas@petton.fr"))
 	(:maintainer nil . "emacs-devel@gnu.org"))])
  (markchars .
-	    [(0 2 1)
+	    [(0 2 2)
 	     nil "Mark chars fitting certain characteristics" single
 	     ((:url . "http://elpa.gnu.org/packages/markchars.html")
 	      (:authors
