@@ -1,0 +1,2 @@
+
+(maxima . [(20201105 1040) ((emacs (25 1)) (s (1 11 0)) (test-simple (1 3 0))) "Major mode for Maxima" tar ((:commit . "f2ae5a52695ea7d394fe6b94812cc84e21d53b6d") (:keywords "maxima" "tools" "math") (:authors ("William F. Schelter") ("Jay Belanger") ("Fermin Munoz")) (:maintainer "Fermin Munoz" . "fmfs@posteo.net") (:url . "https://gitlab.com/sasanidas/maxima"))])

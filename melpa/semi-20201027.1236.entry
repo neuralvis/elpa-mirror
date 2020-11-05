@@ -1,2 +1,0 @@
-
-(semi . [(20201027 1236) ((emacs (24 5)) (apel (10 8)) (flim (1 14 9))) "A library to provide MIME features." tar ((:commit . "d3161cf63e4fedc5eda15731ebbca24a24564d06"))])
