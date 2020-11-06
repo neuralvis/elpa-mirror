@@ -1,2 +1,2 @@
 
-(helm-bufler . [(20200409 1253) ((emacs (26 3)) (bufler (0 2 -1)) (helm (1 9 4))) "Helm source for Bufler" single ((:commit . "1dc3bd63f13e9a1a826bb14fdd4b11b7bfd8bbb3") (:keywords "convenience") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/bufler.el"))])
+(helm-bufler . [(20200409 1253) ((emacs (26 3)) (bufler (0 2 -1)) (helm (1 9 4))) "Helm source for Bufler" single ((:commit . "3f87da0a5eda8dbebea8f6b272ac3dd352f9d219") (:keywords "convenience") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/bufler.el"))])

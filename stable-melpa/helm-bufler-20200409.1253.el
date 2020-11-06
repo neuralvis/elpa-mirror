@@ -4,7 +4,7 @@
 
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; URL: https://github.com/alphapapa/bufler.el
-;; Package-Commit: 1dc3bd63f13e9a1a826bb14fdd4b11b7bfd8bbb3
+;; Package-Commit: 3f87da0a5eda8dbebea8f6b272ac3dd352f9d219
 ;; Package-Version: 20200409.1253
 ;; Package-X-Original-Version: 0.3-pre
 ;; Package-Requires: ((emacs "26.3") (bufler "0.2-pre") (helm "1.9.4"))

@@ -1,0 +1,2 @@
+
+(gkroam . [(20201106 613) ((emacs (26 3)) (db (0 0 6)) (company (0 9 10))) "A lightweight org-mode roam replica" single ((:commit . "d457d21b0ae849fdc7343753c00a3608be4d6d4e") (:keywords "org" "convenience") (:authors ("Kinney Zhang" . "kinneyzhang666@gmail.com")) (:maintainer "Kinney Zhang" . "kinneyzhang666@gmail.com") (:url . "https://github.com/Kinneyzhang/gkroam.el"))])

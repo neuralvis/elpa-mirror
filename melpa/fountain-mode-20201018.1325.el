@@ -7,7 +7,7 @@
 ;; Author: Paul W. Rankin <pwr@skeletons.cc>
 ;; Keywords: wp, text
 ;; Package-Version: 20201018.1325
-;; Package-Commit: 8dc9eb4f936ee5b6ee13716c1dd8e385a9550950
+;; Package-Commit: 6e5e805b579b301f76f5242a62c28bf733aece25
 ;; Version: 3.3.3
 ;; Package-Requires: ((emacs "24.4") (seq "2.20"))
 ;; URL: https://git.skeletons.cc/fountain-mode
