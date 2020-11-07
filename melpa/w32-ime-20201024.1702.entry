@@ -1,2 +1,0 @@
-
-(w32-ime . [(20201024 1702) ((emacs (24 4))) "Windows IME UI/UX controler" single ((:commit . "1dbdc056f507172857195b5e14b7550c565018bc") (:authors ("H.Miyashita") ("MIYOSHI Masanori") ("KOBAYASHI Yasuhiro") ("NTEmacsJP") ("ksugita (gnupack)") ("rzl24ozi") ("TANE") ("Masamichi Hosoda" . "trueroad@trueroad.jp") ("Naoya Yamashita" . "conao3@gmail.com")) (:maintainer "Masamichi Hosoda" . "trueroad@trueroad.jp") (:url . "https://github.com/trueroad/w32-ime.el"))])
