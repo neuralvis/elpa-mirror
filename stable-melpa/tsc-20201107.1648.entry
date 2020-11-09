@@ -1,0 +1,2 @@
+
+(tsc . [(20201107 1648) ((emacs (25 1))) "Core Tree-sitter APIs" tar ((:commit . "1a80af096434c65f1810b82ff527603e46f6769f") (:keywords "languages" "tools" "parsers" "dynamic-modules" "tree-sitter") (:authors ("Tuấn-Anh Nguyễn" . "ubolonton@gmail.com") ("Jorge Javier Araya Navarro" . "jorgejavieran@yahoo.com.mx")) (:maintainer "Tuấn-Anh Nguyễn" . "ubolonton@gmail.com") (:url . "https://github.com/ubolonton/emacs-tree-sitter"))])

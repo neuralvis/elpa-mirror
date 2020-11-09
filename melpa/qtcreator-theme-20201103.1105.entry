@@ -1,2 +1,0 @@
-
-(qtcreator-theme . [(20201103 1105) ((emacs (24 3))) "A color theme that mimics Qt Creator IDE" single ((:commit . "34cfa13f6a8c5cd47d2a5952a98190f1f72be394") (:keywords "theme" "light" "faces") (:authors ("Lesley Lai" . "lesley@lesleylai.info")) (:maintainer "Lesley Lai" . "lesley@lesleylai.info") (:url . "https://github.com/LesleyLai/emacs-qtcreator-theme"))])

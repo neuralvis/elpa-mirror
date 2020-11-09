@@ -13,7 +13,7 @@
 
 ;; Package-Requires: ((emacs "25.1") (dash "20200524") (transient "20200601") (with-editor "20200522"))
 ;; Package-Version: 20200828.1753
-;; Package-Commit: 5a38e1bb0fffa0326a1b5073c0ce9b05386e5109
+;; Package-Commit: 1ea8a70fb22dc7d571ab8070aa925962ed9379ea
 ;; Keywords: git tools vc
 ;; Homepage: https://github.com/magit/magit
 

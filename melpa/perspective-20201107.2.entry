@@ -1,2 +1,0 @@
-
-(perspective . [(20201107 2) ((emacs (24 4)) (cl-lib (0 5))) "switch between named \"perspectives\" of the editor" single ((:commit . "b2baf2a98b7ad778e2d67a2ce31029458ab3940f") (:keywords "workspace" "convenience" "frames") (:authors ("Natalie Weizenbaum" . "nex342@gmail.com")) (:maintainer "Natalie Weizenbaum" . "nex342@gmail.com") (:url . "http://github.com/nex3/perspective-el"))])

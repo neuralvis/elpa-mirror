@@ -1,0 +1,2 @@
+
+(ox-leanpub . [(20201108 1638) ((org (9 1)) (ox-gfm (1 0)) (emacs (26 1)) (s (1 12 0))) "Export Org documents to Leanpub book format" tar ((:commit . "6792b6ffacfb47fbd747174555d3a6c077d66dd5") (:keywords "files" "org" "leanpub") (:authors ("Diego Zamboni" . "diego@zzamboni.org")) (:maintainer "Diego Zamboni" . "diego@zzamboni.org") (:url . "https://gitlab.com/zzamboni/ox-leanpub"))])

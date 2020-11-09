@@ -3,7 +3,7 @@
 ;; Author: Tom Gillespie
 ;; URL: https://github.com/tgbugs/orgstrap
 ;; Package-Version: 20201107.709
-;; Package-Commit: b97398aa7ff1331cb3ad42038dcd81a9aa6090dc
+;; Package-Commit: edb1a09a6406dfb30362ac02d25e8cded1275441
 ;; Keywords: lisp org org-mode bootstrap
 ;; Version: 1.2.4
 ;; Package-Requires: ((emacs "24.4"))
