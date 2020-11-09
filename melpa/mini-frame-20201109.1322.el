@@ -4,10 +4,10 @@
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: frames
-;; Package-Commit: 12ea266bcc06f95e040f2bec631b9444cf50fedb
+;; Package-Commit: 4bad73e8f6f28bbce28a56e1e9b594e4c1a9b081
 ;; URL: https://github.com/muffinmad/emacs-mini-frame
-;; Package-Version: 20201104.1940
-;; Package-X-Original-Version: 1.8.3
+;; Package-Version: 20201109.1322
+;; Package-X-Original-Version: 1.8.4
 ;; Package-Requires: ((emacs "26.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -380,12 +380,21 @@ ALIST is passed to `window--display-buffer'."
             (make-frame-invisible mini-frame-frame)
             (modify-frame-parameters mini-frame-frame '((parent-frame . nil))))))))))
 
+;; http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=2ecbf4cfae
+;; By default minibuffer is moved onto active frame leaving empty mini-frame.
+;; Disable this behavior on mini-frame-mode.
+(defvar minibuffer-follows-selected-frame)
+(defvar mini-frame--minibuffer-follows-selected-frame)
+
 ;;;###autoload
 (define-minor-mode mini-frame-mode
   "Show minibuffer in child frame on read-from-minibuffer."
   :global t
   (cond
    (mini-frame-mode
+    (when (boundp 'minibuffer-follows-selected-frame)
+      (setq mini-frame--minibuffer-follows-selected-frame minibuffer-follows-selected-frame)
+      (setq minibuffer-follows-selected-frame nil))
     (mapc #'(lambda (fn)
               (advice-add fn :around #'mini-frame-read-from-minibuffer))
           mini-frame-advice-functions)
@@ -397,6 +406,8 @@ ALIST is passed to `window--display-buffer'."
                       (setq mini-frame-frame
                             (mini-frame--make-frame '((minibuffer . only)))))))))
    (t
+    (when (boundp 'minibuffer-follows-selected-frame)
+      (setq minibuffer-follows-selected-frame mini-frame--minibuffer-follows-selected-frame))
     (mapc #'(lambda (fn)
               (advice-remove fn #'mini-frame-read-from-minibuffer))
           mini-frame-advice-functions)

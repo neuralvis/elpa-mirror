@@ -5,7 +5,7 @@
 
 ;; URL: http://github.com/bastibe/org-journal
 ;; Package-Version: 20201101.1438
-;; Package-Commit: 78d575213c7cf7c069e52bfc46430090c0500000
+;; Package-Commit: 14ce0119fe2d89f2f2207788be2edce0b9372822
 ;; Version: 2.1.1
 ;; Package-Requires: ((emacs "25.1") (org "9.1"))
 

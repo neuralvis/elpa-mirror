@@ -5,8 +5,8 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20201108.1809
-;; Package-Commit: 49ae11dd5a0f556a8a2e45a278c8aedccb046d89
+;; Package-Version: 20201109.1226
+;; Package-Commit: 2d166271e0b499cfcc751d4e0917e2dd4123c3f5
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -1237,7 +1237,7 @@ is essential."
   "Default file applications on a macOS system.")
 
 (defconst taskpaper-file-apps-defaults-windowsnt
-  (list '(remote . emacs)
+  (list (cons 'remote 'emacs)
         (cons 'system (lambda (file)
                         (with-no-warnings (w32-shell-execute "open" file))))
         (cons t (lambda (file)
@@ -1338,7 +1338,7 @@ With optional argument IN-EMACS, visit the file in Emacs."
 (defun taskpaper-default-open-cmd ()
   "Return the default system command to open URIs.
 Command can be a string containing a %s formatter, which will be
-replaced by the URI or a Lisp function, which will be called with
+replaced by the URI, or a Lisp function, which will be called with
 the URI as a single argument."
   (cond ((eq system-type 'darwin) "open %s")
         ((eq system-type 'windows-nt)
@@ -1417,10 +1417,9 @@ directory. An absolute path can be forced with a
   (interactive)
   (let ((link))
     (cond
+     ;; We need to be greedy here
      ((taskpaper-in-regexp taskpaper-markdown-link-regexp)
       (setq link (match-string-no-properties 6)))
-     ;; We use `taskpaper-in-regexp' instead `thing-at-point-looking-at'
-     ;; because we need to be greedy here.
      ((taskpaper-in-regexp taskpaper-plain-link-regexp)
       (setq link (match-string-no-properties 0)))
      (t (user-error "No link at point")))
@@ -1443,8 +1442,7 @@ If BACK is non-nil, move backward to the previous link."
     (when (taskpaper-in-regexp re)
       ;; Don't stay stuck at link under cursor
       (goto-char (if back (match-beginning 0) (match-end 0))))
-    ;; We use `taskpaper-in-regexp' instead `thing-at-point-looking-at'
-    ;; because we need to be greedy here.
+    ;; We need to be greedy here
     (if (and (funcall func re nil t) (taskpaper-in-regexp re))
         (progn
           (goto-char (match-beginning 0)) (skip-syntax-forward "\s")
@@ -2763,7 +2761,7 @@ string and show the corresponding date."
          (time (encode-time 0 0 0 (nth 1 date) (nth 0 date) (nth 2 date))))
     (insert-before-markers (format-time-string "%Y-%m-%d" time))))
 
-;;;; Date/time prompt
+;;;; Date & time prompt
 
 (defvar taskpaper-calendar-selected-date nil
   "Temporary storage for date selected from calendar.
