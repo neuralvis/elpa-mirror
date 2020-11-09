@@ -6,10 +6,10 @@
 
 ;; Author: Natalie Weizenbaum <nex342@gmail.com>
 ;; URL: http://github.com/nex3/perspective-el
-;; Package-Version: 20201109.600
-;; Package-Commit: e4cbee6a132d57b4a1fcb89643c0f40116be5726
+;; Package-Version: 20201109.1628
+;; Package-Commit: 609e96e778528d8303df84a3b0ef6348e856ed32
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5"))
-;; Version: 2.11
+;; Version: 2.12
 ;; Created: 2008-03-05
 ;; By: Natalie Weizenbaum <nex342@gmail.com>
 ;; Keywords: workspace, convenience, frames
