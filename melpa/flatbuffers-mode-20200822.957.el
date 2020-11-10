@@ -5,6 +5,8 @@
 ;; Author: Asal Mirzaieva <asalle.kim@gmail.com>
 ;; Created: 12-Nov-2019
 ;; Version: 0.2
+;; Package-Version: 20200822.957
+;; Package-Commit: c0e9dc220db5f08410f40becf03531938484cb6c
 ;; Keywords: flatbuffers languages
 ;; Homepage: https://github.com/Asalle/flatbuffers-mode
 ;; Package-Requires: ((emacs "24.3"))

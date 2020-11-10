@@ -5,7 +5,7 @@
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ((emacs "25.2") (treemacs "0.0") (persp-mode "2.9.7") (dash "2.11.0"))
 ;; Package-Version: 20200901.1550
-;; Package-Commit: ed7de5d0a25b19d9ad5f376b5e447123b418964b
+;; Package-Commit: d6acbaf81abf719c58d577a3a5bc18010fa85fbd
 ;; Version: 0
 ;; Homepage: https://github.com/Alexander-Miller/treemacs
 
