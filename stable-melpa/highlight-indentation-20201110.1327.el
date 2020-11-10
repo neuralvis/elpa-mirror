@@ -2,8 +2,8 @@
 ;; Author: Anton Johansson <anton.johansson@gmail.com> - http://antonj.se
 ;; Created: Dec 15 23:42:04 2010
 ;; Version: 0.7.0
-;; Package-Version: 20181204.839
-;; Package-Commit: d03803f2c06749c430443a3d24e039cbafc9c58f
+;; Package-Version: 20201110.1327
+;; Package-Commit: 4fc4e346c17e4e975a8c8ece3d4e7240357e2869
 ;; URL: https://github.com/antonj/Highlight-Indentation-for-Emacs
 ;;
 ;; This program is free software; you can redistribute it and/or
@@ -52,6 +52,7 @@ Known issues:
 - Not yet implemented for highlight-indentation-current-column-mode
 - May not work perfectly near the bottom of the screen
 - Point appears after indent guides on blank lines"
+  :type 'boolean
   :group 'highlight-indentation)
 
 (defvar highlight-indentation-overlay-priority 1)

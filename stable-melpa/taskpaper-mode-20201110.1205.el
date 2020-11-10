@@ -5,8 +5,8 @@
 ;; Author: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; Maintainer: Dmitry Safronov <saf.dmitry@gmail.com>
 ;; URL: <https://github.com/saf-dmitry/taskpaper-mode>
-;; Package-Version: 20201110.545
-;; Package-Commit: 921e8013c492d286b3058f4f077a11e678d97ccd
+;; Package-Version: 20201110.1205
+;; Package-Commit: 84459a698f0f757cfa58d5644a77b0e105fb00a6
 ;; Keywords: outlines, notetaking, task management, productivity, taskpaper
 
 ;; This file is not part of GNU Emacs.
@@ -689,7 +689,7 @@ Group 3 matches the optional tag value without enclosing parentheses.")
    "[/]"
    "\\)"
    "\\)")
-  "Regular expression for general URI.")
+  "Regular expression for generic URI.")
 
 (defconst taskpaper-markdown-link-regexp
   (concat
@@ -917,15 +917,14 @@ If TAG is a number, get the corresponding match group."
        (list 'taskpaper-syntax 'tag
              'face (taskpaper-get-tag-face 2)
              'mouse-face 'highlight
-             'keymap taskpaper-mouse-map-tag
-             'help-echo "Query for tag"))
+             'keymap taskpaper-mouse-map-tag))
       (taskpaper-rear-nonsticky-at (match-end 1)))
     t))
 
 (defun taskpaper-get-link-type (link)
   "Return link type as symbol.
-LINK should be an unescaped raw link. Symbol names for recognized
-types are 'email, 'file, 'uri, and 'unknown."
+LINK should be an unescaped raw link. Recognized types are 'uri,
+'email, 'file, or nil."
   (let* ((fmt "\\`%s\\'")
          (re-email (format fmt taskpaper-email-regexp))
          (re-file  (format fmt taskpaper-file-path-regexp))
@@ -933,7 +932,7 @@ types are 'email, 'file, 'uri, and 'unknown."
     (cond ((string-match-p re-email link) 'email)
           ((string-match-p re-file  link) 'file)
           ((string-match-p re-uri   link) 'uri)
-          (t 'unknown))))
+          (t nil))))
 
 (defun taskpaper-get-link-face (link)
   "Get the right face for LINK."
@@ -962,7 +961,7 @@ types are 'email, 'file, 'uri, and 'unknown."
              'face (taskpaper-get-link-face link)
              'mouse-face 'highlight
              'keymap taskpaper-mouse-map-link
-             'help-echo (concat "Open " link))))
+             'help-echo link)))
     (add-text-properties
      (match-beginning 2) (match-end 2) taskpaper-markup-properties)
     (add-text-properties
@@ -991,7 +990,7 @@ types are 'email, 'file, 'uri, and 'unknown."
                'face (taskpaper-get-link-face link)
                'mouse-face 'highlight
                'keymap taskpaper-mouse-map-link
-               'help-echo (concat "Send email to " link))))
+               'help-echo link)))
       (taskpaper-rear-nonsticky-at (match-end 1))
       t)))
 
@@ -1016,7 +1015,7 @@ types are 'email, 'file, 'uri, and 'unknown."
                'face (taskpaper-get-link-face link)
                'mouse-face 'highlight
                'keymap taskpaper-mouse-map-link
-               'help-echo (concat "Open " link))))
+               'help-echo link)))
       (taskpaper-rear-nonsticky-at (match-end 1))
       t)))
 
@@ -1041,7 +1040,7 @@ types are 'email, 'file, 'uri, and 'unknown."
                'face (taskpaper-get-link-face link)
                'mouse-face 'highlight
                'keymap taskpaper-mouse-map-link
-               'help-echo (concat "Open " link))))
+               'help-echo link)))
       (taskpaper-rear-nonsticky-at (match-end 1))
       t)))
 
@@ -1147,8 +1146,7 @@ types are 'email, 'file, 'uri, and 'unknown."
     (add-text-properties
      (match-beginning 2) (match-end 2)
      (list 'mouse-face 'highlight
-           'keymap taskpaper-mouse-map-mark
-           'help-echo "Toggle done"))
+           'keymap taskpaper-mouse-map-mark))
     (taskpaper-rear-nonsticky-at (match-end 2))
     t))
 
@@ -1169,8 +1167,8 @@ is essential."
                 '((1 'taskpaper-note)))
           '(taskpaper-font-lock-markdown-links)
           '(taskpaper-font-lock-email-links)
-          '(taskpaper-font-lock-uri-links)
           '(taskpaper-font-lock-file-links)
+          '(taskpaper-font-lock-uri-links)
           '(taskpaper-font-lock-tags)
           (when taskpaper-fontify-done-items
             '(taskpaper-font-lock-done-tasks))
