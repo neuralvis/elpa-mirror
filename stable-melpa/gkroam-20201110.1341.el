@@ -4,7 +4,7 @@
 ;;
 ;; Version: 2.4.1
 ;; Package-Version: 20201110.1341
-;; Package-Commit: 4ecfcb4497ec735d2a4a9bb54ba75d362e87a72f
+;; Package-Commit: ab9d7c912cf02c8193e614282ca6025ae576e710
 ;; Keywords: org, convenience
 ;; Author: Kinney Zhang <kinneyzhang666@gmail.com>
 ;; URL: https://github.com/Kinneyzhang/gkroam.el
