@@ -1,2 +1,0 @@
-
-(terraform-mode . [(20201110 1915) ((emacs (24 3)) (hcl-mode (0 3))) "Major mode for terraform configuration file" single ((:commit . "edc22858e27c33a64d0492573888d8779f60d79b") (:authors ("Syohei YOSHIDA" . "syohex@gmail.com")) (:maintainer "Syohei YOSHIDA" . "syohex@gmail.com") (:url . "https://github.com/syohex/emacs-terraform-mode"))])

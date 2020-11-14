@@ -4,7 +4,7 @@
 ;; Author: Simon Nicolussi <sinic@sinic.name>
 ;; Version: 0.1
 ;; Package-Version: 20201108.15
-;; Package-Commit: b1a10b2b115e28884f1e8d93b3a2563b8acc9748
+;; Package-Commit: 9aab26d4f07466e6dfabe14874adde3e1ab3d144
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: unix
 ;; Homepage: https://github.com/sinic/ednc

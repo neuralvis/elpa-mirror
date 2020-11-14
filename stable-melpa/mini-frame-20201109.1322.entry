@@ -1,2 +1,0 @@
-
-(mini-frame . [(20201109 1322) ((emacs (26 1))) "Show minibuffer in child frame on read-from-minibuffer" single ((:commit . "4bad73e8f6f28bbce28a56e1e9b594e4c1a9b081") (:keywords "frames") (:authors ("Andrii Kolomoiets" . "andreyk.mad@gmail.com")) (:maintainer "Andrii Kolomoiets" . "andreyk.mad@gmail.com") (:url . "https://github.com/muffinmad/emacs-mini-frame"))])

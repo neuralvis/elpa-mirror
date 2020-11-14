@@ -1,0 +1,2 @@
+
+(iedit . [(20201111 228) nil "Edit multiple regions in the same way simultaneously." tar ((:commit . "db9ef01c6eefed83e2447ae3d4903ad3773c6dcd") (:keywords "occurrence" "region" "simultaneous" "refactoring") (:authors ("Victor Ren" . "victorhge@gmail.com")) (:maintainer "Victor Ren" . "victorhge@gmail.com") (:url . "https://github.com/victorhge/iedit"))])

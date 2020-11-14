@@ -1,2 +1,2 @@
 
-(ednc . [(20201108 15) ((emacs (26 1))) "Emacs Desktop Notification Center" single ((:commit . "b1a10b2b115e28884f1e8d93b3a2563b8acc9748") (:keywords "unix") (:authors ("Simon Nicolussi" . "sinic@sinic.name")) (:maintainer "Simon Nicolussi" . "sinic@sinic.name") (:url . "https://github.com/sinic/ednc"))])
+(ednc . [(20201108 15) ((emacs (26 1))) "Emacs Desktop Notification Center" single ((:commit . "9aab26d4f07466e6dfabe14874adde3e1ab3d144") (:keywords "unix") (:authors ("Simon Nicolussi" . "sinic@sinic.name")) (:maintainer "Simon Nicolussi" . "sinic@sinic.name") (:url . "https://github.com/sinic/ednc"))])

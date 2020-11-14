@@ -1,2 +1,0 @@
-
-(burnt-toast . [(20201110 600) ((emacs (25 1)) (dash (2 10)) (alert (1 2))) "Elisp integration with the BurntToast PowerShell module" tar ((:commit . "6a7b6342dde3a216f613a17d7b1c3a07d13921bb") (:keywords "alert" "notifications" "powershell" "comm") (:authors ("Sam Cedarbaum" . "scedarbaum@gmail.com")) (:maintainer "Sam Cedarbaum" . "scedarbaum@gmail.com") (:url . "https://github.com/cedarbaum/burnt-toast.el"))])

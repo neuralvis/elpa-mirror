@@ -5,7 +5,7 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/remind-bindings.el
 ;; Package-Version: 20200820.1723
-;; Package-Commit: 6ad03835dbed47b2a1d644a4054a65e1bc16797f
+;; Package-Commit: c9a327bfd3c68a0c41b5b64df491bdee4c73ca39
 ;; Keywords: outlines
 ;; Package-Requires: ((emacs "25.1") (omni-quotes "0.5") (popwin "1.0") (map "2.0"))
 ;; Version: 0.7

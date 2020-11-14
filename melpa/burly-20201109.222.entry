@@ -1,2 +1,0 @@
-
-(burly . [(20201109 222) ((emacs (26 3)) (map (2 1))) "Save and restore window configurations and their buffers" tar ((:commit . "97cb15638a40a22ce1f31375a94794336cfcc3b7") (:keywords "convenience") (:authors ("Adam Porter" . "adam@alphapapa.net")) (:maintainer "Adam Porter" . "adam@alphapapa.net") (:url . "https://github.com/alphapapa/burly.el"))])

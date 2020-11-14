@@ -6,7 +6,7 @@
 ;; Maintainer: Craig Niles <niles.c at gmail.com>
 ;; URL: https://github.com/cniles/emacs-mimetypes
 ;; Package-Version: 20201105.2219
-;; Package-Commit: 5fd74b5d8c18bf4289c3fbfc8f21873bc15ebda4
+;; Package-Commit: 7919969820229e2d2a68b0a60cda43974933c4f8
 ;; Package-Requires: ((emacs "25.1"))
 ;; Version: 1.0
 
