@@ -1,0 +1,1 @@
+Flymake support for Grammarly.

@@ -4,7 +4,7 @@ How to Use?
   `grugru-define-on-major-mode', `grugru-define-on-local-major-mode', and `grugru-define-local'.
   If you use ~grugru~, you should assign ~grugru~ to 1 stroke key like ~C-;~, or ~M-g~.
 
-    (global-set-key (kbd "C-;")
+    (global-set-key (kbd "C-;") #'grugru)   ; Or other key.
 
 
   If you want use default grugru, eval ~grugru-default-setup~.  In the other words,
@@ -263,9 +263,9 @@ Custom Variables
    If you would like to use ivy or ido, write:
 
      ;; For ivy:
-     (setq grugru-completing-function
+     (setq grugru-completing-function #'ivy-completing-read)
      ;; For ido:
-     (setq grugru-completing-function
+     (setq grugru-completing-function #'ido-completing-read)
 
 
 ~grugru-select-function-generate-number~

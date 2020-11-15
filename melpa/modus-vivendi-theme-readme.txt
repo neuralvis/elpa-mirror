@@ -270,6 +270,7 @@ notify me of any missing package or change you would like to see.
     show-paren-mode
     shr
     side-notes
+    sieve-mode
     skewer-mode
     smart-mode-line
     smartparens
