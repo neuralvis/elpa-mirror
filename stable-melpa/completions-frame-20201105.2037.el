@@ -4,7 +4,7 @@
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: frames
-;; Package-Commit: 22c64c0c302e8df2c67d28214516317ff8277032
+;; Package-Commit: d82ac9c9cda51d620b3fbb35c0074d2962302bf2
 ;; URL: https://github.com/muffinmad/emacs-completions-frame
 ;; Package-Version: 20201105.2037
 ;; Package-X-Original-Version: 1.2

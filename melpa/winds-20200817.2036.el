@@ -7,7 +7,7 @@
 ;; Created: 17 Apr 2020
 ;; Keywords: convenience
 ;; Package-Version: 20200817.2036
-;; Package-Commit: b383004d190d4f18cd8ddb62135c60ae1944728b
+;; Package-Commit: 5394155585c096b1222684b61d5522211672561a
 ;; Version: 1.0.0
 ;; Homepage: https://github.com/Javyre/winds.el
 ;; Package-Requires: ((emacs "25.1"))
