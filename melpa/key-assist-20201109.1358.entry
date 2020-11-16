@@ -1,0 +1,2 @@
+
+(key-assist . [(20201109 1358) ((emacs (24 3))) "Minibuffer keybinding cheatsheet and launcher" single ((:commit . "90a53c9978b0bf7205d8e17cc8f24a82f7355dd8") (:keywords "abbrev" "convenience" "docs" "help") (:authors ("Boruch Baum" . "boruch_baum@gmx.com")) (:maintainer "Boruch Baum" . "boruch_baum@gmx.com") (:url . "https://github.com/Boruch-Baum/emacs-key-assist"))])

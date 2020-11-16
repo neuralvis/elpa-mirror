@@ -1,2 +1,0 @@
-
-(grugru . [(20201115 941) ((emacs (24 4))) "Rotate text at point" tar ((:commit . "a717c98acea5c2972c8dc5a3aa9293c5648aae0f") (:keywords "convenience" "abbrev" "tools") (:authors ("ROCKTAKEY" . "rocktakey@gmail.com")) (:maintainer "ROCKTAKEY" . "rocktakey@gmail.com") (:url . "https://github.com/ROCKTAKEY/grugru"))])
