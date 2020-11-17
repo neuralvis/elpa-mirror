@@ -1,2 +1,2 @@
 
-(eyebrowse . [(20201107 955) ((dash (2 7 0)) (emacs (24 3 1))) "Easy window config switching" single ((:commit . "bdc626f88ab8e3d88bf5bf2e929707606675ef92") (:keywords "convenience") (:authors ("Vasilij Schneidermann" . "mail@vasilij.de")) (:maintainer "Vasilij Schneidermann" . "mail@vasilij.de") (:url . "https://depp.brause.cc/eyebrowse"))])
+(eyebrowse . [(20201107 955) ((dash (2 7 0)) (emacs (24 3 1))) "Easy window config switching" single ((:commit . "88c7b59aa7c5c93bc23812217213adfa238f977b") (:keywords "convenience") (:authors ("Vasilij Schneidermann" . "mail@vasilij.de")) (:maintainer "Vasilij Schneidermann" . "mail@vasilij.de") (:url . "https://depp.brause.cc/eyebrowse"))])

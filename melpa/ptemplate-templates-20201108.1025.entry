@@ -1,2 +1,0 @@
-
-(ptemplate-templates . [(20201108 1025) ((emacs (25 1)) (ptemplate (2 0 0))) "Official templates" tar ((:commit . "e564c06c2fe665cfb1c7e521ce007094e3b94e51") (:authors ("Nikita Bloshchanevich" . "nikblos@outlook.com")) (:maintainer "Nikita Bloshchanevich" . "nikblos@outlook.com") (:url . "https://github.com/nbfalcon/ptemplate-templates"))])

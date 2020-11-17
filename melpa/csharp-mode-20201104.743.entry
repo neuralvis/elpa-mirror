@@ -1,2 +1,2 @@
 
-(csharp-mode . [(20201104 743) nil "C# mode derived mode" single ((:commit . "77411966bd9f95dadf2af39f95f86273f5c903bd") (:keywords "c#" "languages" "oop" "mode") (:authors ("Theodor Thornhill" . "theo@thornhill.no")) (:maintainer "Jostein Kjønigsen" . "jostein@gmail.com") (:url . "https://github.com/josteink/csharp-mode"))])
+(csharp-mode . [(20201104 743) nil "C# mode derived mode" single ((:commit . "49ca95e3a19d069921dbb501b8da8ca1bcee6b71") (:keywords "c#" "languages" "oop" "mode") (:authors ("Theodor Thornhill" . "theo@thornhill.no")) (:maintainer "Jostein Kjønigsen" . "jostein@gmail.com") (:url . "https://github.com/josteink/csharp-mode"))])

@@ -1,2 +1,0 @@
-
-(mode-line-debug . [(20201025 1747) nil "show status of `debug-on-error' in the mode-line" single ((:commit . "6d2c9c14f6a3835f4d54091ea241fd436da18ef0") (:keywords "convenience" "lisp") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/tarsius/mode-line-debug"))])

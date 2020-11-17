@@ -5,7 +5,7 @@
 ;; Author: Vasilij Schneidermann <mail@vasilij.de>
 ;; URL: https://depp.brause.cc/zone-nyan
 ;; Package-Version: 20200506.1207
-;; Package-Commit: 48625814f42c39521405d08009e1d44108d880ac
+;; Package-Commit: 253a0484ea5076c0f485c561a3f8370ba560f4f2
 ;; Version: 0.2.2
 ;; Package-Requires: ((esxml "0.3.1"))
 ;; Keywords: zone
