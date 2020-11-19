@@ -1,0 +1,2 @@
+
+(helm-emms . [(20201117 1100) ((helm (1 5)) (emms (6 0)) (cl-lib (0 5)) (emacs (24 1))) "Emms for Helm." single ((:commit . "f9914a6c8909c0953706435389b1fe1e4a264e52") (:keywords "multimedia" "emms") (:authors ("Thierry Volpiatto" . "thierry.volpiatto@gmail.com")) (:maintainer "Thierry Volpiatto" . "thierry.volpiatto@gmail.com") (:url . "https://github.com/emacs-helm/helm-emms"))])

@@ -5,7 +5,7 @@
 ;; Author: Jamie Beardslee <jdb@jamzattack.xyz>
 ;; Keywords: unix, eshell, outline, convenience
 ;; Package-Version: 20200912.142
-;; Package-Commit: d497b1b321d47ce68195dd7d04620d7d9acb41de
+;; Package-Commit: b3f37d193021606adc49bdc53190b9630613d621
 ;; Version: 2020.09.12
 ;; URL: https://git.jamzattack.xyz/eshell-outline
 ;; Package-Requires: ((emacs "25.1"))

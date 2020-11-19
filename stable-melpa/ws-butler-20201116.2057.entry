@@ -1,2 +1,0 @@
-
-(ws-butler . [(20201116 2057) nil "Unobtrusively remove trailing whitespace." single ((:commit . "2d546097bbd32b346423630d83f09e177b23c090") (:authors ("Le Wang")) (:maintainer "Le Wang") (:url . "https://github.com/lewang/ws-butler"))])

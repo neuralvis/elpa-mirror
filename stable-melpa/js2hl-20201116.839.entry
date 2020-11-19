@@ -1,2 +1,0 @@
-
-(js2hl . [(20201116 839) ((emacs (24 4)) (js2-mode (20190219))) "Highlight/rename things using js2-mode parser" single ((:commit . "0ca3bd98c6a7523251df18dcf35e38acdcf660a9") (:keywords "convenience") (:authors ("Chen Bin <chenbin DOT sh AT gmail DOT com>")) (:maintainer "Chen Bin <chenbin DOT sh AT gmail DOT com>") (:url . "https://github.com/redguardtoo/js2hl"))])
