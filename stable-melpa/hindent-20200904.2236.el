@@ -5,7 +5,7 @@
 ;; Author: Chris Done <chrisdone@gmail.com>
 ;; URL: https://github.com/chrisdone/hindent
 ;; Package-Version: 20200904.2236
-;; Package-Commit: 5d2b824ee947f36dad783de58e66d27193f53f09
+;; Package-Commit: 42191be4169acd0fabe1aa4249a4e71bc35febe4
 ;; Package-Requires: ((cl-lib "0.5"))
 
 ;; This file is free software; you can redistribute it and/or modify

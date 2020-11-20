@@ -7,7 +7,7 @@
 ;; Maintainer: Andrew Whatson <whatson@gmail.com>
 ;; Version: 0.1
 ;; Package-Version: 20200721.103
-;; Package-Commit: 2940f1622fa352e7ca95a9e4ad65958c5575da02
+;; Package-Commit: 27f4be2eaadabd4a51060fd4600e76be1e57bc7a
 ;; URL: https://github.com/flatwhatson/flycheck-guile
 ;; Package-Requires: ((emacs "24.1") (flycheck "0.22") (geiser "0.11"))
 
