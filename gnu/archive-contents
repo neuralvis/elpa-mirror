@@ -1168,7 +1168,7 @@
 	       ("Simen Heggestøyl" . "simenheg@gmail.com"))
 	      (:maintainer "Simen Heggestøyl" . "simenheg@gmail.com"))])
  (jsonrpc .
-	  [(1 0 12)
+	  [(1 0 13)
 	   ((emacs
 	     (25 2)))
 	   "JSON-RPC library" single
@@ -2009,7 +2009,7 @@
 	      (:maintainer "Ralph Amissah" . "ralph.amissah@gmail.com")
 	      (:url . "http://www.sisudoc.org/"))])
  (sm-c-mode .
-	    [(1 0)
+	    [(1 1)
 	     nil "C major mode based on SMIE" single
 	     ((:url . "http://elpa.gnu.org/packages/sm-c-mode.html")
 	      (:authors

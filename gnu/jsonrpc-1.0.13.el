@@ -4,7 +4,7 @@
 
 ;; Author: João Távora <joaotavora@gmail.com>
 ;; Keywords: processes, languages, extensions
-;; Version: 1.0.12
+;; Version: 1.0.13
 ;; Package-Requires: ((emacs "25.2"))
 
 ;; This is a GNU ELPA :core package.  Avoid functionality that is not
@@ -26,7 +26,7 @@
 ;;; Commentary:
 
 ;; This library implements the JSONRPC 2.0 specification as described
-;; in http://www.jsonrpc.org/.  As the name suggests, JSONRPC is a
+;; in https://www.jsonrpc.org/.  As the name suggests, JSONRPC is a
 ;; generic Remote Procedure Call protocol designed around JSON
 ;; objects.  To learn how to write JSONRPC programs with this library,
 ;; see Info node `(elisp)JSONRPC'."
@@ -239,8 +239,8 @@ JSON object.
 The caller can expect SUCCESS-FN or ERROR-FN to be called with a
 JSONRPC `:result' or `:error' object, respectively.  If this
 doesn't happen after TIMEOUT seconds (defaults to
-`jsonrpc-request-timeout'), the caller can expect TIMEOUT-FN to be
-called with no arguments. The default values of SUCCESS-FN,
+`jrpc-default-request-timeout'), the caller can expect TIMEOUT-FN
+to be called with no arguments. The default values of SUCCESS-FN,
 ERROR-FN and TIMEOUT-FN simply log the events into
 `jsonrpc-events-buffer'.
 
@@ -271,10 +271,10 @@ it only exits locally (returning the JSONRPC result object) if
 the request is successful, otherwise it exits non-locally with an
 error of type `jsonrpc-error'.
 
-DEFERRED is passed to `jsonrpc-async-request', which see.
+DEFERRED and TIMEOUT as in `jsonrpc-async-request', which see.
 
 If CANCEL-ON-INPUT is non-nil and the user inputs something while
-the functino is waiting, then it exits immediately, returning
+the function is waiting, then it exits immediately, returning
 CANCEL-ON-INPUT-RETVAL.  Any future replies (normal or error) are
 ignored."
   (let* ((tag (cl-gensym "jsonrpc-request-catch-tag")) id-and-timer
@@ -284,7 +284,8 @@ ignored."
               (catch tag
                 (setq
                  id-and-timer
-                 (jsonrpc--async-request-1
+                 (apply
+                  #'jsonrpc--async-request-1
                   connection method params
                   :success-fn (lambda (result)
                                 (unless cancelled
@@ -300,13 +301,14 @@ ignored."
                   (lambda ()
                     (unless cancelled
                       (throw tag '(error (jsonrpc-error-message . "Timed out")))))
-                  :deferred deferred
-                  :timeout timeout))
+                  `(,@(when deferred `(:deferred ,deferred))
+                    ,@(when timeout  `(:timeout  ,timeout)))))
                 (cond (cancel-on-input
-                       (while (sit-for 30))
-                       (setq cancelled t)
+                       (unwind-protect
+                           (let ((inhibit-quit t)) (while (sit-for 30)))
+                         (setq cancelled t))
                        `(cancelled ,cancel-on-input-retval))
-                      (t (while t (accept-process-output nil 30)))))
+                      (t (while t (sit-for 30)))))
             ;; In normal operation, cancellation is handled by the
             ;; timeout function and response filter, but we still have
             ;; to protect against user-quit (C-g) or the
@@ -329,11 +331,14 @@ ignored."
                            :method method
                            :params params))
 
-(defconst jrpc-default-request-timeout 10
+(define-obsolete-variable-alias 'jrpc-default-request-timeout
+  'jsonrpc-default-request-timeout "28.1")
+
+(defconst jsonrpc-default-request-timeout 10
   "Time in seconds before timing out a JSONRPC request.")
 
 
-;;; Specfic to `jsonrpc-process-connection'
+;;; Specific to `jsonrpc-process-connection'
 ;;;
 
 (defclass jsonrpc-process-connection (jsonrpc-connection)
@@ -617,7 +622,7 @@ With optional CLEANUP, kill any associated buffers."
                                     params
                                     &rest args
                                     &key success-fn error-fn timeout-fn
-                                    (timeout jrpc-default-request-timeout)
+                                    (timeout jsonrpc-default-request-timeout)
                                     (deferred nil))
   "Does actual work for `jsonrpc-async-request'.
 
@@ -646,7 +651,7 @@ TIMEOUT is nil)."
       (if (jsonrpc-connection-ready-p connection deferred)
           ;; Server is ready, we jump below and send it immediately.
           (remhash (list deferred buf) (jsonrpc--deferred-actions connection))
-        ;; Otherwise, save in `eglot--deferred-actions' and exit non-locally
+        ;; Otherwise, save in `jsonrpc--deferred-actions' and exit non-locally
         (unless old-id
           (jsonrpc--debug connection `(:deferring ,method :id ,id :params
                                                   ,params)))
