@@ -1,2 +1,0 @@
-
-(wanderlust . [(20201115 15) ((emacs (24 5)) (apel (10 8)) (flim (1 14 9)) (semi (1 14 7))) "Yet Another Message Interface on Emacsen" tar ((:commit . "c19a1df3ea4256519619de0a882122cd3b2396c6"))])
