@@ -1,2 +1,0 @@
-
-(company-ctags . [(20201120 1244) ((emacs (25 1)) (company (0 9 0))) "Fastest company-mode completion backend for ctags" single ((:commit . "4bef30d2e2a7d2db32aecb94d4c51a051bcea00a") (:keywords "convenience") (:authors ("Chen Bin" . "chenbin.sh@gmail.com")) (:maintainer "Chen Bin" . "chenbin.sh@gmail.com") (:url . "https://github.com/redguardtoo/company-ctags"))])
