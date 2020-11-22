@@ -1,0 +1,2 @@
+
+(leo . [(20201119 2122) ((emacs (25 1))) "Interface for dict.leo.org" single ((:commit . "af31e9d0c3eb37d74c489604dccb563152a656fb") (:keywords "convenience") (:authors ("M.T. Enders <michael AT enders.io>")) (:maintainer "M.T. Enders <michael AT enders.io>") (:url . "https://github.com/mtenders/emacs-leo"))])
