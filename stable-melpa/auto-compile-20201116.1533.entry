@@ -1,2 +1,0 @@
-
-(auto-compile . [(20201116 1533) ((emacs (25 1)) (packed (3 0 1))) "automatically compile Emacs Lisp libraries" single ((:commit . "56990a08cf8c3775a03e701e2e8e4fbf65ab0254") (:keywords "compile" "convenience" "lisp") (:authors ("Jonas Bernoulli" . "jonas@bernoul.li")) (:maintainer "Jonas Bernoulli" . "jonas@bernoul.li") (:url . "https://github.com/emacscollective/auto-compile"))])
