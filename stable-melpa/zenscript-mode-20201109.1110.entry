@@ -1,0 +1,2 @@
+
+(zenscript-mode . [(20201109 1110) ((emacs (25 1))) "Major mode for ZenScript" tar ((:commit . "0de897c92cab5cf898764128f2c845f19619a938") (:url . "https://github.com/eutropius225/zenscript-mode"))])
