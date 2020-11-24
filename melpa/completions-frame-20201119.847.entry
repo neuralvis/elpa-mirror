@@ -1,2 +1,0 @@
-
-(completions-frame . [(20201119 847) ((emacs (26 1))) "Show completions in child frame" single ((:commit . "8d2049633f2cdc6d02d442c728e45b23c004c588") (:keywords "frames") (:authors ("Andrii Kolomoiets" . "andreyk.mad@gmail.com")) (:maintainer "Andrii Kolomoiets" . "andreyk.mad@gmail.com") (:url . "https://github.com/muffinmad/emacs-completions-frame"))])

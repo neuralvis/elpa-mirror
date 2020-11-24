@@ -56,7 +56,7 @@ Supported languages:
 - Shell script (beautysh, shfmt)
 - Snakemake (snakefmt)
 - Solidity (prettier prettier-plugin-solidity)
-- SQL (pg-format, sqlformat)
+- SQL (pgformatter, sqlformat)
 - Swift (swiftformat)
 - Terraform (terraform fmt)
 - TOML (prettier prettier-plugin-toml)
