@@ -3,8 +3,8 @@
 ;; Copyright (C) 2013-2020 Skye Shaw and others
 ;; Author: Skye Shaw <skye.shaw@gmail.com>
 ;; Version: 0.8.1 (unreleased)
-;; Package-Version: 20201110.109
-;; Package-Commit: 93ea243277f2f2092b77928f0e1155e3e3a8da6a
+;; Package-Version: 20201124.155
+;; Package-Commit: 151df174a662ae6711f26f160e7759ea014f1a3c
 ;; Keywords: git, vc, github, bitbucket, gitlab, sourcehut, convenience
 ;; URL: http://github.com/sshaw/git-link
 ;; Package-Requires: ((emacs "24.3"))
@@ -37,6 +37,10 @@
 
 ;;; Change Log:
 
+;; 2020-11-23 - v0.8.1
+;; * Fix URL casing (Issue #57)
+;; * Fix byte-compile warnings (Issue #75 thanks Brian Leung)
+;;
 ;; 2020-07-21 - v0.8.0
 ;; * Add `-' prefix argument to git-link to generate links without line numbers
 ;; * Add git-link-use-single-line-number
@@ -340,15 +344,15 @@ return (FILENAME . REVISION) otherwise nil."
 
 (defun git-link--parse-remote (url)
   "Parse URL and return a list as (HOST DIR).  DIR has no leading slash or `git' extension."
-  (let (host path)
+  (let (host path parsed)
     (unless (string-match "^[a-zA-Z0-9]+://" url)
       (setq url (concat "ssh://" url)))
 
-    (setq url  (url-generic-parse-url url)
+    (setq parsed (url-generic-parse-url url)
           ;; Normalize path.
-          ;; If none, will nil on Emacs < 25. Later versions return "".
-          path (or (car (url-path-and-query url)) "")
-          host (url-host url))
+          ;; If none, will be nil on Emacs < 25. Later versions return "".
+          path (or (car (url-path-and-query parsed)) "")
+          host (url-host parsed))
 
     (when host
       (when (and (not (string= "/" path))
@@ -359,11 +363,15 @@ return (FILENAME . REVISION) otherwise nil."
                       path)
                     1)))
 
-      ;; Fix-up scp style URLs
+      ;; Fix-up scp style URLs.
+      ;; git@foo:UsEr/repo gives a host of foo:user
+      ;; We also need to preserve case so we take UsEr from the original url
       (when (string-match ":" host)
-        (let ((parts (split-string host ":" t)))
+        (let ((parts (split-string host ":" t))
+              (case-fold-search t))
+          (string-match (concat (car parts) ":\\(" (cadr parts) "\\)/") url)
           (setq host (car parts)
-                path (concat (cadr parts) "/" path))))
+                path (concat (match-string 1 url) "/" path))))
 
       ;; Fix-up Azure SSH URLs
       (when (string= "ssh.dev.azure.com" host)
@@ -373,9 +381,9 @@ return (FILENAME . REVISION) otherwise nil."
                     "\\1/\\2/_git/\\3"
                     path)))
       (when (string= "vs-ssh.visualstudio.com" host)
-        (setq host (concat (url-user url) ".visualstudio.com"))
+        (setq host (concat (url-user parsed) ".visualstudio.com"))
         (setq path (replace-regexp-in-string
-                    (concat "^v3/" (url-user url) "/\\([^/]+\\)/")
+                    (concat "^v3/" (url-user parsed) "/\\([^/]+\\)/")
                     "\\1/_git/"
                     path)))
 
@@ -475,7 +483,7 @@ return (FILENAME . REVISION) otherwise nil."
 	  commit))
 
 (defun git-link-commit-azure (hostname dirname commit)
-  (format "https://%s/%s/commit/%s"
+ (format "https://%s/%s/commit/%s"
 	  hostname
 	  dirname
 
