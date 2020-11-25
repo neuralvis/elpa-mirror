@@ -1,2 +1,0 @@
-
-(org-ml . [(20201124 331) ((emacs (26 1)) (org (9 3)) (dash (2 17)) (s (1 12))) "Functional Org Mode API" tar ((:commit . "6930e373628cb801f75fca2742a1fe4903078d13") (:keywords "org-mode" "outlines") (:authors ("Nathan Dwarshuis" . "ndwar@yavin4.ch")) (:maintainer "Nathan Dwarshuis" . "ndwar@yavin4.ch") (:url . "https://github.com/ndwarshuis/org-ml"))])
