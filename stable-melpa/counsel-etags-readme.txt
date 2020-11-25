@@ -29,7 +29,8 @@ Usage:
   `counsel-etags-update-tags-force' to update current tags file by force
   `counsel-etags-ignore-config-file' specifies paths of ignore configuration files
   (".gitignore", ".hgignore", etc).  Path is either absolute or relative to the tags file.
-
+  `counsel-etags-universal-ctags-p' to detect if Universal Ctags is used.
+  `counsel-etags-exuberant-ctags-p' to detect if Exuberant Ctags is used.
 
 Tips:
 

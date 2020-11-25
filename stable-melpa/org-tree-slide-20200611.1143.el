@@ -5,7 +5,7 @@
 ;; Author: Takaaki ISHIKAWA <takaxp at ieee dot org>
 ;; Version: 2.8.16
 ;; Package-Version: 20200611.1143
-;; Package-Commit: 7126a4365072a32898f169ead8fb59265dabc605
+;; Package-Commit: 18034c476038adcc1c4697168b8068f4d0ce62fe
 ;; Package-Requires: ((emacs "24.3"))
 ;; Maintainer: Takaaki ISHIKAWA <takaxp at ieee dot org>
 ;; Twitter: @takaxp

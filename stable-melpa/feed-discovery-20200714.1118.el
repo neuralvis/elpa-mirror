@@ -5,7 +5,7 @@
 ;; Author:  Hiroki YAMAKAWA <s06139@gmail.com>
 ;; URL: https://github.com/HKey/feed-discovery
 ;; Package-Version: 20200714.1118
-;; Package-Commit: 47692787326a14c06dab6815bb18caced59a5bf0
+;; Package-Commit: 12fcd1a28fe7c8c46c74e32f395ec631d45ec739
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "25.1") (dash "2.16.0"))
 

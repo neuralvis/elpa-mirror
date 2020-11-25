@@ -1,2 +1,0 @@
-
-(auto-complete . [(20201001 1341) ((popup (0 5 0)) (cl-lib (0 5))) "Auto Completion for GNU Emacs" tar ((:commit . "cbf8aaacb7613916cd932af7bd06cbed48114510"))])

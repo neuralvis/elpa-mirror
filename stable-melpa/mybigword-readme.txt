@@ -56,9 +56,11 @@ Tips,
 
   Move focus over the word like "egotist".  Run "M-x mybigword-play-video-of-word-at-point".
   Then mplayer plays the corresponding video at the time the word is spoken.
+  If video is missing, the mp3 with similar name is played.
+  See `mybigword-video2mp3' on how to generate mp3 from video files.
 
   Please note `mybigword-play-video-of-word-at-point' can be used in other major modes.
-  See `mybigword-default-video-info-function' for details.
+  See `mybigword-default-media-info-function' for details.
 
 
   3. Use `mybigword-pronounce-word' to pronounce the word at point.

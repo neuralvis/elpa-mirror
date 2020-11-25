@@ -1,4 +1,4 @@
-This theme is designed for colour-contrast accessibility.
+This theme is designed for color-contrast accessibility.
 
 1. Provide a consistent minimum contrast ratio between background and
 foreground values of 7:1 or higher.  This meets the highest such
@@ -9,7 +9,7 @@ Consortium's Working Group on Accessibility (WCAG AAA standard).
 already quite long (see further below), with more additions to follow
 as part of the ongoing development process.
 
-The theme provides the following customisation options, all of which
+The theme provides the following customization options, all of which
 are disabled by default:
 
     modus-operandi-theme-slanted-constructs             (boolean)
@@ -23,14 +23,14 @@ are disabled by default:
     modus-operandi-theme-prompts                        (choice)
     modus-operandi-theme-mode-line                      (choice)
     modus-operandi-theme-diffs                          (choice)
-    modus-operandi-theme-faint-syntax                   (boolean)
+    modus-operandi-theme-syntax                         (choice)
     modus-operandi-theme-intense-hl-line                (boolean)
     modus-operandi-theme-intense-paren-match            (boolean)
-    modus-operandi-theme-no-link-underline              (boolean)
+    modus-operandi-theme-links                          (choice)
     modus-operandi-theme-completions                    (choice)
     modus-operandi-theme-override-colors-alist          (alist)
 
-The default scale is as follows (it can be customised as well):
+The default scale is as follows (it can be customized as well):
 
     modus-operandi-theme-scale-1 1.05
     modus-operandi-theme-scale-2 1.1
@@ -201,6 +201,7 @@ notify me of any missing package or change you would like to see.
     lsp-ui
     magit
     magit-imerge
+    make-mode
     man
     markdown-mode
     markup-faces (`adoc-mode')
@@ -239,12 +240,14 @@ notify me of any missing package or change you would like to see.
     paren-face
     parrot
     pass
+    pdf-tools
     persp-mode
     perspective
     phi-grep
     phi-search
     pkgbuild-mode
     pomidor
+    popup
     powerline
     powerline-evil
     proced
@@ -265,7 +268,9 @@ notify me of any missing package or change you would like to see.
     sesman
     shell-script-mode
     show-paren-mode
+    shr
     side-notes
+    sieve-mode
     skewer-mode
     smart-mode-line
     smartparens

@@ -4,7 +4,7 @@ How to Use?
   `grugru-define-on-major-mode', `grugru-define-on-local-major-mode', and `grugru-define-local'.
   If you use ~grugru~, you should assign ~grugru~ to 1 stroke key like ~C-;~, or ~M-g~.
 
-    (global-set-key (kbd "C-;")
+    (global-set-key (kbd "C-;") #'grugru)   ; Or other key.
 
 
   If you want use default grugru, eval ~grugru-default-setup~.  In the other words,
@@ -131,6 +131,7 @@ Functions Defining grugru
    Define global grugru with GETTER and STRINGS-OR-FUNCTION.
 
    GETTER is a function, or a symbol which is alias defined in ~grugru-getter-alist~.
+   GETTER also can be positive or negative number, which means the number of characters.
    By default, symbol, word, char is available.
    If it is a function, it should return cons cell ~(begin . end)~
    which express things at point, and with no argument.
@@ -171,6 +172,13 @@ Functions Defining grugru
                 (lambda ()
                  (grugru-define-local 'word '("is" "was"))
                  (grugru-define-local 'word '("I" "my" "me" "mine"))))
+
+
+   Also, you can run it interactively (though cannot set STRINGS-OR-FUNCTION to a function).
+   On interactive usage, by default, GETTER is the length of car of STRINGS-OR-FUNCTION,
+   and STRINGS-OR-FUNCTION is a list which has 2 elements, constructed interactively.
+   With prefix argument, you can select GETTER and length of STRINGS-OR-FUNCTION.
+   Default GETTER is set by ~grugru-local-interactively-default-getter~.
 
 ~(grugru-define-multiple &rest CLAUSES)~
    This function define multiple grugru.
@@ -262,13 +270,18 @@ Custom Variables
    If you would like to use ivy or ido, write:
 
      ;; For ivy:
-     (setq grugru-completing-function
+     (setq grugru-completing-function #'ivy-completing-read)
      ;; For ido:
-     (setq grugru-completing-function
+     (setq grugru-completing-function #'ido-completing-read)
 
 
 ~grugru-select-function-generate-number~
    This variable have how many strings are generated from function
    in ~STRINGS-OR-FUNCTION~, on ~grugru-select~.
+
+~grugru-local-interactively-default-getter~
+   Indicate default getter on interactive usage of ~grugru-define-local~.
+   0 means If 0, gets number from first string, otherwise it should be
+   symbol in ~grugru-getter-alist~ or a function which gets things at point.
 License
   This package is licensed by GPLv3. See [[file:LICENSE][LICENSE]].

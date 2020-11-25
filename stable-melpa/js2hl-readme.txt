@@ -6,10 +6,13 @@ I clean the code to make this program only dependent on `js2-mode'.
 Usage,
 
 `js2hl-show-thing-at-point' to show things at point.
-Things are variable, strings, numbers, names like "this" or "super".
+Things are variable or it property, strings, numbers, names like "this" or "super".
 It uses parser of `js2-mode' to extract correct things.
 
 `js2hl-rename-thing-at-point' to rename things at point.
+
+`js2hl-add-namespace-to-thing-at-point' to prepend namespace to the thing.
+The separator of namespace is from `js2hl-namespace-separator'.
 
 `js2hl-show-exits' to show exit points from the function surrounding point.
 That is, `return' and `throw' statements.
